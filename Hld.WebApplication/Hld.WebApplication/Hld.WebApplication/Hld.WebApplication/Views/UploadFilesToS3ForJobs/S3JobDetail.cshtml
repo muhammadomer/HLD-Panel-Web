@@ -1,0 +1,121 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.GetJobDetailViewModel>
+
+@{
+    ViewData["Title"] = "S3JobDetail";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h6>File Jobs</h6>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Job ID
+            </th>
+            <th>
+
+                Job Type
+            </th>
+            <th>
+                File
+            </th>
+            <th>
+                Status
+            </th>
+
+            <th>
+                Start Time
+            </th>
+            <th>
+                Completion Time
+            </th>
+            <th>
+                Logs
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Job_Id)
+            </td>
+            <td>
+                @if (item.Job_Type.Equals("skuasin_am_mxpr_dr_qty_comments"))
+                {
+                    <span>Update SKU, ASIN, AmzPrice, MaxPrice, DropShip, DropShipQty, DropShipComments.</span>
+                }
+                @if (item.Job_Type.Equals("ImportChildOrderSC"))
+                {
+                    <span>Get child orders from seller-cloud</span>
+                }
+                @if (item.Job_Type.Equals("DS_QTY_COMMENTS"))
+                {
+                    <span>Update  DropShip, DropShipQty, DropShipComments  for SKU</span>
+                }
+                @if (item.Job_Type.Equals("Import missing sku from seller-cloud"))
+
+                {
+                    <span>Import missing sku from seller-cloud</span>
+                }
+                @if (item.Job_Type.Equals("ApprovedPriceUpdationJob"))
+
+                {
+                    <span>Approved Price Updation</span>
+                }
+                @if (item.Job_Type.Equals("InventoryContinueDiscontinue"))
+
+                {
+            <span>Inventory Continue Discontinue</span>
+                }
+            </td>
+            <td>
+
+                @Html.ActionLink(item.File_Name, "DownloadformS3", new { file = item.File_Name,bucket = item.File_Bucket })
+            </td>
+            <td>
+                @if (item.Status == 0 && item.Running == 0)
+                {
+                    <span>Waiting</span>
+                }
+                else if (item.Status == 0 && item.Running == 1)
+                {
+                    <span>Running</span>
+                }
+                else if (item.Status == 1 && item.Running == 0)
+                {
+                    <span>Completed</span>
+                }
+
+            </td>
+           
+            <td>
+                @if (!String.IsNullOrEmpty(item.Job_Start))
+                {
+                    @String.Format("{0:F}", item.Job_Start);
+                }
+                </td>
+            <td>
+                @if (!String.IsNullOrEmpty(item.Job_Completed))
+                {
+                    @String.Format("{0:F}", item.Job_Completed);
+                }
+              
+            </td>
+            
+            <td>
+
+
+                @Html.ActionLink("Details", "JobLogs", new { id = item.Job_Id }, new { target = "_blank" })
+
+
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

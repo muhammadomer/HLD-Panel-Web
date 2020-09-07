@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.DraftPOViewModel>
+
+@{
+    ViewData["Title"] = "DraftPO";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+
+        .table thead tr th {
+            /*position: sticky;
+            top: 169px;
+            padding: 5px;
+            z-index: 2;*/
+            background-color: lightgray !important;
+        }
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+</style>
+
+<div class="container-fluid searchFormFixed">
+    <div class="col-md-12">
+        <br />
+        <h6>Draft PO</h6>
+
+    </div>
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Internal PO #
+                    </th>
+                    <th>
+                        Vendor
+                    </th>
+                    <th>
+                        SKUs
+                    </th>
+
+                    <th>
+                        Notes
+                    </th>
+                    <th>
+                        Created On
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="../PredictionHistory/PredictionList?data=@item.InternalPOId" target="_blank" style="cursor:pointer">@item.InternalPOId</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Vendor)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SKUs)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Notes)
+                        </td>
+                        <td>
+                            @if (item.OrderedOn != DateTime.MinValue)
+                            {
+                                @string.Format("{0: MMM d, yyyy}", item.OrderedOn)
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $(".table").tablesorter();
+        });
+</script>
+}

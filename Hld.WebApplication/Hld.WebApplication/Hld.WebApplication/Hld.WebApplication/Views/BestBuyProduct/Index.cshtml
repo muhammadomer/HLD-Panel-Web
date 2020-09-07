@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.BBProductViewModel>
+
+    @{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+    }
+
+    <h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BBProductID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DiscountEndDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DiscountStartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UnitDiscountPrice_SellingPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UnitOriginPrice_MSRP)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CategoryCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LogisticClass_Code)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Reference_UPC)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product_Sku)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product_Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantity_BBQ)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShopSKU_OfferSKU)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BBProductID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountEndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountStartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitDiscountPrice_SellingPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitOriginPrice_MSRP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LogisticClass_Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reference_UPC)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product_Sku)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product_Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity_BBQ)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShopSKU_OfferSKU)
+                </td>
+            </tr>
+}
+        </tbody>
+    </table>

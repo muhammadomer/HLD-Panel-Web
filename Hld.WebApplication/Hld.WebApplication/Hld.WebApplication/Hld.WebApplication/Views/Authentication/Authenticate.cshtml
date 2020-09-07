@@ -1,0 +1,161 @@
+﻿@model Login
+
+@{
+    ViewData["Title"] = "Authenticate";
+
+    Layout = "_Layout";
+}
+<link href="~/boots/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="~/boots/jquery.min.js"></script>
+<script src="~/boots/popper.min.js"></script>
+<script src="~/boots/bootstrap.min.js"></script>
+<style>
+    body {
+        padding: 0;
+        margin: 0;
+        font-family: Arial;
+        background-color: steelblue;
+    }
+
+    .mainlogin {
+        position: absolute;
+        padding: 40px;
+        background: whitesmoke;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 453px;
+        height: 289px;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 405px;
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    h6 {
+        margin: auto;
+        width: 163px;
+        display: flex;
+        padding: 10px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        justify-content: center;
+        background-color: cadetblue;
+    }
+
+    .signintext {
+        display: flex;
+        justify-content: center;
+        margin-top: 7px;
+    }
+
+    .inputtext {
+        box-shadow: none !important;
+        width: 75% !important;
+    }
+
+    input span {
+        color: red;
+    }
+
+    .btnclass {
+        margin-top: 5px;
+        padding: 5px;
+        width: 344px;
+        font-weight: bold;
+        color: white;
+        background: dodgerblue;
+        border: none;
+        outline: none;
+        border-radius: 2px;
+    }
+
+        .btnclass:hover {
+            background-color: #1B76CE;
+            color: white;
+            cursor: pointer;
+        }
+
+    .inputdiv {
+        margin-bottom: 20px !important;
+    }
+
+    .logo {
+        height: 46px;
+        width: 129px;
+        display: flex;
+        margin: 0 auto;
+    }
+</style>
+<div class="container mainlogin">
+    <h6>HLD Control Panel</h6>
+    @*<img class="logo" src="~/Images/logo.png" />*@
+    <p class="signintext">Sign-In Your Account</p>
+    <form asp-action="Authenticate" class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-sm-12 inputdiv">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <span class="fa fa-user"></span>
+                        </span>
+                    </div>
+                    <input asp-for="Email" placeholder="Enter email" class="form-control inputtext" />
+                    <br />
+                    <span asp-validation-for="Email" class="text-danger" style="color:red"></span>
+                </div>
+            </div>
+            <div class="col-sm-12 ">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <span class="fa fa-lock"></span>
+                        </span>
+                    </div>
+                    <input asp-for="Password" type="password" placeholder="Enter password" id="input-password" class="form-control inputtext" />
+                    <span class="input-group-append">
+                        <span class="input-group-text">
+                            <span id="view-password"><i class="fa fa-eye" aria-hidden="true"></i></span>
+                            @*<i class="fa fa-eye" aria-hidden="true"></i>*@
+                        </span>
+                    </span>
+                    <br />
+                    <span asp-validation-for="Password" class="text-danger" style="color:red"></span>
+                </div>
+            </div>
+        </div>
+        <p>
+            <input type="checkbox" style="margin-right: 5px;
+    vertical-align: middle;" />Keep me signed in
+        </p>
+        <div class="form-group col-sm-">
+            <input type="submit" value="Sign In" class="btnclass" />
+        </div>
+        <p><a href="" style="color:dodgerblue;text-decoration:none;font-size:12px;float:right">Forgot password?</a></p>
+    </form>
+</div>
+@if (ViewBag.Message == "ErrorOccured")
+{
+    <div class="alert alert-warning alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        User Name or Password is incorrent
+    </div>
+}
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $('#view-password').click(function () {
+            $password = $('#input-password');
+            if ($password.prop('type') == 'password') {
+                $password.prop('type', 'text');
+            } else {
+                $password.prop('type', 'password');
+            }
+            $('i', this).toggleClass('fa-eye-slash');
+        });
+    </script>
+}

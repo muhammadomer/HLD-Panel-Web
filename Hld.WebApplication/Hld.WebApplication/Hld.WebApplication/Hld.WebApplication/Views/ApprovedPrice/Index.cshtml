@@ -1,0 +1,455 @@
+﻿@model Hld.WebApplication.ViewModel.ApprovedSearchViewModel
+
+@{
+    ViewData["Title"] = "ApprovedPrices";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/select2/css/select2.css" rel="stylesheet" />
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+<style>
+
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            /*width: 300px;
+            height: 220px;*/
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+    .select2-container {
+        box-sizing: border-box;
+        display: inline-block;
+        margin: 0;
+        width: 175px!important;
+        position: relative;
+        vertical-align: middle;
+    }
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 26px!important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    .select2-container--default .select2-results > .select2-results__options {
+        max-height: 275px;
+        overflow-y: auto;
+    }
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        display: block;
+        padding-left: 8px;
+        padding-right: 20px;
+        outline: none;
+        line-height: 26px !important;
+        box-shadow: none !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+<div class="container-fluid">
+    <div class="loader">
+        <img src="~/Images/giffff.gif" />
+    </div>
+    <div class="mb-1" id="searchForm">
+        <div class="col-sm-12">
+            <div class="card">
+
+                <div class="card-header" style="padding-top: 0px !important;display:flex;justify-content:space-between;padding-bottom: 0px !important;padding-right: 0px !important;">
+
+                    <div>
+                        <label style="
+    vertical-align: sub;
+    font-weight: bold;
+">Search Price</label>
+                    </div>
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    {
+                        <div>
+                            <a class="btn btn-sm btn-info " target="_blank" role="button" asp-action="GetVendorCurrancy" asp-controller="ApprovedPrice">Add Approved Prices</a>
+                        </div>
+                    }
+                </div>
+
+                <div class="card-body">
+                    @using (Html.BeginForm("Index", "ApprovedPrice", FormMethod.Get, new { @class = "form-inline" }))
+                    {
+                        @*<select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>*@
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        {
+                            @*<input style="margin-right: 5px;box-shadow: none !important;width:88px" autocomplete="off" class="form-control"  type="search" placeholder="Vendor" />
+
+                            <span style="color:red;padding-left:0px;" id="empty-message-vendor"></span>*@
+
+                            @*@Html.HiddenFor(e => Model.Vendor, htmlAttributes: new { @id = "vendorIdForMessage", @name = "vendor" })*@
+                            
+                    <div style="margin-right:6px;">
+                        <select class="js-example-basic-single form-control ActionMenuapprove" name="Vendor" id="vendor">
+
+                            <option value="">Vendor</option>
+
+
+                        </select>
+                    </div>
+                         
+
+                        }
+
+                        <input type="text" style="margin-right: 5px;box-shadow: none !important;width:148px" name="sku" autocomplete="off" class="form-control" id="sku" value="@Model.SKU" placeholder="SKU" />
+
+                        <input type="text" style="margin-right: 5px;box-shadow: none !important;width:458px" name="title" autocomplete="off" class="form-control" id="title" value="@Model.Title" placeholder="Title" />
+                        <button type="button" class="btn btn-link" id="btnSearchSkuList"> SKU</button>
+                        <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="container-fluid ">
+
+        <div class="row col col-12" id="fixActionMenu" style="margin-left: -4px;">
+            <div class="col col-md-2">
+                <div class="row">
+                    <div class="pagination col-md-6 col">
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col col-md-2">
+                <span> Total Items Found : @ViewBag.TotalCount</span>
+            </div>
+
+
+
+        </div>
+    </div>*@
+<div class="row mt-3 mb-3">
+    <input type="hidden" value="@ViewBag.skuSearchList" id="skuSearchListCount" />
+    @if (string.IsNullOrEmpty(ViewBag.skuSearchList))
+    {
+        <div class="col-sm-3 pagination" id="pagination" style="margin-left: 40px;">
+
+        </div>
+    }
+
+    <div class="divCounter col-sm-3" style="margin-left: 28px;">
+        Total item's Found:@ViewBag.TotalCount &nbsp;&nbsp;
+        @if (string.IsNullOrEmpty(ViewBag.skuSearchList))
+        {
+            <span id="itemPerPage"></span>
+        }
+
+    </div>
+
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+@*<div class="container-fluid">
+        <div class="pagination" style="padding-left: 10px;">
+
+        </div>
+    </div>*@
+<div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">SKU List </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBody">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+           
+           
+            function vendorlistget() {
+                debugger;
+                        $.ajax({
+                            url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                            type: "POST",
+                            minLength: 3,
+                            dataType: "json",
+                            data: { Prefix:""},
+                            success: function (data, ui) {
+                                var content = '';
+                                $.each(data, function (index, value) {
+
+                                    content = content + '<option value = "' + value.UserName + '">' + value.UserAlias + '</option>';
+                                  
+                                   
+
+                                });
+
+                                $(".ActionMenuapprove").append(content);
+                                $(".ActionMenuapprove").val(@Model.Vendor);
+
+                                
+                            }
+                })
+
+           
+
+            }
+
+            vendorlistget();
+            $(".ActionMenuapprove").select2();
+            $("select.ActionMenuapprove").change(function () {
+                var selected = $(this).children("option:selected").val();
+                console.log("selected on change",selected);
+            });
+
+
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
+            $('#searchFromSkuList').click(function () {
+                $('#pagination').hide();
+                $('#itemPerPage').hide();
+            });
+
+            $('#btnSearchOrder').click(function () {
+                $('#pagination').show();
+                $('#itemPerPage').show();
+            });
+
+            var SKU = $("#sku").val()
+            //var Vendor = $("#vendorIdForMessage").val()
+            var Vendor = getUrlParameter('Vendor');
+
+            var Title = $("#title").val();
+            var sKUlIST = $('#skuSearchListCount').val();
+            //pagination
+
+            if (sKUlIST == "")
+               {
+      debugger;
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                    format: '[< nncnn >]',
+                    perpage: 25, // show 10 elements per page
+                    lapping: 0, // don't overlap pages for the moment
+                    page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                    onSelect: function (page) {
+                        pageNo = page;
+                        // add code which gets executed when user selects a page
+                        var url = '/ApprovedPrice/ApprovedPricesList?page=' + page + '&SKU=' + SKU + '&Title=' + Title + '&Vendor=' + Vendor + '';
+                        var completURL = url;
+                        $(".loadertbl").show();
+                        $(".loader").show();
+                        $.ajax({
+                            url: completURL,
+                            data: {},
+                            type: 'POST',
+                            traditional: true,
+                            success: function (data) {
+                                $('#loadOrder').empty();
+                                $(function () {
+                                    $(".table").tablesorter();
+                                })
+                                $('#loadOrder').html(data);
+                                $(".loadertbl").hide();
+                                $(".loader").hide();
+
+                            }
+                        });
+                        if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                            if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                                start = moment(OrderDateTimeFrom);
+                                end = moment(OrderDateTimeTo);
+
+                                cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                            }
+                            else {
+                                $('#reportrange span').html("No Date Selected");
+                            }
+
+                        }
+                        else {
+                            $('#reportrange span').html("No Date Selected");
+                        }
+
+
+                        //$.get(completURL).done(function (response) {
+                        //      $('#loadOrder').empty();
+                        //      $('#loadOrder').html(response);
+
+                        //      $('#tableOrderList').stickyTableHeaders({ fixedOffset: 65 });
+                        //  });
+                    },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+
+
+                });
+            }
+            else {
+        debugger;
+                var url = '/ApprovedPrice/ApprovedPricesList?page=' + 1 + '&SKU=' + "" + '&Title=' + "" + '&Vendor=' + "";
+
+                $.post(url).done(function (response) {
+                    $('#loadOrder').empty();
+                    $('#loadOrder').html(response);
+                    $(".loader").hide();
+
+                });
+            }
+
+
+            $('#btnSearchSkuList').click(function () {
+                $('#modelBody').empty();
+                $('#modelBody').load('@Url.Action("GetSkuSelectList", "ApprovedPrice")');
+                $('#myModal').modal('show');
+            });
+
+
+             $('#sku').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Product/GetAllSKUForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+                            console.log("Data", data);
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.SKU, value: item.SKU, id: item.SKU };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#sku-empty-message-Color").text("No results found");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#sku-empty-message-Color").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+
+            //  $('#vendor').autocomplete({
+            //    autoFocus: true,
+            //    source: function (request, response) {
+            //        $.ajax({
+            //            url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+            //            type: "POST",
+            //            minLength: 3,
+            //            dataType: "json",
+            //            data: { Prefix: request.term },
+            //            success: function (data, ui) {
+
+            //                //if (data.length > 0) {
+            //                response($.map(data, function (item) {
+            //                    if (item != null) {
+            //                        return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+            //                    }
+
+            //                }));
+            //            }
+            //        })
+            //    },
+            //    select: function (event, ui) {
+
+            //        $('#vendorIdForMessage').val(ui.item.id);
+            //    },
+            //    response: function (event, ui) {
+            //        console.dir(ui.content)
+            //        if (ui.content.length === 0) {
+            //            $("#empty-message-vendor").text("No results found");
+            //            $('#vendorIdForMessage').val("0");
+
+            //            $('#InputSubmit').attr("disabled", true)
+            //        } else {
+            //            $("#empty-message-vendor").empty();
+            //            $('#InputSubmit').attr("disabled", false)
+            //        }
+            //    }
+            //});
+        });
+    </script>
+}

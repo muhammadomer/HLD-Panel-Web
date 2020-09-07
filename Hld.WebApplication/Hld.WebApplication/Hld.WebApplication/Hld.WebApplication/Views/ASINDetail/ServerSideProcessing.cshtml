@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewData["Title"] = "ServerSideProcessing";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h6>ASIN List</h6>
+<a class="btn btn-primary" href="@Url.Action("Export", "ASINDetail")">Export Data</a>
+<a class="btn btn-primary" target="_blank" href="@Url.Action("SaveASINDetail", "ASINDetail")">Add ASIN</a>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // prepare the data
+
+            $('#btnExportData').on('click', function () {
+                $.get('@Url.Action("Export", "ASINDetail")', function (response) {
+
+                })
+            });
+
+            var source =
+            {
+                datatype: "json",
+                datafields: [
+                    { name: 'asin_date', type: 'date' },
+                    { name: 'ASIN' },
+                    { name: 'Title' },
+                    { name: 'MainImage_imgPath' },
+                    { name: 'Image1_imgPath' },
+                    { name: 'Image2_imgPath' },
+                    { name: 'amazon_price' },
+                    { name: 'AsinProductDetailID' },
+                    { name: 'product_sku' }
+                    //{ name: 'asin_main_image_bucket_url' },
+                    //{ name: 'asin_image_1_bucket_url' },
+
+                ],
+                url: '@Url.Action("ASINDetailMainViewJSONData", "ASINDetail")',
+                filter: function () {
+                    // update the grid and send a request to the server.
+                    $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+                }
+            };
+            //var addfilter = function () {
+            //    var filtergroup = new $.jqx.filter();
+            //    var filter_or_operator = 1;
+            //    var filtervalue = '';
+            //    var filtercondition = 'contains';
+            //    var filter1 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
+            //    filtervalue = '';
+            //    filtercondition = 'contains';
+            //    var filter2 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
+
+            //    filtergroup.addfilter(filter_or_operator, filter1);
+            //    filtergroup.addfilter(filter_or_operator, filter2);
+            //    // add the filters.
+            //    $("#jqxgrid").jqxGrid('addfilter', 'Title', filtergroup);
+            //    $("#jqxgrid").jqxGrid('addfilter', 'ASIN', filtergroup);
+            //    // apply the filters.
+            //    $("#jqxgrid").jqxGrid('applyfilters');
+            //}
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // initialize jqxGrid
+            $("#jqxgrid").jqxGrid(
+                {
+                    source: dataAdapter,
+                    filterable: true,
+                    showfilterrow: true,
+                    selectionmode: 'multiplecellsextended',
+                    showfilterrow: true,
+                    selectionmode: 'checkbox',
+                    pageable: true,
+                    pagesize: 25,
+                    width: '90%',
+                    sortable: true,
+                    altrows: true,
+                    enabletooltips: true,
+                    editable:true,
+                    height:'900px',
+                    ready: function () {
+                        //$("#jqxgrid").find('.jqx-grid-column-header .jqx-checkbox-default').parent().on('change', function (event) {
+                        //    var state = event.args.checked;
+                        //    alert(state);
+                        //});
+
+                    },
+                    autoshowfiltericon: true,
+                    columns: [
+                        { text: 'ID', datafield: 'AsinProductDetailID', editable: false, filterable:false,   width: 100 },
+                        { text: 'Date', datafield: 'asin_date', editable: false, filtertype: 'range', cellsformat: 'yyyy-MM-dd', width: 200 },
+                        {
+                            text: 'ASIN', datafield: 'ASIN', editable: false, columntype: 'textbox', filtertype: 'input', width: 200, cellsrenderer: function (row)
+                            {
+                                var asin=dataAdapter.records[row].ASIN;
+                                return '<a  href="https://www.amazon.ca/dp/' + asin + '"  target="_blank">' + asin + '</a>';
+                            }
+                        },
+                        {
+                            text: 'Product SKU', datafield: 'product_sku', editable: false,filterable:false, columntype: 'textbox', filtertype: 'input', width: 200, cellsrenderer: function (row) {
+                                var product_sku = dataAdapter.records[row].product_sku;
+                                return '<a  href="@Url.Action("PropertyPage", "BestBuyProduct")?ProductSKU='+product_sku+'"  target="_blank">' + product_sku + '</a>';
+                            }
+                        }
+                        ,
+                        { text: 'Title', datafield: 'Title', columntype: 'textbox', filtertype: 'input' , width: 200 },
+                        {
+                            text: 'Amazon Price', datafield: 'amazon_price', editable: false, columntype: 'textbox', filterable: false, width: 100, cellsrenderer: function (row) {
+                                var amzPrice = dataAdapter.records[row].amazon_price;
+                                amzPrice = parseFloat(amzPrice) / 100.0;
+                                return '<span>' + amzPrice + '</span>'
+                            }
+                        },
+                        {
+                            text: 'IMG1', datafield: 'MainImage_imgPath', editable: false,filterable:false, width: 50, height: 70, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+                                var img = dataAdapter.records[row].MainImage_imgPath;
+                                return ' <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + img + '"><img style="margin-left: 5px;" height="50" width="50" src="https://s3.us-east-2.amazonaws.com/amzca.bb.images.thumbnails/' + value + '"/> </a>'
+                            }
+                        },
+                        {
+                            text: 'IMG2', datafield: 'Image1_imgPath', filterable: false, editable: false, width: 50, height: 70, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+                                var img = dataAdapter.records[row].Image1_imgPath;
+                                return ' <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + img + '"><img style="margin-left: 5px;" height="50" width="50" src="https://s3.us-east-2.amazonaws.com/amzca.bb.images.thumbnails/' + value + '"/> </a>'
+                            }
+                        },
+                        {
+                            text: 'IMG2', datafield: 'Image2_imgPath', editable:false, filterable: false, width: 50,height:70, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+                                var img = dataAdapter.records[row].Image2_imgPath;
+                                return ' <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + img + '"><img style="margin-left: 5px;" height="50" width="50" src="https://s3.us-east-2.amazonaws.com/amzca.bb.images.thumbnails/' + value + '"/> </a>'
+                            }
+                        }
+                        //{
+                        //    text: 'IMG2', datafield: 'asin_main_image_bucket_url', editable: false, filterable: false, width: 50, height: 70, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+                        //        var img = dataAdapter.records[row].asin_main_image_bucket_url;
+                        //        return ' <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + img + '"><img style="margin-left: 5px;" height="50" width="50" src="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + value + '"/> </a>'
+                        //    }
+                        //},
+                        //{
+                        //    text: 'IMG2', datafield: 'asin_image_1_bucket_url', editable: false, filterable: false, width: 50, height: 70, cellsrenderer: function (row, columnfield, value, defaulthtml, columnproperties) {
+                        //        var img = dataAdapter.records[row].asin_image_1_bucket_url;
+                        //        return ' <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + img + '"><img style="margin-left: 5px;" height="50" width="50" src="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + value + '"/> </a>'
+                        //    }
+                        //}
+
+                    ]
+                });
+
+
+        });
+    </script>
+
+    <div id="jqxgrid"></div>
+}

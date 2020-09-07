@@ -1,0 +1,328 @@
+﻿@model Hld.WebApplication.ViewModel.CasePackSearchViewModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "GetTemplateList";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .myclass {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .searchFormFixed {
+        position: fixed;
+        top: 50px;
+        width: 100%;
+        z-index: 500;
+        padding-bottom: 3px;
+        background: white;
+    }
+
+    .fixedclassforpagination {
+        position: fixed;
+        top: 140px;
+        padding-bottom: 0px;
+        z-index: 400;
+        background: white;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+    .ui-autocomplete {
+        z-index: 2000;
+    }
+</style>
+<div class="container-fluid searchFormFixed" style="padding-left:30px;">
+    <br />@*<h6>Product CasePack List</h6>*@
+    <p>
+        <a class="btn btn-success m-1 btnstyle" asp-controller="ShipmentCasePack" asp-action="SaveTemplate" target="_blank">Create new Case Pack</a>
+    </p>
+    <div class="loader">
+        <img src="~/Images/giffff.gif" />
+    </div>
+
+    <div class="mb-1 searchFormcard" id="searchForm">
+        <div class="">
+            @using (Html.BeginForm("GetTemplateList", "ShipmentCasePack", FormMethod.Get))
+            {
+                <div class="row" style="        margin-left: 2px;
+        margin-top: 15px;
+">
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    {<div class="col-md-1 p-0 mr-1">
+
+                            <input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />
+                            @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                            <span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>
+
+                            @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })
+                        </div>
+                    }
+                    <div class="col-md-2 p-0 mr-1">
+                        <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
+                    </div>
+                    <div class="col-md-3 p-0 mr-1">
+                        <input type="text" id="Title" name="Title" value="@Model.Title" placeholder="Title" class="form-control" style="box-shadow: none" />
+                    </div>
+                    <div class="col-md-1 p-0">
+                        <button class="ml-0 btn btn-primary" type="submit" id="Search">Search</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row col col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: -5px;
+margin-top: 9px;">
+        <div class="col col-md-2">
+            <div class="row">
+                <div class="pagination col-md-6 col">
+
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-2" style="margin-top:5px;">
+            <span> Total Records Found : @ViewBag.TotalCount</span>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="pagination">
+
+    </div>
+</div>
+<div class="hidedialogbox">
+    <div id="dialog-Delete">
+        <h6 style="color:red">Do you want to delete this record!</h6>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#Vendor').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+                            debugger;
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                select: function (event, ui) {
+
+                    $('#VendorIdForMessage').val(ui.item.id);
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#empty-message-Vendor").text("No results found");
+                        $('#VendorIdForMessage').val("0");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message-Vendor").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+
+            $(".loader").hide();
+            $("#dialog-Delete").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+            $(document).on("click", ".btnDelete", function () {
+                var selectedRow = $(this);
+                var productid = $(selectedRow).parents('tr').find('.CasePackId').val();
+                $("#dialog-Delete").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            $(".loader").show();
+                            $.ajax({
+                                type: 'POST',
+                                url: '../ShipmentCasePack/DeleteCasePack',
+                                data: { Id: productid },
+                                success: function (res) {
+                                    debugger;
+                                    $("#dialog-Delete").dialog("close");
+                                    $(".loader").hide();
+                                    selectedRow.parents('tr').remove();
+                                    $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger myclass' });
+                                    debugger;
+                                },
+                                Error: function (err) {
+                                    debugger;
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                })
+                $("#dialog-Delete").dialog("open");
+            });
+
+
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
+            var SKU = getUrlParameter('SKU');
+            var Title = getUrlParameter('Title');
+            var Vendor = getUrlParameter('Vendor');
+            if (Vendor == null || Vendor == "") {
+                $("#VendorIdForMessage").val(0);
+            }
+            var VendorId = $("#VendorIdForMessage").val();
+
+              $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                  format: '[< nncnn >]',
+                  perpage: 25, // show 10 elements per page
+                  lapping: 0, // don't overlap pages for the moment
+                  page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                  onSelect: function (page) {
+                      debugger;
+                      pageNo = page;
+                      // add code which gets executed when user selects a page
+                      var url = '/ShipmentCasePack/GetTemplateListPartial?page=' + page + "&SKU=" + SKU + "&Title=" + Title + "&VendorId=" + VendorId ;
+                      var completURL = url  ;
+                      $.ajax({
+                          url: completURL,
+                          data: {  },
+                          type: 'POST',
+                          traditional: true,
+                          success: function (data) {
+
+                              $('#loadOrder').empty();
+                              $('#loadOrder').html(data);
+                              $(function () {
+                                  $(".table").tablesorter();
+                              })
+                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                          },
+                          error: function (data) {
+                              debugger;
+                          }
+                      });
+                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                              start = moment(OrderDateTimeFrom);
+                              end = moment(OrderDateTimeTo);
+                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                          }
+                          else {
+                              $('#reportrange span').html("No Date Selected");
+                          }
+
+                      }
+                      else {
+                          $('#reportrange span').html("No Date Selected");
+                      }
+                  },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+             });
+            $(".table").tablesorter();
+            
+        });
+    </script>
+}

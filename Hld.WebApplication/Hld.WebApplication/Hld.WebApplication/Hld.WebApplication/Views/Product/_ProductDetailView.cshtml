@@ -1,0 +1,59 @@
+﻿@model Hld.WebApplication.ViewModel.ProductInsetUpdateViewModel
+
+<style type="text/css">
+    .removePadding {
+        padding-left: 0px !important;
+        padding-right: 3px !important;
+    }
+    .r_p_l_r {
+      
+        padding-right: 0px !important;
+            max-width: 11%;
+     
+    }
+</style>
+
+
+<div class="row">
+    <label class="control-label col-sm-1">SKU:</label>
+    <div class="col-sm-2 removePadding">
+        @*@Html.DisplayFor(e => Model.ProductSKU)*@
+        <a href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@Model.ProductSKU" target="_blank">@Model.ProductSKU</a>
+    </div>
+    <label class="control-label col-sm-1 text-right removePadding  ">Brand:</label>
+    <div class="col-sm-1 removePadding">
+        @Html.DisplayFor(e => Model.Brand)
+    </div>
+    <label class="control-label col-sm-1 text-right removePadding  ">UPC:</label>
+    <div class="col-sm-2 removePadding">
+        @Html.DisplayFor(e => Model.Upc)
+    </div>
+    <label class="control-label col-sm-1 text-right removePadding  ">Status:</label>
+    <div class="col-sm-2 removePadding">
+        @Html.DisplayFor(e => Model.StatusName)
+    </div>
+    <div class="">
+        <a asp-action="ProductAddUpdate" asp-controller="Product" asp-route-ProductSKU="@Model.ProductSKU" target="_blank">Edit</a><br>
+    </div>
+</div>
+<div class="row">
+    <label class="control-label col-sm-2 r_p_l_r">Avg Cost:</label>
+    <div class="col-sm-3 removePadding">
+        USD  @Html.DisplayFor(e => Model.AvgCost)
+
+        &nbsp;  CAD<span style="font-weight:bold;color:darkgoldenrod"> @Html.DisplayFor(e => Model.CADPrice)</span>
+
+    </div>
+</div>
+<div class="row">
+    <label class="control-label col-sm-2 ">Product Title:</label>
+    <div class="col-sm-9 removePadding">
+        @Html.DisplayFor(e => Model.ProductTitle)
+    </div>
+</div>
+<div class="row">
+    <label class="control-label col-sm-2 pr-0">Product Category:</label>
+    <div class="col-sm-9 removePadding">
+        @Html.DisplayFor(e => Model.Category)
+    </div>
+</div>

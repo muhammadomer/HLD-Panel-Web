@@ -1,0 +1,49 @@
+﻿@model List<ProductWarehouseQtyViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Sr #</th>
+            <th scope="col">Warehouse Name</th>
+            <th scope="col">Qty</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int sno = 0;
+        }
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @{ sno++; }
+                    @sno
+                </td>
+                @if (item.WarehouseName == "Interim FBA USA" || item.WarehouseName == "Interim FBA CA")
+                {
+                    <td style="color:orange">@item.WarehouseName</td>
+                }
+                else if (item.WarehouseName == "HLD-Tech1")
+                {
+                    <td style="color:blue;font-weight:bold">@item.WarehouseName</td>
+                }
+                else if (item.WarehouseName == "FBA USA" || item.WarehouseName == "FBA Canada")
+                {
+                    <td style="color:green">@item.WarehouseName</td>
+                }
+                else
+                {
+                    <td>@item.WarehouseName</td>
+                }
+
+
+                <td>@item.AvailableQty</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+

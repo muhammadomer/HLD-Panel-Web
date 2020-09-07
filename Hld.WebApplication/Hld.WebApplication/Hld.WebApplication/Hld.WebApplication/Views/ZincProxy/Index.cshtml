@@ -1,0 +1,178 @@
+﻿@model Hld.WebApplication.ViewModel.ZincProxyViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .controlabel {
+        width: 125px;
+        font-weight: bold;
+    }
+
+    .sidebar {
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 51px;
+        left: 0;
+        width: 165px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        background-color: lightgrey;
+        overflow-x: hidden;
+        padding-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            color: black;
+            display: block;
+            height: auto;
+            border-bottom: 1px solid #b7b5b5;
+        }
+
+            .sidebar a:hover {
+                color: coral;
+            }
+
+    .sidebarafter {
+        margin-left: 210px;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+</style>
+<div class="sidebar">
+    <ul class="sidebar-links">
+        <li class="">
+            <a class="" asp-action="WatchListSummary" asp-controller="ZincWatchlist">Zinc DS Job</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincKey" asp-controller="Channels">Zinc</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincMaxDays" asp-controller="Channels">Zinc Max Days</a>
+        </li>
+        <li class="">
+            <a class="active" asp-action="Index" asp-controller="ZincProxy">Zinc Proxy</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="SaveZincEmail" asp-controller="ZincProxy">Zinc Proxy Email</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincAccounts">Amazon Account</a>
+        </li>
+
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="CreditCardView">Credit Card</a>
+        </li>
+
+    </ul>
+
+
+
+</div>
+<div class="container sidebarafter">
+    <div style="margin-left:-17px">
+        <h6> Create Zinc Proxy </h6>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Index">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group row">
+                    <label asp-for="ProxyUser" class="col-form-label-sm controlabel">Proxy User:</label>
+                    <div class="col-sm-4">
+                        <input type="text" asp-for="ProxyUser" class="form-control form-control-sm">
+                        <span asp-validation-for="ProxyUser" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row ">
+                    <label asp-for="ProxyIP" class="col-form-label-sm controlabel">Proxy IP:</label>
+                    <div class="col-sm-4">
+                        <input type="text" asp-for="ProxyIP" class="form-control form-control-sm">
+                        <span asp-validation-for="ProxyIP" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row ">
+                    <label asp-for="ProxyPort" class="col-form-label-sm controlabel">Proxy Port:</label>
+                    <div class="col-sm-4">
+                        <input type="text" asp-for="ProxyPort" class="form-control form-control-sm">
+                        <span asp-validation-for="ProxyPort" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row ">
+                    <label asp-for="ProxyEmail" class="col-form-label-sm controlabel">Proxy Email:</label>
+                    <div class="col-sm-4">
+                        @*<input type="text" asp-for="ProxyEmail" class="form-control form-control-sm">
+                            <span asp-validation-for="ProxyEmail" class="text-danger"></span>*@
+                        @Html.DropDownListFor(model => model.ProxyEmail, new SelectList(Model.List, "ProxyEmail", "ProxyEmail"), new { @class = "form-control p-0" })
+                        @*<select class="form-control" id="BoxesDrpDown" style="padding:0px;" asp-for="ProxyEmail"></select>*@
+                    </div>
+                </div>
+                <div class="form-group row ">
+                    <label asp-for="ProxyPassword" class="col-form-label-sm controlabel">Proxy Password:</label>
+                    <div class="col-sm-4">
+                        <input type="text" asp-for="ProxyPassword" class="form-control form-control-sm">
+                        <span asp-validation-for="ProxyPassword" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row ">
+                    <div class="offset-md-1" style="padding-left:45px">
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+
+                    </div>
+                    <div style="margin-top: 2px;
+                         margin-left: 6px;">
+                        <a class="" asp-action="ZincProxyDetail" asp-controller="ZincProxy" target="_blank">View Proxy</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            loadEmail();
+
+            function loadEmail() {
+                $.ajax({
+                    type: 'POST',
+                    url: '../ZincProxy/GetZincProxyEmail',
+
+                    data: {},
+                    success: function (res) {
+                        debugger;
+                        $("#BoxesDrpDown").html("");
+                        var content = '';
+                        $.each(res, function (index, value) {
+                            content = content + '<option value = "' + value.ProxyEmail + '">' + value.ProxyEmail + '</option>';
+                        });
+                        $("#BoxesDrpDown").append(content);
+
+                    }
+                });
+            }
+
+
+        });
+
+    </script>
+}

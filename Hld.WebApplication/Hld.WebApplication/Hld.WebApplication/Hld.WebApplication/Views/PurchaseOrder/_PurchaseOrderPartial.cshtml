@@ -1,0 +1,209 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.PurchaseOrdersViewModel>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyOrdersViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+<style type="text/css">
+       .maincontainer {
+        background-color: #2A2B2B03;
+        min-width: 1320px
+    }
+
+    .table-bordered thead th, .table-bordered thead td {
+        padding: 0px;
+        border-bottom-width: 2px;
+    }
+
+    .purchaseEnd {
+        text-align: right !important;
+       
+    }
+
+    .table thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #DEE2E6;
+        text-align:center;
+    }
+
+    .table th, .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #DEE2E6;
+        vertical-align: middle !important;
+    }
+
+
+    .table td {
+        text-align: center;
+    }
+    /*.table thead tr th {
+        position: sticky;
+        top: 50px;
+        padding: 7px;
+        z-index: 2;
+        background-color: lightgray;
+    }*/
+    .table thead tr:nth-child(1) th {
+        position: sticky;
+        top: 250px;
+        padding: 0px;
+        padding-right: 16px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    .table thead tr:nth-child(2) th {
+        position: sticky;
+        top: 266px;
+        padding: 0px;
+        padding-right: 16px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    .table thead tr:nth-child(3) th {
+        position: sticky;
+        top: 284px;
+        padding: 0px;
+        padding-right: 16px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    .table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .table tr:first-child th, tr:last-child th {
+        background: none !important;
+        pointer-events: none !important;
+        background-color: lightgray !important;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+    .purchaseorder {
+        text-align: center !important;
+        padding: 0 !important;
+    }
+    .purchaseorderhead {
+        text-align: right !important;
+        padding-right: 4px !important;
+    }
+
+</style>
+<div class="container-fluid mt-3 maincontainer">
+    @*<div class="table-responsive">*@
+        <table class="table " style="margin-top: 252px;">
+            <thead style="background-color:lightgray;">
+                <tr>
+                    <th colspan="4"></th>
+                    <th colspan="4" style="background:#D5EFFF !important">Quantity</th>
+                    <th colspan="4" style="background:#D1FFE8 !important">Amount in USD</th>
+                </tr>
+                <tr>
+                    <th>PO #</th>
+
+                    <th>Vendor</th>
+                    <th>
+                        PO Created On
+                    </th>
+                    <th>SKU #.</th>
+                    <th>Ordered</th>
+                    <th>Shipped</th>
+                    <th>Received</th>
+                    <th>Open</th>
+                    <th>Ordered</th>
+                    <th>Shipped</th>
+
+                    <th>Received</th>
+                    <th>Open</th>
+                </tr>
+                <tr>
+
+                    <th class="">
+                        @*@ViewBag.POcount*@
+                    </th>
+                    <th class="">
+
+                    </th>
+                    <th >
+                        @*@ViewBag.count*@
+                    </th>
+                    <th >
+
+                    </th>
+
+
+
+                    <th class="purchaseorder">
+                        @ViewBag.ordQty
+
+                    </th>
+                    <th class="purchaseorder">
+                        @ViewBag.shiQty
+
+                    </th>
+                    
+
+                    <th class="purchaseorder">
+                        @ViewBag.recQty
+                    </th>
+                    <th class="purchaseorder">
+                        @ViewBag.OpenQty
+                    </th>
+
+
+                    
+
+                    <th class="purchaseorderhead">
+                        @string.Format("{0:N2}", @ViewBag.orderamount)
+
+                    </th>
+                    <th class="purchaseorderhead">
+                        @string.Format("{0:N2}", @ViewBag.shipedamount)
+
+                    </th>
+                    <th class="purchaseorderhead">
+                        @string.Format("{0:N2}", @ViewBag.ReceviedAmount)
+
+                    </th>
+                    <th class="purchaseorderhead">
+                        @string.Format("{0:N2}", @ViewBag.OpenAmount)
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        <a asp-action="PurchaseOrdersItems" target="_blank" asp-controller="PurchaseOrder" asp-route-POId="@item.POId">@item.POId</a>
+                    </td>
+
+                    <td>@item.Vendor (@item.VendorId)</td>
+                    <td>    @string.Format("{0: MMM d, yyyy}", item.OrderedOn)</td>
+                    <td class="purchaseorder">@item.SKUCount</td>
+                    <td class="purchaseorder">@item.OrderQty</td>
+                    <td class="purchaseorder" >@item.ShippedQty</td>
+                    <td class="purchaseorder">@item.recQty</td>
+                    <td class="purchaseorder">@item.QtyOpen</td>
+                    <td class="purchaseEnd">
+                        @string.Format("{0:N2}", @item.AmountOrdered)
+                    </td>
+                    <td class="purchaseEnd"> @string.Format("{0:N2}", @item.ShippedAmount)</td>
+                    <td class="purchaseEnd"> @string.Format("{0:N2}", @item.AmountReceived)</td>
+                    <td class="purchaseEnd"> @string.Format("{0:N2}", @item.AmountOpen)</td>
+
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    @*</div>*@
+</div>

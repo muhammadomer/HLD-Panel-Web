@@ -1,0 +1,661 @@
+﻿@model Hld.WebApplication.ViewModel.BBProductViewModel
+@{
+    ViewData["Title"] = "PropertyPage";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style type="text/css">
+    .removePadding {
+        padding-left: 0px !important;
+        padding-right: 3px !important;
+    }
+
+    #mainProductDetai {
+        background-color: honeydew;
+        border-radius: 2px;
+        padding-top: 5px;
+        padding-left: 7px;
+    }
+
+    div.removePadding > .row > .col-sm-2 {
+        padding-right: 0px;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+
+    .hidemainDivshowPartialView {
+        display: none;
+    }
+
+    .hideLoader {
+        display: none;
+    }
+
+    .checkdays-m-text {
+        margin-left: 3px;
+        vertical-align: text-bottom;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+</style>
+
+<h6 style="color: #60ABAF; font-weight: 600;">Product Dashboard </h6>
+<hr />
+
+<div class="row">
+    <div class="col-sm-2" id="warehouseQty">
+
+    </div>
+    <div class="col-sm-6">
+        <div id="ProductNavBar" style="background-color:#e1e1e2;border-radius:2px;">
+            <div class="container">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="PropertyPage" asp-controller="HLDHistory" asp-route-ProductSku="@Model.Product_Sku">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" asp-action="GetSalesHistoryOfSKU" asp-controller="HLDHistory" asp-route-ProductSku="@Model.Product_Sku">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="GetProductWarehouseQty" asp-controller="ProductWarehouseQty" asp-route-ProductSku="@Model.Product_Sku">Warehouse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  " href="#">Purchasing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  " href="#">Returns</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="mainProductDetai">
+
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="imagesDivMainView"></div>
+    </div>
+</div>
+
+
+
+
+<hr style="border:1px solid black;margin-right:10px;" />
+<div class="mainWrapper">
+    <div class="row">
+        <!--Start Left Menue-->
+        <div class="col-sm-2">
+            <div style="background-color:#e1e1e2;">
+                <ul class="nav flex-column sidebar-links">
+                    <li class="nav-item ">
+                        <a class="nav-link " asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@Model.Product_Sku">BestBuy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="ProductZinc" asp-controller="Zinc" asp-route-ProductSKU="@Model.Product_Sku">Zinc</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--End Left Menu-->
+        <!--Start MainSection-->
+        <div class="col-sm-8" id="">
+            @*<div class="row">
+                    <div class="col-sm-2">
+                        AvgCost (CA$)
+                    </div>
+                    <div class="col-sm-3">
+                        2345
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        BB Seller Price
+                    </div>
+                    <div class="col-sm-3">
+                        1234
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        BB Comm
+                    </div>
+                    <div class="col-sm-3">
+                        1234
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Est P&L
+                    </div>
+                    <div class="col-sm-3">
+                        1234
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Max Price (Cents)
+                    </div>
+                    <div class="col-sm-3">
+                        2345
+                    </div>
+                </div>*@
+            <div style="padding-top:5px;padding-bottom:5px;" class="row">
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="textboxZincASIN" />
+                </div>
+                <div class="col-sm-2" style="padding:0">
+                    <button id="btnGetAsinDetail" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary">Get ASIN Detail</button>
+                    <span>
+                        <img style="display:none;" class="ButtonLoaderForAdd" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                    </span>
+                </div>
+                <div class="col-sm-3" style="padding:0">
+                    <button id="btnAddAsinManually" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary ml-2" data-toggle="modal" data-target="#myModal" onclick="PopupForm('@Url.Action("AddUpdateZinc","Zinc",new {id=0 })')">Add ASIN Manually</button>
+                    <span>
+                        <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                    </span>
+                </div>
+                @*<div class="col-sm-2" style="padding:0">
+                        <button id="btnZinJob" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary">Zinc Job</button>
+                    </div>*@
+            </div>
+            <div id="mainDivshowPartialView" style="padding-top:5px;padding-bottom:5px;width: 1090px;" class="row ">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">ASIN Detail </div>
+                        <div class="card-body">
+                            <div id="showPartialView">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--End Main Section-->
+            <div style="padding-top:5px;padding-bottom:5px;width: 1091px;" class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">ASIN List </div>
+                        <div class="card-body" style="padding:0px;" id="showPartialViewList">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" value="@Model.Product_Sku" id="HfProductId" />
+
+
+
+        <div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+            <div class="modal-dialog" style="width:1000px;">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Zinc</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body" id="modelBody">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade"  style="margin-top: 80px!important;" id="myModalAzin" data-backdrop='static' data-keyboard='false'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add to Watchlist</h4>
+                    </div>
+                    <div class="modal-body" id="watchlistmodalbody">
+
+                    </div>
+                    <div class="modal-footer" style="display:block">
+
+                        <button type="button" class="btn btn-link closed" data-dismiss="modal" style="color: black;float: right;text-decoration: none;">
+                            Close
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @*<div id="dialog-box">
+            <h6 style="color:red">Do you want to start zinc job!</h6>
+        </div>*@
+    <div class="hidedialogbox">
+        <div id="dialog-boxAsin">
+            <h6 style="color:red">Do you want to delete this ASIN!</h6>
+        </div>
+    </div>
+
+
+    @section Scripts{
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+             var productsku = $('#HfProductId').val();
+            var indexURL = '/Zinc/Index';
+            $.get(indexURL, { sku: productsku }).done(function (response) {
+                $('#showPartialViewList').html(response);
+            });
+            $("#dialog-boxAsin").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+
+            //$("#dialog-box").dialog({
+            //    autoOpen: false,
+            //    //title: 'Are u want to delete this reocord!',
+            //    modal: true,
+            //});
+
+            //$("#btnZinJob").click(function () {
+
+            //    $("#dialog-box").dialog({
+            //        buttons: {
+            //            "Confirm": function () {
+            //                $.ajax({
+            //                    type: 'GET',
+            //                    url: '../Zinc/ZincJobExecute',
+            //                    contentType: 'application/json',
+            //                    success: function (res) {
+            //                        console.log("success");
+            //                        $("#dialog-box").dialog("close");
+            //                        $.notify('Zinc job executed successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+            //                    }
+            //                });
+            //            },
+            //            "Cancel": function () {
+            //                $(this).dialog("close");
+            //            }
+            //        }
+            //    });
+            //    $("#dialog-box").dialog("open");
+            //});
+
+
+
+            $(".sidebar-links > li").click(function () {
+                $(".sidebar-links > li").removeClass("active");
+                $(this).addClass("active");
+            })
+            if ($('#HfProductId').val().trim().length > 0) {
+
+                $.get('/Product/ProductDetailView/' + $('#HfProductId').val() + '').done(function (response) {
+                    $('#mainProductDetai').html(response);
+                });
+
+                $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
+
+                    console.log(response);
+                    var $container = $(response).wrap('<div />');
+                    $container.find('span.close').remove();
+                    $('#imagesDivMainView').html($container);
+
+                });
+                 $.get('/Product/PoroductWarehouseQty?sku=' + $('#HfProductId').val() + '').done(function (response) {
+                                $('#warehouseQty').html(response);
+                            });
+            }
+
+
+
+
+            $(".sidebar-links > li").click(function () {
+                $(".sidebar-links > li").removeClass("active");
+                $(this).addClass("active");
+            });
+
+
+            $('#btnGetAsinDetail').click(function () {
+
+                if ($('body #textboxZincASIN').val().replace(/ /g, '').length > 0) {
+                    $('.ButtonLoaderForAdd').css('display', 'inline');
+                    $('#btnGetAsinDetail').attr('disabled', true)
+                    $('body #textboxZincASIN').css('border', '');
+                    $.ajax({
+                        url: '/Zinc/GetProductOfferDataFromZinc?orderid=' + $('#textboxZincASIN').val() + '&ProductSKU=' + productsku,
+                        type: 'GET',
+                        error: function (xhr) {
+                            alert('Error: ' + xhr.statusText);
+                            $('#btnGetAsinDetail').removeAttr('disabled');
+                            $('.ButtonLoaderForAdd').css('display', 'none');
+                        },
+                        success: function (result) {
+                            $('.ButtonLoaderForAdd').css('display', 'none');
+                            $('#btnGetAsinDetail').removeAttr('disabled');
+                            $('#showPartialView').html(result);
+                        }
+
+                    });
+                }
+                else {
+                    $('body #textboxZincASIN').css('border', '1px solid red');
+                }
+
+
+                //if ($('#textboxZincASIN').val().trim().length > 0) {
+                //    $.get(url, { orderid: asin, ProductSKU: productsku }).done(function (response) {
+
+                //        $('#showPartialView').html(response);
+                //    });
+                //}
+            });
+
+
+              $(document).on('click','.UpdateSkuImage',function () {
+                        var URL = '/SellerCloud/UpdateImageFromSellerCloudBySKU';
+                        $('.UpdateImageButtonLoader').css('display', 'inline');
+                        var productSKU = $('#HfProductId').val().trim();
+                        $.ajax({
+                            type: 'Get',
+                            url: URL,
+                            data: { sku: productSKU },
+                            dataType: 'json',
+                            traditional: true,
+                            success: function (data) {
+                                 $(document).find('.UpdateSkuImage').removeAttr('disabled');
+                                 $(document).find('.UpdateImageButtonLoader').css('display', 'none');
+                                if (data.success) {
+                                    $.notify('Update Successfully', { globalPosition: 'bottom right', className: 'success' });
+                                    ShowImages();
+                                }
+                                else if (data.ImageNotFound) {
+                                    $.notify('Image Not Found', { globalPosition: 'bottom right', className: 'warn' });
+                                }
+                                else if (data.ImageAlreadyExist) {
+                                    $.notify('Image Already Exist', { globalPosition: 'bottom right', className: 'info' });
+                                }
+                                else {
+                                    $.notify('some error occured', { globalPosition: 'bottom right', className: 'error' });
+                                }
+                            }
+                        });
+                    });
+
+
+        });
+
+            function CancelFormProductASIN() {
+                $('body #textboxZincASIN').val('');
+            $('#showPartialView').empty();
+            $('body').find('#partialASIN').empty();
+
+
+            }
+
+            function PopupForm(url) {
+                $.get(url).done(function (response) {
+                    $('#modelBody').html(response);
+                });
+            }
+
+            function PopupFormwatchlist(url) {
+                $.get(url).done(function (response) {
+                    $('#watchlistmodalbody').html(response);
+                });
+            }
+
+            function SubmitFormProductASINUpdate() {
+                debugger;
+                var productSku = $('#HfProductId').val().trim();
+                 var url = '@Url.Action("AddUpdateZincWithdollerPrice", "Zinc")?sku='+productSku+'';
+            var data = $('#form1').serialize();
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success == true) {
+                            $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
+                            $.get('/Zinc/Index', { sku: productSku }).done(function (response) {
+                                $('#myModal').modal('toggle');
+                                $('body #textboxZincASIN').val('');
+                                $('#showPartialView').empty();
+                                $('#showPartialViewList').empty();
+                                $('#showPartialViewList').html(response);
+                            });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+            //function DeleteASIN(id) {
+            //    var productSku = $('#HfProductId').val().trim();
+            //    var url = '/Zinc/DeleteProductASINZincDetail/' + id;
+            //    $.ajax({
+            //        type: "POST",
+            //        url: url,
+            //        success: function (data) {
+            //            if (data.success == true) {
+            //                $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
+            //                $.get('/Zinc/Index', { sku: productSku }).done(function (response) {
+            //                    $('#showPartialViewList').empty();
+            //                    $('#showPartialViewList').html(response);
+            //                });
+            //            }
+            //        }
+            //    });
+            //}
+
+
+            function DeleteASIN(id) {
+                $("#dialog-boxAsin").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            var productSku = $('#HfProductId').val().trim();
+                            var url = '/Zinc/DeleteProductASINZincDetail/' + id;
+                            $.ajax({
+                                type: "POST",
+                                url: url,
+                                success: function (data) {
+                                    if (data.success == true) {
+                                        $("#dialog-boxAsin").dialog("close");
+                                        $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
+                                        $.get('/Zinc/Index', { sku: productSku }).done(function (response) {
+                                            $('#showPartialViewList').empty();
+                                            $('#showPartialViewList').html(response);
+                                        });
+                                    }
+                                }
+                            });
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                $("#dialog-boxAsin").dialog("open");
+            }
+
+            function SubmitFormProductASIN() {
+
+                var productSku = $('#HfProductId').val().trim();
+            var url = '@Url.Action("AddUpdateZinc", "Zinc")?sku='+productSku+'';
+            var data = $('#form1').serialize();
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success == true) {
+                            $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
+                            $.get('/Zinc/Index', { sku: productSku }).done(function (response) {
+                                $('body #textboxZincASIN').val('');
+                                $('#showPartialView').empty();
+                                $('#showPartialViewList').empty();
+                                $('#showPartialViewList').html(response);
+                            });
+                        }
+                    }
+                });
+            }
+            return false;
+            }
+
+            function SubmitFormWatchlistASIN() {
+
+
+                var url = '@Url.Action("Watchlist", "ZincWatchlist")';
+                var data = $('#watchlistform').serialize();
+                $.validator.unobtrusive.parse($('#watchlistform'));
+                if ($('#watchlistform').valid()) {
+                    $('#btn_submitWatchlist').prop('disabled', true);
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: data,
+                            success: function (data) {
+                                if (data == true) {
+                                    $('#ErrorMessageWatchlist').append('<span style="color:green">Success</span>')
+
+                                }
+                                else {
+
+                                    $('#ErrorMessageWatchlist').append('<span style="color:red">Error</span>')
+
+                                }
+                            }
+                        });
+                    }
+                    else
+                     {
+                         $('#ErrorMessageWatchlist').empty();
+                         $('#ErrorMessageWatchlist').append('<span style="color:red">Please select days.</span>')
+                    }
+
+              }
+
+            function GetUpdateFromZinc(asin, id, element) {
+                $(element).attr("disabled", true);
+                var productSku = $('#HfProductId').val().trim();
+                var loader = $('.addLoader-' + id);
+                $(loader).css('display','inline');
+                $.ajax({
+
+                    type: "POST",
+                    url: '/Zinc/GetProductOfferDataFromZincAndUpdateDatabase?orderid=' + asin + '&ProductSKU=' + $('#HfProductId').val() +'&bbZincID='+id,
+                    success: function (data) {
+                        if (data.success == true) {
+                            $(loader).css('display', 'none');
+                            $(element).removeAttr("disabled");
+                            $.get('/Zinc/Index', { sku: productSku }).done(function (response) {
+                                $('#showPartialViewList').empty();
+                                $('#showPartialViewList').html(response);
+                            });
+
+                        }
+                        else {
+                            $(element).removeAttr("disabled");
+                            $(loader).css('display','none')
+                            $('.addText-' + id).text('No Response');
+                        }
+                    }
+                });
+            }
+
+            function PopupForm(url) {
+                $.get(url).done(function (response) {
+                    $('#modelBody').html(response);
+                });
+            }
+            $(document).ready(function () {
+                $(this).scrollTop(0);
+
+            });$(document).ready(function () {
+            $(document).on("change", "select,input[type=radio]", function () {
+            var selVal = $('#optin select option:selected').text();
+            var radVal = $('input[type=radio]:checked').val();
+            $('.total').html(selVal * radVal - radVal)
+        })
+            });
+
+
+
+            $(document).on("change", ".customSwitch1", function () {
+            var swtichstatus = '';
+            if ($(this).prop("checked") == true) {
+                 swtichstatus = 1;
+            } else {
+                swtichstatus = 0;
+            }
+            var asin = $(this).closest('tr').find('td span.switchval').attr('value');
+            var url = "/ZincWatchlist/GetActiveStatus";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { ASIN: asin, Active:swtichstatus},
+                success: function (data) {
+                    if (data == true) {
+                       $.notify("Updated Successfully", { globalPosition: 'bottom right', className: 'success' });
+                    } else {
+                        $.notify("Error", { globalPosition: 'bottom right', className: 'danger' });
+                    }
+                }
+            });
+        });
+
+        $(document).on("keyup", "#ZincAmzPrice", function () {
+                    var $this = $(this);
+                 $this.val($this.val().replace(/[^\d.]/g, ''));
+                $('#ZincMaxPrice').val(parseFloat($('#ZincAmzPrice').val() * 1.25));
+                    $('#ZincMaxPrice').prop("readonly",true)
+        });
+
+        $(document).on('click', '#GetquantityFromSellerCloud', function () {
+
+
+         var loader =   $(document).find('.ButtonLoader1');
+                  var  selSKU = $(this).attr('data-id');
+                $(loader).css('display', 'block');
+
+         $.get('/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloud?sku=' + selSKU + '').done(function (response) {
+                $(loader).css('display', 'none');
+                                 $(document).find('#warehouseQty').html(response);
+           });
+       });
+        </script>
+
+    }
+
+
+
+
+

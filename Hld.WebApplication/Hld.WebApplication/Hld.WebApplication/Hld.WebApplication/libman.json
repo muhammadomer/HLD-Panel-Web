@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "notify.js@3.0.0",
+      "destination": "wwwroot/notify/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "notify@0.4.2",
+      "destination": "wwwroot/lib/notify/"
+    },
+    {
+      "library": "sticky-table-headers@0.1.24",
+      "destination": "wwwroot/sticky-table-headers/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jQuery-Paging@1.2.0",
+      "destination": "wwwroot/lib/jQuery-Paging/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery.tablesorter@2.31.1",
+      "destination": "wwwroot/lib/jquery.tablesorter/"
+    },
+    {
+      "library": "fixed-header-table@1.3.0",
+      "destination": "wwwroot/lib/fixed-header-table/"
+    },
+    {
+      "library": "font-awesome@5.9.0",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "select2@4.0.8",
+      "destination": "wwwroot/select2/"
+    }
+  ]
+}

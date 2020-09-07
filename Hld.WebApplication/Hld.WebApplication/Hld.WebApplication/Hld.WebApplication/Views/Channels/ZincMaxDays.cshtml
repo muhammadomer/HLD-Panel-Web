@@ -1,0 +1,162 @@
+﻿
+@{
+    ViewData["Title"] = "ZincMaxDays";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+
+@model Hld.WebApplication.ViewModel.ZincKeyModel
+
+
+
+<style>
+    .sidebar {
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 51px;
+        left: 0;
+        width: 165px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        background-color: lightgrey;
+        overflow-x: hidden;
+        padding-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            color: black;
+            display: block;
+            height: auto;
+            border-bottom: 1px solid #b7b5b5;
+        }
+
+            .sidebar a:hover {
+                color: coral;
+            }
+
+    .sidebarafter {
+        margin-left: 210px;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+</style>
+
+<div class="sidebar">
+    <ul class="sidebar-links">
+
+
+        <li class="">
+            <a class="" asp-action="WatchListSummary" asp-controller="ZincWatchlist">Zinc DS Job</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincKey" asp-controller="Channels">Zinc Key</a>
+        </li>
+
+        <li class="">
+            <a class="active" asp-action="ZincMaxDays" asp-controller="Channels">Zinc Max Days</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincProxy">Zinc Proxy</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="SaveZincEmail" asp-controller="ZincProxy">Zinc Proxy Email</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincAccounts">Amazon Account</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="CreditCardView">Credit Card</a>
+        </li>
+
+    </ul>
+
+
+
+</div>
+
+<div class="col-10 container p-0 m-0">
+
+    <div class="row">
+
+        <div class="col-md-10 sidebarafter">
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Zinc Max Days:</label>
+                    <input type="number" style="margin-right: 5px;box-shadow: none !important" autocomplete="off" class="form-control " name="ZincCallMaxDays" id="ZincCallMaxDays" />
+                </div>
+                <div class="form-group">
+                    <input type="button" value="Save" id="btn_SaveMaxDays" class="btn btn-primary" />
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+
+
+            var _url = '/Channels/GetZincMaxDays/';
+            $.ajax({
+                url: _url,
+
+                type: 'POST',
+                traditional: true,
+                //contentType: 'application/json',
+                success: function (data) {
+                    $('#ZincCallMaxDays').val(data)
+                }
+            });
+
+            $(document).on('click', '#btn_SaveMaxDays', function () {
+
+
+                var Days = $('#ZincCallMaxDays').val();
+
+                // console.log(JsonDataOfOrder);
+                var Url = '/Channels/UpdateAmazonZincDays/';
+                $.ajax({
+                    url: Url,
+                    data: { Days: Days },
+                    type: 'POST',
+                    traditional: true,
+                    //contentType: 'application/json',
+                    success: function (data) {
+                        if (data) {
+                            $.notify("Success", { globalPosition: 'right middle', className: 'success' });
+                        }
+                        else {
+                            $.notify("Error", { globalPosition: 'right middle', className: 'success' });
+                        }
+                    }
+                });
+
+                //commented code for display lock icone
+
+                //$(lockZincOrder).css('display', 'inline');
+                //    $(lockZincOrder).attr('data-status', false);
+
+            });
+
+        });
+
+    </script>
+}

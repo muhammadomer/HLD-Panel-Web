@@ -1,0 +1,317 @@
+﻿@model DataAccess.ViewModels.CreditCardDetailViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+
+
+
+@*<style>
+
+
+    .ui-datepicker-calendar, .ui-datepicker-year {
+        display: none;
+    }*@
+
+<style>
+    .controlabel {
+        width: 105px;
+        font-weight: bold;
+    }
+
+    .sidebar {
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 51px;
+        left: 0;
+        width: 165px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        background-color: lightgrey;
+        overflow-x: hidden;
+        padding-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            color: black;
+            display: block;
+            height: auto;
+            border-bottom: 1px solid #b7b5b5;
+        }
+
+            .sidebar a:hover {
+                color: coral;
+            }
+
+    .sidebarafter {
+        margin-left: 210px;
+    }
+
+    .sidebarafterdiv {
+        margin-left: 208px;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+</style>
+<div class="sidebar">
+    <ul class="sidebar-links">
+        <li class="">
+            <a class="" asp-action="WatchListSummary" asp-controller="ZincWatchlist">Zinc DS Job</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincKey" asp-controller="Channels">Zinc Key</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincMaxDays" asp-controller="Channels">Zinc Max Days</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincProxy">Zinc Proxy</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="SaveZincEmail" asp-controller="ZincProxy">Zinc Proxy Email</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincAccounts">Amazon Account</a>
+        </li>
+        <li class="">
+            <a class="active" asp-action="Index" asp-controller="CreditCardView">Credit Card</a>
+        </li>
+
+    </ul>
+
+
+
+</div>
+
+<div class="sidebarafterdiv" style="">
+    <h5>Credit Card Info</h5>
+
+    <hr />
+</div>
+<div class="container sidebarafter">
+
+
+    <form asp-action="Index">
+        <div class="form-group row">
+            <label asp-for="name_on_card" class="col-form-label-sm controlabel">Name On Card:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="name_on_card" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="name_on_card" class="text-danger"></span>
+            </div>
+            <label asp-for="first_name" class=" col-form-label-sm controlabel">First Name:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="first_name" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="first_name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+
+            <label asp-for="number" class=" col-form-label-sm controlabel"> Card Number:</label>
+            <div class="col-sm-3">
+                <input type="number" asp-for="number" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="number" class="text-danger"></span>
+            </div>
+
+            <label asp-for="last_name" class="col-form-label-sm controlabel">Last Lame:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="last_name" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="last_name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+
+            <label class="col-form-label-sm controlabel">Expiration</label>
+            <div class="" style="width: 123px;
+    margin-left: 15px;">
+                @*<label asp-for="expiration_month" class=" col-form-label-sm controlabel" style="margin-left:15px;">Address_Line1:</label>*@
+                <div class="">
+                    <select asp-for="expiration_month" class="form-control form-control-sm" style="">
+                        <option value="" selected disabled hidden>MM</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+
+                    </select>
+
+                    <span asp-validation-for="expiration_month" class="text-danger"></span>
+
+
+
+                </div>
+                @*<select asp-for="expiration_month" class="form-control form-control-sm" style="">
+                        <option>MM</option>
+
+                    </select>
+                    <span asp-validation-for="expiration_month" class="text-danger"></span>*@
+            </div>
+            <div class="" style="width: 123px;
+    margin-left: 10px;">
+
+
+                <input type="text" asp-for="expiration_year" class="form-control form-control-sm" id="" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==4) return false;" minlength="4" maxlength="4" placeholder="Year">
+                <span asp-validation-for="expiration_year" class="text-danger"></span>
+
+
+
+            </div>
+
+            <label asp-for="address_line1" class=" col-form-label-sm controlabel" style="margin-left:15px;">Address_Line1:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="address_line1" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="address_line1" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="security_code" class=" col-form-label-sm controlabel">Security Code:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="security_code" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="security_code" class="text-danger"></span>
+            </div>
+
+            <label asp-for="address_line2" class=" col-form-label-sm controlabel">Address_Line2:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="address_line2" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="address_line2" class="text-danger"></span>
+            </div>
+        </div>
+
+
+
+        <div class="form-group row">
+
+            <label asp-for="zip_code" class=" col-form-label-sm controlabel">Zip Code:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="zip_code" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="zip_code" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+
+            <label asp-for="city" class=" col-form-label-sm controlabel">City:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="city" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="city" class="text-danger"></span>
+            </div>
+            <label asp-for="state" class=" col-form-label-sm controlabel">State:</label>
+            <div class="col-sm-3">
+                <input type="text" asp-for="state" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="state" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+
+            <label asp-for="country" class=" col-form-label-sm controlabel">Country:</label>
+            <div class="col-sm-3">
+
+                <select asp-for="country" class="form-control form-control-sm" style="">
+                    <option value="" selected disabled hidden>Country</option>
+                    <option value="CA">Canada</option>
+                    <option value="US">USA</option>
+                </select>
+                <span asp-validation-for="country" class="text-danger"></span>
+            </div>
+            <label asp-for="PhoneNo" class="col-form-label-sm controlabel">Phone Number:</label>
+            <div class="col-sm-3">
+                <input type="number" asp-for="PhoneNo" class="form-control form-control-sm" id="" placeholder="">
+                <span asp-validation-for="PhoneNo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+
+            <div class="offset-md-1" style="padding-left:24px">
+                <button class="btn btn-primary">Submit</button>
+                <a class="" asp-action="Listinfo" asp-controller="CreditCardView" target="_blank" style="font-size:15px">Credit Detail</a>
+            </div>
+
+
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $(function () {
+                $('#orderDateTimeFrom').datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    showButtonPanel: true,
+                    dateFormat: 'MM',
+                    onClose: function (dateText, inst) {
+
+                        //Get the selected month value
+                        var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+
+                        //Get the selected year value
+                        var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+
+                        //set month value to the textbox
+                        $(this).datepicker('setDate', new Date(year, month, 1));
+                    }
+                });
+
+            });
+
+
+
+
+
+
+        });
+        $(function () {
+            $('#orderDateTimeFromyear').datepicker({
+                //changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                dateFormat: 'yy',
+                onClose: function (dateText, inst) {
+
+                    //Get the selected month value
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+
+                    //Get the selected year value
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+
+                    //set month value to the textbox
+                    $(this).datepicker('setDate', new Date(year, month, 1));
+                }
+            });
+
+        });
+
+    </script>
+}
+

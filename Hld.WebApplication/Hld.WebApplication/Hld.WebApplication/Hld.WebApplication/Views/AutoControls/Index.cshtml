@@ -1,0 +1,180 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.AutoControlViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .tool {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tooltiptext {
+        display: none;
+        width: 340px;
+        margin-top: -69px;
+        margin-left: -112px;
+        font-family: Arial;
+        background-color: #060427DE;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        transition: 1s;
+    }
+
+    .tool .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 34%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+    }
+
+    .tool:hover .tooltiptext {
+        display: block;
+    }
+    .tooltiptext2 {
+        display: none;
+        width: 340px;
+        margin-top: -87px;
+        margin-left: -112px;
+        font-family: Arial;
+        background-color: #060427DE;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        transition: 1s;
+    }
+
+    .tool .tooltiptext2::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 34%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+    }
+
+    .tool:hover .tooltiptext2 {
+        display: block;
+    }
+</style>
+
+<div class="container mt-4">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name Of Controller</th>
+                <th>Switch</th>
+                <th>Status Message</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    @if (item.JobName.Contains("InprocessZincOrder"))
+                    {
+                        <td>Update Inprocess Zinc Order Jobs <i class="tool" style="font-weight:Bolder;margin-left: 15px;cursor: pointer;font-size: larger;color:black">i<span class="tooltiptext">Get latest order status of those order which have <b style="color:red;">inprocess</b> and <b style="color:red;">order request sent</b> status from Zinc</span></i></td>
+                    }
+                    else if (item.JobName.Contains("InProgessSuccessZinc"))
+                    {
+                        <td>Update InprogressSuccess Zinc Order Jobs <i class="tool" style="font-weight:Bolder;margin-left: 15px;cursor: pointer;font-size: larger;color:black">i<span class="tooltiptext2">Get latest order status of those order which have <b style="color:red;">inprogresssuccess</b> status from Zinc if order status is <b style="color:red;">shipped</b> send tracking to SellerCloud </span></i></td>
+                    }
+                    else if (item.JobName.Contains("qtyupdater"))
+                    {
+                        <td>Update Qty on bestBuy Job <i class="tool" style="font-weight:Bolder;margin-left: 15px;cursor: pointer;font-size: larger;color:black">i<span class="tooltiptext2" style="margin-top:-51px !important"> Update Qty on bestbuy</span></i></td>
+                    }
+                    else if (item.JobName.Contains("sellercloudadding"))
+                    {
+                        <td>Get Orders from BestBuy </td>
+                    }
+                    else if (item.JobName.Contains("neworders"))
+                    {
+                        <td>Create Orders On SellerCloud</td>
+                    }
+                    else if (item.JobName.Contains("trackingorder"))
+                    {
+                        <td>Update Tracking On BestBuy</td>
+                    }
+                    else if (item.JobName.Contains("ZincJob"))
+                    {
+                        <td>Zinc Job</td>
+                    }
+
+                    else if (item.JobName.Contains("ReadExcelFile"))
+                    {
+                        <td>Read Excel File Job</td>
+                    }
+                    else if (item.JobName.Contains("WarehouseProductQtyJob"))
+                    {
+                        <td>Warehouse Product Qty Update Job</td>
+                    }
+                    else if (item.JobName.Contains("GetProductCatalogDetail"))
+                    {
+                        <td>Product Catalog Detail Job</td>
+                    }
+                    @if (item.StatusID == 0)
+                    {
+                        <td><button type="button" data-span-id=@item.JobName class="btn btn-outline-success zincjob @item.JobName" value="1">ON</button><button data-span-id=@item.JobName type="button" class="btn btn-danger zincjob ml-1 @item.JobName" value="0">OFF</button></td>
+                        <td><span id="@item.JobName">Automation Api is Stopped</span></td>
+                    }
+                    else
+                    {
+                        <td><button type="button" data-span-id=@item.JobName class="btn btn-success zincjob @item.JobName" value="1">ON</button><button data-span-id=@item.JobName type="button" class="btn btn-outline-danger zincjob ml-1 @item.JobName" value="0">OFF</button></td>
+                        <td><span id="@item.JobName">Automation Api is running</span></td>
+                    }
+                </tr>
+            </tbody>
+        }
+    </table>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".zincjob").click(function () {
+            var $this = $(this);
+            var spanId = $(this).attr("value");
+            var JobName = $(this).attr("data-span-id");
+            var Url = '/AutoControls/Update/';
+            $.ajax({
+                url: Url,
+                type: 'POST',
+                data: { statusID: spanId, jobName: JobName },
+                traditional: true,
+               
+                success: function (data) {
+                    if (data = true) {
+                        if (spanId == 1) {
+                            $('#' + JobName).text("Automation Api is Running");
+                            $this.addClass("btn-success").removeClass("btn-outline-success");
+                            $this.next().removeClass("btn-danger").addClass("btn-outline-danger");
+                        }
+                        else {
+                            $('#' + JobName).text("Automation Api is Stopped");
+                            $this.addClass("btn-danger").removeClass("btn-outline-danger");
+                            $this.prev().removeClass("btn-success").addClass("btn-outline-success");
+                        }
+                    }
+                    else {
+                    }
+                }
+            });
+           
+        });
+      
+    });
+</script>

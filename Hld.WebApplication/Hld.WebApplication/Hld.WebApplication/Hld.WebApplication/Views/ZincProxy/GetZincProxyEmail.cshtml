@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.SaveZincProxyEmailViewModel>
+
+@{
+    ViewData["Title"] = "GetZincProxyEmail";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .myclass {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: red;
+        
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+</style>
+<div class="container col-md-6">
+    <div class="form-group mb-0" style="display: flex;">
+        <h6 style="margin-right:10px">Zinc Proxy Email Detail</h6>
+        <p style="font-weight:bold">
+
+            <a class="" asp-action="SaveZincEmail" asp-controller="ZincProxy">Back</a>
+        </p>
+    </div>
+
+    <table class="table ">
+        <thead style="background-color:lightgray">
+            <tr>
+
+                <th style="width: 90%!important;">
+                   
+                    Email
+
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProxyEmail)
+
+                        <input style='display:none' class='form-control idGetProxyEmail'value="@item.idGetProxyEmail">
+
+
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Delete", "Delete", new { id = item.idGetProxyEmail }, new { @class = "dltbtn" })*@
+                      <button type="button"class="btn btn-danger idGetProxyEmail">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="hidedialogbox ">
+    <div id="dialog-box">
+        <h6 style="color:red">Do you want to delete this email!</h6>
+    </div>
+</div>
+    @section Scripts{
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#dialog-box").dialog({
+                    autoOpen: false,
+                    //title: 'Are u want to delete this reocord!',
+                    modal: true,
+                });
+
+                $(document).on("click", ".idGetProxyEmail", function () {
+                    var currentElem = $(this).closest('tr');
+                    var selectedRow = $(this);
+                    var productid = $(selectedRow).parents('tr').find('.idGetProxyEmail').val();
+                    $("#dialog-box").dialog({
+                        buttons: {
+                            "Confirm": function () {
+                                $.ajax({
+                                    type: 'GET',
+                                    url: '../ZincProxy/Delete',
+                                    data: { Id: productid },
+                                    success: function (res) {
+                                       
+                                        $("#dialog-box").dialog("close");
+                                        selectedRow.parents('tr').remove();
+
+                                        $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger myclass' });
+                                       
+                                    },
+                                    Error: function (err) {
+                                      
+                                    }
+                                });
+                                currentElem.remove()
+                                $(this).dialog("close");
+                            },
+                            "Cancel": function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    })
+                    $("#dialog-box").dialog("open");
+                });
+
+            });
+        </script>
+    }

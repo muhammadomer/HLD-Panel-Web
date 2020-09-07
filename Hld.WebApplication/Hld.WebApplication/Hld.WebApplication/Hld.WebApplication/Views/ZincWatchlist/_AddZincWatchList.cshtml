@@ -1,0 +1,111 @@
+﻿@model Hld.WebApplication.ViewModel.SaveWatchlistViewModel
+@using Hld.WebApplication.Models
+
+
+
+
+@if (Model != null)
+{
+
+    <form class="form-horizontal" role="form" method="post" id="watchlistform">
+        <div class="form-group row">
+            <label for="inputType" class="col-md-2 control-label">ASIN</label>
+            <div class="col-md-4">
+                <input type="text" asp-for="ASIN" class="form-control" readonly>
+            </div>
+        </div>
+        <input style="display:none" asp-for="ProductSKU"/>
+        <div class="form-group row">
+            <label for="inputType" class="col-md-2 control-label">Period:</label>
+            <div class="col-md-4">
+                <label class="radio-inline">
+                    <input type="radio" name="CheckafterDays" asp-for="CheckafterDays" value="7"><span class="checkdays-m-text">7</span>
+                </label>
+                <label class="radio-inline " style="padding:inherit">
+                    <input type="radio" name="CheckafterDays" asp-for="CheckafterDays" value="15"><span class="checkdays-m-text">15</span>
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="CheckafterDays" asp-for="CheckafterDays" value="30"><span class="checkdays-m-text">30</span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputType" class="col-md-2 control-label">Frequency:</label>
+            <div class="col-md-4"id="optin">
+                <select style="padding:0px" id="inputState" asp-for="frequency" class="form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </div>
+            Duration:
+            @if (Model.frequency != 0)
+            {
+                <span class="total" style="font-weight:600">
+                    @(string.Format("{0}", Math.Round(Math.Abs(((DateTime.Now - Convert.ToDateTime(Model.ExpiryDate)).TotalDays))).ToString()))
+                </span>
+            }
+            else
+            {
+                <span class="total" style="font-weight:600"> </span>
+            }
+        </div>
+        @if (Model.frequency == 0)
+        {
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" value="Submit" id="btn_submitWatchlist" onclick="return SubmitFormWatchlistASIN();" />
+            </div>
+        }
+        else
+        {
+            @*<div class="form-group">
+               <span style="color:red">Already in watchlist</span>
+            </div>*@
+            <div class="form-group" style="position:relative">
+                <input type="button" class="btn btn-primary" value="Update" id="btn_submitWatchlist" onclick="return SubmitFormWatchlistASIN();" />
+                <div style="position:absolute;top: -128px;margin-left: 255px;box-shadow: 1px 3px 7px 4px #eeeeeeb8;height: 72px;padding-left: 5px;width: 216px;">
+                    @if (Model.LastUpdateDate != default(DateTime))
+                    {
+                        <label>Last Update:</label>
+                        <span style="color: darkgrey;">@String.Format("{0:ddd, MMM d, yyyy}", Model.LastUpdateDate)</span><br />
+                    }
+                    @if (Model.NextUpdateDate != default(DateTime))
+                    {
+                        <label>Next Update:</label>
+                        <span style="color: darkgrey;">@String.Format("{0:ddd, MMM d, yyyy}", Model.NextUpdateDate)</span><br />
+                    }
+                    @if (Model.ExpiryDate != default(DateTime))
+                    {<label>Expiry:</label>
+                        <span style="color: darkgrey;">@String.Format("{0:ddd, MMM d, yyyy}", Model.ExpiryDate)</span>
+                    }
+                </div>
+            </div>
+        }
+        <div id="ErrorMessageWatchlist">
+        </div>
+    </form>
+}
+else
+{
+    <div>No Response From Zinc</div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+       
+         
+    </script>
+
+}
+
+

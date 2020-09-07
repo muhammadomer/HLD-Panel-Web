@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.ConditionViewModel>
+
+<div class="container">
+
+   
+    <table id="table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sr. #
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Action
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int sno = 0;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{ sno++; }
+                        @sno
+                    </td>
+                    <td>
+                        @Html.HiddenFor(modelItem => item.ConditionId)
+
+                        @Html.DisplayFor(modelItem => item.ConditionName)
+                    </td>
+
+                    <td>
+                        <a href="#" data-target="#myModal" data-toggle="modal" onclick="PopupForm('@Url.Action("AddUpdateCondition","Condition",new {id=item.ConditionId } )')"> Edit </a>   |
+                        <a href="#" onclick="AddEditEmployee(@item.ConditionId)"> Delete  </a>
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+
+

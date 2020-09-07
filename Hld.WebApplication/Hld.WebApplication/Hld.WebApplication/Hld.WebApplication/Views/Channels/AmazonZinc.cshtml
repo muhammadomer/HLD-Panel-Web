@@ -1,0 +1,164 @@
+﻿@model Hld.WebApplication.ViewModel.AmazonZincViewModel
+
+@{
+    ViewData["Title"] = "AmazonZinc";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .sidebar {
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 51px;
+        left: 0;
+        width: 165px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        background-color: lightgrey;
+        overflow-x: hidden;
+        padding-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            color: black;
+            display: block;
+            height: auto;
+            border-bottom: 1px solid #b7b5b5;
+        }
+
+            .sidebar a:hover {
+                color: coral;
+            }
+
+    .sidebarafter {
+        margin-left: 210px;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+</style>
+<div class="sidebar">
+    <ul class="sidebar-links">
+        <li class="">
+            <a class="" asp-action="ZincKey" asp-controller="Channels">Zinc</a>
+        </li>
+        @*<li class="">
+            <a class="active" asp-action="AmazonZinc" asp-controller="Channels">Amazon</a>
+        </li>*@
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincAccounts">Amazon</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="CreditCardView">Credit Card</a>
+        </li>
+
+    </ul>
+
+
+
+</div>
+
+<div class="row">
+    <div class="col-md-4 sidebarafter">
+        <h4 style="margin-left:0">Amazon Zinc</h4>
+        <div style="margin-left:0">
+            <hr />
+        </div>
+        @using (Html.BeginForm("UpdateAmazonZincCredential", "Channels", FormMethod.Post))
+        {
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="form-group">
+                <label asp-for="FAKey" class="control-label"></label>
+                @Html.PasswordFor(model => model.FAKey, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FAKey, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+    <div class="col-md-3 offset-3">
+        <div class="form-group">
+            <label class="control-label">Zinc Max Days:</label>
+            <input type="number" style="margin-right: 5px;box-shadow: none !important" autocomplete="off" class="form-control " name="ZincCallMaxDays" id="ZincCallMaxDays" />
+        </div>
+        <div class="form-group">
+            <input type="button" value="Save" id="btn_SaveMaxDays" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Channels" asp-action="ViewAmazonZincLogs">View Logs</a>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+
+        var _url = '/Channels/GetZincMaxDays/';
+        $.ajax({
+            url: _url,
+
+            type: 'POST',
+            traditional: true,
+            //contentType: 'application/json',
+            success: function (data) {
+                $('#ZincCallMaxDays').val(data)
+            }
+        });
+
+        $(document).on('click', '#btn_SaveMaxDays', function () {
+
+
+            var Days = $('#ZincCallMaxDays').val();
+
+            // console.log(JsonDataOfOrder);
+            var Url = '/Channels/UpdateAmazonZincDays/';
+            $.ajax({
+                url: Url,
+                data: { Days: Days },
+                type: 'POST',
+                traditional: true,
+                //contentType: 'application/json',
+                success: function (data) {
+                    if (data) {
+                        $.notify("Success", { globalPosition: 'right middle', className: 'success' });
+                    }
+                    else {
+                        $.notify("Error", { globalPosition: 'right middle', className: 'success' });
+                    }
+                }
+            });
+
+            //commented code for display lock icone
+
+            //$(lockZincOrder).css('display', 'inline');
+            //    $(lockZincOrder).attr('data-status', false);
+
+        });
+
+    });
+</script>

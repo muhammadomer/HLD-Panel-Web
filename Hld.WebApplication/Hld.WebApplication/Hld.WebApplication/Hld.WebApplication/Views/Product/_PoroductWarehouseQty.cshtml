@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ProductWarehouseQtyViewModel>
+<div style="display:inline-flex">
+    <h6>Warehouse Qty</h6>
+    <a id="GetquantityFromSellerCloud" data-id="@ViewBag.ProductSku">
+        <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+    </a>
+    <span>
+        <img style="display:none;" class="ButtonLoader1" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+    </span>
+</div>
+
+<div class="row">
+    <div class="col-sm-4" style="padding-right:0px">
+        HLD-CA1
+    </div>
+    <div class="col-sm-8">
+        @Model.Where(E => E.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        FBA CA
+    </div>
+    <div class="col-sm-2">
+        <span> @Model.Where(e => e.WarehouseName == "FBA Canada").Select(e => e.AvailableQty).FirstOrDefault()</span>&nbsp;
+    </div>
+    <div class="col-sm-4" style="padding:0">
+        FBA CA Int
+    </div> <div class="col-sm-2">
+        @Model.Where(e => e.WarehouseName == "Interim FBA CA").Select(e => e.AvailableQty).FirstOrDefault()
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        FBA US
+    </div>
+    <div class="col-sm-2">
+        @Model.Where(e => e.WarehouseName == "FBA USA").Select(e => e.AvailableQty).FirstOrDefault()
+    </div>
+    <div class="col-sm-4" style="padding:0">
+        FBA US Int
+    </div> <div class="col-sm-2">
+        @Model.Where(e => e.WarehouseName == "Interim FBA USA").Select(e => e.AvailableQty).FirstOrDefault()</span>
+    </div>
+</div>
+<div style="display:inline-flex">
+    <h6>Location Notes</h6>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        @Model.Select(e => e.LocationNotes).FirstOrDefault()
+    </div>
+</div>

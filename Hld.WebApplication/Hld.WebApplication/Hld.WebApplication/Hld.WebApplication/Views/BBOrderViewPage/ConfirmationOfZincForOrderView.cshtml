@@ -1,0 +1,117 @@
+﻿
+@model Hld.WebApplication.ViewModel.SaveZincOrders.RootObject
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group row">
+
+            <div class="col-sm-12 p-2 bg-primary text-white" style="width: 610px;">Please confirm order detail before send to Zinc  </div>
+            <div class="col-sm-12">
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <p class="my-1" style="font-weight:bold">Shipping Address</p>
+                        <div class="col-sm-12 p-0">
+                            <div><span>@Model.shipping_address.first_name</span>&nbsp; <span>@Model.shipping_address.last_name</span></div>
+                            @if (Model.shipping_address.address_line1.ToLower().Contains("box"))
+                            {
+                                <div><span style="color:white;background-color:red;font-weight:bold;"> @Model.shipping_address.address_line1</span></div>
+                            }
+                            else
+                            {
+                                <div><span> @Model.shipping_address.address_line1</span></div>
+                            }
+
+                            <div><span>@Model.shipping_address.city</span>&nbsp; <span>@Model.shipping_address.state</span>&nbsp; <span>@Model.shipping_address.zip_code</span></div>
+                            <div><span>@Model.shipping_address.country</span></div>
+                            <div><span>@Model.shipping_address.phone_number</span></div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <p class="my-1" style="font-weight:bold">Product Detail</p>
+                        <div class="col-sm-12  p-0">
+                            <div>
+                                @foreach (var item in Model.products)
+                                {
+                                    <span>@item.product_id</span>
+                                    @if (item.quantity > 1)
+                                    {
+                                        <span style="background-color: red;color: white;width: 16px;display: inline-block;text-align: center;">@item.quantity</span>}
+                                    else
+                                    {
+                                        <span style="background-color: blue;color: white;width: 16px;display: inline-block;text-align: center;">@item.quantity</span>}
+                                }
+
+                            </div>
+                            <div>
+                                <label class="font-weight-bold">P&L:</label>
+                                @if (ViewBag.percentagepro > 5)
+                                {
+                                    <label style="color:blue">$@ViewBag.profitlose (@ViewBag.percentagepro%)</label>
+                                }
+                                else
+                                {
+                                    <label style="color:red">$@ViewBag.profitlose (@ViewBag.percentagepro%)</label>
+                                }
+                                @*<span style="font-weight:bold">P&L:</span><span>@ViewBag.profitlose</span><span>(@ViewBag.percentagepro</span>%)*@
+                            </div>
+
+                            @*<div class="row col-sm-12">
+                                <label style="font-weight:bold">Ship Date:</label>
+                                <input type="date" style="margin-right: 5px;box-shadow: none !important" placeholder="Ship Date" autocomplete="off" class="form-control" name="orderDateTimeShip" id="orderDateTimeShip" />
+
+                            </div>*@
+                            <div class="row col-sm-12">
+                                <label style="font-weight:bold">Ship Days:</label>
+                                <select class="form-control p-0" style="width:120px;" id="DeliveryDays">
+                                    <option value="0"> select </option>
+                                    <option value="5"> 5 </option>
+                                    <option value="6"> 6 </option>
+                                    <option value="7"> 7 </option>
+                                    <option value="8"> 8 </option>
+                                    <option value="9"> 9 </option>
+                                    <option value="10"> 10 </option>
+                                    <option value="11"> 11 </option>
+                                    <option value="12"> 12 </option>
+                                    <option value="13"> 13 </option>
+                                    <option value="14"> 14 </option>
+                                    <option value="15"> 15 </option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="col-sm-12 pl-0">
+                            <p class="my-1" style="font-weight:bold">Account Detail</p>
+                            @Html.DropDownListFor(model => model.ZincAccountsId, new SelectList(Model.ZincAccounts, "ZincAccountsId", "UserNameShort"), new { @class = "form-control p-0" })
+                        </div>
+
+                        <div class="col-sm-12 pl-0">
+                            <p class="my-1" style="font-weight:bold">Credit Card Detail</p>
+                            @Html.DropDownListFor(model => model.CreditCardDetailId, new SelectList(Model.CreditCardDetail, "CreditCardDetailId", "name_on_cardShort"), new { @class = "form-control p-0" })
+                        </div>`
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-12 findParent">
+                <div class="col-sm-4 pl-0 mt-2">
+                    <button type="button" data-scOrderID="@Model.client_notes.our_internal_order_id" id="btnSendBestBuyOrderToZincOrderView" data-id="@Model.products.Select(e=>e.product_id).FirstOrDefault()-@Model.client_notes.our_internal_order_id" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="col-sm-8">
+                    <div class="alert alert-success  successmessage">
+                        <a href="#" class="close" aria-label="close">&times;</a>
+                        <strong>Success!</strong><span class="successAppend">Your order request has been sent to Zinc,Please close the window.</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

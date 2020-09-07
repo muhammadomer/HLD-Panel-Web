@@ -1,0 +1,236 @@
+﻿@model IEnumerable<DataAccess.ViewModels.ZincAccountsViewModel>
+
+@{
+    ViewData["Title"] = "ZincAccountDetail";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+</style>
+
+<div class="container">
+    
+    <div class="form-row mb-2 ml-0">
+        <h6>Zinc Account Detail</h6>
+        <li class="" style="margin-left:7px">
+            <a class="" asp-action="Index" asp-controller="ZincAccounts"style="font-size:15px;
+    margin-left: 7px;">Back</a>
+        </li>
+    </div>
+
+    <table class="table">
+        <thead style="background-color:lightgrey">
+            <tr>
+
+                <th>
+                    User Name
+
+                </th>
+                <th>
+                    Key
+
+                </th>
+                <th>
+                    Password
+                </th>
+
+
+
+                <th>Active</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @item.UserNameShort
+                    </td>
+                    <td>
+                        @item.KeyShort
+                    </td>
+                    <td>
+                        @item.PasswordShort
+                    </td>
+
+
+
+
+                    <td style="">
+                        @if (item.IsDefault)
+                        {
+                            <span class="custom-control custom-switch" data-Isactive="@item.IsActive" data-Id="@item.ZincAccountsId" value="@item.IsActive" style="padding-left: 3.25rem!important;">
+                                <input type="checkbox" class="custom-control-input" checked="@item.IsActive" id="@item.IsActive" style="display: inline-block!important">
+                                <label class="custom-control-label" for="@item.IsActive"></label>
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="custom-control custom-switch IsActiveSwtich" data-Isactive="@item.IsActive" data-Id="@item.ZincAccountsId" value="@item.IsActive" style="padding-left: 3.25rem!important;">
+                                <input type="checkbox" class="custom-control-input" checked="@item.IsActive" id="@item.IsActive" style="display: inline-block!important">
+                                <label class="custom-control-label" for="@item.IsActive"></label>
+                            </span>
+                        }
+
+
+
+
+                    </td>
+                    <td style="">
+
+
+
+                        <span class="custom-control custom-switch IsDefaultSwtich" data-IsDefault="@item.IsDefault" data-Id="@item.ZincAccountsId" value="@item.IsDefault" style="padding-left: 3.25rem!important;">
+                            <input type="checkbox" class="custom-control-input" checked="@item.IsDefault" id="@item.IsDefault" style="display: inline-block!important">
+                            <label class="custom-control-label" for="@item.IsDefault"></label>
+                        </span>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="dialog-box">
+        <h6 style="color:red">Please confirm to make active Zinc!</h6>
+    </div>
+    <div id="dialog-boxDefault">
+        <h6 style="color:red">Please confirm to set as default!!</h6>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                title: 'Set Active Zinc',
+                modal: true,
+                show: 'blind',
+               
+        hide: 'fold',
+
+               
+
+            });
+
+            $("#dialog-boxDefault").dialog({
+                autoOpen: false,
+                title: 'Set Default Zinc',
+                modal: true,
+                show: {
+                    effect: "blind",
+
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+
+            });
+            $(document).on("click", ".IsActiveSwtich", function () {
+                
+                var item = $(this);
+                var val = $(this).attr("data-Isactive").toLocaleLowerCase();
+                var IsActive = false;
+                if (val == "false") {
+                    IsActive = true;
+
+                }
+                var id = $(this).attr("data-Id");
+                var url = "/ZincAccounts/IsActive";
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+
+
+                            $.ajax({
+                                type: "POST",
+                                url: url,
+                                data: {
+                                    id: id,
+                                    IsActive: IsActive,
+
+                                },
+                                success: function (data) {
+                                    $("#dialog-box").dialog("close");
+
+                                    location.href = '../ZincAccounts/ZincAccountDetail';
+
+
+                                }
+                            });
+
+                        },
+                       
+                    },
+                     "Cancel": function () {
+                        $(this).dialog("close");
+                       
+                    },
+                    
+
+                });
+                $("#dialog-box").dialog("open");
+            });
+
+            $(document).on("click", ".IsDefaultSwtich", function () {
+               
+                var item = $(this);
+                var val = $(this).attr("data-IsDefault").toLocaleLowerCase();
+
+                var IsDefault = false;
+                if (val == "false") {
+                    IsDefault = true;
+
+                }
+                var id = $(this).attr("data-Id");
+                var url = "/ZincAccounts/IsDefault";
+                $("#dialog-boxDefault").dialog({
+                    buttons: {
+                        "Confirm": function () {
+
+
+                            $.ajax({
+                                type: "POST",
+                                url: url,
+                                data: {
+                                    id: id,
+                                    IsDefault: IsDefault,
+
+                                },
+                                success: function (data) {
+                                    $("#dialog-boxDefault").dialog("close");
+
+                                    location.href = '../ZincAccounts/ZincAccountDetail';
+
+
+                                }
+                            });
+
+                        }
+                    },
+
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                       
+                    }
+
+                });
+                $("#dialog-boxDefault").dialog("open");
+            });
+
+        })
+
+    </script>
+}

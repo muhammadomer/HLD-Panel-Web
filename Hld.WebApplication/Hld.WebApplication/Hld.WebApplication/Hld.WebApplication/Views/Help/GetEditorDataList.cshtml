@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.PostDataViewModel>
+
+@{
+    ViewData["Title"] = "GetEditorDataList";
+}
+
+
+
+<div class="container">
+    <h6>List</h6>
+
+
+    <div class="container">
+        @foreach (var item in Model)
+        {
+
+            @*@Html.DisplayFor(modelItem => item.postdata)*@
+           <p>@Html.Raw(item.postdata)</p>
+
+        }
+    </div>
+
+    @*<div class="container"id="getdta">
+       
+    </div>*@
+
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+    @*<script>
+        $(document).ready(function () {
+            $("#getdta").append('@Model.postdata')
+        })
+    </script>*@
+    
+
+}

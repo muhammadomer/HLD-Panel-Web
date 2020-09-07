@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.ProductDisplayViewModel>
+@inject Microsoft.Extensions.Configuration.IConfiguration Iconfig
+
+<link href="~/lib/jquery.tablesorter/css/theme.default.min.css" rel="stylesheet" />
+<style type="text/css">
+
+
+    #tableProductList > tbody > tr > td {
+        font-family: Arial;
+        font-size: 8pt;
+        padding: 0.2rem;
+    }
+
+    .table thead th {
+        vertical-align: top !important;
+    }
+
+    .table th, .table td {
+        padding: 0.2rem;
+    }
+</style>
+
+<div class="scrollable-area">
+    
+    <table id="tableProductList" style="width:100%" class="table table-hover tablesorter">
+        <thead style="background-color:lightgrey">
+            <tr>
+                
+                <th data-sorter="false" style="width:1%;">
+                    <label>Image</label>
+                </th>
+                <th style="width:1%;">
+                    <div class="tablesorter-header-inner"> <i class="tablesorter-icon"></i> SKU/<br>BB Product ID</div>
+                    <label style="display:none;">
+                        SKU <span class="sku" data-value="asc" style="padding-left:10px;display:none"><u>A-Z</u></span>
+                        <span class="sku" data-value="desc" style="padding-left:10px;display:none"><u>Z-A</u></span>
+                    </label>
+                </th>
+                <th data-sorter="false" style="width:7%;">
+                    <label>Title</label>
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>                    
+                    <td>
+                        @{
+                            <a target="_blank" href="@ViewBag.S3BucketURL/@item.ImageURL">
+                                <img src="@ViewBag.S3BucketURL/@item.ImageURL" class="rounded DeleteImage" height="50" width="50" />
+                            </a>
+                        }
+                    </td>
+                    <td>
+
+                        <a asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.ProductSKU" target="_blank">@item.ProductSKU</a><br>
+                        <a asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.ProductSKU" target="_blank">
+                            <img class="displayed1" src="~/Images/BestBuyImage.png" height="12px" width="14px" alt="" />
+                        </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductTitle)
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            $('#tableProductList').stickyTableHeaders({ fixedOffset: 55 });
+
+        });
+
+    </script>
+}

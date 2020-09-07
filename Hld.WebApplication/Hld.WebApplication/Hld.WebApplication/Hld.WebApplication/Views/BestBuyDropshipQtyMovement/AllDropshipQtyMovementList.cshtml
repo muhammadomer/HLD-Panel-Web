@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewData["Title"] = "BestBuy Qty Update Log";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+
+<h6>BestBuy Qty Update Log</h6>
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+        //var showLink = function (row, datafield, value) {
+        //    return '<a href="/BestBuyProduct/PropertyPage?ProductSKU=' + value + '" target="_blank">' + value + '</a>';
+        //}
+        //var showBBLink = function (row, datafield, value) {
+        //    if (value != "") {
+        //        return '<a href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=' + value + '" target="_blank">' + value + '</a>';
+        //    }
+
+        //}
+           var source =
+            {
+                datatype: "json",
+                datafields: [
+                    { name: 'order_date', type: 'date' },
+                    { name: 'product_sku' },
+                    { name: 'BBProductID' },
+                    { name: 'ds_qty' },
+                    { name: 'ds_status' },
+                    { name: 'update_status' },
+                    { name: 'comments' },
+                    { name: 'bb_import_id' }
+                   
+
+                ],
+                url: '@Url.Action("GetQtyLogs", "BestBuyDropshipQtyMovement")',
+                filter: function () {
+                    // update the grid and send a request to the server.
+                    $("#quantityDiv").jqxGrid('updatebounddata', 'filter');
+                }
+            };
+
+
+
+         var dataAdapter = new $.jqx.dataAdapter(source);
+            // initialize jqxGrid
+        $("#quantityDiv").jqxGrid(
+                {
+                    source: dataAdapter,
+                    filterable: true,
+                    showfilterrow: true,
+                    selectionmode: 'multiplecellsextended',
+                    showfilterrow: true,
+                   
+                    pageable: true,
+                    pagesize: 25,
+                    width: '90%',
+                    sortable: true,
+                    altrows: true,
+                    enabletooltips: true,
+                    editable:true,
+                    height:'900px',
+                    ready: function () {
+                        //$("#jqxgrid").find('.jqx-grid-column-header .jqx-checkbox-default').parent().on('change', function (event) {
+                        //    var state = event.args.checked;
+                        //    alert(state);
+                        //});
+
+                    },
+                    autoshowfiltericon: true,
+                    columns: [
+
+                        {
+                            text: 'SKU', datafield: 'product_sku', editable: false, filtertype: 'input', columntype: 'textbox', width: 200,  cellsrenderer: function (row)
+                            {
+                                var ProductSku = dataAdapter.records[row].product_sku;
+                                return '<a  href="/BestBuyProduct/PropertyPage?ProductSKU=' + ProductSku + '"  target="_blank"  >' + ProductSku + '</a>';
+                            }
+                        },
+                        {
+                            text: 'BB Product ID', datafield: 'BBProductID', editable: false, columntype: 'textbox', filtertype: 'input', width: 200, cellsrenderer: function (row)
+                            {
+                                var BBProductID = dataAdapter.records[row].BBProductID;
+                                return '<a  href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=' + BBProductID + '"  target="_blank">' + BBProductID + '</a>';
+                            }
+                        },
+                        {
+                            text: 'DS Qty', datafield: 'ds_qty', editable: false, padding: 5, columntype: 'textbox', filtertype: 'input', width: 200 
+                              
+                        },
+                        { text: 'DS Status', datafield: 'ds_status', columntype: 'textbox', filtertype: 'input' , width: 200 },
+
+                        {
+                            text: 'Update Date & Time', datafield: 'order_date', filtertype: 'range', cellsformat: 'yyyy-MM-dd hh:MM tt', width: 200 
+                        },
+
+                        {
+                            text: 'Status', datafield: 'update_status', columntype: 'textbox', filtertype: 'input', width: 200
+                        },
+                        {
+                            text: 'Comments', datafield: 'comments', columntype: 'textbox', filtertype: 'input', width: 200
+                        },
+                        {
+                            text: 'Import ID', datafield: 'bb_import_id', columntype: 'textbox', filtertype: 'input', width: 200
+                        }
+
+
+                    ]
+                });
+        });
+    </script>
+
+    @*<jqx-grid sortable="true"  enable-tool-tips="true"   show-filter-row="true" width="90%"   pageable="true" page-size="50" filterable="true" auto-height="false" height="1000px" source="Model">
+            <jqx-grid-columns>
+                <jqx-grid-column width="150px" filter-type="input" datafield-for="@(employee.ProductSku)" cells-renderer="showLink()" text="SKU">
+                </jqx-grid-column>
+                <jqx-grid-column width="150px" filter-type="input" datafield-for="@(employee.BBProductID)" cells-renderer="showBBLink()" text="BB Product ID">
+                </jqx-grid-column>
+
+                <jqx-grid-column datafield-for="@(employee.DropShipQuantity)" text="DS Qty"></jqx-grid-column>
+                <jqx-grid-column filter-type="list" datafield-for="@(employee.DropShipStatusString)" text="DS Status"></jqx-grid-column>
+                <jqx-grid-column width="150px" filter-type="range" datafield-for="@(employee.OrderDate)" cells-format="yyyy-MM-ddTHH:mm:ss.fff" text="Update Date & Time"></jqx-grid-column>
+                <jqx-grid-column datafield-for="@(employee.IsDropshipStatusUpdate_Name))" text="Status"></jqx-grid-column>
+                <jqx-grid-column datafield-for="@(employee.comments)" width="150px" text="Comments"></jqx-grid-column>
+                <jqx-grid-column datafield-for="@(employee.BestBuyImportID)"  text="Import ID"></jqx-grid-column>
+            </jqx-grid-columns>
+        </jqx-grid>*@
+
+    <div id="quantityDiv"></div>
+}
+

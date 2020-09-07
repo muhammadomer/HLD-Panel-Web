@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.CatageorySub1ViewModel>
+
+
+<table id="categorySub1" class="table table-hover">
+    <thead>
+        <tr>
+
+            <th>
+                <label id="label">Category 2</label>
+            </th>
+            <th>
+                <label id="label">sku's</label>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.HiddenFor(e => item.CatageoryMainId)
+                    @Html.HiddenFor(e => item.CatageorySubId)                    
+                    @Html.DisplayFor(modelItem => item.CatageorySub1Name)
+                </td>
+                <td>0</td>
+                <td>
+                    @if (item.status == "not-exists")
+                    {
+                        <a asp-controller="Catageory" asp-action="DeleteCategorySub1" asp-route-id="@item.CatageorySubId" data-Url="/Catageory/CategoriesListSub2/@item.CatageorySubId" class="deleteAble">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Catageory" asp-action="DeleteCategorySub1" asp-route-id="@item.CatageorySubId" data-Url="/Catageory/CategoriesListSub2/@item.CatageorySubId" style="pointer-events: none;color:lightgrey" class="not-deleteAble">Delete</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

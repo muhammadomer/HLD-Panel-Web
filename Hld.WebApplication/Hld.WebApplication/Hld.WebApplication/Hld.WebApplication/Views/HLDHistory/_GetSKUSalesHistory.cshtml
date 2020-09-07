@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Order_SKU_ProfitHistory_CalculationViewmodel>
+
+<style type="text/css">
+    .fontSize {
+        font-weight: bold;
+    }
+</style>
+<div class="row">
+    <div class="col-sm-11">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="fontSize">Period</th>
+                    <th class="fontSize">Units Sold</th>
+                    <th class="fontSize">Orders</th>
+                    <th class="fontSize">Gross</th>
+                    <th class="fontSize">Net Profit</th>
+                    <th class="fontSize">Item Cost</th>
+                    <th class="fontSize">ShipCost</th>
+                    <th class="fontSize">Fees</th>
+                    <th class="fontSize">Tax</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fontSize">@item.Duration</td>
+                        <td>@item.UnitsSold</td>
+                        <td>@item.OrderQuantity</td>
+                        <td>@item.GrossRevnue</td>
+                        <td>@string.Format("{0} ({1}%) ", item.Profit, item.ProfitPercentage) </td>
+                        <td>@string.Format("{0}  ", item.ItemCost) </td>
+                        <td>@string.Format("{0}  ", 0) </td>
+                        <td>@string.Format("{0} ({1}%) ", item.SellingFee, item.SellingFeePercentage) </td>
+                        <td>@string.Format("{0} ({1}%) ", item.Taxes, item.TaxesPercentage) </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

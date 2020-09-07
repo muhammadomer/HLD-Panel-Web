@@ -1,0 +1,326 @@
+﻿@model IEnumerable<Order_SKU_ProfitHistory_CalculationViewmodel>
+@{
+    ViewData["Title"] = "DashBoard";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+    }
+
+    .color {
+        color: gray;
+    }
+   
+
+    .heading {
+        font-weight: bold;
+        font-size: 18px;
+    }
+    #mainWrapper {
+        margin-top: 37px;
+        margin-right: 0px;
+        margin-left: 0px;
+        /*min-width: 1349px;*/
+    }
+    .mainrow {
+       margin-right: -10px;
+    margin: 0px;
+}
+    
+    
+    @@media (max-width:767px) {
+        #mainWrapper {
+            min-width: 1349px;
+            margin-left:0;
+            margin-right:0;
+        }
+        footer {
+            margin: 0 auto;
+        }
+        /*.card {
+             min-width: 288px;
+
+            
+        }*/
+    }
+    @@media (max-width:575px) {
+        #mainWrapper {
+            min-width: 1349px;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        /*.card {
+            
+            min-width: 288px;
+            
+        }*/
+        
+        }
+    
+      
+    @@media (max-width:575px) {
+        /*.mainrow {
+            margin-left: 150px;
+            margin-top: 30px;
+           
+        }*/
+        .card{ width:95%;}
+
+        .h4 {
+            margin-top: 26%;
+        }
+
+        .card1 {
+            margin-bottom: 20px;
+        }
+    }
+
+    @@media (min-width:576px) {
+
+        /*.card1 {
+            width: auto;
+            height: auto;
+        }*/
+    }
+
+    @@media(max-width:575px) {
+
+        /*.dash {
+            margin-top: -11%;
+        }*/
+
+        #mainWrapper {
+            margin-top: -12px;
+        }
+    }
+
+    h4 {
+        margin-left: 18px;
+       
+        cursor:pointer;
+    }
+    .block1:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        opacity: 0.9;
+    }
+</style>
+
+
+
+<h4 class="text-info dash">DashBoard</h4>
+<hr />
+<div class="container-fluid">
+    <div class="row" id="mainWrapper" style="">
+        <div class="col col-sm-12" style="background-color:#deebec;padding:15px;">
+            <div class="row mainrow">
+                @foreach (var item in Model)
+                {
+                    <div class="col col-sm-3 mw-100 col-md-3 pr-2 pl-1 block1">
+                        <div class="col col-sm-3 col-md-3 mw-100 pr-2 pl-1 card1">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="heading">
+                                        @item.Duration
+                                        @if (item.Duration == "Today")
+                                        {
+                                            <form asp-action="DashBoard" style="display:inline" asp-controller="HLDHistory" method="get">
+                                                <button style="display:inline" class="btn" type="submit">    <i class="text-info getToolTip fas fa-sync" style="cursor:pointer" data-id="@item.Duration" alt=""></i> </button>
+                                            </form>
+
+                                        }
+                                    </div>
+                                    @if (item.Duration == "7 Days")
+                                    {
+                                        <div class="color">@item.DateTime.Value.Date.ToString("MMM d, yyyy") - @item.StartDate.Value.Date.ToString("MMM d, yyyy") </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="color">@item.DateTime.Value.Date.ToString("MMM d, yyyy") </div>
+                                    }
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col col-sm-6">
+                                            <div class="color">Gross Revnue</div>
+                                            <div class="heading">@string.Format("{0:n}", item.GrossRevnue)</div>
+                                        </div>
+                                        <div class="col col-sm-6" @*style="display:contents" *@>
+                                            <div class="text-right">
+                                                <div class="color">Cost</div>
+                                                <div class="heading">@string.Format("{0:n}", item.ItemCost)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" style="background-color:#80808021">
+                                    <div class="row">
+                                        <div class="col col-sm-6">
+                                            <div class="color">Profit</div>
+                                            <div class="heading">@string.Format("{0:n0}", item.Profit)</div>
+                                        </div>
+                                        <div class="col col-sm-6">
+                                            <div class="text-right">
+                                                <div class="color">Profit %</div>
+                                                <div class="heading"> @string.Format("{0:n0}%", item.ProfitPercentage) </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col col-sm-3 p-0 text-primary ">
+                                            <div>Orders</div>
+                                            <div>@string.Format("{0:n0}", item.OrderQuantity)</div>
+                                        </div>
+                                        <div class="col col-sm-3 p-0 text-primary">
+                                            <div>Units</div>
+                                            <div>@string.Format("{0:n0}", item.UnitsSold)</div>
+                                        </div>
+                                        <div class="col col-sm-3 p-0 text-primary">
+                                            <div>Taxes%</div>
+                                            <div>@string.Format("{0:n0}%", item.TaxesPercentage)</div>
+                                        </div>
+                                        <div class="col col-sm-3 p-0 text-primary">
+                                            <div>Fees%</div>
+                                            <div>@string.Format("{0:n0}%", item.SellingFeePercentage)</div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+
+                <div class="col col-sm-3 col-md-3 mw-100 pr-2 pl-1 card block1">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div style="font-weight:bold">Custom</div>
+                            <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;">
+                                <i class="fa fa-calendar"></i>&nbsp;
+                                <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
+                        </li>
+                        <li id="grossRevnueLi" style="display:none" class="list-group-item">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="color">Gross Revnue</div>
+                                    <div id="GR" class="heading"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="text-right">
+                                        <div class="color">Cost</div>
+                                        <div id="itemCost" class="heading"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li id="ProfitLi" class="list-group-item" style="background-color:#80808021;display:none">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="color">Profit</div>
+                                    <div id="Profit" class="heading"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="text-right">
+                                        <div class="color">Profit%</div>
+                                        <div id="ProfitPercentage" class="heading"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li id="QuantityLi" class="list-group-item" style="display:none">
+                            <div class="row">
+                                <div class="col-sm-3 p-0 text-primary ">
+                                    <div>Orders</div>
+                                    <div id="Orders"></div>
+                                </div>
+                                <div class="col-sm-3 p-0 text-primary">
+                                    <div>Units</div>
+                                    <div id="UnitsSold"></div>
+                                </div>
+                                <div class="col-sm-3 p-0 text-primary">
+                                    <div>Taxes%</div>
+                                    <div id="Taxes"></div>
+                                </div>
+                                <div class="col-sm-3 p-0 text-primary">
+                                    <div>Fees%</div>
+                                    <div id="SellingFee"></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+
+
+    <script type="text/javascript">
+        $(function () {
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+
+            function cb(start, end) {
+
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+
+
+                var selectedDateFrom = picker.startDate.format('YYYY-MM-DD');
+                var selectedDatTo = picker.endDate.format('YYYY-MM-DD');
+
+                $.ajax({
+                    type: 'Get',
+                    url:'@Url.Action("CustomDateRange", "HLDHistory")',
+                    data: { dateFrom: selectedDateFrom, dateTo: selectedDatTo },
+                    contentType:'application/json',
+                    success: function (response) {
+                        var ProfitLi = $('#ProfitLi').css('display','block');
+                        var grossRevnue = $('#grossRevnueLi').css('display', 'block');
+                        var QuantityLi = $('#QuantityLi').css('display', 'block');;
+                        ProfitLi.find("#Profit").text(response.Profit_str);
+                        ProfitLi.find("#ProfitPercentage").text(response.ProfitPercentage_str);
+                        grossRevnue.find("#GR").text(response.GrossRevnue_str);
+                        grossRevnue.find("#itemCost").text(response.ItemCost_str);
+                        QuantityLi.find("#Orders").text(response.OrderQuantity_str);
+                        QuantityLi.find("#UnitsSold").text(response.UnitsSold_str);
+                        QuantityLi.find("#Taxes").text(response.TaxesPercentage_str);
+                        QuantityLi.find("#SellingFee").text(response.SellingFeePercentage_str);
+                    }
+
+                })
+
+            });
+
+
+            cb(start, end);
+
+        });
+    </script>
+}
+

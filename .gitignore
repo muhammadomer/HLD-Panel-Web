@@ -47,3 +47,8 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/.vs/
+Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/aws-logger-errors.txt
+Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/bin/
+Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/obj/Debug/netcoreapp2.2/Hld.WebApplication.assets.cache
+Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/Hld.WebApplication/obj/

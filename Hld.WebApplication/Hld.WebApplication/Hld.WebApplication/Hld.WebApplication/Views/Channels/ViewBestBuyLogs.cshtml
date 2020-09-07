@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.ChannelLogs>
+
+@{
+    ViewData["Title"] = "ViewBestBuyLogs";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h6>BestBuy Credential Logs</h6>
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+
+                Last Updated Date
+            </th>
+            <th>
+                User
+            </th>
+            <th>
+                Key
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastUpdate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User)
+                    </td>
+                    <td>
+                        ***************@Html.DisplayFor(modelItem => item.Key)
+                    </td>
+
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>

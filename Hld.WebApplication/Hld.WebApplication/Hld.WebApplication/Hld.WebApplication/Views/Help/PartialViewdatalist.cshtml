@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.PostDataViewModel>
+<div class="container-fluid p-0">
+    
+    
+    
+       
+        <div class="container-fluid p-0">
+            <table class="table table-bordered">
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                       
+                        <td>
+                            <div>@Html.Raw(item.posttitle)</div>
+                        </td>
+                        <td>
+                            <div>@Html.Raw(item.postdata)</div>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete", "Delete", new { id = item.idPostEditor })|
+                            @Html.ActionLink("Edit", "Edit", new { id = item.idPostEditor })
+                        </td>
+                    </tr>}
+                </tbody> 
+                </table>
+        </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+
+
+
+}

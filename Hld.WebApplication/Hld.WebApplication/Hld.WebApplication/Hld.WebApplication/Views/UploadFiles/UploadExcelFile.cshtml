@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewData["Title"] = "UploadExcelFile";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h6>UploadExcelFile</h6>
+<div class="row">
+    <div class="col-sm-5">
+        <form method="post" asp-action="UploadExcelFile" id="UploadFile" enctype="multipart/form-data">
+            <div class="card">
+                <div class="card-header">Upload File </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Upload Excel File</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="file" id="fUpload" multiple name="files" class="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="margin-top:5px;margin-bottom:5px;" class="offset-3 col-sm-1">
+                            <input class="btn btn-primary" type="button" id="btnUpload" value="Upload" />
+                        </div>
+                        <div class="offset-2 col-sm-2">
+                            <img style="display:none;" class="uploadFileStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </div>
+                    </div>
+                    <label>SKU,AvgCostUSD</label>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="col-sm-5">
+
+        <div class="col-sm-6">
+            <div class="alert alert-success  successmessage">
+                <a href="#" class="close" aria-label="close">&times;</a>
+                <strong>Success!</strong><span class="successAppend"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="alert alert-danger  dangermessage">
+                <a href="#" class="close" aria-label="close">&times;</a>
+                <strong>Alert!</strong><span class="failureAppend"> Some Error Occured.</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*
+    Upload excel file for update title,upc ,avgCost ,imageURL
+*@
+
+<div class="row">
+    <div class="col-sm-5">
+        <form method="post" asp-action="UploadExcelFileForImagesAndTitle" id="UploadFile" enctype="multipart/form-data">
+            <div class="card">
+                <div class="card-header">Upload File for update Product detail </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Upload Excel File for Update (SKU, AvgCostCAD, Title, UPC, ImageMain)</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="file" id="fUploadforUpdateProductDetail" multiple name="files" class="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="margin-top:5px;margin-bottom:5px;" class="offset-3 col-sm-1">
+                            <input class="btn btn-primary" type="button" id="btnUploadForProductDetail" value="Upload" />
+                        </div>
+                        <div class="offset-2 col-sm-2">
+                            <img style="display:none;" class="uploadFileStatusForProductDetail" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.successmessage').hide();
+            $('.dangermessage').hide();
+
+
+            //For update average cost
+            $("#fUpload").change(function () {
+                var fileExtension = ['xlsx'];
+                if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                    alert("Only formats are allowed : " + fileExtension.join(', '));
+                }
+            });
+
+            $('#btnUpload').click(function () {
+                $('#btnUpload').attr('disabled', true);
+                $('.uploadFileStatus').css('display', 'inline');
+                var files = $('#fUpload').prop("files");
+                var fdata = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fdata.append("files", files[i]);
+                }
+
+                if (files.length > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/UploadFiles/UploadExcelFile",
+                        data: fdata,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            debugger;
+                            $('input[type=file]').val(null);
+                            $('.uploadFileStatus').css('display', 'none');
+                            if (data.success) {
+                                $('#btnUpload').removeAttr('disabled');
+                                $('.UpdateASINButtonLoader').css('display', 'none');
+                                $('.successAppend').empty();
+                                $('.successAppend').append('<span class="pl-1"> Success :' + data.successCount + ' Failure :' + data.failureCounter + '</span>')
+                                $('.successmessage').show();
+                            }
+                            else {
+
+                                $('#btnUpload').removeAttr('disabled');
+                                $('.uploadFileStatus').css('display', 'none');
+                                $('.failureAppend').empty();
+                                $('.failureAppend').append('<span class="pl-1"> Success :' + data.successCount + ' Failure :' + data.failureCounter + ' </span>')
+                                $('.dangermessage').show();
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    alert('Please select a file.');
+                    $('#btnUpload').removeAttr('disabled');
+                    $('.uploadFileStatus').css('display', 'none');
+                }
+            });
+
+
+
+            //For update product detail
+            $("#btnUploadForProductDetail").change(function () {
+                var fileExtension = ['xlsx'];
+                if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                    alert("Only formats are allowed : " + fileExtension.join(', '));
+                }
+            });
+
+            $('#btnUploadForProductDetail').click(function () {
+                $('#btnUploadForProductDetail').attr('disabled', true);
+                $('.uploadFileStatusForProductDetail').css('display', 'inline');
+                var files = $('#fUploadforUpdateProductDetail').prop("files");
+                var fdata = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fdata.append("files", files[i]);
+                }
+
+                if (files.length > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/UploadFiles/UploadExcelFileForUpdateProductDetail",
+                        data: fdata,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            debugger;
+                            $('input[type=file]').val(null);
+                            $('.uploadFileStatusForProductDetail').css('display', 'none');
+                            if (data.success) {
+                                $('#btnUploadForProductDetail').removeAttr('disabled');
+                                $('.UpdateASINButtonLoader').css('display', 'none');
+                                $('.successAppend').empty();
+                                $('.successAppend').append('<span class="pl-1"> Success :' + data.successCount + ' Failure :' + data.failureCounter + 'New Sku Inserted :' + data.newItemInserted +'</span>')
+                                $('.successmessage').show();
+                            }
+                            else {
+
+                                $('#btnUploadForProductDetail').removeAttr('disabled');
+                                $('.uploadFileStatusForProductDetail').css('display', 'none');
+                                $('.failureAppend').empty();
+                                $('.failureAppend').append('<span class="pl-1"> Success :' + data.successCount + ' Failure :' + data.failureCounter + ' New Sku Inserted :' + data.newItemInserted +'</span>')
+                                $('.dangermessage').show();
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    alert('Please select a file.');
+                    $('#btnUploadForProductDetail').removeAttr('disabled');
+                    $('.uploadFileStatusForProductDetail').css('display', 'none');
+                }
+            });
+
+            
+
+            $('a.close').click(function () {
+                $(this).parent().hide();
+            });
+
+        });
+
+    </script>}

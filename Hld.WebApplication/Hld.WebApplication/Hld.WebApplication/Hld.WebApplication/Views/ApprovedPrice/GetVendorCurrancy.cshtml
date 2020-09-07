@@ -1,0 +1,402 @@
+﻿@model Hld.WebApplication.ViewModels.ApprovedPriceViewModel
+@{
+    ViewData["Title"] = "GetVendorCurrancy";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .controlabel {
+        width: 112px;
+        font-weight: bold;
+    }
+
+    .table tbody tr td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: white;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .error {
+        outline: 1px solid red;
+    }
+
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+</style>
+<div class="row col-md-12 ml-0">
+    <h6>Add Approved Price</h6>
+    <a class="" style="margin-left:20px;font-weight:bold;padding-top:2px" asp-action="Index" asp-controller="ApprovedPrice" target="_blank">Back</a>
+</div>
+<div class="container-fluid">
+    <div class="row col-md-12">
+        <div class="col-md-4">
+
+            <div class="form-group row">
+                <label class="col-form-label-sm  controlabel">Vendor Alias:</label>
+                <div class="col-sm-7 pl-0">
+                    <input id="VendorSearch" type="search" class="form-control" />
+                </div>
+                @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label-sm  controlabel">Currency:</label>
+                <div class="col-sm-7 pl-0">
+                    <input id="CurrencySearch" type="search" class="form-control" />
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label-sm  controlabel">Date:</label>
+                <div class="col-sm-7 pl-0">
+                    <input type="date" id="datetxt" class="form-control" />
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+            @*<div class="form-group row">
+                    <label class="col-form-label-sm  controlabel">Approved Price:</label>
+                    <div class="col-sm-7 pl-0">
+                        <input class="form-control ApprovedPrice" />
+
+                    </div>
+                </div>*@
+            <div class="form-group row">
+                <label class="col-form-label-sm  controlabel">SKU:</label>
+                <div class="col-sm-7 pl-0">
+                    @*<input id="productskuSearch" type="search" class="form-control" />*@
+                    <textarea id="productskuSearchsku" cols="30" rows="10" style="width:100%"></textarea>
+                    <span class="text-danger"></span>
+                    <span style="color:red;padding-left:0px;" id="sku-empty-message-Color"></span>
+                </div>
+
+            </div>
+            <div class="form-group" style="">
+                <input type="submit" value="Add Value" class="btn btn-primary offset-3 btnsave" />
+
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="container">
+                <table class="table table-bordered">
+                    <thead style="background-color:lightgray">
+                        <tr><th>Image</th><th style="width: 20%;">SKU</th><th>Title</th><th style="width: 15%">Approved Price</th><th>Action</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <input type="submit" value="Submit" class="btn btn-primary btnsubmit" />
+
+
+            </div>
+        </div>
+
+    </div>
+    <div class="container-fluid p-0" style="">
+
+        <form asp-action="AddNotesInApprovedPrice" style="margin-top: 70px;">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <div class="form-group">
+<textarea asp-for="HasNotes" class="ckeditor" name="HasNotes" value=""></textarea>
+                        <span asp-validation-for="HasNotes" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @*<div class="col-md-2">
+                    <div class="form-group">
+
+
+                    </div>
+                    </div>*@
+                <div class="col-md-12">
+                    <div class="form-group">
+
+                        <input type="submit" name="" value="Save" class="btn btn-block" style="color:white;box-shadow: none;background-color:darkgrey!important;
+outline: none;border: none;" />
+                    </div>
+                </div>
+
+
+            </div>
+        </form>
+
+
+    </div>
+</div>
+<div class="hidedialogbox ">
+    <div id="dialog-box">
+        <h6 style="color:green">Do you want to save those skue's!</h6>
+    </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+
+            $(".btnsubmit").hide();
+
+            var val = '@ViewBag.S3BucketURL_large';
+            $("#productskuSearch").change(function () {
+                $.ajax({
+                    url: "/Product/GetProductDetailsForAPBySku",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: $("#productskuSearch").val() },
+                    success: function (data, ui) {
+                        //console.log("SKUProfile", data);
+
+                        $("#ProfileDive").html('<a target="_blank" href="' + val + '/' + data.image_name + '"><img src="' + val + '/' + data.image_name + '" class="rounded" height="50" width="50" /></a>');
+                        $("#TitleDiv").html('<p style="margin-top:100px;"><span>' + data.Title + '</span> </p> ');
+
+                    }
+                })
+            });
+
+            $(".table tbody").on("click", "#DeleteButton", function () {
+                $(this).closest("tr").remove();
+            });
+
+
+            $(".btnsave").click(function () {
+
+                var lines = [];
+                $.each($('#productskuSearchsku').val().split(/\n/), function (i, data) {
+                    //var count = $('#productskuSearchsku').val().split(/\n/).length
+                    //if (count >= 3) {
+                    //    alert("nott")
+                    //    return false;
+                    //}
+                    data = ($.trim(data.replace(/\s+/g, ' ')));
+                    if (data) {
+                        //lines.push(data);
+                        var sku = data.split(" ")[0];
+                        var aproveprice = data.split(" ")[1];
+                        $.ajax({
+                            url: "/Product/GetProductDetailsForAPBySku",
+                            type: "POST",
+                            dataType: "json",
+                            data: { Prefix: sku },
+                            success: function (data, ui) {
+
+
+                                $(".btnsubmit").show();
+                                //$("#productskuSearch").val('');
+                                //$(".ApprovedPrice").val('');
+
+                                $(".table tbody").append("<tr><td>" + '<a target="_blank" href="' + val + '/' + data.image_name + '"><img src="' + val + '/' + data.image_name + '" class="rounded" height="50" width="50" /></a>' + "</td><td class='skucol'>" + sku + "</td><td>" + data.Title + "</td><td class='aprovepricecol'>" + aproveprice + "</td><td><a style='cursor: pointer' id='DeleteButton' data-ID=''><img src='/Images/trash-can-1.1s-128px.png' height='25'/></a></td></tr>")
+
+
+                            }
+                        })
+                    } else {
+                        lines.push("");
+                    }
+                });
+
+                //for (var i = 0; i < lines.length; i++) {
+                //    var line = lines[i];
+                //    var sku = line.split(" ")[0];
+                //    var aproveprice = line.split(" ")[1];
+
+                //    $.ajax({
+                //        url: "/Product/GetProductDetailsForAPBySku",
+                //        type: "POST",
+                //        dataType: "json",
+                //        data: { Prefix:sku},
+                //        success: function (data, ui) {
+                //            $(".btnsubmit").show();
+                //            //$("#productskuSearch").val('');
+                //            //$(".ApprovedPrice").val('');
+
+                //            $(".table tbody").append("<tr><td>" + '<a target="_blank" href="' + val + '/' + data.image_name + '"><img src="' + val + '/' + data.image_name + '" class="rounded" height="50" width="50" /></a>' + "</td><td class='skucol'>" + sku + "</td><td>" + data.Title + "</td><td class='aprovepricecol'>" + aproveprice + "</td></tr>")
+
+
+                //        }
+                //    })
+
+                //    //$(".table tbody").append("<tr><td id='nameval'>" + line.split(" ")[0] + "</td><td id='priceval'>" + line.split(" ")[1] + "</td></tr>");
+
+                //}
+
+
+
+
+                //var sku = $("#productskuSearch").val();
+
+                //var aproveprice = $(".ApprovedPrice").val();
+
+                //if ($('.ApprovedPrice').val().length === 0) {
+                //    $('.ApprovedPrice').addClass("error");
+                //    return false;
+                //} else {
+                //    $('.ApprovedPrice').removeClass("error");
+
+                //}
+
+
+                //var rowCount = $('.table >tbody >tr').length;
+                //if (rowCount >= 10) {
+                //    alert("you cant enter more sku!")
+                //    $(".btnsave").prop('disabled', true);
+                //    return false;
+
+                //}
+                //else {
+
+                //    $(".btnsave").prop('disabled', false);
+                //}
+
+
+
+            })
+
+            $('#VendorSearch').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                select: function (event, ui) {
+
+                    $('#ColorIdForMessage').val(ui.item.id);
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#empty-message-Color").text("No results found");
+                        $('#ColorIdForMessage').val("0");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message-Color").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+            var Currency = [
+                { value: 'CNY', data: 'CNY' },
+
+                { value: 'USD', data: 'USD' }
+            ];
+            $('#CurrencySearch').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    response($.map(Currency, function (item) {
+                        if (item != null) {
+                            return { label: item.value, value: item.value, id: item.value };
+                        }
+
+                    }));
+                },
+                select: function (event, ui) {
+
+                    $('#CurrencyForMessage').val(ui.item.value);
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#empty-message-Currency").text("No results found");
+                        $('#CurrencyIdForMessage').val("0");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message-Currency").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+
+            $(".btnsubmit").click(function () {
+                var data = [];
+                $(".table tbody tr ").each(function () {
+                    Obj = {
+                        VendorId: $('#ColorIdForMessage').val(),
+                        VendorAlias: $('#VendorSearch').val(),
+                        ApprovedUnitPrice: $(this).find('.aprovepricecol').text(),
+                        Currency: $('#CurrencySearch').val(),
+                        SKU: $(this).find('.skucol').text(),
+                        PriceStatus:true,
+                        Date: $('#datetxt').val(),
+                    };
+
+                    data.push(Obj);
+                });
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: '../ApprovedPrice/AddMultiApprovedPrice',
+                                data: { data },
+                                //contentType: 'application/json',
+                                //dataType: 'json',
+                                success: function (res) {
+                                    $("#dialog-box").dialog("close");
+                                    location.href = '../ApprovedPrice/Index';
+                                    //debugger;
+                                    $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                                    //debugger;
+                                },
+                                Error: function (err) {
+                                    //debugger;
+                                }
+                            });
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                })
+                $("#dialog-box").dialog("open");
+            });
+        });
+
+    </script>
+}

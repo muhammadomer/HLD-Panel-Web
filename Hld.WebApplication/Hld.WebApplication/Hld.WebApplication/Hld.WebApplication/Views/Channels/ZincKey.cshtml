@@ -1,0 +1,163 @@
+﻿@model Hld.WebApplication.ViewModel.ZincKeyModel
+
+@{
+    ViewData["Title"] = "ZincKey";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .sidebar {
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 51px;
+        left: 0;
+        width: 165px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        background-color: lightgrey;
+        /*overflow-x: hidden;*/
+        padding-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            color: black;
+            display: block;
+            height: auto;
+            border-bottom: 1px solid #b7b5b5;
+        }
+
+            .sidebar a:hover {
+                color: coral;
+            }
+
+    .sidebarafter {
+        margin-left: 210px;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+</style>
+
+<div class="sidebar">
+    <ul class="sidebar-links">
+
+
+        <li class="">
+            <a class="" asp-action="WatchListSummary" asp-controller="ZincWatchlist">Zinc DS Job</a>
+        </li>
+        <li class="">
+            <a class="active" asp-action="ZincKey" asp-controller="Channels">Zinc Key</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincMaxDays" asp-controller="Channels">Zinc Max Days</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincProxy">Zinc Proxy</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="SaveZincEmail" asp-controller="ZincProxy">Zinc Proxy Email</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincAccounts">Amazon Account</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="CreditCardView">Credit Card</a>
+        </li>
+
+    </ul>
+
+
+
+</div>
+
+<div class="col-10 container p-0 m-0">
+
+    <div class="row">
+
+        <div class="col-md-10 sidebarafter">
+            <h4 style="margin-left:15px">Zinc</h4>
+            <div style="margin-left:15px">
+                <hr />
+            </div>
+
+            <div class="col-md-4">
+
+                @using (Html.BeginForm("UpdateZincCredential", "Channels", FormMethod.Post))
+                {
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => Model.ZincKeyValue, new { @class = "control-label" })
+
+                        @Html.PasswordFor(model => model.ZincKeyValue, new { @class = "form-control" })
+
+                        @Html.ValidationMessageFor(model => model.ZincKeyValue, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group row ml-0">
+                        <input type="submit" value="Save" class="btn btn-success" />
+                        <div style="margin-top: 2px;
+    margin-left: 6px;">
+
+
+                            <a class="" asp-action="ViewZincLogs" asp-controller="Channels" target="_blank">View Logs</a>
+
+
+                        </div>
+                    </div>
+
+
+                }
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            //$(".sidebar-links li>a").click(function () {
+            //    //$(".sidebar-links li>a").removeClass("active");
+            //    $(this).addClass("active");
+            //});
+            //$("#btnn").click(function () {
+            //    var indexURL = '/CreditCardView/Index';
+            //    $.get(indexURL).done(function (response) {
+            //        $('#warehouseQty1').html(response);
+            //    });
+
+            //});
+
+
+
+        });
+
+        $(".sidebar-links li>a").click(function () {
+            //$(".sidebar-links li>a").removeClass("active");
+            $(this).addClass("active");
+        });
+
+    </script>
+
+
+}

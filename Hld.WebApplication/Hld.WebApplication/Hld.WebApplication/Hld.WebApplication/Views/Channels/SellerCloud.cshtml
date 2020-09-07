@@ -1,0 +1,42 @@
+﻿@model Hld.WebApplication.ViewModel.ChannelsViewModel
+
+@{
+    ViewData["Title"] = "SellerCloud";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<h4>Seller Cloud</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+
+        @using (Html.BeginForm("UpdateSellerCredential", "Channels"))
+        {
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label asp-for="UserName" class="control-label"></label>
+
+            @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+        </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+
+        }
+
+
+    </div>
+</div>
+
+<div>
+        <a asp-controller="Channels" asp-action="ViewSellerLogs">View Logs</a>
+    </div>
+

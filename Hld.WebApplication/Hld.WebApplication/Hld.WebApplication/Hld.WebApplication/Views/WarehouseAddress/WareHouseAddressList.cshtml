@@ -1,0 +1,141 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.WarehouseAddressViewModel>
+
+@{
+    ViewData["Title"] = "WareHouseAddressList";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .table-bordered thead th, .table-bordered thead td {
+        padding: 0px;
+        border-bottom-width: 2px;
+    }
+
+    .table thead th {
+        vertical-align: middle !important;
+        text-align: center;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .table th, .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+        vertical-align: middle !important;
+    }
+
+    .table td {
+        text-align: center;
+    }
+
+    .table tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+</style>
+
+<div class="container-fluid mt-3">
+    <p>
+        <a asp-action="Create">Create Address</a>
+    </p>
+    <div class="table-responsive">
+        <table class="table ">
+            <thead style="background-color:darkgray;">
+                <tr>
+                    <th>
+                        WH Name
+
+                    </th>
+                    <th>
+                        WH ID
+
+                    </th>
+                    <th>
+                        Company Name
+
+                    </th>
+                    <th>
+                        Address Line 1
+
+                    </th>
+                    <th>
+                        Address Line 2
+
+                    </th>
+                    <th>
+                        Unit
+
+                    </th>
+                    <th>
+                        Postel Code
+                    </th>
+                    <th>
+                        City
+                    </th>
+                    <th>
+                        State
+
+                    </th>
+                    <th>
+                        Country
+
+                    </th>
+                    <th>
+                        Phone
+
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.whname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.whid)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.companyname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.street1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.street2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.unit)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.postelcode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.city)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.state)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.country)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.phone)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ID })
+                          
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

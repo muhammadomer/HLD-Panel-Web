@@ -1,0 +1,1077 @@
+﻿@model ProductInventorySearchViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+
+<link href="~/lib/jquery.tablesorter/css/theme.bootstrap_4.min.css" rel="stylesheet" />
+<style type="text/css">
+    .tablesorter-bootstrap tfoot td, .tablesorter-bootstrap tfoot th, .tablesorter-bootstrap thead td, .tablesorter-bootstrap thead th {
+        font: 12px Arial,Sans-serif;
+        font-weight: 600;
+        padding: 4px;
+        margin: 0 0 18px;
+    }
+
+    #tableProductList > tbody > tr > td {
+        font-family: Arial;
+        font-size: 8pt;
+        padding: 0.2rem;
+    }
+
+    /*.table thead th {
+        vertical-align: top !important;
+    }*/
+
+    .table th, .table td {
+        padding: 0.2rem;
+    }
+
+    #pagination > a {
+        padding: 5px;
+    }
+
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .hideForBulkSku {
+        display: none;
+    }
+
+    /*.ms-options-wrap > .ms-options {
+        position: static !important;
+        min-height: 100px !important;
+        margin-right: 350px !important;
+        overflow-y: scroll;
+    }
+
+        .ms-options-wrap > .ms-options > ul input[type="checkbox"] {
+            position: static !important;
+            margin-right: 350px !important;
+        }
+
+        .ms-options-wrap > .ms-options > ul label {
+            padding: 4px 4px 4px 3px !important;
+        }*/
+
+    .ms-options-wrap.ms-active > .ms-options {
+        max-width: 400px !important;
+        min-height: 92px !important;
+    }
+
+    .ms-options-wrap > button:focus, .ms-options-wrap > button {
+        border-radius: 4px;
+        height: 25px;
+        outline: none !important;
+    }
+
+    ms-options-wrap > button:focus, .ms-options-wrap > button {
+        padding: 1px 0px 1px 2px !important;
+    }
+
+    .ms-options-wrap > .ms-options > ul label {
+        width: 101% !important;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            /*width: 300px;
+            height: 220px;*/
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+
+    .myclasss {
+        top: 22px !important;
+    }
+
+    .myclasss1 {
+        top: 0px !important;
+    }
+
+
+    .myclassin {
+        border-color: red;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 70%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 60px;
+    }
+
+    .myclass1 {
+        position: fixed;
+        top: 17%;
+        left: 70%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 60px;
+    }
+</style>
+<div>
+    <div class="loader">
+        <img src="~/Images/giffff.gif" />
+    </div>
+    <div class="mb-1 row" id="searchForm" style="margin-top: 60px;">
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">Search Inventory </div>
+                <div class="card-body" style="        padding: 0.5rem
+">
+                    @using (Html.BeginForm("IndexMainView", "Product", FormMethod.Get, new { @class = "form-inline" }))
+                    {
+                        @*<label class="mb-2 mr-sm-2">Select Dropship :</label>*@
+
+                        <select style="padding:0px;box-shadow: none; width:110px!important;" id="multiselect" class="form-control" asp-for="dropshipstatusSearch">
+                            <option value="1">Dropship</option>
+                            <option value="0">Dropship None</option>
+                            <option value="ALL">All</option>
+                        </select>
+                        @*<div class="col-md-1 p-0 mr-1"style="width:150px">
+                            <select id="multiselect" class="3col active form-control mb-2 mr-sm-2 QuantityStatus" multiple="multiple" style="box-shadow:none"asp-for="dropshipstatusSearch">
+                            <option value="1">Dropship</option>
+                            <option value="0">Dropship None</option>
+                            <option value="ALL">All</option>
+                            </select>
+                            <input type="hidden" name="Sku" id="ddlQuantity" />
+                            </div>*@
+
+
+
+                        <div class=" col-md-1 p-0 mr-1">
+                            <select id="multiselect" style="padding:0px;box-shadow: none; width:110px!important;" class="form-control col-md-1 DSTagselect" multiple="multiple">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="DSTag" id="ddDSTag" />
+
+                        <select style="padding:0px;margin-right:6px;width:110px!important;box-shadow: none;" id="multiselect" class="form-control" asp-for="dropshipstatus">
+
+                            <option value="sku">SKU</option>
+                            <option value="ProductTitle">Title</option>
+                            <option value="asin">ASIN</option>
+                            @*<option value="1">Dropship</option>
+                                <option value="0">Dropship None</option>*@
+                            <option value="ALL">All</option>
+                        </select>
+                        <label class="mb-2 mr-sm-2"></label>
+
+                        <input type="text" autocomplete="off" class="form-control" asp-for="Sku" style="box-shadow: none;width: 540px;" />
+                        <label class="mb-2 mr-sm-2"></label>
+
+                        <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
+                        <select id="" class="form-control p-sm-0" asp-for="TypeSearch">
+                            <option value="ALL">ALL</option>
+                            <option value="Continued">Continued </option>
+                            <option value="Discontinued">Discontinued</option>
+                        </select>
+
+
+                        <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+
+
+                        <div class="dropdown show ">
+                            <a class="btn btn-secondary dropdown-toggle myclasss1" href="#" role="button" id="dropdownMenuLink" style="background:#007bff;border-color:#007bff; margin-left:15px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Tags
+                            </a>
+                            <div class="dropdown-menu myclasss" aria-labelledby="dropdownMenuLink">
+
+                                <a class="dropdown-item" asp-controller="Tag" asp-action="Create" target="_blank" style="color:#007bff">Add New Tag</a>
+                                <a class="dropdown-item" href="javascript:;" id="addasintags" style="color: #007bff"> Assign Tag </a>
+                                <a class="dropdown-item" href="#" id="Removetags" style="color: #007bff"> Remove Tag </a>
+                            </div>
+                        </div>
+
+                        <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder">Export</button>
+                    }
+
+
+
+                </div>
+            </div>
+
+
+            <div class="container">
+                <div class="modal fade" style="margin-top: 80px!important;" id="myModaltags">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title text-info text-center">Assign Tags</h4>
+                            </div>
+                            <div class="modal-body">
+                                <select class="selectbox" id="ddlselected" multiple="multiple">
+                                    <option value="" selected disabled>--Please select your tags--</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="alert alert-success  successmessageModel" style="display:none">
+                                    <a href="#" class="close" aria-label="close">&times;</a>
+                                    <strong>Success!</strong><span class="successAppendModel"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="alert alert-danger  dangermessageModel " style="display:none">
+                                    <a href="#" class="close" aria-label="close">&times;</a>
+                                    <strong>Alert!</strong><span class="failureAppendModel"> Some Error Occured.</span>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container">
+                <div class="modal fade" style="margin-top: 80px!important;" id="RemoveModalOpen">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title text-info text-center">Remove Tags</h4>
+                            </div>
+                            <div class="modal-body">
+                                <select class="selectbox" id="selectedRemove" multiple="multiple">
+                                    <option value="" selected disabled>--Please select your tags--</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="alert alert-success  successmessageModelRM" style="display:none">
+                                    <a href="#" class="close" aria-label="close">&times;</a>
+                                    <strong>Success!</strong><span class="successAppendModelRM"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="alert alert-danger  dangermessageModelRM " style="display:none">
+                                    <a href="#" class="close" aria-label="close">&times;</a>
+                                    <strong>Alert!</strong><span class="failureAppendModelRM"> Some Error Occured.</span>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="btnRemove">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3">
+        <input type="hidden" value="@ViewBag.skuSearchList" id="skuSearchList" />
+        @if (string.IsNullOrEmpty(ViewBag.skuSearchList))
+        {
+            <div class="col-sm-3" id="pagination">
+                <div class="pagination">
+
+                </div>
+            </div>
+        }
+
+        <div class="divCounter col-sm-3">
+            Total item's Found:@ViewBag.TotalCount &nbsp;&nbsp;
+            @if (string.IsNullOrEmpty(ViewBag.skuSearchList))
+            {
+                <span id="itemPerPage"> Item's Per Page:50</span>
+            }
+
+        </div>
+        <div class="col-sm-2">
+            @if ((ViewBag.TotalCount / 50) > 1 && ViewBag.Sku != "Nill")
+            {
+                <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span>Select All Pages</span>
+                <span class="Processing">
+                    <span style="display:none;">   <img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
+                </span>
+            }
+        </div>
+        <div class="col-sm-3 ">
+            <div class="row ">
+                <div class="col-sm-8">
+                    <select id="actionMenu" class="form-control p-sm-0">
+                        <option value="ED-DS-SKU">Enable/Disable Dropship SKU</option>
+                        <option value="EnableProduct">Set as Continued</option>
+                        <option value="DisableProduct">Set as Discontinued</option>
+                        <option value="StatusFromZinc">Get Status From Zinc</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                    <input type="button" id="btnEnableDisableSKU" class="ml-sm-1 btn btn-primary" value="Go" />
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div style="width:100%" id="loadOrder">
+
+    </div>
+    <div class="col-sm-3 p-0">
+        <div  class="pagination"></div>
+    </div>
+    <div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">SKU Status</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body" id="modelBody">
+                    @* For Bulk Selction of SKU *@
+                    @*<form asp-action="IndexMainView" asp-controller="Product">
+                            <textarea id="SearchFromSkuList" class="hideForBulkSku" name="SearchFromSkuList" cols="50" rows="10"></textarea>
+                            <input type="submit" value="SearchFromSKUList" class="hideForBulkSku btn btn-primary" />
+                        </form>*@
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.widgets.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('select[multiple].DSTagselect').multiselect({
+                columns: 1,
+                placeholder: 'DS Tags',
+                maxPlaceholderOpts: 1,
+
+                selectAll: false,
+                onOptionClick: function (element, option) {
+                    $('#ddDSTag').val($(element).val());
+                    $(element).val();
+                },
+            });
+
+
+            $('select[multiple].active.3col.QuantityStatus').multiselect({
+                columns: 1,
+                placeholder: 'ALL',
+                maxPlaceholderOpts: 1,
+
+                selectAll: false,
+                onOptionClick: function (element, option) {
+                    $('#ddlQuantity').val($(element).val());
+                    $(element).val();
+                },
+            });
+
+
+
+            function getasinamazoneprice() {
+               
+                $(".table tbody tr ").each(function () {
+                    var sku = $(this).find('#productSkuForUpdating').val()
+                    var Url = '/Product/GetSkuAmazonePrice?sku=' + sku;
+
+                    var row = $(this);
+                    $.ajax({
+                        type: 'Get',
+                        url: Url,
+                        dataType: 'json',
+                        traditional: true,
+                        success: function (data) {
+                            
+                            $(row).find(".getasinprice").empty();
+                            $.each(data, function (key, value) {
+                                $(row).find(".getasinprice").append($("<span><a target='_blank' href='https://www.amazon.ca/dp/" + value.Asin + "?th=1&psc=1'>" + value.Asin + "</a></span> <span>" + value.amzonprice/100 + "</span><br/>"));
+                            })
+                            if (data == undefined) {
+                                $(row).find(".getasinprice").append($("<span>- - - </span>"));
+                            }
+                        }
+                    });
+                });
+            }
+
+
+            //global functions
+            $('select#multiselect').on('change', function () {
+                var sval = $('select#multiselect').val();
+                var arrValues = ["asin", "sku", "ProductTitle"];
+                var inputVal = $("input[type=text]").val();
+                if (arrValues.includes(sval)) {
+                    if (inputVal) {
+
+                        $("input").removeClass("myclassin")
+                    }
+                    else {
+                        $("input").addClass('myclassin')
+                    }
+                }
+                else {
+                    $("input").removeClass("myclassin")
+                }
+                $("input").keyup(function () {
+                    var datinput = $(this).val();
+                    if (datinput) {
+
+                        $("input").removeClass("myclassin")
+                    }
+                    else {
+                        $("input").addClass('myclassin')
+                    }
+                })
+            });
+
+
+            $.fn.checkUncheckSKU_checkbox = function (status) {
+                $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                    $(this).attr('checked', status);
+                });
+            }
+
+
+            $('#searchFromSkuList').click(function () {
+                $('.pagination').hide();
+                $('#itemPerPage').hide();
+            });
+
+            $('#btnSearchOrder').click(function () {
+                $('.pagination').show();
+                $('#itemPerPage').show();
+            });
+
+
+
+
+            $('#btnSearchFromSkuList').click(function () {
+                $('#modelBody').empty();
+                $('#modelBody').load('@Url.Action("SkuSelectList", "Product")');
+                $('#myModal').modal('show');
+            });
+
+            var totalCountOfSelectSKU = 0;
+            var pageNo = 1;
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
+
+
+            //var getUrlParametersearch = function getUrlParameter(sParam) {
+            //    var sPageURL = window.location.search.substring(1),
+            //        sURLVariables = sPageURL.split('&'),
+            //        sParameterName,
+            //        i;
+
+            //    for (i = 0; i < sURLVariables.length; i++) {
+            //        sParameterName = sURLVariables[i].split('=');
+
+            //        if (sParameterName[0] === sParam) {
+            //            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            //        }
+            //    }
+            //};
+
+            var dropship = getUrlParameter('dropshipstatus');
+            var dropshipstatusSearch = getUrlParameter('dropshipstatusSearch');
+            var sku = getUrlParameter('Sku');
+            var DSTagItem = getUrlParameter('DSTag');
+
+            var TypeSearch = getUrlParameter('TypeSearch');
+            if (TypeSearch == "Continued") {
+
+                console.log("Continued Data", TypeSearch);
+            }
+           
+            if (TypeSearch == "Discontinued") {
+                console.log("Discontinued Data", TypeSearch);
+            }
+           
+
+
+            if (DSTagItem != null) {
+               
+                var res = DSTagItem.split(",");
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+                            $('#ddDSTag').val($(this).val());
+                        }
+                    });
+                });
+            }
+
+            //if (sku != null) {
+            //    var res = sku.split(",");
+            //    $.each(res, function (key, value) {
+            //        $(".ms-options").find("input[type=checkbox]").each(function () {
+
+            //            if ($(this).val() == value.trim()) {
+            //                $(this).prop("checked", true);
+            //                $('#ddlQuantity').val($(this).val());
+            //            }
+            //        });
+            //    });
+            //}
+
+            $('#btnexportOrder').click(function () {
+                var Url = '/Product/Index/';
+
+                $.ajax({
+                    type: 'POST',
+                    url: Url,
+                    dataType: "json",
+                    data: { dropshipstatus: dropship, Sku: sku },
+
+                    traditional: true,
+                    success: function (data) {
+                        window.location.href = "@Url.RouteUrl(new
+            { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
+                    }
+
+                });
+            })
+
+
+            $(document).on('change', '#headerCheckBox', function () {
+
+                var result = $(this).is(':checked');
+                $.fn.checkUncheckSKU_checkbox(result)
+                //$(document).find('.checkboxSkuForUpdating').each(function (index) {
+                //        $(this).attr('checked', result);
+                //    });
+            });
+
+
+            $(document).on('click', '#btnEnableDisableSKU', function () {
+
+                var SKUArraryForSinglePage = [];
+                if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
+                    var status = $('#checkAllPages').is(':checked');
+                    debugger
+                    if (status) {
+                        $('.Processing').children('span').css('display', 'inline')
+                        var url = '/Product/SelectAllPagesWithoutPageLimit?dropshipstatus=' + dropship + '&Sku=' + sku;
+
+                        $.get(url).done(function (response) {
+                            $('#modelBody').empty();
+
+                            $('#modelBody').html(response);
+                            $('#myModal').modal('show');
+                            $('.Processing').children('span').css('display', 'none');
+                        });
+                        $.fn.checkUncheckSKU_checkbox(status);
+                        $(document).find('#headerCheckBox').attr('checked', status);
+                    }
+                    else if ($(document).find('#headerCheckBox').is(':checked')) {
+                        $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                            var status = $(this).is(':checked');
+                            if (status) {
+                                var productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+                                SKUArraryForSinglePage.push(productSKU)
+                            }
+                        });
+                        if (typeof SKUArraryForSinglePage !== 'undefined' && SKUArraryForSinglePage.length > 0) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("ShowBulkSKUStatusFor_DropshipEnableDisable_Inventory", "Product")',
+                                data: { skuList: SKUArraryForSinglePage },
+                                dataType: 'html',
+                                traditional: true,
+                                success: function (data) {
+                                    $('#modelBody').empty();
+                                    $('#modelBody').html(data);
+                                    $('#myModal').modal('show');
+                                }
+
+                            });
+                        }
+                    }
+
+                }
+
+
+                if ($('#actionMenu option:selected').val() == "EnableProduct") {
+                  
+                    var data = [];
+                    $(".tableProductListSelected tbody tr ").each(function () {
+                        if ($(this).find('.checkboxSkForEnableDisable').is(':checked')) {
+                            var sku = $(this).find('.productSkuForEnableDisable').val();
+
+                            data.push({ SKU: sku, Continue: true });
+                        }
+
+                    });
+                    console.log(data);
+
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'post',
+                        url: '../product/productcontinuediscontinue',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                            
+                            $.notify('Product enabled  successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                            //$("#btnSearchOrder").click();
+                           
+                        }
+                    });
+                    setInterval('location.reload()', 6000); 
+
+                }
+                if ($('#actionMenu option:selected').val() == "DisableProduct") {
+                  
+                    var data = [];
+                    $(".tableProductListSelected tbody tr ").each(function () {
+                        if ($(this).find('.checkboxSkForEnableDisable').is(':checked')) {
+                            var sku = $(this).find('.productSkuForEnableDisable').val();
+
+                            data.push({ SKU: sku, Continue: false });
+                        }
+
+
+                    });
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'post',
+                        url: '../product/productcontinuediscontinue',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                            $.notify('Product disabled  successfully', { globalPosition: 'bottom right', className: 'danger myclass1' });
+                           
+                            //$("#btnSearchOrder").click();
+                        }
+                    });
+                    setInterval('location.reload()', 6000); 
+                    console.log(data);
+                }
+
+                if ($('#actionMenu option:selected').val() == "StatusFromZinc") {
+                  
+                    var data = [];
+                    $(".tableProductListSelected tbody tr ").each(function () {
+                        if ($(this).find('.checkboxSkForEnableDisable').is(':checked')) {
+                            var sku = $(this).find('.productSkuForEnableDisable').val();
+
+                            data.push({ SKU: sku});
+                        }
+
+
+                    });
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'post',
+                        url: '../product/GetStausFromZinc',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                            $.notify('Status from Zinc Updated  successfully', { globalPosition: 'bottom right', className: 'danger myclass1' });
+                           
+                            //$("#btnSearchOrder").click();
+                        }
+                    });
+                    setInterval('location.reload()', 6000); 
+                    console.log(data);
+                }
+            });
+        
+
+            $('#checkAllPages').change(function () {
+                var status = $(this).is(':checked');
+                $.fn.checkUncheckSKU_checkbox(status);
+                $(document).find('#headerCheckBox').attr('checked', status);
+            });
+
+            if ($('#skuSearchList').val() == "")
+            {
+
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                    format: '[< nncnn >]',
+                    perpage: 30, // show 10 elements per page
+                    lapping: 0, // don't overlap pages for the moment
+                    page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                    onSelect: function (page) {
+                        pageNo = page;
+                        // add code which gets executed when user selects a page
+                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch;
+                        $(".loader").show();
+                        $.get(url).done(function (response) {
+                            $('#loadOrder').empty();
+                            $(".loader").hide();
+                            $('#loadOrder').html(response);
+                            var table = $(document).find('#tableProductList');
+                            getasinamazoneprice();
+                            $(table).tablesorter({
+                                theme: 'bootstrap',
+                                headerTemplate: '{content} {icon}',
+                                onRenderHeader: function (index) {
+                                    // the span wrapper is added by default
+                                    this.wrapInner('<span class="icons"></span>');
+
+                                }
+                            });
+                           // $(table).stickyTableHeaders({ fixedOffset: 0 });
+                        });
+                    },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+                });
+        }else {
+                var url = '/Product/Index?page=' + 1 + '&dropshipstatus=' + "" +'&dropshipstatusSearch='+"" + '&Sku=' + "";
+
+                $.get(url).done(function (response) {
+                    $('#loadOrder').empty();
+                    $('#loadOrder').html(response);
+                    getasinamazoneprice();
+                     $(".loader").hide();
+                    var table = $(document).find('#tableProductList');
+                    $(table).tablesorter({
+                        theme: 'bootstrap',
+                        headerTemplate: '{content} {icon}',
+                        onRenderHeader: function (index) {
+                            // the span wrapper is added by default
+                            this.wrapInner('<span class="icons"></span>');
+                        }
+                    });
+                   // $(table).stickyTableHeaders({ fixedOffset: 0 });
+                });
+            }
+
+
+
+        $('body').on('click', 'span.sku', function () {
+            var sortValue = $(this).attr('data-value')
+
+
+            var url = '/Product/Index?page=' + page + '?sort='+sortValue+'';
+
+            $.get(url).done(function (response) {
+                $('#loadOrder').empty();
+                $('#loadOrder').html(response);
+            });
+        });
+        });
+
+        function SubmitForm() {
+            var url = '@Url.Action("Update_DS_EnableDisable_SKU", "Product")';
+            var data = $('#form1').serialize();
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $(document).find('.ButtonLoader').children('span').css('display', 'inline');
+                $(document).find('#SaveDS_Enable_disable_SKU').attr('disabled', 'disabled');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        $(document).find('.ButtonLoader').children('span').css('display', 'none');
+                        $(document).find('#SkuStatusMessage').append([
+                            $('<label/>').text("Sku are Update " + data.SkuUpdate).css({ 'margin-left': '10px', 'color': 'green', 'font-weight': 'bold', 'margin-right': '7px' }),
+                            $('<label/>').text("Sku contain's Error " + data.SkuError).css({ 'color': 'red', 'font-weight': 'bold', 'margin-right': '7px' }),
+                            $('<br/>'),
+                            $('<label/>').text("Note : Please search again to see affected SKUs").css('margin-left', '10px')
+                        ]);
+                        checkUncheckSKU_checkbox(false);
+                        $(document).find('#headerCheckBox').attr('checked', false);
+                    }
+                });
+
+            }
+            return false;
+        }
+
+
+        $(document).on('click', '#addasintags', function () {
+            if ($(".checkboxSkuForUpdating").is(":checked")) {
+                $('#myModaltags').modal({
+                    //backdrop: 'static',
+                    //keyboard: false
+                });
+
+                var Url = '/Tag/TagListForAssign/';
+                $("#ddlselected").empty();
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    /*data: { orderid: sellerCloudOrderId },*/
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+
+                        $.each(data, function (key, value) {
+
+                            // $("#ddlselected").append($("<option></option>").val(value.TagId).html(value.TagName).css({ 'background-color': value.TagColor, 'color': 'white' }).addClass("taground"));
+                            $("#ddlselected").append($("<option></option>").val(value.TagId).html(value.TagName));
+                        })
+
+                        $('#ddlselected').multiselect({
+                            includeSelectAllOption: true
+                        });
+                    }
+                })
+            }
+            else {
+                alert("please select Product!")
+            }
+
+        });
+
+        $("#btnSave").click(function () {
+            var SKUArraryForSinglePage = [];
+            var Tagid = [];
+            // var productsku = $('.tblOrderMainHead .selectSkucheckbox:checked').val().trim();
+
+            if ($(document).find('#headerCheckBox').is(':checked')) {
+                $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                    var status = $(this).is(':checked');
+                    if (status) {
+                        var productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+                        SKUArraryForSinglePage.push(productSKU)
+                    }
+                });
+            }
+            else {
+                $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                    var status = $(this).is(':checked');
+                    if (status) {
+                        var productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+                        SKUArraryForSinglePage.push(productSKU)
+                    }
+                });
+            }
+            var selected = $("#ddlselected option:selected");
+
+            selected.each(function () {
+                Tagid.push($(this).val());
+            });
+            if (typeof selected !== 'undefined' && selected.length > 0) {
+                var Url = '/Tag/AssignTagsToProduct/';
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { sku: SKUArraryForSinglePage, Tagids: Tagid },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                        if (data == true) {
+
+                            $('.successAppendModel').empty();
+                            $('.successAppendModel').append('<span class="pl-1">  Updated Successfully ');
+
+                            $('.successmessageModel').css("display", "block");
+                        }
+                        else {
+
+                            $('.failureAppendModel').empty();
+                            $('.failureAppendModel').append('<span class="pl-1"> Something Went Wrong');
+                            $('.dangermessageModel').css("display", "block");
+
+                        }
+
+                    }
+                });
+            }
+            else {
+                $('.failureAppendModel').empty();
+                $('.failureAppendModel').append('<span class="pl-1"> Please Select Tag');
+                $('.dangermessageModel').css("display", "block");
+            }
+
+
+
+
+        });
+
+
+        $('#Removetags').click(function () {
+            //e.preventDefault();
+
+            if ($(".checkboxSkuForUpdating:checked").length > 1) {
+                alert("please select only one option");
+            }
+            else if ($(".checkboxSkuForUpdating").is(":checked")) {
+
+                $('#RemoveModalOpen').modal({
+                    //backdrop: 'static',
+                    //keyboard: false
+                });
+                var productSKU = "";
+                $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                    var status = $(this).is(':checked');
+                    if (status) {
+                        productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+
+                    }
+                });
+
+                var Url = '/Tag/GetTagforsku/';
+
+                $("#selectedRemove").empty();
+
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { sku: productSKU },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+
+                        $.each(data, function (key, value) {
+
+                            // $("#ddlselected").append($("<option></option>").val(value.TagId).html(value.TagName).css({ 'background-color': value.TagColor, 'color': 'white' }).addClass("taground"));
+                            $("#selectedRemove").append($("<option></option>").val(value.TagId).html(value.TagName));
+                        })
+
+                        $('#selectedRemove').multiselect({
+                            includeSelectAllOption: true
+                        });
+                    }
+                });
+
+
+            } else {
+                alert("please select Product!")
+            }
+        });
+
+
+        $("#btnRemove").click(function () {
+            var productSKU = "";
+            var Tagid = [];
+            // var productsku = $('.tblOrderMainHead .selectSkucheckbox:checked').val().trim();
+
+            if ($(document).find('#headerCheckBox').is(':checked')) {
+                $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                    var status = $(this).is(':checked');
+                    if (status) {
+                        productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+
+                    }
+                });
+            }
+            else {
+                $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                    var status = $(this).is(':checked');
+                    if (status) {
+                        productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+
+                    }
+                });
+            }
+            var selected = $("#selectedRemove option:selected");
+
+            selected.each(function () {
+                Tagid.push($(this).val());
+            });
+            if (typeof selected !== 'undefined' && selected.length > 0) {
+                var Url = '/Tag/RemoveTagsToProduct/';
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { sku: productSKU, Tagids: Tagid },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                        if (data == true) {
+
+                            $('.successAppendModelRM').empty();
+                            $('.successAppendModelRM').append('<span class="pl-1">  Removed Successfully ');
+
+                            $('.successmessageModelRM').css("display", "block");
+                        }
+                        else {
+
+                            $('.failureAppendModelRM').empty();
+                            $('.failureAppendModelRM').append('<span class="pl-1"> Something Went Wrong');
+                            $('.dangermessageModelRM').css("display", "block");
+
+                        }
+
+                    }
+                });
+            }
+            else {
+                $('.failureAppendModelRM').empty();
+                $('.failureAppendModelRM').append('<span class="pl-1"> Please Select Tag');
+                $('.dangermessageModelRM').css("display", "block");
+            }
+
+
+
+
+        });
+        //$(window).scroll(function () {
+        //    var scroll = $(window).scrollTop();
+        //    if (scroll >= 100) {
+        //        $("#tableProductList thead").addClass("tblproductlist")
+        //    }
+        //    else if (scroll <= 0) {
+        //        $("#tableProductList thead").removeClass("tblproductlist")
+        //    }
+        //});
+    </script>
+}

@@ -1,0 +1,141 @@
+﻿@model DataAccess.ViewModels.ZincAccountsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .controlabel {
+        width: 105px;
+        font-weight: bold;
+    }
+
+    .sidebar {
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 51px;
+        left: 0;
+        width: 165px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        background-color: lightgrey;
+        overflow-x: hidden;
+        padding-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            color: black;
+            display: block;
+            height: auto;
+            border-bottom: 1px solid #b7b5b5;
+        }
+
+            .sidebar a:hover {
+                color: coral;
+            }
+
+    .sidebarafter {
+        margin-left: 210px;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+</style>
+<div class="sidebar">
+    <ul class="sidebar-links">
+        <li class="">
+            <a class="" asp-action="WatchListSummary" asp-controller="ZincWatchlist">Zinc DS Job</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincKey" asp-controller="Channels">Zinc</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincMaxDays" asp-controller="Channels">Zinc Max Days</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincProxy">Zinc Proxy</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="SaveZincEmail" asp-controller="ZincProxy">Zinc Proxy Email</a>
+        </li>
+        <li class="">
+            <a class="active" asp-action="Index" asp-controller="ZincAccounts">Amazon Account</a>
+        </li>
+
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="CreditCardView">Credit Card</a>
+        </li>
+
+    </ul>
+
+
+
+</div>
+
+<div class="container sidebarafter">
+    <div style="margin-left:-17px">
+        <h6> Create Zinc Accounts </h6>
+        <hr />
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Index">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group row">
+                    <label asp-for="UserName" class="col-form-label-sm controlabel">User Name:</label>
+                    <div class="col-sm-4">
+                        <input type="text" asp-for="UserName" class="form-control form-control-sm" id="" placeholder="">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Key" class="col-form-label-sm controlabel">Key:</label>
+                    <div class="col-sm-4">
+                        <input type="text" asp-for="Key" class="form-control form-control-sm" id="" placeholder="">
+                        <span asp-validation-for="Key" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+
+                    <label asp-for="Password" class="col-form-label-sm controlabel">Password:</label>
+                    <div class="col-sm-4">
+                        <input type="text" asp-for="Password" class="form-control form-control-sm" id="" placeholder="">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+
+                    <div class="offset-md-1" style="padding-left:24px">
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                    </div>
+                    <div class="margin-top: 5px;">
+                        <a asp-controller="ZincAccounts" asp-action="ZincAccountDetail" target="_blank" class="" style="font-size:15px;
+    margin-left: 7px;">View Amz Account</a>
+                    </div>
+
+
+                </div>
+
+
+                @*<div class="form-group">
+
+                    </div>*@
+            </form>
+        </div>
+
+    </div>
+</div>
+

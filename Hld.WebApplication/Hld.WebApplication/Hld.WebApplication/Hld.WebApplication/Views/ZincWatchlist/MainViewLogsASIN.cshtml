@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "MainViewLogs";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h4>Zinc WatchList Logs</h4>
+
+<div class="container-fluid ">
+
+    <div class="row col col-12" id="fixActionMenu">
+        <div class="col col-md-2">
+            <div class="row">
+                <div class="pagination col-md-6 col">
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col col-md-2">
+            <span>Records Found : @ViewBag.logsRecords</span>
+        </div>
+
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="pagination">
+
+    </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+              var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
+            var ASIN = getUrlParameter('ASIN');
+            var available = getUrlParameter('available');
+            var jobID = getUrlParameter('jobID');
+
+          //pagination
+                $(".pagination").paging(parseInt('@ViewBag.logsRecords'), {
+                format: '[< nncnn >]',
+                perpage: 25, // show 10 elements per page
+                lapping: 0, // don't overlap pages for the moment
+                page: 1, // start at page, can also be "null" or negative
+                stepwidth: 0, // =0 means blockwise next/prev steps
+                onSelect: function (page) {
+
+                pageNo = page;
+                // add code which gets executed when user selects a page
+
+                      var url = '/ZincWatchlist/ZincWatchListLogs?page=' + page + ''
+                    var completURL = url + '&ASIN=' + ASIN + '&jobID=' + jobID+ '&available=' + available;
+                $(".loadertbl").show();
+
+                    $.ajax({
+                        url: completURL,
+                        data: {},
+                        type: 'POST',
+                        traditional: true,
+                        success: function (data) {
+                            $('#loadOrder').empty();
+                            $('#loadOrder').html(data);
+                            $(".loadertbl").hide();
+                            // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                        }
+                    });
+                    if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                        if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                            start = moment(OrderDateTimeFrom);
+                            end = moment(OrderDateTimeTo);
+
+                            cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                        }
+                        else {
+                            $('#reportrange span').html("No Date Selected");
+                        }
+
+                    }
+                    else {
+                        $('#reportrange span').html("No Date Selected");
+                    }
+
+
+                //$.get(completURL).done(function (response) {
+                //      $('#loadOrder').empty();
+                //      $('#loadOrder').html(response);
+
+                //      $('#tableOrderList').stickyTableHeaders({ fixedOffset: 65 });
+                //  });
+                },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+
+
+                });
+
+
+
+        });
+
+           $(document).on("click", "a.showmore", function () {
+          //$('a.showmore').click(function (e) {
+               var options = { day: 'numeric', year: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                var id = $(this).attr("value");
+                var un_id = $(this).closest('tr').next('.detail').attr('id')
+                var content = $(this).attr("data-content");
+                if (content == 'Hide') {
+                    var url = "GetWatchListSummaryByJobID"
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        data: { jobid: id },
+                        success: function (data) {
+                            $('a.showmore').closest('tr').next('.detail').empty();
+                            var CompletionTime = "";
+                            var StartTime = "";
+                          var CompletionTime = new Date(data.CompletionTime).toLocaleTimeString('en-us', options);
+                            var StartTime = new Date(data.StartTime).toLocaleTimeString('en-us', options);
+                             var diffMs = (new Date(data.CompletionTime) - new Date(data.StartTime));
+                            var diffDays = Math.floor(diffMs / 60000);
+                            $('#' + un_id).append('<td colspan=10 style="padding:0"><table style="width:100%"class="table "><thead class="thead-light"><tr><th>Job ID #</th><th>Start Time</th><th>Completion Time</th><th>Duration </th><th>Total ASIN</th><th>Available</th><th>Prime</th><th>No Prime</th><th>Unavailable</th></tr></thead><tbody><tr><td>' +
+                                data.JobID + '</td><td>' + StartTime + '</td><td>' + CompletionTime + '</td><td>' + diffDays +" Min"+ '</td><td>' + data.Total_ASIN + '</td><td>' + data.Available + '</td><td>' + data.Prime + '</td><td>' + data.NoPrime + '</td><td>' + data.Unavailable + '</td></tr></tbody></table></td>');
+                            $('#' + un_id).slideDown(2000);
+                            $('a.showmore').attr("data-content", "Show");
+                        }
+                    });
+                }
+                else {
+                    $('#' + un_id).slideUp(1000);
+                    $('a.showmore').attr("data-content", "Hide");
+                }
+
+
+
+            });
+    </script>
+}
+
+
+

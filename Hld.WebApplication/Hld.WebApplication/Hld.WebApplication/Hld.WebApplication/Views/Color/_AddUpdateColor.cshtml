@@ -1,0 +1,46 @@
+﻿@model Hld.WebApplication.ViewModel.ColorViewModel
+@using Hld.WebApplication.Models
+
+<div class="container">
+    <form asp-action="AddUpdateColor" id="form1" role="form">
+        <div class="form-group row">
+            <label asp-for="ColorName" class="col-lg-3 col-sm-3 control-label font-weight-bold mr-2"></label>
+            <div class="col-lg-9">
+                @Html.HiddenFor(e => e.ColorId)
+                <input asp-for="ColorName" id="ColorNameId" class="form-control" />
+                <span asp-validation-for="ColorName" class="text-danger"></span>
+            </div>
+            <span id="ColorExists"></span>
+        </div>
+        <div class="form-group row">
+            <label asp-for="ColorCode" class="col-lg-3 col-sm-3 control-label font-weight-bold mr-2"></label>
+            <div class="col-lg-9">
+                <input type="color" oninput="ColorValueInRGB(this)" value="#aaffc3" id="ColorId" />
+                <div style="margin-bottom:5px;"></div>
+                <input asp-for="ColorCode" id="ColorCodeId" class="form-control" />
+                <span asp-validation-for="ColorCode" class="text-danger"></span>
+            </div>
+            
+        </div>
+        <div class="form-group row">
+            <label asp-for="ColorAlias" class="col-lg-3 col-sm-3 control-label font-weight-bold mr-2"></label>
+            <div class="col-lg-9">
+                <input asp-for="ColorAlias" id="ColorAliasId" class="form-control" />
+                <span asp-validation-for="ColorAlias" class="text-danger"></span>
+            </div>
+            <span id="ColorAliasExists"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="button" id="btnSaveColor" disabled="true" class="btn btn-light" value="Submit" onclick="return SubmitForm();" />
+        </div>
+
+    </form>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    
+}
+

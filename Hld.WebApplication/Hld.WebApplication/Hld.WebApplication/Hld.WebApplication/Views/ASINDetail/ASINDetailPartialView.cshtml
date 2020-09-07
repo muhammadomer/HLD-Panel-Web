@@ -1,0 +1,196 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.ASINDetailViewModel>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyOrdersViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+<style>
+    #myModalEdit, #myModal {
+        margin: 20px;
+        margin-top: 88px;
+    }
+
+    .table {
+        margin-top: 60px;
+    }
+
+        /*.table thead tr th {
+            width: 88px;
+            vertical-align: middle !important;
+        }*/
+
+        .table thead tr th {
+            position: sticky;
+            top: 175px;
+            padding: 5px;
+            /*width: 26px;*/
+            z-index: 2;
+            background-color: lightgray;
+        }
+
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .myclasscancel {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: black;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .table th:last-child, .table th:first-child {
+        background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+        /*background-color: lightgray !important;*/
+        /*background: none !important;*/
+        background-image: none !important;
+    }
+
+    table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    table tbody tr td {
+        /*min-width: 50px !important;
+        max-width: 50px !important;*/
+        height: 50px !important;
+        display: table-cell;
+        min-height: 50px !important;
+        line-height: 1 !important;
+    }
+
+    .tablecenteRow {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    table td {
+        vertical-align: middle !important;
+    }
+
+    .tbldata {
+        text-align: center !important;
+    }
+
+    .btn-style {
+        padding: 3px;
+        font-size: 11px;
+    }
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    #onhoveredit {
+        visibility: hidden;
+        /*position:absolute;*/
+    }
+
+    .edit:hover ~ #onhoveredit {
+        visibility: visible;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+</style>
+
+<div class="container-fluid mt-3 maincontainer">
+    @*<div class="table-responsive">*@
+    <table class="table tablesorter detailtable" style="margin-top:175px;width:100%!important">
+        <thead style="background-color:darkgray;">
+            <tr>
+                <th style="width: 38px !important;text-align: center;vertical-align: middle !important">
+                <input type="checkbox" class="" id="checkboxall" /></th>
+
+                <th>
+                    ID
+                </th>
+
+                <th>
+                    Date
+                </th>
+                <th>ASIN</th>
+                <th>Product SKU</th>
+                <th>
+                    Title
+                </th>
+                <th>
+                    AmzPr CA$
+                </th>
+                <th>
+                    IMG 1
+                </th>
+                <th>
+                    IMG 2
+                </th>
+                <th>
+                    IMG 3
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @{ 
+                        double AMZPrice = @Math.Round(Convert.ToDouble(item.amazon_price) /100, 2);
+                    }
+                    <td>
+                        <input type="checkbox" class="checkboxtbl" />
+                        <input style="display:none" class="asin_datetbl" value="@item.asin_date" />
+                        <input style="display:none" class="ASINtbl" value="@item.ASIN" />
+                        <input style="display:none" class="Titletbl" value="@item.Title" />
+                        <input style="display:none" class="feature_bulletstbl" value="@item.feature_bullets" />
+                        <input style="display:none" class="amazon_pricetbl" value="@item.amazon_price" />
+                        <input style="display:none" class="MainImage_imgPathtbl" value="@item.MainImage_imgPath" />
+                        <input style="display:none" class="Image1_imgPathtbl" value="@item.Image1_imgPath" />
+                        <input style="display:none" class="Image2_imgPathtbl" value="@item.Image2_imgPath" />
+                        <input style="display:none" class="OtherImagesURL" value="@item.OtherImagesURL" />
+                    </td>
+                    <td>@item.AsinProductDetailID</td>
+                    <td>@string.Format("{0: MMM d, yyyy}", @item.asin_date)</td>
+                    <td><a href="https://www.amazon.ca/dp/@item.ASIN" target="_blank">@item.ASIN</a></td>
+                    <td><a href="@Url.Action("PropertyPage", "BestBuyProduct")?ProductSKU=@item.product_sku" target="_blank">@item.product_sku</a></td>
+                    <td>@item.Title</td>
+                    <td>@AMZPrice</td>
+                    <td>
+                        <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/@item.MainImage_imgPath">
+                            <img src="https://s3.us-east-2.amazonaws.com/amzca.bb.images.thumbnails/@item.MainImage_imgPath" class="rounded" height="50" width="50" />
+                        </a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/@item.Image1_imgPath">
+                            <img src="https://s3.us-east-2.amazonaws.com/amzca.bb.images.thumbnails/@item.Image1_imgPath" class="rounded" height="50" width="50" />
+                        </a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/@item.Image2_imgPath">
+                            <img src="https://s3.us-east-2.amazonaws.com/amzca.bb.images.thumbnails/@item.Image2_imgPath" class="rounded" height="50" width="50" />
+                        </a>
+                    </td>
+
+
+
+
+
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+    @*</div>*@
+</div>
+
+

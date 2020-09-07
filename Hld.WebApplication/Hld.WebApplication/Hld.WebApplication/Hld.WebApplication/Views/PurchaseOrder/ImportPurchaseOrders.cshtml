@@ -1,0 +1,124 @@
+﻿@model PurchaseModel
+@{
+    ViewData["Title"] = "ImportPurchaseOrders";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div style="padding:6px" class="card-header"><h6>Import PO from SellerCloud</h6></div>
+        <div class="row" style="margin-top: 20px;
+">
+            <div class="col-md-5">
+                <div>
+                    <form asp-controller="PurchaseOrder" asp-action="ImportPurchaseOrders" method="post">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label for="inputEmail3" class="">Add Order IDs: </label>
+                                    <textarea rows="10" class="form-control" id="orderlist" asp-for="Order" cols="50">
+             </textarea>
+                                    <span asp-validation-for="Order" class="text-danger"></span>
+                                </div>
+                                @*<input type="submit" id="btnSubmit" class="btn btn-primary" style="display:none;" value="Submit" />*@
+                                <div class="col-sm-5 hideWholeDiv">
+                                    @if (ViewBag.MissingOrderCount == null)
+                                    {
+                                        <input type="submit" class="btn btn-primary" id="btnSubmit" value="Submit" />
+                                        <div id="processingMessage" style="display:none;">
+                                            <img style="height:30px;width:30px" src="~/Images/loadingImage.gif" />
+                                            <span>Please wait . . . . .</span>
+                                        </div>
+                                    }
+                                    @if (ViewBag.MissingOrderCount > 0)
+                                    {
+                                        <label style="color:red;font-weight:bold;" class="m-sm-1 hideMessages" id="missingOrder">Missing Orders :@ViewBag.MissingOrderCount</label>
+                                        <input type="button" id="btnAddMissingOrder" value="Add Missing Order" class="btn btn-primary" />
+                                        <img style="height:30px;width:30px;display:none;" id="rotatingImage" src="~/Images/loadingImage.gif" />
+                                    }
+                                    @if (ViewBag.ExistingOrderCount > 0)
+                                    {
+                                        <label style="color:green;font-weight:bold;" class="m-sm-1 hideMessages" id="Sku">Existing Orders :@ViewBag.ExistingOrderCount</label><br />
+                                        @foreach (var item in ViewBag.ExistingOrder)
+                                        {
+                                            <a asp-action="PurchaseOrdersItems" target="_blank" asp-controller="PurchaseOrder" asp-route-POId="@item">Purchase Order @item</a><br />
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="appendDynamicMessage"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <table class="table table-bordered  appendDynamicdataerror" style="display:none">
+                    <thead style="background: aliceblue;">
+                        <tr>
+                            <th>Order's in Error </th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table class="table table-bordered  appendDynamicdatafound" style="display:none">
+                    <thead style="background: aliceblue;">
+                        <tr>
+
+                            <th>Found Orders</th>
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#btnSubmit').click(function () {
+                $('#processingMessage').css('display', 'inline');
+            //$('#btnSubmit').attr('disabled', 'disabled');
+        });
+        $('#btnAddMissingOrder').click(function () {
+           
+            $('#rotatingImage').css('display', 'inline');
+            $.get('@Url.Action("ImportPurchaseOrderFromSellerCloud", "PurchaseOrder")').done(function (response) {
+                $('#rotatingImage').css('display', 'none');
+                $(this).hide();
+                $('.hideWholeDiv').hide();
+                $('#orderlist').val('');
+                $('.appendDynamicMessage').append([
+                    $('<label/>').css({ 'color': 'red', 'font-weight': 'bold', 'margin-right': '10px' }).text("Order's in Error :" + response.ErrorOrder.length),
+                    $('<label/>').css({ 'color': 'green', 'font-weight': 'bold', 'margin-right': '10px' }).text("Missing Order's Added :" + response.AddedOrder.length),
+                    
+                    $('<br/>'),
+                    $('<label/>').text(response.AddedOrder.length+" Missing  Order's added successfully")
+                ]);
+                $.each(response.ErrorOrder, function (key, value) {
+                    $('.appendDynamicdataerror').slideDown(4000);
+                    $('.appendDynamicdataerror').append("<tr> <td style='color:red; font-weight:bold;'>" + value + "</td></tr>");
+                });
+                $.each(response.AddedOrder, function (key, value) {
+                    $('.appendDynamicdatafound').slideDown(4000);
+                    $('.appendDynamicdatafound').append("<tr> <td style= 'font-weight:bold;'> <a id="+value+">" + value + "</a> </td></tr>");
+                    $('#' + value).attr({ 'href':"/PurchaseOrder/PurchaseOrdersItems?POId="+ value , 'target':'_blank'});
+                });
+                $('#btnSubmit').css('disply', 'inline');
+               
+            });
+        });
+
+
+
+        });
+    </script>
+}

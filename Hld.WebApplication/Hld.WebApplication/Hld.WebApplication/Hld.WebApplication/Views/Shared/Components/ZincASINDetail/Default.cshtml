@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.ProductZinAsinDetail>
+
+
+<style>
+    .removePadding .col-sm-6{
+        padding-left:0px;
+    }
+</style>
+
+<div class="removePadding">
+    @if (Model != null && Model.Count() > 0)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="col-sm-12 p-t-b">
+                    <span>@item.priority</span>
+                    <input style="margin-right:15px" id="ZincAsinRadioButton" data-MaxPrice="@item.max_price" data-ASIN="@item.ASIN" type="radio" name="choice" value="@item.ProductSku" data-id="@item.bb_product_zinc_id" />
+                    <a target="_blank" href="https://www.amazon.ca/dp/@item.ASIN?th=1&psc=1">@item.ASIN</a>
+                    @if (item.prime)
+                    {
+                        <img src="/Images/Prime-small.png" />
+                    }
+                    else
+                    {
+                        <img src="/Images/Prime-Gray-small.png" />
+                    }
+                    AMZPr: $@item.amazon_price<strong>,</strong>
+                    MaxPr: $@item.max_price
+                </div>
+
+            </div>
+          
+
+        }
+    }
+
+    else
+    {
+        <div>
+            <span style="color:red">No ASIN detail found</span>
+        </div>
+    }
+</div>

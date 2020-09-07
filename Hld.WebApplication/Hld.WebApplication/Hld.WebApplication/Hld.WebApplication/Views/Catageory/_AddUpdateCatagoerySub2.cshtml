@@ -1,0 +1,27 @@
+﻿@model Hld.WebApplication.ViewModel.CatageorySub2ViewModel
+@using Hld.WebApplication.Models
+
+<div class="container">
+    @using (Html.BeginForm("AddUpdateCatagoerySub2", "Catageory", FormMethod.Post, new { id = "form1" }))
+    {
+    <div class="form-group row">
+        @Html.Label("Category 3", "Catageory 3", new { @class = "col-lg-3 col-sm-3 control-label font-weight-bold mr-2" })
+        <div class="col-lg-9">
+            @Html.HiddenFor(e => e.CatageorySub1Id)
+            @Html.HiddenFor(e => e.CatageorySub2Id)
+            <input asp-for="CatageorySub2Name" id="CatageorySub2NameId" class="form-control" />
+            <span asp-validation-for="CatageorySub2Name" class="text-danger"></span>
+        </div>
+        <span id="IsExistCategorySub2"></span>
+    </div>
+
+        <div class="form-group">
+            <input type="button" class="btn btn-light" disabled="true" id="btnSaveCategorySub2" value="Submit" onclick="return SubmitFormForCatageroySub2('CatageorySub2');" />
+        </div>
+
+    }
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

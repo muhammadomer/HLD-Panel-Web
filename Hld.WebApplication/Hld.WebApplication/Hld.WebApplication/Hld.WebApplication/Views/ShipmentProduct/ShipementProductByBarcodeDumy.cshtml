@@ -1,0 +1,608 @@
+﻿@model Hld.WebApplication.ViewModel.ShipementProductSearchViewModel;
+@{
+    ViewData["Title"] = "ShipmentCreation";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .pagination > a {
+        padding: 5px;
+    }
+
+    #myModal {
+        margin: 20px;
+        margin-top: 88px;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .colorhead {
+        color: #548b8d;
+    }
+
+    .mydelte {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+
+    .labelclass {
+        display: contents !important;
+    }
+
+    .table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+
+    .inputsearch {
+        width: 184px;
+        margin-left: -228px;
+        border-left: none !important;
+        box-shadow: none !important;
+        border-radius: 1px !important;
+        outline: none !important;
+        border-right: none !important;
+    }
+
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+</style>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" style="margin-top: 80px!important;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 520px;">
+            <div class="modal-header" style="">
+                <h4 class="modal-title" id="exampleModalLabel" style="border: 2px solid darkgrey;
+padding: 0px 23px 2px 4px;">
+
+                    <b><label class="control-label mb-0 labelclass">Box #: </label></b>
+                    <b><label class="control-label mb-0 labelclass" id="BoxID"></label><br /></b>
+                </h4>
+
+
+                <div class="row col-6 p-0">
+
+
+                    <div class="col-md-12 p-0" style="margin:0 auto">
+                        <b><label class="control-label mb-0 colorhead labelclass">BOX ID: </label></b><b><label class="labelclass"> @Model.model.BoxId</label></b>
+                        <br />
+                        <b><label class="control-label mb-0 colorhead labelclass">SKU: </label></b><b><a href="" id="SkuVallink" target="_blank" style="cursor:pointer"><label class="control-label mb-0 labelclass" id="GetSkuVal" style="cursor:pointer"></label></b></a>
+                        <br />
+                        <b><label class="control-label mb-0 colorhead labelclass">PO#: </label></b><b><a href="" target="_blank" id="GetPOlink" style="cursor:pointer"><label class="control-label mb-0 labelclass" id="GetPOval" style="cursor:pointer"></label></b></a>
+
+                    </div>
+
+
+                </div>
+
+                <div class=""><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col md-6">
+                        <label for="inputName" style="font-size: 16px;font-weight: bold;">Received Qty :</label>
+
+                        <span><input type="number" name="ShipmentName" class="form-control" id="ReceivedQty" style="width:65%; font-weight: bold;font-size: 40px;"></span>
+                        <span style="position: absolute;
+margin-left: 200px;
+margin-top: -58px;
+color: gray;
+font-weight: bold;
+font-size: 40px;">
+                            <label class="control-label mb-0" id="shipedqty"></label>
+                        </span>
+                        <b>
+                            <label class="control-label mb-0 colorhead">Physical Inventory:</label>
+                            <label class="control-label mb-0" id="PhysicalInventoryModel"></label><br />
+                            <label class="control-label mb-0 colorhead">Qty Per Case:</label>
+                            <label class="control-label mb-0" id="QtyPerCaseModel"></label><br />
+                            <label class="control-label mb-0 colorhead">Location Notes:</label>
+                            <label class="control-label mb-0" id="LocationNotesModel"></label><br />
+                            <label class="control-label mb-0 colorhead">Shadow Of:</label>
+                            <label class="control-label mb-0" id="ShadowOfModel"></label><br />
+                            <input type="number" style="display:none" class="form-control" id="ProductId">
+                            <input type="number" style="display:none" class="form-control" id="POIdmodel">
+                            <input type="number" style="display:none" class="form-control" id="shipedqtymodel">
+                            <input type="number" style="display:none" class="form-control" id="receivedqtytblmodel">
+                        </b>
+                    </div>
+
+                    <div class="col-5">
+
+
+                        <br />
+                        <a id="largeimage" target="_blank" href="">
+                            <img style="width: 180px;" src="" id="smallimage" />
+                        </a>
+                    </div>
+                </div>
+
+
+                <div class="form-group row" style="
+margin-bottom: 0!important;
+margin-top: 12px;
+">
+                    <b><label class="colorhead" style="margin-left:15px">Product Title:</label></b>
+                    <div class="col-sm-9" style="padding-left: 3px;">
+                        <span class="" id="ProductTitle"></span><br />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary btnsubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <h6>Receive Shipment</h6>
+</div>
+<div class="loader">
+    <img src="~/Images/giffff.gif" />
+</div>
+<div class="hidedialogbox">
+    <div id="dialog-box">
+        <h6 style="color:red">Do you want to mark shipment received!</h6>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="card mb-3 mt-3">
+        <div style="padding:0px" class="card-header">
+            <b style=" vertical-align: sub;
+margin-left: 13px;">Shipment Details</b>
+            @*<div style="float: right;">
+                <button class="btn btn-success MarkAsReceived">Mark As Received</button>
+                </div>*@
+        </div>
+        <div class="row ml-0 mt-1" style="line-height: 1!important">
+            <div class="col-1">
+                <label class="control-label mb-0 colorhead"><b>Ship from:</b></label>
+                <div class="" style="">
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Shipment Name/ID:</b></label>
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>ID:</b></label>
+
+                    <label class="control-label mb-0 "> <a href="/Shipment/Shipmentindex?ShipmentId=@Model.model.ShipmentId" style="cursor:pointer">@Model.model.ShipmentId</a></label> <br />
+                    <label class="control-label mb-0 colorhead"><b>Name:</b></label>
+                    @Model.model.ShipmentName
+
+                </div>
+            </div>
+            <div class="col-1">
+                <label class="control-label mb-0 colorhead"><b>Ship to:</b></label>
+                <div class="" style="">
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Box Contents:</b></label>
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Box ID:</b></label>
+                    @Model.model.BoxId <br />
+                    @*<label class="control-label"><b>Dimension:</b></b></label>
+                        W x H x L : @Model.Width x @Model.Height x @Model.Length
+                        <br>
+                        <label class="control-label"><b>Weight:</b></label>
+                        @Model.Weight <span>Kg</span>*@
+                    <label class="control-label mb-0 colorhead"><b>Qty Shipped:</b></label>
+                    <label class="control-label mb-0 " id="totalshipedqty">@Model.model.TotalShipedQty </label>
+                    <br />
+                    <label class="control-label mb-0 colorhead"><b>SKU's:</b></label>
+                    <label class="control-label mb-0 " id="totalshipedqty">@Model.model.TotalSKUs </label>
+
+                    <label class="control-label mb-0 colorhead"><b>PO's:</b></label>
+                    <label class="control-label mb-0 " id="totalshipedqty">@Model.model.POs </label>
+                </div>
+            </div>
+            <div class="col-3">
+                <label class="control-label mb-0 colorhead"><b>Value Reconciliation:</b></label>
+                <div class="" style="">
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Shipment Status:</b></label>
+                @if (Model.model.Status == 1)
+                {
+                    <span>Open</span>
+                }
+                @if (Model.model.Status == 2)
+                {
+                    <span>In Process</span>
+                }
+                @if (Model.model.Status == 3)
+                {
+                    <span>Shipped</span>
+                }
+                @if (Model.model.Status == 4)
+                {
+                    <span>Receiving in process</span>
+                }
+                @if (Model.model.Status == 5)
+                {
+                    <span>Received</span>
+                }
+
+                <div class="" style="">
+                </div>
+            </div>
+
+
+        </div>
+        <div class=" form-group row ml-0">
+            <label class="control-label mb-0 colorhead" style="margin-left: 15px;"><b>Notes:</b></label>
+            <div class="col-sm-10" style="padding-left:2px">
+                @Model.model.Notes
+            </div>
+        </div>
+    </div>
+    <div class="mb-1 row" id="searchForm">
+        <div class="col-sm-12" style="margin-top: 0px;">
+
+
+            @using (Html.BeginForm("ShipementProductByBarcode", "ShipementProduct", FormMethod.Get, new { @class = "form-inline" }))
+            {
+                <div class=" pl-0" style="margin-right:5px!important; width:230px;">
+                    <select class="form-control" style="width: 230px; float: left;" id="BoxesDrpDown" onchange="this.nextElementSibling.value=this.value">
+                    </select>
+                    <input type="text" name="BoxId" autocomplete="off" class="form-control inputsearch" id="BoxId" value="@Model.BoxId" placeholder="BoxID" />
+                </div>
+                <div class=" pr-0 pl-0" style="">
+                    <span>
+                        <input type="text" id="search" class="form-control" placeholder="SKU, Title, POID" style="width:230px;box-shadow:none!important" />
+                    </span>
+                </div>
+                <div class="pl-0" style="">
+                    <button class="ml-1 btn btn-success" style="" type="submit" id="btnSearchOrder">Search</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="container-fluid pr-0">
+
+    <div class="row col col-12 pr-0" id="fixActionMenu">
+        <div class="col col-md-2">
+            <div class="row">
+                <div class="pagination col-md-6 col">
+
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-2" style=" margin-top: 3px;">
+            <span> Total Items Found : @ViewBag.TotalCount</span>
+        </div>
+
+        <div class="col-md-6">
+            <button class="btn btn-sm btn-success btnsubmitall" style="float:right ;display:none"> Receive All</button>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="pagination">
+
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#search').on('keyup', function () {
+                var searchTerm = $(this).val().toLowerCase();
+                $('table tbody tr').each(function () {
+                    var lineStr = $(this).text().toLowerCase();
+                    if (lineStr.indexOf(searchTerm) === -1) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+
+            function loadBoxes() {
+            $.ajax({
+                type: 'POST',
+                url: '../ShipmentProduct/Boxes?ShipmentId=@Model.model.ShipmentId',
+                data: {},
+                success: function (res) {
+                    console.log("Boxes", res);
+                    $("#BoxesDrpDown").html("");
+                    var content = '';
+                    $.each(res, function (index, value) {
+                        content = content + '<option value = "' + value.BoxId + '">' + value.BoxId + '</option>';
+                    });
+                    $("#BoxesDrpDown").append(content);
+                    $("#BoxesDrpDown").val('@Model.BoxId');
+                }
+            });
+        }
+        loadBoxes();
+              $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                  format: '[< nncnn >]',
+                  perpage: 25, // show 10 elements per page
+                  lapping: 0, // don't overlap pages for the moment
+                  page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                  onSelect: function (page) {
+                      debugger;
+                      pageNo = page;
+                      var boxId = $("#BoxId").val();
+                      // add code which gets executed when user selects a page
+                      var url = '/ShipmentProduct/ShipementProductByBarcodeList?page=' + page + '&BoxId=' + boxId;
+                      var completURL = url  ;
+                      $(".loadertbl").show();
+                      $(".loader").show();
+                      $.ajax({
+                          url: completURL,
+                          data: {  },
+                          type: 'POST',
+                          traditional: true,
+                          success: function (data) {
+                              $('#loadOrder').empty();
+                              $('#loadOrder').html(data);
+                              $(".loader").hide();
+                              $(function () {
+                                  $(".table").tablesorter();
+                              })
+                              $(".loadertbl").hide();
+                          },
+                          error: function (data) {
+                              debugger;
+                          }
+                      });
+                  },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+             });
+            $(".table").tablesorter();
+            //$(document).on('keypress', '.sku', function (event) {
+            //    if (event.keyCode == 13) {
+            //        $("").clicked;
+            //    }
+            //});
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+            $(document).on('click', '.btnreceived', function (event) {
+
+                $(".modal").on('shown.bs.modal', function () {
+                    $(this).find("#ReceivedQty").focus();
+                });
+
+                $('.btnsubmit').prop('disabled', false);
+                $(".modal-body").css("opacity", "1");
+
+                var skulink = 'https://lp.cwa.sellercloud.com/Inventory/ProductWareHouse.aspx?Id=' + ($(this).attr('data-Sku'))
+                var polink = '../PurchaseOrder/PurchaseOrdersItems?POId=' + ($(this).attr('data-POId'))
+
+                $('#myModal').modal('show');
+                $('#smallimage').attr("src", $(this).attr('data-img-large'));
+                $('#largeimage').attr("href", $(this).attr('data-img-large'));
+                $('#ProductId').val($(this).attr('data-Id'));
+                $('#GetSkuVal').text(' ' + $(this).attr('data-Sku'));
+
+                $('#SkuVallink').attr('href', skulink);
+                $('#GetPOlink').attr('href', polink);
+                $('#GetPOval').text($(this).attr('data-POId'));
+
+                var val = ($(this).attr('data-BoxId'));
+                var myString = val.split('-');
+                var boxnum = myString[myString.length-1];
+                if (boxnum.length == 1) {
+                    boxnum = "0" + boxnum;
+                }
+                $('#BoxID').text(boxnum);
+                $('#POIdmodel').val($(this).attr('data-POId'));
+                $('#receivedqtytblmodel').val($(this).parents('tr').find('.receivedqtytbl').text());
+                $('#shipedqtymodel').val($(this).attr('data-ShipedQty'));
+                $('#shipedqty').text($(this).attr('data-ShipedQty'));
+                $('#ProductTitle').text($(this).attr('data-Producttitle'));
+                var item = $(this).attr('data-QtyPerCase');
+                if (item.length == 1) {
+                    item = "0" + item;
+                }
+                $('#LocationNotesModel').text($(this).attr('data-LocationNotes'));
+                $('#PhysicalInventoryModel').text($(this).attr('data-PhysicalInventory'));
+                $('#QtyPerCaseModel').text(item);
+                $('#ShadowOfModel').text($(this).attr('data-ShadowOf'));
+
+            });
+            $('#ReceivedQty').keypress(function (e) {
+                var key = e.which;
+                if (key == 13)  // the enter key code
+                {
+                    $('.btnsubmit').click();
+                }
+            });
+
+            @*$(document).on('click', '.MarkAsReceived', function (event) {
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            var data = {
+                                ShipmentId: '@Model.model.ShipmentId',
+                            };
+
+                            $.ajax({
+                                type: 'POST',
+                                url: '../ShipmentProduct/UpdateShipmentStatus',
+                                data: { data },
+                                success: function (res) {
+                                    $.notify('Received Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                                },
+                                Error: function (err) {
+                                }
+                            });
+                        }
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                    }
+
+                });
+                $("#dialog-box").dialog("open");
+                debugger;
+            });*@
+
+            $(document).on('click', '.btnsubmit', function (event) {
+                $('.btnsubmit').prop('disabled', true);
+                $(".modal-body").css("opacity", "0.1");
+                var Shipped = parseInt($('#shipedqtymodel').val());
+                var Received = parseInt( $('#receivedqtytblmodel').val());
+                var ReceivedInput = parseInt($('#ReceivedQty').val());
+                var Id = $('#ProductId').val();
+                debugger;
+                if ((Received + ReceivedInput) > Shipped) {
+                    $.notify('Received Qty exceed Shipped Qty', { globalPosition: 'bottom right', className: 'danger mydelte' });
+                    //$('#myModal').modal('hide');
+                    return false;
+                }
+                var data = [];
+                data.push({
+                    idShipmentProducts: $('#ProductId').val(),
+                    ReceivedQty: $('#ReceivedQty').val(),
+                    BoxId: '@Model.model.BoxId',
+                    POId: $('#POIdmodel').val(),
+                    ShipmentId:'@Model.model.ShipmentId',
+                });
+                $(".loader").show();
+                $.ajax({
+                    type: 'POST',
+                    url: '../ShipmentProduct/UpdateReceivedQty',
+                    data: { data },
+                    success: function (res) {
+                       $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                       $(".table tbody tr ").each(function () {
+                           var item2= $(this).find('.productIdtbl').val()
+                           debugger;
+                           if ($(this).find('.productIdtbl').val() == Id) {
+                               $(this).find('.receivedqtytbl').text(Received + ReceivedInput);
+                               if ((Received + ReceivedInput) == Shipped) {
+                                   $(this).find('.btnreceived').hide();
+                               }
+                           }
+                       });
+                        $(".loader").hide();
+                       $('#myModal').modal('hide');
+                       $('#ReceivedQty').val(0);
+                       //location.reload();
+                    },
+                    Error: function (err) {
+                    }
+                });
+
+                debugger;
+            });
+
+            $(document).on('click', '.btnsubmitall', function (event) {
+                var data = [];
+                $(".table tbody tr ").each(function () {
+                    data.push({
+                        idShipmentProducts: $(this).find('.productIdtbl').val(),
+                        ReceivedQty: $(this).find('.shipedqtytbl').val(),
+                        BoxId: $('#BoxId').val(),
+                        POId: $(this).find('.POIdtbl').val(),
+                    });
+                });
+                debugger;
+                $.ajax({
+                    type: 'POST',
+                    url: '../ShipmentProduct/UpdateReceivedQty',
+                    data: { data },
+                    success: function (res) {
+
+                        $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                        $('#myModal').modal('hide');
+                        $('#ReceivedQty').val(0);
+                        location.reload();
+                    },
+                    Error: function (err) {
+                    }
+                });
+
+                debugger;
+            });
+
+        });
+    </script>
+}

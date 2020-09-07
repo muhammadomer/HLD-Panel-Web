@@ -1,0 +1,7 @@
+before_install:
+  - npm install -g coffee-script
+before_script:
+  - "coffee -c background.coffee"
+language: node_js
+node_js:
+- "0.10"

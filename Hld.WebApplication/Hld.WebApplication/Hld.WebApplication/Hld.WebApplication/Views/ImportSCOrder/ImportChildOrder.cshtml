@@ -1,0 +1,114 @@
+﻿@model MissingOrderViewModel
+
+    @{
+        ViewData["Title"] = "ImportChildOrder";
+        Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+    }
+
+   
+    <div class="container-fluid">
+        <div class="card">
+            <div style="padding:6px" class="card-header"><h6>Import Child Order From SellerCloud</h6></div>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-5">
+                    <div>
+                        <form asp-controller="ImportSCOrder" asp-action="AddChildOrderFromSellerCloud" method="post">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label for="inputEmail3" class="">Add Order IDs: </label>
+                                        <textarea rows="10" class="form-control" id="orderlist" asp-for="Order" cols="50">
+                                          </textarea>
+                                        <span asp-validation-for="Order" class="text-danger"></span>
+                                        <a asp-action="S3JobDetail" target="_blank" asp-controller="UploadFilesToS3ForJobs">View Jobs</a>
+                                    </div>
+                                    @*<input type="submit" id="btnSubmit" class="btn btn-primary" style="display:none;" value="Submit" />*@
+                                    <div class="col-sm-5 hideWholeDiv">
+                                        @if (ViewBag.MissingChildOrderCount == null)
+                                        {
+                                            <input type="submit" class="btn btn-primary" id="btnSubmit" value="Submit" />
+                                            <div id="processingMessage" style="display:none;">
+                                                <img style="height:30px;width:30px" src="~/Images/loadingImage.gif" />
+                                                <span>Please wait . . . . .</span>
+                                            </div>
+                                        }
+                                        @if (ViewBag.MissingChildOrderCount > 0)
+                                        {
+
+                                            <label style="color:red;font-weight:bold;" class="m-sm-1 hideMessages" id="missingOrder">Missing Orders :@ViewBag.MissingChildOrderCount</label>
+
+                                            <input type="button" id="btnAddMissingOrder" value="Add Missing Order" class="btn btn-primary" />
+                                            <img style="height:30px;width:30px;display:none;" id="rotatingImage" src="~/Images/loadingImage.gif" />
+                                        }
+                                        @if (ViewBag.ExistingChildOrderCount > 0)
+                                        {
+                                            <label style="color:green;font-weight:bold;" class="m-sm-1 hideMessages" id="Sku">Existing Orders :@ViewBag.ExistingOrderCount</label>
+                                            @foreach (var item in ViewBag.ExistingChildOrder)
+                                            {
+                                                <a asp-action="OrderViewPage" target="_blank" asp-controller="BBOrderViewPage" asp-route-SCorderid="@item">Order View Page @item</a>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="appendDynamicMessage"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <table class="table table-bordered  appendDynamicdataerror" style="display:none">
+                        <thead style="background: aliceblue;">
+                            <tr>
+                                <th>Order's in Error </th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="col-md-3">
+                    <table class="table table-bordered  appendDynamicdatafound" style="display:none">
+                        <thead style="background: aliceblue;">
+                            <tr>
+
+                                <th>Found Orders</th>
+
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    @section Scripts{
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSubmit').click(function () {
+                $('#processingMessage').css('display', 'inline');
+            //$('#btnSubmit').attr('disabled', 'disabled');
+        });
+        $('#btnAddMissingOrder').click(function () {
+
+          
+            $.get('@Url.Action("ImportChildOrdersFromSessionAsync", "ImportSCOrder")').done(function (response) {
+                $('#rotatingImage').css('display', 'none');
+                $(this).hide();
+                $('.hideWholeDiv').hide();
+                $('#orderlist').val('');
+                $('.appendDynamicMessage').append([
+                    $('<label/>').css({ 'color': 'Green', 'font-weight': 'bold', 'margin-right': '10px' }).text("Job ID :" + response.data.jobid),
+                   
+                ]);
+              
+                $('#btnSubmit').css('disply', 'inline');
+                
+            });
+          
+        });
+    });
+        </script>
+    }

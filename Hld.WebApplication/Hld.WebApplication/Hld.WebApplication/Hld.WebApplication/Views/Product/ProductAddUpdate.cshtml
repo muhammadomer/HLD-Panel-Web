@@ -1,0 +1,655 @@
+﻿@model Hld.WebApplication.ViewModel.ProductInsetUpdateViewModel
+
+@{
+    ViewData["Title"] = "ProductAddUpdate";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style type="text/css">
+    .form-control {
+        padding: 0px;
+    }
+
+    input[type="file"] {
+        display: block;
+    }
+
+    .imageThumb {
+        height: 75px;
+        width: 75px;
+        padding: 1px;
+        cursor: pointer;
+    }
+
+    .pip {
+        display: inline-block;
+        margin: 10px 10px 0 0;
+    }
+
+    .remove {
+        width: 75px;
+        display: block;
+        background: #444;
+        border: 1px solid black;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .remove:hover {
+            background: white;
+            color: black;
+        }
+
+    .requiredCustomClass {
+        color: red;
+    }
+
+    .col-sm-3, .col-sm-8 {
+        padding-right: 3px;
+    }
+</style>
+<div class="row">
+    <div class="col-sm-3">
+        <h6>Add/Edit Product </h6>
+    </div>
+    <div class="col-sm-3">
+        @if (Model.ProductSKU != null)
+        {
+            <a asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@Model.ProductSKU">Back To Product</a>
+        }
+    </div>
+    <div class="col-sm-3">
+        <div class="text-right">
+            @if (Model.ProductSKU != null)
+            {
+                <form asp-action="ProductAddUpdate" id="AddEditForm" enctype="multipart/form-data">
+                    @Html.HiddenFor(e => e.ProductSKU)
+                    <button name="action" value="Delete" type="submit" data-ProductSKU="@Model.ProductSKU" class="btn btn-danger">Delete Product</button>
+
+                </form>
+            }
+        </div>
+
+    </div>
+</div>
+
+<hr />
+
+
+<div style="margin-left:20px;">
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="ProductAddUpdate" id="AddEditForm" enctype="multipart/form-data">
+                <input type="hidden" id="currencyRate" value="@Model.CurrencyRate" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group row">
+                    <label asp-for="ProductSKU" class="col-sm-1 text-sm-right control-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="ProductSKU" id="SKU" class="form-control" />
+                        <span asp-validation-for="ProductSKU" class="text-danger"></span>
+                    </div>
+                    <span class="requiredCustomClass">*</span>
+                    <span id="IsExistsSKU" style="padding-left:4px;padding-right:4px;"></span>
+                    <span style="margin-left:30px;" id="SKUCounter"></span>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="ProductTitle" class="col-sm-1 text-sm-right control-label"></label>
+                    <div class="col-sm-8">
+                        <input asp-for="ProductTitle" id="ProductTitle" class="form-control" />
+                        <span asp-validation-for="ProductTitle" class="text-danger"></span>
+                    </div>
+                    <span class="requiredCustomClass">*</span>
+                    <span style="margin-left:30px;" id="ProductTitleCounter"></span>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="ConditionId" class="col-sm-1 text-sm-right  control-label"></label>
+                    <div class="col-sm-3">
+                        @Html.DropDownListFor(x => x.ConditionId, new SelectList(Model.Condition, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Condition" })
+                        @*<span asp-validation-for="ConditionId" class="text-danger"></span>*@
+                    </div>
+                    <span class="requiredCustomClass">*</span>
+                </div>
+
+
+                <div class="form-group row">
+                    <label class="col-sm-1 text-sm-right control-label">Color</label>
+                    <div class="col-sm-3">
+                        <input asp-for="Color" type="search" id="Color" class="form-control" />
+                        @*<span asp-validation-for="Color" class="text-danger"></span>*@
+                        <span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
+
+                        @Html.HiddenFor(e => Model.ColorId, htmlAttributes: new { @id = "ColorIdForMessage" })
+                    </div>
+                    <div style=" padding-left: 0px;" class="col-sm-1 text-sm-left">
+                        <span class="requiredCustomClass">*</span>
+                        <span style="margin-left:10px;"> <a target="_blank" asp-controller="Color" asp-action="MainView">Add Color</a></span>
+                    </div>
+                    <label asp-for="BrandId" class="col-sm-1 text-sm-right control-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Brand" type="search" id="Brand" class="form-control" />
+                        <span asp-validation-for="Brand" class="text-danger"></span>
+                        <span style="color:red" id="empty-message-Brand"></span>
+
+                        @Html.HiddenFor(e => Model.BrandId, htmlAttributes: new { @id = "BrandIdForMessage" })
+                    </div>
+                    <span style="margin-left:10px;">
+                        <a asp-controller="Brand" target="_blank" asp-action="MainView">Add Brand</a>
+                    </span>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Category" class="col-sm-1 text-sm-right control-label"></label>
+                    <div class="col-sm-8">
+                        <input asp-for="Category" type="search" id="CategoryId" class="form-control" />
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                        <span style="color:red" id="empty-message"></span>
+                    </div>
+                    <span class="requiredCustomClass">*</span>
+                    <span style="margin-left:10px;">   <a asp-controller="Catageory" target="_blank" asp-action="MainView">Add Category</a></span>
+
+
+                </div>
+                <div class="form-group row">
+
+                    <label asp-for="Upc" class="col-sm-1 text-sm-right control-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Upc" id="UPCID" class="form-control" />
+                        @*<span asp-validation-for="Upc" class="text-danger"></span>*@
+                        <span class="UpcError"></span>
+                    </div>
+                    <span style="margin-left:20px;" id="UPCCounter"></span>
+                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
+                </div>
+
+
+                <div class="form-group row">
+                    <label asp-for="AvgCost" class="col-sm-1 text-sm-right control-label" style="padding-left:0"></label>
+                    <div class="col-sm-1">
+                        <input asp-for="AvgCost" id="AvgCostId" class="form-control" style="width:94px" />
+                    </div>
+                    <label class="col-sm-1 text-sm-right control-label" style="padding-right: 0;">CAD$</label>
+                    <div class="col-sm-1">
+                        <input style="font-weight:bold;color:darkgoldenrod;width:94px" asp-for="@Model.CADPrice" id="lblAvgCostCanada" class="form-control" />
+                    </div>
+                    <label asp-for="ShipmentWeight" class="col-sm-2 text-sm-right control-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="ShipmentWeight" id="ShipmentWeightId" class="form-control" />
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label text-sm-right col-sm-1">Ship L x W x H (inch)</label>
+                    <div class="input-group col-sm-2">
+
+                        <input asp-for="shipmentLenght" id="shipmentLenghtId" placeholder="Lenght" class=" form-control" />
+                        <input asp-for="shipmentHeight" id="shipmentHeightId" placeholder="Width" class="form-control" />
+                        <input asp-for="shipmentWidth" id="shipmentWidthId" placeholder="Height" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="Description" class="col-sm-1 text-sm-right control-label"></label>
+                    <div class="col-sm-8">
+                        @Html.TextAreaFor(e => Model.Description, htmlAttributes: new { @class = "form-control", @id = "productDescription" })
+
+                    </div>
+                    <span id="productDescriptionCounter"></span>
+                </div>
+                @if (TempData["ProductId"] == null)
+                {
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <input type="file" id="SaveImages" asp-for="UploadImages" multiple class="form-control" />
+                        </div>
+                    </div>
+                }
+
+                <input type="hidden" id="HfProductId" value="@Model.ProductSKU" />
+
+                @Html.HiddenFor(e => Model.ProductId)
+
+
+
+                @Html.HiddenFor(e => Model.CategoryIds, htmlAttributes: new { @id = "categoriesValueId" })
+
+                <div id="imagesDivMainView"></div>
+
+                <div class="form-group col-sm-10 text-sm-center">
+                    <input type="submit" name="action" id="InputSubmit" value="Submit" class="btn btn-primary" />
+                    @if (TempData["ProductId"] != null)
+                    {
+                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal" onclick="OpenUploadImagesForm('@Url.Action("UploadImagesOfSku","Product",new {id=@Model.ProductSKU })')">Upload Images</button>
+                    }
+                    @if (TempData["SaveProductMessage"] != null)
+                    {
+                        <div style="margin-top:10px;" class="alert alert-success alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>Success!</strong> Product @TempData["SaveProductMessage"].ToString() successfully . . .
+                        </div>
+                    }
+                    @if (TempData["DeleteProductMessage"] != null && TempData["DeleteProductMessage"].ToString() == "Deleted successfully")
+                    {
+                        <div style="margin-top:10px;" class="alert alert-success alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>Success!</strong> Product  @TempData["DeleteProductMessage"].ToString()
+                        </div>
+                    }
+                    @if (TempData["DeleteProductMessage"] != null && TempData["DeleteProductMessage"].ToString() == "Can't be deleted,because it exists in SellerCloud Orders")
+                    {
+                        <div style="margin-top:10px;" class="alert alert-danger alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>Alert!</strong> Product  @TempData["DeleteProductMessage"].ToString()
+                        </div>
+                    }
+
+
+                    @*id="DeleteProduct"*@
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Upload Sku Images -->
+
+
+<div class="modal fade" id="myModal" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Product Images</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modelBody">
+            </div>
+            <div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            if ($('#HfProductId').length > 0) {
+                $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
+                    $('#imagesDivMainView').html(response);
+                });
+            }
+
+            $('#DeleteProduct').click(function () {
+                var productSku = $(this).attr('data-ProductSKU');
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeletProduct", "Product")?ProductSku='+productSku,
+                    data: {},
+                    success: function (data) {
+                        console.log(data.statuss)
+                    }
+                });
+
+            });
+
+
+
+            $('input[id=SKU]').keyup(function (e) {
+                $(this).val($(this).val().replace(/ +?/g, ''));
+                $(this).addClass('text-uppercase');
+                var remaining = 20 - $('#SKU').val().length;
+                if (e.which == 32)
+                    return false;
+
+                $('#SKUCounter').text(remaining + "/" + 20);
+
+                 var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckProductSKUExists", "Product")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExistsSKU').text("Already Exists").css("color", "red");
+                            $('#InputSubmit').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExistsSKU').text("Available").css("color", "green");
+                            $('#InputSubmit').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExistsSKU').text("");
+            }
+
+
+            });
+
+
+            // focus in if default value is 0 than make it empty
+            $("#UPCID, #shipmentLenghtId ,#shipmentHeightId ,#shipmentWidthId, #ShipmentWeightId ,#AvgCostId").focus(function () {
+                if ($(this).val() == "0.00") {
+                    $(this).val("");
+                }
+            });
+
+            // focus out if default value is empty than make it 0
+            $("#UPCID, #shipmentLenghtId ,#shipmentHeightId ,#shipmentWidthId, #ShipmentWeightId ,#AvgCostId").focusout(function () {
+
+                if ($(this).val() == "") {
+                    $(this).val("0");
+                }
+            });
+
+
+
+
+            $("#fUpload").on("change", function (e) {
+
+                var files = e.target.files,
+                    filesLength = files.length;
+                for (var i = 0; i < filesLength; i++) {
+                    var f = files[i]
+                    var fileReader = new FileReader();
+                    fileReader.onload = (function (e) {
+                        var file = e.target;
+                        $("<span class=\"pip\">" +
+                            "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+                            "</span>").insertAfter("#files");
+                        $(".remove").click(function () {
+                            var index = $(this).parent().index();
+                            $(this).parent(".pip").remove();
+                        });
+
+
+                    });
+                    fileReader.readAsDataURL(f);
+                }
+            });
+
+
+
+            //on key press if textbox containa alphabets then remove those characters
+            $("#UPCID,#shipmentLenghtId ,#shipmentHeightId ,#shipmentWidthId, #ShipmentWeightId ,#AvgCostId,#lblAvgCostCanada").keyup(function (event) {
+
+                    var $this = $(this);
+                 $this.val($this.val().replace(/[^\d.]/g, ''));
+
+              if (event.target.id == "AvgCostId") {
+                    $('#lblAvgCostCanada').val(parseFloat($('#AvgCostId').val() * $('#currencyRate').val()).toFixed(2));
+                    $('#lblAvgCostCanada').prop("readonly",true)
+                }
+                if (event.target.id == "lblAvgCostCanada") {
+                    $('#AvgCostId').val(parseFloat($('#lblAvgCostCanada').val() / $('#currencyRate').val()).toFixed(2));
+                    $('#AvgCostId').prop("readonly", true)
+                }
+
+
+            });
+
+            $('#UPCID').keyup(function () {
+                CountDownCharacter(12, 'UPCID', 'UPCCounter');
+            });
+
+            $('#productDescription').keyup(function () {
+                CountDownCharacter(1000, 'productDescription', 'productDescriptionCounter');
+            });
+
+            $('input[id=ProductTitle]').keyup(function () {
+                CountDownCharacter(200, 'ProductTitle', 'ProductTitleCounter');
+            });
+
+            // categories autoComplete
+
+            $('#CategoryId').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Product/GetAllCategoriesForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.Name, value: item.Name, id: item.ID };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                select: function (event, ui) {
+
+                    $('#categoriesValueId').val(ui.item.id);
+                },
+                response: function (event, ui) {
+                    if (ui.content.length === 0) {
+                        $("#empty-message").text("No results found");
+                        $('#categoriesValueId').val("0");
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+
+
+
+            $('#Color').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Product/GetAlColorForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.Name, value: item.Name, id: item.ID };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                select: function (event, ui) {
+
+                    $('#ColorIdForMessage').val(ui.item.id);
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#empty-message-Color").text("No results found");
+                        $('#ColorIdForMessage').val("0");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message-Color").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+
+
+            // Brand AutoComplete
+
+            $('#Brand').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Product/GetAllBrandForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+
+                                    return { label: item.BrandName, value: item.BrandName, id: item.BrandId };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                select: function (event, ui) {
+                    debugger;
+                    $('#BrandIdForMessage').val(ui.item.id);
+                },
+                response: function (event, ui) {
+
+                    if (ui.content.length === 0) {
+                        $("#empty-message-Brand").text("No results found");
+                        $('#BrandIdForMessage').val("0");
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message-Brand").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+
+
+
+            function CountDownCharacter(limit, controlID, target) {
+                var remaining = limit - $('#' + controlID).val().length;
+                $('#' + target).text(remaining + "/" + limit);
+            }
+
+            $('#ProductTitle').keyup(function () {
+                capitalize_Words($(this).val(), 'ProductTitle');
+            });
+
+
+
+            function capitalize_Words(str, id) {
+                var data = str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1) });
+                $('#' + id).val(data);
+            }
+
+            $('#btnClose').click(function () {
+                if ($('#HfProductId').length > 0) {
+                    $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
+                        $('#imagesDivMainView').html(response);
+                    });
+                }
+            });
+        });
+
+
+        function SubmitForm() {
+            var files = $('#UloadImages').find('#fUpload').prop("files");
+            var fdata = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                fdata.append("files", files[i]);
+            }
+            fdata.append("ProductId", $('#HfProductId').val())
+            if (files.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/UploadImagesOfSku",
+                    data: fdata ,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+
+                        $.get('/Product/ShowImages/' + $('#HfProductId').val()+'').done(function (response) {
+                            $('#imagesDIV').html(response);
+                        });
+                    }
+                });
+            }
+            else {
+                alert('Please select a file.')
+            }
+        }
+
+
+        function OpenUploadImagesForm(url) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+
+                var res = url.split("/");
+
+                $.get('/Product/ShowImages/'+res[3]+'').done(function (response) {
+                    $('#imagesDIV').html(response);
+                })
+            });
+        }
+
+        $('body').on('click', 'span.close', function () {
+
+
+            var ProductImageId = $(this).attr("data-porductImage-id");
+            $(this).parent().remove();
+
+            $.ajax({
+                url: '@Url.Action("DeleteProductImage","Product")/' + ProductImageId + '',
+                type: "POST",
+                success: function (data) {
+                    if (data.status) {
+
+                        $(this).parent().remove();
+                    }
+                }
+            });
+        });
+
+
+
+        $('body').on('keyup', '#UPCID', function () {
+            var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckProductUPCExists", "Product")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExistsUPC').text("Already Exists").css("color", "red");
+                            $('#InputSubmit').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExistsUPC').text("Available").css("color", "green");
+                            $('#InputSubmit').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExistsUPC').text("");
+            }
+        });
+
+
+    </script>
+}

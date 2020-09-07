@@ -1,0 +1,717 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    @*<meta name="viewport" content="width=900, initial-scale=1, shrink-to-fit=no" />*@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - HLD Panel</title>
+    @using Microsoft.AspNetCore.Authorization
+    @inject IAuthorizationService AuthorizationService
+    @*Production , Development*@
+    <environment include="Development">
+        <link href="~/Images/d.ico" rel="icon" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/jqwidgets/styles/jqx.base.css" type="text/css" />
+        <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" />
+
+        <link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </environment>
+
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            list-style-type: none;
+        }
+
+
+        .header {
+            width: 100%;
+            margin-right: 0;
+            margin-left: 0;
+            height: 60px;
+            position: fixed;
+            z-index: 4000;
+            top: 0;
+            display: block;
+        }
+
+        .innerheader {
+            box-shadow: 0 5px 15px rgba(0,0,0,.2);
+            margin: 0 auto;
+            height: 85%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 1349px;
+            background-color: cadetblue;
+            align-items: flex-start;
+        }
+
+        .logo {
+            height: 100%;
+            display: table;
+            margin-top: auto;
+            float: left;
+            margin-right: -20px;
+        }
+
+            .logo h6 {
+                height: 100%;
+                color: white;
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 14px;
+                font-family: Arial;
+                font-weight: 200;
+            }
+
+                .logo h6 span {
+                    font-weight: 800;
+                }
+
+            .logo a {
+                color: white;
+            }
+
+        .navigation {
+            float: left;
+            height: 100%;
+        }
+
+            .navigation li {
+                height: 100%;
+                display: table;
+                padding: 0px 0px;
+                float: left;
+                color: white;
+            }
+
+                .navigation li a {
+                    height: 100%;
+                    text-decoration: none;
+                    display: table-cell;
+                    vertical-align: middle;
+                    color: white;
+                    cursor: pointer;
+                    font-size: 12px;
+                    font-family: Arial;
+                }
+
+            .navigation a:hover {
+                color: coral;
+            }
+
+        .dropdown-item .dropdown-menu, .nav-item .nav-link {
+            color: cadetblue;
+        }
+
+        .dropdown-item .dropdown-menu, .nav-item .nav-link {
+            color: cadetblue;
+        }
+
+        .dropdown-menu .dropdown-item.nav-item {
+            background: none;
+        }
+
+
+
+        .dropdown-item:hover, .dropdown-item:focus {
+            background-color: white !important;
+        }
+
+        #anchar {
+            color: white;
+        }
+
+            #anchar:hover {
+                color: #e8dad5ed;
+            }
+
+        .forms {
+            display: flex;
+            float: right;
+            color: black;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+            .forms select {
+                height: 34px;
+                color: white;
+                display: table-cell;
+                vertical-align: middle;
+                font-size: 12px;
+            }
+
+                .forms select option {
+                    font-size: 12px;
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+
+            .forms input[type="text"], .forms select {
+                height: 26px;
+                width: 150px;
+                margin-left: 12px;
+                border: 2px solid #b5b2a196;
+                border-radius: 5px;
+                color: cadetblue;
+                background-color: ghostwhite;
+                transition: 1s all;
+                font-size: 12px;
+                outline: none;
+            }
+
+                .forms input[type="text"]:focus {
+                    width: 170px;
+                    font-size: 14px;
+                }
+
+                .forms select option {
+                    background-color: white;
+                    color: cadetblue;
+                    padding: 10px 20px;
+                    margin-top: 12px;
+                    border-radius: 10px;
+                }
+
+
+        .btnn input {
+            float: right;
+            border-radius: 2px;
+            font-size: 12px;
+            padding: 2px 9px;
+            margin-top: 0px;
+            background: ghostwhite;
+            color: black;
+            outline: none;
+            margin-top: 1px;
+            margin-left: 3px;
+            margin-right: -9px;
+        }
+
+            .btnn input:hover {
+                color: coral;
+            }
+
+
+
+        footer p {
+            margin-top: 50px;
+        }
+
+        .sub-dropdown .dropdown-item {
+            position: relative;
+        }
+
+        .sub-dropdown .dropdown-toggle::after {
+            position: absolute;
+            right: 0;
+            transform: rotate(270deg);
+            top: 9px;
+            font-size: 16px;
+        }
+
+        .dropdown:hover > .dropdown-menu {
+            display: block;
+            top: 48px;
+        }
+
+        .dropdown-menu:hover > .dropdown-item {
+            position: relative;
+        }
+
+        .usernameclass {
+            margin-left: 16px;
+            color: #ffcf64;
+            font-weight: 100 !important;
+            font-size: 12px;
+        }
+
+        .usernameclass2 {
+            color: #ffcf64;
+            font-weight: 100 !important;
+            font-size: 12px;
+        }
+
+        .sub-dropdown {
+            transform: translate3d(0px, 0px, 0px) !important;
+        }
+        /*.dropdown-menu {
+             transform: translate3d(0px, 49px, 0px) !important;
+        }*/
+
+        /*<!-----end header----->*/
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="innerheader">
+            <div class="logo">
+                @{
+
+                    var username = Context.Request.Cookies["UserAlias"];
+                }
+
+                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Inventory Tab")).Succeeded)
+                {
+                    <h6>
+                        <a class="nav-link" asp-controller="HLDHistory" asp-action="Dashboard">  HLD Control Panel</a>
+                        <span class="usernameclass">
+                            @username
+                        </span>
+                    </h6>
+                }
+                else
+                {
+                    <h6 style="padding-left:20px">
+                        HLD Control Panel
+                        <br />
+                        <span class="usernameclass2">
+                            @username
+                        </span>
+                    </h6>
+                }
+
+                <ul class="navigation">
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Inventory Tab")).Succeeded)
+                    {
+                        <li class="nav-item dropdown pr-0 pl-0">
+                            <a class="nav-link dropdown-toggle " id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Inventory</a>
+                            <ul class="dropdown-menu " aria-labelledby="dropdown1">
+
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Add or Edit Product")).Succeeded)
+                                {
+                                    <li class="dropdown-item dropdown">
+
+                                        <a class="dropdown-toggle nav-item" style="font-size:12px;color: cadetblue" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add Product</a>
+
+                                        <ul class="dropdown-menu sub-dropdown" aria-labelledby="dropdown1-1" style="margin-left: 158px;top:0;">
+                                            <li class="nav-item ">
+                                                <a class="nav-link" asp-controller="Product" asp-action="ProductAddUpdate">Add Product</a>
+                                            </li>
+
+                                            <li class="nav-item ">
+                                                <a class="nav-link" asp-controller="Brand" asp-action="MainView">Brand</a>
+
+                                            </li>
+                                            <li class="nav-item ">
+                                                <a class="nav-link" asp-controller="Condition" asp-action="MainView">Condition</a>
+                                            </li>
+
+                                            <li class="nav-item ">
+                                                <a class="nav-link" asp-controller="Catageory" asp-action="MainView">Add Category</a>
+                                            </li>
+                                            <li class="nav-item ">
+                                                <a class="nav-link" asp-controller="Color" asp-action="MainView">Color</a>
+                                            </li>
+                                            <li class="nav-item ">
+                                                <a class="nav-link" asp-controller="Catageory" asp-action="CategoriesListMainView">Category List</a>
+                                            </li>
+                                            <li class="nav-item ">
+                                                <a class="nav-link" asp-controller="Tag" asp-action="Create">Tags</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Inventory")).Succeeded)
+                                {
+                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="Product" asp-action="IndexMainView">BestBuy Inventory</a></li>
+                                }
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="BestBuyDropshipQtyMovement" asp-action="AllDropshipQtyMovementList">BestBuy Qty Update Log</a></li>
+                                <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="asindetail" asp-action="ASINDetailList">ASIN List</a></li>
+                                @*<li class="dropdown-item dropdown">
+
+                                        <a class="dropdown-toggle nav-item" style="font-size:12px;color:cadetblue;" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Amzca Asin</a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdown1-1" style="margin-left: 158px;top:0;">
+
+                                            <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="asindetail" asp-action="SaveASINDetail">Add ASIN</a></li>
+                                            <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="asindetail" asp-action="ServerSideProcessing">ASIN List</a></li>
+
+
+
+                                        </ul>
+                                    </li>*@
+
+                            </ul>
+                        </li>
+
+
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Order Tab")).Succeeded)
+                    {
+
+                        <li class="nav-item dropdown pr-0 pl-0">
+                            <a class="nav-link dropdown-toggle " id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orders</a>
+                            <ul class="dropdown-menu " aria-labelledby="dropdown1">
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Orders")).Succeeded)
+                                {
+                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="BestBuyProduct" asp-action="BestBuOrdersDetail">BestBuy Orders</a></li>
+
+                                    <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="BestBuyTrackingUpdateLog" asp-action="Index">BB Order Tracking Log</a></li>
+                                }
+                                <li class="dropdown-item dropdown">
+                                    <a class="dropdown-toggle nav-item" style="font-size:12px;color:cadetblue;" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Import Orders</a>
+                                    <ul class="dropdown-menu sub-dropdown" aria-labelledby="dropdown1-1" style="margin-left: 158px;top:0;">
+                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ImportSCOrder" asp-action="ImportMissing">Import Missing Order</a></li>
+                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ImportSCOrder" asp-action="ImportChildOrder">Import Child Order</a></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to PO")).Succeeded)
+                    {
+
+                        <li class="nav-item dropdown pr-0 pl-0">
+                            <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Purchase Order</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdown1">
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Import PO")).Succeeded)
+                                {
+                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PredictionHistory" asp-action="Index">Predict PO</a></li>
+                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="ImportPurchaseOrders">Import PO</a></li>
+
+                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="WarehouseAddress" asp-action="WareHouseAddressList">WH Address</a></li>
+
+                                }
+
+                                <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="Index">Approved Price </a></li>
+                                @*<li class="dropdown-item dropdown">
+                                                                <a class="dropdown-toggle nav-item " style="font-size:12px;color:cadetblue;" asp-controller="ApprovedPrice" asp-action="Index" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Approved Price</a>
+                                                                <ul class="dropdown-menu sub-dropdown" aria-labelledby="dropdown1-1" style="        margin-left: 158px;
+                                    top: 0;">
+                                                                    <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="Index">Price List</a></li>
+                                                                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                                                                    {
+                                                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="AddUpdateApprovedPrice">Add Price</a></li>
+                                                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="GetVendorCurrancy">Add Multiple Prices</a></li>
+                                                                    }
+                                                                </ul>
+                                                            </li>*@
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="PurchaseOrders">Purchase Orders</a></li>
+
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="GetPOProduct">Products In PO`s</a></li>
+
+
+                                <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Shipment" asp-action="Create">Shipments</a></li>
+                                @*@if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                                    {
+                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcode">Receive Shipments</a></li>
+                                    }*@
+                            </ul>
+                        </li>
+                    }
+
+
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to BulkUpdate Tab")).Succeeded)
+                    {
+                        <li class="nav-item dropdown pr-0 pl-0">
+                            <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bulk Updates</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdown1">
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="MissingSKUManagement" asp-action="AddMissingSKUFromSellerCloud">Import Missing SKUs</a></li>
+                                <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="Setting" asp-action="Index">Update Images from SC</a></li>
+                                <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="UploadFiles" asp-action="UploadExcelFile">Update Avg Cost</a></li>
+                                <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="UploadFiles" asp-action="UploadExcelFileOfASIN">Update ASIN</a></li>
+                                <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="UploadFilesToS3ForJobs" asp-action="AsinSkuMappingToS3">Update ASIN & Dropship</a></li>
+
+                                <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="ApprovedPrice" asp-action="BullkApprovedPrices">Add Approved Price</a></li>
+                                <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="UploadFilesToS3ForJobs" asp-action="UpdateDiscontinueInventory">Inventory Enable/Disable</a></li>
+                                <li class="dropdown-item dropdown">
+                                    <a class="dropdown-toggle nav-item" style="        font-size: 12px;
+        color: cadetblue;
+" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export</a>
+                                    <ul class="dropdown-menu sub-dropdown" aria-labelledby="dropdown1-1" style="margin-left: 158px; top: 0; ">
+
+                                        <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="Export" asp-action="ExportSkuUrlImgUrl">Export SKU with ImageUrl</a></li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Setting Tab")).Succeeded)
+                    {
+                        <li class="nav-item dropdown pr-0 pl-0">
+                            <a class="nav-link dropdown-toggle " id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Setting</a>
+                            <ul class="dropdown-menu " aria-labelledby="dropdown1">
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="CurrencyExchange" asp-action="MainView">Currency Exchange</a></li>
+
+                                <li class="dropdown-item dropdown">
+                                    <a class="dropdown-toggle nav-item " style="font-size: 12px; color: cadetblue;" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Channel</a>
+                                    <ul class="dropdown-menu sub-dropdown" aria-labelledby="dropdown1-1" style="margin-left: 158px;top:0;">
+                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Channels" asp-action="SellerCloud">SellerCloud</a></li>
+                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Channels" asp-action="ZincKey">Zinc</a></li>
+                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Channels" asp-action="AmazonZinc">Amazon Zinc</a></li>
+                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Channels" asp-action="BestBuyCAKeyvalue">BestBuyCA</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="AutoControls" asp-action="Index">Jobs Control</a></li>
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="UploadFilesToS3ForJobs" asp-action="S3JobDetail">View Jobs</a></li>
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="ZincWatchlist" asp-action="WatchListSummary">Zinc Jobs</a></li>
+
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Admin Tab")).Succeeded)
+                    {
+                        <li class="nav-item dropdown pr-0 pl-0">
+                            <a class="nav-link dropdown-toggle " id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                            <ul class="dropdown-menu " aria-labelledby="dropdown1">
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="Admin" asp-action="Index">Manage Users</a></li>
+
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="Role" asp-action="Index">Manage Roles</a></li>
+
+
+                            </ul>
+                        </li>
+                        <li class="nav-item pr-0 pl-0 ">
+                            <a class="nav-link " id="anchar" asp-controller="Help" asp-action="Index">Help</a>
+                        </li>
+
+                    }
+
+                    <li class="nav-item dropdown pr-0 pl-0">
+                        <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdown1">
+
+                            <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="Authentication" asp-action="Logout">Logout</a></li>
+                            @*<li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="" asp-action="">@username</a></li>*@
+                        </ul>
+                    </li>
+
+                    @*<li class="nav-item ">
+                            <a class="nav-link " id="anchar" asp-controller="asindetail" asp-action="ServerSideProcessing">ASIN List</a>
+                        </li>*@
+
+                </ul>
+
+            </div>
+
+
+
+            <div class="forms">
+                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Inventory Tab")).Succeeded)
+                {
+                    <select id="globalSearch" placeholder="Search">
+                        <option value="ProductSKU">SKU</option>
+                        <option value="BBSKU">BB SKU</option>
+                        <option value="sellerCloudID">SC Order#</option>
+                        <option value="order_id">Source Order#</option>
+                        <option value="Tracking">Order Tracking#</option>
+                        <option value="CustomerName">Customer Name</option>
+                        <option value="POID">Purchase Order</option>
+                    </select>
+                }
+                else
+                {
+                    <select id="globalSearch" placeholder="Search">
+
+                        <option value="POID">Purchase Order</option>
+                    </select>
+
+                }
+                <div>
+                    <input type="text" id="txtGloabalValue" />
+                </div>
+                <div class="btnn">
+                    <input type="button" id="btnSearch" value="Search" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="container-fluid">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" style="margin-top:60px;" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="text-center text-muted">
+
+            <p> &copy; 2019 - Hld.WebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></p>
+
+        </footer>*@
+
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+        <script src="~/lib/notify/notify.min.js"></script>
+
+        <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+
+        <script src="~/fixed-header-table/jquery.fixedheadertable.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxcore.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxdata.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxbuttons.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxscrollbar.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxlistbox.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxdropdownlist.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxmenu.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxgrid.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxgrid.filter.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxgrid.sort.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxgrid.selection.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxpanel.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/globalization/globalize.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxcalendar.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxdatetimeinput.js"></script>
+        <script type="text/javascript" src="~/jqwidgets/jqxcheckbox.js"></script>
+        <script src="~/jqwidgets/jqxgrid.storage.js"></script>
+        <script src="~/jqwidgets/jqx-all.js"></script>
+        <script src="~/lib/font-awesome/js/all.js"></script>
+        <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.js"></script>
+        <link href="~/lib/jquery.tablesorter/css/theme.default.min.css" rel="stylesheet" />
+    </environment>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(window).scrollTop(0);
+            if (localStorage.getItem('saveData')) {
+                $('#globalSearch').val(localStorage.getItem('saveData'));
+            }
+            $('#btnSearch').click(function () {
+
+                var FilterName = $('#globalSearch option:selected').val();
+                var FilterValue = $('#txtGloabalValue').val().trim();
+                var FilterLength = $('#txtGloabalValue').val().trim().length;
+
+                if (FilterLength > 0) {
+                    if (FilterName == "ProductSKU" || FilterName == "BBSKU") {
+                        var target = '/BestBuyProduct/PropertyPage?' + FilterName + '=' + FilterValue + '';
+
+                        window.location.href = target;
+
+                    }
+                    if (FilterName == "sellerCloudID" || FilterName == "order_id" || FilterName == "CustomerName") {
+
+                        var target = '/BestBuyProduct/BestBuOrdersDetail?' + FilterName + '=' + FilterValue + '';
+
+                        window.location.href = target;
+                    }
+                    if (FilterName == "POID") {
+
+                        var target = '/PurchaseOrder/PurchaseOrdersItems?' + FilterName + '=' + FilterValue + '';
+
+                        window.location.href = target;
+                    }
+                }
+            });
+            $(function () {
+                $('#globalSearch').change(function () {
+                    localStorage.setItem('saveData', this.value);
+
+                });
+
+            });
+            $('#txtGloabalValue').keypress(function (event) {
+                var FilterName = $('#globalSearch option:selected').val();
+                var FilterValue = $('#txtGloabalValue').val().trim();
+                var FilterLength = $('#txtGloabalValue').val().trim().length;
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    if (FilterLength > 0) {
+                        if (FilterName == "ProductSKU" || FilterName == "BBSKU") {
+                            var target = '/BestBuyProduct/PropertyPage?' + FilterName + '=' + FilterValue + '';
+
+                            window.location.href = target;
+
+                        }
+                        if (FilterName == "sellerCloudID" || FilterName == "order_id" || FilterName == "CustomerName") {
+                            var target = '/BestBuyProduct/BestBuOrdersDetail?' + FilterName + '=' + FilterValue + '';
+                            window.location.href = target;
+                        }
+                        if (FilterName == "POID") {
+
+                            var target = '/PurchaseOrder/PurchaseOrdersItems?' + FilterName + '=' + FilterValue + '';
+
+                            window.location.href = target;
+                        }
+                    }
+                }
+            });
+
+            //$('.dropdown-item').on('click', function (e) {
+
+
+            //    var $el = $(this).children('.dropdown-toggle');
+            //    var $parent = $el.offsetParent(".dropdown-menu");
+            //    $(this).parent("li").toggleClass('open');
+
+            //    if (!$parent.parent().hasClass('navbar-nav')) {
+            //        if ($parent.hasClass('show')) {
+            //            $parent.removeClass('show');
+            //            $el.next().removeClass('show');
+            //            $el.next().css({ "top": -999, "left": -999 });
+            //        } else {
+            //            $parent.parent().find('.show').removeClass('show');
+            //            $parent.addClass('show');
+            //            $el.next().addClass('show');
+            //            $el.next().css({ "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 });
+            //        }
+            //        //e.preventDefault();
+            //        e.stopPropagation();
+            //    }
+            //});
+
+            //$('.navbar .dropdown').on('hidden.bs.dropdown', function () {
+            //    $(this).find('li.dropdown').removeClass('show open');
+            //    $(this).find('ul.dropdown-menu').removeClass('show open');
+            //});
+
+
+
+
+        });
+
+
+    </script>
+    <script>
+                                                                                                                                                                                                                                                                                                                //window.onscroll = function () { myFunction() };
+
+                                                                                                                                                                                                                                                                                                                //var header = document.getElementById("myHeader");
+                                                                                                                                                                                                                                                                                                                //var sticky = header.offsetTop;
+
+                                                                                                                                                                                                                                                                                                                //function myFunction() {
+                                                                                                                                                                                                                                                                                                                //    if (window.pageYOffset > sticky) {
+                                                                                                                                                                                                                                                                                                                //        header.classList.add("sticky");
+                                                                                                                                                                                                                                                                                                                //    } else {
+                                                                                                                                                                                                                                                                                                                //        header.classList.remove("sticky");
+                                                                                                                                                                                                                                                                                                                //    }
+                                                                                                                                                                                                                                                                                                                //}
+    </script>
+
+</body>
+</html>

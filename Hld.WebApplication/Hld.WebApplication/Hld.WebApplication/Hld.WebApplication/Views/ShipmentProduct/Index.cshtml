@@ -1,0 +1,741 @@
+﻿@model Hld.WebApplication.ViewModel.ShipmentProductHeaderViewModel;
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    form {
+        margin: 20px 0;
+    }
+
+        form input, button {
+            padding: 5px;
+        }
+
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+
+    table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid #cdcdcd;
+    }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        table thead tr th {
+            vertical-align: top !important;
+        }
+
+    .warning {
+        border: 1px solid red;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .mydelte {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .colorhead {
+        color: #548b8d;
+    }
+
+    .btn-style {
+        padding: 3px;
+        font-size: 11px;
+    }
+
+    .nav-custom-link {
+        vertical-align: sub;
+        margin-left: 13px;
+    }
+
+    .nav-custom-link-box {
+        vertical-align: sub;
+        margin-left: 5px;
+    }
+
+    .hideclass {
+        top: 1000px;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card mb-3 mt-3">
+        <div style="padding:0px" class="card-header">
+            <b style="vertical-align: sub; margin-left: 13px;">Shipment Details</b>
+            <a style="cursor:pointer" class="nav-custom-link" asp-action="Create" asp-controller="Shipment">Shipments</a>
+            <a style="cursor:pointer" class="nav-custom-link-box" asp-action="Create" asp-controller="ShipmentBox" asp-route-ShipmentId="@Model.ShipmentId">> Boxes </a>
+            <a style="cursor:pointer" class="nav-custom-link-box" asp-action="Index" asp-controller="ShipmentProduct" asp-route-BoxId="@Model.BoxId">> <b>Add Products in Boxes</b></a>
+            @if (Model.Status < 3)
+            {
+                <div style="float: right;">
+
+                    <button class=" btn btn-danger btn-style " id="btnDeleteBox" value="Delete" style="box-shadow:none"> Delete Box </button>
+                </div>
+            }
+        </div>
+        <div class="row ml-0 mt-1 mb-0">
+            <div class="col-1">
+                <label class="control-label mb-0 colorhead"><b>Ship from:</b></label>
+                <div class="" style="">
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Shipment Name/ID:</b></label>
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>ID:</b></label>
+                    <label class="control-label mb-0 colorhead"> <a href="/Shipment/Shipmentindex?ShipmentId=@Model.ShipmentId" style="cursor:pointer">@Model.ShipmentId</a></label> <br />
+                    <label class="control-label mb-0 colorhead"><b>Name:</b></label>
+                    @Model.ShipmentName
+
+                </div>
+            </div>
+            <div class="col-1">
+                <label class="control-label mb-0 colorhead"><b>Ship to:</b></label>
+                <div class="" style="">
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Shipment Contents:</b></label>
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Box ID:</b></label>
+                    @Model.BoxId <br />
+                    @*<label class="control-label"><b>Dimension:</b></b></label>
+                        W x H x L : @Model.Width x @Model.Height x @Model.Length
+                        <br>
+                        <label class="control-label"><b>Weight:</b></label>
+                        @Model.Weight <span>Kg</span>*@
+                    <label class="control-label mb-0 colorhead"><b>Qty Shipped:</b></label>
+                    <label class="control-label mb-0 " id="totalshipedqty"> </label>
+                    <br />
+                    <label class="control-label mb-0 colorhead"><b>SKU's</b></label>
+                    <label class="control-label mb-0 ">@Model.SKUs</label>
+                    <label class="control-label mb-0 colorhead"><b>PO's</b></label>
+                    <label class="control-label mb-0 ">@Model.POs</label>
+                </div>
+            </div>
+            <div class="col-3">
+                <label class="control-label mb-0 colorhead"><b>Value Reconciliation:</b></label>
+                <div class="" style="">
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Shipment Status:</b></label>
+                @if (Model.Status == 1)
+                {
+                    <span>Open</span>
+                }
+                @if (Model.Status == 2)
+                {
+                    <span>In Process</span>
+                }
+                @if (Model.Status == 3)
+                {
+                    <span>Shipped</span>
+                }
+                @if (Model.Status == 4)
+                {
+                    <span>Receiving in process</span>
+                }
+                @if (Model.Status == 5)
+                {
+                    <span>Received</span>
+                }
+                <div class="" style="">
+                </div>
+            </div>
+
+
+        </div>
+        <div class=" form-group row ml-0 mb-0">
+
+            <label class="col-sm-1 control-label colorhead"><b>Notes:</b></label>
+            <div class="col-sm-10">
+                @Model.Notes
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <div class="row" style="margin-bottom:10px; padding-left:0px;">
+            <div class="col-md-3">
+                <select class="form-control" id="BoxesDrpDown" style="padding:0px;">
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-success" id="srearchBox">Search</button>
+            </div>
+        </div>
+    </div>
+    <table class="table ">
+        <thead style="background-color:lightgray">
+            <tr>
+                <th><input type='checkbox' id="headerCheckBox" name='record'></th>
+                <th>Image</th>
+                <th width="35%">SKU</th>
+                <th>
+                    <label>PO #</label><label class="col-sm-3  pr-0">
+                        Qty
+                        <br />Open
+                    </label><label class="col-sm-4  p-0">Qty    <br /> Balanced</label>
+                </th>
+                <th>
+                    Qty
+                    <br />
+                    Shipped
+                </th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.list != null)
+            {
+                @foreach (var item in Model.list)
+                {
+                    <tr>
+                        <td><input type='checkbox' class='checkbx' name='record'><input type='text' class='form-control productId' style='display:none' value='@item.idShipmentProducts'></td>
+                        <td>
+                            <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                                <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                            </a>
+                        </td>
+                        <td>
+
+                            <input type='text' class='form-control sku' placeholder='Scan SKU or type/paste then press Enter Key' value='@item.SKU' readonly type='search'>
+                            <p class="producttitle">@item.Title</p>
+                        </td>
+                        <td><select class='form-control PO' disabled style='padding:0px;'><option value='0'>@item.POId&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.OpenQty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.BalanceQty</option> </select></td>
+                        <td>
+                            <input type='text' class='form-control shipedqty' readonly value='@item.ShipedQty'>
+                            <label class="qtyerr" style="color:red;display:none"></label>
+                        </td>
+                        <td>
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                            {
+                                @if (Model.Status < 5)
+                                {
+                                    <a style="cursor:pointer" title="Delete Product" class=" btnDelete"><img src="~/Images/trash-can-1.1s-128px.png" height="25" /></a>
+                                    <button type='button' class='btn btn-success m-2 addproduct ' style='display:none'>Save</button>
+                                    <button type='button' class='btn btn-success editproduct'>Edit</button>
+                                }
+                            }
+
+                            else
+                            {
+                                @if (Model.Status < 3)
+                                {
+                                    <a style="cursor:pointer" title="Delete Product" class=" btnDelete"><img src="~/Images/trash-can-1.1s-128px.png" height="25" /></a>
+                                    <button type='button' class='btn btn-success m-2 addproduct ' style='display:none'>Save</button>
+                                    <button type='button' class='btn btn-success editproduct'>Edit</button>
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    @*style="float: right;"*@
+    <div id="dialog-box">
+        <h6 style="color:red">Do you want to delete this reocord!</h6>
+    </div>
+    <form>
+        @if (Model.Status < 3)
+        {
+            <button type="button" class="btn btn-sm btn-primary add-row "><i class="fas fa-plus"></i>Add Product</button>
+            <button type="button" id="btnDelete" style="display:none; cursor:pointer;" title="Delete Product" class="btn btn-sm btn-danger delete-row"><i class="far fa-trash-alt"></i> Delete Row</button>
+        }
+    </form>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+    $(document).ready(function () {
+
+        $("#srearchBox").click(function () {
+            var BoxId = $("#BoxesDrpDown").val();
+            debugger;
+            window.location ="../ShipmentProduct/Index?BoxId=" + BoxId;
+        });
+
+        function loadBoxes() {
+            $.ajax({
+                type: 'POST',
+                url: '../ShipmentProduct/Boxes?ShipmentId=@Model.ShipmentId',
+                data: {},
+                success: function (res) {
+                    console.log("Boxes", res);
+                    $("#BoxesDrpDown").html("");
+                    var content = '';
+                    $.each(res, function (index, value) {
+                        content = content + '<option value = "' + value.BoxId + '">' + value.BoxId + '</option>';
+                    });
+                    $("#BoxesDrpDown").append(content);
+                    $("#BoxesDrpDown").val('@Model.BoxId');
+                }
+            });
+        }
+        loadBoxes();
+
+
+        $("#dialog-box").dialog({
+            autoOpen: false,
+            //title: 'Are u want to delete this reocord!',
+            modal: true,
+        });
+
+        $('#headerCheckBox').click(function () {
+            if ($(this).is(':checked')) {
+                $('.checkbx').attr('checked', true);
+                //$("#btnDelete").show();
+            }
+            else {
+                $('.checkbx').attr('checked', false);
+                //$("#btnDelete").hide();
+            }
+
+        });
+            $(document).on('click', '.checkbx', function () {
+                var found = false;
+                debugger;
+                $(".table tbody tr ").each(function () {
+                    debugger;
+                    var checkbox = $(this).find('.checkbx');
+                    if ($(checkbox).is(":checked")) {
+                        found = true
+                    }
+                });
+                if (found) {
+                    //$("#btnDelete").show();
+                }
+                else {
+                    //$("#btnDelete").hide();
+                }
+            });
+            $(".btnDelete").click(function () {
+                var selected = $(this);
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            var data = [];
+                            var Obj = {
+                                idShipmentProducts: selected.parents('tr').find('.productId').val(),
+                            };
+                            data.push(Obj);
+                            debugger;
+                            $.ajax({
+                                type: 'POST',
+                                url: '../ShipmentProduct/Delete',
+                                data: { data },
+                                success: function (res) {
+                                    $("#dialog-box").dialog("close");
+                                    selected.parents('tr').remove();
+                                    setTimeout(function () { SumShipedQty();}, 1000);
+                                    $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger mydelte' });
+                                    debugger;
+                                },
+                                Error: function (err) {
+                                    debugger;
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                         "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+
+                $("#dialog-box").dialog("open");
+            });
+        var editval = false;
+        $(document).on('click', '.editproduct', function () {
+            editval = true;
+                var row = $(this).parents('tr');
+                $(row).find('.shipedqty').prop('readonly', false);
+                //$(row).find('select').attr('disabled', false);
+                $(row).find('.editproduct').hide();
+                $(row).find('.addproduct').show();
+            });
+
+        function AddMarkup() {
+            debugger;
+            var markup = "<tr>" +
+                "<td><input type='checkbox' class='checkbx' name='record'><input type='text'class='form-control productId'  style='display:none' value='0'></td>" +
+                "<td><div class='productimage'></div></td>" +
+                "<td><input type='text'class='form-control sku' placeholder='Scan SKU or type/paste then press Enter Key'  value=''>" +
+                "<p class='producttitle'></p></td>" +
+                "<td><select class='form-control PO' style='padding:0px;'><option value=''>select</option> </select></td>" +
+                "<td><input type='text'class='form-control shipedqty' value=''>" +
+                "<label class='qtyerr' style='color: red; display: none'></label></td>" +
+                "<td>" + "<a class='btnDelete' style='cursor:pointer' ><img src='/Images/trash-can-1.1s-128px.png'height='25' /></a>" +
+                "<button type='button'class='btn btn-success addproduct' >Save</button>" +
+                "<button type='button'class='btn btn-success editproduct' style='display:none'>Edit</button></td> " +
+                "</tr>";
+            $("table tbody").append(markup);
+        }
+
+            $(document).on('click', '.addproduct', function () {
+                var row = $(this).parents('tr');
+                var addsku = $(this);
+                AddMarkup();
+                $(addsku).parents('tr').next().find(".sku").focus();
+                var data =
+                {
+                    SKU: $(row).find('.sku').val(),
+                    POId: $(row).find('.PO').val(),
+                    ShipedQty: $(row).find('.shipedqty').val(),
+                    ShipmentId:'@Model.ShipmentId',
+                    BoxId:'@Model.BoxId',
+                    idShipmentProducts: $(row).find('.productId').val(),
+                }
+                var i = 0;
+                $.ajax({
+                    type: 'POST',
+                    url: '../ShipmentProduct/CreateBox',
+                    data: { data },
+                    success: function (res) {
+                        i++;
+                        debugger;
+                        if (res > 0) {
+                            $(row).find('.productId').val(res);
+                            $(row).find('input').prop('readonly', true);
+                            $(row).find('select').attr('disabled', true);
+                            $(row).find('.editproduct').show();
+                            $(row).find('.addproduct').hide();
+                            if (editval == false) {
+                                AddMarkup()
+                                $(addsku).parents('tr').next('.sku').find(".sku").focus();
+                            }
+                            editval = false;
+                          SumShipedQty();
+                            $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                        }
+                        else {
+                            $(row).find('.shipedqty').addClass('warning')
+                            $(row).find('.qtyerr').show();
+                            $(row).find('.qtyerr').text('Must be less then Open Qty');
+                            //$.notify('Quantity is higher then Open Qty', { globalPosition: 'bottom right', className: 'danger mydelte' });
+                        }
+                    },
+                    Error: function (err) {
+                        debugger;
+                    }
+                });
+            });
+
+            $(document).on('keypress','.sku', function (event) {
+                //var item = $(this).parents('tr');
+                if (event.keyCode == 13) {
+                    var item = $(this);
+                    if (item.val() == "")
+                        return;
+                    $.ajax({
+                        type: 'GET',
+                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + item.val(),
+                        contentType: 'application/json',
+                        success: function (res) {
+                            $(item).parents('tr').find('.PO').empty();
+                            var content = '';
+                            $.each(res, function (index, value) {
+                                content = content + '<option value = "' + value.POId + '">' + value.POId + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.OpenQty + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.BalanceQty + '</option>';
+                            });
+                            debugger;
+                            $(item).parents('tr').find('.PO').append(content);
+                            console.log("Response", res);
+                            $(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        url: "/Product/GetProductDetailsForAPBySku",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: item.val() },
+                        success: function (data, ui) {
+                            console.log("SKUProfile", data);
+                            $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
+                                '<img src="@ViewBag.S3BucketURL/' + data.Compress_image + '" class="rounded" height="50" width="50" /></a>');
+                            $(item).parents('tr').find(".producttitle").text(data.Title);
+                            debugger;
+                        }
+                    });
+                }
+            });
+
+        function skuChange(event, ui) {
+            var item = $(this);
+            var values = item.val();
+            debugger;
+            if (item.val() == "")
+                return;
+
+             $.ajax({
+                    type: 'GET',
+                    url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + item.val(),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        $(item).parents('tr').find('.PO').empty();
+                        var content = '';
+                        $.each(res, function (index, value) {
+                           content = content + '<option value = "' + value.POId + '">' + value.POId + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.OpenQty + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.BalanceQty+ '</option>';
+                        });
+                        $(item).parents('tr').find('.PO').append(content);
+                        console.log("Response", res);
+                    }
+                });
+
+                $.ajax({
+                    url: "/Product/GetProductDetailsForAPBySku",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: item.val() },
+                    success: function (data, ui) {
+                        console.log("SKUProfile", data);
+                        $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
+                            '<img src="@ViewBag.S3BucketURL/' + data.Compress_image + '" class="rounded" height="50" width="50" /></a>');
+                        //Compress_image $("#ProfileDive").html('<img src="' + val + '/' + data.image_name + '" class="rounded" height="300" width="300" />');
+                    }
+                });
+        }
+            var count = 0;
+
+        $(".add-row").click(function () {
+
+                count++;
+                if (count < 2) {
+                    AddMarkup()
+                }
+                var tbody_tr_last = $('table>tbody>tr:last');
+                var A = tbody_tr_last.find(".sku").val();
+                var B = tbody_tr_last.find(".shipedqty").val();
+                var C = tbody_tr_last.find(".PO").val();
+                var D = tbody_tr_last.find(".productId").val();
+
+                if (A != '' && B != '' && C != '' && D != 0) {
+                    AddMarkup()
+                }
+
+                else {
+                    if (A == '') {
+                        tbody_tr_last.find(".sku").addClass('warning')
+                    }
+                    if (B == '') {
+                        tbody_tr_last.find(".PO").addClass('warning')
+                    }
+                    if (C == '') {
+                        tbody_tr_last.find(".shipedqty").addClass('warning')
+                    }
+                    if (D == 0) {
+                        tbody_tr_last.find(".addproduct").addClass('warning')
+                    }
+
+                }
+            });
+
+        @*$(document).on('keypress', '.sku', function (event) {
+            if (event.keyCode == 13) {
+                var row = $(this).parents('tr');
+                var data =
+                {
+                    SKU: $(row).find('.sku').val(),
+                    POId: $(row).find('.PO').val(),
+                    ShipedQty: $(row).find('.shipedqty').val(),
+                    ShipmentId: '@Model.ShipmentId',
+                    BoxId: '@Model.BoxId',
+                    idShipmentProducts: $(row).find('.productId').val(),
+                }
+            }
+        });*@
+
+        $(document).on('keypress', '.shipedqty', function (event)
+        {
+            if (event.keyCode == 13) {
+                var row = $(this).parents('tr');
+                var  skuadd= $(this);
+                var data =
+                {
+                    SKU: $(row).find('.sku').val(),
+                    POId: $(row).find('.PO').val(),
+                    ShipedQty: $(row).find('.shipedqty').val(),
+                    ShipmentId: '@Model.ShipmentId',
+                    BoxId: '@Model.BoxId',
+                    idShipmentProducts: $(row).find('.productId').val(),
+                }
+                var i = 0;
+                $.ajax({
+                    type: 'POST',
+                    url: '../ShipmentProduct/CreateBox',
+                    data: { data },
+                    success: function (res) {
+                        i++;
+                        debugger;
+                        if (res > 0) {
+                            $(row).find('.productId').val(res);
+                            $(row).find('input').prop('readonly', true);
+                            $(row).find('select').attr('disabled', true);
+                            $(row).find('.editproduct').show();
+                            $(row).find('.addproduct').hide();
+                            if (editval == false) {
+                                AddMarkup();
+                                $(skuadd).parents('tr').next().find(".sku").focus();
+                            }
+                            editval = false;
+                            SumShipedQty();
+                            $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                        }
+                        else {
+                            $(row).find('.shipedqty').addClass('warning')
+                            $(row).find('.qtyerr').show();
+                            $(row).find('.qtyerr').text('Must be less then Open Qty');
+                            //$.notify('Quantity is higher then Open Qty', { globalPosition: 'bottom right', className: 'danger mydelte' });
+                        }
+                    },
+                    Error: function (err) {
+                        debugger;
+                    }
+                });
+            }
+        });
+
+            $(document).on("input", "table input", function () {
+                if ($(this).val() == "") {
+                    $(this).addClass("warning")
+                } else {
+                    $(this).removeClass("warning")
+                    $(this).parents('tr').find('.qtyerr').hide();
+                }
+            })
+
+         $("#btnDeleteBox").click(function () {
+            $("#dialog-box").dialog({
+                buttons: {
+                    "Confirm": function () {
+                        var data = [];
+                        var Obj = {
+                            BoxId: '@Model.BoxId',
+                        };
+                        data.push(Obj)
+                        $.ajax({
+                            type: 'POST',
+                            url: '../ShipmentBox/Delete',
+                            data: { data },
+                            success: function (res) {
+                                $("#dialog-box").dialog("close");
+                                $.notify('Delete Successfully', { className: 'danger mydelte' });
+                                location.href = '../ShipmentBox/Create?ShipmentId=@Model.ShipmentId';
+                            },
+                            Error: function (err) {
+                                $.notify('some error occured!', { className: 'error mydelte' });
+                            }
+                        });
+
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                        $.notify('Cancel Successfully ', { globalPosition: 'bottom right', className: 'warning mydelte' });
+                    }
+                }
+            });
+            $("#dialog-box").dialog("open");
+        });
+          function SumShipedQty() {
+            var Total = 0;
+            $('.table tbody tr').each(function () {
+
+                var number = parseInt($(this).find('.shipedqty').val());
+                if (number>0)
+                    Total = Total + number;
+                debugger;
+            });
+            debugger;
+            $("#totalshipedqty").text(Total);
+        }
+        SumShipedQty();
+    });
+    $(document).on("click", ".btnDelete", function () {
+        var currentElem = $(this).closest('tr');
+        var selected = $(this);
+        $("#dialog-box").dialog({
+            buttons: {
+                "Confirm": function () {
+                    var data = [];
+                    var Obj = {
+                        idShipmentProducts: selected.parents('tr').find('.productId').val(),
+                    };
+                    data.push(Obj);
+                    debugger;
+                    $.ajax({
+                        type: 'POST',
+                        url: '../ShipmentProduct/Delete',
+                        data: { data },
+                        success: function (res) {
+                            $("#dialog-box").dialog("close");
+                            selected.parents('tr').remove();
+                            setTimeout(function () { SumShipedQty(); }, 1000);
+                            $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger mydelte' });
+                            debugger;
+                        },
+                        Error: function (err) {
+                            debugger;
+                        }
+                    });
+
+
+                    currentElem.remove()
+                    $(this).dialog("close");
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        })
+        $("#dialog-box").dialog("open");
+    });
+
+    </script>
+
+}
+

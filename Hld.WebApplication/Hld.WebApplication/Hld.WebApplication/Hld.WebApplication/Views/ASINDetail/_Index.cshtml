@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ASINDetailViewModel>
+
+
+@{
+    Layout = null;
+    var detail = Model.FirstOrDefault();
+}
+
+ 
+     
+
+    <jqx-grid sortable="true" show-filter-row="true" width="90%" show-tool-bar="true" pageable="true" page-size="25" filterable="true" auto-height="true" source="Model">
+        <jqx-grid-columns>
+            
+            <jqx-grid-column datafield-for="@(detail.asin_date)" text="Date"   cells-format="d"></jqx-grid-column>
+            <jqx-grid-column   datafield-for="@(detail.ASIN)" text="ASIN"></jqx-grid-column>
+            <jqx-grid-column width="150px"   datafield-for="@(detail.Title)"   text="Title"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(detail.Description))" text="Description"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(detail.OtherImagesURL)" text="Images URL"></jqx-grid-column>
+        </jqx-grid-columns>
+
+    </jqx-grid>
+ 

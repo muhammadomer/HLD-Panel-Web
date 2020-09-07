@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.AliasViewModel>
+@{
+    Layout = "_LayoutNavigation";
+}
+
+<h6>Alias List</h6>
+<hr />
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="PopupForm('@Url.Action("AddUpdateAlias","Alias",new {id=0 })')">Add New Alias</button><br /><br />
+<div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Alias</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="indexView"></div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $.get('@Url.Action("Index","Alias")').done(function (response) {
+                $('#indexView').html(response)
+            });
+        });
+
+        function PopupForm(url) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+            });
+        }
+        function SubmitForm() {
+            var url = '@Url.Action("AddUpdateAlias", "Alias",new {id=0 })';
+            var data = $('#form1').serialize();
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $.ajax({
+
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success == true) {
+
+                            $.get('@Url.Action("Index","Alias")').done(function (response) {
+                                $('#indexView').html(response)
+                            });
+                            $('#myModal').modal('toggle');
+                            $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+    </script>
+
+}

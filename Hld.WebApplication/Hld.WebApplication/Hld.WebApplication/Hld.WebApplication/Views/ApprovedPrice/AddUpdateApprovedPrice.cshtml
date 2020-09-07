@@ -1,0 +1,222 @@
+﻿@model Hld.WebApplication.ViewModels.ApprovedPriceViewModel
+
+@{
+    ViewData["Title"] = "AddUpdateApprovedPrice";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .lblcalss {
+        justify-content: flex-end;
+        display: flex;
+    }
+
+    .formcontrol {
+        box-shadow: none !important;
+        height: 26px !important;
+    }
+</style>
+
+<h6>Approved Price</h6>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddUpdateApprovedPrice">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label asp-for="SKU" class="control-label col-sm-3 col-form-label offset-1">SKU:</label>
+                <div class="col-sm-6">
+                    <input asp-for="SKU" id="productsku" type="search" class="form-control" />
+                    <span asp-validation-for="SKU" class="text-danger"></span>
+                    <span style="color:red;padding-left:0px;" id="sku-empty-message-Color"></span>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="VendorAlias" class="control-label col-sm-3 col-form-label offset-1">Vendor Alias:</label>
+                <div class="col-sm-6">
+                    <input asp-for="VendorAlias" type="search" id="Vendor" class="form-control" />
+                    @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                    <span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
+                </div>
+                @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })
+            </div>
+            <div class="form-group row">
+                <label asp-for="ApprovedUnitPrice" class="control-label pr-0 col-sm-3 col-form-label offset-1">Approved Price:</label>
+                <div class="col-sm-6">
+                    <input asp-for="ApprovedUnitPrice" class="form-control" />
+                    <span asp-validation-for="ApprovedUnitPrice" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Currency" class="control-label col-sm-3 col-form-label offset-1">Currency:</label>
+                <div class="col-sm-6">
+                    <input asp-for="Currency" id="Currency" type="search" class="form-control" />
+                    @*<span asp-validation-for="Currency" class="text-danger"></span>*@
+                    <span style="color:red;padding-left:0px;" id="empty-message-Currency"></span>
+                </div>
+            </div>
+            <div class="form-group form-check ">
+                <label class="form-check-label offset-8">
+                    <input class="form-check-input" asp-for="PriceStatus" /> @Html.DisplayNameFor(model => model.PriceStatus)
+                </label>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Date" class="control-label col-sm-3 col-form-label offset-1">Date:</label>
+                <div class="col-sm-6">
+                    <input asp-for="Date" type="date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary offset-1" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3" id="ProfileDive">
+
+    </div>
+    <div class="col-md-3" id="TitleDiv">
+
+    </div>
+
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var val = '@ViewBag.S3BucketURL_large';
+
+            $("#productsku").change(function () {
+                $.ajax({
+                    url: "/Product/GetProductDetailsForAPBySku",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: $("#productsku").val() },
+                    success: function (data, ui) {
+                        console.log("SKUProfile", data);
+
+                        $("#ProfileDive").html('<a target="_blank" href="'+val+'/'+data.image_name+'"><img src="' + val + '/' + data.image_name + '" class="rounded" height="300" width="300" /></a>');
+                        $("#TitleDiv").html('<p style="margin-top:100px;"><span>' + data.Title + '</span> </p> ');
+                    }
+                })
+            });
+            $('#productsku').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Product/GetAllSKUForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+                            console.log("Data", data);
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.SKU, value: item.SKU, id: item.SKU };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#sku-empty-message-Color").text("No results found");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#sku-empty-message-Color").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+
+            $('#Vendor').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                select: function (event, ui) {
+
+                    $('#ColorIdForMessage').val(ui.item.id);
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#empty-message-Color").text("No results found");
+                        $('#ColorIdForMessage').val("0");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message-Color").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+            var Currency = [
+                { value: 'CNY', data: 'CNY' },
+
+                { value: 'USD', data: 'USD' }
+            ];
+            $('#Currency').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    response($.map(Currency, function (item) {
+                        if (item != null) {
+                            return { label: item.value, value: item.value, id: item.value };
+                        }
+
+                    }));
+                },
+                select: function (event, ui) {
+
+                    $('#CurrencyForMessage').val(ui.item.value);
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#empty-message-Currency").text("No results found");
+                        $('#CurrencyIdForMessage').val("0");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message-Currency").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+
+        });
+
+
+
+    </script>
+}

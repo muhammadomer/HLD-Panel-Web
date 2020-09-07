@@ -1,0 +1,444 @@
+﻿
+@{
+    ViewData["Title"] = "SaveASINDetail";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .hide {
+        display: none
+    }
+
+    .show {
+        display: inline;
+    }
+</style>
+<h5>Add ASIN's</h5>
+<div class="col-sm-11">
+    @*<button id="btnExportData" class="btn btn-primary">Export Data</button>*@
+    <div class="col-sm-11">
+        <div class="card">
+
+            <div class="card-header">ASIN Section</div>
+
+            <div class="card-body">
+                <button class="btn btn-link" id="btnSelectASIN">Add Multiple ASINs</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Status</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body" id="modelBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="col-sm-11 mt-2 ml-3">
+    <button type="button" id="btnClearField" class="btn btn-primary">Clear Field</button>
+    <button type="button" id="btnBulkInsertion" class="hide btn btn-success">Submit All Record to Zinc</button>
+</div>
+<div class="col-sm-11 mt-2 ml-3">
+    <table style="width:50%;" id="asinDetailTable" class="table table-bordered">
+        <tr>
+            <th style="width:45px;">#</th>
+            <th style="width:200px;">ASIN</th>
+            <th style="width:100px;">Send to Zinc</th>
+            <th>Api Call Status</th>
+        </tr>
+        <tbody>
+            <tr>
+                <td>
+                    1
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    2
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    3
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    4
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    5
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    6
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    7
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    8
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    9
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    10
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    11
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    12
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    13
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    14
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    15
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    16
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    17
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    18
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    19
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class="ClearData offerStatus"></div>
+                    <div class="ClearData ProductStatus"></div>
+                    <div class="ClearData message"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    20
+                </td>
+                <td>
+                    <input type="text" class="form-control asin" />
+                </td>
+                <td><button class="btn btn-primary sendToZinc">Send</button></td>
+                <td>
+                    <div class=" ClearData offerStatus"></div>
+                    <div class=" ClearData ProductStatus"></div>
+                    <div class=" ClearData message"></div>
+                </td>
+            </tr>
+
+
+
+        </tbody>
+    </table>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            function ClearField() {
+                $('#asinDetailTable input[type=text]').each(function (index, element) {
+                    $(element).val("");
+                    $(element).closest('tr').find('.ClearData').text("");
+                });
+            }
+
+            function SendToZinc(td) {
+                var currentRow = $(td).closest('tr');
+                var asinValue = $(currentRow).find('.asin').val();
+                var   offerStatus = $(currentRow).find('.offerStatus');
+                var   ProductStatus = $(currentRow).find('.ProductStatus');
+                var   message = $(currentRow).find('.message');
+
+                if ($.trim(asinValue).length > 0) {
+                    $(offerStatus).text('Offer Status: Processing').show();
+                    $(ProductStatus).text('Product status: Processing').show();
+                    $(message).hide();
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SaveASIN", "ASINDetail")',
+                        data: { sku: asinValue },
+                        success: function (data) {
+                            if (data.asin == asinValue) {
+                                if (data.message !="") {
+                                    $(message).text(data.message).css('color','red').show();
+                                    $(offerStatus).hide();
+                                    $(ProductStatus).hide()
+                                }
+                                else {
+                                    if (data.offerstatus == "Error" || data.productstatus == "Error") {
+                                        $(offerStatus).text('Offer Status: ').append('<lablel style="color:red">' + data.offerstatus+'</lable>').show();
+                                        $(ProductStatus).text('Product Status: ').append('<lablel style="color:red">' + data.productstatus + '</lable>').show();
+                                    }
+                                    else {
+                                        $(offerStatus).text('Offer Status: ').append('<lablel style="color:white;background-color:green">' + data.offerstatus + '</lable>').show();
+                                        $(ProductStatus).text('Product Status: ').append('<lablel style="color:white;background-color:green">' + data.productstatus + '</lable>').show();
+                                    }
+                                }
+                            }
+                        }
+                    }) 
+                } else {
+                    $(offerStatus).text('Please Enter ASIN First').css('color','red');
+                }
+            }
+
+
+            $('#btnClearField').click(function () {
+                ClearField();
+            });
+
+            $('#btnBulkInsertion').click(function () {
+                $('#asinDetailTable input[type=text]').each(function (index, element) {
+                    if ($.trim($(element).val()) != "") {
+                     setTimeout(   SendToZinc($(element).closest('td')) ,10000);
+                    }
+                });
+            });
+
+
+            $(document).on('click','#btnSelectASINList',function () {
+                var asinList = $(this).parents('form#ASINDetail').find('#ASINList').val().trim();
+                ClearField();
+                if (asinList != "") {
+                    var asinarray = asinList.split("\n");
+                    if (Array.isArray(asinarray) && asinarray.length) {
+                        $('#asinDetailTable input[type=text]').each(function (index, element) {
+                            $(element).val(asinarray[index]);
+                        });
+                        //$('#btnClearField').removeClass('hide').addClass('show');
+                        $('#btnBulkInsertion').removeClass('hide').addClass('show');
+                    }
+                }
+            });
+
+            $('#btnSelectASIN').click(function () {
+
+                $.get('@Url.Action("SaveASIN", "ASINDetail")').done(function (response) {
+                    $('#modelBody').empty();
+                    $('#modelBody').html(response);
+                    $('#myModal').modal('show');
+                });
+            });
+
+            $('#asinDetailTable').on('click', 'td > .sendToZinc', function () {
+                SendToZinc($(this));
+            });
+        });
+    </script>
+}

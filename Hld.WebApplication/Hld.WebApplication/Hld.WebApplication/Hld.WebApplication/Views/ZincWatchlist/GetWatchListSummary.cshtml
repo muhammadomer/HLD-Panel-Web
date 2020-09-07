@@ -1,0 +1,117 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.ZincWatchListSummaryViewModal>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyOrdersViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+
+@*@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}*@
+
+<style>
+    .table thead tr th {
+        position: sticky;
+        top: 50px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray !important;
+    }
+
+    .table tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+</style>
+
+<div class="container-fluid">
+    <table class="table table-bordered"style="width:88%!important;margin-left:150px!important">
+        <thead style="background-color:lightgrey">
+            <tr>
+                <th>
+                    Job ID #
+                </th>
+                <th>
+                    Start Time
+                </th>
+                <th>
+                    Completion Time
+                </th>
+                <th>
+                    Duration
+                </th>
+                <th>
+                    Total ASIN
+                </th>
+                <th>
+                    Available
+                </th>
+                <th>
+                    Available %
+                </th>
+                <th>
+                    Prime
+                </th>
+                <th>
+                    No Prime
+                </th>
+                <th>
+                    Unavailable
+                </th>
+                <th>Logs</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.JobID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CompletionTime)
+                    </td>
+                    <td>
+
+                        <span class="total" style="font-weight:600">
+                            @(string.Format("{0}", (item.CompletionTime - item.StartTime).Value.Duration()).ToString())
+                        </span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_ASIN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Available)
+                    </td>
+                    <td>
+                        @{
+                            int Total_ASIN = Convert.ToInt32(item.Total_ASIN);
+                            decimal itemprice = 0.0m;
+                            if (Total_ASIN > 0)
+                            {
+                                itemprice = (decimal)(item.Available / item.Total_ASIN) * 100;
+                            }
+
+                        }
+                        @itemprice%
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Prime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoPrime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unavailable)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Logs", "MainViewLogs", new { ASIN = " ", jobID = item.JobID, available = " " }, new { target = "_blank" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

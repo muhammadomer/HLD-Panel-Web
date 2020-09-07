@@ -1,0 +1,1338 @@
+﻿@model Hld.WebApplication.ViewModel.HistorySearchViewModel;
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "Predict PO";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+<style>
+    .ui-autocomplete {
+        z-index: 2000;
+    }
+
+    .table thead th {
+        background-color: lightgray !important;
+    }
+
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .ms-options-wrap.ms-active > .ms-options {
+        max-width: 400px !important;
+        min-height: 92px !important;
+    }
+
+    .ms-options-wrap > button:focus, .ms-options-wrap > button {
+        border-radius: 4px;
+        height: 25px;
+        outline: none !important;
+    }
+
+    ms-options-wrap > button:focus, .ms-options-wrap > button {
+        padding: 1px 0px 1px 2px !important;
+    }
+
+    .ms-options-wrap > .ms-options > ul label {
+        width: 101% !important;
+    }
+
+    #myModalEdit, #myModal, #myModalMarkShiped {
+        margin: 20px;
+        margin-top: 88px;
+    }
+
+    .table {
+        margin-top: 96px;
+    }
+
+        .table thead tr th {
+            width: 88px;
+            vertical-align: middle !important;
+        }
+
+        /*.table td {
+            vertical-align: middle !important;
+            text-align: start !important;
+        }*/
+
+        .table thead tr th {
+            position: sticky;
+            top: 168px;
+            padding: 5px;
+            z-index: 2;
+            background-color: lightgray;
+        }
+
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .myclasscancel {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: black;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    .btnstyle {
+        padding: 4px;
+        box-shadow: none;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+
+    .mydlete {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+
+    .searchFormFixed {
+        position: fixed;
+        top: 39px;
+        width: 100%;
+        z-index: 500;
+        padding-bottom: 0px;
+        background: white;
+    }
+
+    .fixedclassforpagination {
+        position: fixed;
+        top: 133px;
+        padding-bottom: 0px;
+        z-index: 400;
+        background: white;
+    }
+
+    .btngocalss {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 5px !important;
+        border-radius: 2px !important;
+    }
+
+    .select2-container {
+        box-sizing: border-box;
+        display: inline-block;
+        margin: 0;
+        width: 215px !important;
+        position: relative;
+        vertical-align: middle;
+</style>
+
+<div class="modal fade" id="myModal" tabindex="-1" style="margin-top: 80px!important;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 680px !important;">
+        <div class="modal-content">
+            <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel"><b>On Order Qty Detail</b></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="row">
+                        <div class="col-2 productimage" style="margin-bottom: 20px;">
+
+                        </div>
+                        <div class="col-10 producttitle">
+                            <h6>No PO found</h6>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class=" col-12">
+                        <table calss="table table5" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="background-color:lightgrey">
+                                        PO #
+                                    </th>
+                                    <th style="background-color:lightgrey">
+                                        Shipment Id
+                                    </th>
+                                    <th style="background-color:lightgrey">
+                                        Ordered Qty
+                                    </th>
+                                    <th style="background-color:lightgrey">
+                                        Shipped Qty
+                                    </th>
+
+                                    <th style="background-color:lightgrey">Ordered On</th>
+                                    <th style="background-color:lightgrey">Shipped On</th>
+                                    <th style="background-color:lightgrey">
+                                        Vendor
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="mytab">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModalAddToPO" tabindex="-1" style="margin-top: 80px!important;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 680px !important;">
+        <div class="modal-content">
+            <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel"><b>Add To PO</b></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-12 ">
+                        <table calss="table table5" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="background-color:lightgrey">
+                                        Internal PO #
+                                    </th>
+                                    <th style="background-color:lightgrey">
+                                        Vendor
+                                    </th>
+                                    <th style="background-color:lightgrey">
+                                        SKUs
+                                    </th>
+                                    <th style="background-color:lightgrey">
+                                        Created On
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="POList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid searchFormFixed">
+    <br />
+    <div class="row" style="margin-left:4px;">
+        <div class="col-md-1">
+            <h6>Predict PO</h6>
+        </div>
+        <div class="col-md-2">
+            <a href="/PredictionHistory/DraftPO" target="_blank" class="btn btn-success">Draft PO</a>
+        </div>
+    </div>
+    <div class="mb-1 searchFormcard" id="searchForm">
+        <div class="col-sm-12">
+            @using (Html.BeginForm("Index", "PredictionHistory", FormMethod.Get))
+            {
+                <div class="row" style="margin-left:2px;margin-top:15px;">
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    {<div class="col-md-1 p-0 mr-1">
+
+                            <input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />
+                            @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                            <span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>
+
+                            @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })
+                        </div>
+                    }
+                    <div class="col-md-2 p-0 mr-1">
+                        <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
+                        <input type="text" id="Sorted" name="Sorted" value="@Model.Sorted" class="form-control" style="box-shadow:none;display:none" />
+                        <input type="text" id="SortedType" name="SortedType" value="@Model.SortedType" class="form-control" style="box-shadow:none;display:none" />
+
+
+                    </div>
+                    <div class="col-md-3 p-0 mr-1">
+                        <input type="text" id="Title" name="Title" value="@Model.Title" placeholder="Title" class="form-control" style="box-shadow: none" />
+                    </div>
+                    <div class="col-md-1 p-0 mr-1">
+                        <select asp-for="Type" name="Type" class="form-control p-0">
+                            <option value="0">Cover Days</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+                            <option value="60">60</option>
+                            <option value="90">90</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1 p-0 mr-1">
+                        <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Approved Price</label>
+                    </div>
+                    <div class="col-md-1 p-0">
+                        <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="loader">
+    <img src="~/Images/giffff.gif" />
+</div>
+
+<div class="container-fluid  ">
+    <div class="row col col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: -5px;
+margin-top: 11px;">
+        <div class="col col-md-2">
+            <div class="row">
+                <div class="pagination col-md-6 col">
+
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-2" style="padding-top:5px;">
+            <span> Items Per Page : 50</span>
+        </div>
+        <div class="col col-md-2" style="padding-top:5px;">
+            <span> Total Records Found : @ViewBag.TotalCount</span>
+
+        </div>
+        <div class="col col-md-6">
+            <div style="float: right; display: flex;margin-bottom: 5px; margin-right:41px;" class="ml-auto">
+                <span>
+                    <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                </span>
+                <select class="js-example-basic-single" id="ActionMenu" name="state">
+
+                    <option value="">Select</option>
+
+
+                    <option value="POCreation">Create New PO</option>
+                    <option value="AddToPO">Add to Draft PO</option>
+                    <option value="GetOnDemand">Get Update From SC</option>
+                    <option value="DisableProduct">Set as Discontinued</option>
+                    <option value="SetAsKit">Set as Kit</option>
+                    <option value="SetAsShadow">Set as Shadow</option>
+
+                </select>
+                <button class=" btn-success btngocalss" id="btnGoOrder">Go</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+
+</div>
+<div class="container-fluid" style="margin-left:10px">
+    <div class="pagination">
+
+    </div>
+    <div class="hidedialogbox">
+        <div id="dialog-box">
+            @*<h6 style="color:red">Do you want to unship this shipment!</h6>*@
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script>
+         $('#ActionMenu').select2();
+        var selectedDateFrom = "";
+        var selectedDatTo = "";
+        var selectedVendor = "";
+        var selectedId = 0;
+        var selectPOId = 0;
+        var currency = "";
+        var sort = "";
+        $(document).ready(function () {
+
+            $(document).on('click', '.OnOrder', function () {
+                var row = $(this).parents('tr');
+                var ProductSKU = $(row).find('.SKU').val();
+                var LargeImage = $(this).attr('data-largimage');
+                var SmallImage = $(this).attr('data-SmallImage');
+                var Url = '/PredictionHistory/GetSKUDetailBySku?SKU=' + ProductSKU;
+                $(".loader").show();
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (res, ui) {
+                        console.log("data", res);
+                        $(".mytab").html("");
+                        $('.producttitle').html("<h6>No PO found</h6>");
+                        if (res.length > 0) {
+                            $('.productimage').html('<a id="largeimage" target="_blank" href="' + LargeImage + '"><img style="width: 80px; height:80px;" src="' + SmallImage + '"/></a>');
+                        }
+
+                        $.each(res, function (key, value) {
+                            var CreatedOn = new Date(value.OrderedOn);
+                            CreatedOn = CreatedOn.getDate() + "-" + (CreatedOn.getMonth() + 1) + "-" + CreatedOn.getFullYear();
+                            if (CreatedOn == '1-1-1') {
+                                CreatedOn = '';
+                            }
+
+                            $('.producttitle').html('<span><h6>' + ProductSKU +'</h6></span><span>' + value.ProductTitle + '</span>')
+                            var shippedId = '';
+                            var shippeddate = '';
+                            var shippedqty = '';
+                            debugger;
+                            var list = value.list
+                            $.each(list, function (index, item) {
+                                var ShippedOn = new Date(item.ShippedOn);
+                                ShippedOn = ShippedOn.getDate() + "-" + (ShippedOn.getMonth() + 1) + "-" + ShippedOn.getFullYear();
+                                if (ShippedOn == '1-1-1') {
+                                    ShippedOn = '';
+                                }
+                                else {
+                                    ShippedOn = $.datepicker.formatDate('dd M yy', new Date(item.ShippedOn));
+                                }
+
+                                var typeTd = '';
+                                if (item.Type == 'casepack') {
+                                    typeTd = '<a style="cursor:pointer" href="../ShipmentCasePack/viewShipment?ShipmentId=' + item.ShipmentId + '" target="_blank">' + item.ShipmentId  + '</a>';
+                                }
+                                else {
+                                    typeTd = '<a style="cursor:pointer" href="../Shipment/Shipmentindex?ShipmentId=' + item.ShipmentId + '" target="_blank">' + item.ShipmentId  + '</a>';
+                                }
+
+                                shippedId = shippedId + '<span> ' + typeTd +' </span><br/>';
+                                shippedqty = shippedqty + '<span>' + item.ShippedQty + '</span><br/>';
+                                shippeddate = shippeddate + '<span>' + ShippedOn + '</span><br/>';
+
+                            });
+
+                            var skutbody = '<tr>' +
+                                '<td><a  target="_blank" href="PurchaseOrder/PurchaseOrdersItems?POId=' + value.POId + '">' + value.POId + '</a></td>' +
+                                '<td>' + shippedId + '</td>' +
+                                '<td>' + value.QtyOrdered + '</td>' +
+                                '<td>' + shippedqty+ '</td>' +
+                                '<td>' + $.datepicker.formatDate('dd M yy', new Date(value.OrderedOn))+ '</td>' +
+                                '<td>' + shippeddate+ '</td>' +
+                                '<td>' + value.Vendor + '</td>' +
+                                '</tr>';
+                            $("table .mytab").append(skutbody);
+                        });
+                        $('#myModal').modal('show');
+                        $(".loader").hide();
+                    }
+                });
+            });
+
+            $(document).on('mouseover', '.phyqty', function () {
+                //$(this).parents('tr').find('.Getproductid').click();
+                var row = $(this).parents('tr');
+                var ProductSKU = $(row).find('.SKU').val();
+                var Url = '/PredictionHistory/GetWareHouseProductQuantitylistBySku?SKU=' + ProductSKU;
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data, ui) {
+                        //var tdContent = '<div class="row">'+
+                        //    '<div class="col-12">'
+                        //        +'<table calss="table" style="width:100%">'
+                        //    +'<thead><tr>'+
+                        //                 '<th style="background-color:lightgrey">Wharehouse Name</th>'+
+                        //    '<th style="background-color:lightgrey">Qty</th>' +
+                        //                '</tr>'+
+                        //            '</thead>'+
+                        //            '<tbody>'+
+                        var tdContent = '<div class="row"><div class="col-md-8"><b>Warehouse </b></div><div class="col-md-4"><b>Qty</b></div>';
+
+                        $.each(data, function (key, value) {
+
+                            //tdContent = tdContent + '<tr>' +
+                            //    '<td>' + value.warehouseName + '</td>' +
+                            //    '<td>' + value.physical_qty + '</td>' +
+                            //    '</tr>';
+
+                            tdContent = tdContent + '<div class="col-md-8">' +
+                                '<span>' + value.warehouseName + '</span></div>' +
+                                '<div class="col-md-4"><span>' + value.physical_qty + '</span></div><br />';
+                        })
+                        //tdContent = tdContent + '</tbody>' +
+                        //    '</table>' +
+                        //    '</div>' +
+                        //    '</div>';
+                        tdContent = tdContent + '</div>';
+                        $(row).find('.phyqtyspan').html(tdContent);
+                        $(row).find('.phyqtyspan').toggle('fast')
+                    }
+                });
+            });
+            $(document).on('mouseout', '.phyqty', function () {
+                var row = $(this).parents('tr');
+                var ProductSKU = $(row).find('.SKU').val();
+                var Url = '/PredictionHistory/GetWareHouseProductQuantitylistBySku?SKU=' + ProductSKU;
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data, ui) {
+                        var tdContent = '<div class="row"><div class="col-md-8"><b>Warehouse </b></div><div class="col-md-4"><b>Qty</b></div>';
+
+                        $.each(data, function (key, value) {
+                            tdContent = tdContent + '<div class="col-md-8">' +
+                                '<span>' + value.warehouseName + '</span></div>' +
+                                '<div class="col-md-4"><span>' + value.physical_qty + '</span></div><br />';
+                        })
+                        tdContent = tdContent + '</div>';
+                        $(row).find('.phyqtyspan').html(tdContent);
+                        $(row).find('.phyqtyspan').toggle('fast')
+                    }
+                });
+            });
+
+
+
+
+            $(document).on('mouseover', '.qtySoldSpan', function () {
+                //$(this).parents('tr').find('.Getproductid').click();
+                var row = $(this).parents('tr');
+                var ProductSKU = $(row).find('.SKU').val();
+                var Url = '/PredictionHistory/GetSoldQtyDays?SKU=' + ProductSKU;
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data, ui) {
+                        console.log("Sold Qty", data);
+                        var tdContent = '<div class="row"><div class="col-md-5"><b>Days</b></div><div class="col-md-3" style="width:100px;"><b>Qty</b></div><div class="col-md-4"><b>Velocity</b></div>' +
+                            '<div class="col-md-5"><span>QtySold15</span></div><div class="col-md-3"><span>' + data.QtySold15 + '</span></div><div class="col-md-4"><span>' + (data.QtySold15 / 15).toFixed(2) + '</span></div>' +
+                            '<div class="col-md-5"><span>QtySold30</span></div><div class="col-md-3"><span>' + data.QtySold30 + '</span></div><div class="col-md-4"><span>' + (data.QtySold30 / 30).toFixed(2) + '</span></div>' +
+                            '<div class="col-md-5"><span>QtySold60</span></div><div class="col-md-3"><span>' + data.QtySold60 + '</span></div><div class="col-md-4"><span>' + (data.QtySold60 / 60).toFixed(2) + '</span></div>' +
+                            '<div class="col-md-5"><span>QtySold90</span></div><div class="col-md-3"><span>' + data.QtySold90 + '</span></div><div class="col-md-4"><span>' + (data.QtySold90 / 90).toFixed(2) + '</span></div>';
+                        $(row).find('.QtySold').html(tdContent);
+                        $(row).find('.QtySold').toggle('fast')
+                    }
+                });
+            });
+
+            $(document).on('mouseout', '.qtySoldSpan', function () {
+                //$(this).parents('tr').find('.Getproductid').click();
+                var row = $(this).parents('tr');
+                var ProductSKU = $(row).find('.SKU').val();
+                var Url = '/PredictionHistory/GetSoldQtyDays?SKU=' + ProductSKU;
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data, ui) {
+                        console.log("Sold Qty", data);
+                        var tdContent = '<div class="row"><div class="col-md-5"><b>Days</b></div><div class="col-md-3" style="width:100px;"><b>Qty</b></div><div class="col-md-4"><b>Velocity</b></div>' +
+                            '<div class="col-md-5"><span>QtySold15</span></div><div class="col-md-3"><span>' + data.QtySold15 + '</span></div><div class="col-md-4"><span>' + (data.QtySold15 / 15).toFixed(2) + '</span></div>' +
+                            '<div class="col-md-5"><span>QtySold30</span></div><div class="col-md-3"><span>' + data.QtySold30 + '</span></div><div class="col-md-4"><span>' + (data.QtySold30 / 30).toFixed(2) + '</span></div>' +
+                            '<div class="col-md-5"><span>QtySold60</span></div><div class="col-md-3"><span>' + data.QtySold60 + '</span></div><div class="col-md-4"><span>' + (data.QtySold60 / 60).toFixed(2) + '</span></div>' +
+                            '<div class="col-md-5"><span>QtySold90</span></div><div class="col-md-3"><span>' + data.QtySold90 + '</span></div><div class="col-md-4"><span>' + (data.QtySold90 / 90).toFixed(2) + '</span></div>';
+                        $(row).find('.QtySold').html(tdContent);
+                        $(row).find('.QtySold').toggle('fast')
+                    }
+                });
+            });
+
+            $(document).on('mouseover', '.skuspan', function () {
+                //$(this).parents('tr').find('.Getproductid').click();
+                var row = $(this).parents('tr');
+                var ProductSKU = $(row).find('.SKU').val();
+                $.ajax({
+                    url: "/Product/GetProductDetailsForAPBySku",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: ProductSKU },
+                    success: function (data, ui) {
+                        console.log("SKUProfile", data);
+                        $(row).find('.ProducTitle').text(data.Title);
+                        $(row).find('.ProducTitle').toggle('fast')
+                    }
+                })
+            });
+
+            $(document).on('mouseout', '.skuspan', function () {
+                //$(this).parents('tr').find('.Getproductid').click();
+                var row = $(this).parents('tr');
+                var ProductSKU = $(row).find('.SKU').val();
+                debugger;
+                $.ajax({
+                    url: "/Product/GetProductDetailsForAPBySku",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: ProductSKU },
+                    success: function (data, ui) {
+                        console.log("SKUProfile", data);
+                        $(row).find('.ProducTitle').text(data.Title);
+                        $(row).find('.ProducTitle').toggle('fast')
+                    }
+                })
+            });
+
+            function GetInternalPOIdBySku() {
+                debugger;
+                $(".table tbody tr ").each(function () {
+                    debugger;
+                    var sku = $(this).find('.SKU').val();
+                    var Url = '/PredictionHistory/GetInternalPOIdBySku?data=' + sku;
+                    var row = $(this);
+                    $.ajax({
+                        type: 'Get',
+                        url: Url,
+                        dataType: 'json',
+                        traditional: true,
+                        success: function (data) {
+                            debugger;
+                            $(row).find(".InternalPOID").empty();
+                            var tdContent = '<div>';
+                            $.each(data, function (key, value) {
+                                tdContent = tdContent + '<input type="radio" value=' + value.InternalPOID + ' name="InternalPOId"  class="selectPOId" disabled  /><a href="../PredictionHistory/PredictionList?data=' + value.InternalPOID + '" target="_blank" style="cursor:pointer">' + value.InternalPOID + '</a><span> ' + value.Vendor + '</span><br/>';
+                            })
+                            $(row).find(".InternalPOID").append($(tdContent));
+                            if (data == undefined) {
+                                $(row).find(".InternalPOID").append($("<span>- - - </span>"));
+                            }
+                        }
+                    });
+                });
+            }
+
+            $(document).on('click', '#headerCheckBox', function () {
+
+
+                if ($(this).is(':checked')) {
+                    //$('.checkbx').attr('checked', true);
+                    $(".table tbody tr ").each(function () {
+                        debugger;
+                        var CheckApproved = $(this).find('.CheckApproved').val();
+                        console.log();
+                        if (CheckApproved == "0") {
+                            $(this).find('.selectRow').attr('checked', true);
+                        }
+                    });
+                }
+                else {
+                    //$('.checkbx').attr('checked', false);
+                    $(".table tbody tr ").each(function () {
+                        $(this).find('.selectRow').attr('checked', false);
+                    });
+                }
+            });
+
+
+            $(document).on('click', '#btnGoOrder', function () {
+                //window.open('../PredictionHistory/PredictionList', '_blank');
+                var addtopo = false;
+                 var POCreation = false;
+                var action = $('#ActionMenu').val();
+                debugger;
+
+                if (action == "") {
+$.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
+return;
+}
+
+if (action == "AddToPO") {
+$(".table tbody tr ").each(function () {
+debugger;
+    if ($(this).find('.selectRow').is(':checked')) {
+        var CheckApproved = $(this).find('.CheckApproved').val();
+        console.log();
+        if (CheckApproved == "1") {
+            POCreation = true;
+
+        }
+    }
+
+});
+//var row = $(this).parents('tr');
+
+if (addtopo == true) {
+
+    $.notify('Some selected SKUs does not have Vendor!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+return false;
+}
+var Url = '/PredictionHistory/DraftPOList?';
+$(".loader").show();
+$.ajax({
+type: 'Get',
+url: Url,
+dataType: 'json',
+traditional: true,
+success: function (res, ui) {
+debugger;
+console.log("data", res);
+var POs = '';
+$.each(res, function (key, value) {
+
+//POs = POs + '<span style="cursor:pointer;color:#007bff;" class="SelectPO">' + value.InternalPOId + '</span><br/>';
+var CreatedOn = new Date(value.OrderedOn);
+CreatedOn = CreatedOn.getDate() + "-" + (CreatedOn.getMonth() + 1) + "-" + CreatedOn.getFullYear();
+if (CreatedOn == '1-1-1') {
+CreatedOn = '';
+}
+var vendorancor = '';
+if (selectedVendor == value.Vendor) {
+vendorancor = '<span style="cursor:pointer;color:#007bff;" class="SelectPO">' + value.InternalPOId + '</span>';
+}
+else {
+vendorancor = '<span>' + value.InternalPOId + '</span>';
+}
+
+POs = POs + '<tr>' +
+'<td>' + vendorancor+'</td>' +
+'<td>' + value.Vendor + '</td>' +
+'<td>' + value.SKUs + '</td>' +
+'<td>' + CreatedOn + '</td>' +
+'</tr>';
+});
+$('.POList').html(POs)
+$('#myModalAddToPO').modal('show');
+$(".loader").hide();
+}
+});
+}
+
+if (action == "POCreation"){
+$(".table tbody tr ").each(function () {
+    debugger;
+    if ($(this).find('.selectRow').is(':checked')) {
+        var CheckApproved = $(this).find('.CheckApproved').val();
+        console.log();
+        if (CheckApproved == "1") {
+            POCreation = true;
+
+        }
+    }
+});
+if (POCreation == true) {
+
+$.notify('Some selected SKUs does not have Vendor!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+return false;
+
+}
+var array = [];
+$('.table tbody tr').each(function () {
+if ($(this).find('.selectRow').is(':checked')) {
+var price = 0.0;
+$(this).find('.selectVendor').each(function () {
+if (selectedVendor == $(this).val()) {
+price = parseFloat($(this).attr("data-ApprovedUnitPrice"))
+}
+
+});
+array.push({
+LargImage: $(this).find('.LargImage').val(),
+SmallImage: $(this).find('.SmallImage').val(),
+CasePackQty: $(this).find('.CasePackQty').val(),
+SKU: $(this).find('.SKU').val(),
+POQty: parseInt($(this).find('.POQty').val()),
+ApprovedUnitPrice: price
+});
+}
+});
+var data = {
+VendorId: parseInt(selectedId),
+Vendor: selectedVendor,
+Currency: currency,
+InternalPOID: selectPOId,
+list: array
+};
+if (array.length == 0) {
+$.notify('Please select at least one product!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+return;
+}
+if (selectedVendor == "") {
+$.notify('Please select a vendor!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+return;
+}
+window.open("../PredictionHistory/PredictionList?data=" + JSON.stringify(data), "_blank")
+}
+
+                if (action == "GetOnDemand") {
+                        var data = [];
+                        $(".table tbody tr ").each(function () {
+                            if ($(this).find('.selectRow').is(':checked')) {
+                                var sku = $(this).find('.SKU').val();
+                                data.push(sku);
+                            }
+
+                        });
+                        $(".loader").show();
+                        $.ajax({
+                            type: 'POST',
+                            url: '../PredictionHistory/GetOnDemand',
+                            data: { data },
+                            success: function (res) {
+                                $(".loader").hide();
+                                if (res == 1) {
+                                    $.notify('Catalog Updated Successfully', { globalPosition: 'bottom right', className: 'Success myclass' });
+                                    $("#btnSearchOrder").click();
+                                }
+
+                                else
+                                    $.notify('Some thing went wroung!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                            }
+                        });
+                }
+
+
+
+
+
+                //window.location.href = "../PredictionHistory/PredictionList?data=" + JSON.stringify(data);
+                //jQuery.get("../PredictionHistory/PredictionList?", { data: JSON.stringify(data) }, function (data, status) {
+                //    //window.location.href = "../PredictionHistory/PredictionList";
+                //}, "text");
+                //$.ajax({
+                //    type: 'POST',
+                //    url: '../PredictionHistory/Middleware',
+                //    data: { data },
+                //    success: function (res) {
+
+                //    }
+                //});
+
+                if (action == "DisableProduct") {
+
+                    var data = [];
+                    $(".table tbody tr ").each(function () {
+                        if ($(this).find('.selectRow').is(':checked')) {
+                            var sku = $(this).find('.SKU').val();
+
+                            data.push({ SKU: sku, Continue: false });
+                        }
+
+
+                    });
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'post',
+                        url: '../product/productcontinuediscontinue',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                            $.notify('Product disabled successfully', { globalPosition: 'bottom right', className: 'danger myclasspo' });
+                            //$('#btnGoOrder').click()
+                            //$('#btnGoOrder').click(1000);
+
+
+
+                            //$('#btnGoOrder').delay(3500, function () {
+                            // window.location = toLoad;
+                            //});
+                            //$("#btnSearchOrder").click();
+                        }
+
+                    });
+setInterval('location.reload()', 5000);
+                }
+
+                if (action == "SetAsKit") {
+
+                    var data = [];
+                    $(".table tbody tr ").each(function () {
+                        if ($(this).find('.selectRow').is(':checked')) {
+                            var sku = $(this).find('.SKU').val();
+
+                            data.push({ SKU: sku, KitOrShadow: false });
+                        }
+
+
+                    });
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'post',
+                        url: '../product/ProductSetAsKitOrShadow',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                            $.notify('Product Set as Kit successfully', { globalPosition: 'bottom right', className: 'danger myclasspo' });
+                            //$('#btnGoOrder').click()
+                            //$('#btnGoOrder').click(1000);
+
+
+
+                            //$('#btnGoOrder').delay(3500, function () {
+                            // window.location = toLoad;
+                            //});
+                            //$("#btnSearchOrder").click();
+                        }
+
+                    });
+setInterval('location.reload()', 5000);
+                }
+                 if (action == "SetAsShadow") {
+
+                    var data = [];
+                    $(".table tbody tr ").each(function () {
+                        if ($(this).find('.selectRow').is(':checked')) {
+                            var sku = $(this).find('.SKU').val();
+
+                            data.push({ SKU: sku, KitOrShadow: true });
+                        }
+
+
+                    });
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'post',
+                        url: '../product/ProductSetAsKitOrShadow',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                            $.notify('Product Set as Shadow successfully', { globalPosition: 'bottom right', className: 'danger myclasspo' });
+                            //$('#btnGoOrder').click()
+                            //$('#btnGoOrder').click(1000);
+
+
+
+                            //$('#btnGoOrder').delay(3500, function () {
+                            // window.location = toLoad;
+                            //});
+                            //$("#btnSearchOrder").click();
+                        }
+
+                    });
+setInterval('location.reload()', 5000);
+}
+            });
+
+            $(document).on('click', '.SelectPO', function () {
+                var array = [];
+                var POVender = $(this).attr('data-Vendor');
+                if (POVender == selectedVendor) {
+                    $('.table tbody tr').each(function () {
+                        if ($(this).find('.selectRow').is(':checked')) {
+                            var price = 0.0;
+                            $(this).find('.selectVendor').each(function () {
+                                if (selectedVendor == $(this).val()) {
+                                    price = parseFloat($(this).attr("data-ApprovedUnitPrice"))
+                                }
+
+                            });
+                            array.push({
+                                LargImage: $(this).find('.LargImage').val(),
+                                SmallImage: $(this).find('.SmallImage').val(),
+                                CasePackQty: $(this).find('.CasePackQty').val(),
+                                SKU: $(this).find('.SKU').val(),
+                                POQty: parseInt($(this).find('.POQty').val()),
+                                ApprovedUnitPrice: price
+                            });
+                        }
+                    });
+                    var data = {
+                        VendorId: parseInt(selectedId),
+                        Vendor: selectedVendor,
+                        Currency: currency,
+                        InternalPOID: parseInt($(this).text()),
+                        list: array
+                    };
+                    window.open("../PredictionHistory/PredictionList?data=" + JSON.stringify(data), "_blank");
+                }
+                else {
+                    $.notify('selected  vendor does not match!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                }
+
+            });
+
+            $(document).on('click', '.selectRow', function () {
+                debugger;
+                if (selectedVendor != "") {
+
+                    $(this).parents('tr').find('.selectVendor').each(function () {
+                        $(this).attr('disabled', true);
+                        if (selectedVendor == $(this).val()) {
+                            $(this).prop('checked', true);
+                        }
+                    });
+
+                }
+                else {
+                    if ($(this).is(':checked')) {
+                        $(this).parents('tr').find('.selectVendor').attr('disabled', false);
+                    }
+                    else {
+                        $(this).parents('tr').find('.selectVendor').attr('disabled', true);
+                        $(this).parents('tr').find('.selectVendor').prop('checked', false);
+                        selectedVendor = "";
+                    }
+                }
+
+                if (selectPOId == 0) {
+                    if ($(this).is(':checked')) {
+                        $(this).parents('tr').find('.selectPOId').attr('disabled', false);
+                    }
+                    else {
+                        $(this).parents('tr').find('.selectPOId').prop('checked', false);
+                        $(this).parents('tr').find('.selectPOId').attr('disabled', true);
+                        selectPOId = 0;
+                    }
+                }
+
+            });
+
+            $(document).on('click', '.selectVendor', function () {
+                debugger;
+                selectedId = $(this).attr("data-VendorId");
+                selectedVendor = $(this).val();
+                currency = $(this).attr("data-Currency");
+                debugger;
+                $('.table tbody tr').each(function () {
+
+                    var found = false;
+                    $(this).find('.selectVendor').each(function () {
+                        if (selectedVendor == $(this).val()) {
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        $(this).find('.selectRow').prop('checked', false);
+                        $(this).find('.selectRow').attr('disabled', true);
+                        $(this).find('.selectVendor').prop('checked', false);
+
+                    }
+                    else {
+                        $(this).find('.selectRow').attr('disabled', false);
+                        $(this).find('.selectVendor').prop('checked', false);
+                        if ($(this).find('.selectRow').is(':checked')) {
+                            $(this).find('.selectVendor[value=' + selectedVendor + ']').prop('checked', true);
+                        }
+                    }
+                });
+                debugger;
+            });
+
+            $(document).on('click', '.selectPOId', function () {
+                debugger;
+                selectPOId = $(this).val();
+            });
+
+            $('#Vendor').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data, ui) {
+                            debugger;
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                select: function (event, ui) {
+
+                    $('#VendorIdForMessage').val(ui.item.id);
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#empty-message-Vendor").text("No results found");
+                        $('#VendorIdForMessage').val("0");
+
+                        $('#InputSubmit').attr("disabled", true)
+                    } else {
+                        $("#empty-message-Vendor").empty();
+                        $('#InputSubmit').attr("disabled", false)
+                    }
+                }
+            });
+            $(".loader").hide();
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+            var start = moment().subtract(7, 'days');
+            var end = moment();
+
+            function cb(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+            $("#orderDateTimeFrom").datepicker({ dateFormat: 'yy-mm-dd' });
+            $("#orderDateTimeTo").datepicker({ dateFormat: 'yy-mm-dd' });
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                selectedDateFrom = picker.startDate.format('YYYY-MM-DD');
+                selectedDatTo = picker.endDate.format('YYYY-MM-DD');
+                $("#orderDateTimeTo").val(selectedDatTo);
+                $("#orderDateTimeFrom").val(selectedDateFrom);
+                console.log($("#orderDateTimeTo").val());
+                console.log(selectedDatTo);
+            });
+
+            //var Items = getUrlParameter('CustomerName');
+            $('select[multiple].active.3col.QuantityStatus').multiselect({
+                columns: 1,
+                placeholder: 'Status',
+                maxPlaceholderOpts: 1,
+
+                selectAll: false,
+                onOptionClick: function (element, option) {
+                    $('#ddlQuantity').val($(element).val());
+                    $(element).val();
+                },
+            });
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
+            var SKU = getUrlParameter('SKU');
+            var ShipmentId = getUrlParameter('ShipmentId');
+            var Title = getUrlParameter('Title');
+            var item = getUrlParameter('ItemType');
+            var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
+            var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
+            var Vendor = getUrlParameter('Vendor');
+            var Approved = getUrlParameter('Approved');
+            var Sorted = getUrlParameter('Sorted');
+            var SortedType = getUrlParameter('SortedType');
+            //var D_90 = getUrlParameter('D_90');
+
+            var Status = getUrlParameter('Status');
+            if (Vendor == null || Vendor == "") {
+                $("#VendorIdForMessage").val(0);
+            }
+            var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
+            var VendorId = $("#VendorIdForMessage").val();
+            if (item != null) {
+                debugger;
+                var res = item.split(",");
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+                            $('#ddlQuantity').val($(this).val());
+                        }
+                    });
+                });
+            }
+            var Type = getUrlParameter('Type');
+
+
+
+
+            $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+
+                  format: '[< nncnn >]',
+                  perpage: 50, // show 10 elements per page
+                  lapping: 0, // don't overlap pages for the moment
+                  page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                  onSelect: function (page) {
+                      debugger;
+                      pageNo = page;
+                      // add code which gets executed when user selects a page
+                      var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Vendor=' + Vendor + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type;
+                      var completURL = url  ;
+                      $(".loadertbl").show();
+                      $(".loader").show();
+                      $.ajax({
+                          url: completURL,
+                          data: {  },
+                          type: 'POST',
+                          traditional: true,
+                          success: function (data) {
+
+                              $('#loadOrder').empty();
+                              $('#loadOrder').html(data);
+                              $(function () {
+                                  $(".table").tablesorter();
+                              })
+                              $(".loadertbl").hide();
+                              GetInternalPOIdBySku();
+                              $(".loader").hide();
+                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                          },
+                          error: function (data) {
+                              debugger;
+                          }
+                      });
+                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                              start = moment(OrderDateTimeFrom);
+                              end = moment(OrderDateTimeTo);
+                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                          }
+                          else {
+                              $('#reportrange span').html("No Date Selected");
+                          }
+
+                      }
+                      else {
+                          $('#reportrange span').html("No Date Selected");
+                      }
+                  },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+             });
+            $(".table").tablesorter();
+
+            $(document).on('click', '.sortCover', function () {
+                debugger;
+                //var pageURL = $(location).attr("href");
+                var sortedVal = $("#Sorted").val();
+                var sortedTypeVal = $("#SortedType").val();
+
+                if ((sortedVal == "desc" && sortedTypeVal =='p.CoverDays') || (sortedVal == "" && sortedTypeVal !='p.CoverDays') ) {
+                    $("#Sorted").val("asc");
+                    $("#SortedType").val("p.CoverDays");
+                }
+                else {
+                    $("#Sorted").val("desc");
+                    $("#SortedType").val("p.CoverDays");
+
+                }
+                //$("#Sorted").val(sort);
+                //window.open('/PredictionHistory/Index?VendorId=' + VendorId + '&Vendor=' + Vendor + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved);
+                $("#btnSearchOrder").click();
+            });
+
+            $(document).on('click', '.Def60Cover', function () {
+                debugger;
+                //var pageURL = $(location).attr("href");
+                var sortedVal = $("#Sorted").val();
+                var sortedTypeVal = $("#SortedType").val();
+
+                if ((sortedVal == 'desc' && sortedTypeVal=='p.LowStock60') || (sortedVal == "" && sortedTypeVal != 'p.LowStock60')) {
+                    $("#Sorted").val("asc");
+                    $("#SortedType").val("p.LowStock60");
+                }
+                else {
+                    $("#Sorted").val("desc");
+                    $("#SortedType").val("p.LowStock60");
+
+                }
+                //$("#Sorted").val(sort);
+                //window.open('/PredictionHistory/Index?VendorId=' + VendorId + '&Vendor=' + Vendor + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved);
+                $("#btnSearchOrder").click();
+            });
+            $(document).on('click', '.Def90Cover', function () {
+                debugger;
+                //var pageURL = $(location).attr("href");
+                var sortedVal = $("#Sorted").val();
+                var sortedTypeVal = $("#SortedType").val();
+
+                if ((sortedVal == "desc" && sortedTypeVal=='p.LowStock90') || (sortedVal == "" && sortedTypeVal != 'p.LowStock90')) {
+                    $("#Sorted").val("asc");
+                    $("#SortedType").val("p.LowStock90");
+                }
+                else {
+                    $("#Sorted").val("desc");
+                    $("#SortedType").val("p.LowStock90");
+
+                }
+                //$("#Sorted").val(sort);
+                //window.open('/PredictionHistory/Index?VendorId=' + VendorId + '&Vendor=' + Vendor + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved);
+                $("#btnSearchOrder").click();
+            });
+        });
+    </script>
+}

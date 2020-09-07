@@ -1,0 +1,130 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.ZincWatchlistLogsViewModel>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyOrdersViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+
+<style>
+    tr.detail {
+        display: none;
+        width: 100%;
+    }
+
+    .hidden_row {
+        display: none;
+    }
+
+    .showmore:hover {
+        cursor: pointer;
+    }
+    .imageDiv {
+        float: right;
+    position: absolute;
+    margin-left: 500px;
+    margin-top: -56px;
+    }
+</style>
+<div class="imageDiv">
+    <a target="_blank" href="@ViewBag.image_name_URL/@Model.Select(e=>e.image_name).FirstOrDefault()">
+        <img src="@ViewBag.Compress_image_URL/@Model.Select(e=>e.Compress_image).FirstOrDefault()" class="rounded" height="50" width="50" />
+    </a>
+</div>
+<table class="table">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                Job ID #
+            </th>
+            @*<th>
+                Image
+            </th>*@
+
+            <th>
+                ASIN
+            </th>
+            <th>
+                Product SKU
+            </th>
+            <th>
+                Zinc Response
+            </th>
+            <th>
+                Seller Name
+            </th>
+            <th>
+                Amazon Price
+            </th>
+            <th>
+                Prime
+            </th>
+            <th>
+                Fulfilled BY
+            </th>
+            <th>
+                View Jobs
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.jobID)
+                </td>
+                @*<td>
+                    @{
+                        <a target="_blank" href="@ViewBag.image_name_URL/@item.image_name">
+                            <img src="@ViewBag.Compress_image_URL/@item.Compress_image" class="rounded" height="50" width="50" />
+                        </a>
+                    }
+                </td>*@
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ASIN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductSKU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ZincResponse)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SellerName)
+                </td>
+                <td>
+                    @{
+                        int item_price = Convert.ToInt32(item.Amz_Price);
+                        decimal itemprice = 0.0m;
+                        if (item_price > 0)
+                        {
+                            itemprice = (decimal)(item_price / 100.0);
+                        }
+
+                    }
+                    $@itemprice
+
+                </td>
+                <td>
+                    @if (item.IsPrime == 1)
+                    {
+                        <span>Available</span>
+                    }
+                    else
+                    {
+                        <span>Unavailable</span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FulfilledBY)
+                </td>
+                <td>
+                    <a href="#" class="showmore" data-content="Hide" value="@item.jobID">Show Detail</a>
+                </td>
+
+            </tr>
+            <tr style="width: 98%;" class="detail hidden_row" id=@(item.ASIN+item.jobID)>
+            </tr>
+        }
+    </tbody>
+</table>

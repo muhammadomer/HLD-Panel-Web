@@ -1,0 +1,14 @@
+﻿@model string
+@{
+    ViewData["Title"] = "404 Error";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+
+
+<div class="alert alert-danger mt-1 mb-1 col-sm-11">
+    <h2>404 Not Found Error</h2>
+    <hr />
+    <h5>Product Not Found with this SKU : @Model</h5>
+</div>
+

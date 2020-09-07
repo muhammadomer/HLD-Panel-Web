@@ -1,0 +1,82 @@
+﻿
+@{
+    Layout = "_LayoutNavigation";
+}
+<style type="text/css">
+    #example > thead > tr > th {
+        font-weight: 500;
+    }
+</style>
+<div class="">
+    <br />
+    <div style="width:100%; margin:0 auto;">
+        <table id="example" class="display dataTable no-footer" style="font-weight:inherit;font-size:12px;" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Orderid</th>
+                    <th>Product_sku</th>
+                    <th>Product Title</th>
+                    <th>Shipped Date</th>
+                    <th>Received Date</th>
+                    <th>Commission</th>
+                    <th>Price</th>
+                    <th>Order line state</th>
+                    <th>SellerCloud ID</th>
+                    <th>Shipping Company</th>
+                    <th>Acceptance Date</th>
+                    <th>Order State</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts{    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#example").DataTable({
+                "processing": false, // for show progress bar
+                "serverSide": false, // for process server side
+                "filter": true, // this is for disable filter (search box)
+                "orderMulti": false, // for disable multiple column at once
+                "ordering": false,
+                "ajax": {
+                    "url": "/HldPanel/GetOrderList",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columnDefs": [
+                    { "width": "220px", "targets":4 }
+                ],
+
+                "columns": [
+
+                    { "data": "customer_firstName", "name": "customer_firstName", "autoWidth": true },
+                    { "data": "customer_country", "name": "customer_country", "autoWidth": true },
+                    { "data": "order_orderId", "name": "order_orderId", "autoWidth": true },
+                    { "data": "orderLine_offer_sku", "name": "orderLine_offer_sku", "autoWidth": true },
+                    { "data": "orderLine_product_title", "name": "orderLine_product_title" },
+                    { "data": "orderLine_shipped_date", "name": "orderLine_shipped_date", "autoWidth": true },
+                    { "data": "orderLine_received_date", "name": "orderLine_received_date", "autoWidth": true },
+                    { "data": "orderLine_total_commission", "name": "orderLine_total_commission", "autoWidth": true },
+                    { "data": "orderLine_total_price", "name": "orderLine_total_price", "autoWidth": true },
+                    { "data": "orderLine_order_line_state", "name": "orderLine_order_line_state", "autoWidth": true },
+                    { "data": "order_sellerCloudID", "name": "order_sellerCloudID", "autoWidth": true },
+                    { "data": "shipping_shippingCompany", "name": "shipping_shippingCompany", "autoWidth": true },
+                    { "data": "order_acceptanceDecisionDate", "name": "order_acceptanceDecisionDate", "autoWidth": true },
+                    { "data": "orderLine_order_line_state", "name": "orderLine_order_line_state", "autoWidth": true }
+                ]
+
+            });
+        });
+    </script>
+}
+
+
+

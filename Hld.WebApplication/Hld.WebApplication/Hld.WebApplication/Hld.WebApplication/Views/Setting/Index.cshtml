@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h1>Setting</h1>
+<div class="form-group row">
+    <div class="col-sm-5">
+
+        <button class="btn btn-primary" id="btnUpdateProductImages" type="button">Update Product Image Direct From SC</button>
+        <span>
+            <img style="display:none;" class="UpdateASINButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+        </span>
+    </div>
+    <div class="col-sm-7">
+        <div class="col-sm-6">
+            <div class="alert alert-success  successmessage">
+                <a href="#" class="close"   aria-label="close">&times;</a>
+                <strong>Success!</strong><span class="successAppend"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="alert alert-danger  dangermessage">
+                <a href="#" class="close"   aria-label="close">&times;</a>
+                <strong>Alert!</strong><span class="failureAppend"> Some Error Occured.</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-sm-5">
+
+        <button class="btn btn-primary" id="btnUpdateProductImagesFromSKUURL" type="button">Update Product Image From Inventory URL</button>
+        <span>
+            <img style="display:none;" class="UpdateASINButtonLoaderFromSKUURL" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+        </span>
+    </div>   
+</div>
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.successmessage').hide();
+            $('.dangermessage').hide();
+            $('#btnUpdateProductImages').click(function () {
+
+                $('#btnUpdateProductImages').attr('disabled', true);
+                debugger;
+                var URL = '/SellerCloud/GetProductImagesFromSellerCloud';
+                $('.UpdateASINButtonLoader').css('display', 'inline');
+
+                $.ajax({
+                    type: 'Get',
+                    url: URL,
+                    data: {},
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {                       
+                        if (data.success) {
+                            
+                            $('#btnUpdateProductImages').removeAttr('disabled');
+                            $('.UpdateASINButtonLoader').css('display', 'none');
+                            $('.successAppend').empty();
+                            $('.successAppend').append('<span class="pl-1"> Success :' + data.successCount + ' Failure :' + data.failureCounter +'</span>')
+                            $('.successmessage').show();
+                        }
+                        else {
+                           
+                            $('#btnUpdateProductImages').removeAttr('disabled');
+                            $('.UpdateASINButtonLoader').css('display', 'none');
+                            $('.failureAppend').empty();
+                            $('.failureAppend').append('<span class="pl-1"> Success :' + data.successCount + ' Failure :' + data.failureCounter + ' </span>')
+                            $('.dangermessage').show();
+                        } 
+
+                    }
+                });
+            });
+
+
+
+            // update product images from product table URL
+
+            $('#btnUpdateProductImagesFromSKUURL').click(function () {
+                $('#btnUpdateProductImagesFromSKUURL').attr('disabled', true);                
+                var URL = '/SellerCloud/SaveProductImageFromSellerCloudURL';
+                $('.UpdateASINButtonLoaderFromSKUURL').css('display', 'inline');
+
+                $.ajax({
+                    type: 'Get',
+                    url: URL,
+                    data: {},
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                        if (data.success) {
+
+                            $('#btnUpdateProductImagesFromSKUURL').removeAttr('disabled');
+                            $('.UpdateASINButtonLoaderFromSKUURL').css('display', 'none');
+                            $('.successAppend').empty();
+                            $('.successAppend').append('<span class="pl-1"> Success :' + data.successCount + ' Failure :' + data.failureCounter + '</span>')
+                            $('.successmessage').show();
+                        }
+                        else {
+
+                            $('#btnUpdateProductImagesFromSKUURL').removeAttr('disabled');
+                            $('.UpdateASINButtonLoaderFromSKUURL').css('display', 'none');
+                            $('.failureAppend').empty();
+                            $('.failureAppend').append('<span class="pl-1"> Success :' + data.successCount + ' Failure :' + data.failureCounter + ' </span>')
+                            $('.dangermessage').show();
+                        }
+
+                    }
+                });
+            });
+
+
+
+
+            $('a.close').click(function () {
+                $(this).parent().hide();
+            });
+
+        });
+
+    </script>
+}

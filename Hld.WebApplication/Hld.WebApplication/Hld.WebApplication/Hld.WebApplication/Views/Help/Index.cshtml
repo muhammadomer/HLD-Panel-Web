@@ -1,0 +1,133 @@
+﻿@model Hld.WebApplication.ViewModel.PostDataViewModel
+
+@{
+    ViewData["Title"] = "Index Section";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h6>Help Section</h6>
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Job Name</th>
+        <th>Status</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>Update SC Orders</td>
+        <td>Active</td>
+        <td>
+            Get SellerCloud New Orders which are in inprocess state, run every 30 minutes
+        </td>
+    </tr>
+    <tr>
+        <td>Update Bestbuy Orders</td>
+        <td>Active</td>
+        <td>Get bestbuy orders update from sellercloud for inprocess orders, run every 30 minutes </td>
+    </tr>
+    <tr>
+        <td>Update Zinc Order Status</td>
+        <td>Active</td>
+        <td>Get Zinc Order update for InProcess orders  <strong>Condition:</strong> InProcess and time passed 20 minutes from InProcess </td>
+    </tr>
+    <tr>
+        <td>Update Zinc InProgress (Success)</td>
+        <td>Active</td>
+        <td>Get Zinc order update with InProgress (Success) after 24 hours. </td>
+    </tr>
+
+</table>
+
+<div class="container-fluid p-0" style="">
+    <form asp-action="Index">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            @*<div class="col-md-2">
+                    <div class="form-group"style="">
+                        <label asp-for="postdata"> Write Your Post</label>
+
+                    </div>
+                </div>*@
+            <div class="col-md-12">
+                <div class="form-group row ol-sm-12" style="padding-bottom: 0px;">
+                    <input asp-for="idPostEditor" class="form-control" hidden />
+                    <label class="control-label" style="padding-left:15px;font-weight:bold">Title:</label>
+
+                    <div class="col-sm-2 p-0" style="margin-left: 3px;margin-right: 5px;">
+                        <input value="@Model.posttitle" name="posttitle" class="form-control" placeholder="add title here..." />
+                        @*<input asp-for="posttitle" name="posttitle" id="" value="" class="form-control" placeholder="add title here..." />*@
+                        <span asp-validation-for="posttitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group row ">
+                        <label asp-for="catagoryid" class="control-label" style="padding-left:15px;font-weight:bold">Catagory:</label>
+                        <div class="" style="width: 155px;padding:0;margin-left: 3px;">
+                            @Html.DropDownListFor(model => model.catagoryid, new SelectList(Model.listdatacatagory, "catagoryid", "catagory"), new { @class = "form-control p-0" })
+                            <span asp-validation-for="catagoryid" class="text-danger"></span>
+                        </div>
+                        <div style="margin-left:15px; ">
+                            <li class="">
+                                <a class="" asp-action="GetDataByCatagory" target="_blank" asp-controller="Help" style="vertical-align:sub">View Summary</a>
+                            </li>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <textarea asp-for="postdata" class="ckeditor" name="postdata" value=""></textarea>
+                    <span asp-validation-for="postdata" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @*<div class="col-md-2">
+                    <div class="form-group">
+
+
+                    </div>
+                </div>*@
+            <div class="col-md-12">
+                <div class="form-group">
+
+                    <input type="submit" name="" value="Save" class="btn btn-block" style="color:white;box-shadow: none;background-color:darkgrey!important;
+    outline: none;border: none;" />
+                </div>
+            </div>
+
+
+        </div>
+    </form>
+    <div class="container-fluid p-0">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+
+                    <div id="showPartialViewList">
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#Post_date").datepicker({ dateFormat: 'yy-mm-dd' });
+            //var productsku = $('#HfProductId').val();
+            var indexURL = '/Help/GetEditorDataList';
+            $.get(indexURL).done(function (response) {
+                $('#showPartialViewList').html(response);
+            });
+        })
+    </script>
+}

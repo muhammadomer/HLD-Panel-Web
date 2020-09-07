@@ -1,0 +1,202 @@
+﻿
+@model Hld.WebApplication.ViewModel.BBProductViewModel
+@{
+    Layout = "_LayoutNavigation";
+}
+
+<style type="text/css">
+    .removePadding {
+        padding-left: 0px !important;
+        padding-right: 3px !important;
+    }
+
+    #mainProductDetail {
+        background-color: honeydew;
+        border-radius: 2px;
+        padding-top: 5px;
+        padding-left: 7px;
+    }
+
+    a {
+    }
+</style>
+
+<h6>Product Dashboard </h6>
+<hr />
+<div class="row">
+    <div class="col-sm-2" id="warehouseQty"></div>
+    <div class="col-sm-6">
+        <div id="ProductNavBar" style="background-color:#e1e1e2;border-radius:2px;">
+            <div class="container">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link " href="#">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" asp-action="GetSalesHistoryOfSKU" asp-controller="HLDHistory" asp-route-ProductSku="@Model.Product_Sku">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="GetProductWarehouseQty" asp-controller="ProductWarehouseQty" asp-route-ProductSku="@Model.Product_Sku">Warehouse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  " href="#">Purchasing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  " href="#">Returns</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="mainProductDetail">
+
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="imagesDivMainView"></div>
+    </div>
+</div>
+
+<hr style="border:1px solid black;margin-right:10px;" />
+<div class="mainWrapper">
+    <div class="row">
+        <!--Start Left Menue-->
+        <div class="col-sm-2">
+            <div style="background-color:#e1e1e2;">
+                <ul class="nav flex-column sidebar-links">
+                    <li class="nav-item ">
+                        <a class="nav-link " asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@Model.Product_Sku">BestBuy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="ProductZinc" asp-controller="Zinc" asp-route-ProductSKU="@Model.Product_Sku">Zinc</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--End Left Menu-->
+        <!--Start MainSection-->
+        <!--End Main Section-->
+        <div class="col-sm-4"></div>
+    </div>
+
+    <input type="hidden" value="@Model.ProductId" id="HfProductId" />
+
+
+</div>
+
+<div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Brand</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="indexView"></div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $.get('@Url.Action("Index","Brand")').done(function (response) {
+                $('#indexView').html(response)
+            });
+        });
+
+        $(".sidebar-links > li").click(function () {
+            $(".sidebar-links > li").removeClass("active");
+            $(this).addClass("active");
+        })
+        if ($('#HfProductId').val() > 0) {
+            $.get('/Product/ProductDetailView/' + $('#HfProductId').val() + '').done(function (response) {
+                $('#mainProductDetail').html(response);
+            });
+
+            $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
+                console.log(response);
+                var $container = $(response).wrap('<div />');
+                $container.find('span.close').remove();
+                $('#imagesDivMainView').html($container);
+
+            });
+
+            $.get('/Product/PoroductWarehouseQty?sku=' + $('#HfProductId').val() + '').done(function (response) {
+                $('#warehouseQty').html(response);
+            });
+
+        }
+
+        $(".sidebar-links > li").click(function () {
+            $(".sidebar-links > li").removeClass("active");
+            $(this).addClass("active");
+        })
+
+
+
+        $('body').on('keyup', '#BrandNameId', function () {
+            var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckBrandExists", "Brand")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExists').text("Already Exists").css("color", "red");
+                            $('#btnSaveBrand').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExists').text("Available").css("color", "green");
+                            $('#btnSaveBrand').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExists').text("");
+            }
+        });
+        function PopupForm(url) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+            });
+        }
+        function SubmitForm() {
+            var url = '@Url.Action("AddUpdateBrand", "Brand",new {id=0 })';
+            var data = $('#form1').serialize();
+
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success == true) {
+                            $.get('@Url.Action("Index","Brand")').done(function (response) {
+                                $('#indexView').html(response)
+                            });
+                            $('#myModal').modal('toggle');
+                            $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+    </script>
+
+}
+

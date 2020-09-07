@@ -1,0 +1,14 @@
+﻿@model string
+@{
+    ViewData["Title"] = "ErrorOrder";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+
+
+<div class="alert alert-danger mt-1 mb-1 col-sm-11">
+    <h2>404 Not Found Error</h2>
+    <hr />
+    <h5>Order Not Found : @Model</h5>
+</div>
+

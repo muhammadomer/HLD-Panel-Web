@@ -1,0 +1,28 @@
+﻿@model Hld.WebApplication.ViewModel.UpdatePOAcceptedViewModel
+@using Hld.WebApplication.Models
+
+
+    <div class="">
+        @using (Html.BeginForm("AddUpdateExpected", "PurchaseOrder", FormMethod.Post, new { id = "form1" }))
+        {
+            <div class="form-group row">
+                <label class="col-sm-4 control-label " style="padding-right:0px">Expected Ship Date:</label>
+                <div class="col-sm-6">
+                    <input asp-for="POLastUpdate" type="date"  class="form-control" />
+                    <span asp-validation-for="POLastUpdate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 control-label " style="padding-right:0px">Expected arrival Date:</label>
+                <div class="col-sm-6">
+                    <input asp-for="POArrivalDate" type="date"  class="form-control" />
+                    <span asp-validation-for="POArrivalDate" class="text-danger"></span>
+                </div>
+            </div>
+            <input asp-for="IsAccepted"  type="hidden" />
+            <input asp-for="POId"  type="hidden" />
+            <div class="form-group">
+                <input type="button" class="btn btn-primary"  value="Submit" onclick="return SubmitFormForDates();"/>
+            </div>
+        }
+    </div>

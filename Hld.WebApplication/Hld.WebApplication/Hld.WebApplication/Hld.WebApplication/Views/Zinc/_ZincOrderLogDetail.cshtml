@@ -1,0 +1,51 @@
+﻿@model Hld.WebApplication.ViewModel.ZincOrderLogDetailViewModel
+
+
+<style>
+    .removePadding{
+        padding:0px;
+    }
+</style>
+
+<div style="padding:0px;">
+    <div class="form-group row">
+        <div class="col-sm-3 removePadding">
+            Tracking Number:
+        </div>
+        <div class="col-sm-9">
+             @Model.TrackingNumber 
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 removePadding">
+            Carrier:
+        </div>
+        <div class="col-sm-9">
+            @Model.Carrier
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 removePadding">
+            Amazon Tracking:
+        </div>
+        <div class="col-sm-9">
+            <a href="@Model.AmazonTracking" target="_blank">Amazon Tracking</a>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 removePadding">
+            17Tracking:
+        </div>
+        <div class="col-sm-9">
+            <a href="@Model._17Tracking" target="_blank">17Tracking</a>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 removePadding">
+            Shipped Date:
+        </div>
+        <div class="col-sm-9">
+            @Model.ShppingDate
+        </div>
+    </div>
+</div>

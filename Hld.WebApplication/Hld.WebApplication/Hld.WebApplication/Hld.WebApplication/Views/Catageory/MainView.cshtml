@@ -1,0 +1,554 @@
+﻿@model Hld.WebApplication.ViewModel.CatageoriesViewModel
+
+@{
+    ViewData["Title"] = "MainView";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .form-control {
+        padding: 0px;
+    }
+</style>
+<h6>Categeories</h6>
+<hr />
+
+<div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Category</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <form asp-action="MainView">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group row">
+                    <label asp-for="CatageoryMainLabel" class="control-label col-md-2"></label>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(e => Model.CatageoryMainLabel, new SelectList(Model.CatageoryMain, "Value", "Text"), htmlAttributes: new { @class = "form-control catageory", id = "MainCatageory", url = "" })
+                    </div>
+                    <div class="col-md-2 button-for-addEdit">
+                        <button type="button" class="btn btn-link add hide" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoeryMain", "Catageory")'>Add</button>
+                        <button type="button" class="btn btn-link update hide" data-id="CatageoryMain" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoeryMain", "Catageory")'>Edit</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="CatageorySub1Label" class="control-label col-md-2"></label>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(e => Model.CatageorySub1Label, new SelectList(Model.CatageorySub1, "Value", "Text"), htmlAttributes: new { @class = "form-control catageory", id = "CatageorySub1", url = "/Catageory/CatageorySub1" })
+                    </div>
+                    <div class="col-md-2 button-for-addEdit">
+                        <button type="button" class="btn btn-link add hide" data-id="CatageorySub1" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoerySub1", "Catageory", new { id = 0 })'>Add</button>
+                        <button type="button" class="btn btn-link update hide" data-id="CatageorySub1" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoerySub1", "Catageory" )'>Edit</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="CatageorySub2Label" class="control-label col-md-2"></label>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(e => Model.CatageorySub2Label, new SelectList(Model.CatageorySub2, "Value", "Text"), htmlAttributes: new { @class = "form-control catageory", id = "CatageorySub2", url = "/Catageory/CatageorySub2" })
+                    </div>
+                    <div class="col-md-2 button-for-addEdit">
+                        <button type="button" class="btn btn-link add hide" data-id="CatageorySub2" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoerySub2", "Catageory", new { id = 0 })'>Add</button>
+                        <button type="button" class="btn btn-link update hide" data-id="CatageorySub2" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoerySub2", "Catageory" )'>Edit</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="CatageorySub3Label" class="control-label col-md-2"></label>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(e => Model.CatageorySub3Label, new SelectList(Model.CatageorySub3, "Value", "Text"), htmlAttributes: new { @class = "form-control catageory", id = "CatageorySub3", url = "/Catageory/CatageorySub3" })
+                    </div>
+                    <div class="col-md-2 button-for-addEdit">
+                        <button type="button" class="btn btn-link add hide" data-id="CatageorySub3" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoerySub3", "Catageory", new { id = 0 })'>Add</button>
+                        <button type="button" class="btn btn-link update hide" data-id="CatageorySub3" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoerySub3", "Catageory" )'>Edit</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="CatageorySub4Label" class="control-label col-md-2"></label>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(e => Model.CatageorySub4Label, new SelectList(Model.CatageorySub4, "Value", "Text"), htmlAttributes: new { @class = "form-control catageory", id = "CatageorySub4", url = "/Catageory/CatageorySub4" })
+                    </div>
+                    <div class="col-md-2 button-for-addEdit">
+                        <button type="button" class="btn btn-link add hide" data-id="CatageorySub4" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoerySub4", "Catageory", new { id = 0 })'>Add</button>
+                        <button type="button" class="btn btn-link update hide" data-id="CatageorySub4" data-toggle="modal" data-target="#myModal" data-URL='@Url.Action("AddUpdateCatagoerySub4", "Catageory" )'>Edit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="col-md-2">
+            <label style="font-weight:bold;font-size:14px;">Category Path :</label>
+        </div>
+        <div id="categoryPath" class="col-md-9">
+            <p style="background-color:aliceblue;font-size:14px;font-weight:bold"></p>
+        </div>
+
+    </div>
+    <div>
+        <div id="warningMessage">
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+            //diable all button of edit and update excluding first one
+
+            $('div.row > .button-for-addEdit:not(:first)').each(function (index,element) {
+
+                $(this).find('button').prop("disabled", true);
+
+            });
+            $('.catageory').change(function () {
+                var CategoryPath = "";
+                var url = $(this).closest('div.row').next('div').first().find('select').attr("url");
+                var source = $(this).attr('id');
+                var target = $(this).closest('div.row').next('div').first().find('select').attr("id");
+
+                var currentSelectedItemValue = $(this).find("option:selected").val();
+                var currentSelectedItemText = $(this).find("option:selected").text()
+
+                // if selected catageory name value is > 1 then populate data from database
+
+                if (currentSelectedItemValue != 0) {
+
+                    $('#'+target).closest('div.row').find('button').prop('disabled', false);
+                    if (target != null && url != null) {
+                        cascadeDropDownList(url, source, target);
+                    }
+                    //
+                    var AllDropdownData = $(this).closest('div.row').prevAll('div').find('select option:selected');
+                    $(AllDropdownData).each(function (index, element) {
+                        CategoryPath += $(element).text() +"--->"
+                    });
+                    $('#categoryPath').find('p').text(CategoryPath + currentSelectedItemText);
+
+                }
+
+                //if selected option in "select catageory" then remove all drop down data without first one
+
+                else {
+                    var allDropDowns = $(this).closest('div.row').nextAll('div').find('select');
+                    $(allDropDowns).each(function () {
+                        $(this).find("option:not(:first)").remove();
+                    });
+
+                    // if selected drop down text is select category then update all below drop down text
+                    //select category
+
+                    $(this).closest('div.row').nextAll('div').find('button.hide').prop('disabled',true);
+                    var AllDropdownData = $(this).closest('div.row').prevAll('div').find('select option:selected');
+                    $(AllDropdownData).each(function (index, element) {
+                        CategoryPath += $(element).text() + "-->";
+                    });
+                    $('#categoryPath').find('p').text(CategoryPath);
+
+                }
+            });
+
+        });
+
+        function cascadeDropDownList(url, source, target) {
+            console.log(url + "-" + source + "-" + target);
+            $.ajax({
+                type: 'Get',
+                url: url,
+                data: { id: $('#' + source).val() },
+                dataType: 'json',
+                traditional: true,
+                success: function (data) {
+                    // remove previous option contents first
+                    $('#' + target + ' option').each(function () {
+                        $(this).remove();
+                    });
+                    // add new option contents
+                    var options = '<option value="0">Select Category</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        if (data.length > 0) {
+                            options += '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                        }
+                    }
+                    $('#' + target).html(options);
+                }
+            });
+        }
+        // pop up form
+
+
+
+        $('.add').click(function () {
+            var url = $(this).attr("data-URL");
+            var id = $(this).attr("data-id");
+
+            var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+            if (select == null) {
+                PopupForm(url);
+            }
+            else {
+                if (id == "CatageorySub1") {
+                    var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+                    PopupFormForCatageorySub1(url, select)
+                }
+                if (id =="CatageorySub2") {
+                    var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+                    PopupFormForCatageorySub2(url, select)
+                }
+                if (id == "CatageorySub3") {
+                    var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+                    PopupFormForCatageorySub3(url, select)
+                }
+                if (id == "CatageorySub4") {
+                    var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+                    PopupFormForCatageorySub4(url, select)
+                }
+            }
+
+        });
+
+        $('.update').click(function () {
+            var id = $(this).attr("data-id");
+            var CurrentDropdownselect =$(this).closest("div.row").find("select option:selected").val();
+            var url = $(this).attr("data-URL") + "/" + CurrentDropdownselect;
+
+            if (CurrentDropdownselect > 0) {
+                if (id == "CatageoryMain") {
+                    PopupForm(url);
+                }
+                else {
+                    if (id == "CatageorySub1") {
+                        var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+                        PopupFormForCatageorySub1(url, select)
+                    }
+                    if (id == "CatageorySub2") {
+                        var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+                        PopupFormForCatageorySub2(url, select)
+                    }
+                    if (id == "CatageorySub3") {
+                        var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+                        PopupFormForCatageorySub3(url, select)
+                    }
+                    if (id == "CatageorySub4") {
+                        var select = $(this).closest("div.row").prev("div").find('select option:selected').val();
+                        PopupFormForCatageorySub4(url, select)
+                    }
+
+                }
+            }
+            else {
+
+                // if selected category values in zero then show warning message
+                var html = "<div class='alert alert-warning alert-dismissible fade show'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>Warning!</strong> This value can not be edited...</div>";
+                $('#warningMessage').html(html);
+                return false;
+            }
+        });
+
+        function PopupForm(url) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+            });
+        }
+
+        function PopupFormForCatageorySub1(url, select) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+                $('#form1').find("#CatageoryMainId").val(select);
+            });
+        }
+
+        function PopupFormForCatageorySub2(url, select) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+                $('#form1').find("#CatageorySub1Id").val(select);
+            });
+        }
+        function PopupFormForCatageorySub3(url, select) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+                $('#form1').find("#CatageorySub2Id").val(select);
+            });
+        }
+        function PopupFormForCatageorySub4(url, select) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+                $('#form1').find("#CatageorySub3Id").val(select);
+            });
+        }
+
+        function SubmitFormForCatageroyMain(CategoryId) {
+            debugger;
+            var url = '@Url.Action("AddUpdateCatageoryMain", "Catageory",new {id=0 })';
+            var data = $('#form1').serialize();
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                PostRequest(url, data, 'MainCatageory')
+                ChangeCategoryAfterAddEdit(CategoryId);
+            }
+            return false;
+        }
+
+
+
+        function SubmitFormForCatageroySub1(CategoryId) {
+            debugger;
+            var url = '@Url.Action("AddUpdateCatagoerySub1", "Catageory",new {id=0 })';
+            var data = $('#form1').serialize();
+
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+
+                PostRequest(url, data, CategoryId)
+                ChangeCategoryAfterAddEdit(CategoryId);
+
+            }
+            return false;
+        }
+
+        function SubmitFormForCatageroySub2(CategoryId) {
+            var url = '@Url.Action("AddUpdateCatagoerySub2", "Catageory",new {id=0 })';
+            var data = $('#form1').serialize();
+
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+
+                PostRequest(url, data, CategoryId);
+                ChangeCategoryAfterAddEdit(CategoryId);
+            }
+            return false;
+        }
+
+        function SubmitFormForCatageroySub3(CategoryId) {
+
+            var url = '@Url.Action("AddUpdateCatagoerySub3", "Catageory",new {id=0 })';
+            var data = $('#form1').serialize();
+
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                PostRequest(url, data, CategoryId);
+                ChangeCategoryAfterAddEdit(CategoryId);
+            }
+            return false;
+        }
+
+        function SubmitFormForCatageroySub4(CategoryId) {
+
+            var url = '@Url.Action("AddUpdateCatagoerySub4", "Catageory",new {id=0 })';
+            var data = $('#form1').serialize();
+
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                PostRequest(url, data, CategoryId);
+                ChangeCategoryAfterAddEdit(CategoryId);
+            }
+            return false;
+        }
+
+
+        function ChangeCategoryAfterAddEdit(categoryId) {
+            var allDropDowns = $('#'+categoryId).closest('div.row').nextAll('div').find('select');
+            $(allDropDowns).each(function () {
+                $(this).find("option:not(:first)").remove();
+            });
+            $('#' + categoryId).closest('div.row').nextAll('div').find('button').prop('disabled', true);
+        }
+
+
+        function PostRequest(url, data, categoryId) {
+
+             $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                 success: function (data) {
+
+                        if (data.success == true) {
+                            $('#myModal').modal('toggle');
+                            $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
+                            var options = '<option value="0">Select Category</option>';
+                            for (var i = 0; i < data.viewModel.length; i++) {
+                                if (data.viewModel.length > 0) {
+                                    options += '<option value=' + data.viewModel[i].Value + '>' + data.viewModel[i].Text + '</option>';
+                                }
+                            }
+                            $('#' + categoryId).html(options);
+                        }
+                    }
+                });
+        }
+
+        $('body').on('keyup', '#CatageorySub4NameId', function () {
+            capitalize_Words($(this).val(), 'CatageorySub4NameId');
+
+            var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CatageorySub4Exists", "Catageory")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExistCategorySub4').text("Already Exists").css("color", "red");
+                            $('#btnSaveCategorySub4').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExistCategorySub4').text("Available").css("color", "green");
+                            $('#btnSaveCategorySub4').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExistCategorySub4').text("");
+            }
+        });
+
+        function capitalize_Words(str, id) {
+            var data = str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1) });
+            $('#' + id).val(data);
+        }
+
+        $('body').on('keyup', '#CatageorySub3NameId', function () {
+            capitalize_Words($(this).val(), 'CatageorySub3NameId');
+
+             var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CatageorySub3Exists", "Catageory")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExistCategorySub3').text("Already Exists").css("color", "red");
+                            $('#btnSaveCategorySub3').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExistCategorySub3').text("Available").css("color", "green");
+                            $('#btnSaveCategorySub3').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExistCategorySub3').text("");
+            }
+        });
+
+        function capitalize_Words(str, id) {
+            var data = str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1) });
+            $('#' + id).val(data);
+        }
+
+
+        $('body').on('keyup', '#CatageorySub2NameId', function () {
+            capitalize_Words($(this).val(), 'CatageorySub2NameId');
+
+            var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CatageorySub2Exists", "Catageory")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExistCategorySub2').text("Already Exists").css("color", "red");
+                            $('#btnSaveCategorySub2').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExistCategorySub2').text("Available").css("color", "green");
+                            $('#btnSaveCategorySub2').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExistCategorySub2').text("");
+            }
+        });
+
+        function capitalize_Words(str, id) {
+            var data = str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1) });
+            $('#' + id).val(data);
+        }
+
+        $('body').on('keyup', '#CatageorySub1NameId', function () {
+            capitalize_Words($(this).val(), 'CatageorySub1NameId');
+            var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CatageorySub1Exists", "Catageory")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExistCategorySub1').text("Already Exists").css("color", "red");
+                            $('#btnSaveCategorySub1').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExistCategorySub1').text("Available").css("color", "green");
+                            $('#btnSaveCategorySub1').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExistCategorySub1').text("");
+            }
+        });
+
+        function capitalize_Words(str, id) {
+            var data = str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1) });
+            $('#' + id).val(data);
+        }
+
+        $('body').on('keyup', '#CatageoryMainNameId', function () {
+            capitalize_Words($(this).val(), 'CatageoryMainNameId');
+
+            var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CatageoryMainExists", "Catageory")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExistCategoryMain').text("Already Exists").css("color", "red");
+                            $('#btnSaveCategoryMain').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExistCategoryMain').text("Available").css("color", "green");
+                            $('#btnSaveCategoryMain').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExistCategoryMain').text("");
+            }
+        });
+
+        function capitalize_Words(str, id) {
+            var data = str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1) });
+            $('#' + id).val(data);
+        }
+    </script>
+}

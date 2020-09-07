@@ -1,0 +1,57 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+@*<h1 class="bg-info text-white">Update User</h1>*@
+<h6 style="color: cadetblue;
+    font-size: 20px;
+    font-size: 14px;
+    font-family: Arial;
+    font-weight: 200;">
+    Update User 
+</h6>
+@*<a asp-action="Index" class="btn btn-secondary">Back</a>*@
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Update" method="post">
+  
+    <div class="form-group row">
+        <label asp-for="Name" class="col-sm-1 col-form-label" style="">User ID:</label>
+        <div class="col-sm-3">
+            <input class="form-control form-control-sm" asp-for="Name" style="box-shadow:none">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Alias" class="col-sm-1 col-form-label" style="">User Name:</label>
+        <div class="col-sm-3">
+            <input class="form-control form-control-sm" asp-for="Alias" style="box-shadow:none">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Email" class="col-sm-1 col-form-label">Email:</label>
+        <div class="col-sm-3">
+            <input class="form-control form-control-sm" asp-for="Email" style="box-shadow:none">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="password" class="col-sm-1 col-form-label">Password:</label>
+        <div class="col-sm-3">
+            <input class="form-control form-control-sm" name="password" style="box-shadow:none">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-1 offset-1">
+            <button type="submit" class="btn btn-primary" style="box-shadow:none">Save</button>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm- offset-0">
+                <a asp-action="Index" class="btn btn-secondary" style="box-shadow:none;margin-left: -23px;">Back</a>
+                <a asp-action="ManageUserPermission" asp-route-userId="@Model.Id"
+                   style="width:auto;box-shadow:none" class="btn btn-primary">
+                    Manage Permission
+                </a>
+            </div>
+        </div>
+    </div>
+</form>

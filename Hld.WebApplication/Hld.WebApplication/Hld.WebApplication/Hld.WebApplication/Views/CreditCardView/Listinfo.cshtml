@@ -1,0 +1,215 @@
+﻿@model IEnumerable<DataAccess.ViewModels.CreditCardDetailViewModel>
+
+@{
+    ViewData["Title"] = "Listinfo";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .credittable thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .credittable tbody td {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+</style>
+<div class="container-fluid">
+    <h5>Credit Card Detail</h5>
+    <p>
+        
+        <a class="" asp-action="Index" asp-controller="CreditCardView">Back</a>
+    </p>
+    <table class="table table-bordered credittable">
+        <thead style="background-color:lightgrey">
+            <tr>
+                <th>
+                    Credit Card Alias
+
+                </th>
+                <th>
+                    Card Number
+
+                </th>
+
+
+
+                <th>
+
+                    Expiration
+                </th>
+                <th>
+
+                    Zip Code
+                </th>
+                <th>
+
+                    Name
+                </th>
+
+                <th>
+
+                    Address
+                </th>
+
+
+                <th>
+                    Phone No
+
+                </th>
+
+
+                <th>Active</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @item.name_on_cardShort
+
+                    </td>
+                    <td>@item.numberShort</td>
+
+
+                    <td>@item.expiration_month/@item.expiration_year</td>
+
+                    <td>@item.zip_code</td>
+                    <td>@item.first_name @item.last_name </td>
+
+                    <td style="text-align:left">@item.address_line1 @item.address_line2 @item.city @item.state @item.country</td>
+
+
+
+                    <td>@item.PhoneNo</td>
+
+
+                    <td style="">
+
+                        @if (item.IsDefault)
+                        {
+                            <span class="custom-control custom-switch"  data-Isactive="@item.IsActive" data-Id="@item.CreditCardDetailId" value="@item.IsActive" style="padding-left: 3.25rem!important;">
+                                <input type="checkbox" class="custom-control-input" checked="@item.IsActive" id="@item.IsActive" style="display: inline-block!important">
+                                <label class="custom-control-label" for="@item.IsActive"></label>
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="custom-control custom-switch IsActiveSwtich" data-Isactive="@item.IsActive" data-Id="@item.CreditCardDetailId" value="@item.IsActive" style="padding-left: 3.25rem!important;">
+                                <input type="checkbox" class="custom-control-input" checked="@item.IsActive" id="@item.IsActive" style="display: inline-block!important">
+                                <label class="custom-control-label" for="@item.IsActive"></label>
+                            </span>
+                        }
+
+                        </td>
+                    <td>
+                        <span class="custom-control custom-switch IsDefaultSwtich" data-IsDefault="@item.IsDefault" data-Id="@item.CreditCardDetailId" value="@item.IsDefault" style="padding-left: 3.25rem!important;">
+                            <input type="checkbox" class="custom-control-input" checked="@item.IsDefault" id="@item.IsDefault" style="display: inline-block!important">
+                            <label class="custom-control-label" for="@item.IsDefault"></label>
+                        </span>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    
+</div>
+<div id="dialog-box">
+    <h6 style="color:red">Please confirm to make active!</h6>
+</div>
+<div id="dialog-boxDefault">
+    <h6 style="color:red">Please confirm to set as default!!</h6>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                title: 'Set Active',
+                modal: true,
+            });
+
+            $("#dialog-boxDefault").dialog({
+                autoOpen: false,
+                title: 'Set Default',
+                modal: true,
+            });
+            $(document).on("click", ".IsActiveSwtich", function () {                debugger                    var item = $(this);                    var val = $(this).attr("data-Isactive").toLocaleLowerCase();                    var IsActive = false;                    if (val == "false") {                        IsActive = true;                    }                    var id = $(this).attr("data-Id");                    var url = "/CreditCardView/IsActive";
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            
+                             
+                            $.ajax({                                type: "POST",                                url: url,                                    data:  {
+                                        id: id,
+                                        IsActive: IsActive,
+
+                                    },                                success: function (data) {                                    $("#dialog-box").dialog("close");
+
+                                    location.href = '../CreditCardView/Listinfo';
+                                                                                                      }                            });
+                           
+                        }
+                    },
+
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                        $.notify('Cancel Successfully ', { globalPosition: 'bottom right', className: 'warning mydelte' });
+                    }
+
+                });
+                $("#dialog-box").dialog("open");
+            });
+            //$(document).on("click", ".IsActiveSwtich", function () {            //    debugger;            //    var item = $(this);            //    var val = $(this).attr("data-Isactive").toLocaleLowerCase();            //    var IsActive = false;            //    if (val == "false") {            //        IsActive = true;            //    }            //    var id = $(this).attr("data-Id");            //    var url = "/CreditCardView/IsActive";            //    $.ajax({            //        type: "POST",            //        url: url,            //        data: { id: id, IsActive: IsActive },            //        success: function (data) {            //            location.href = '../CreditCardView/Listinfo';            //            $.notify('Updated successfully', { globalPosition: 'bottom right', className: 'success myclass' });            //            //if (data == true) {            //            //    $.notify("Update Status Successfully", { globalPosition: 'bottom right', className: 'success' });            //            //} else {            //            //    $.notify("Error", { globalPosition: 'bottom right', className: 'danger' });            //            //}            //        }            //    });            //});
+            $(document).on("click", ".IsDefaultSwtich", function () {                debugger;                var item = $(this);                var val = $(this).attr("data-IsDefault").toLocaleLowerCase();
+                var IsDefault = false;                if (val == "false") {                    IsDefault = true;                }                var id = $(this).attr("data-Id");                var url = "/CreditCardView/IsDefault";
+                $("#dialog-boxDefault").dialog({
+                    buttons: {
+                        "Confirm": function () {
+
+
+                            $.ajax({                                type: "POST",                                url: url,                                data: {
+                                    id: id,
+                                    IsDefault: IsDefault,
+
+                                },                                success: function (data) {                                    $("#dialog-boxDefault").dialog("close");
+
+                                    location.href = '../CreditCardView/Listinfo';
+                                }                            });
+
+                        }
+                    },
+
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                        $.notify('Cancel Successfully ', { globalPosition: 'bottom right', className: 'warning mydelte' });
+                    }
+
+                });
+                $("#dialog-boxDefault").dialog("open");
+            });
+            //$(document).on("click", ".IsDefaultSwtich", function () {            //    debugger;            //    var item = $(this);            //    var val = $(this).attr("data-IsDefault").toLocaleLowerCase();
+                            //    var IsDefault = false;            //    if (val == "false") {            //        IsDefault = true;            //    }            //    var id = $(this).attr("data-Id");            //    var url = "/CreditCardView/IsDefault";            //    $.ajax({            //        type: "POST",            //        url: url,            //        data: { id: id, IsDefault: IsDefault },            //        success: function (data) {                                   //            //if (data == true) {            //            //    $.notify("Update Status Successfully", { globalPosition: 'bottom right', className: 'success' });            //            //} else {            //            //    $.notify("Error", { globalPosition: 'bottom right', className: 'danger' });            //            //}            //            location.href = '../CreditCardView/Listinfo';            //        }            //    });            //});
+        })
+
+    </script>
+}

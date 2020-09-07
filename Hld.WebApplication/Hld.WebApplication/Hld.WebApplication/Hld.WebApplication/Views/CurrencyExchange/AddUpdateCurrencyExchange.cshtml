@@ -1,0 +1,50 @@
+﻿@model Hld.WebApplication.ViewModel.CurrencyExchangeViewModel
+@using Hld.WebApplication.Models
+<div class="container">
+    <form asp-action="AddUpdateCurrencyExchange" id="form1" role="form">
+        <div class="form-group row">
+            <label class="col-lg-3 col-sm-3 control-label font-weight-bold mr-2">Currency Date</label>
+            <div class="col-lg-9">
+                @Html.HiddenFor(e => e.CurrencyExchangeID)
+                @*<input  type="text" name="dateTime" id="CurrencyDateTime" class="form-control" />*@
+                <input asp-for="dateTime" id="CurrencyDateTime" class="form-control" />
+                <span asp-validation-for="dateTime" class="text-danger"></span>
+            </div>
+            <span id="ColorExists"></span>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-3 col-sm-3 control-label font-weight-bold mr-2">USD TO CAD</label>
+            <div class="col-lg-9">
+                <div style="margin-bottom:5px;"></div>
+                @*<input  type="text" name="USD_To_CAD" id="UsdToCad" class="form-control" />*@
+                <input asp-for="USD_To_CAD" id="UsdToCad" class="form-control" />
+                <span asp-validation-for="USD_To_CAD" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-3 col-sm-3 control-label font-weight-bold mr-2">USD TO CNY</label>
+            <div class="col-lg-9">
+                <div style="margin-bottom:5px;"></div>
+                @*<input  type="text" name="USD_To_CAD" id="UsdToCad" class="form-control" />*@
+                <input asp-for="USD_To_CNY" id="UsdToCad" class="form-control" />
+                <span asp-validation-for="USD_To_CNY" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-3 col-sm-3 control-label font-weight-bold mr-2">Status</label>
+            <div class="col-lg-9">
+                <input asp-for="IsActive" id="isActiveStatus" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="button" id="btnSaveColor" class="btn btn-light" value="Submit" onclick="return SubmitForm();" />
+        </div>
+
+    </form>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

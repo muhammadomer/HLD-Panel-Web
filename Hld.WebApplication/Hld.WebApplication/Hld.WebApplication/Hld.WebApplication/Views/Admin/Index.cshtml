@@ -1,0 +1,25 @@
+﻿@model IEnumerable<AppUser>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<h6 style="color: cadetblue;
+    font-size: 20px;
+    font-size: 14px;
+    font-family: Arial;
+    font-weight: 200;">
+    All Users
+</h6>
+<a asp-action="Create" class="btn btn-sm btn-secondary" style="margin-bottom: 5px;box-shadow:none">Create a User</a>
+<table class="table table-sm table-bordered">
+    <tr style="color:cadetblue"><th>User Name</th><th>User ID</th><th>Email</th><th>Update</th></tr>
+    @foreach (AppUser user in Model)
+    {
+        <tr>
+            <td>@user.UserAlias</td>
+            <td>@user.UserName</td>
+            <td>@user.Email</td>
+            <td><a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@user.Id">Update</a></td>
+        </tr>
+    }
+</table>

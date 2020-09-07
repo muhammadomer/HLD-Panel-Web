@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.PostData>
+@{
+
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    #sidebar {
+        background-color: #a9cad0 !important;
+        height: 100%;
+        width: 200px;
+        margin: 0;
+        padding: 0;
+        left: 0;
+        top: 51px;
+        position: absolute;
+    }
+
+    .nav-item .nav-link {
+        color: black;
+        /* color: #1f1f1f; */
+        text-decoration: none;
+        font-family: Arial;
+    }
+
+    .nav > li > a:hover, .nav > li > a:focus {
+        background: none;
+    }
+</style>
+
+<div class="col-2 collapse show d-md-flex  pt-2 p-0 min-vh-100" id="sidebar">
+    <ul class="nav flex-column flex-nowrap overflow-hidden">
+        @foreach (var item in Model)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-truncate" href="#"><span class="d-none d-sm-inline catagoryclass" style="font-size: 14px;font-family: arial;"data-Id="@item.catagoryid"><i class="fa fa-angle-right"style="margin-right: 5px;"></i>@item.catagory</span></a>
+                <ul class="nav flex-column flex-nowrap overflow-hidden @item.catagoryid">
+
+                      
+                </ul>
+            </li>}
+    </ul>
+</div>
+<div class="row"style="margin-left:240px">
+    <div class="col-12">
+        <input type="search" class="form-control" style="height:40px;"placeholder="Search by Title"id="searchtitle">
+    </div>
+  
+</div>
+<div class="col-dm-10"style="margin-left: 205px;">
+    <div id="appendata">
+
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+    $(document).ready(function () {
+        $(document).on("click", ".catagorytitle", function () {
+           
+            var id = $(this).attr("data-Id");
+            var url = "/Help/GetDataByCatagoryID";
+                        $.ajax({
+                            type: "GET",
+                            url: url,
+                            data: {
+                                catagoryid: id,
+                            },
+                            success: function (data) {
+                                $("#appendata").html(data)
+                          }
+                        });
+            $(this).find("i").toggleClass("fa fa-angle-right fa fa-angle-down");    
+        });
+        var categoryToggle = 0;
+        $(document).on("click", ".catagoryclass", function () {
+            //$(this).find("i").toggleClass("fa fa-angle-right fa fa-angle-down");
+            var id = $(this).attr("data-Id");
+            var url = "/Help/GetDataByCatagoryByTitle";
+            var select = $(this);
+            if (categoryToggle == 0) {
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    data: {
+                        catagoryidByTitle: id,
+                    },
+
+                    success: function (data) {
+                        $("." + id).html("");
+                        $.each(data, function (key, value) {
+                            $("." + id).append("<li class='nav-item'><a class='nav-link text-truncate' href='#'style='color:blue'><span class='d-none d-sm-inline catagorytitle' data-Id=" + value.idPostEditor + " style='font-size: 14px;font-family: arial; margin-left:15px;'> " + value.posttitle + "</span></a></li>");
+
+                        });
+                        //$(select).find("svg").toggleClass("fa fa-angle-right fa fa-angle-down");
+                        $(select).find("svg").removeClass("fa-angle-right");
+                        $(select).find("svg").addClass("fa-angle-down");
+                        categoryToggle = 1;
+                    }
+                });
+            }
+            else {
+                $("." + id).html("");
+                categoryToggle = 0;
+                $(select).find("svg").removeClass("fa-angle-down");
+                $(select).find("svg").addClass("fa-angle-right");
+                
+            }
+        });
+
+        $(document).on("keyup", "#searchtitle", function () {
+         
+            var title = $("#searchtitle").val();
+            var url = "/Help/GetDataByCatagoryByTitleSearch";
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: {
+                    Title: title,
+                },
+                success: function (data) {
+                    $("#appendata").html(data)
+                }
+            });
+        });
+    });
+</script>
+}
+

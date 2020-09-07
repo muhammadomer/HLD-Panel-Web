@@ -1,0 +1,263 @@
+﻿
+@{
+    ViewData["Title"] = "AsinSkuMappingToS3";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h6>Bulk Update multiple fields </h6>
+
+<style>
+    .m-l-0 {
+        margin-left: 0px;
+    }
+
+    .headinclass {
+        height: 148px!important;
+        margin-left: 15px;
+        border: 1px solid lightgray !important;
+        border-right: none !important;
+    }
+</style>
+
+<div class="row ">
+    <div class="col-sm-1 headinclass">
+        <apan class="row m-l-0"style="">  SKU (Primary) </apan>
+        <apan class="row m-l-0">   ASIN </apan>
+        <apan class="row m-l-0">  AmzPrice</apan>
+        <apan class="row m-l-0">   MaxPrice</apan>
+        <apan class="row m-l-0">  AvgCostCAD </apan>
+        <apan class="row m-l-0">  DropShip </apan>
+        <apan class="row m-l-0">  DropShipQty </apan>
+        <apan class="row m-l-0">   DropShipComments</apan>
+    </div>
+    <div class="col-sm-4 p-0">
+
+        <form method="post" asp-action="UploadAsinSkuMappingToS3" id="UploadFile" enctype="multipart/form-data">
+            <div class="card" style="height: 148px!important">
+
+                @*<div class="card-header">Choose Excel File <span class="text-left">   @Html.ActionLink("Template File", "/UploadFilesToS3ForJobs/DownloadformS3", new { file = "SKU_ASIN_Price_DS Bulk Update.xlsx", bucket = "jobsfilesbucket/ASINSKUMapping-Jobs" })</span></div>*@
+                <div class="card-header">Choose Excel File <span class="text-left">   @Html.ActionLink("Template File", "DownloadformS3", new { file = "SKU_ASIN_Price_DS Bulk Update.xlsx", bucket = "jobsfilesbucket/ASINSKUMapping-Jobs" })</span>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-9">
+                        <input type="file" id="fUpload" multiple name="files" class="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="margin-top:5px;margin-bottom:5px;" class="offset-9 col-sm-1">
+                        <input class="btn btn-primary" type="button" id="btnUpload" value="Upload" />
+                    </div>
+                    <div class="offset-9 col-sm-2">
+                        <img style="display:none;" class="uploadFileStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                    </div>
+                </div>
+
+            </div>
+</div>
+
+        </form>
+       
+
+    </div>
+    <div class="col-sm-5">
+
+        <div class="col-sm-6">
+            <div class="alert alert-success  successmessage">
+                <a href="#" class="close" aria-label="close">&times;</a>
+                <strong>Success!</strong><span class="successAppend"></span>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="alert alert-danger  dangermessage">
+                <a href="#" class="close" aria-label="close">&times;</a>
+                <strong>Alert!</strong><span class="failureAppend"> Some Error Occured.</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row"style="margin-top: 30px;">
+    <div class="col-sm-1 headinclass">
+        <apan class="row m-l-0">  SKU (Primary) </apan>
+    
+        <apan class="row m-l-0">  DropShip </apan>
+        <apan class="row m-l-0">  DropShipQty </apan>
+        <apan class="row m-l-0">   DropShipComments</apan>
+    </div>
+    <div class="col-sm-4 p-0">
+
+        <form method="post" asp-action="UploadAsinSkuMappingToS3" id="UploadFile" enctype="multipart/form-data">
+            <div class="card"style="height:148px;">
+                <div class="card-header">Choose Excel File <span class="text-left">   @Html.ActionLink("Template File", "DownloadformS3", new { file = "SKU_QTY_DS_Comments Bulk Update.xlsx", bucket = "jobsfilesbucket/Ds_Qty_Comments" })</span></div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-9">
+                            <input type="file" id="fUploadDS" multiple name="files" class="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="margin-top:5px;margin-bottom:5px;" class="offset-9 col-sm-1">
+                            <input class="btn btn-primary" type="button" id="btnUploadFile" value="Upload" />
+                        </div>
+                        <div class="offset-9 col-sm-2">
+                            <img style="display:none;" class="uploadDSFileStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+        <a asp-action="S3JobDetail" target="_blank" asp-controller="UploadFilesToS3ForJobs">View Jobs</a>
+
+    </div>
+    <div class="col-sm-5">
+
+        <div class="col-sm-6">
+            <div class="alert alert-success  successmessage1">
+                <a href="#" class="close" aria-label="close">&times;</a>
+                <strong>Success!</strong><span class="successAppend1"></span>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="alert alert-danger  dangermessage1">
+                <a href="#" class="close" aria-label="close">&times;</a>
+                <strong>Alert!</strong><span class="failureAppend1"> Some Error Occured.</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.successmessage').hide();
+            $('.successmessage1').hide();
+            $('.dangermessage').hide();
+            $('.dangermessage1').hide();
+
+
+            //For update average cost
+            $("#fUpload").change(function () {
+                var fileExtension = ['xlsx'];
+                if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                    alert("Only formats are allowed : " + fileExtension.join(', '));
+                }
+            });
+
+            $('#btnUpload').click(function () {
+                $('#btnUpload').attr('disabled', true);
+                $('.uploadFileStatus').css('display', 'inline');
+                var files = $('#fUpload').prop("files");
+                var fdata = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fdata.append("files", files[i]);
+                }
+
+                if (files.length > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/UploadFilesToS3ForJobs/UploadAsinSkuMappingToS3",
+                        data: fdata,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+
+                            $('input[type=file]').val(null);
+                            $('.uploadFileStatus').css('display', 'none');
+                            if (data.success == true) {
+                                $('#btnUpload').removeAttr('disabled');
+                                $('.UpdateASINButtonLoader').css('display', 'none');
+                                $('.successAppend').empty();
+                                $('.successAppend').append('<span class="pl-1"> File Updated Successfully and Job ID is ' + data.JobID)
+                                $('.successmessage').show();
+                            }
+                            else {
+
+                                if (data.success == false) {
+                                    $('#btnUpload').removeAttr('disabled');
+                                    $('.uploadFileStatus').css('display', 'none');
+                                    $('.failureAppend').empty();
+                                    $('.failureAppend').append('<span class="pl-1"> Something Went Wrong')
+                                    $('.dangermessage').show();
+                                }
+
+
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    alert('Please select a file.');
+                    $('#btnUpload').removeAttr('disabled');
+                    $('.uploadFileStatus').css('display', 'none');
+                }
+            });
+
+            $('#btnUploadFile').click(function () {
+                $('#btnUploadFile').attr('disabled', true);
+                $('.uploadDSFileStatus').css('display', 'inline');
+                var files = $('#fUploadDS').prop("files");
+                var fdata = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fdata.append("files", files[i]);
+                }
+
+                if (files.length > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/UploadFilesToS3ForJobs/UploadDS_QTY_CommentsToS3",
+                        data: fdata,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+
+                            $('input[type=file]').val(null);
+                            $('.uploadDSFileStatus').css('display', 'none');
+                            if (data.success == true) {
+                                $('#btnUpload').removeAttr('disabled');
+                                $('.UpdateASINButtonLoader').css('display', 'none');
+                                $('.successAppend1').empty();
+                                $('.successAppend1').append('<span class="pl-1"> File Updated Successfully and Job ID is' + data.JobID)
+                                $('.successmessage1').show();
+                            }
+                            else {
+
+                                if (data.success == false) {
+                                    $('#btnUpload').removeAttr('disabled');
+                                    $('.uploadDSFileStatus').css('display', 'none');
+                                    $('.failureAppend1').empty();
+                                    $('.failureAppend1').append('<span class="pl-1"> Something Went Wrong')
+                                    $('.dangermessage1').show();
+                                }
+
+
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    alert('Please select a file.');
+                    $('#btnUploadFile').removeAttr('disabled');
+                    $('.uploadDSFileStatus').css('display', 'none');
+                }
+            });
+        });
+    </script>
+}
+
+

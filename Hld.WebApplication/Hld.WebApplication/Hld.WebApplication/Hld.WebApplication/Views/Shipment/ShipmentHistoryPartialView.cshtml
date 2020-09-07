@@ -1,0 +1,249 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.ShipmentHistoryViewModel>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyOrdersViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+<style>
+    .ui-autocomplete {
+        z-index: 2000;
+    }
+
+    #myModalEdit, #myModal {
+        margin: 20px;
+        margin-top: 88px;
+    }
+
+    .table {
+        margin-top: 60px;
+    }
+
+        /*.table thead tr th {
+            width: 88px;
+            vertical-align: middle !important;
+        }*/
+
+        .table thead tr th {
+            position: sticky;
+            top: 170px;
+            padding: 5px;
+            /*width: 26px;*/
+            z-index: 2;
+            background-color: lightgray;
+        }
+
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .myclasscancel {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: black;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .table th:last-child, .table th:first-child {
+        background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+        /*background-color: lightgray !important;*/
+        /*background: none !important;*/
+        background-image: none !important;
+    }
+
+    table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    table tbody tr td {
+        /*min-width: 50px !important;
+        max-width: 50px !important;*/
+        height: 50px !important;
+        display: table-cell;
+        min-height: 50px !important;
+        line-height: 1 !important;
+    }
+
+    .tablecenteRow {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    table td {
+        vertical-align: middle !important;
+    }
+
+    .tbldata {
+        text-align: center !important;
+    }
+
+    .btn-style {
+        padding: 3px;
+        font-size: 11px;
+    }
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    #onhoveredit {
+        visibility: hidden;
+        /*position:absolute;*/
+    }
+
+    .edit:hover ~ #onhoveredit {
+        visibility: visible;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+</style>
+
+<div class="container-fluid mt-3 maincontainer">
+    @*<div class="table-responsive">*@
+    <table class="table tablesorter detailtable" style="margin-top:170px;width:98%!important">
+        <thead style="background-color:darkgray;">
+            <tr>
+                <th style="width: 38px !important;
+text-align: center;
+vertical-align: middle !important
+"><input type="checkbox" /></th>
+
+
+                <th>Image</th>
+                <th>Product SKU</th>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Shipment ID
+                </th>
+                <th>
+                    PO# - Qty
+                </th>
+                <th>
+                    Vendor
+                </th>
+                <th>
+                    Shipped Qty
+                </th>
+                <th>
+                    Received Qty
+                </th>
+                <th>Created On</th>
+                <th>
+                    Shipped On
+                </th>
+                <th>
+                    Received On
+                </th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+
+                    <td>
+                        <input type="checkbox" class="checkboxtbl" />
+                    </td>
+                    <td>
+                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                            <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                        </a>
+                    </td>
+                    <td>
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        {
+                            <a style="cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.SKU" target="_blank">@item.SKU</a>
+                        }
+                        else
+                        {@item.SKU}
+                    </td>
+                    <td>@item.Title</td>
+                    <td>
+                        @if (item.Type == "casepack")
+                        {
+                            <a href="../ShipmentCasePack/viewShipment?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
+                        }
+                        else
+                        {
+
+                            <a href="../Shipment/Shipmentindex?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var innerItem in item.POs)
+                        {
+                            <span>
+                                <a style="cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@innerItem.POId" target="_blank">@innerItem.POId</a>
+                         &nbsp;-&nbsp; @innerItem.ShipedQty</span>
+                        }
+                    </td>
+                    <td>@item.Vendor</td>
+                    <td>@item.ShipedQty</td>
+                    <td>@item.ReceivedQty</td>
+                    <td>
+                        @if (item.CreatedOn != DateTime.MinValue)
+                        {
+                            @string.Format("{0: MMM d, yyyy}", @item.CreatedOn)
+                        }
+                    </td>
+                    <td>
+                        @if (item.ShippedDate != DateTime.MinValue)
+                        {
+                            @string.Format("{0: MMM d, yyyy}", @item.ShippedDate)
+                        }
+                    </td>
+                    <td>
+                        @if (item.ReceivedDate != DateTime.MinValue)
+                        {
+                            @string.Format("{0: MMM d, yyyy}", @item.ReceivedDate)
+                        }
+                    </td>
+                    <td>
+
+                        @if (item.Status == 1)
+                        {
+                            <span>Open</span>
+                        }
+                        @if (item.Status == 2)
+                        {
+                            <span>In Process</span>
+                        }
+                        @if (item.Status == 3)
+                        {
+                            <span>Shipped</span>
+                        }
+                        @if (item.Status == 4)
+                        {
+                            <span>Receiving in process</span>
+                        }
+                        @if (item.Status == 5)
+                        {
+                            <span>Received</span>
+                        }
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+    @*</div>*@
+</div>
+
+

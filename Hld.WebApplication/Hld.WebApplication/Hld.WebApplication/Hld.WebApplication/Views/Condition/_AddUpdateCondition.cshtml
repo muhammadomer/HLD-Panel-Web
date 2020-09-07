@@ -1,0 +1,28 @@
+﻿@model Hld.WebApplication.ViewModel.ConditionViewModel
+@using Hld.WebApplication.Models
+
+<div class="container">
+    <form asp-action="AddUpdateCondition" id="form1" role="form">
+        <div class="form-group row">
+            <label asp-for="ConditionName" class="col-sm-2 control-label font-weight-bold "></label>
+            <div class="col-sm-6">
+                @Html.HiddenFor(e => e.ConditionId)
+                <input asp-for="ConditionName" id="ConditionNameId" class="form-control" />
+                <span asp-validation-for="ConditionName" class="text-danger"></span>
+            </div>
+            <span id="IsExists"></span>
+        </div>
+        
+            <div class="form-group row">
+                <div class="col-sm-8 text-sm-center" >
+                    <input type="button" id="btnSaveCondition" disabled="true" class="btn btn-light" value="Submit" onclick="return SubmitForm();" />
+                </div>
+                </div>
+
+</form>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+  
+}
+

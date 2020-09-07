@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.CatageorySub4ViewModel>
+
+
+<table id="categorySub4" class="table table-hover">
+    <thead>
+        <tr>
+            @*<th>
+            <label id="label">Sr #</label>
+        </th>*@
+            <th>
+                <label id="label">Category 5</label>
+            </th>
+            <th>
+                <label id="label">sku's</label>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.HiddenFor(e => item.CatageorySub3Id)
+                    @Html.HiddenFor(e => item.CatageorySub4Id)
+
+                    @Html.DisplayFor(modelItem => item.CatageorySub4Name)
+                </td>
+                <td>0</td>
+                <td>
+                    <a asp-controller="Catageory" asp-action="DeleteCategorySub4" asp-route-id="@item.CatageorySub4Id" class="btn-link deleteAble">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

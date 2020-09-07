@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewData["Title"] = "Order History Of SKU";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<p class="text-primary my-0 py-3">Note:The below table shows lat 100 orders, for older orders, please select date range. </p>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // prepare the data
+            var source =
+            {
+                datatype: "json",
+                datafields: [
+                    { name: 'RowID'  },
+                    { name: 'InSellerCloud',type:'date' },
+                    { name: 'SellerCloudID',type:'string' },
+                    { name: 'MPID' },
+                    { name: 'TotalQuantity' },
+                    { name: 'UnitPrice' },
+                    { name: 'calculation_Comission' },
+                    { name: 'calculation_TotalTax' },
+                    { name: 'calculation_SumTotal' },
+                    { name: 'calculation_ProfitLoss' },
+                    { name: 'calculation_ProfitLossPercentage' },
+                    { name: 'AverageCost',type:'decimal' },
+                    { name: 'calculation_TotalAvgCost',type:'decimal' },
+
+                ],
+                url: '@Url.Action("GetSalesHistoryOfSKUJsonData", "HLDHistory")?ProductSku=@Context.Request.Query["ProductSku"].ToString()' ,
+                filter: function () {
+                    // update the grid and send a request to the server.
+                    $("#jqxgrid").jqxGrid('updatebounddata', 'filter');
+                }
+            };
+
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // initialize jqxGrid
+            $("#jqxgrid").jqxGrid(
+                {
+                    source: dataAdapter,
+                    filterable: true,
+                    showfilterrow: true,
+                    selectionmode: 'multiplecellsextended',
+                    showfilterrow: true,
+                    pageable: true,
+                    pagesize: 25,
+                    width: '95%',
+                    sortable: true,
+                    altrows: true,
+                    enabletooltips: true,
+                    editable:true,
+                    height:'900px',
+                    ready: function () {
+                        //$("#jqxgrid").find('.jqx-grid-column-header .jqx-checkbox-default').parent().on('change', function (event) {
+                        //    var state = event.args.checked;
+                        //    alert(state);
+                        //});
+
+                    },
+                    autoshowfiltericon: true,
+                    columns: [
+                        { text: 'SR #', datafield: 'RowID', editable: false,filterable:false,   width: 80 ,cellsalign:'center',align:'center'},
+                        { text: 'Date', datafield: 'InSellerCloud', editable: false, columntype: 'range', cellsformat: 'yyyy-MM-dd', cellsalign: 'center', align: 'center', filtertype: 'range', width: 200 },
+
+                        {
+                            text: 'BB Order #', datafield: 'MPID',editable: false, columntype: 'textbox', filtertype: 'input', width: 130, cellsalign: 'center', align: 'center',cellsrenderer: function (row)
+                            {
+                                var MPID = dataAdapter.records[row].MPID;
+                                return '<a style="margin-top: 10px;margin-left: 26px;display: table;"href="https://marketplace.bestbuy.ca/mmp/shop/order/' + MPID + '"  target="_blank">' + MPID + '</a>';
+                            }
+
+                        },
+                        {
+                            text: 'SC Order #', datafield: 'SellerCloudID',editable: false, columntype: 'textbox', filtertype: 'input', width: 130, cellsalign: 'center', align: 'center', cellsrenderer: function (row) 
+                            
+                                
+                                {
+                                var SellerCloudID = dataAdapter.records[row].SellerCloudID;
+                                return '<a style="margin-top: 10px;margin-left: 26px;display: table;"href="https://lp.cwa.sellercloud.com/Orders/Orders_Details.aspx?ID=' + SellerCloudID + '"  target="_blank">' + SellerCloudID + '</a><spans style="float: right;"> <a target="_blank"href="/BBOrderViewPage/OrderViewPage?SCorderid='+SellerCloudID+'"><img src="/Images/d.ico" style="margin-top:-30px;width:20px;margin-right: 10px;"></a></span>';
+                            }
+                                
+                                
+                                },
+                        { text: 'Qty', datafield: 'TotalQuantity', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
+                        { text: 'Avg Cost', datafield: 'AverageCost', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
+                        { text: 'Total Avg Cost', datafield: 'calculation_TotalAvgCost', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
+                        { text: 'Unit Price', datafield: 'UnitPrice', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
+                        { text: 'Sales Total', datafield: 'calculation_SumTotal', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
+                        { text: 'Fees', datafield: 'calculation_Comission', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
+                        { text: 'Tax', datafield: 'calculation_TotalTax', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
+                        { text: 'Profit', datafield: 'calculation_ProfitLoss', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
+                        { text: 'Profit%', datafield: 'calculation_ProfitLossPercentage', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' }
+                    ]
+                });
+
+
+        });
+    </script>
+    <div class="container-fluid">
+        <div id="jqxgrid"></div>
+    </div>
+}

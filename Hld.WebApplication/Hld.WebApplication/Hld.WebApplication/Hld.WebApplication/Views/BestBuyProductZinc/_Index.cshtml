@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyProductZincViewModel>
+
+<div class="container">
+
+
+    <table id="table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    ZASIN_CA
+                </th>
+                <th>
+                    Priority
+                </th>
+                <th>
+                    Ava Qty
+                </th>
+                <th>
+                    Amz Price
+                </th>
+                <th>
+                    Max Price
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Prime
+                </th>
+                <th>
+                    Reviews
+                </th>
+                <th>
+                    Feedback
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int sno = 0;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{ sno++; }
+                        @sno
+                    </td>
+                    <td>
+                        @Html.HiddenFor(modelItem => item.BestBuyProductZincID)
+
+                        @Html.DisplayFor(modelItem => item.ZincAsinCA)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Priority)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AvailableQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AmazonPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaxPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Prime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reviews)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Feedback)
+                    </td>
+                    <td>
+                        <a href="#" data-target="#myModal" data-toggle="modal" onclick="PopupForm('@Url.Action("AddUpdateBrand","Brand",new {id=item.BestBuyProductZincID } )')"> Edit </a>   |
+                        <a href="#" onclick="AddEditEmployee(@item.BestBuyProductZincID)"> Delete  </a>
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+
+

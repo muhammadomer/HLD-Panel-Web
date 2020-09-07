@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.PostDataViewModel>
+<style>
+    .table tbody td {
+        border-top:none!important;
+    }
+</style>
+<div class="container-fluid p-0">
+ 
+
+    
+        @*@Html.DisplayFor(modelItem => item.postdata)*@
+        <div class="container-fluid p-0"style="margin-left:50px;margin-top: 50px;">
+            <table class="table">
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr><td><div style="color:cornflowerblue;font-size:30px;font-family:Arial">@Html.Raw(item.posttitle)</div></td></tr>
+                        <tr>
+
+                            
+                            <td>
+                                <div>@Html.Raw(item.postdata)</div>
+                            </td>
+                        </tr>}
+                </tbody>
+                
+                
+            </table>
+
+        </div>
+   
+
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+
+
+
+}

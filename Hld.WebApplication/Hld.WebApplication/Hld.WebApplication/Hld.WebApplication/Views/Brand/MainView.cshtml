@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.ConditionViewModel>
+@{
+    Layout = "_LayoutNavigation";
+}
+
+<h6>Brand List</h6>
+<hr />
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="PopupForm('@Url.Action("AddUpdateBrand","Brand",new {id=0 })')">Add New Brand</button><br /><br />
+<div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Brand</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="indexView"></div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $.get('@Url.Action("Index","Brand")').done(function (response) {
+                $('#indexView').html(response)
+            });
+        });
+
+        $('body').on('keyup', '#BrandNameId', function () {
+            var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckBrandExists", "Brand")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExists').text("Already Exists").css("color", "red");
+                            $('#btnSaveBrand').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExists').text("Available").css("color", "green");
+                            $('#btnSaveBrand').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExists').text("");
+            }
+        });
+        function PopupForm(url) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+            });
+        }
+        function SubmitForm() {
+            var url = '@Url.Action("AddUpdateBrand", "Brand",new {id=0 })';
+            var data = $('#form1').serialize();
+
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success == true) {
+                            $.get('@Url.Action("Index","Brand")').done(function (response) {
+                                $('#indexView').html(response)
+                            });
+                            $('#myModal').modal('toggle');
+                            $.notify(data.message, { globalPosition: 'right middle', className: 'success' });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+    </script>
+
+}

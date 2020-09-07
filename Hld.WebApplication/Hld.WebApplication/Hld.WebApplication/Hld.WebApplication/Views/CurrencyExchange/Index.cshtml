@@ -1,0 +1,62 @@
+﻿
+@model IEnumerable<Hld.WebApplication.ViewModel.CurrencyExchangeViewModel>
+
+<div class="container">
+    <table id="table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sr. #
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    USD To CAD
+                </th>
+                <th>
+                    USD To CNY
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int sno = 0;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{ sno++; }
+                        @sno
+                    </td>
+                    <td>
+                        @item.dateTime.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.USD_To_CAD)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.USD_To_CNY)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td>
+                        <a href="#" data-target="#myModal" data-toggle="modal" onclick="PopupForm('@Url.Action("AddUpdateCurrencyExchange","CurrencyExchange",new {id=item.CurrencyExchangeID } )')"> Edit </a>   
+                        @*<a href="#" onclick="AddEditEmployee(@item.CurrencyExchangeID)"> Delete  </a>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+

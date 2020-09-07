@@ -1,0 +1,145 @@
+﻿@model S3LogViewModel
+@{
+    ViewData["Title"] = "JobLogs";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+
+<h6>Logs</h6>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Job #
+            </th>
+            <th>
+                Success #
+            </th>
+            <th>
+                Fail #
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+
+        <tr>
+            <td>
+                <span>@Model.job_id</span>
+            </td>
+            <td>
+                <span>@Model.Success</span>
+            </td>
+            <td>
+                <span>@Model.Fail</span>
+            </td>
+
+
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+@if (Model.Fail > 0)
+{
+    <div class="row">
+        <div class="col-lg">
+            <h6>Detail</h6>
+        </div>
+
+    </div>
+    @if (Model.message.FirstOrDefault().message.Contains("Order"))
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                  
+                    <th>
+                       Child Order ID #
+                    </th>
+                    <th>
+                        Message
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.message)
+                {
+
+
+
+
+                    <tr>
+                       
+                        <td>
+                            <span>@item.sku</span>
+                        </td>
+                        <td>
+                            <span>@item.message</span>
+                        </td>
+
+
+                    </tr>
+
+
+
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Row #
+                    </th>
+                    <th>
+                        SKU
+                    </th>
+                    <th>
+                        Message
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.message)
+                {
+
+
+
+
+                    <tr>
+                        <td>
+                            <span>@item.row</span>
+                        </td>
+                        <td>
+                            <span>@item.sku</span>
+                        </td>
+                        <td>
+                            <span>@item.message</span>
+                        </td>
+
+
+                    </tr>
+
+
+
+                }
+            </tbody>
+        </table>
+    }
+
+
+
+}

@@ -1,0 +1,32 @@
+﻿@model Hld.WebApplication.ViewModel.BestBuyCAviewModel
+
+@{
+    ViewData["Title"] = "BestBuyCAKeyvalue";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<h4>Best Buy</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @using (Html.BeginForm("UpdateBestBuyCredential", "Channels"))
+        {
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label asp-for="BestBuyCAKeyValue" class="control-label"></label>
+           
+            @Html.PasswordFor(model => model.BestBuyCAKeyValue, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.BestBuyCAKeyValue, "", new { @class = "text-danger" })
+        </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        }
+        
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Channels" asp-action="ViewBestBuyLogs">View Logs</a>
+</div>
+

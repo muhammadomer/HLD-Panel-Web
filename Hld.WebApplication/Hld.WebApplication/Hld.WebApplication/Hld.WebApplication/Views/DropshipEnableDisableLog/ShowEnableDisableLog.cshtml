@@ -1,0 +1,110 @@
+﻿@model IEnumerable<DropShipEnableDisableLogViewModel>
+@{
+    ViewData["Title"] = "ShowEnableDisableLog";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h6>BestBuy Qty Update Log</h6>
+<hr />
+<div class="container">
+
+
+    <table id="table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sr. #
+                </th>
+                <th>
+                    SKU
+                </th>
+                <th>
+                    Last Update
+                </th>
+                <th>
+                    DS Status
+                </th>
+                <th>
+                    Qty
+                </th>
+                <th>
+                    Comments
+                </th>
+                <th>
+                    MSRP
+                </th>
+                <th>
+                    SellPrice
+                </th>
+                <th>
+                    BB Product ID
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                     End Date
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int sno = 0;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{ sno++; }
+                        @sno
+                    </td>
+                    <td>
+                        
+                        @Html.DisplayFor(modelItem => item.ProductSku)
+                    </td>
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.LastUpdate)
+                    </td>
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.EnableDisable)
+                    </td>
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comments)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MSRP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SellingFee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BBProductID)
+                    </td>
+                    <td>
+                        @if (item.OfferStartDate.HasValue)
+                        {
+                            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.OfferStartDate.Value))
+                        }
+                    </td>
+                    <td>
+                        @if (item.OfferEndDate.HasValue)
+                        {
+                            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.OfferEndDate.Value))
+                        }
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+

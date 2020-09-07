@@ -1,0 +1,85 @@
+﻿@model ZincSettingViewModel
+@{
+    ViewData["Title"] = "ZincAccountSetting";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h1>Zinc Account Setting</h1>
+<div class="card">
+
+    <div class="card-header">Zinc Setting </div>
+
+
+    <div class="card-body">
+        <form method="post" asp-action="ZincSetting" asp-controller="Zinc"></form>
+        <h6>Retailer Credential</h6><hr />
+        <div class="form-row">
+            <div class="form-group col-sm-3">
+                <label asp-for="RC_email">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="RC_password">Password</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="RC_2fa_key">totp_2fa_key</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+        </div>
+        <h6>Billing Address</h6><hr />
+
+        <div class="form-row">
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_first_name">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_last_name">Password</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_address_line1">totp_2fa_key</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_address_line2">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_zip_code">Password</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_city">totp_2fa_key</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_city">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_state">Password</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="BA_country">totp_2fa_key</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="BA_phone_number">Address 2</label>
+            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Sign in</button>
+
+    </div>
+</div>
+
+
+

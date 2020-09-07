@@ -1,0 +1,134 @@
+﻿@model Hld.WebApplication.ViewModel.ZincProductSaveViewModel
+@using Hld.WebApplication.Models
+
+
+<div class="">
+
+    @if (Model != null)
+    {
+
+
+
+        @using (Html.BeginForm("AddUpdateZinc", "Zinc", FormMethod.Post, new { id = "form1" }))
+        {
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCity">ZASIN-CA</label>
+                    <input type="text" asp-for="ASIN" class="form-control">
+                    <span asp-validation-for="ASIN" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="max_price_limit">Max Price</label>
+                    <input type="text" class="form-control" asp-for="max_price_limit">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputZip">Priority</label>
+                    <select style="padding:0px" id="inputState" asp-for="Priorty" class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Seller Name :</label>
+                    @Html.DisplayFor(e => e.sellerName)
+                    <input type="hidden" asp-for="sellerName" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Prime Badge :</label>
+                    @Html.DisplayFor(e => e.item_prime_badge)
+                    <input type="hidden" asp-for="item_prime_badge" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Item Condition :</label>
+                    @Html.DisplayFor(e => e.item_condition)
+                    <input type="hidden" asp-for="item_condition" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Item Price :</label>
+                    @Html.DisplayFor(e => e.itemprice)
+                    <input type="hidden" asp-for="itemprice" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Item Available :</label>
+                    @Html.DisplayFor(e => e.itemavailable)
+                    <input type="hidden" asp-for="itemavailable" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Delivery Days Max :</label>
+                    @Html.DisplayFor(e => e.delivery_days_max)
+                    <input type="hidden" asp-for="delivery_days_max" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Delivery Days Min :</label>
+                    @Html.DisplayFor(e => e.delivery_days_min)
+                    <input type="hidden" asp-for="delivery_days_min" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Handling Days Min :</label>
+                    @Html.DisplayFor(e => e.handlingday_min)
+                    <input type="hidden" asp-for="handlingday_min" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Handling Days Max :</label>
+                    @Html.DisplayFor(e => e.handlingday_max)
+                    <input type="hidden" asp-for="handlingday_max" />
+                </div>
+            </div>
+
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Feedback :</label>
+                    @Html.DisplayFor(e => e.percent_positive)
+                    <input type="hidden" asp-for="percent_positive" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Timestemp :</label>
+                    @Html.DisplayFor(e => e.timestemp)
+                    <input type="hidden" asp-for="timestemp" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputCity">Status :</label>
+                    @Html.DisplayFor(e => e.status)
+                    <input type="hidden" asp-for="status" />
+                </div>
+            </div>
+
+
+
+            <input type="hidden" asp-for="bb_product_zinc_id" />
+            <input type="hidden" asp-for="Product_sku" />
+
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" id="btnSaveASIN" value="Submit" onclick="return SubmitFormProductASIN();" />
+                <input type="button" class="btn btn-danger" id="btnCancelASIN" value="Cancel" onclick="return CancelFormProductASIN();" />
+            </div>
+
+        }
+    }
+    else
+    {
+            <div>No Response From Zinc</div>
+    }
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

@@ -1,0 +1,390 @@
+﻿@model Hld.WebApplication.ViewModel.BBProductViewModel
+@{
+    ViewData["Title"] = "PropertyPage";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style type="text/css">
+    .removePadding {
+        padding-left: 0px !important;
+        padding-right: 3px !important;
+       
+    }
+    .CardStyle {
+        padding-left: 0px !important;
+        padding-right: 3px !important;
+        margin-left: 20px;
+        font-weight: 600;
+    }
+
+    .mainProductDetail {
+        background-color: honeydew;
+        border-radius: 2px;
+        padding-top: 5px;
+        padding-left: 7px;
+    }
+
+    
+</style>
+
+<h6 style="color: #60ABAF;font-weight: 600;">Product Dashboard </h6>
+<hr />
+
+<div class="row">
+    <div class="col-sm-2" id="warehouseQty">
+
+
+    </div>
+    <div class="col-sm-6">
+        <div id="ProductNavBar" style="background-color:#e1e1e2;border-radius:2px;">
+            <div class="container">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="PropertyPage" asp-controller="HLDHistory" asp-route-ProductSku="@Model.Product_Sku">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" asp-action="GetSalesHistoryOfSKU" asp-controller="HLDHistory" asp-route-ProductSku="@Model.Product_Sku">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="GetProductWarehouseQty" asp-controller="ProductWarehouseQty" asp-route-ProductSku="@Model.Product_Sku">Warehouse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  " href="#">Purchasing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  " href="#">Returns</a>
+                    </li>
+                    @*<li class="nav-item">
+                        <a class="nav-link UpdateSkuImage" href="#">Update Image</a>
+                        <span>
+                            <img style="display:none;" class="UpdateImageButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    </li>*@
+                    @*<li class="nav-item">
+                        <a class="nav-link" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@Model.Product_Sku" target="_blank">SC SKU</a>
+                    </li>*@
+                </ul>
+            </div>
+        </div>
+        <div id="mainProductDetail" class="mainProductDetail">
+
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="imagesDivMainView"></div>
+    </div>
+</div>
+
+
+
+
+<hr style="border:1px solid black;margin-right:10px;" />
+<div class="mainWrapper">
+    <div class="row">
+        <!--Start Left Menue-->
+        <div class="col-sm-2">
+            <div style="background-color:#e1e1e2;">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("PropertyPage","BestBuyProduct",new {ProductSKU=Model.Product_Sku })">BestBuy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("ProductZinc","Zinc",new {ProductSKU=Model.Product_Sku })">Zinc</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--End Left Menu-->
+        <!--Start MainSection-->
+        <div class="col-sm-10">
+
+            <div class="card">
+                <div style="padding:13px" class="card-header"></div>
+                <div class="row">
+                    <label class="control-label col-sm-2 CardStyle ">BB Product Title:</label>
+                    <div class="col-sm-9" style="margin-left: -60px;">
+                        @Html.DisplayFor(e => Model.Product_Title)
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-2  CardStyle  ">BB Category:</label>
+                    <div class="col-sm-9" style="margin-left: -60px;">
+                        @Html.DisplayFor(e => Model.BBCategory)
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="control-label col-sm-2 CardStyle ">BB Brand:</label>
+                    <div class="col-sm-9" style="margin-left: -60px;">
+                        - - -
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-sm-5">
+                    <form asp-controller="BestBuyProduct" asp-action="UpdateBestBuyProduct">
+                        <div class="card">
+                            <div style="padding:3px" class="card-header font-weight-bold">Dropship status </div>
+                            <div style="padding-bottom:9px;" class="card-body">
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-3">DropShip:<span> <input type="checkbox" asp-for="dropship_status" /></span></label>
+
+                                    <label class="control-label col-sm-4" style="padding-left:49px;">DropShip Qty:</label>
+                                    <input asp-for="dropship_Qty" type="text" class="form-control col-sm-2" />
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-3   ">Comments:</label>
+                                    <textarea class="form-control col-sm-7" asp-for="DropshipComments" cols="50" rows="3">
+                            </textarea>
+                                    <input type="hidden" asp-for="ShopSKU_OfferSKU" />
+                                </div>
+                                <input asp-for="BBProductID" type="hidden" class="form-control col-sm-2" />
+                                <div class="text-center" style="padding-bottom:0px">
+                                    <button class="btn btn-primary" type="submit" id="btnUpdateDetail">Update DropShip</button>
+                                    <span class="pl-sm-1">
+                                        <a style="display:inline" class="nav-link" target="_blank" asp-action="ShowEnableDisableLog" asp-controller="DropshipEnableDisableLog" asp-route-ProductSku="@Model.Product_Sku">DS Log</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-7">
+                    <div class="card">
+                        <div style="padding:3px" class="card-header font-weight-bold">BestBuy Product Status </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="control-label col-sm-3   ">BestBuy Product ID:</label>
+                                <div class="col-sm-4">
+                                    <input asp-for="BBProductID" class="form-control" />
+                                    <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@Model.BBProductID" target="_blank">
+                                        <img height="13px" width="15px" src="~/Images/BestBuy-Gray.png" />
+                                    </a>
+                                    <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@Model.BBProductID" target="_blank">
+                                        <img height="10px" width="15px" src="~/Images/openbb.png" />
+                                    </a>
+                                    <input type="hidden" asp-for="ShopSKU_OfferSKU" />
+                                    @*<a style="padding-left:2px;cursor:pointer" asp-controller="BestBuyProduct" asp-action="InsertProductToBBProduct" asp-route-SKU="@Model.Product_Sku" >
+                                        Update
+                                    </a>*@
+                                    
+                                </div>
+                                <label class="control-label col-sm-2    ">MSRP:</label>
+                                <div class="col-sm-3">
+                                    <input asp-for="UnitOriginPrice_MSRP" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="control-label col-sm-3   ">Offer Start Date:</label>
+                                <div class="col-sm-4">
+                                    <input name="DiscountStartDate" type="text" id="DiscountStartDate" value="@Model.DiscountStartDate" class="form-control" />
+                                </div>
+                                <label class="control-label col-sm-2  ">Selling Price:</label>
+                                <div class="col-sm-3">
+                                    <input asp-for="UnitDiscountPrice_SellingPrice" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row" style="padding-bottom: 0px;">
+                                <label class="control-label col-sm-3   ">Offer End Date:</label>
+                                <div class="col-sm-4">
+                                    <input name="DiscountEndDate" type="text" id="DiscountEndDate" value="@Model.DiscountEndDate" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--End Main Section-->
+                @*<div class="col-sm-4"></div>*@
+            </div>
+
+            @*<div class="row">
+            <!--Main Left Section-->
+            <div class="col-sm-6">
+                <div class="form-group row">
+                    <label class="control-label col-sm-4 removePadding text-right  ">BestBuy Enabled:</label>
+                    <div class="col-sm-1">
+                        <input type="checkbox" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-4 removePadding text-right  ">AvgCost (US$):</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-4 removePadding text-right  ">AvgCost (CA$):</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-4 removePadding text-right ">BB Selling Fee:</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-4 removePadding text-right  ">EST Ship Cost:</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-4 removePadding text-right  ">EST Cost:</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-4 removePadding text-right  ">EST Profit:</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <!--End Main left Section-->
+
+
+
+        </div>*@
+
+            <div class="card" style="margin-top: 15px;">
+                <div style="padding:13px" class="card-header"></div>
+                <form style="margin-top:20px;padding-right:15px;margin-left:15px;">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">AvgCost (US$):</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" />
+                        </div>
+                        <label class="col-sm-2 col-form-label">AvgCost (CA$):</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label ">BB Selling Fee:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" />
+                        </div>
+                        <label class="col-sm-2 col-form-label  ">EST Ship Cost:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label ">EST Cost:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" />
+                        </div>
+                        <label class="col-sm-2 col-form-label    ">EST Profit:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label class="control-label  ">BestBuy Enabled:</label>
+                            <input style="margin-left: 83px;" type="checkbox" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <input type="hidden" value="@Model.Product_Sku" id="HfProductId" />
+
+
+        </div>
+
+        @section Scripts{
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#DiscountStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
+                    $("#DiscountEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
+                    function ShowImages() {
+
+                        if ($('#HfProductId').length > 0) {
+                            $.get('/Product/ProductDetailView/' + $('#HfProductId').val() + '').done(function (response) {
+                                $('#mainProductDetail').html(response);
+                            });
+
+                            $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
+                                var $container = $(response).wrap('<div />');
+                                $container.find('span.close').remove();
+                                $('#imagesDivMainView').html($container);
+
+                            });
+
+                            $.get('/Product/PoroductWarehouseQty?sku=' + $('#HfProductId').val() + '').done(function (response) {
+                                $('#warehouseQty').html(response);
+                            });
+                        }
+                    }
+                    ShowImages();
+
+                    $(document).on('click','.UpdateSkuImage',function () {
+                        var URL = '/SellerCloud/UpdateImageFromSellerCloudBySKU';
+                        $('.UpdateImageButtonLoader').css('display', 'inline');
+                        var productSKU = $('#HfProductId').val().trim();
+                        $.ajax({
+                            type: 'Get',
+                            url: URL,
+                            data: { sku: productSKU },
+                            dataType: 'json',
+                            traditional: true,
+                            success: function (data) {
+                                 $(document).find('.UpdateSkuImage').removeAttr('disabled');
+                                 $(document).find('.UpdateImageButtonLoader').css('display', 'none');
+                                if (data.success) {
+                                    $.notify('Update Successfully', { globalPosition: 'bottom right', className: 'success' });
+                                    ShowImages();
+                                }
+                                else if (data.ImageNotFound) {
+                                    $.notify('Image Not Found', { globalPosition: 'bottom right', className: 'warn' });
+                                }
+                                else if (data.ImageAlreadyExist) {
+                                    $.notify('Image Already Exist', { globalPosition: 'bottom right', className: 'info' });
+                                }
+                                else {
+                                    $.notify('some error occured', { globalPosition: 'bottom right', className: 'error' });
+                                }
+                            }
+                        });
+                    });
+
+                    
+                 
+
+                });
+
+                $(document).on('click', '#GetquantityFromSellerCloud', function () {
+
+
+                  var loader =   $(document).find('.ButtonLoader1');
+                  var  selSKU = $(this).attr('data-id');
+            
+
+                $(loader).css('display', 'block');
+               
+         $.get('/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloud?sku=' + selSKU + '').done(function (response) {
+                $(loader).css('display', 'none');
+                                 $(document).find('#warehouseQty').html(response);
+           });
+                
+
+            });
+            </script>
+
+        }
+
+
+
+
+

@@ -1,0 +1,151 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.AliasViewModel>
+@{
+    Layout = "_LayoutNavigation";
+}
+
+<h6>Color List</h6>
+<hr />
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="PopupForm('@Url.Action("AddUpdateColor","Color",new {id=0 })')">Add New Color</button><br /><br />
+<div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+    <div class="modal-dialog" style="width:1000px;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Color</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="indexView"></div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $.get('@Url.Action("Index","Color")').done(function (response) {
+                $('#indexView').html(response)
+            });
+
+            $('body').on('keyup', '#ColorNameId', function () {
+                capitalize_Words($(this).val(), 'ColorNameId');
+
+                 var textBoxValue = $(this).val().trim();
+
+            if (textBoxValue.length > 0) {
+            $.ajax({
+                    type: "POST",
+                url: '@Url.Action("CheckColorExists", "Color")',
+                data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+
+                            $('#ColorExists').text("Already Exists").css("color","red");
+                            $('#btnSaveColor').attr("disabled", true)
+                        }
+                        else {
+                            $('#ColorExists').text("Available").css("color", "green");
+                            $('#btnSaveColor').attr("disabled", false)
+                        }
+                    }
+                });
+                }
+            else {
+                $('#ColorExists').text("")
+            }
+            });
+
+            function capitalize_Words(str, id) {
+                var data = str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1) });
+                $('#' + id).val(data);
+            }
+
+            $('body').on('keyup', '#ColorAliasId', function () {
+                $(this).addClass('text-uppercase');
+                  var textBoxValue = $(this).val().trim();
+
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckColorAliasExists", "Color")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+
+                            $('#ColorAliasExists').text("Already Exists").css("color", "red");
+                            $('#btnSaveColor').attr("disabled", true)
+                        }
+                        else {
+                            $('#ColorAliasExists').text("Available").css("color", "green");
+                            $('#btnSaveColor').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#ColorAliasExists').text("");
+            }
+            });
+
+            function capitalize_Words(str, id) {
+                var data = str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1) });
+                $('#' + id).val(data);
+            }
+
+        });
+
+
+
+
+        function PopupForm(url) {
+            $.get(url).done(function (response) {
+                $('#modelBody').html(response);
+            });
+        }
+        function SubmitForm() {
+            var url = '@Url.Action("AddUpdateColor", "Color",new {id=0 })';
+            var data = $('#form1').serialize();
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $.ajax({
+
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success == true) {
+                            $.get('@Url.Action("Index","Color")').done(function (response) {
+                                $('#indexView').html(response)
+                            });
+                            $('#myModal').modal('toggle');
+                            $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+        function ColorValueInRGB(ColorValue) {
+            var value = $(ColorValue).val().match(/[A-Za-z0-9]{2}/g);
+            value = value.map(function (v) {
+                return parseInt(v, 16);
+            });
+            var data = "rgb(" + value.join(",") + ")";
+            $('#ColorCodeId').empty();
+            $('#ColorCodeId').val(data);
+        }
+
+ 
+
+    </script>
+
+}

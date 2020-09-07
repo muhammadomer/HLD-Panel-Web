@@ -1,0 +1,64 @@
+﻿@model IEnumerable<TagViewModel>
+
+@{
+    ViewData["Title"] = "TagList";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    .taground {
+        color: white;
+        font-size: 12px;
+        padding: 3px;
+        border: none;
+        border-radius: 3px;
+    }
+</style>
+
+<div>
+    <h4>TagList</h4>
+    <table id="table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sr. #
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Action
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int sno = 0;
+            }
+            @foreach (var list in Model)
+            {
+
+                <tr>
+                    <td>
+                        @{ sno++; }
+                        @sno
+                    </td>
+                    <td>
+                        @Html.HiddenFor(model => list.TagId)
+
+                        <span class="taground" style="background-color:@list.TagColor;">@list.TagName</span>
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = list.TagId }) |  @Html.ActionLink("Delete", "Delete", new { id = list.TagId })
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+
+
+    <a asp-action="Create">Back to List</a>
+</div>

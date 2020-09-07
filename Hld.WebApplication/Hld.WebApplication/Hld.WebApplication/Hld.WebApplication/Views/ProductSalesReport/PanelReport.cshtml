@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewData["Title"] = "PanelReport";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+
+<h1>PanelReport</h1>
+
+<form id="form1" runat="server">
+    <div style="width: 900px; border: 1px solid black; padding: 3px">
+        <table id="MyTable">
+            <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Total Cost</th>
+                    <th>Total Sales</th>
+                    <th>Total Amount</th>
+                    <th>Profit %</th>
+                </tr>
+            </thead>
+
+        </table>
+    </div>
+</form>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            //$('#MyTable').DataTable({
+            //    columns: [
+            //        { 'data': 'offer_sku' },
+            //        { 'data': 'Qty' },
+            //        { 'data': 'UnitPrice' },
+            //        { 'data': 'total_Cost' },
+            //        { 'data': 'total_Sales' },
+            //        { 'data': 'Total_Amount' },
+            //        { 'data': 'P_L' }
+            //    ],
+            //    bServerSide: true,
+            //    sAjaxSource: 'PanelReportDatatable'
+            //});
+
+
+            var table = $('#MyTable').DataTable({
+                language: {
+                    processing: "Loading Data...",
+                    zeroRecords: "No matching records found"
+                },
+                processing: true,
+                serverSide: true,
+                orderCellsTop: true,
+                autoWidth: true,
+                deferRender: true,
+                lengthMenu: [[5, 10, 15, 20, -1], [5, 10, 15, 20, "All"]],
+                dom: '<tr>',
+
+                ajax: {
+                    type: "POST",
+                    url: '/ProductSalesReport/PanelReportDatatable/',
+                    contentType: "application/json; charset=utf-8",
+                    async: true,
+
+                    data: function (data) {
+                        let additionalValues = [];
+                        additionalValues[0] = "Additional Parameters 1";
+                        additionalValues[1] = "Additional Parameters 2";
+                        data.AdditionalValues = additionalValues;
+
+                        return JSON.stringify(data);
+                    },
+                    success: function (data)
+                    {
+
+                    }
+                },
+                columns: [
+                    {
+                        data: "offer_sku",
+                        name: "offer_sku"
+
+                    },
+                    {
+                        data: "Qty",
+                        name: "Qty"
+                    },
+                    {
+                        data: "UnitPrice",
+                        name: "UnitPrice"
+                    },
+                    {
+                        data: "total_Cost",
+                        name: "total_Cost"
+                    },
+                    {
+                        data: "total_Sales",
+                        name: "total_Sales"
+                    },
+                    {
+                        data: "Total_Amount",
+                        name: "Total_Amount"
+                    }, {
+                        data: "P_L",
+                        name: "P_L"
+                    }
+
+                ]
+            });
+        });
+    </script>
+}

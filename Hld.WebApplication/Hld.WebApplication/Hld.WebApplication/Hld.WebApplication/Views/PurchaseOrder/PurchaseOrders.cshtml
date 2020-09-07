@@ -1,0 +1,478 @@
+﻿@model Hld.WebApplication.ViewModel.PurchaseOrdersViewModel
+@{
+    ViewData["Title"] = "PurchaseOrders";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+<style>
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .ms-options-wrap.ms-active > .ms-options {
+        max-width: 400px !important;
+        min-height: 92px !important;
+    }
+
+    .ms-options-wrap > button:focus, .ms-options-wrap > button {
+        border-radius: 4px;
+        height: 25px;
+        outline: none !important;
+    }
+
+    ms-options-wrap > button:focus, .ms-options-wrap > button {
+        padding: 1px 0px 1px 2px !important;
+    }
+
+    .ms-options-wrap > .ms-options > ul label {
+        width: 101% !important;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            /*width: 300px;
+            height: 220px;*/
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+
+    .searchFormcard {
+        position: fixed;
+        background: white;
+        width: 97%;
+        padding: 58px 0px;
+        top: 10px;
+        z-index: 500;
+    }
+
+    .fixedclassforpagination {
+        position: fixed;
+        top: 204px;
+        width: 400px;
+        z-index: 500;
+        background: white;
+    }
+
+    .ui-autocomplete {
+        z-index: 2000;
+    }
+    .select2-container {
+        box-sizing: border-box;
+        display: inline-block;
+        margin: 0;
+        width: 175px !important;
+        position: relative;
+        vertical-align: middle;
+    }
+
+        .select2-container .select2-selection--single {
+            box-sizing: border-box;
+            cursor: pointer;
+            display: block;
+            height: 26px !important;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+    .select2-container--default .select2-results > .select2-results__options {
+        max-height: 275px;
+        overflow-y: auto;
+    }
+
+    .select2-container .select2-selection--single .select2-selection__rendered {
+        display: block;
+        padding-left: 8px;
+        padding-right: 20px;
+        outline: none;
+        line-height: 26px !important;
+        box-shadow: none !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+
+<div class="container-fluid ">
+    <div class="loader">
+        <img src="~/Images/giffff.gif" />
+    </div>
+    <div class="mb-1 searchFormcard" id="searchForm">
+        <div class="col-sm-12">
+            <div class="card">
+
+                <div class="card-header">Search Product</div>
+
+                @using (Html.BeginForm("PurchaseOrders", "PurchaseOrder", FormMethod.Get))
+                {
+                    <div class="card-body">
+
+                        <div class="row">
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                            {
+                                @*<div class="col-md-1 p-0 mr-1">*@
+
+                                @*<input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor22" class="form-control" />*@
+                                @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                                @*<span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>*@
+
+                                @*@Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })*@
+                                @*</div>*@
+                                <div style="margin-right:6px;">
+                                    <select class="js-example-basic-single form-control PurchaseOrder" name="VendorId" id="vendor">
+
+                                        <option value="">Vendor</option>
+
+
+                                    </select>
+                                </div>
+
+
+                            }
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                            {
+                                <div class="col-md-1 p-0 mr-1">
+                                    <input type="number" id="POID" name="POID" value="@Model.POId" placeholder="PO #" class="form-control" style="box-shadow: none" />
+                                    @*<input asp-for="POId" type="search" id="Vendor" placeholder="PO #" class="form-control" />*@
+                                    @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                                    <span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>
+
+                                    @Html.HiddenFor(e => Model.POId, htmlAttributes: new { @id = "POIdForMessage", @name = "POID" })
+                                </div>
+                            }
+
+
+
+
+
+                            <div class="col-md-2 p-0" style="margin-right: 0px;">
+                                <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;box-shadow:none">
+                                    <i class="fa fa-calendar"></i>&nbsp;
+                                    <span></span> <i class="fa fa-caret-down"></i>
+                                </div>
+                                <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+                                <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
+                            </div>
+                            <div class=" col-md-1 p-0 mr-1"style="margin-left: 5px;">
+                                <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 QuantityStatus" multiple="multiple" style="box-shadow:none">
+                                    <option value="OpenItem">Open Item</option>
+                                    <option value="ReceivedItem">Received Item</option>
+                                    <option value="OrderdItem">Ordered Item</option>
+                                    <option value="NotShipped">Not Shipped</option>
+                                </select>
+                                <input type="hidden" name="ItemType" id="ddlQuantity" />
+                            </div>
+                            <div class="col-md-1">
+                                <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row col col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: -4px;">
+        <div class="col col-md-6">
+            <div class="row">
+                <div class="pagination col-md-6 col">
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <span> Total Orders Found : @ViewBag.TotalCount</span>
+        </div>
+
+
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="pagination" style="padding-left: 10px;">
+
+    </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            function vendorlistgetInPredictPurchaseOrder() {
+
+                $.ajax({
+                    url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.UserName + '">' + value.UserAlias + '</option>';
+
+
+
+                        });
+
+                        $(".PurchaseOrder").append(content);
+
+                        $(".PurchaseOrder").val(@Model.VendorId);
+
+                    }
+                })
+
+
+
+            }
+
+            vendorlistgetInPredictPurchaseOrder();
+            $(".PurchaseOrder").select2();
+
+
+            if ('@Model.POId' == 0) {
+                $("#POID").val("");
+            }
+
+            var start = moment().subtract(7, 'days');
+            var end = moment();
+
+            function cb(start, end) {
+
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+
+            $("#orderDateTimeFrom").datepicker({ dateFormat: 'yy-mm-dd' });
+
+
+            $("#orderDateTimeTo").datepicker({ dateFormat: 'yy-mm-dd' });
+
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+
+                selectedDateFrom = picker.startDate.format('YYYY-MM-DD');
+                selectedDatTo = picker.endDate.format('YYYY-MM-DD');
+                $("#orderDateTimeTo").val(selectedDatTo);
+                $("#orderDateTimeFrom").val(selectedDateFrom);
+                console.log($("#orderDateTimeTo").val());
+                console.log(selectedDatTo);
+            });
+            $('select[multiple].active.3col.QuantityStatus').multiselect({
+                columns: 1,
+                placeholder: 'Quantity Type',
+                maxPlaceholderOpts: 1,
+
+                selectAll: false,
+                onOptionClick: function (element, option) {
+                    $('#ddlQuantity').val($(element).val());
+                    $(element).val();
+                },
+            });
+
+
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
+
+            var Vendor = getUrlParameter('VendorId');
+            //if (Vendor == null || Vendor == "") {
+            //    $("#VendorIdForMessage").val(0);
+            //}
+
+            var item = getUrlParameter('ItemType');
+            var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
+            var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
+            //var VendorId = $("#VendorIdForMessage").val();
+
+            var POID = getUrlParameter("POID");
+
+              //pagination
+              $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                  format: '[< nncnn >]',
+                  perpage: 25, // show 10 elements per page
+                  lapping: 0, // don't overlap pages for the moment
+                  page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                  onSelect: function (page) {
+                      var item = getUrlParameter('ItemType');
+                      pageNo = page;
+                        // add code which gets executed when user selects a page
+                      var url = '/PurchaseOrder/PurchaseOrdersList?page=' + page + '&Vendor=' + Vendor + '&POID=' + POID +'&ItemType=' + item + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo
+                      var completURL = url  ;
+                      $(".loader").show();
+
+                      $.ajax({
+                          url: completURL,
+                          data: {  },
+                          type: 'POST',
+                          traditional: true,
+                          success: function (data) {
+                              $('#loadOrder').empty();
+                              $('#loadOrder').html(data);
+                              $(".loader").hide();
+                              $(function () {
+                                  $("table").tablesorter();
+                              })
+                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                          }
+                      });
+                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined"  )
+                      {
+                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                              start = moment(OrderDateTimeFrom);
+                              end = moment(OrderDateTimeTo);
+
+                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                          }
+                          else
+                          {
+                              $('#reportrange span').html("No Date Selected");
+                          }
+
+                      }
+                      else {
+                          $('#reportrange span').html("No Date Selected");
+                      }
+
+
+                      //$.get(completURL).done(function (response) {
+                      //      $('#loadOrder').empty();
+                      //      $('#loadOrder').html(response);
+
+                      //      $('#tableOrderList').stickyTableHeaders({ fixedOffset: 65 });
+                      //  });
+                    },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                  }
+
+
+                });
+            //$('#Vendor').autocomplete({
+            //    autoFocus: true,
+            //    source: function (request, response) {
+            //        $.ajax({
+            //            url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+            //            type: "POST",
+            //            minLength: 3,
+            //            dataType: "json",
+            //            data: { Prefix: request.term },
+            //            success: function (data, ui) {
+
+            //                //if (data.length > 0) {
+            //                response($.map(data, function (item) {
+            //                    if (item != null) {
+            //                        return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+            //                    }
+
+            //                }));
+            //            }
+            //        })
+            //    },
+            //    select: function (event, ui) {
+
+            //        $('#VendorIdForMessage').val(ui.item.id);
+            //    },
+            //    response: function (event, ui) {
+            //        console.dir(ui.content)
+            //        if (ui.content.length === 0) {
+            //            $("#empty-message-Vendor").text("No results found");
+            //            $('#VendorIdForMessage').val("0");
+
+            //            $('#InputSubmit').attr("disabled", true)
+            //        } else {
+            //            $("#empty-message-Vendor").empty();
+            //            $('#InputSubmit').attr("disabled", false)
+            //        }
+            //    }
+            //});
+            if (item != null) {
+                var res = item.split(",");
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+                            $('#ddlQuantity').val($(this).val());
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+}

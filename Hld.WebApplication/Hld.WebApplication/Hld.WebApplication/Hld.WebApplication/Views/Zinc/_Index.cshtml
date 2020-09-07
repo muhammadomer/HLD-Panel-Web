@@ -1,0 +1,292 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.ZincProductSaveViewModel>
+
+<style>
+    .imggg {
+        width: 16px;
+        border-radius: 2px;
+        height: 16px;
+        border: 1px solid black;
+        position: relative;
+        cursor: pointer;
+        display:inline-flex;
+        margin-top:2px;
+    }
+
+        .imggg p {
+            line-height: 17px;
+            font-weight: 600;
+            color: green;
+            position: absolute;
+            margin-left: 1px;
+        }
+
+    .tooltip {
+        position: relative;
+        display: contents;
+    }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 531px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            font-family: arial;
+            position: absolute;
+            z-index: 71;
+            bottom: 64%;
+            left: 23%;
+            margin-bottom: 13px;
+            margin-left: -167px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltip .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    .tooltipactive {
+        position: relative;
+        display: contents;
+    }
+
+        .tooltipactive .tooltiptextt {
+            visibility: hidden;
+            width: 233px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            text-align: left;
+            padding-left: 10px;
+            font-family: arial;
+            position: absolute;
+            z-index: 71;
+            bottom: 64%;
+            left: 4%;
+            margin-bottom: 12px;
+            margin-left: -37px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltipactive .tooltiptextt::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltipactive:hover .tooltiptextt {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>
+<div class=""style="width:1060px">
+
+
+    <table id="table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sr #.
+                </th>
+                <th>
+                    ZASIN_CA
+                    <span class="tooltipactive">
+                        <i class=" fa fa-info" style="cursor:pointer;margin-left:5px!important;width:0.3em!important" data-id=""></i>
+                        <span class="tooltiptextt">
+                            Gray = Not Active, Not in Watchlist <br />
+                            Orange = Not Active but in watchlist <br />
+                            Green = Active and in Watchlist <br />
+                        </span>
+                    </span>
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Active
+                    <span class="tooltip">
+                        <i class=" fa fa-info" style="cursor:pointer;margin-left:5px!important;width:0.3em!important" data-id=""></i>
+                        <span class="tooltiptext">If Enabled, that means watchlist is active & continue updating offer data as per given conditions, if Disabled that means watchlist is not active & will not update offer data</span>
+                    </span>
+                </th>
+                <th>
+                    Priority
+                </th>
+                <th>
+                    SKU
+                </th>
+                <th>
+                    Amz Price
+                </th>
+                <th>
+                    Max Price
+                </th>
+
+                <th>
+                    Feedback
+                </th>
+
+                <th>
+                    Update Time (EST)
+                </th>
+                <th>
+                    Action
+                </th>
+                <th>
+                    Update Zinc
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int sno = 0;
+            }
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @{ sno++; }
+                    @sno
+                </td>
+                <td>
+                    @Html.HiddenFor(modelItem => item.bb_product_zinc_id)
+                    <a href="https://www.amazon.ca/dp/@item.ASIN" target="_blank">@item.ASIN</a>
+                    @if (item.ValidStatus == 1)
+                    {
+                        <span>
+                            <a href="#" data-target="#myModalAzin" data-toggle="modal" onclick="PopupFormwatchlist('@Url.Action("AddWatchlist","ZincWatchlist",new {Asin=item.ASIN,ProductSKU=item.Product_sku })')"><img src="~/Images/green.png" style="height:18px" /></a>
+                        </span>
+                    }
+                    else if (item.ValidStatus == 0 && Convert.ToDecimal(item.Frequency) > 0)
+                    {
+                        <span>
+                            <a href="#" data-target="#myModalAzin" data-toggle="modal" onclick="PopupFormwatchlist('@Url.Action("AddWatchlist","ZincWatchlist",new {Asin=item.ASIN,ProductSKU=item.Product_sku })')"><img src="~/Images/orange.png" style="height: 18px" /></a>
+                        </span>
+                    }
+                    else
+                    {
+                        <span>
+                            <a href="#" data-target="#myModalAzin" data-toggle="modal" onclick="PopupFormwatchlist('@Url.Action("AddWatchlist","ZincWatchlist",new {Asin=item.ASIN,ProductSKU=item.Product_sku })')"><img src="~/Images/gray.png" style="height:18px" /></a>
+                        </span>
+                    }
+
+                    <span>
+                        @*<a href="#" onclick="location.href = '@Url.Action("MainViewLogs","ZincWatchlist",new {perameter="ASIN",value=item.ASIN }) '"> <img src="~/Images/icons8-log-50.png" style="height:18px" /></a>*@
+
+                        <a href="@Url.Action("MainViewLogs", "ZincWatchlist", new {ASIN=item.ASIN,jobID=" " ,available=" "})"
+                           target="_blank">
+                            <img src="~/Images/icons8-log-50.png" style="height:18px" />
+                        </a>
+                    </span>
+                    @*@Html.DisplayFor(modelItem => item.ASIN)*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.primeAvailable)
+                </td>
+                <td>
+                    @if (item.ValidStatus == 0)
+                    {
+                        <span class="custom-control switchval custom-switch" value="@item.ASIN">
+                            <input type="checkbox" class="custom-control-input customSwitch1" id="@item.ASIN">
+                            <label class="custom-control-label" for="@item.ASIN"></label>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="custom-control switchval custom-switch" value="@item.ASIN">
+                            <input type="checkbox" class="custom-control-input customSwitch1" checked id="@item.ASIN">
+                            <label class="custom-control-label" for="@item.ASIN"></label>
+                        </span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Priorty)
+                </td>
+                <td>
+                    @foreach (var SKU in item.listSKU)
+                    {
+                      
+                        <span><a style="cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-productsku="@SKU.productsku" target="_blank">@SKU.productsku</a></span><br />
+                    }
+                </td>
+                <td>
+                    @{
+                        int item_price = Convert.ToInt32(item.itemprice);
+                        decimal itemprice = 0.0m;
+                        if (item_price > 0)
+                        {
+                            itemprice = (decimal)(item_price / 100.0);
+                        }
+
+                    }
+                    $@itemprice
+                </td>
+                <td>
+                    @{
+                        double max_price = Convert.ToDouble(item.max_price_limit);
+                        double maxprice = 0.0;
+                        if (max_price > 0)
+                        {
+                            maxprice = Convert.ToDouble(max_price / 100.0);
+                        }
+
+                    }
+
+                    $@maxprice
+                </td>
+
+                <td>
+                    @item.percent_positive%
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.updateDate)
+                </td>
+                <td>
+                    <a href="#" data-target="#myModal" data-toggle="modal" onclick="PopupForm('@Url.Action("AddUpdateZinc","Zinc",new {id=item.bb_product_zinc_id } )')"> Update </a>   |
+                    <a href="#" onclick="DeleteASIN(@item.bb_product_zinc_id)"> Delete  </a>
+                </td>
+                <td>
+                    <a href="#" onclick="GetUpdateFromZinc('@item.ASIN.Trim()',@item.bb_product_zinc_id,this)">Update From Zinc</a>
+                    <span>
+                        <img style="display:none;" class="addLoader-@item.bb_product_zinc_id" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+
+                    </span>
+                    <span class="addText-@item.bb_product_zinc_id">
+
+                    </span>
+                </td>
+            </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+
+

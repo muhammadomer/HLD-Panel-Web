@@ -1,0 +1,152 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.CatageoryMainViewModel>
+@{
+    ViewData["Title"] = "CategoriesListMainView";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style type="text/css">
+    .container {
+        width: 100% !important;
+    }
+</style>
+
+
+<div class="row">
+
+    <div id="mainCategory" class="col-md-3 remove">
+        <table id="mainCategory" class="table table-hover">
+            <thead>
+                <tr>
+                    @*<th>
+                            <label id="label">Sr #</label>
+                        </th>*@
+                    <th>
+                        <label id="label">Category 1</label>
+                    </th>
+                    <th>
+                        <label id="label">sku's</label>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CatageoryMainName)
+
+                            @Html.HiddenFor(modelItem => item.CatageoryMainId)
+                        </td>
+                        <td>0</td>
+                        <td>
+                            @if (item.status == "not-exists")
+                            {
+                                <a asp-controller="Catageory" asp-action="DeleteCategoryMain" asp-route-id="@item.CatageoryMainId" data-Url="/Catageory/CategoriesListSub1/@item.CatageoryMainId" class="deleteAble">Delete</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Catageory" asp-action="DeleteCategoryMain" asp-route-id="@item.CatageoryMainId" data-Url="/Catageory/CategoriesListSub1/@item.CatageoryMainId" style="pointer-events: none;color:lightgrey" class="disabled not-deleteAble">Delete</a>
+                            }
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div id="categorySub1" class="col-md-2 remove"></div>
+    <div id="categorySub2" class="col-md-2 remove"></div>
+    <div id="categorySub3" class="col-md-2 remove"></div>
+    <div id="categorySub4" class="col-md-2 remove"></div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on('click', '#mainCategory tr', function () {
+
+
+                $(this).parents(".remove").nextAll(".remove").find("table").remove();
+                 
+                 
+
+                var link = $(this).closest('tr').find('td > a');
+
+                if ($(link).hasClass("not-deleteAble")) {
+                    var href = $(link).attr('data-Url');
+                    var id = $(link).attr('id');
+                  
+                    $.get(href).done(function (response) {
+                        $('#categorySub1').html(response);
+                    })
+
+                }
+            });
+
+            $(document).on('click', '#categorySub1 tr', function () {
+
+                $(this).parents(".remove").nextAll(".remove").find("table").remove();
+
+                var link = $(this).closest('tr').find('td > a');
+
+                if ($(link).hasClass("not-deleteAble")) {
+                    var href = $(link).attr('data-Url');
+                    var id = $(link).attr('id');
+                    debugger;
+                    $.get(href).done(function (response) {
+
+                        $('#categorySub2').html(response);
+                    })
+
+                }
+            });
+            $(document).on('click', '#categorySub2 tr', function () {
+                $(this).parents(".remove").nextAll(".remove").find("table").remove();
+                var link = $(this).closest('tr').find('td > a');
+
+                if ($(link).hasClass("not-deleteAble")) {
+                    var href = $(link).attr('data-Url');
+                    var id = $(link).attr('id');
+                    debugger;
+                    $.get(href).done(function (response) {
+
+                        $('#categorySub3').html(response);
+                    })
+
+                }
+            });
+            $(document).on('click', '#categorySub3 tr', function () {
+                $(this).parents(".remove").nextAll(".remove").find("table").remove();
+                var link = $(this).closest('tr').find('td > a');
+
+                if ($(link).hasClass("not-deleteAble")) {
+                    var href = $(link).attr('data-Url');
+                    var id = $(link).attr('id');
+                    debugger;
+                    $.get(href).done(function (response) {
+
+                        $('#categorySub4').html(response);
+                    })
+
+                }
+            });
+
+            $(document).on('click', '.deleteAble', function () {
+
+                $.post($(this).attr('href'), "", function (response) {
+
+                    alert($(response).html());
+                });
+            });
+
+
+        });
+
+    </script>
+}
+
+
+
+

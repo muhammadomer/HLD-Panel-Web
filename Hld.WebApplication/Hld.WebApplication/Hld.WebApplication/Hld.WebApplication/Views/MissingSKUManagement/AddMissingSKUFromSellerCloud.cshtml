@@ -1,0 +1,241 @@
+﻿@model MissingSkuViewModel
+@{
+    ViewData["Title"] = "AddMissingSKUFromSellerCloud";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h6>Import Missing SKU From SellerCloud</h6>
+<div>
+    <div class="form-group row">
+        <div class="col-sm-6">
+
+
+            <form asp-controller="MissingSKUManagement" asp-action="AddMissingSKUFromSellerCloud" method="post">
+                <div class="row">
+                    <div class="float-right">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Add SKU's </label>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <textarea rows="10" class="form-control" id="skuList" asp-for="Sku" cols="50">                        
+             </textarea>
+                        <span asp-validation-for="Sku" class="text-danger"></span>
+                    </div>
+                    @*<input type="submit" id="btnSubmit" class="btn btn-primary" style="display:none;" value="Submit" />*@
+
+                    <div class="col-sm-6 hideWholeDiv">
+                        @if (ViewBag.missingSkuCounter == null)
+                        {
+                            <input type="submit" class="btn btn-primary" id="btnSubmit" value="Submit" />
+                            <div id="processingMessage" style="display:none;">
+                                <img style="height:30px;width:30px" src="~/Images/loadingImage.gif" />
+                                <span>Please wait . . . . .</span>
+                            </div>
+                        }
+
+                        @if (ViewBag.missingSkuCounter > 0)
+                        {
+                            <label style="color:red;font-weight:bold;" class="m-sm-1 hideMessages" id="missingSku">Missing SKU :@ViewBag.missingSkuCounter</label>
+                            <input type="button" id="btnAddMissingSku" value="Add Missing SKU's" class="btn btn-primary" />
+                            <img style="height:30px;width:30px;display:none;" id="rotatingImage" src="~/Images/loadingImage.gif" />
+                        }
+                        @if (ViewBag.existSKUCounter > 0)
+                        {
+                            <label style="color:green;font-weight:bold;" class="m-sm-1 hideMessages" id="missingSku">Existing SKU :@ViewBag.existSKUCounter</label>
+                        }
+                    </div>
+
+                    <div class="appendDynamicMessage"></div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-2">
+                    <apan class="row m-l-0">  SKU (Primary) </apan>
+                </div>
+                <div class="col-sm-7">
+
+                    <form method="post" asp-action="UploadAsinSkuMappingToS3" id="UploadFile" enctype="multipart/form-data">
+                        <div class="card">
+                            <div class="card-header">Choose Excel File <span class="text-left">   @Html.ActionLink("Template File", "DownloadformS3", "UploadFilesToS3ForJobs", new { file = "MissingSKU.xlsx", bucket = "jobsfilesbucket/MissingSKUFromSellerCloud" })</span></div>
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-md-9">
+                                        <input type="file" id="fUploadDS" multiple name="files" class="" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div style="margin-top:5px;margin-bottom:5px;" class="offset-9 col-sm-1">
+                                        <input class="btn btn-primary" type="button" id="btnUploadFile" value="Upload" />
+                                    </div>
+                                    <div class="offset-9 col-sm-2">
+                                        <img style="display:none;" class="uploadDSFileStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </form>
+                    <a asp-action="S3JobDetail" target="_blank" asp-controller="UploadFilesToS3ForJobs">View Jobs</a>
+
+                </div>
+                <div class="col-sm-3">
+
+                    <div class="col-sm">
+                        <div class="alert alert-success  successmessage1" style="padding:5px">
+                            <a href="#" class="close" aria-label="close">&times;</a>
+                            <strong>Success!</strong><span class="successAppend1"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="alert alert-danger  dangermessage1" style="padding:5px">
+                            <a href="#" class="close" aria-label="close">&times;</a>
+                            <strong>Error!</strong><span class="failureAppend1"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="container-fluid p-0">
+        <table class="table MissingSkutable table-bordered">
+            <thead style="background-color:lightgrey">
+                <tr>
+
+                    <th data-sorter="false"style="width:1%;">
+                        <label>Image</label>
+                    </th>
+                    <th style="width:1%;">
+                        <div class="tablesorter-header-inner"> <i class="tablesorter-icon"></i> SKU/<br>BB Product ID</div>
+                        <label style="display:none;">
+                            SKU <span class="sku" data-value="asc" style="padding-left:10px;display:none"><u>A-Z</u></span>
+                            <span class="sku" data-value="desc" style="padding-left:10px;display:none"><u>Z-A</u></span>
+                        </label>
+                    </th>
+                    <th data-sorter="false" style="width:7%;">
+                        <label>Title</label>
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody id="getskulist">
+
+            </tbody>
+
+        </table>
+    </div>
+    <div id="tableProductList1">
+        @if (ViewData["existingSku"] != null)
+        {
+            <h6>Existing Sku</h6>
+            @await Html.PartialAsync("~/Views/Product/_ProductBasicDetail.cshtml", ViewData["existingSku"] as IEnumerable<ProductDisplayViewModel>)
+        }
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+           
+            $(".MissingSkutable").hide();
+            $('.successmessage1').hide();
+      
+            $('.dangermessage1').hide();
+        $('#btnSubmit').click(function () {
+            
+                $('#processingMessage').css('display', 'inline');
+           
+            //$('#btnSubmit').attr('disabled', 'disabled');
+        });
+         var img = '@ViewBag.S3BucketURL_large';
+        $('#btnAddMissingSku').click(function () {
+           
+            $('#rotatingImage').css('display', 'inline');
+            $.get('@Url.Action("AddMissingSkuListFromSession", "MissingSKUManagement")').done(function (response) {
+                $('#rotatingImage').css('display', 'none');
+                $(this).hide();
+                $("#tableProductList1").hide();
+                $(".MissingSkutable").show();
+                $('.hideWholeDiv').hide();
+                $('#skuList').val('');
+                console.log(img);
+                $.each(response.viewmodel, function (key, value) {
+                    var tempdata = "<tr><td><a target='_blank' href='@ViewBag.S3BucketURL_large/" + value.ImageURL + "'><img src='" + img + "/" + value.ImageURL + "' class='rounded' height='50' width='50' /></a></td><td style='vertical-align: middle;'><a  href ='https://erp.hldinc.net/Zinc/ProductZinc?ProductSKU=" + value.ProductSKU + "' target = '_blank'>" + value.ProductSKU + "</a><br> <a href='/BestBuyProduct/PropertyPage?ProductSKU=" + value.ProductSKU+"' target='_blank'><img class='displayed1' src='/Images/BestBuyImage.png' height='12px' width='14px' alt='' /></a></td><td style='vertical-align: middle;'>" + value.ProductTitle + "</td></tr>"
+                    $(".MissingSkutable tbody").append(tempdata);
+                })
+                $('.appendDynamicMessage').append([
+                    $('<label/>').css({ 'color': 'red', 'font-weight': 'bold', 'margin-right': '10px' }).text("SKU's in Error :" + response.ErrorSku),
+                    $('<label/>').css({ 'color': 'green', 'font-weight': 'bold', 'margin-right': '10px' }).text("Missing SKU's Added :" + response.AddedSku),
+                    $('<label/>').css({ 'color': 'blue', 'font-weight': 'bold', 'margin-right': '10px' }).text("No Sku Found :" + response.NoResult),
+                    $('<br/>'),
+                    $('<label/>').text(response.AddedSku+" Missing SKU's added successfully")
+                    ]);
+                $('#btnSubmit').css('disply', 'inline');
+                //$('.appendDynamicMessage').append("<label/>").css({ 'color': 'red', 'font-weight': 'bold' }).text("SKU's Error :" + response.ErrorSku);
+
+                //$('.appendDynamicMessage').append("<label/>").css({ 'color': 'green', 'font-weight': 'bold' }).text("SKU's Added :" + response.AddedSku);
+            });
+        });
+
+
+        $('#btnUploadFile').click(function () {
+                $('#btnUploadFile').attr('disabled', true);
+                $('.uploadDSFileStatus').css('display', 'inline');
+                var files = $('#fUploadDS').prop("files");
+                var fdata = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fdata.append("files", files[i]);
+                }
+
+                if (files.length > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/UploadFilesToS3ForJobs/UploadMissingSkuFileToS3",
+                        data: fdata,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+
+                            $('input[type=file]').val(null);
+                            $('.uploadDSFileStatus').css('display', 'none');
+                            if (data.success == true) {
+                                $('#btnUpload').removeAttr('disabled');
+                                $('.UpdateASINButtonLoader').css('display', 'none');
+                                $('.successAppend1').empty();
+                                $('.successAppend1').append('<span class="pl-1">Updated Successfully and Job ID is' + data.JobID)
+                                $('.successmessage1').show();
+                            }
+                            else {
+
+                                if (data.success == false) {
+                                    $('#btnUpload').removeAttr('disabled');
+                                    $('.uploadDSFileStatus').css('display', 'none');
+                                    $('.failureAppend1').empty();
+                                    $('.failureAppend1').append('<span class="pl-1"> Something Went Wrong')
+                                    $('.dangermessage1').show();
+                                }
+
+
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    alert('Please select a file.');
+                    $('#btnUploadFile').removeAttr('disabled');
+                    $('.uploadDSFileStatus').css('display', 'none');
+                }
+            });
+    });
+    </script>
+}

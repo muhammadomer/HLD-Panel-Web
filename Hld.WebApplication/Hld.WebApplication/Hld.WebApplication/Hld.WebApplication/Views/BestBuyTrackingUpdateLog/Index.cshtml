@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewData["Title"] = "BestBuy Tracking Log";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+
+}
+
+<style>
+    .jqx-grid-cell {
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<h6>BB Orders Tracking Log</h6>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var source =
+            {
+                datatype: "json",
+                datafields: [
+                    { name: 'shipDate', type: 'date' },
+                    { name: 'scOrderID' },
+                    { name: 'bbOrderID' },
+                    { name: 'shippingServiceCode' },
+                    { name: 'trackingNumber' },
+                    { name: 'BBStatus' }
+
+
+                ],
+                url: '@Url.Action("GetTracking", "BestBuyTrackingUpdateLog")',
+                filter: function () {
+                    // update the grid and send a request to the server.
+                    $("#TrackingDiv").jqxGrid('updatebounddata', 'filter');
+                }
+            };
+
+
+
+         var dataAdapter = new $.jqx.dataAdapter(source);
+            // initialize jqxGrid
+        $("#TrackingDiv").jqxGrid(
+                {
+                    source: dataAdapter,
+                    filterable: true,
+                    showfilterrow: true,
+                    selectionmode: 'multiplecellsextended',
+                    showfilterrow: true,
+                   
+                    pageable: true,
+                    pagesize: 25,
+                    width: '90%',
+                    sortable: true,
+                    altrows: true,
+                    enabletooltips: true,
+                    editable:true,
+                    height:'900px',
+                    ready: function () {
+                        //$("#jqxgrid").find('.jqx-grid-column-header .jqx-checkbox-default').parent().on('change', function (event) {
+                        //    var state = event.args.checked;
+                        //    alert(state);
+                        //});
+
+                    },
+                    autoshowfiltericon: true,
+                    columns: [
+
+                        { text: 'Ship Date', datafield: 'shipDate', editable: false, filtertype: 'range', cellsformat: 'yyyy-MM-dd', width: 200 },
+                        {
+                            text: 'SC Order ID', datafield: 'scOrderID', editable: false, columntype: 'textbox', filtertype: 'input', width: 200, cellsrenderer: function (row)
+                            {
+                                var scOrderID = dataAdapter.records[row].scOrderID;
+                                return '<a  href="https://lp.cwa.sellercloud.com/Orders/Orders_Details.aspx?ID=' + scOrderID + '"  target="_blank">' + scOrderID + '</a>';
+                            }
+                        },
+                        {
+                            text: 'BB Order ID', datafield: 'bbOrderID', editable: false, padding: 5, columntype: 'textbox', filtertype: 'input', width: 200, cellsrenderer: function (row) {
+                                var bbOrderID = dataAdapter.records[row].bbOrderID;
+                                return '<a  href="https://marketplace.bestbuy.ca/mmp/shop/order/' + bbOrderID + '"  target="_blank"  >' + bbOrderID + '</a>';
+                            }
+                           
+                        }
+                        ,
+                        { text: 'Carrier', datafield: 'shippingServiceCode', columntype: 'textbox', filtertype: 'input' , width: 200 },
+                        {
+                            text: 'Tracking #', datafield: 'trackingNumber', columntype: 'textbox', filtertype: 'input', width: 200
+                        },
+
+                        {
+                            text: 'Status', datafield: 'BBStatus', columntype: 'textbox', filtertype: 'input', width: 200
+                        }
+
+
+                    ]
+                });
+
+
+
+
+        });
+
+    </script>
+    <div id="TrackingDiv"></div>
+    @*<div class="container-fluid" style="margin-top:-20px">
+            <jqx-grid sortable="true" show-filter-row="true" width="90%" pageable="true" page-size="50" filterable="true" auto-height="false" height="1000px" source="Model">
+                <jqx-grid-columns>
+                    <jqx-grid-column filter-type="range" datafield-for="@(employee.shipmentDate)" cells-format="yyyy-MM-ddTHH:mm:ss.fff" text="Ship Date"></jqx-grid-column>
+                    <jqx-grid-column filter-type="input" datafield-for="@(employee.SCId)" cells-renderer="SellerCloud()" text="SC Order ID"></jqx-grid-column>
+                    <jqx-grid-column width="150px" filter-type="input" cells-renderer="BBLink()" datafield-for="@(employee.BBId)" text="BB Order ID"></jqx-grid-column>
+                    <jqx-grid-column filter-type="input" datafield-for="@(employee.Carrier))" text="Carrier"></jqx-grid-column>
+                    <jqx-grid-column filter-type="input" datafield-for="@(employee.TrackingNo)" text="Tracking #"></jqx-grid-column>
+                    <jqx-grid-column filter-type="input" datafield-for="@(employee.Status)" text="Status"></jqx-grid-column>
+                </jqx-grid-columns>
+
+            </jqx-grid>
+        </div>*@
+}
+
+

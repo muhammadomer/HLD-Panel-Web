@@ -1,0 +1,114 @@
+﻿@model Hld.WebApplication.ViewModel.SaveZincProxyEmailViewModel
+
+@{
+    ViewData["Title"] = "SaveZincEmail";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .controlabel {
+        width: 40px !important;
+        font-weight: bold;
+    }
+
+    .sidebar {
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 51px;
+        left: 0;
+        width: 165px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        background-color: lightgrey;
+        overflow-x: hidden;
+        padding-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            color: black;
+            display: block;
+            height: auto;
+            border-bottom: 1px solid #b7b5b5;
+        }
+
+            .sidebar a:hover {
+                color: coral;
+            }
+
+    .sidebarafter {
+        margin-left: 210px;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+
+    .controlabel {
+        width: 125px;
+        font-weight: bold;
+    }
+</style>
+<div class="sidebar">
+    <ul class="sidebar-links">
+        <li class="">
+            <a class="" asp-action="WatchListSummary" asp-controller="ZincWatchlist">Zinc DS Job</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincKey" asp-controller="Channels">Zinc</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincMaxDays" asp-controller="Channels">Zinc Max Days</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincProxy">Zinc Proxy</a>
+        </li>
+        <li class="">
+            <a class="active" asp-action="SaveZincEmail" asp-controller="ZincProxy">Zinc Proxy Email</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincAccounts">Amazon Account</a>
+        </li>
+
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="CreditCardView">Credit Card</a>
+        </li>
+
+    </ul>
+
+
+
+</div>
+<div class="container sidebarafter">
+
+    <div class="row">
+        <div class="col-md-12" style="margin-top:20px;">
+            <form asp-action="SaveZincEmail">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group row mb-0">
+                    <label asp-for="ProxyEmail" class="col-form-label-sm controlabel">Email:</label>
+                    <div class="col-sm-4">
+                        <input asp-for="ProxyEmail" class="form-control" />
+                        <span asp-validation-for="ProxyEmail" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" target="_blank" style="margin-left:40px;" />
+                    <a class="" asp-action="GetZincProxyEmail" asp-controller="ZincProxy" target="_blank" style="font-size:15px">Email List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+</div>

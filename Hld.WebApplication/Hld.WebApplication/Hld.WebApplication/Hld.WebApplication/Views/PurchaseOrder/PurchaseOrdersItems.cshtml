@@ -1,0 +1,1144 @@
+﻿@model PurchaseOrderModel
+@{
+    ViewData["Title"] = "PurchaseOrdersItems";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+<link href="~/lib/jquery.tablesorter/css/theme.default.min.css" rel="stylesheet" />
+
+<style type="text/css">
+    .maincontainer {
+        background-color: #2A2B2B03;
+        min-width: 1320px
+    }
+
+    .table-bordered thead th, .table-bordered thead td {
+        padding: 0px;
+        border-bottom-width: 2px;
+    }
+
+    .table thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #DEE2E6;
+        text-align: center;
+    }
+
+    .table th, .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #DEE2E6;
+        vertical-align: middle !important;
+    }
+
+   
+    /*.table td {
+        text-align: center;
+    }*/
+
+    /*.table thead tr th {
+        position: sticky;
+        top: 50px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray;
+    }*/
+
+    /*.table thead tr th {
+        padding-left: 0px !important;
+        padding-right: 15px !important;
+    }*/
+
+    .mydelte {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .btnsuccess {
+        font-size: 10px !important;
+        font-family: arial !important;
+        padding: 1px !important;
+        box-shadow: none !important;
+        border-radius: 2px !important;
+    }
+
+    .table tr:last-child th, tr:first-child th {
+        background: none !important;
+        pointer-events: none !important;
+    }
+
+    .printdata {
+        position: absolute;
+        top: -1000px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    @@page {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+    }
+    /*---------------------------*/
+
+
+    thead tr:nth-child(1) th {
+        position: sticky;
+        top: 98px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray !important;
+    }
+
+    thead tr:nth-child(2) th {
+        position: sticky;
+        top: 123px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    thead tr:nth-child(3) th {
+        position: sticky;
+        top: 165px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+    .vendortable thead tr:nth-child(1) th {
+        position: sticky;
+        top: 98px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray !important;
+    }
+
+    .vendortable thead tr:nth-child(2) th {
+        position: sticky;
+        top: 123px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    .vendortable thead tr:nth-child(3) th {
+        position: sticky;
+        top: 150px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+     .table tr:nth-child(3) th {
+        background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+        background-color: lightgray !important;
+        background-image: none !important;
+    }
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    .table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+    .qtyclass {
+        padding: 0 !important;
+        text-align: center !important;
+    }
+    .purchaseEnd {
+        padding: 0 !important;
+        text-align: right !important;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+    .purchaseEndunit {
+       
+        text-align: right !important;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+    .vendortable {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+
+    /*.accptedrowlcass {
+        width: 97%;
+        top: 50px;
+        padding: 10px 6px;
+        background-color: white;
+        z-index: 500;
+        position: fixed;
+    }*/
+
+    /*.postatusrowclass {
+        width: 97%;
+        position: fixed;
+        top: 90px;
+        padding: 8px 8px;
+        z-index: 500;
+        background-color: white;
+    }*/
+
+    /*.searchrowclass {
+        top: 330px;
+        background-color: white;
+        position: fixed;
+        width: 100%;
+        z-index: 500;
+        padding: 6px 14px;
+    }*/
+    .searchrows {
+        top: 42px;
+        padding: 6px 14px;
+        background-color: white;
+        width: 98%;
+        padding: 0px 38px 10px 15px;
+        position: fixed;
+        z-index: 500;
+    }
+    .purchaseEndVendor {
+        padding-right: 10px !important;
+        text-align: right !important;
+    }
+    .qtyclassVendor {
+      
+        text-align: center !important;
+    }
+    .purchaseEndunitVendor {
+        text-align: right !important;
+    }
+</style>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" style="margin-top: 80px!important;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 680px !important;">
+        <div class="modal-content">
+            <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel"><b>Shipment Detail</b></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class=" col-12">
+                        <table calss="table table5" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th style="position:unset !important;padding:0px;">
+                                        Image
+                                    </th>
+                                    <th style="position:unset !important;padding:0px;">
+                                        SKU
+                                    </th >
+                                    <th style="position:unset !important;padding:0px;">ShipmentID</th>
+                                    <th style="position:unset !important;padding:0px;">
+                                        Shipped Qty
+                                    </th>
+                                    <th style="position:unset !important;padding:0px;">Created On</th>
+                                    <th style="position:unset !important;padding:0px;">Shipped On</th>
+                                    <th style="position:unset !important;padding:0px;">Received On</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="mytab"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModalAccept" style="margin-top: 80px!important;" data-backdrop='static' data-keyboard='false'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Expected Date</h4>
+            </div>
+            <div class="modal-body" id="acceptmodalbody">
+
+            </div>
+            <div class="modal-footer" style="display:block">
+
+                <button type="button" class="btn btn-link closed" data-dismiss="modal" style="color: black;float: right;text-decoration: none;">
+                    Close
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog-box">
+    <h6 style="color:red">Do you want to delete this product!</h6>
+</div>
+<div class="container-fluid pt-3 pb-3 mt-4 mb-4 maincontainer">
+    <div class="container-fluid">
+        <div class="row accptedrowlcass">
+            <div class="col ml-auto">
+                @if (Model.IsAccepted == 0)
+                {
+                    <span>
+                        <a href="#" data-target="#myModalAccept" data-toggle="modal" onclick="PopupFormaccept('@Url.Action("AddUpdateShipdate","PurchaseOrder",new {POID=Model.POId , datedata=Model.POLastUpdate })')">Accept</a>
+                    </span>
+                }
+
+
+                <div style="float: right; display: flex;margin-bottom: 5px;" class="ml-auto">
+
+
+                    <span>
+                        <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                    </span>
+                    <select class="js-example-basic-single" id="ActionMenu" name="state">
+                        <option value="">-----</option>
+                        <option value="DS_Requested_To_None">DS Requested To None</option>
+                    </select>
+                    <button class=" btn-success" id="ApplyActionMenu">Go</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row postatusrowclass">
+            <div class="col-2 ">
+                <div class="" style="height:100%;">
+                    <div class="list-group border" style="line-height: 2px;">
+                        <label class="list-group-item" style="font-weight:bold;padding-left: 5px;">
+                            <span class="">PO Status</span>
+                        </label>
+                        @if (Model.POStatus == 1)
+                        {
+                            <label class="list-group-item"><span style="color:blue;">In Process</span></label>
+                        }
+                        else if (Model.POStatus == 2)
+                        {
+                            <label class=" list-group-item"><span style="color:white;background-color:green;"> Shipped</span></label>
+                        }
+
+                        @if (Model.IsAccepted == 1)
+                        {
+                            <label class=" list-group-item"><span style="color:white;background-color:green;">Accepted </span></label>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        {
+                            <label class=" list-group-item"> <a class="btn btn-sm btn-success btnsuccess" role="button" asp-action="UpdatepurchaseOrder" asp-controller="PurchaseOrder" asp-route-POID="@Model.POId">Update From SC</a></label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="row">
+                    <div class="col-6 border" style="height: 235px!important;min-height:235px!important">
+                        <div class="row" style="padding-top:10px;">
+                            <label class="col-3" style="display:flex">Company:</label>
+                            <label>
+                                HLD Canada
+                                <img src="~/Images/canadaflag.png" style="height:10px;width:20px" />
+                            </label>
+                        </div>
+                        <div class="row">
+                            <label class="col-3" style="display:flex">PO#:</label>
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                            {
+                                <a style="padding-left:2px;cursor:pointer" href="https://lp.cwa.sellercloud.com/Purchasing/PurchaseOrderEdit.aspx?merchantid=512&orderid=@Model.POId" target="_blank">
+                                    <span>@Model.POId</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <span>@Model.POId</span>
+                            }
+                        </div>
+                        <div class="row">
+                            <label class="col-3" style="display:flex">Vendor#:</label>
+                            <label>@Model.Vendor (@Model.VendorId)</label>
+
+                        </div>
+                        <div class="row">
+                            <label class="col-3" style="display:flex">PO Date:</label>
+
+                            <label>@String.Format("{0:D}", Convert.ToDateTime(Model.OrderedOn))</label>
+                        </div>
+                        <div class="row">
+                            @if (Model.IsAccepted == 1)
+                            {
+                                <label class="col-3" style="display:flex">Accepted Date:</label>
+
+                                <label>@String.Format("{0:D}", Convert.ToDateTime(Model.POAcceptanceDate))</label>
+                            }
+                        </div>
+                        <div class="row">
+                            @if (Model.IsAccepted == 1)
+                            {
+                                <label class="col-3" style="display:flex">Expected Ship:</label>
+
+                                <label>@String.Format("{0:D}", Convert.ToDateTime(Model.POLastUpdate))</label>
+                                <span>
+                                    <a href="#" data-target="#myModalAccept" data-toggle="modal" onclick="PopupFormaccept('@Url.Action("AddUpdateShipdate","PurchaseOrder",new {POID=Model.POId , datedata=Model.POLastUpdate })')"><span><img src="~/Images/icons-edit-calendar.png" style="height: 21px;margin-left: 5px;" /></span></a>
+                                </span>
+                            }
+                        </div>
+                        <div class="row">
+                            @if (Model.IsAccepted == 1)
+                            {
+                                <label class="col-3" style="display:flex">Expected Arrival:</label>
+
+                                <label>@String.Format("{0:D}", Convert.ToDateTime(Model.POArrivalDate))</label>
+                            }
+                        </div>
+                        <div class="row">
+                            <label class="col-3">Currency:</label>
+                            @*@if (Model.CurrencyCode == 4)
+                                {
+                                    <span>CAD</span>
+                                }
+                                else if (Model.CurrencyCode == 0)
+                                {
+                                    <span>USD</span>
+                                }
+                                else
+                                {
+                                    <span>CNY</span>
+                                }*@
+                            <select id="CurrencyCode" asp-for="CurrencyCode" data-POID="@Model.POId" class="form-control col-sm-2 p-0">
+                                <option value="4">CAD</option>
+                                <option value="0">USD</option>
+                                <option value="8">CNY</option>
+                            </select>
+                        </div>
+                        <div class="row" style="display:flex">
+                            @* <label class="col-3">Exchange Rate:</label>
+                                <input id="CurrencyExchange" asp-for="@Model.ExchangeRate" class="form-control col-3" />
+                                <input type="button" id="btnCurrencyExchange" data-POID="@Model.POId" class="btn btn-light" value="Save" />*@
+
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border"style="height: 235px!important;min-height:235px!important">
+                            <h6 class="mt-2 ml-2" style="font-size:14px;font-family:Arial;font-weight:bold">Ship To</h6>
+                            <hr />
+                            <address style="float: left;
+    text-align: start;
+    padding-left: 17px;">
+                                <label class="mb-0">
+                                    Home Living Dream
+                                </label><br />
+                                <label class="mb-0">
+                                    4090 Ridgeway Drive, Unit 22-23
+                                </label><br />
+                                <label class="mb-0">
+                                    Mississauga ON L5L 5X5
+                                </label><br />
+                                <label class="mb-0">
+                                    Canada
+                                </label><br />
+                                <label class="mb-0">
+                                    Phone: 514-996-1278
+                                </label><br />
+                                <label class="mb-0">PO Description: @Model.Notes</label>
+                            </address>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 mt-2 "id="searchrowclass">
+        <br />
+        
+        @using (Html.BeginForm("PurchaseOrdersItems", "PurchaseOrder", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            @*<select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>*@
+            <input type="number" style="margin-right: 5px;box-shadow: none !important;width:88px; display:none" name="POId" autocomplete="off" class="form-control col-sm-2 hide" id="POId" value="@Model.POId" placeholder="POId" />
+            <input type="text" style="margin-right: 5px;box-shadow: none !important;width:16%" name="SKU" class="form-control " id="SKU" value="@Model.SKU" placeholder="SKU" />
+
+            @*<span style="color:red;padding-left:0px;" id="sku-empty-message-Color"></span>*@
+            <input type="text" style="margin-right: 5px;box-shadow: none !important;width:400px" name="Title" autocomplete="off" class="form-control col-sm-5" id="Title" value="@Model.Title" placeholder="Title" />
+            <input class="form-check-input" asp-for="OpenQty" /> @Html.DisplayNameFor(model => model.OpenQty)
+            <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+        }
+    </div>
+    <div class="container-fluid mt-2">
+        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+        {
+            <table class="table tablesorter" style="">
+                <thead style="background-color:lightgray;">
+                    <tr style="border-bottom:none">
+                        <th>
+
+                        </th>
+                        <th>
+
+                        </th>
+                        <th style="width:12%!important;min-width:12%!important;text-align:left">
+
+                        </th>
+                        <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important">
+
+                        </th>
+                        <th >
+
+                        </th>
+                        <th>
+
+                        </th>
+                        <th style="background:#D5EFFF !important">
+
+                        </th>
+                        <th style="background:#D5EFFF !important">
+
+                        </th>
+                        <th style="background:#D5EFFF !important"> Quantity</th>
+
+                        <th style="background:#D5EFFF !important">
+
+                        </th>
+                        <th style="background:#D5EFFF !important">
+
+                        </th>
+                      
+                        <th style="background:#D1FFE8 !important">
+
+                        </th>
+                        <th style="background:#D1FFE8 !important">
+
+                        </th>
+                        <th  style="background:#D1FFE8 !important"> Amount</th>
+                        <th  style="background:#D1FFE8 !important">
+
+                        </th>
+
+
+
+                        <th colspan="1"> </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="headerCheckBox" />
+                        </th>
+                        <th>
+                            Image
+                        </th>
+                        <th style="width:12%!important;min-width:12%!important;text-align:left">
+                            Product ID
+                        </th>
+                        <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important">Product Title</th>
+                        <th style="min-height:46px;height:46px!important"class="">
+                         Price    @if (Model.CurrencyCode == 4)
+                            {
+                                <span>CAD</span>
+                            }
+                            else if (Model.CurrencyCode == 0)
+                            {
+                                <span>USD</span>
+                            }
+                            else
+                            {
+                                <span>CNY</span>
+                            }
+                        </th>
+                        <th style=""class="">
+                           Price USD
+                        </th>
+                        <th>
+                            Ordered
+                        </th>
+                        <th>Shipped</th>
+                        <th>
+                            Received
+                        </th>
+                        <th>
+                            Open
+                        </th>
+                        <th>
+                            OnHand
+                        </th>
+                        <th>
+                            Ordered
+                        </th>
+                        <th>Shipped</th>
+                        <th>
+                            Received
+                        </th>
+                        <th>
+                            Open
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+
+                        </th>
+                        <th style="width:12%!important;min-width:12%!important;text-align:left">
+                            @Model.ListItems.Count()
+                        </th>
+                        <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important"></th>
+                        <th class="">
+
+                        </th>
+                        <th class="">
+
+                        </th>
+                        <th class="qtyclass">
+                            @Model.ListItems.Sum(p => p.QtyOrdered)
+                        </th>
+                        <th class="qtyclass">@Model.ListItems.Sum(p => p.ShippedQty)</th>
+                        <th class="qtyclass">
+                            @Model.ListItems.Sum(p => p.QtyReceived)
+                        </th>
+                        <th class="qtyclass">
+                            @Model.ListItems.Sum(p => p.QtyOpen)
+                        </th>
+                        <th class="qtyclass">
+                            @Model.ListItems.Sum(p => p.QtyOnHand)
+                        </th>
+                        <th class="purchaseEnd"style="">
+                            @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.OrderedAmount))
+                        </th>
+                        <th class="purchaseEnd"style="">
+                            @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.ShippedAmount))
+                        </th>
+                        <th class="purchaseEnd"style="">
+                            @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.ReceivedAmount))
+                        </th>
+                        <th class="purchaseEnd"style="">
+                            @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.OpenAmount))
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListItems)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="headerCheckBox" />
+                            </td>
+                            <td>
+                                @{
+                                    <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.image_name">
+                                        <img src="@ViewBag.S3BucketURL/@item.Compress_image" class="rounded" height="50" width="50" />
+                                    </a>
+                                }
+                            </td>
+                            <td style="text-align:left">
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                                {
+                                    <a style="cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" skuid="@item.ProductID" class="productsku" asp-route-ProductSKU="@item.ProductID" target="_blank">@item.ProductID</a>
+
+                                    <br />
+                                    <img src="~/Images/barcode-png.png" data-ID="@item.ProductID" class="print" height="25" width="25" style="cursor:pointer;margin-left: 14px;" />
+                                }
+                                else
+                                {
+                                    <span>@item.ProductID</span>
+
+                                }
+                                @if (@item.ID > 0)
+                                {
+                                    <span style="color:gray">@item.ID</span>
+                                }
+                                else
+                                {
+                                    <span style="background-color:lightgrey;color:red">PO Item ID Missing</span>
+                                }
+
+                            </td>
+                            <td style="text-align:left">@item.ProductTitle</td>
+                            <td class="purchaseEndunit">@item.UnitPrice</td>
+                            <td class="purchaseEndunit">@item.UnitPriceUSD</td>
+                            <td class="qtyclass">@item.QtyOrdered</td>
+                            <td class="qtyclass">
+                                <a class="btn btn-sm viewbtn" style="cursor:pointer;color:#007bff;font-size:12px; text-decoration:underline" data-SKU="@item.ProductID" data-img="@ViewBag.S3BucketURL/@item.Compress_image"
+                                   data-img-large="@ViewBag.S3BucketURL_large/@item.image_name">
+                                    @item.ShippedQty
+                                </a>
+                            </td>
+                            <td class="qtyclass">@item.QtyReceived</td>
+                            <td class="qtyclass">@item.QtyOpen</td>
+                            <td class="qtyclass">@item.QtyOnHand</td>
+                            <td class="purchaseEnd"> @string.Format("{0:N2}", item.OrderedAmount)</td>
+                            <td class="purchaseEnd"> @string.Format("{0:N2}", item.ShippedAmount)</td>
+                            <td class="purchaseEnd"> @string.Format("{0:N2}", item.ReceivedAmount)</td>
+                            <td class="purchaseEnd"> @string.Format("{0:N2}", item.OpenAmount)</td>
+
+                            <td style="text-align:center">
+                                <a style="cursor:pointer" id="DeletePoItem" data-ID="@item.ID"><img src="~/Images/trash-can-1.1s-128px.png" height="25" /></a>
+                            </td>
+                        </tr>
+                    }
+               
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table tablesorter vendortable"style="">
+                <thead style="background-color:lightgray;">
+                    <tr style="border-bottom:none">
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important"></th>
+                        <th></th>
+                        <th></th>
+
+
+
+                        <th>Quantity</th>
+                        <th></th>
+                        <th></th>
+                        <th> Amount</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="headerCheckBox" />
+                        </th>
+                        <th style="text-align:left!important">
+                            Image
+                        </th>
+                        <th style="text-align:left;padding-left:5px;">
+                            Product ID
+                        </th>
+                        <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important">Product Title</th>
+                        <th style="">
+                           Price    @if (Model.CurrencyCode == 4)
+                            {
+                                <span>CAD</span>
+                            }
+                            else if (Model.CurrencyCode == 0)
+                            {
+                                <span>USD</span>
+                            }
+                            else
+                            {
+                                <span>CNY</span>
+                            }
+                        </th>
+                        <th style="" >
+                             Price USD
+                        </th>
+                        <th>
+                            Ordered
+                        </th>
+                        <th>
+                            Received
+                        </th>
+                        <th>
+                            Open
+                        </th>
+
+                        <th>
+                            Ordered
+                        </th>
+                        <th>
+                            Received
+                        </th>
+                        <th>
+                            Open
+                        </th>
+
+                    </tr>
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+
+                        </th>
+                        <th style="text-align:left!important">
+                            @Model.ListItems.Count()
+                        </th>
+                        <th  style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important"></th>
+                        <th >
+
+                        </th>
+                        <th>
+
+                        </th>
+                        <th class="qtyclassVendor">
+                            @Model.ListItems.Sum(p => p.QtyOrdered)
+                        </th>
+                        <th class="qtyclassVendor">
+                            @Model.ListItems.Sum(p => p.QtyReceived)
+                        </th>
+                        <th class="qtyclassVendor">
+                            @Model.ListItems.Sum(p => p.QtyOpen)
+                        </th>
+
+                        <th class="purchaseEndVendor">
+                            @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.OrderedAmount))
+                        </th>
+                        <th class="purchaseEndVendor">
+                            @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.ReceivedAmount))
+                        </th>
+                        <th class="purchaseEndVendor">
+                            @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.OpenAmount))
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListItems)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="headerCheckBox" />
+                            </td>
+                            <td>
+                                @{
+                                    <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.image_name">
+                                        <img src="@ViewBag.S3BucketURL/@item.Compress_image" class="rounded" height="50" width="50" />
+                                    </a>
+                                }
+                            </td>
+                            <td style="text-align:left">
+
+
+                                <span skuid="@item.ProductID" class="productsku">@item.ProductID</span>
+                                <br />
+
+                                <img src="~/Images/barcode-png.png" data-ID="@item.ProductID" class="print" height="25" width="25" style="cursor:pointer;margin-left: 14px;" />
+                               <br>
+                                @if (@item.ID > 0)
+                                {
+                                    <span style="color:gray;">@item.ID</span>
+                                }
+                                else
+                                {
+                                    <span style="background-color:lightgrey;color:red">PO Item ID Missing</span>
+                                }
+
+                            </td>
+                            <td style="text-align:left">@item.ProductTitle</td>
+                            <td class="purchaseEndunitVendor" style="">@item.UnitPrice</td>
+                            <td class="purchaseEndunitVendor" style="">@item.UnitPriceUSD</td>
+                            <td class="qtyclassVendor">@item.QtyOrdered</td>
+                            <td class="qtyclassVendor">@item.QtyReceived</td>
+                            <td class="qtyclassVendor">@item.QtyOpen</td>
+
+                            <td class="purchaseEndVendor"> @string.Format("{0:N2}", item.OrderedAmount)</td>
+                            <td class="purchaseEndVendor"> @string.Format("{0:N2}", item.ReceivedAmount)</td>
+                            <td class="purchaseEndVendor"> @string.Format("{0:N2}", item.OpenAmount)</td>
+
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+          $("#dialog-box").dialog({
+            autoOpen: false,
+            //title: 'Are u want to delete this reocord!',
+            modal: true,
+          });
+        $(document).on('click', '.viewbtn', function () {
+                debugger;
+            var  SKU = $(this).attr("data-SKU");
+            var POID = '@Model.POId';
+                $.ajax({
+                    type: 'GET',
+                    url: '../Shipment/ShipmentDetailBySku?SKU=' + SKU + '&POID=' + POID,
+                    contentType: 'application/json',
+                    success: function (res) {
+                        console.log("data", res);
+                        $(".mytab").html("");
+                        $.each(res, function (key, value) {
+                            var CreatedOn = new Date(value.CreatedOn);
+                            CreatedOn = CreatedOn.getDate() + "-" + (CreatedOn.getMonth() + 1) + "-" + CreatedOn.getFullYear();
+
+                            var ShippedDate = new Date(value.ShippedDate);
+                            ShippedDate = ShippedDate.getDate() + "-" + (ShippedDate.getMonth() + 1) + "-" + ShippedDate.getFullYear();
+
+                            var ReceivedDate = new Date(value.ReceivedDate);
+                            ReceivedDate = ReceivedDate.getDate() + "-" + (ReceivedDate.getMonth() + 1) + "-" + ReceivedDate.getFullYear();
+
+                            if (ReceivedDate == '1-1-1') {
+                                ReceivedDate = '';
+                            }
+
+                            if (ShippedDate == '1-1-1') {
+                                ShippedDate = '';
+                            }
+
+                            if (CreatedOn == '1-1-1') {
+                                CreatedOn = '';
+                            }
+                            var typeTd = '';
+                            if (value.Type == 'casepack') {
+                                typeTd = '<a style="cursor:pointer" href="../ShipmentCasePack/viewShipment?ShipmentId=' + value.ShipmentId + '" target="_blank">' + value.ShipmentId + '</a>';
+                            }
+                            else {
+                                typeTd = '<a style="cursor:pointer" href="../Shipment/Shipmentindex?ShipmentId=' + value.ShipmentId + '" target="_blank">' + value.ShipmentId+'</a>';
+                            }
+
+                            var skutbody = '<tr>' +
+                                '<td style="padding-top:5px;padding-bottom:5px"><a id="largeimage" target="_blank" href=""><img style="width: 50px;" src="@ViewBag.S3BucketURL/' + value.CompressedImage + '"/></a></td>' +
+                                '<td>' + value.SKU + '</td>' +
+                                '<td>' + typeTd + '</td>' +
+                                '<td>' + value.ShipedQty + '</td>' +
+                                '<td>' + CreatedOn+ '</td>' +
+                                '<td>' + ShippedDate+ '</td>' +
+                                '<td>' + ReceivedDate + '</td>' +
+                                '</tr>';
+                            $("table .mytab").append(skutbody);
+                        });
+                        $('#myModal').modal('show');
+                    }
+                });
+                //$(this).find('input[type="text"]').focus();
+            });
+
+        //$(document).on('click', '#btnCurrencyExchange', function () {
+
+
+        //    var loader = $(this).closest('td').find('.ZincOrderReteriveLoader');
+        //    $(loader).css('display', 'inline');
+        //    var POID = $(this).attr('data-POID');
+        //    var exchangeRate = $('#CurrencyExchange').val();
+
+
+        //    var Url = '/PurchaseOrder/SaveCurrencyExchange/';
+        //    $.ajax({
+        //        type: 'Get',
+        //        url: Url,
+        //        data: { POId: POID, exchangeRate: exchangeRate },
+        //        dataType: 'json',
+        //        traditional: true,
+        //        success: function (data) {
+
+        //            $(loader).css('display', 'none');
+        //            location.reload(true);
+
+
+        //        }
+        //    });
+
+
+        //    //'span.showToolTipData'
+       // });
+         @*$('#CurrencyCode').val('@Model.CurrencyCode');*@
+
+        $(".print").click(function () {
+            var SKU = $(this).attr("data-ID");
+            var POID= @Model.POId
+            $.ajax({
+                type: 'POST',
+                url: '../PurchaseOrder/DownloadSKULabel',
+                data: { SKU: SKU,POID:POID },
+                success: function (res) {
+                    $.notify('success', { className: 'success ' });
+                     var sampleArr = base64ToArrayBuffer(res.Content);
+                         saveByteArray(SKU, sampleArr);
+
+                },
+                Error: function (err) {
+                    $.notify('some error occured!', { className: 'error ' });
+                }
+            });
+        });
+         function base64ToArrayBuffer(base64) {
+                var binaryString = window.atob(base64);
+                var binaryLen = binaryString.length;
+                var bytes = new Uint8Array(binaryLen);
+                for (var i = 0; i < binaryLen; i++) {
+                    var ascii = binaryString.charCodeAt(i);
+                    bytes[i] = ascii;
+                }
+                return bytes;
+            };
+            function saveByteArray(reportName, byte) {
+                var blob = new Blob([byte], { type: "application/pdf" });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                var fileName = reportName;
+                link.download = fileName;
+                link.click();
+            };
+        $(document).on('click', '#DeletePoItem', function () {
+
+              var ID = $(this).attr('data-ID');
+             var Url = '/PurchaseOrder/DeleteItem/';
+              $("#dialog-box").dialog({
+                buttons: {
+                    "Confirm": function () {
+
+                        $.ajax({
+                            type: 'Get',
+                            url: Url,
+                          data: { ID: ID },
+                            success: function (res) {
+                                $("#dialog-box").dialog("close");
+                                $.notify('Delete Successfully', { className: 'danger mydelte' });
+                                  location.reload(true);
+                            },
+                            Error: function (err) {
+                                $.notify('some error occured!', { className: 'error mydelte' });
+                            }
+                        });
+
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-box").dialog("open");
+
+
+
+                    //$.ajax({
+                    //    type: 'Get',
+                    //    url: Url,
+                    //    data: { ID: ID },
+                    //    dataType: 'json',
+                    //    traditional: true,
+                    //    success: function (data) {
+
+                    //        location.reload(true);
+                    //    }
+                    //});
+
+        });
+        $(document).on('change', '#CurrencyCode', function () {
+
+                    var loader = $(this).closest('td').find('.ZincOrderReteriveLoader');
+                    $(loader).css('display', 'inline');
+                    var POID = $(this).attr('data-POID');
+                    var currencyCode = $('#CurrencyCode').val();
+                    var Url = '/PurchaseOrder/SaveCurrencyChange/';
+                    $.ajax({
+                        type: 'Get',
+                        url: Url,
+                        data: { POId: POID, currencyCode : currencyCode },
+                        dataType: 'json',
+                        traditional: true,
+                        success: function (data) {
+                            $(loader).css('display', 'none');
+                            location.reload(true);
+                        }
+                    });
+                });
+
+        $(function () {
+            $(".table").tablesorter();
+        });
+        var POId = $('#POId').val();
+          $('#SKU').autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/PurchaseOrder/GetProductDetailsForAPBySku",
+                        type: "POST",
+                        minLength: 3,
+                        dataType: "json",
+                        data: { Prefix: request.term,POID:POId },
+                        success: function (data, ui) {
+                            console.log("Data", data);
+                            //if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                if (item != null) {
+                                    return { label: item.SKU, value: item.SKU, id: item.SKU };
+                                }
+
+                            }));
+                        }
+                    })
+                },
+                response: function (event, ui) {
+                    console.dir(ui.content)
+                    if (ui.content.length === 0) {
+                        $("#sku-empty-message-Color").text("No results found");
+                    } else {
+                        $("#sku-empty-message-Color").empty();
+                    }
+                }
+            });
+
+
+
+    });
+
+    function PopupFormaccept(url) {
+        $.get(url).done(function (response) {
+            $('#acceptmodalbody').html(response);
+
+            //  $("#POLastUpdate").datepicker({
+            //    dateFormat: 'dd-mm-yy'
+            //});
+            //$("#POArrivalDate").datepicker({
+            //    dateFormat: 'dd-mm-yy'
+            //});
+        });
+
+
+
+    }
+
+    function SubmitFormForDates() {
+
+                 var url = '@Url.Action("AddUpdateExpected", "PurchaseOrder")';
+            var data = $('#form1').serialize();
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data == true) {
+                            $.notify("Updated", { globalPosition: 'bottom right', className: 'success' });
+                            location.reload(true);
+
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+        $(window).scroll(function () {
+            var scroll = $(window).scrollTop();
+            if (scroll >= 290) {
+                $("#searchrowclass").addClass("searchrows")
+            }
+            else if (scroll <= 0) {
+                $("#searchrowclass").removeClass("searchrows")
+            }
+        });
+    </script>
+}

@@ -1,0 +1,871 @@
+﻿@model Hld.WebApplication.ViewModel.SearchViewModelShipmentCasePack
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@{
+    ViewData["Title"] = "ViewShipment";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+@*<script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.js"></script>
+    <link href="~/lib/jquery.tablesorter/css/theme.default.min.css" rel="stylesheet" />*@
+<style>
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .ms-options-wrap.ms-active > .ms-options {
+        max-width: 400px !important;
+        min-height: 92px !important;
+    }
+
+    .ms-options-wrap > button:focus, .ms-options-wrap > button {
+        border-radius: 4px;
+        height: 25px;
+        outline: none !important;
+    }
+
+    ms-options-wrap > button:focus, .ms-options-wrap > button {
+        padding: 1px 0px 1px 2px !important;
+    }
+
+    .ms-options-wrap > .ms-options > ul label {
+        width: 101% !important;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+    .mydelte {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .loader img {
+        /*width: 300px;
+            height: 220px;*/
+        top: 50%;
+        position: absolute;
+        left: 50%;
+        margin: 0;
+        margin-right: -50%;
+        transform: translate(-50%,-50%);
+    }
+
+    .colorhead {
+        color: #548b8d;
+    }
+
+    .ui-autocomplete {
+        z-index: 2000;
+    }
+
+    .colorhead {
+        color: #548b8d;
+    }
+
+    .searchFormcard {
+        position: fixed;
+        background: white;
+        width: 95%;
+        padding: 32px 0px;
+        top: 10px;
+        z-index: 500;
+        margin-left: 13px;
+    }
+
+    .searchFormFixed {
+        position: fixed;
+        top: 232px;
+        width: 100%;
+        z-index: 500;
+        background: white;
+    }
+
+    #myModalEdit, #myModalMarkReceived {
+        margin: 20px;
+        margin-top: 88px;
+    }
+
+    .fixedclassforpagination {
+        position: fixed;
+        top: 285px;
+        padding-bottom: 12px;
+        z-index: 400;
+        background: white;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .myclasscancel {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: black;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .table thead tr:nth-child(1) th, .table thead tr:nth-child(2) th, .table thead tr:nth-child(3) th {
+        top: 250px;
+        padding: 0px;
+        padding-right: 5px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+</style>
+
+<div class="container-fluid ">
+    <div class="card mt-3">
+        <div style="padding:2px 0px" class="card-header">
+            <b style="margin-left: 13px;">Shipment Details</b>
+            @if (Model.Item.Status != 5)
+            {
+                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                {
+                    <div style="float: right;">
+                        <button class="btn btn-success MarkAsReceived">Mark As Received</button>
+                    </div>
+                    <div style="float: right;">
+                        <a class="btn btn-success mr-2" href="#" target="_blank">Received Shipment</a>
+                    </div>
+                    <div style="float: right;">
+                        <a class="btn btn-success mr-2" href="/ShipmentCasePack/Index?ShipmentId=@Model.Item.ShipmentId" target="_blank">Edit Shipment</a>
+                    </div>
+                }
+            }
+        </div>
+        <div class="row ml-0 mt-1" style="
+line-height: 1!important;
+">
+            <div class="col-1">
+                <label class="control-label colorhead mb-0"><b>Ship from:</b></label>
+                <div class="" style="">
+                    <label class="control-label colorhead mb-0"><b>ID:</b></label>
+                    <label class="mb-0"> @Model.Item.VendorId</label> <br />
+                    <label class="control-label colorhead mb-0"><b>Name:</b></label>
+                    @Model.Item.Vendor
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label colorhead mb-0"><b>Shipment Name/ID:</b></label>
+                <div class="" style="">
+                    <label class="control-label colorhead mb-0"><b>ID:</b></label>
+
+                    <label class="mb-0"> @Model.Item.ShipmentId</label> <br />
+                    <label class="control-label colorhead mb-0"><b>Name:</b></label>
+                    @Model.Item.ShipmentName
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label colorhead mb-0"><b>Shipping Wt / Volume</b></label>
+                <div class="" style="">
+                    <label class="control-label colorhead mb-0"><b>Gross Wt:</b></label>
+                    <label class="control-label mb-0" id="">@Math.Round(@Model.list.Sum(s => s.Weight * s.NoOfBoxes),0) Kgs</label>
+                    <br />
+                    <label class="control-label colorhead mb-0"><b>CBM:</b></label>
+                    <label class="control-label mb-0" id=""> @Math.Round(@Model.list.Sum(s => s.NoOfBoxes * ((s.Height * s.Weight * s.Length) / 1000000)),3) </label>
+                    <br />
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label colorhead mb-0"><b>Box Contents:</b></label>
+                <div class="" style="">
+                    <label class="control-label colorhead mb-0"><b>Qty Shipped:</b></label>
+                    <label class="control-label mb-0" id="">@Model.Item.TotalShipedQty</label>
+                    <br />
+                    <label class="control-label colorhead mb-0"><b>Qty Recieved:</b></label>
+                    <label class="control-label mb-0" id="">@Model.Item.TotalReceivedQty</label>
+                    <br />
+                    <label class="control-label mb-0 colorhead"><b>Boxes:</b></label>
+                    <label class="control-label mb-0" id="totalBoxes"> @Model.Item.Boxes </label>
+                    <br />
+                    <label class="control-label mb-0 colorhead"><b>SKUs: </b></label>
+                    <label class="control-label mb-0 " id="totalSKUs"> @Model.Item.SKUs </label>
+
+                    <label class="control-label mb-0 colorhead"><b>PO's: </b></label>
+                    <label class="control-label mb-0 " id="totalPOs"> @Model.Item.POs </label>
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label colorhead mb-0"><b>Value Reconciliation:</b></label>
+                <div class="" style="">
+
+                    <label class="control-label mb-0 colorhead"><b>Shipped&nbsp&nbsp&nbspCNY: </b></label>
+                    <label class="control-label mb-0 " id="">@string.Format("{0:N2}", @Model.Item.ShipedAmountCNY) </label>
+                    <br />
+                    <label class="control-label mb-0 colorhead"><b>Received&nbspCNY: </b></label>
+                    <label class="control-label mb-0 " id="">@string.Format("{0:N2}", @Model.Item.ReceivedAmountCNY)</label>
+                    <br />
+                    <label class="control-label mb-0 colorhead"><b>Shipped&nbsp&nbsp&nbspUSD:</b></label>
+                    <label class="control-label mb-0" id=""> @string.Format("{0:N2}", @Model.Item.ShipedAmountUSD)</label>
+                    <br />
+                    <label class="control-label colorhead mb-0"><b>Received&nbspUSD:</b></label>
+                    <label class="control-label mb-0" id="">@string.Format("{0:N2}", @Model.Item.ReceivedAmountUSD)</label>
+
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Shipment Status:</b></label>
+                @if (Model.Item.Status == 1)
+                {
+                    <span>Open</span>
+                }
+                @if (Model.Item.Status == 2)
+                {
+                    <span>In Process</span>
+                }
+                @if (Model.Item.Status == 3)
+                {
+                    <span>Shipped</span>
+                }
+                @if (Model.Item.Status == 4)
+                {
+                    <span>Receiving in process</span>
+                }
+                @if (Model.Item.Status == 5)
+                {
+                    <span>Received</span>
+                }
+                <br />
+                <label class="control-label colorhead mb-0"><b>Created On:</b></label>
+                <label class="control-label mb-0" id="">
+                    @if (@Model.Item.CreatedOn != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", @Model.Item.CreatedOn)
+                    }
+                </label>
+                <br />
+                <label class="control-label colorhead mb-0"><b>Shipped On:</b></label>
+                <label class="control-label mb-0" id="">
+                    @if (@Model.Item.ShippedDate != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", @Model.Item.ShippedDate)
+                    }
+                </label>
+                <br />
+                <label class="control-label colorhead mb-0"><b>Recieved On:</b></label>
+                <label class="control-label mb-0" id="">
+                    @if (@Model.Item.ReceivedDate != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", @Model.Item.ReceivedDate)
+                    }
+                </label>
+                <div class="" style="">
+                </div>
+            </div>
+            @*<div class="col-0">
+                <label class="control-label colorhead"><b>Notes:</b></label>
+                <div class="" style="">
+                @Model.Item.Notes
+                </div>
+                </div>*@
+        </div>
+        <div class=" form-group row ml-0">
+
+            <label class="control-label colorhead" style="margin-left: 15px;"><b>Notes:</b></label>
+            <div class="col-sm-10" style="padding-left:2px">
+                @Model.Item.Notes
+            </div>
+        </div>
+    </div>
+    <div class="col col-md-2 pr-0" style="padding-left: 0;
+        margin-top: 10px;">
+        <span>
+            <input type="text" id="searchcasepack" class="form-control" placeholder="SKU, Title, POID" style="box-shadow:none!important" />
+        </span>
+    </div>
+    <table class="table tablesorter detailtable" style="margin-top: 10px;">
+        <thead style="background-color:lightgray;">
+            <tr>
+                <th colspan="12"></th>
+                <th colspan="3" style="background-color:#D1FFE8!important;text-align:center;">Boxes</th>
+                <th colspan="4" style="background-color:#D5EFFF !important;text-align:center;">Quantity</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>
+                    <input type="checkbox" id="headerCheckBox" />
+                </th>
+                <th>
+                    Image
+                </th>
+                <th style="text-align:left;padding-left:5px;width:12%">
+                    SKU
+                </th>
+                <th style="text-align:left;padding-left:5px;width:25%">Product Title</th>
+
+                <th>
+                    PO#
+                </th>
+                <th style="width: 135px;min-width:135px !important;">Dimentions<br /> HxWxL (cm)</th>
+                <th>Weight (Kg)</th>
+                <th style="width:7%;">Unit Price</th>
+                <th style="width:6%;">Unit Price USD</th>
+                <th>
+                    Location Notes
+                </th>
+                <th>
+                    PHY Qty
+                </th>
+                <th>Qty/Box</th>
+                <th style="width: 3%;min-width:5%!important">
+                    Shipped
+                </th>
+                <th style="width: 3%;min-width:5%!important">Received</th>
+                <th style="width: 3%;min-width:5%!important">Open</th>
+                <th>
+                    Ordered
+                </th>
+                <th>
+                    Shipped
+                </th>
+                <th>
+                    Received
+                </th>
+                <th>
+                    Open
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+
+            <tr>
+                <th>
+                    <input type="checkbox" id="headerCheckBox" />
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th></th>
+
+                <th>
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th></th>
+                <th class="boxesShipped">
+                    @Model.Item.Boxes
+                </th>
+                <th class="boxesReceived"></th>
+                <th class="boxesOpen"> </th>
+                <th class="qtyOrdered">
+
+                </th>
+                <th class="qtyShipped">
+                    @Model.Item.TotalShipedQty
+                </th>
+                <th class="qtyReceived">
+                    @Model.Item.TotalReceivedQty
+                </th>
+                <th class="qtyOpen">
+                </th>
+                <th>
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model.list)
+            {
+                <tr>
+                    @{
+                        var ReceivedBoxes = (item.ReceivedQty) / item.QtyPerBox;
+                        var OpenBoxes = item.NoOfBoxes - ReceivedBoxes;
+                    }
+                    <td> <input type="checkbox" id="CheckBox" /></td>
+                    <td>
+                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                            <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+
+                        </a>
+                    </td>
+                    <td>
+                        <input type="text" style="display:none;" class="productIdtbl" value="@item.idShipmentProducts" />
+                        @*/BestBuyProduct/PropertyPage?ProductSKU=D7-181024-04*@
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        {
+                            <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.SKU" target="_blank">@item.SKU</a>
+                        }
+                        else
+                        {@item.SKU}
+                    </td>
+                    <td>@item.Title</td>
+
+                    <td>
+
+                        <a style="cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@item.POId" target="_blank">@item.POId</a>
+                    </td>
+
+
+
+                    <td>@item.Height x @item.Weight x @item.Length</td>
+                    <td>@item.Weight</td>
+                    <td width="80px">
+                        @if (item.CurrencyCode == 4)
+                        {
+                            <span>CAD</span>
+                        }
+                        else if (item.CurrencyCode == 0)
+                        {
+                            <span>USD</span>
+                        }
+                        else
+                        {
+                            <span>CNY</span>
+                        }
+                        @item.UnitPrice
+                    </td>
+                    <td>@item.UnitPriceUSD</td>
+
+                    <td>
+                        @item.LocationNotes
+                    </td>
+                    <td>
+                        @item.PhysicalInventory
+                    </td>
+                    <td class="qtyperboxtbl">@item.QtyPerBox</td>
+                    <td class="shippedboxestbl">
+                        @item.NoOfBoxes
+                    </td>
+                    <td class="receivedboxestbl">
+                        @ReceivedBoxes
+                    </td>
+                    <td class="openboxestbl">
+                        @OpenBoxes
+                    </td>
+                    <td class="orderedqtytbl">@item.OrderedQty</td>
+                    <td class="shipedqty">
+                        @item.ShipedQty
+                    </td>
+                    <td>
+                        <label class="receivedqtytbl">@item.ReceivedQty</label>
+                    </td>
+                    <td class="openqtytbl">@item.OpenQty</td>
+                    <td>
+
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        {
+                            @if (item.ShipedQty != item.ReceivedQty)
+                            {
+                                @if (item.SCID > 0)
+                                {
+                                    <button class="btn btn-success casebtnreceived"
+                                            data-POId="@item.POId"
+                                            data-Sku="@item.SKU"
+                                            data-img="@ViewBag.S3BucketURL/@item.CompressedImage"
+                                            data-img-large="@ViewBag.S3BucketURL_large/@item.ImageName"
+                                            data-Id="@item.idShipmentProducts"
+                                            data-ReceivedQty="@item.ReceivedQty"
+                                            data-ShipedQty="@item.ShipedQty"
+                                            data-LocationNotes="@item.LocationNotes"
+                                            data-PhysicalInventory="@item.PhysicalInventory"
+                                            data-QtyPerCase="@item.QtyPerCase"
+                                            data-ShadowOf="@item.ShadowOf"
+                                            data-Producttitle="@item.Title"
+                                            data-BoxId="@item.BoxId"
+                                            data-NoOfBoxes="@item.NoOfBoxes">
+                                        Receive
+                                    </button>
+                                }
+                                else
+                                {
+                    <p style="color:red">PO Item ID Missing</p>
+                                }
+                            }
+                        }
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 80px!important;">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 520px;">
+                <div class="modal-header" style="">
+                    <div class="row" style="width:100%">
+                        <div class="col-md-6">
+                            <h6 class="modal-title" id="exampleModalLabel" style="">
+                                <b>
+                                    <label class="control-label mb-0 colorhead labelclass">
+                                        SKU: <a href="" id="SkuVallink" target="_blank" style="cursor:pointer">
+                                            <label class="control-label mb-0 labelclass" id="GetSkuVal" style="cursor:pointer"></label>
+                                        </a>
+                                    </label>
+                                </b>
+                                <br />
+                                <b><label class="control-label mb-0 colorhead labelclass">PO#: <a href="" target="_blank" id="GetPOlink" style="cursor:pointer"><label class="control-label mb-0 labelclass" id="GetPOval" style="cursor:pointer"></label></a></label></b>
+                                @*<b><label class="control-label mb-0 labelclass">Box #: </label></b>
+                                    <b><label class="control-label mb-0 labelclass" id="BoxID"></label><br /></b>*@
+                            </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>
+                                <b>
+                                    <label class="control-label mb-0 colorhead"> Total Qty Units:</label>
+                                    <label class="control-label mb-0" id="TotalQtyUnitsModel"></label><br />
+
+                                    <label class="control-label mb-0 colorhead"> Case Pack Qty:</label>
+                                    <label class="control-label mb-0" id="QtyPerCaseModel"></label><br />
+                                </b>
+                            </h6>
+                        </div>
+                    </div>
+
+                    <div class=""><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col md-6">
+                            <label for="inputName" style="font-size: 16px;font-weight: bold;">Received Boxes:</label>
+
+                            <span><input type="number" name="ShipmentName" class="form-control" id="ReceivedQty" style="width:65%; font-weight: bold;font-size: 40px;"></span>
+                            <span style="position: absolute;
+margin-left: 200px;
+margin-top: -58px;
+color: gray;
+font-weight: bold;
+font-size: 40px;">
+                                <label class="control-label mb-0" id="shipedqty"></label>
+                            </span>
+                            <b>
+                                <label class="control-label mb-0 colorhead">Physical Inventory:</label>
+                                <label class="control-label mb-0" id="PhysicalInventoryModel"></label><br />
+
+
+                                <label class="control-label mb-0 colorhead">Location Notes:</label>
+                                <label class="control-label mb-0" id="LocationNotesModel"></label><br />
+                                <label class="control-label mb-0 colorhead">Shadow Of:</label>
+                                <label class="control-label mb-0" id="ShadowOfModel"></label><br />
+                                <input type="number" style="display:none" class="form-control" id="ProductId">
+                                <input type="number" style="display:none" class="form-control" id="POIdmodel">
+                                <input type="number" style="display:none" class="form-control" id="shipedqtymodel">
+                                <input type="number" style="display:none" class="form-control" id="Boxesmodel">
+                                <input type="number" style="display:none" class="form-control" id="receivedqtytblmodel">
+                            </b>
+                        </div>
+
+                        <div class="col-5">
+
+
+                            <br />
+                            <a id="largeimage" target="_blank" href="">
+                                <img style="width: 180px;" src="" id="smallimage" />
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row" style="
+margin-bottom: 0!important;
+margin-top: 12px;
+">
+                        <b><label class="colorhead" style="margin-left:15px">Product Title:</label></b>
+                        <div class="col-sm-9" style="padding-left: 3px;">
+                            <span class="" id="ProductTitle"></span><br />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary btnsubmit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModalMarkReceived" tabindex="-1" style="margin-top: 80px!important;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel"><b>Receive Shipment</b></h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="inputName">Receiving Date :</label>
+                        <input type="date" value="" name="Receiveddate" class="form-control" id="Receiveddate">
+                    </div>
+                    @*<div class="form-group">
+                                                    <label for="inputComment">Notes:</label>
+                        <textarea class="form-control myInput" value="@Model.Notes" name="Notes" maxlength="50" id="IdmyInput" rows="4"></textarea><span class="notescounter"></span>
+                                                </div>*@
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary btncreate" id="BtnSaveReceived">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.casebtnreceived', function (event) {
+
+                $(".modal").on('shown.bs.modal', function () {
+                    $(this).find("#ReceivedQty").focus();
+                });
+
+                $('.btnsubmit').prop('disabled', false);
+                $(".modal-body").css("opacity", "1");
+
+                var skulink = 'https://lp.cwa.sellercloud.com/Inventory/ProductWareHouse.aspx?Id=' + ($(this).attr('data-Sku'))
+                var polink = '../PurchaseOrder/PurchaseOrdersItems?POId=' + ($(this).attr('data-POId'))
+
+                $('#myModal').modal('show');
+                $('#smallimage').attr("src", $(this).attr('data-img-large'));
+                $('#largeimage').attr("href", $(this).attr('data-img-large'));
+                $('#ProductId').val($(this).attr('data-Id'));
+                $('#GetSkuVal').text(' ' + $(this).attr('data-Sku'));
+
+                $('#SkuVallink').attr('href', skulink);
+                $('#GetPOlink').attr('href', polink);
+                $('#GetPOval').text($(this).attr('data-POId'));
+
+                var val = ($(this).attr('data-BoxId'));
+                var myString = val.split('-');
+                var boxnum = myString[myString.length - 1];
+                if (boxnum.length == 1) {
+                    boxnum = "0" + boxnum;
+                }
+                var receivedQty = $(this).parents('tr').find('.receivedqtytbl').text();
+                var shipedQty = $(this).attr('data-ShipedQty');
+                    //left
+                $('#BoxID').text(boxnum);
+                $('#POIdmodel').val($(this).attr('data-POId'));
+                $('#receivedqtytblmodel').val(receivedQty);
+                $('#shipedqtymodel').val($(this).attr('data-ShipedQty'));
+                $('#shipedqty').text($(this).attr('data-NoOfBoxes'));
+
+                var item = $(this).attr('data-ShipedQty') / $(this).attr('data-NoOfBoxes');
+                if (item.length == 1) {
+                    item = "0" + item;
+                }
+                //data - QtyPerBox
+                //Boxesmodel
+                //Open Boxes
+                var OpenBoxes = (shipedQty - receivedQty) / item;
+                var Text = OpenBoxes
+                    //+ "/" + $(this).attr('data-NoOfBoxes')
+                $('#shipedqty').text(Text);
+                //OpenBoxes
+
+                $('#Boxesmodel').val($(this).attr('data-NoOfBoxes'));
+                //
+                var QtyPerCase=
+                $('#TotalQtyUnitsModel').text($(this).attr('data-ShipedQty'));
+                $('#ProductTitle').text($(this).attr('data-Producttitle'));
+
+                $('#LocationNotesModel').text($(this).attr('data-LocationNotes'));
+                $('#PhysicalInventoryModel').text($(this).attr('data-PhysicalInventory'));
+                $('#QtyPerCaseModel').text(item);
+                $('#ShadowOfModel').text($(this).attr('data-ShadowOf'));
+            });
+            $('#searchcasepack').on('keyup', function () {
+                var searchTerm = $(this).val().toLowerCase();
+                $('table tbody tr').each(function () {
+                    var lineStr = $(this).text().toLowerCase();
+                    if (lineStr.indexOf(searchTerm) === -1) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+
+            function Sum() {
+                var ReceivedBoxes = 0;
+                var OpenBoxes = 0;
+
+                var ReceivedQty = 0;
+                var OpenQty = 0;
+                var OrderedQty = 0;
+
+                $('.table tbody tr').each(function () {
+                    OpenBoxes = OpenBoxes + parseInt($(this).find('.openboxestbl').text());
+                    ReceivedBoxes = ReceivedBoxes + parseInt($(this).find('.receivedboxestbl').text());
+
+                    ReceivedQty = ReceivedQty + parseInt($(this).find('.receivedqtytbl').text());
+                    OpenQty = OpenQty + parseInt($(this).find('.openqtytbl').text());
+                    OrderedQty = OrderedQty + parseInt($(this).find('.orderedqtytbl').text());
+
+                    debugger;
+                });
+                debugger;
+                $(".boxesReceived").text(ReceivedBoxes);
+                $(".boxesOpen").text(OpenBoxes);
+
+                $(".qtyReceived").text(ReceivedQty);
+                $(".qtyOpen").text(OpenQty);
+                $(".qtyOrdered").text(OrderedQty);
+            }
+            Sum();
+            $('#ReceivedQty').keypress(function (e) {
+                var key = e.which;
+                if (key == 13)  // the enter key code
+                {
+                    $('.btnsubmit').click();
+                }
+            });
+
+             $(document).on('click', '.btnsubmit', function (event) {
+                $('.btnsubmit').prop('disabled', true);
+                $(".modal-body").css("opacity", "0.1");
+                var Shipped = parseInt($('#shipedqtymodel').val());
+                 var Received = parseInt($('#receivedqtytblmodel').val());
+                 var qtyperBox = (parseInt($('#shipedqtymodel').val()) / parseInt($('#Boxesmodel').val()));
+                 var ReceivedInput = parseInt($('#ReceivedQty').val()) * qtyperBox;
+
+                 var Id = $('#ProductId').val();
+                debugger;
+                if ((Received + ReceivedInput) > Shipped) {
+                    $.notify('Received Qty exceed Shipped Qty', { globalPosition: 'bottom right', className: 'danger mydelte' });
+                    //$('#myModal').modal('hide');
+                    return false;
+                }
+                var data = [];
+                data.push({
+                    idShipmentProducts: $('#ProductId').val(),
+                    ReceivedQty: ReceivedInput,
+                    POId: $('#POIdmodel').val(),
+                    ShipmentId:'@Model.Item.ShipmentId',
+                });
+                $(".loader").show();
+                $.ajax({
+                    type: 'POST',
+                    url: '../ShipmentCasePack/UpdateReceivedQty',
+                    data: { data },
+                    success: function (res) {
+                       $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                       $(".table tbody tr ").each(function () {
+                           //var item2 = $(this).find('.productIdtbl').val();
+                           //console.log(item2);
+                           debugger;
+                           if ($(this).find('.productIdtbl').val() == Id) {
+                               var ReceivedQty = Received + ReceivedInput
+                               var QtyPercase = parseInt($(this).find('.qtyperboxtbl').text());
+                               var OpenQty = parseInt($(this).find('.openqtytbl').text()) - ReceivedInput;
+
+                               var shipppedBoxes = parseInt($(this).find('.shippedboxestbl').text());
+                               var ReceivedBoxes = ReceivedQty / QtyPercase;
+                               var OpenBoxes = shipppedBoxes - ReceivedBoxes;
+                               $(this).find('.receivedqtytbl').text(ReceivedQty);
+                               $(this).find('.openqtytbl').text(OpenQty);
+                               $(this).find('.receivedboxestbl').text(ReceivedBoxes);
+                               $(this).find('.openboxestbl').text(OpenBoxes);
+                               if ((Received + ReceivedInput) == Shipped) {
+                                   $(this).find('.casebtnreceived').hide();
+                               }
+                           }
+                       });
+                        $(".loader").hide();
+                       $('#myModal').modal('hide');
+                       $('#ReceivedQty').val(0);
+                       //location.reload();
+                    },
+                    Error: function (err) {
+                    }
+                });
+
+                debugger;
+            });
+
+            $(document).on('click', '.MarkAsReceived', function (event) {
+                //$('.btnsubmit').prop('disabled', false);
+                //$(".modal-body").css("opacity", "1");
+                var ShippedQty = '@Model.Item.TotalShipedQty';
+                var ReceivedQty = '@Model.Item.TotalReceivedQty';
+                if (ShippedQty == ReceivedQty) {
+                    $('#myModalMarkReceived').modal('show');
+                }
+                else {
+                    $.notify("You can't receive this shipement because some products are pending", { className: 'danger mydelte' });
+                }
+            });
+
+            $(document).on('click', '#BtnSaveReceived', function (event) {
+                $('#BtnSaveReceived').prop('disabled', true);
+                $(".modal-body").css("opacity", "0.1");
+                var data = {
+                    ShipmentId: '@Model.Item.ShipmentId',
+                    ReceivedDate: $("#Receiveddate").val(),
+                };
+                debugger;
+                $.ajax({
+                    type: 'POST',
+                    url: '../ShipmentProduct/ShipmentasReceived',
+                    data: { data },
+                    success: function (res) {
+                        $('#myModalMarkReceived').modal('hide');
+                        $.notify('Received Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                        location.reload();
+                    },
+                    Error: function (err) {
+                    }
+                });
+            });
+        });
+    </script>
+
+
+}

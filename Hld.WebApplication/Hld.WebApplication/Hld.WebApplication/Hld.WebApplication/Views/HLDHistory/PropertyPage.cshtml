@@ -1,0 +1,136 @@
+﻿@model Hld.WebApplication.ViewModel.BBProductViewModel
+@{
+    ViewData["Title"] = "PropertyPage";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style type="text/css">
+    .removePadding {
+        padding-left: 0px !important;
+        padding-right: 3px !important;
+    }
+
+    .mainProductDetail {
+        background-color: honeydew;
+        border-radius: 2px;
+        padding-top: 5px;
+        padding-left: 7px;
+    }
+
+    a {
+    }
+</style>
+
+<h6>Product Dashboard </h6>
+<hr />
+
+<div class="row">
+    <div class="col-sm-2" id="warehouseQty"></div>
+    <div class="col-sm-6">
+        <div id="ProductNavBar" style="background-color:#e1e1e2;border-radius:2px;">
+            <div class="container">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="PropertyPage" asp-controller="HLDHistory" asp-route-ProductSku="@Model.Product_Sku">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" asp-action="GetSalesHistoryOfSKU" asp-controller="HLDHistory" asp-route-ProductSku="@Model.Product_Sku">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="GetProductWarehouseQty" asp-controller="ProductWarehouseQty" asp-route-ProductSku="@Model.Product_Sku">Warehouse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  " href="#">Purchasing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  " href="#">Returns</a>
+                    </li>                    
+                </ul>
+            </div>
+        </div>
+        <div id="mainProductDetail" class="mainProductDetail">
+
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="imagesDivMainView"></div>
+    </div>
+</div>
+
+
+
+
+<hr style="border:1px solid black;margin-right:10px;" />
+<div class="mainWrapper">
+    <div class="row">
+        <!--Start Left Menue-->
+        <div class="col-sm-2">
+            <div style="background-color:#e1e1e2;">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("PropertyPage","BestBuyProduct",new {ProductSKU=Model.Product_Sku })">BestBuy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("ProductZinc","Zinc",new {ProductSKU=Model.Product_Sku })">Zinc</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--End Left Menu-->
+        <!--Start MainSection-->
+
+
+        <div id="SkuProditHistory" class="col-sm-10">
+
+        </div>
+
+
+
+
+
+
+        <input type="hidden" value="@Model.Product_Sku" id="HfProductId" />
+
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            function ShowImages() {
+
+                if ($('#HfProductId').length > 0) {
+                    $.get('/Product/ProductDetailView/' + $('#HfProductId').val() + '').done(function (response) {
+                        $('#mainProductDetail').html(response);
+                    });
+
+                    $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
+                        var $container = $(response).wrap('<div />');
+                        $container.find('span.close').remove();
+                        $('#imagesDivMainView').html($container);
+
+                    });
+
+                    $.get('/Product/PoroductWarehouseQty?sku=' + $('#HfProductId').val() + '').done(function (response) {
+                        $('#warehouseQty').html(response);
+                    });
+
+                    $.get('/HLDHistory/GetSKUSalesHistory?ProductSku=' + $('#HfProductId').val() + '').done(function (response) {
+                        $('#SkuProditHistory').html(response);
+                    });
+                }
+            }
+            ShowImages();
+
+
+        });
+    </script>
+
+}
+

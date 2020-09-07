@@ -1,0 +1,217 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.ShipmentViewProducListViewModel>
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@{
+    ViewData["Title"] = "ShipmentReceivedPartialView";
+    //Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="~/lib/jquery.tablesorter/css/theme.default.min.css" rel="stylesheet" />
+<style type="text/css">
+    .boxtdclass {
+        display: flex;
+        position: relative;
+        margin: 0;
+        border-left: none !important;
+        border-right: none !important;
+        border-bottom: 0px solid #dee2e6 !important;
+        / border: none !important;
+        / border-collapse: collapse;
+        padding: 20px !important;
+    }
+
+    .maincontainer {
+        background-color: #2A2B2B03;
+        min-width: 1290px;
+    }
+
+    .table-bordered thead th, .table-bordered thead td {
+        padding: 0px;
+        border-bottom-width: 2px;
+    }
+
+    .table thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #DEE2E6;
+        text-align: center;
+    }
+
+    .table th, .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #DEE2E6;
+        vertical-align: middle !important;
+    }
+
+    .table td {
+        text-align: center;
+    }
+
+    .table thead tr:nth-child(1) th {
+        position: sticky;
+        top: 278px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    .table thead tr:nth-child(2) th {
+        position: sticky;
+        top: 305px;
+        padding: 0px;
+        padding-right: 16px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    .btnsuccess {
+        font-size: 10px !important;
+        font-family: arial !important;
+        padding: 1px !important;
+        box-shadow: none !important;
+        border-radius: 2px !important;
+    }
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .table tr:last-child th {
+        background: none !important;
+        pointer-events: none !important;
+        background-color: lightgray !important;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+</style>
+<div class="container-fluid">
+    <table class="table  tablesorter detailtable" style="margin-top: 278px;width:100%!important">
+        <thead style="background-color:lightgray;">
+            <tr>
+                <th>
+                    <input type="checkbox" id="headerCheckBox" />
+                </th>
+                <th>
+                    Image
+                </th>
+                <th style="text-align:left;padding-left:5px;width:10%">
+                    SKU
+                </th>
+                <th style="text-align:left;padding-left:5px;width:20%">Product Title</th>
+                <th style="width:10%">
+                    Box ID's/Qty Detail
+                </th>
+                <th>
+                    PO#
+                </th>
+
+                <th style="width:6%">Unit Price</th>
+                <th>Unit Price USD</th>
+
+                <th>
+                    Qty Ordered
+                </th>
+                <th>
+                    Qty Shipped
+                </th>
+                <th>
+                    Qty Received
+                </th>
+                <th>
+                    Qty Open
+                </th>
+            </tr>
+            <tr>
+                <th colspan="8">
+
+                </th>
+
+                <th class="QtyOrdered">
+                    
+                </th>
+                <th class="QtyShipped">
+                    
+                </th>
+                <th class="QtyReceived">
+                    
+                </th>
+                <th class="QtyOpen">
+                    
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td> <input type="checkbox" id="CheckBox" /></td>
+                    <td>
+                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                            <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                        </a>
+                    </td>
+                    <td>
+                        @*/BestBuyProduct/PropertyPage?ProductSKU=D7-181024-04*@
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        {
+                            <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.SKU" target="_blank">@item.SKU</a>
+                        }
+                        else
+                        {@item.SKU}
+                    </td>
+                    <td>@item.Title</td>
+                    <td class="">
+                        @foreach (var inneritem in item.Boxes)
+                        {
+                            <span>
+                                Box<a style="padding-left:5px;cursor:pointer" asp-action="Index" asp-controller="ShipmentProduct" asp-route-BoxId="@inneritem.BoxId" target="_blank">@inneritem.BoxNo</a>
+                                &nbsp;&nbsp;Qty @inneritem.SKUShipedQty
+                            </span>
+                            <button class="btn btn-sm viewbtn" data-SKU="@item.SKU" data-img="@ViewBag.S3BucketURL/@item.CompressedImage"
+                                    data-img-large="@ViewBag.S3BucketURL_large/@item.ImageName">
+                                <i class="fa fa-eye" aria-hidden="true" style="color:lightgray;"></i>
+                            </button>
+                            <br />
+                        }
+                    </td>
+                    <td>
+                        <a style="cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@item.POId" target="_blank">@item.POId</a>
+                    </td>
+
+                    <td width="80px">
+                        @if (item.CurrencyCode == 4)
+                        {
+                            <span>CAD</span>
+                        }
+                        else if (item.CurrencyCode == 0)
+                        {
+                            <span>USD</span>
+                        }
+                        else
+                        {
+                            <span>CNY</span>
+                        }
+                        @item.UnitPrice
+                    </td>
+                    <td>@item.UnitPriceUSD</td>
+                    <td>@item.OrderedQty</td>
+                    <td class="shipedqty">
+                        @item.ShipedQty
+                    </td>
+                    <td>@item.ReceivedQty</td>
+                    <td>@item.OpenQty</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

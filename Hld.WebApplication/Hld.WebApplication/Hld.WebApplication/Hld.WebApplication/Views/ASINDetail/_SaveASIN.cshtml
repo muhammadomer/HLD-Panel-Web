@@ -1,0 +1,21 @@
+﻿@model ASINDetailViewModel
+<div>
+    <form asp-action="SaveASIN" asp-controller="ASINDetail" id="ASINDetail" method="post">
+        <div class="row">
+            <div class="col-sm-7">
+                <textarea asp-for="ASINList" class="form-control" rows="10" cols="30">
+                </textarea>
+                <span asp-validation-for="ASINList" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center col-sm-5">
+                <input type="button"  id="btnSelectASINList" value="sumbit" class="btn btn-primary mt-3" />
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

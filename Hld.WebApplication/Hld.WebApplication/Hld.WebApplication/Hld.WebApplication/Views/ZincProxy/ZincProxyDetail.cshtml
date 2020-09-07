@@ -1,0 +1,473 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.GetZincProxyViewModel>
+
+@{
+    ViewData["Title"] = "ZincProxyDetail";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<style>
+    #myModal {
+        margin: 20px;
+        margin-top: 88px;
+    }
+    .myclass {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+</style>
+<div class="loader">
+    <img src="~/Images/giffff.gif" />
+</div>
+<div class="modal fade" id="myModal" style="margin-top: 80px!important;" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="display: flex; flex-direction: row-reverse !important">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel"><b>Proxy Response</b></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" style="margin-bottom:0px !important">
+                    <label for="inputName"><b>User Auth :</b> <span id="auth_user"></span></label>
+                </div>
+                <div class="form-group" style="margin-bottom:0px !important">
+                    <label for="inputName"><b>User Password :</b> <span id="auth_password"></span></label>
+                </div>
+                <div class="form-group" style="margin-bottom:0px !important">
+                    <label for="inputName"><b>Host :</b> <span id="host"></span></label>
+                </div>
+                <div class="form-group" style="margin-bottom:0px !important">
+                    <label for="inputName"><b>Website :</b> <span id="website"></span></label>
+                </div>
+                <div class="form-group" style="margin-bottom:0px !important">
+                    <label for="inputName"><b>Active :</b> <span id="active"></span></label>
+                </div>
+                <div class="form-group" style="margin-bottom:0px !important">
+                    <label for="inputName"><b>State :</b> <span id="state"></span></label>
+                </div>
+
+                @*<div class="form-group">
+            <label for="inputName">Provider : <span id="provider"></span></label>
+        </div>*@
+
+                <div class="form-group" style="margin-bottom:0px !important">
+                    <label for="inputName"><b>Provider :</b> <span id="provider"></span></label>
+                </div>
+
+                @*<div class="form-group">
+            <label for="inputName">UserName :</label>
+        </div>*@
+                <div class="form-group" style="margin-bottom:0px !important">
+                    <label for="inputName"><b>Created Date :</b> <span id="created_at"></span></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container">
+    <div class="form-row mb-2 ml-0">
+        <div class="col-md-2">
+            <h6>Zinc Proxy Detail</h6>
+        </div>
+        <div class="col-md-8">
+
+            <button href="" style="cursor:pointer; color:dodgerblue;" class="btn "><a class="" asp-action="Index" asp-controller="ZincProxy">Back</a></button>
+            <button style="cursor:pointer; color:dodgerblue;" class="btn ConfigureAPI">Configure Proxy</button>
+            <button style="cursor:pointer; color:dodgerblue;" class="btn GetResponse">Get Configuration Detail</button>
+        </div>
+    </div>
+
+    <table class="table ">
+        <thead style="background-color:lightgrey">
+            <tr>
+                <th>
+                    Proxy User
+
+                </th>
+                <th>email</th>
+                <th>
+                    Proxy IP
+
+                </th>
+                <th>
+                    Proxy Port
+                </th>
+                <th>
+
+                    Proxy Password
+
+                </th>
+                <th>Last Updated On</th>
+                <th>Active</th>
+                <th>Default</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProxyUser)
+                        <input style='display:none' class='form-control idZincProxy' value="@item.idZincProxy">
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProxyEmail)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProxyIP)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProxyPort)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProxyPasswordShort)
+                    </td>
+                    <td>
+                        @string.Format("{0: MMM d, yyyy}", @item.LatUpdated)
+
+                    </td>
+                    <td>
+                        @if (item.IsDefault)
+                        {
+                            <span class="custom-control custom-switch" data-IsActive="@item.Isactive" data-Id="@item.idZincProxy" value="@item.Isactive" style="padding-left: 3.25rem!important;">
+                                <input type="checkbox" class="custom-control-input" checked="@item.Isactive" id="@item.Isactive" style="display: inline-block!important">
+                                <label class="custom-control-label" for="@item.Isactive"></label>
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="custom-control custom-switch IsActiveSwtich" data-Isactive="@item.Isactive" data-Id="@item.idZincProxy" value="@item.Isactive" style="padding-left: 3.25rem!important;">
+                                <input type="checkbox" class="custom-control-input" checked="@item.Isactive" id="@item.Isactive" style="display: inline-block!important">
+                                <label class="custom-control-label" for="@item.Isactive"></label>
+                            </span>
+                        }
+
+                    </td>
+                    <td>
+
+                        <span class="custom-control custom-switch IsDefaultSwtich" data-IsDefault="@item.IsDefault" data-Id="@item.idZincProxy" value="@item.IsDefault" style="padding-left: 3.25rem!important;">
+                            <input type="checkbox" class="custom-control-input" checked="@item.IsDefault" id="@item.IsDefault" style="display: inline-block!important">
+                            <label class="custom-control-label" for="@item.IsDefault"></label>
+                        </span>
+
+                    </td>
+                    <td>
+                        @if (!item.IsDefault)
+                        {
+                            <a style="cursor:pointer" title="Delete" class=" btnDelete"><img src="~/Images/trash-can-1.1s-128px.png" height="25" /></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="dialog-box">
+        <h6 style="color:red">Please confirm to make active Zinc proxy!</h6>
+    </div>
+    <div id="dialog-boxDefault">
+        <h6 style="color:red">Please confirm to set as default!!</h6>
+    </div>
+
+    <div id="dialog-boxConfig">
+        <h6 style="color:red">Do you want to Configure Proxy!!</h6>
+    </div>
+
+    <div id="dialog-Delete">
+        <h6 style="color:red">Do you want to delete this record!</h6>
+    </div>
+
+
+
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".loader").hide();
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                title: 'Set Active Zinc',
+                modal: true,
+                show: 'blind',
+
+                hide: 'fold',
+
+
+
+            });
+
+            $("#dialog-boxConfig").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+
+
+            });
+
+            $("#dialog-boxDefault").dialog({
+                autoOpen: false,
+                title: 'Set Default Zinc',
+                modal: true,
+                show: {
+                    effect: "blind",
+
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+
+            });
+
+            $("#dialog-Delete").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+
+
+            $(document).on("click", ".btnDelete", function () {
+                var selectedRow = $(this);
+                var productid = $(selectedRow).parents('tr').find('.idZincProxy').val();
+                $("#dialog-Delete").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            $(".loader").show();
+                            $.ajax({
+                                type: 'GET',
+                                url: '../ZincProxy/ProxyDelete',
+                                data: { Id: productid },
+                                success: function (res) {
+                                    $("#dialog-Delete").dialog("close");
+                                    $(".loader").hide();
+                                    selectedRow.parents('tr').remove();
+                                    $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger myclass' });
+                                },
+                                Error: function (err) {
+
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                })
+                $("#dialog-Delete").dialog("open");
+            });
+
+
+            $(document).on("click", ".IsActiveSwtich", function () {
+
+                var item = $(this);
+                var val = $(this).attr("data-Isactive").toLocaleLowerCase();
+                var IsActive = false;
+                if (val == "false") {
+                    IsActive = true;
+
+                }
+                var id = $(this).attr("data-Id");
+                var url = "/ZincProxy/IsActive";
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+
+
+                            $.ajax({
+                                type: "POST",
+                                url: url,
+                                data: {
+                                    id: id,
+                                    IsActive: IsActive,
+                                },
+                                success: function (data) {
+                                    $("#dialog-box").dialog("close");
+                                    location.href = '../ZincProxy/ZincproxyDetail';
+                                }
+                            });
+                        },
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                    },
+                });
+                $("#dialog-box").dialog("open");
+            });
+
+            $(document).on("click", ".IsDefaultSwtich", function () {
+
+                var item = $(this);
+                var val = $(this).attr("data-IsDefault").toLocaleLowerCase();
+
+                var IsDefault = false;
+                if (val == "false") {
+                    IsDefault = true;
+
+                }
+                var id = $(this).attr("data-Id");
+                var url = "/ZincProxy/IsDefault";
+                $("#dialog-boxDefault").dialog({
+                    buttons: {
+                        "Confirm": function () {
+
+
+                            $.ajax({
+                                type: "POST",
+                                url: url,
+                                data: {
+                                    id: id,
+                                    IsDefault: IsDefault,
+
+                                },
+                                success: function (data) {
+                                    $("#dialog-boxDefault").dialog("close");
+
+                                    location.href = '../ZincProxy/ZincproxyDetail';
+
+
+                                }
+                            });
+
+                        }
+                    },
+
+                    "Cancel": function () {
+                        $(this).dialog("close");
+
+                    }
+
+                });
+                $("#dialog-boxDefault").dialog("open");
+            });
+
+            $(document).on("click", ".ConfigureAPI", function () {
+
+                $("#dialog-boxConfig").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            $(".loader").show();
+                            $.ajax({
+                                type: 'POST',
+                                url: '../ZincProxy/CheckProxy',
+                                data: {},
+                                success: function (res) {
+                                    $(".loader").hide();
+                                    $("#dialog-boxConfig").dialog("close");
+
+                                    var date = new Date(res.created_at);
+                                    $("#auth_user").text(res.auth_user);
+                                    $("#created_at").text(date.toISOString("DD-MM-YYYY"));
+                                    $("#website").text(res.website);
+                                    $("#active").text(res.active);
+                                    $("#state").text(res.state);
+                                    $("#provider").text(res.provider);
+                                    $("#host").text(res.host);
+                                    $("#auth_password").text("*****" + res.auth_password);
+                                    //$("#user_id").text(res.user_id);
+                                    $(".loader").hide();
+                                    $('#myModal').modal('show');
+
+                                    //if (res == 1) {
+                                    //    $.notify('Proxy Configured Successfully', { className: 'success ' });
+                                    //}
+                                    //else {
+                                    //    $.notify('some error occured!', { className: 'error ' });
+                                    //}
+                                },
+                                Error: function (err) {
+                                    debugger;
+                                    $(".loader").hide();
+                                    $.notify('some error occured!', { className: 'error ' });
+                                }
+                            });
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        },
+                    }
+
+                });
+                $("#dialog-boxConfig").dialog("open");
+            });
+
+            $(document).on("click", ".GetResponse", function () {
+                $(".loader").show();
+                $.ajax({
+                    type: 'POST',
+                    url: '../ZincProxy/GetResponse',
+                    data: {},
+                    success: function (res) {
+                        debugger;
+                        var date = new Date(res.created_at);
+                        $("#auth_user").text(res.auth_user);
+                        $("#created_at").text(date.toISOString("DD-MM-YYYY"));
+                        $("#website").text(res.website);
+                        $("#active").text(res.active);
+                        $("#state").text(res.state);
+                        $("#provider").text(res.provider);
+                        $("#host").text(res.host);
+                        $("#auth_password").text("*****"+ res.auth_password);
+                        //$("#user_id").text(res.user_id);
+                        $(".loader").hide();
+                        $('#myModal').modal('show');
+                        //setTimeout(function () { $('#myModal').modal('hide'); }, 10000);
+                        //if (res == 1) {
+                        //    $.notify('Proxy Configured Successfully', { className: 'success ' });
+                        //}
+                        //else {
+                        //    $.notify('some error occured!', { className: 'error ' });
+                        //}
+                    },
+                    Error: function (err) {
+                        debugger;
+                        $(".loader").hide();
+                        $.notify('some error occured!', { className: 'error ' });
+                    }
+                });
+            });
+
+        })
+
+    </script>
+}

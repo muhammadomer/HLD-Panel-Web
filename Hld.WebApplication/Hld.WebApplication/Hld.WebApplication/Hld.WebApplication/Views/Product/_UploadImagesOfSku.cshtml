@@ -1,0 +1,22 @@
+﻿<form method="post" asp-action="UploadImagesOfSku" id="UloadImages" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-12">
+            <input type="file" id="fUpload" name="files" multiple class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div style="margin-top:5px;margin-bottom:5px;" class="col-md-12">
+            <input class="btn btn-primary" type="button" id="btnUpload" onclick="return SubmitForm()" value="Upload" />
+        </div>
+    </div>
+</form>
+
+<div id="imagesDIV">
+
+</div>
+@section Scripts{
+    <script type="text/javascript">
+ 
+
+    </script>
+}

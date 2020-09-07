@@ -1,0 +1,16 @@
+﻿
+@model Hld.WebApplication.ViewModel.ApprovedSearchViewModel
+<div>
+    <form asp-action="Index" asp-controller="ApprovedPrice" role="form">
+        <textarea id="SearchFromSkuList" name="SearchFromSkuList" style="padding-left:4px;" cols="50" rows="10"></textarea>
+        <span class="text-danger" asp-validation-for="SearchFromSkuList"></span>
+        <input type="submit" id="searchFromSkuList" value="SearchFromSKUList" class="btn btn-primary" />
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+
+}

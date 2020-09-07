@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "ExportSkuUrlImgUrl";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<h4 style="color:cadetblue">Export</h4>
+
+<div>
+    <button class="ml-1 btn btn-primary" type="button" id="btnExportImgUrl" style="box-shadow:none">Export SKU with ImageUrl</button>
+    <span>
+        <img style="display:none;" class="UpdateSCTrackingLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+    </span>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnExportImgUrl').click(function () {
+                $(".UpdateSCTrackingLoader").css("display", "inline");
+             var Url = '/Export/ExportskuUrlImg/';//controller and then action
+             $.ajax({
+                 type: 'GET',
+                 url: Url,
+                 dataType: "json",
+                 data: {},
+                 traditional: true,
+                 success: function (data) {
+                     window.location.href = "@Url.RouteUrl(new
+                                            { Controller = "Export", Action = "downloadFileSku" })/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
+                       $(".UpdateSCTrackingLoader").css("display", "none");
+                                }
+              });
+         });
+    });
+    </script>
+}

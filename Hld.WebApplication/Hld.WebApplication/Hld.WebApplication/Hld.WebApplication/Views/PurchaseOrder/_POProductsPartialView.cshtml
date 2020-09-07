@@ -1,0 +1,288 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.PurchaseOrderItemsViewModel>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyOrdersViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<link href="~/lib/jquery.tablesorter/css/theme.default.min.css" rel="stylesheet" />
+<style type="text/css">
+    /*body {
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0 20px 0 20px;
+        text-align: center;
+        background: white;
+    }*/
+    .purchaseEnd {
+        text-align: right !important;
+    }
+    .purchaseEndth {
+        padding-right:4px!important;
+        text-align: right !important;
+    }
+    .purchaseEndthamount {
+        padding-right: 0!important;
+        text-align: center !important;
+    }
+        .table-bordered thead th, .table-bordered thead td {
+            padding: 0px;
+            /*border-bottom-width: 2px;*/
+        }
+
+    .table thead th {
+        vertical-align: middle !important;
+        /*border-bottom: 2px solid #DEE2E6;*/
+        text-align: center;
+    }
+
+    .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #DEE2E6;
+        vertical-align: middle !important;
+    }
+    /*.table thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #DEE2E6;
+        text-align: center;
+    }*/
+    .table td {
+        text-align: center;
+    }
+
+
+
+    .table thead tr:nth-child(1) th {
+        position: sticky;
+        top: 250px;
+        padding: 0px;
+        padding-right: 16px;
+        z-index: 2;
+        background-color: lightgray !important;
+    }
+
+    .table thead tr:nth-child(2) th {
+        position: sticky;
+        top: 266px;
+        padding: 0px;
+        padding-right: 16px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    .table thead tr:nth-child(3) th {
+        position: sticky;
+        top: 325px;
+        padding: 0px;
+        padding-right: 16px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+    .table tr:first-child th, tr:last-child th {
+        background: none !important;
+        pointer-events: none !important;
+        background-color: lightgray !important;
+    }
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    .table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+    .unitpriceheight {
+        max-height: 63px !important;
+        min-height: 63px !important;
+        height: 63px !important;
+    }
+</style>
+
+<div class="container-fluid ">
+    <div>
+        <div>
+            <table class="table  tablesorter" style="margin-top: 250px;">
+                <thead style="background-color:lightgrey;">
+                    <tr style="border-bottom:none">
+                        <th colspan="7"></th>
+                        <th colspan="4" style="background:#D5EFFF !important">Quantity</th>
+                        <th colspan="4" style="background:#D1FFE8 !important">Amount</th>
+                    </tr>
+                    <tr>
+                        <th class="">
+                            Image
+                        </th>
+                        <th class="">
+                            PO #
+                        </th>
+                        <th class=""style="text-align:left">
+                            Vendor
+                        </th>
+                        <th style="width: 9%;padding-left:25px!important;text-align:left">
+                            Product SKU
+                        </th>
+                        <th style="width:24%;text-align:left!important">
+                            Product Title
+                        </th>
+
+                        <th class="unitpriceheight"style="width: 9%!important;">
+                            Unit Price
+                        </th>
+                        <th class="unitpriceheight">
+                             Price
+                            USD <img src="~/Images/country.png" style="height:17px;width:20px" />
+                        </th>
+                        <th class="">
+                            Ordered
+                        </th>
+                        <th>Shipped</th>
+                        <th class="">
+                            Received
+                        </th>
+                        <th class="">
+                            Open
+                        </th>
+
+                        <th class="">
+                            Ordered
+                        </th>
+                        <th>Shipped</th>
+                        <th class="">
+                            Received
+                        </th>
+                        <th class="">
+                            Open
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="">
+
+                        </th>
+                        <th class=""style="text-align: center;">
+                            @ViewBag.POcount
+                        </th>
+                        <th class="">
+
+                        </th>
+                        <th style="width:10%;padding-left: 25px;text-align: left;">
+                            @ViewBag.count
+                        </th>
+                        <th style="width:30%;text-align:left">
+
+                        </th>
+
+                        <th class="">
+
+                        </th>
+                        <th class="">
+
+                        </th>
+                        <th class="purchaseEndthamount">
+                            @ViewBag.ordQty
+                        </th>
+                        <th class="purchaseEndthamount">
+                            @ViewBag.shiQty
+                        </th>
+                        <th class="purchaseEndthamount">
+                            @ViewBag.recQty
+                        </th>
+                        <th class="purchaseEndthamount">
+                            @ViewBag.OpenQty
+                        </th>
+
+                        <th class="purchaseEndth">
+
+                            @string.Format("{0:N2}", @ViewBag.orderamount)
+                        </th>
+                        <th class="purchaseEndth">
+                            @string.Format("{0:N2}", @ViewBag.shipedamount)
+
+                        </th>
+                        <th class="purchaseEndth">
+                            @string.Format("{0:N2}", @ViewBag.ReceviedAmount)
+
+                        </th>
+                        <th class="purchaseEndth">
+                            @string.Format("{0:N2}", @ViewBag.OpenAmount)
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.image_name">
+                                    <img src="@ViewBag.S3BucketURL/@item.Compress_image" class="rounded" height="50" width="50" />
+                                </a>
+                            </td>
+                            <td style="text-align: left;">
+
+                                <a style="padding-left:18px;cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@item.PurchaseID" target="_blank">@item.PurchaseID</a>
+                            </td>
+                            <td style="text-align:left!important">@item.Vendor</td>
+                            <td style="text-align:left!important">
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                                {
+                                    <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.ProductID" target="_blank">@item.ProductID</a>
+                                }
+                                else
+                                {
+                                    <span>@item.ProductID</span>
+
+                                }
+                            </td>
+                            <td style="text-align: left;">@item.ProductTitle</td>
+
+                            <td class="purchaseEnd">
+                                <div style="">
+                                    @if (item.CurrencyCode == 8)
+                                    {<span>CNY</span> }
+                                    else
+                                    {<span>USD</span>}
+                                    @item.UnitPrice
+                                </div>
+                            </td>
+                            <td class="purchaseEnd" style="">@item.UnitPriceUSD</td>
+                            <td>@item.QtyOrdered</td>
+                            <td>
+                                @*@if (item.QtyReceived == 0)
+                                    {
+                                    <a style="cursor:pointer" asp-action="ShipmentHistoryList" asp-controller="Shipment" asp-route-EmptyFirstTime="No" asp-route-SKU="@item.ProductID" target="_blank">@item.ShippedQty</a>
+                                    }
+                                    else
+                                    {
+
+                                        @item.ShippedQty
+                                    }*@
+                                <a class="btn btn-sm viewbtn" style="cursor:pointer; color:#007bff;font-size:12px; text-decoration:underline;" data-POID="@item.PurchaseID" data-SKU="@item.ProductID" data-img="@ViewBag.S3BucketURL/@item.Compress_image"
+                                   data-img-large="@ViewBag.S3BucketURL_large/@item.image_name">
+                                    @item.ShippedQty
+                                </a>
+                            </td>
+                            <td>@item.QtyReceived</td>
+                            <td>@item.OpenQty</td>
+                            <td class="purchaseEnd"> @string.Format("{0:N2}", @item.OrderedAmount)</td>
+                            <td class="purchaseEnd">@string.Format("{0:N2}", @item.ShippedAmount)</td>
+                            <td class="purchaseEnd"> @string.Format("{0:N2}", @item.ReceivedAmount)</td>
+                            <td class="purchaseEnd"> @string.Format("{0:N2}", @item.OpenAmount)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

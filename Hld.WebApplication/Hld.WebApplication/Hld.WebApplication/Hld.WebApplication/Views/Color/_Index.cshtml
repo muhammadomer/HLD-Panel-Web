@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.ColorViewModel>
+
+<div class="container">
+
+
+    <table id="table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sr. #
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Code
+                </th>
+                <th>
+                    Alias
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int sno = 0;
+            }
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @{ sno++; }
+                    @sno
+                </td>
+                <td>
+                    @Html.HiddenFor(modelItem => item.ColorId)
+
+                    @Html.DisplayFor(modelItem => item.ColorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ColorCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ColorAlias)
+                </td>                
+                <td>
+                    <a href="#" data-target="#myModal" data-toggle="modal" onclick="PopupForm('@Url.Action("AddUpdateColor","Color",new {id=item.ColorId } )')"> Edit </a>   |
+                    <a href="#" onclick="AddEditEmployee(@item.ColorId)"> Delete  </a>
+                </td>
+            </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+
+

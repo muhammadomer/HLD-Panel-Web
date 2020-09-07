@@ -1,0 +1,118 @@
+﻿@model List<Hld.WebApplication.ViewModels.ApprovedPriceViewModel>
+@{
+    ViewData["Title"] = "ApprovedPriceLogs";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<h6>Approved Price History</h6>
+<style>
+    .maincontainer {
+        background-color: #2A2B2B03;
+        min-width: 1320px
+    }
+
+    .table-bordered thead th, .table-bordered thead td {
+        padding: 0px;
+        border-bottom-width: 2px;
+    }
+
+    .table thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #DEE2E6;
+        text-align: center;
+    }
+
+    .table th, .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #DEE2E6;
+        vertical-align: middle !important;
+    }
+
+    .table td {
+        text-align: center;
+    }
+
+    .table thead tr th {
+        position: sticky;
+        top: 50px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+</style>
+
+
+<div class="container-fluid mt-3 maincontainer">
+    @*<div class="table-responsive">*@
+    <table class="table ">
+        <thead style="background-color:lightgray;">
+            <tr>
+                <th>Image</th>
+                <th>Vendor</th>
+
+                <th>SKU</th>
+                <th style="    text-align: left;
+    padding: 10px;width: 40%;">Product Title</th>
+
+                <th>
+                    Unit Price
+                </th>
+                <th>
+                    Unit Price <br />
+                    USD  <img src="~/Images/country.png" style="height:17px;width:20px" />
+                </th>
+                <th>
+                    Unit Price <br />
+                    CAD  <img src="~/Images/canadaflag.png" style="height:10px;width:20px" />
+                </th>
+                <th>
+                    Date
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{
+                            <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                                <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                            </a>
+                        }
+                    </td>
+
+                    <td>@item.VendorAlias (@item.VendorId)</td>
+
+                    <td>
+
+                        @item.SKU
+                    </td>
+
+                    <td>@item.ProductTitle</td>
+
+                    <td>
+                        <span> @item.Currency</span> @string.Format("{0:N2}", item.ApprovedUnitPrice) <br />
+
+                    </td>
+                    <td>  @string.Format("{0:N2}", item.USD)</td>
+                    <td>  @string.Format("{0:N2}", item.CAD)</td>
+                    <td>
+
+
+                        @string.Format("{0: MMM d, yyyy}", item.Date)
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    @*</div>*@
+</div>

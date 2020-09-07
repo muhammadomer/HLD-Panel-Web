@@ -1,0 +1,16 @@
+﻿@model Hld.WebApplication.ViewModel.BootstrapModelStatus
+
+
+@if (Model.Status)
+{
+
+    <div>
+        <h2>  @Model.ModelName , @Model.StatusMessage</h2>
+    </div>
+}
+else
+{
+    <div>
+        <h2>  @Model.ModelName , @Model.StatusMessage</h2>
+    </div>
+}

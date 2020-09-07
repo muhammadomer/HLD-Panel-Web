@@ -1,0 +1,139 @@
+﻿@model IEnumerable<ASINDetailViewModel>
+@{
+    ViewData["Title"] = "ASINDetailMainView";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+@{
+
+    var detail = Model.FirstOrDefault();
+}
+
+<style type="text/css">
+    .verticalAling {
+        vertical-align: top;
+    }
+</style>
+
+<h6>ASIN Detail</h6>
+<hr />
+
+<div class="col-sm-11">
+    <div class="card">
+
+        <div class="card-header">ASIN Section</div>
+
+        <div class="card-body">
+            <button class="btn btn-link" id="btnSelectASIN">Add Multiple ASINs</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Status</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        var verticalAling = function (row, columnfield, value, defaulthtml, columnproperties) {
+            return '<div style="vertical-align:top">' + value + ' </div>'
+        }
+
+        var cellRendererForImages = function (row, columnfield, value, defaulthtml, columnproperties) {
+
+            var text = "";
+            var sliceArray = value.split("|");
+            $.each(sliceArray, function (index, val) {
+                text += '<a href=' + val + ' target="_blank" >image' + index + '</a>'
+            });
+            return text;
+        }
+
+        var showImage = function (row, columnfield, value, defaulthtml, columnproperties) {
+            return ' <a target="_blank" href="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + value + '"><img style="margin-left: 5px;" height="50" width="50" src="https://s3.us-east-2.amazonaws.com/amzca.bb.images/' + value + '"/> </a>';
+        }
+
+        var AddCheckBox = function (row, columnfield, value, defaulthtml, columnproperties) {
+            return '<input type="checkbox" value='+value+' />'
+        }
+    </script>
+
+    <div class="col-sm-11">
+        <jqx-grid sortable="true" enable-tool-tips="true" columns-reorder="true" filterable="true"  columns-resize="true" show-filter-row="true" width="90%" pageable="true" page-size="25"   auto-height="false" height="1000px" source="Model">
+            <jqx-grid-columns>
+                @{ string newAsin = detail.ASIN; }
+                <jqx-grid-column cells-renderer="AddCheckBox()" text="" sortable="false"    filterable="false" datafield="@newAsin"></jqx-grid-column>
+                <jqx-grid-column width="120px" datafield-for="@(detail.asin_date)" filterable="true"  text="Date" cells-format="d"></jqx-grid-column>
+                <jqx-grid-column width="120px" cells-renderer="verticalAling()" filterable="true" datafield-for="@(detail.ASIN)" text="ASIN"></jqx-grid-column>
+                <jqx-grid-column cells-renderer="verticalAling()" filterable="true" datafield-for=@(detail.Title) text="Title"></jqx-grid-column>
+                <jqx-grid-column width="70px" cells-renderer="showImage()" datafield-for="@(detail.MainImage_imgPath)" text="IMG1"></jqx-grid-column>
+                <jqx-grid-column width="70px" cells-renderer="showImage()" datafield-for="@(detail.Image1_imgPath)" text="IMG2"></jqx-grid-column>
+                <jqx-grid-column width="70px" cells-renderer="showImage()" datafield-for="@(detail.Image2_imgPath)" text="IMG3"></jqx-grid-column>
+                <jqx-grid-column width="120px" cells-renderer="verticalAling()" filterable="true" datafield-for="@(detail.amazon_price)" text="Amazone Price"></jqx-grid-column>
+            </jqx-grid-columns>
+        </jqx-grid>
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            @*$.get('@Url.Action("Index", "ASINDetail")').done(function (response) {
+                $('#asinDetail').html(response);
+            });*@
+
+            $('#btnSelectASIN').click(function () {
+                $.get('@Url.Action("SaveASIN", "ASINDetail")').done(function (response) {
+                    $('#modelBody').empty();
+                    $('#modelBody').html(response);
+                    $('#myModal').modal('show');
+                });
+            });
+        });
+
+
+
+        function SubmitForm() {
+            var data = $('#ASINDetail').serialize();
+           $.validator.unobtrusive.parse($('#ASINDetail'));
+            if ($('#ASINDetail').valid()) {
+               $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SaveASIN", "ASINDetail")',
+                    data: data,
+                    success: function (data) {
+                        if (data.success == true) {
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+    </script>
+}
+

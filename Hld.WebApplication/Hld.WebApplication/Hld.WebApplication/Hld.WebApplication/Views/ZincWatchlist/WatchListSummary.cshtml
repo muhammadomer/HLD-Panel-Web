@@ -1,0 +1,567 @@
+﻿
+@{
+    ViewData["Title"] = "WatchListSummary";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+
+}
+@*<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">*@
+<link href="~/boots/bootstrap-toggle.min.css" rel="stylesheet" />
+
+<style>
+    .tooltipp {
+        position: relative;
+        display: contents;
+    }
+
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .tooltipp .tooltiptextt {
+        visibility: hidden;
+        width: 475px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        font-family: arial;
+        position: absolute;
+        z-index: 71;
+        bottom: 64%;
+        /* left: -958%; */
+        margin-bottom: 14px;
+        margin-left: -463px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+        .tooltipp .tooltiptextt::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: 213px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+    .tooltipp:hover .tooltiptextt {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .searchFormcard {
+        position: fixed;
+        background: white;
+        width: 98%;
+        /*padding: 58px 0px;*/
+        padding: 58px 0px 10px 0px;
+        top: 33px;
+        z-index: 500;
+    }
+
+    .fixedclassforpagination {
+        position: fixed;
+        top: 130px;
+        /* width: 400px; */
+        z-index: 500;
+        background: white;
+    }
+
+    .sidebar {
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+        top: 51px;
+        left: 0;
+        width: 165px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.2);
+        background-color: lightgrey;
+        overflow-x: hidden;
+        padding-top: 20px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Arial;
+            color: black;
+            display: block;
+            height: auto;
+            border-bottom: 1px solid #b7b5b5;
+        }
+
+            .sidebar a:hover {
+                color: coral;
+            }
+
+    .sidebarafter {
+        margin-left: 158px;
+    }
+
+    .active {
+        font-weight: 600;
+    }
+
+    .toggle.btn {
+        min-width: 57px;
+        min-height: 25px;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+</style>
+<div class="sidebar">
+    <ul class="sidebar-links">
+        <li class="">
+            <a class="active" asp-action="WatchListSummary" asp-controller="ZincWatchlist">Zinc DS Job</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincKey" asp-controller="Channels">Zinc</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="ZincMaxDays" asp-controller="Channels">Zinc Max Days</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincProxy">Zinc Proxy</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="SaveZincEmail" asp-controller="ZincProxy">Zinc Proxy Email</a>
+        </li>
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="ZincAccounts">Amazon Account</a>
+        </li>
+
+        <li class="">
+            <a class="" asp-action="Index" asp-controller="CreditCardView">Credit Card</a>
+        </li>
+
+    </ul>
+
+
+
+</div>
+<div class="container-fluid ">
+    <div class="form-row sidebarafter" style="">
+        <div class="form-group row col-12" style="margin-top: 30px;">
+            <div class="col-4">
+                <h4>Zinc WatchList Summary</h4>
+            </div>
+
+            <div class="col-8" style="text-align: end;">
+                @*<input type="checkbox" id="toggle-two" data-onstyle="success" data-offstyle="warning" style="color:white">*@
+                <button id="btnEnable" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-success">
+                    Enable
+                </button>
+                <button id="btnDisable" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-warning">
+                    Disable
+                </button>
+                <button id="btnStopZinJob" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary">
+                    Stop Zinc Job
+                </button>
+                <div class="btn-group">
+                    <button id="btnZinJob" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary">
+                        Zinc Job
+                    </button>
+                    <button class="btn" style="background-color: darkgrey!important;box-shadow:none!important;outline:none;color:white"><span class="tooltipp"><i class="fa fa-info" aria-hidden="true"></i><span class="tooltiptextt">Products having tag Tag  DS and Dropship disable will be sent to Zinc for update.</span></span></button>
+
+
+                </div>
+            </div>
+            @*<div class="col-3">
+
+                </div>
+                <div class="col-3">
+
+                </div>*@
+        </div>
+
+
+        <div>
+            @*<input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled">*@
+
+            @*<span class="custom-control custom-switch IsActiveSwtich" data-Isactive="@item.IsActive" data-Id="@item.CreditCardDetailId" value="@item.IsActive" style="padding-left: 3.25rem!important;">
+                    <input type="checkbox" class="custom-control-input" checked="@item.IsActive" id="@item.IsActive" style="display: inline-block!important">
+                    <label class="custom-control-label" for="@item.IsActive"></label>
+                </span>*@
+        </div>
+        @*<div class="btn-group">
+                <button id="btnStopZinJob" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary">
+
+                    Stop Zinc Job
+
+                </button>
+
+
+
+            </div>*@
+        @*<div class="col-8" style="padding-right:28px;text-align:end">
+
+
+                <div class="btn-group">
+                    <button id="btnZinJob" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary">
+
+                        Zinc Job
+
+                    </button>
+                    <button class="btn" style="background-color: darkgrey!important;box-shadow:none!important;outline:none;color:white"><span class="tooltipp"><i class="fa fa-info" aria-hidden="true"></i><span class="tooltiptextt">Products having tag Tag  DS and Dropship disable will be sent to Zinc for update.</span></span></button>
+
+
+                </div>
+            </div>*@
+
+    </div>
+</div>
+<div class="container-fluid">
+
+    <div class="row col col-12" id="fixActionMenu">
+        <div class="col col-md-2">
+            <div class="row" style="margin-left:150px;
+    margin-bottom: 15px;">
+                <div class="pagination col-md-6 col">
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col col-md-2" style="margin-left:150px">
+            <span>Records Found : @ViewBag.Records</span>
+        </div>
+
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="pagination" style="margin-left: 164px;
+    ">
+
+    </div>
+</div>
+<div id="dialog-Zinc">
+    <h6 style="color:red">Do you want to enable Zinc job!</h6>
+</div>
+
+
+<div class="hidedialogbox">
+    <div id="dialog-box">
+        <h6 style="color:red">Do you want to start zinc job!</h6>
+    </div>
+    <div id="dialog-StopZinc">
+        <h6 style="color:red">Do you want to Stop Zinc job!</h6>
+    </div>
+    <div id="dialog-box-Enable">
+        <h6 style="color:red">Do you want to enable zinc job!</h6>
+    </div>
+    <div id="dialog-box-Disable">
+        <h6 style="color:red">Do you want to disable zinc job!</h6>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    @*<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>*@
+    <script src="~/lib/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: '../ZincWatchlist/GetZincWatchListStatus',
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.status == 1) {
+                        $("#btnDisable").show();
+                        $("#btnEnable").hide();
+                    }
+                    else {
+                        $("#btnDisable").hide();
+                        $("#btnEnable").show();
+                    }
+                    if (data.Switch == 0) {
+                        $("#btnStopZinJob").hide();
+                    }
+                    else {
+                        $("#btnStopZinJob").show();
+
+                    }
+
+                }
+            });
+
+            $("#dialog-Zinc").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+            $("#dialog-StopZinc").dialog({
+                autoOpen: false,
+                title: 'Are u want to Stop Zinc Job!',
+                modal: true,
+            });
+            $("#dialog-box-Enable").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+            $("#dialog-box-Disable").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+          //pagination
+    $(".pagination").paging(parseInt('@ViewBag.Records'), {
+    format: '[< nncnn >]',
+    perpage: 25, // show 10 elements per page
+    lapping: 0, // don't overlap pages for the moment
+    page: 1, // start at page, can also be "null" or negative
+    stepwidth: 0, // =0 means blockwise next/prev steps
+    onSelect: function (page) {
+
+    pageNo = page;
+    // add code which gets executed when user selects a page
+    var completURL = '/ZincWatchlist/GetWatchListSummary?page=' + page + ''
+
+    $(".loadertbl").show();
+
+        $.ajax({
+            url: completURL,
+            data: {},
+            type: 'POST',
+            traditional: true,
+            success: function (data) {
+                $('#loadOrder').empty();
+                $('#loadOrder').html(data);
+                $(".loadertbl").hide();
+                // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+            }
+        });
+        if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+            if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                start = moment(OrderDateTimeFrom);
+                end = moment(OrderDateTimeTo);
+
+                cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+            }
+            else {
+                $('#reportrange span').html("No Date Selected");
+            }
+
+        }
+        else {
+            $('#reportrange span').html("No Date Selected");
+        }
+
+
+    //$.get(completURL).done(function (response) {
+    //      $('#loadOrder').empty();
+    //      $('#loadOrder').html(response);
+
+    //      $('#tableOrderList').stickyTableHeaders({ fixedOffset: 65 });
+    //  });
+    },
+        onFormat: function (type) {
+            switch (type) {
+                case 'block': // n and c
+                    if (this.page === this.value) {
+                        return '<span>' + this.value + '</span>';
+                    } else {
+                        return '<a href="#">' + this.value + '</a>';
+                    }
+                case 'next': // >
+                    return '<a href="#">&gt;</a>';
+                case 'prev': // <
+                    return '<a href="#">&lt;</a>';
+                case 'first': // [
+                    return '<a href="#">First</a>';
+                case 'last': // ]
+                    return '<a href="#">Last</a>';
+            }
+        }
+
+
+    });
+            //$(function () {
+            //    $('#toggle-two').bootstrapToggle({
+            //        on: 'Enabled',
+            //        off: 'Disabled'
+            //    });
+            //});
+
+
+        $(document).on("change", "#toggle-two", function () {
+            var zincval = $(this).is(':checked');
+
+            $("#dialog-Zinc").dialog({
+                buttons: {
+                    "Confirm": function () {
+                        debugger;
+
+                       $.ajax({
+                    type: 'GET',
+                           url: '../ZincWatchlist/UpdateStatus?value=' +zincval ,
+                    contentType: 'application/json',
+                    success: function (res) {
+                        $("#dialog-Zinc").dialog("close");
+
+                    }
+                });
+                    }
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+
+                }
+
+            });
+            $("#dialog-Zinc").dialog("open");
+            })
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+
+            $("#btnZinJob").click(function () {
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            $.ajax({
+                                type: 'GET',
+                                url: '../ZincWatchlist/UpdateZincJobSwitch?value=' + true,
+                                contentType: 'application/json',
+                                success: function (res) {
+                                    $("#dialog-box").dialog("close");
+                                    $("#btnStopZinJob").show();
+                                    $.ajax({
+                                        type: 'GET',
+                                        url: '../Zinc/ZincJobExecute',
+                                        contentType: 'application/json',
+                                        success: function (res) {
+                                            console.log("success");
+                                            $("#dialog-box").dialog("close");
+                                            $.notify('Zinc job executed successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                                        }
+                                    });
+                                }
+                            });
+
+
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                $("#dialog-box").dialog("open");
+            });
+
+
+            $(document).on("click", "#btnStopZinJob", function () {
+                var Stopzincval =false;
+
+                $("#dialog-StopZinc").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            debugger;
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '../ZincWatchlist/UpdateZincJobSwitch?value=' + Stopzincval,
+                                contentType: 'application/json',
+                                success: function (res) {
+                                    $("#dialog-StopZinc").dialog("close");
+                                    $("#btnStopZinJob").hide();
+                                }
+                            });
+                        }
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+
+                    }
+
+                });
+                $("#dialog-StopZinc").dialog("open");
+            })
+
+            $(document).on("click", "#btnEnable", function () {
+                $("#dialog-box-Enable").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            debugger;
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '../ZincWatchlist/UpdateStatus?value=' + true,
+                                contentType: 'application/json',
+                                success: function (res) {
+                                    $("#btnDisable").show();
+                                    $("#btnEnable").hide();
+                                    $("#dialog-box-Enable").dialog("close");
+
+                                }
+                            });
+                        }
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+
+                    }
+
+                });
+                $("#dialog-box-Enable").dialog("open");
+            })
+
+
+
+            $(document).on("click", "#btnDisable", function () {
+                debugger;
+                $("#dialog-box-Disable").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            debugger;
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '../ZincWatchlist/UpdateStatus?value=' + false,
+                                contentType: 'application/json',
+                                success: function (res) {
+                                    $("#dialog-box-Disable").dialog("close");
+                                    $("#btnDisable").hide();
+                                    $("#btnEnable").show();
+                                }
+                            });
+                        }
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+
+                    }
+
+                });
+                $("#dialog-box-Disable").dialog("open");
+            })
+
+    });
+    </script>
+}
+

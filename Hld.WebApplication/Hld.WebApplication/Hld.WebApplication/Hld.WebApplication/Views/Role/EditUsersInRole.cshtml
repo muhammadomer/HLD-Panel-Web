@@ -1,0 +1,38 @@
+﻿@model List<UserRoleViewModel>
+@{
+    ViewData["Title"] = "EditUsersInRole";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+    var roleId = ViewBag.roleId;
+}
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h6 style="color: cadetblue;
+    font-size: 20px;
+    font-size: 14px;
+    font-family: Arial;
+    font-weight: 200;">
+                Add or remove users from this role
+            </h6>
+        </div>
+        <div class="card-body">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="form-check m-1">
+                    <input type="hidden" asp-for="@Model[i].UserId" />
+                    <input type="hidden" asp-for="@Model[i].UserName" />
+                    <input asp-for="@Model[i].IsSelected" class="form-check-input" />
+                    <label class="form-check-label" asp-for="@Model[i].IsSelected">
+                        @Model[i].UserName
+                    </label>
+                </div>
+            }
+        </div>
+        <div class="card-footer">
+            <input type="submit" value="Update" class="btn btn-primary"
+                   style="width:auto;box-shadow:none" />
+            <a asp-action="EditRole" asp-route-id="@roleId"
+               class="btn btn-secondary" style="width:auto;box-shadow:none">Cancel</a>
+        </div>
+    </div>
+</form>

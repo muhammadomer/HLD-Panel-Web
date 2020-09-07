@@ -1,0 +1,1252 @@
+﻿@model Hld.WebApplication.ViewModel.ShipmentCasePackHeaderViewModel;
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    ViewData["Title"] = "CasePackShipment";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .warning {
+        border: 1px solid red;
+    }
+
+    .Cm-color {
+        color: #0099cc !important;
+    }
+
+    .Inch-color {
+        color: #009900 !important;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .colorhead {
+        color: #548b8d;
+    }
+
+    /*.user-input-wrp {
+        position: relative;
+        width: 50%;
+    }
+
+        .user-input-wrp .inputText {
+            width: 100%;
+        }
+
+            .user-input-wrp .inputText:focus {
+
+                border-width: medium medium 2px;
+            }
+
+        .user-input-wrp .floating-label {
+            position: absolute;
+            pointer-events: none;
+            top: 18px;
+            left: 10px;
+            transition: 0.2s ease all;
+        }
+
+        .user-input-wrp input:focus ~ .floating-label,
+        .user-input-wrp input:not(:focus):valid ~ .floating-label {
+            top: 0px;
+            left: 10px;
+            font-size: 13px;
+            opacity: 1;
+        }*/
+
+    .warning {
+        border: 1px solid red;
+    }
+
+    .Cm-color {
+        color: #0099cc !important;
+    }
+
+    .Inch-color {
+        color: #009900 !important;
+    }
+
+    .tablethclass {
+        width: 90px !important;
+        max-width: 90px !important;
+        min-width: 90px !important;
+    }
+
+    .tablethclassSku {
+        width: 246px !important;
+        min-width: 246px !important;
+    }
+
+    /*.tablethclassPo {
+        width: 200px !important;
+        min-width: 200px !important;
+    }*/
+
+    .form-groupinch {
+        padding: 10px;
+        border: 2px solid;
+        margin: 10px;
+    }
+
+        .form-groupinch > label {
+            padding-left: 5px;
+            padding-right: 5px;
+            position: relative;
+            top: -20px;
+            left: 20px;
+            background-color: white;
+        }
+
+        .form-groupinch > input {
+            border: none;
+        }
+
+    .colorhead {
+        color: #548b8d;
+    }
+
+    placeholder {
+        position: absolute;
+        cursor: initial;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 13px;
+        margin-top: 2px;
+        margin-left: -1.2px;
+        padding-left: 7px;
+        padding-right: 5px;
+        background-color: rgb(255, 255, 255);
+    }
+
+    .cmclass {
+        /*width: 60px;*/
+        box-shadow: none;
+    }
+
+    .inputcm {
+        height: 25px;
+        box-shadow: none !important;
+        padding: 0;
+    }
+
+    .preappend {
+        height: 25px;
+        padding: 0px;
+        /*width: 22px;*/
+    }
+
+    .appendafter {
+        padding: 1px
+    }
+
+    .inchclass {
+        /*width: 55px;*/
+        box-shadow: none;
+    }
+
+    .inputinch {
+        height: 25px;
+        box-shadow: none !important;
+        padding: 0;
+    }
+
+    .preappend {
+        height: 25px;
+        padding: 0px;
+    }
+
+    .preappendlist {
+        height: 26px;
+        padding: 0px;
+    }
+
+    .appendafter {
+        padding: 1px
+    }
+
+    .actionclass {
+        min-width: 130px;
+        width: 130px !important;
+        max-width: 140px !important;
+    }
+
+    .btnclass {
+        padding-top: 0px !important;
+        height: 23px !important;
+        box-shadow: none !important;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .myclasscancel {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: black;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .mydelte {
+        position: fixed;
+        top: 25%;
+        left: 85%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+
+    .grpTextBox {
+        text-align: left;
+        font: inherit;
+        padding: 2px 4px;
+        margin: 1px auto;
+        border: solid 1px #BFBFBF;
+        border-radius: 2px;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+    }
+
+    .highlight_row {
+        background-color: #CCC;
+        color: #000;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+</style>
+
+
+
+<div class="modal fade" id="myModalMarkShiped" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 80px!important;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Mark As Shipped</h4>
+            </div>
+
+            @using (Html.BeginForm("CreateShipmentCourier", "Shipment"))
+            {<div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputName"><b>Shipping Courier Code :</b></label>
+                        <input type="text" name="CourierCode" class="form-control" id="idCourierCode">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputName"><b>Traking Number :</b></label>
+                        <input type="text" name="TrakingNumber" class="form-control" id="idTrakingNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputName"><b>Shipping Date :</b></label>
+                        <input type="date" name="CreatedAt" class="form-control" id="idCreatedAt">
+                        <input type="text" style="display:none" name="ShipmentId" value="@Model.ShipmentId" class="form-control" id="MarkedShipmentId">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
+                    <button type="submit" id="btnMarkedAsShipped" class="btn btn-primary btnsave">Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="card mb-3 mt-3">
+        <div style="padding:0px" class="card-header">
+            <b style=" vertical-align: sub;
+margin-left: 13px;">Case Pack Shipment Details</b>
+
+            <div style="float: right;">
+                <a class="btn btn-success btnstyle" asp-controller="ShipmentCasePack" asp-action="GetTemplateList" target="_blank">Manage Case Pack</a>
+                @if (Model.Status < 3)
+                {
+                    <button ShipmentId="@Model.ShipmentId" class="btn btn-success btn-style MarkedAsCaseShipped">Mark As Shipped</button>
+                }
+
+                @if (Model.Status < 3 || ViewBag.POMasterID == 1278)
+                {
+                    <button class=" btn btn-danger btn-style " id="btnDeleteCasePackShipment" value="Delete" style="box-shadow:none"> Delete Shipment </button>
+                }
+
+
+            </div>
+        </div>
+        <div class="row ml-0 mt-1">
+            <div class="col-1">
+                <label class="control-label mb-0 colorhead"><b>Ship from:</b></label>
+                <div class="" style="">
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Shipment Name/ID:</b></label>
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>ID:</b></label>
+
+                    <label class="control-label mb-0 "> </label><a href="/ShipmentCasePack/viewShipment?ShipmentId=@Model.ShipmentId" style="cursor:pointer">
+    @Model.ShipmentId</a> <br />
+                    <label class="control-label mb-0 colorhead"><b>Name:</b></label>
+                    <label class="control-label mb-0 ">@Model.ShipmentName </label> <br />
+
+</div>
+            </div>
+            <div class="col-2">
+                <label class="control-label colorhead mb-0"><b>Shipping Wt / Volume</b></label>
+                <div class="" style="">
+                    <label class="control-label colorhead mb-0"><b>Gross Wt:</b></label>
+                    <label class="control-label mb-0" id="">@Math.Round(@Model.list.Sum(s => s.Weight * s.NoOfBoxes),0) Kgs</label>
+                    <br />
+                    <label class="control-label colorhead mb-0"><b>CBM:</b></label>
+                    <label class="control-label mb-0" id="">@Math.Round(@Model.list.Sum(s => s.NoOfBoxes * ((s.Height * s.Weight * s.Length) / 1000000)),3) </label>
+                    <br />
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Box Contents:</b></label>
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Boxs:</b></label>
+                    <label class="control-label mb-0 " id="totalshipedqty">@Model.NoOfBoxes </label>
+                    <br />
+                    <label class="control-label mb-0 colorhead"><b>Qty Shipped:</b></label>
+                    <label class="control-label mb-0 " id="totalshipedqty"> @Model.ShipedQty </label>
+                    <br />
+                    <label class="control-label mb-0 colorhead"><b>SKU's:</b></label>
+                    <label class="control-label mb-0 " id="totalshipedqty">@Model.SKUs </label>
+                    <label class="control-label mb-0 colorhead"><b>PO's:</b></label>
+                    <label class="control-label mb-0 " id="totalshipedqty">@Model.POs </label>
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Value Reconciliation:</b></label>
+                <div class="" style="">
+
+                </div>
+            </div>
+            <div class="col-2">
+                <label class="control-label mb-0 colorhead"><b>Shipment Status:</b></label>
+                @if (Model.Status == 1)
+                {
+                    <span>Open</span>
+                }
+                @if (Model.Status == 2)
+                {
+                    <span>In Process</span>
+                }
+                @if (Model.Status == 3)
+                {
+                    <span>Shipped</span>
+                }
+                @if (Model.Status == 4)
+                {
+                    <span>Receiving in process</span>
+                }
+                @if (Model.Status == 5)
+                {
+                    <span>Received</span>
+                }
+
+                <div class="" style="">
+                </div>
+            </div>
+
+
+        </div>
+        <div class=" form-group row ml-0">
+            <label class="control-label mb-0 colorhead" style="margin-left: 15px;"><b>Notes:</b></label>
+            <div class="col-sm-10" style="padding-left:2px">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="container-fluid">
+    <table class="table table-bordered casepacktable">
+        <thead style="background-color:lightgray">
+            <tr>
+                <th>Image</th>
+                <th>SKU</th>
+                <th>Qty/Box</th>
+                <th>
+                    <label>PO #</label><label class="col-sm-3  pr-0">
+                        Qty
+                        <br />Open
+                    </label><label class="col-sm-4  p-0">Qty    <br /> Balanced</label>
+                </th>
+                <th>Boxes</th>
+                <th>Qty Shipped</th>
+                <th class="Cm-color tablethclass">Width</th>
+                <th class="Cm-color tablethclass">Height</th>
+                <th class="Cm-color tablethclass">Length</th>
+                <th class="Cm-color tablethclass">Weight</th>
+                <th class="Cm-color tablethclass">Total</th>
+                <th class="actionclass ">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.list)
+            {
+
+                <tr>
+                    @{
+
+                        double width = @Math.Round(Convert.ToDouble(item.Width) * 0.393701, 2);
+                        double height = @Math.Round(Convert.ToDouble(item.Height) * 0.393701, 2);
+                        double length = @Math.Round(Convert.ToDouble(item.Length) * 0.393701, 2);
+                        double weight = @Math.Round(Convert.ToDouble(item.Weight) * 2.20462, 2);
+                        double totalweightkg = @Math.Round(Convert.ToDouble(item.Weight * item.NoOfBoxes), 2);
+                        double totalweight = @Math.Round(Convert.ToDouble(item.Weight * item.NoOfBoxes) * 2.20462, 2);
+                    }
+                    <td>
+                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                            <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                        </a>
+                    </td>
+                    <td style=''>
+                        <input style='width:300px;' readonly class='form-control sku' placeholder="Scan SKU or type/paste then press Enter Key" value="@item.SKU">
+                        <input style='display:none' class='form-control idShipmentProducts' value='@item.idShipmentProducts'>
+                        <input style='display:none' class='form-control casepack' value='@item.CasePackId'>
+                        <p style="margin-bottom: 0 !important;">@item.Title</p>
+                    </td>
+                    <td style=''><input type='text' readonly class='form-control qtybox' value="@item.QtyPerBox"></td>
+                    <td style=''>
+                        <select type='text' style='width:200px;' disabled class='form-control p-0 po'>
+                            <option value='0'>@item.POId&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.OpenQty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.BalanceQty</option>
+                        </select>
+                    </td>
+                    <td style=''><input type='text' class='form-control boxes' readonly value="@item.NoOfBoxes"></td>
+                    <td style=''><input type='text' class='form-control qtyshipped' readonly value="@item.ShipedQty"></td>
+                    <td style=''>
+                        <div class='input-group cmclass' style='margin-bottom: 10px;'>
+                            <input type='text' class='form-control widthcm' readonly value="@item.Width"><div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color: #0099cc !important; font-size:12px;'>cm</span></div>
+                        </div>
+                        <div class='input-group inchclass'>
+                            <input type='text' class='form-control widthinch' value="@width" readonly style='cursor:not-allowed;'>
+                            <div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color:green ;font-size:12px;'>Inch</span></div>
+                        </div>
+                    </td>
+                    <td style=''>
+                        <div class='input-group cmclass' style='margin-bottom: 10px;'>
+                            <input type='text' class='form-control heightcm' readonly value="@item.Height">
+                            <div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color: #0099cc !important; font-size:12px;'>cm</span></div>
+                        </div>
+                        <div class='input-group inchclass'>
+                            <input type='text' class='form-control heightinch' readonly value='@height' style='cursor:not-allowed;'>
+                            <div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color:green;font-size:12px;'>Inch</span></div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class='input-group cmclass' style='margin-bottom: 10px;'>
+                            <input type='text' class='form-control lengthcm' readonly value='@item.Length'>
+                            <div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color: #0099cc !important;font-size:12px;'>cm</span></div>
+                        </div>
+
+                        <div class='input-group inchclass'>
+                            <input type='text' class='form-control lengthinch' readonly value='@length' style='cursor:not-allowed;'>
+                            <div class='input-group-append preappendlist'><span class='input-group-text appendafter' style='color:green;font-size:12px;'>Inch</span></div>
+                        </div>
+
+                    </td>
+
+                    <td>
+                        <div class='input-group cmclass' style='margin-bottom: 10px;'>
+                            <input type='text' class='form-control weightkg' readonly value='@item.Weight'>
+                            <div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color: #0099cc !important;font-size:12px;'>kg</span></div>
+                        </div>
+
+                        <div class='input-group inchclass'>
+                            <input type='text' class='form-control weightlbs' readonly value='@weight' style='cursor:not-allowed;'>
+                            <div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color: green !important;font-size:12px;'>lb</span></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class='input-group cmclass' style='margin-bottom: 10px;'>
+                            <input type='text' class='form-control totalkg' value='@totalweightkg' readonly style='cursor:not-allowed;'>
+                            <div class='input-group-append preappendlist'><span class='input-group-text appendafter' style='color: #0099cc !important;font-size:12px;'>kg</span></div>
+                        </div>
+                        <div class='input-group inchclass'>
+                            <input type='text' class='form-control totallbs' readonly value='@totalweight' style='cursor:not-allowed;'>
+                            <div class='input-group-append preappendlist'><span class='input-group-text appendafter' style='color:green;font-size:12px;'>lb</span></div>
+                        </div>
+                    </td>
+                    <td>
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        {
+                            @if (Model.Status < 5)
+                            {
+                                <button type='button' class='btn btn-sm btn-success submit' style="display:none;" value=''>Save</button>
+                                <button type='button' class='btn btn-sm btn-success edit' value=''>Edit</button>
+                                <button type='button' class='btn btn-sm delete' style="" value=''><img src="~/Images/trash-can-1.1s-128px.png" height="25" /></button>
+                            }
+                        }
+
+                        else
+                        {
+                            @if (Model.Status < 3)
+                            {
+                                <button type='button' class='btn btn-sm btn-success submit' style="display:none;" value=''>Save</button>
+                                <button type='button' class='btn btn-sm btn-success edit' value=''>Edit</button>
+                                <button type='button' class='btn btn-sm delete' style="" value=''><img src="~/Images/trash-can-1.1s-128px.png" height="25" /></button>
+                            }
+                        }
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+    <form>
+        @if (Model.Status < 3)
+        {
+            <input type="button" class="add-row btn btn-success" value="Add Product">
+        }
+    </form>
+
+</div>
+<div class="hidedialogbox ">
+    <div id="dialog-box">
+        <h6 style="color:red">Do you want to delete this reocord!</h6>
+    </div>
+    <div id="dialog-box">
+        <h6 style="color:red ;">Do you want to delete this reocord!</h6>
+    </div>
+    <div id="dialog-box-Inform">
+        <h6 style="color:red">You can not delete shipment until delete all the boxes in this Case Pack shipment!</h6>
+    </div>
+
+    <div id="dialog-box-warn">
+        <h6 style="color:red">You can not ship because boxes in this shipment are empty Or their dimenions are not given</h6>
+    </div>
+
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript" src="https://www.jqueryscript.net/demo/jQuery-Floating-Placeholder-Text-Plugin-Placeholder-Label/src/jquery.placeholder.label.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                modal: true,
+            });
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+
+            });
+            $("#dialog-box-Inform").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+
+
+            });
+
+            $("#dialog-box-warn").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+
+            var editable = false;
+            $(document).on("blur", ".widthcm", function () {
+
+                $(this).closest('tr').find(".widthinch").val(($(this).val() * 0.393701).toFixed(2));
+
+            });
+
+
+
+            $(document).on("blur", ".heightcm", function () {
+
+                $(this).closest('tr').find(".heightinch").val(($(this).val() * 0.393701).toFixed(2));
+
+            });
+
+            $(document).on("blur", ".lengthcm", function () {
+
+                $(this).closest('tr').find(".lengthinch").val(($(this).val() * 0.393701).toFixed(2));
+
+            });
+
+            $(document).on("blur", ".weightkg", function () {
+
+                $(this).closest('tr').find(".weightlbs").val(($(this).val() * 2.20462).toFixed(2));
+
+            });
+
+            $(document).on("blur", ".boxes,.qtybox ", function () {
+                var qtybox = $(this).closest('tr').find(".qtybox ").val();
+
+                var boxes = $(this).closest('tr').find(".boxes").val();
+                var result = boxes * qtybox;
+                $(this).closest('tr').find('.qtyshipped').val(boxes * qtybox);
+
+                //$(this).closest('tr').find(".qtyshipped").val((result * 2.20462).toFixed(2));
+
+            });
+
+            $(document).on("blur", ".boxes,.weightkg", function () {
+                var weight = $(this).closest('tr').find(".weightkg").val();
+
+                var boxes = $(this).closest('tr').find(".boxes").val();
+                var result = boxes * weight;
+                $(this).closest('tr').find('.totalkg').val(boxes * weight);
+
+                $(this).closest('tr').find(".totallbs").val((result * 2.20462).toFixed(2));
+
+            });
+
+            $(document).on("click", ".edit", function () {
+                var selectedRow = $(this).parents('tr');
+                editable = true;
+                $(selectedRow).find('.boxes').prop('readonly', false);
+                $(selectedRow).find('.edit').hide();
+                $(selectedRow).find('.submit').show();
+            });
+
+
+            $(".btnMarkedAsShipped").click(function () {
+                $('#myModalMarkShiped').modal('hide');
+                $.notify('Marked As Shipped successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+
+            });
+
+            $(".MarkedAsCaseShipped").click(function () {
+
+                var Found = false;
+                var i = 0;
+                $('.table tbody tr').each(function () {
+                    debugger;
+
+                    var data = {
+                        Width: parseFloat($(this).find('.widthcm').val()),
+                        Height: parseFloat($(this).find('.heightcm').val()),
+                        Length: parseFloat($(this).find('.lengthcm').val()),
+                        Weight: parseFloat($(this).find('.weightkg').val()),
+                        //BoxId: $(this).find('.BoxId').val(),
+                        ShipedQty: parseFloat($(this).find('.qtyshipped').text()),
+                    };
+                    if (data.Width === 0) {
+                        Found = true;
+                        return false;
+                    }
+                    if (data.Height === 0) {
+                        Found = true;
+                        return false;
+                    }
+                    if (data.Length === 0) {
+                        Found = true;
+                        return false;
+                    }
+                    if (data.Weight === 0) {
+                        Found = true;
+                        return false;
+                    }
+                    if (data.ShippedQty === 0) {
+                        Found = true;
+                        return false;
+                    }
+                    if (data.Weight != 'undefined') {
+                        i++;
+                    }
+
+                });
+
+                if (Found || i === 0) {
+                    $("#dialog-box-warn").dialog("open");
+                }
+                else {
+                    $("#MarkedShipmentId").val($(this).attr("ShipmentId"));
+
+                    $('#myModalMarkShiped').modal('show');
+                    $(this).find('input[type="text"]').focus();
+                }
+
+            });
+
+
+            $(document).on('keypress', '.sku', function (event) {
+                //var item = $(this).parents('tr');
+                if (event.keyCode == 13) {
+                    var item = $(this);
+                    if (item.val() == "")
+                        return;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '../ShipmentCasePack/GetTemplate?SKU=' + item.val(),
+                        contentType: 'application/json',
+                        success: function (res) {
+                            debugger;
+                            var casepackId = res.CasePackId;
+                            var qtyperbox = res.QtyPerBox;
+                            var width = res.Width;
+                            var height = res.Height;
+                            var length = res.Length;
+                            var weight = res.Weight;
+                            //var totalweigth = weight * boxes;
+                            if (width > 0) {
+
+
+                                $(item).parents('tr').find('.widthinch').val((width * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.heightinch').val((height * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.lengthinch').val((length * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.weightlbs').val((weight * 2.20462).toFixed(2));
+                                //$(item).parents('tr').find('.po').val((totalweigth * 2.20462).toFixed(2));
+                                $(item).parents('tr').find('.widthcm').val((width).toFixed(2));
+                                $(item).parents('tr').find('.heightcm').val((height).toFixed(2));
+                                $(item).parents('tr').find('.lengthcm').val((length).toFixed(2));
+                                $(item).parents('tr').find('.weightkg').val((weight).toFixed(2));
+
+                                $(item).parents('tr').find('.qtybox').val((qtyperbox));
+                                $(item).parents('tr').find('.casepack').val((casepackId));
+                            }
+
+                            //$(item).parents('tr').find('.po').append(content);
+                            //console.log("Response", res);
+                            //$(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + item.val(),
+                        contentType: 'application/json',
+                        success: function (res) {
+                            $(item).parents('tr').find('.po').empty();
+                            var content = '';
+                            $.each(res, function (index, value) {
+                                content = content + '<option value = "' + value.POId + '">' + value.POId + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.OpenQty + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.BalanceQty + '</option>';
+                            });
+                            debugger;
+                            $(item).parents('tr').find('.po').append(content);
+                            //console.log("Response", res);
+                            //$(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        url: "/Product/GetProductDetailsForAPBySku",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: item.val() },
+                        success: function (data, ui) {
+                            console.log("SKUProfile", data);
+                            $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
+                                '<img src="@ViewBag.S3BucketURL/' + data.Compress_image + '" class="rounded" height="50" width="50" /></a>');
+                            $(item).parents('tr').find(".producttitle").text(data.Title);
+                            debugger;
+                        }
+                    });
+                }
+            });
+
+
+            //$(document).on("focus", ".widthinch", function () {
+            //    $(this).closest('tr').find(".widthcm").focus();
+
+            //});
+            $(document).on("click", ".delete", function () {
+                var currentElem = $(this).closest('tr');
+                var selectedRow = $(this);
+                var productid = $(selectedRow).parents('tr').find('.idShipmentProducts').val();
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+
+                            debugger;
+                            $.ajax({
+                                type: 'POST',
+                                url: '../ShipmentCasePack/Delete',
+                                data: { Id: productid },
+                                success: function (res) {
+                                    debugger;
+                                    $("#dialog-box").dialog("close");
+                                    selectedRow.parents('tr').remove();
+                                    setTimeout(function () { SumShipedQty(); }, 1000);
+                                    $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
+                                    debugger;
+                                },
+                                Error: function (err) {
+                                    debugger;
+                                }
+                            });
+
+
+                            currentElem.remove()
+                            $(this).dialog("close");
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                })
+                $("#dialog-box").dialog("open");
+            });
+
+            function AddMarkup() {
+                var markup = "<tr>" +
+                    "<td><div class='productimage'></div></td>" +
+                    "<td style=''><input type='search' style='width:300px;' placeholder='Scan SKU or type/paste then press Enter Key' class='form-control sku'>" +
+                    "<input style='display:none' class='form-control idShipmentProducts' value=''>" +
+                    "<input type='search' style='display:none' class='form-control casepack'>" +
+                    "<p class='producttitle'></p>" + "</td>" +
+                    "<td style=''><input type='text' class='form-control qtybox'></td>" +
+                    "<td style=''><select type='text' style='width:200px;' class='form-control p-0 po'></select></td>" +
+                    "<td style=''><input type='text' class='form-control boxes '></td>" +
+                    "<td style=''><input type='text' readonly class='form-control qtyshipped'></td>" +
+                    "<td style=''><div class='input-group cmclass'style='margin-bottom: 10px;'><input type='text' class='form-control widthcm inputcm'><div class='input-group-append preappend'> <span class='input-group-text appendafter'style='color: #0099cc !important;font-size:12px;'>cm</span></div></div><div class='input-group inchclass'><input type='text'class='form-control  widthinch inputinch'value='' readonly style='cursor:not-allowed;'><div class='input-group-append preappend'> <span class='input-group-text appendafter'style='color:green;font-size:12px;'>Inch</span></div></div></td>" +
+                    "<td style=''><div class='input-group cmclass'style='margin-bottom: 10px;'><input type='text' class='form-control  heightcm inputcm'><div class='input-group-append preappend'> <span class='input-group-text appendafter'style='color: #0099cc !important;font-size:12px;'>cm</span></div></div><div class='input-group inchclass'><input type='text'class='form-control  heightinch inputinch'readonly value=''style='cursor:not-allowed'><div class='input-group-append preappend'> <span class='input-group-text appendafter'style='color:green;font-size:12px;'>Inch</span></div></div></td>" +
+                    "<td><div class='input-group cmclass'style='margin-bottom: 10px;'><input type='text'class='form-control lengthcm inputcm' value=''><div class='input-group-append preappend'> <span class='input-group-text appendafter'style='color: #0099cc !important;font-size:12px;'>cm</span></div></div><div class='input-group inchclass'><input type='text'class='form-control lengthinch inputinch' readonly value=''style='cursor:not-allowed'><div class='input-group-append preappend'> <span class='input-group-text appendafter'style='color:green;font-size:12px;'>Inch</span></div></div></td>" +
+                    "<td><div class='input-group cmclass'style='margin-bottom: 10px;'><input type='text'class='form-control weightkg inputinch' value=''><div class='input-group-append preappend'> <span class='input-group-text appendafter'style='color: #0099cc !important;font-size:12px;'>kg</span></div></div><div class='input-group inchclass'><input type='text' class='form-control weightlbs inputinch' readonly value='' style='cursor:not-allowed'><div class='input-group-append preappend'> <span class='input-group-text appendafter'style='color:green;font-size:12px;'>lb</span></div></div>" + "</td>" +
+                    "<td><div class='input-group cmclass'style='margin-bottom: 10px;'><input type='text'class='form-control totalkg inputinch' value=''readonly style='cursor:not-allowed;'><div class='input-group-append preappend'><span class='input-group-text appendafter'style='color: #0099cc !important;font-size:12px;'>kg</span></div></div>" +
+                    "<div class='input-group inchclass'><input type='text'class='form-control totallbs inputinch'readonly value=''style='cursor:not-allowed;'><div class='input-group-append preappend'><span class='input-group-text appendafter' style='color:green;font-size:12px;'>lb</span></div></div>" + "</td > " +
+                    "<td><button type='button'class='btn btn-sm btn-success submit btnclass' value=''style='margin-right:4px!important;'>Save</button>" +
+                    "<button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button'class='btn btn-sm delete btnclass' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td>" +
+                    "</tr>";
+                $(".table tbody").append(markup);
+            }
+
+
+
+
+
+
+
+            var count = 0;
+            $(".add-row").click(function () {
+
+                debugger;
+                count++;
+                if (count < 2) {
+                    AddMarkup();
+                    $('.sku').focus();
+                    keypressfunction();
+
+
+                }
+                var tbody_tr_last = $('table>tbody>tr:last');
+                var sku = tbody_tr_last.find(".sku").val();
+                var qtybox = tbody_tr_last.find(".qtybox").val();
+                var po = tbody_tr_last.find(".po").val();
+                var boxes = tbody_tr_last.find(".boxes").val();
+                var qtyshipped = tbody_tr_last.find(".qtyshipped").val();
+
+                var width = tbody_tr_last.find(".widthcm").val();
+                var height = tbody_tr_last.find(".heightcm").val();
+                var length = tbody_tr_last.find(".lengthcm").val();
+                var weight = tbody_tr_last.find(".weightkg").val();
+
+
+                if (sku != '' && qtybox != '' && po != '' && boxes != '' && qtyshipped != '' && width != '' && height != '' && length != '' && weight != '') {
+
+                    AddMarkup();
+
+
+                    $('.sku').focus();
+                    keypressfunction();
+                }
+                else {
+                    if (sku == '') {
+                        tbody_tr_last.find(".sku").addClass('warning')
+                    }
+                    if (qtybox == '') {
+                        tbody_tr_last.find(".qtybox").addClass('warning')
+                    }
+                    if (po == '') {
+                        tbody_tr_last.find(".po").addClass('warning')
+                    }
+                    if (boxes == '') {
+                        tbody_tr_last.find(".boxes").addClass('warning')
+                    }
+                    if (qtyshipped == '') {
+                        tbody_tr_last.find(".qtyshipped").addClass('warning')
+                    }
+                    if (width == '') {
+                        tbody_tr_last.find(".widthcm").addClass('warning')
+                    }
+                    if (height == '') {
+                        tbody_tr_last.find(".heightcm").addClass('warning')
+                    }
+                    if (length == '') {
+                        tbody_tr_last.find(".lengthcm").addClass('warning')
+                    }
+                    if (weight == '') {
+                        tbody_tr_last.find(".weightkg").addClass('warning')
+                    }
+                }
+            });
+
+             $(document).on("click", ".submit", function () {
+
+                var selectedRow = $(this).parents('tr');
+                $(selectedRow).parents('tr').next().find(".sku").focus();
+                var data =
+                {
+                    SKU: $(selectedRow).find('.sku').val(),
+                    POId: $(selectedRow).find('.po').val(),
+                    idShipmentProducts: $(selectedRow).find('.idShipmentProducts').val(),
+                    ShipmentId: '@Model.ShipmentId',
+                    ShipedQty: $(selectedRow).find('.qtyshipped').val(),
+                    //VendorId: $(row).find('.PO').val(),
+                    NoOfBoxes: $(selectedRow).find('.boxes').val(),
+                    CasePackId: $(selectedRow).find('.casepack').val(),
+                    Height: $(selectedRow).find('.heightcm').val(),
+                    Width: $(selectedRow).find('.widthcm').val(),
+                    Length: $(selectedRow).find('.lengthcm').val(),
+                    Weight: $(selectedRow).find('.weightkg').val(),
+                    QtyPerBox: $(selectedRow).find('.qtybox').val(),
+                }
+                 if (data.SKU != '' && data.POId != '' && data.QtyPerBox != '' && data.NoOfBoxes != '' && data.Height != '' && data.Width != '' && data.Length != '' && data.Weight != '' && data.ShipedQty !== '')
+                 {
+
+                     var i = 0;
+                     $.ajax({
+                         type: 'POST',
+                         url: '../ShipmentCasePack/Save',
+                         data: { data },
+                         success: function (res) {
+                             i++;
+                             debugger;
+                             if (res > 0) {
+                                 $(selectedRow).find('.idShipmentProducts').val(res);
+                                 $(selectedRow).find('input').prop('readonly', true);
+                                 $(selectedRow).find('select').attr('disabled', true);
+                                 $(selectedRow).find('.edit').show();
+                                 $(selectedRow).find('.submit').hide();
+                                 if (editable == false) {
+                                     AddMarkup();
+                                     $(selectedRow).next().find(".sku").focus();
+
+
+                                 }
+                                 editable = false;
+                                 //SumShipedQty();
+                                 $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                             }
+                             else {
+                                 //$(selectedRow).find('.shipedqty').addClass('warning')
+                                 //$(selectedRow).find('.qtyerr').show();
+                                 //$(selectedRow).find('.qtyerr').text('Must be less then Open Qty');
+                                 $.notify('Quantity is higher then Open Qty', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
+                             }
+                         },
+                         Error: function (err) {
+                             debugger;
+                         }
+                     });
+                 }
+                 else {
+                     if (data.SKU == '') {
+                         selectedRow.find(".sku").addClass('warning')
+                     }
+                     if (data.POId  == '') {
+                         selectedRow.find(".po").addClass('warning')
+                     }
+                     if (data.QtyPerBox == '') {
+                         selectedRow.find(".qtybox").addClass('warning')
+                     }
+                     if (data.ShipedQty == '') {
+                         selectedRow.find(".qtyshipped").addClass('warning')
+                     }
+                     if (data.NoOfBoxes == '') {
+                         selectedRow.find(".boxes").addClass('warning')
+                     }
+
+                     if (data.Width == '') {
+                         selectedRow.find(".widthcm").addClass('warning')
+                     }
+                     if (data.Height == '') {
+                         selectedRow.find(".heightcm").addClass('warning')
+                     }
+                     if (data.Length == '') {
+                         selectedRow.find(".lengthcm").addClass('warning')
+                     }
+                     if (data.Weight == '') {
+                         selectedRow.find(".weightkg").addClass('warning')
+                     }
+                 }
+            });
+
+            $(document).on('keypress', '.boxes', function (event) {
+                if (event.keyCode == 13) {
+
+                var selectedRow = $(this).parents('tr');
+                    //$(selectedRow).find('.qtyshipped').val($(selectedRow).find('.boxes').val() * $(selectedRow).find('.qtybox').val());
+                var data =
+                {
+                    SKU: $(selectedRow).find('.sku').val(),
+                    POId: $(selectedRow).find('.po').val(),
+                    idShipmentProducts: $(selectedRow).find('.idShipmentProducts').val(),
+                    ShipmentId: '@Model.ShipmentId',
+                    ShipedQty: $(selectedRow).find('.qtyshipped').val(),
+                    //VendorId: $(row).find('.PO').val(),
+                    NoOfBoxes: $(selectedRow).find('.boxes').val(),
+                    CasePackId: $(selectedRow).find('.casepack').val(),
+                    Height: $(selectedRow).find('.heightcm').val(),
+                    Width: $(selectedRow).find('.widthcm').val(),
+                    Length: $(selectedRow).find('.lengthcm').val(),
+                    Weight: $(selectedRow).find('.weightkg').val(),
+                    QtyPerBox: $(selectedRow).find('.qtybox').val(),
+                }
+                 if (data.SKU != '' && data.POId != '' && data.QtyPerBox != '' && data.NoOfBoxes != '' && data.Height != '' && data.Width != '' && data.Length != '' && data.Weight != '' && data.ShipedQty !== '')
+                 {
+
+                     var i = 0;
+                     $.ajax({
+                         type: 'POST',
+                         url: '../ShipmentCasePack/Save',
+                         data: { data },
+                         success: function (res) {
+                             i++;
+                             debugger;
+                             if (res > 0) {
+                                 $(selectedRow).find('.idShipmentProducts').val(res);
+                                 $(selectedRow).find('input').prop('readonly', true);
+                                 $(selectedRow).find('select').attr('disabled', true);
+                                 $(selectedRow).find('.edit').show();
+                                 $(selectedRow).find('.submit').hide();
+                                 if (editable == false) {
+                                     AddMarkup()
+                                     $(selectedRow).next().find(".sku").focus();
+
+                                 }
+                                 editable = false;
+                                 //SumShipedQty();
+                                 $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                             }
+                             else {
+                                 //$(selectedRow).find('.shipedqty').addClass('warning')
+                                 //$(selectedRow).find('.qtyerr').show();
+                                 //$(selectedRow).find('.qtyerr').text('Must be less then Open Qty');
+                                 $.notify('Quantity is higher then Open Qty', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
+                             }
+                         },
+                         Error: function (err) {
+                             debugger;
+                         }
+                     });
+                 }
+                 else {
+                     if (data.SKU == '') {
+                         selectedRow.find(".sku").addClass('warning')
+                     }
+                     if (data.POId  == '') {
+                         selectedRow.find(".po").addClass('warning')
+                     }
+                     if (data.QtyPerBox == '') {
+                         selectedRow.find(".qtybox").addClass('warning')
+                     }
+                     if (data.ShipedQty == '') {
+                         selectedRow.find(".qtyshipped").addClass('warning')
+                     }
+                     if (data.NoOfBoxes == '') {
+                         selectedRow.find(".boxes").addClass('warning')
+                     }
+
+                     if (data.Width == '') {
+                         selectedRow.find(".widthcm").addClass('warning')
+                     }
+                     if (data.Height == '') {
+                         selectedRow.find(".heightcm").addClass('warning')
+                     }
+                     if (data.Length == '') {
+                         selectedRow.find(".lengthcm").addClass('warning')
+                     }
+                     if (data.Weight == '') {
+                         selectedRow.find(".weightkg").addClass('warning')
+                     }
+                 }
+
+
+                }
+            });
+
+
+            $(document).on("input", "table input", function () {
+                if ($(this).val() == "") {
+                    $(this).addClass("warning")
+                } else {
+                    $(this).removeClass("warning")
+                }
+            })
+
+
+            $("#btnDeleteCasePackShipment").click(function () {
+                debugger;
+                $("#dialog-box").dialog({
+                    buttons: {
+                        "Confirm": function () {
+                            var data = {
+                                ShipmentId: '@Model.ShipmentId',
+                            };
+                            $.ajax({
+                                type: 'POST',
+                                url: '../Shipment/Delete',
+                                data: { data },
+                                success: function (res) {
+                                    $("#dialog-box").dialog("close");
+                                    $.notify('Delete Successfully', { className: 'danger mydelte' });
+                                    location.href = '../Shipment/Create';
+                                },
+                                Error: function (err) {
+                                    $.notify('some error occured!', { className: 'error mydelte' });
+                                }
+                            });
+
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                            $.notify('Cancel Successfully ', { globalPosition: 'bottom right', className: 'warning mydelte' });
+                        }
+                    }
+                });
+                debugger;
+
+                if ($('.casepacktable tbody tr').length > 0) {
+                    $("#dialog-box-Inform").dialog("open");
+                }
+                else
+                {
+                      $("#dialog-box").dialog("open");
+                }
+            });
+
+
+            $(document).on('keydown', '.sku', function (event)
+            {
+                if (event.keyCode == 9) {
+                    event.preventDefault();
+                    $(this).closest('tr').find(".qtybox").focus();
+                }
+            });
+
+            $(document).on('keydown', '.qtybox', function (event) {
+                if (event.keyCode == 9) {
+                    event.preventDefault();
+                    $(this).closest('tr').find(".boxes").focus();
+                }
+            });
+
+            $(document).on('keydown', '.boxes', function (event) {
+                if (event.keyCode == 9) {
+                    event.preventDefault();
+                    $(this).closest('tr').find(".widthcm").focus();
+                }
+            }
+            );
+
+            //$(document).on('keydown', '.qtyshipped', function (event) {
+            //    if (event.keyCode == 9) {
+            //        event.preventDefault();
+            //        $(this).closest('tr').find(".widthcm").focus();
+            //    }
+            //});
+
+            $(document).on('keydown', '.widthcm', function (event) {
+                if (event.keyCode == 9) {
+                    event.preventDefault();
+                    $(this).closest('tr').find(".heightcm").focus();
+                }
+            });
+
+            $(document).on('keydown', '.heightcm', function (event) {
+                if (event.keyCode == 9) {
+                    event.preventDefault();
+                    $(this).closest('tr').find(".lengthcm").focus();
+                }
+            });
+
+            $(document).on('keydown', '.lengthcm', function (event) {
+                if (event.keyCode == 9) {
+                    event.preventDefault();
+                    $(this).closest('tr').find(".weightkg").focus();
+                }
+            });
+
+            $(document).on('keydown', '.weightkg', function (event) {
+                if (event.keyCode == 9) {
+                    event.preventDefault();
+                    $(this).closest('tr').find(".submit").focus();
+                }
+            });
+
+        });
+
+        //function keypressfunction() {
+        //    $(".sku").on('keydown', function (event) {
+        //    //var keyCode = event.keyCode || event.which;
+
+        //        if (event.keyCode == 9) {
+
+        //            $(".sku").keydown(function () {
+        //                $(this).closest('tr').find(".qtybox").focus();
+        //            });
+        //            $(".qtybox").keydown(function () {
+        //                $(this).closest('tr').find(".boxes").focus();
+        //                //$(".boxes").focus();
+        //            });
+        //            $(".boxes").keydown(function () {
+        //                $(this).closest('tr').find(".qtyshipped").focus();
+        //                //$(".qtyshipped").focus();
+        //            });
+
+        //            $(".qtyshipped").keydown(function () {
+        //                $(this).closest('tr').find(".widthcm").focus();
+        //                //$(".widthcm").focus();
+        //            });
+        //            $(".widthcm").keydown(function () {
+        //                $(this).closest('tr').find(".heightcm").focus();
+        //                //$(".heightcm").focus();
+        //            });
+        //            $(".heightcm").keydown(function () {
+        //                //$(".lengthcm").focus();
+        //                $(this).closest('tr').find(".lengthcm").focus();
+        //            });
+        //            $(".lengthcm").keydown(function () {
+        //                $(this).closest('tr').find(".weightkg").focus();
+        //                //$(".weightkg").focus();
+        //            });
+
+
+        //        }
+        //    });
+        //}
+
+    </script>
+}
