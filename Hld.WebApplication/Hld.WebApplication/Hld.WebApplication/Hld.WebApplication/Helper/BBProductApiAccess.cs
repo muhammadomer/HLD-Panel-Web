@@ -243,5 +243,57 @@ namespace Hld.WebApplication.Helper
 
             return responses;
         }
+
+        public List<BestBuyUpdateViewModel> bestBuyUpdateLogs(string ApiURL, string token, int offset)
+        {
+            List<BestBuyUpdateViewModel> listmodel = new List<BestBuyUpdateViewModel>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyProduct/GetBestBuyUpdate/");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                var response = (HttpWebResponse)request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                listmodel = JsonConvert.DeserializeObject<List<BestBuyUpdateViewModel>>(strResponse);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return listmodel;
+        }
+        public int GetWatchListSummaryCount(string ApiURL, string token)
+        {
+            int count = 0;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyProduct/getcount");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                var response = (HttpWebResponse)request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                    count = Convert.ToInt32(strResponse);
+                }
+                
+            }
+            catch (Exception exp)
+            {
+                throw;
+            }
+            return count;
+        }
+
+
     }
 }

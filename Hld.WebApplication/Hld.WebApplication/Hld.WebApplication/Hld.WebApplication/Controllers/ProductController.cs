@@ -995,12 +995,12 @@ namespace Hld.WebApplication.Controllers
 
         }
         [HttpPost]
-        public string GetStausFromZinc(List<GetStatusFromZincViewModel> data)
+        public int GetStausFromZinc(List<GetStatusFromZincViewModel> data)
         {
             string token = Request.Cookies["Token"];
 
-            var staus = ProductApiAccess.GetStatusFromZinc(ApiURL, token, data);
-            return staus;
+            var ID = ProductApiAccess.GetStatusFromZinc(ApiURL, token, data);
+            return ID;
 
 
         }

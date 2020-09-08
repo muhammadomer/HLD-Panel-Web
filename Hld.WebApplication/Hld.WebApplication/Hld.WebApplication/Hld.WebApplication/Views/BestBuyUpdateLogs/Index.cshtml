@@ -1,0 +1,298 @@
+﻿
+@{
+    ViewData["Title"] = "BestBuyLogs";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+<style>
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 20%;
+        left: 70%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 60px;
+    }
+
+    .select2-container {
+        box-sizing: border-box;
+        display: inline-block;
+        margin: 0;
+        width: 215px !important;
+        position: relative;
+        vertical-align: middle;
+    }
+
+    .btngocalss {
+        box-shadow: none !important;
+        border: none !important;
+        height: 28px !important;
+        margin-left: -6px !important;
+        border-radius: 5px !important;
+    }
+
+    .mydlete {
+        position: fixed;
+        top: 24%;
+        left: 70%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 60px;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 24%;
+        left: 70%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+</style>
+
+<div class="loader">
+    <img src="~/Images/giffff.gif" />
+</div>
+<div class="container-fluid p-0">
+    <h4 style="margin-left: 13px;">Best Buy Logs</h4>
+    <div class="row col col-12" id="fixActionMenu">
+        <div class="col col-md-2">
+            <div class="row">
+                <div class="pagination col-md-6 col" style="margin-left: 10px;">
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col col-md-2">
+            <span>Records Found : @ViewBag.logsRecords</span>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="pagination">
+
+    </div>
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(".loader").hide();
+            $(document).on('click', '#headerCheckBox', function () {
+
+
+                if ($(this).is(':checked')) {
+
+                    $(".table tbody tr ").each(function () {
+                        debugger;
+                        var watchlistsku = $(this).find('.watchlistdata').val();
+                        console.log("watlhust", watchlistsku);
+                        if (watchlistsku == 1) {
+                            $(this).find('.checkboxSkForEnableDisable').attr('checked', true);
+                        }
+                    });
+                }
+                else {
+
+                    $(".table tbody tr ").each(function () {
+                        $(this).find('.checkboxSkForEnableDisable').attr('checked', false);
+                    });
+                }
+            });
+
+
+            $("#actionMenu").select2();
+            function hideclass() {
+                $(".btnbuttonstyle").hide();
+
+            }
+            $(document).on("dblclick", ".inputvalchange", function () {
+                $(".btnbuttonstyle").hide();
+
+                // $(this).closest('tr').find(".buttons-group").css("transform", "translateX(0)");
+
+                $(this).closest('tr').find(".btnbuttonstyle").show();
+
+
+
+            })
+
+$(document).on("click", ".btnsavetable", function () {
+//var selectedRow = $(this);
+//var productid = $(selectedRow).parents('tr').find('.idZincProxy').val();
+var asin = $(this).closest('tr').find(".inputvalchange").attr("data-id");
+var maxprice = $(this).closest('tr').find(".inputvalchange").val();
+console.log("price get", maxprice);
+console.log("asin value", asin);
+
+$.ajax({
+type: 'GET',
+url: '../ZincWatchlist/UpdatePriceMax',
+data: {
+ASIN: asin,
+MaxPrice: maxprice
+},
+success: function (data) {
+//$("#dialog-Delete").dialog("close");
+//$(".loader").hide();
+//selectedRow.parents('tr').remove();
+$.notify('update Successfully', { globalPosition: 'bottom right', className: 'danger myclass' });
+},
+Error: function (err) {
+
+}
+});
+
+});
+
+            $(document).on("click", ".btncanceltable", function () {
+                $(".btnbuttonstyle").hide();
+
+
+            })
+
+
+$(document).on("dblclick", ".inputvalchange", function () {
+$(this).closest('tr').find(".btnsavetable").show();
+
+$(this).closest('tr').find(".btncanceltable").show();
+
+
+})
+              var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
+            var jobID = getUrlParameter('JobId');
+
+            $.fn.checkUncheckSKU_checkbox = function (status) {
+                $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                    $(this).attr('checked', status);
+                });
+            }
+
+          //pagination
+                $(".pagination").paging(parseInt('@ViewBag.logsRecords'), {
+                format: '[< nncnn >]',
+                perpage: 25, // show 10 elements per page
+                lapping: 0, // don't overlap pages for the moment
+                page: 1, // start at page, can also be "null" or negative
+                stepwidth: 0, // =0 means blockwise next/prev steps
+                onSelect: function (page) {
+
+                pageNo = page;
+                // add code which gets executed when user selects a page
+
+                    var url = '/BestBuyUpdateLogs/getlist?page=' + page + ''
+                    var completURL = '/BestBuyUpdateLogs/getlist?page=' + page + '&JobId=' + jobID;
+                $(".loadertbl").show();
+
+                    $.ajax({
+                        url: completURL,
+                        data: {},
+                        type: 'POST',
+                        traditional: true,
+                        success: function (data) {
+                            $('#loadOrder').empty();
+                            $('#loadOrder').html(data);
+                            hideclass();
+                            $(".loadertbl").hide();
+                            // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                        }
+                    });
+                    if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                        if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                            start = moment(OrderDateTimeFrom);
+                            end = moment(OrderDateTimeTo);
+
+                            cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                        }
+                        else {
+                            $('#reportrange span').html("No Date Selected");
+                        }
+
+                    }
+                    else {
+                        $('#reportrange span').html("No Date Selected");
+                    }
+                },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+
+
+                });
+
+
+        });
+
+
+
+
+    </script>
+}
+
+
+

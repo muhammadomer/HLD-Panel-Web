@@ -495,6 +495,70 @@ namespace Hld.WebApplication.Controllers
             }
         }
 
+      
+        public IActionResult GetWatchListSummary()
+        {
+            string token = Request.Cookies["Token"];
+            ViewBag.TotalCount = _bBProductApiAccess.GetWatchListSummaryCount(ApiURL, token);
+
+            return View();
+        }
+
+        public ActionResult bestBuyUpdateLogs(int page = 1)
+        {
+            IPagedList<BestBuyUpdateViewModel> data = null;
+            string token = Request.Cookies["Token"];
+            int pageNumber = page;
+            int offset = 0;
+            int pageSize = 25;
+
+
+            offset = (pageNumber - 1) * 25;
+
+            List<BestBuyUpdateViewModel> listmodel = new List<BestBuyUpdateViewModel>();
+            listmodel = _bBProductApiAccess.bestBuyUpdateLogs(ApiURL, token, offset);
+            ViewBag.Records = listmodel;
+            data = new StaticPagedList<BestBuyUpdateViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
+            ViewBag.S3BucketURL = s3BucketURL;
+            ViewBag.S3BucketURL_large = s3BucketURL_large;
+            return PartialView("~/Views/BestBuyProduct/bestBuyUpdateLogs.cshtml", data);
+
+        }
+
+
+
+        public IActionResult SummaryList(int? page)
+        {
+            token = Request.Cookies["Token"];
+            IPagedList<BestBuyUpdateViewModel> data = null;
+            int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
+            int pageSize = 25;
+            int endLimit = 0;
+            int startlimit = pageSize;
+            if (page.HasValue)
+            {
+                endLimit = (pageNumber - 1) * pageSize;
+            }            //return PartialView("~/Views/BestBuyUpdateLogs/BustBuuPartialView.cshtml", data);
+
+            List<BestBuyUpdateViewModel> listmodel = new List<BestBuyUpdateViewModel>();
+            listmodel = _bBProductApiAccess.bestBuyUpdateLogs(ApiURL, token, endLimit);
+            data = new StaticPagedList<BestBuyUpdateViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
+            ViewBag.S3BucketURL = s3BucketURL;
+            ViewBag.S3BucketURL_large = s3BucketURL_large;
+
+            data = new StaticPagedList<BestBuyUpdateViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
+            return PartialView("~/Views/BestBuyProduct/BestBuyUpdatelistPartialView.cshtml", data);
+        }
+
+        public IActionResult SummaryCount()
+        {
+            string token = Request.Cookies["Token"];
+            int listmodel = 0;
+            listmodel = _bBProductApiAccess.GetWatchListSummaryCount(ApiURL, token);
+            ViewBag.logsRecords = listmodel;
+            return View();
+        }
+
     }
 
 

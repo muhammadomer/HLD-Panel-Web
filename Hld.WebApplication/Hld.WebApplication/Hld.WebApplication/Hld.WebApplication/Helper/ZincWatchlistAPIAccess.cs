@@ -104,6 +104,7 @@ namespace Hld.WebApplication.Helper
             return listmodel;
         }
 
+
         public ZincWatchListSummaryViewModal GetWatchListSummaryByID(string ApiURL, string token, int JobID)
         {
             ZincWatchListSummaryViewModal listmodel = new ZincWatchListSummaryViewModal();
@@ -406,6 +407,31 @@ namespace Hld.WebApplication.Helper
 
 
             return Convert.ToBoolean(strResponse);
+        }
+
+        public int BestBuyUpdateLogView(string ApiURL, string token)
+        {
+            int Count = 0;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList/GetSummaryCount");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                var response = (HttpWebResponse)request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                Count = JsonConvert.DeserializeObject<int>(strResponse);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Count;
         }
     }
 }

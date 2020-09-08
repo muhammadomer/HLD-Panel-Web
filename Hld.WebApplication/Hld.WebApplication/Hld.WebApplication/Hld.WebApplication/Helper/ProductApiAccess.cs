@@ -884,9 +884,10 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
-        public string GetStatusFromZinc(string ApiURL, string token, List<GetStatusFromZincViewModel> viewModel)
+        public int GetStatusFromZinc(string ApiURL, string token, List<GetStatusFromZincViewModel> viewModel)
         {
-            string status = "";
+          //  string status = "";
+            int ID = 0;
             try
             {
                 var data = JsonConvert.SerializeObject(viewModel);
@@ -907,12 +908,14 @@ namespace Hld.WebApplication.Helper
                 {
                     strResponse = sr.ReadToEnd();
                 }
-                status = JsonConvert.DeserializeObject<string>(strResponse);
+                
+                ID = Convert.ToInt32(strResponse);
+              //  status = JsonConvert.DeserializeObject<string>(strResponse);
             }
             catch (Exception ex)
             {
             }
-            return status;
+            return ID;
         }
 
     }

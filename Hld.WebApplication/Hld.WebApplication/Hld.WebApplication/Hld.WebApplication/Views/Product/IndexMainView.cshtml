@@ -122,7 +122,7 @@
 
     .myclass1 {
         position: fixed;
-        top: 17%;
+        top: 30%;
         left: 70%;
         color: red;
         transform: translate(-50%, -50%);
@@ -138,7 +138,12 @@
 
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header">Search Inventory </div>
+                <div class="card-header">Search Inventory 
+                    <div class="alert alert-success successmessage" style="float:right;display:none">
+                        <button class="close successmessagclose" aria-label="close">&times;</button>
+                        <strong>Success!</strong><span class="successAppend"></span>
+                    </div>
+                </div>
                 <div class="card-body" style="        padding: 0.5rem
 ">
                     @using (Html.BeginForm("IndexMainView", "Product", FormMethod.Get, new { @class = "form-inline" }))
@@ -383,7 +388,11 @@
                     $(element).val();
                 },
             });
+            $('.successmessage').hide();
 
+$('.successmessagclose').click(function () {
+$('.successmessage').hide();
+});
 
             $('select[multiple].active.3col.QuantityStatus').multiselect({
                 columns: 1,
@@ -712,12 +721,17 @@
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();
-                            $.notify('Status from Zinc Updated  successfully', { globalPosition: 'bottom right', className: 'danger myclass1' });
+                            debugger
+                            $('.successAppend').empty();
+                            $('.successAppend').append('<span class="pl-1">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+$('.successmessage').show();
+                           // $.notify("<span>Status from Zinc Updated  successfully</span><a href='../ZincWatchlist/MainViewLogs/jobID="+res+"'target=_blank'>"+res+"</a>", {
+                             //   globalPosition: 'bottom right', autoHideDelay: null, autoHide: false, clickToHide: true, arrowShow: true, arrowSize: 5, className: 'danger myclass1'},);
                            
                             //$("#btnSearchOrder").click();
                         }
                     });
-                    setInterval('location.reload()', 6000); 
+                   // setInterval('location.reload()', 6000); 
                     console.log(data);
                 }
             });
