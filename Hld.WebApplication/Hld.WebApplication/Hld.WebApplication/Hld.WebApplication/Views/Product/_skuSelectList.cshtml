@@ -1,7 +1,21 @@
 ﻿@model ProductInventorySearchViewModel
 <div>
     <form asp-action="IndexMainView" asp-controller="Product" role="form">
-        <textarea id="SearchFromSkuList" name="SearchFromSkuList" style="padding-left:4px;" cols="50" rows="10"></textarea>
+        
+        <div class="form-group row">
+            <div class="col-md-8">
+                <textarea id="SearchFromSkuList" name="SearchFromSkuList" style="padding-left:4px;" cols="50" rows="10"></textarea>
+
+            </div>
+            <div class="col-md-4">
+                <select style="padding:0px;box-shadow: none; width:110px!important;" id="multiselect" class="form-control" asp-for="dropshipstatusSearch">
+                    <option value="1">Dropship</option>
+                    <option value="0">Dropship None</option>
+                    <option value="ALL">All</option>
+                </select>
+            </div>
+        
+        </div>
         <span class="text-danger" asp-validation-for="SearchFromSkuList"></span>
         <input type="submit" id="searchFromSkuList" value="SearchFromSKUList" class="btn btn-primary" />
     </form>

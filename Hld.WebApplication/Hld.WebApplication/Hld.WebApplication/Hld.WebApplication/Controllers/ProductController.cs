@@ -93,6 +93,7 @@ namespace Hld.WebApplication.Controllers
                 model.SearchFromSkuList = getString(newLines);
                 string skuList = JsonConvert.SerializeObject(model.SearchFromSkuList);
                 HttpContext.Session.SetString("skuList", skuList);
+                HttpContext.Session.SetString("dropshipsearch", model.dropshipstatusSearch);
                 ViewBag.skuSearchList = "searchList";
             }
             else
@@ -187,6 +188,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             var key = HttpContext.Session.GetString("skuList");
+            var search = HttpContext.Session.GetString("dropshipsearch");
 
 
 
@@ -207,7 +209,7 @@ namespace Hld.WebApplication.Controllers
                 string skuList = JsonConvert.DeserializeObject<string>(key);
                 ProductInventorySearchViewModel viewmodel = new ProductInventorySearchViewModel();
                 viewmodel.dropshipstatus = "ALL";
-                viewmodel.dropshipstatusSearch = "ALL";
+                viewmodel.dropshipstatusSearch = search;
                 viewmodel.Sku = "Nill";
                 viewmodel.SearchFromSkuList = skuList;
                 viewmodel.DSTag = "ALL";

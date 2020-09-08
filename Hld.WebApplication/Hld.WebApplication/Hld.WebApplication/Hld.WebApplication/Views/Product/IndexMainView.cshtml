@@ -754,6 +754,7 @@ $('.successmessage').show();
                     stepwidth: 0, // =0 means blockwise next/prev steps
                     onSelect: function (page) {
                         pageNo = page;
+                        
                         // add code which gets executed when user selects a page
                         var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch;
                         $(".loader").show();
@@ -794,7 +795,8 @@ $('.successmessage').show();
                         }
                     }
                 });
-        }else {
+            }
+            else {
                 var url = '/Product/Index?page=' + 1 + '&dropshipstatus=' + "" +'&dropshipstatusSearch='+"" + '&Sku=' + "";
 
                 $.get(url).done(function (response) {

@@ -392,8 +392,8 @@ $(this).closest('tr').find(".btncanceltable").show();
                $(this).closest("form").submit();
 
            });
-
-                    var avail = available.replace("+", "");
+            if (available != null) {
+                var avail = available.replace("+", "");
                     $("input[type=radio]").each(function () {
                         if ($(this).val().replace(" ", "") == avail) {
 
@@ -403,9 +403,13 @@ $(this).closest('tr').find(".btncanceltable").show();
                         }
 
                     });
+            }
+                    
             $(document).on('click', '#btnEnableDisableSKU', function () {
-                var checked = $('.table').find(':checked').length;                console.log("checked value", checked);                if (checked == 0) {                    $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });                }
-                else {
+               
+                {
+                     var checked = $('.table').find(':checked').length;                console.log("checked value", checked);                if (checked == 0) {                    $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });                    return;
+                }
                     var SKUArraryForSinglePage = [];
                     if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
                         debugger
@@ -457,6 +461,8 @@ $(this).closest('tr').find(".btncanceltable").show();
                             });
                         }
                         else {
+                                var checked = $('.table').find(':checked').length;                console.log("checked value", checked);                if (checked == 0) {                    $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });                    return;
+                }
                             $(".loader").show();
                             var data = [];
                             $(document).find('.checkboxSkuForUpdating').each(function (index) {
