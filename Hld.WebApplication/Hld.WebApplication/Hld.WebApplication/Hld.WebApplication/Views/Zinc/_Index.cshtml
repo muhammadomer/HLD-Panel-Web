@@ -108,6 +108,9 @@
         <thead>
             <tr>
                 <th>
+                    
+                </th>
+                <th>
                     Sr #.
                 </th>
                 <th>
@@ -167,6 +170,14 @@
             @foreach (var item in Model)
             {
             <tr>
+                <td>
+                    <input type="text" value="@item.Product_sku" data-sku="@item.Product_sku"style="display:none"class="skuvalue"/>
+                    <input type="text"  value="@item.ASIN" data-asin="@item.ASIN"style="display:none"class="asinvalue"/>
+                    <p>
+                        <label><input type="radio" name="radiobutton" value="radiobutton" class="radiobuttoncheckd"></label>
+                    </p>
+                    @*<input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />*@
+                </td>
                 <td>
                     @{ sno++; }
                     @sno
@@ -228,7 +239,7 @@
                 <td>
                     @foreach (var SKU in item.listSKU)
                     {
-                      
+
                         <span><a style="cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-productsku="@SKU.productsku" target="_blank">@SKU.productsku</a></span><br />
                     }
                 </td>

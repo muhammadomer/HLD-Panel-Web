@@ -81,10 +81,10 @@
                         </span>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Total_ASIN)
+                        @item.Total_ASIN
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Available)
+                        @item.Available
                     </td>
                     <td>
                         @{
@@ -92,7 +92,7 @@
                             decimal itemprice = 0.0m;
                             if (Total_ASIN > 0)
                             {
-                                itemprice = (decimal)(item.Available / item.Total_ASIN) * 100;
+                                itemprice =Math.Round( (decimal)(item.Available/item.Total_ASIN) * 100,0);
                             }
 
                         }

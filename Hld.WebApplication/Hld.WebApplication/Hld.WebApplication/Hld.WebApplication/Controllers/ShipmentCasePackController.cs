@@ -137,7 +137,7 @@ namespace Hld.WebApplication.Controllers
         public IActionResult GetTemplateList(CasePackSearchViewModel viewModel)
         {
             POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
-            if (viewModel.VendorId == 0 || string.IsNullOrEmpty(viewModel.Vendor) || viewModel.Vendor == "undefined")
+            if (viewModel.VendorId == 0)
             {
                 viewModel.VendorId = POMasterID;
             }

@@ -10,30 +10,55 @@ namespace Hld.WebApplication.ViewModel
         public int idPurchaseOrdersItems { get; set; }
         public int VendorId { get; set; }
         public string Vendor { get; set; }
+        public decimal LowStock90 { get; set; }
+    
+        public int CoverPhy { get; set; }
         public string Currency { get; set; }
         public string Notes { get; set; }
         public int POQty { get; set; }
-        public int CasePackQty { get; set; }
         public string SKU { get; set; }
+        public int OnOrder { get; set; }
+        public int CasePackQty { get; set; }
         public string LargImage { get; set; }
         public string SmallImage { get; set; }
         public decimal ApprovedUnitPrice { get; set; }
-        public DateTime OrderedOn { get; set; }
         public int InternalPOID { get; set; }
+        public int QtySold60 { get; set; }
+        public int QtySold90 { get; set; }
+        public int CoverDays { get; set; }
+        public decimal Velocity { get; set; }
+        public int PhysicalQty { get; set; }
         public int POstatus { get; set; }
+        public int ReservedQty { get; set; }
+        public DateTime OrderedOn { get; set; }
+        public string VendorAlias { get; set; }
         public List<PredictionSKUs> list { get; set; }
     }
     public class PredictionSKUs
     {
         public int idPurchaseOrdersItems { get; set; }
+        public int VendorId { get; set; }
+        public int ReservedQty { get; set; }
+        public decimal LowStock90 { get; set; }
+
+        public int CoverPhy { get; set; }
         public int POQty { get; set; }
         public int CasePackQty { get; set; }
+        public int OnOrder { get; set; }
         public string SKU { get; set; }
+        public string VendorAlias { get; set; }
         public string LargImage { get; set; }
         public string SmallImage { get; set; }
         public decimal ApprovedUnitPrice { get; set; }
-    }
 
+        public string Currency { get; set; }
+        public int QtySold60 { get; set; }
+        public int QtySold90 { get; set; }
+        public int CoverDays { get; set; }
+        public decimal Velocity { get; set; }
+        public int PhysicalQty { get; set; }
+
+    }
     public class PredictionInternalPOList
     {
         public string Vendor { get; set; }
@@ -80,4 +105,10 @@ namespace Hld.WebApplication.ViewModel
         public SCShippingAddress ShippingAddress { get; set; }
     }
 
+    public class PredictionInternalSKUList
+    {
+        public int InternalPOID { get; set; }
+        public int VendorId { get; set; }
+        public string SKU { get; set; }
+    }
 }

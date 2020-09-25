@@ -151,6 +151,23 @@
         z-index: 400;
         background: white;
     }
+    .select2 {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 27px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 27px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
 </style>
 
 <div class="loader">
@@ -172,12 +189,17 @@
                     @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
                     {<div class="col-md-1 p-0 mr-1">
 
-                            <input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />
-                            @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
-                            <span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>
+    <!--<input asp-for="Vendor" type="search" id="Vendor" name="Vendor" placeholder="Vendor" class="form-control" />-->
+    @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+    <!--<span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>-->
+    <select class="js-example-basic-single form-control ShipmentHistory" name="VendorId" id="vendor">
 
-                            @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })
-                        </div>
+        <option value="">Vendor</option>
+
+
+    </select>
+
+</div>
                     }
                     <div class="col-md-2 p-0 mr-1">
                         <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
@@ -297,7 +319,38 @@ margin-top: 9px;">
         var selectedDateFrom = "";
         var selectedDatTo = "";
         $(document).ready(function () {
-            debugger;
+              function VendorlistgetInShipmentlist() {
+
+                $.ajax({
+                    url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.UserName + '">' + value.UserAlias + '</option>';
+
+
+
+                        });
+
+                        $(".ShipmentHistory").append(content);
+
+                        $(".ShipmentHistory").val(@Model.VendorId);
+
+                    }
+        })
+
+
+
+            }
+
+            VendorlistgetInShipmentlist();
+            $(".ShipmentHistory").select2()
+
 
             $('.Statusbtn').click(function () {
                 $('#btnSearchStatus').click();
@@ -318,44 +371,44 @@ margin-top: 9px;">
 
             //});
             $("#EmptyFirstTime").val("No");
-            $('#Vendor').autocomplete({
-                autoFocus: true,
-                source: function (request, response) {
-                    $.ajax({
-                        url: "/ApprovedPrice/GetAllVendorForAutoComplete",
-                        type: "POST",
-                        minLength: 3,
-                        dataType: "json",
-                        data: { Prefix: request.term },
-                        success: function (data, ui) {
-                            debugger;
-                            //if (data.length > 0) {
-                            response($.map(data, function (item) {
-                                if (item != null) {
-                                    return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
-                                }
+            //$('#Vendor').autocomplete({
+            //    autoFocus: true,
+            //    source: function (request, response) {
+            //        $.ajax({
+            //            url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+            //            type: "POST",
+            //            minLength: 3,
+            //            dataType: "json",
+            //            data: { Prefix: request.term },
+            //            success: function (data, ui) {
+            //                debugger;
+            //                //if (data.length > 0) {
+            //                response($.map(data, function (item) {
+            //                    if (item != null) {
+            //                        return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+            //                    }
 
-                            }));
-                        }
-                    })
-                },
-                select: function (event, ui) {
+            //                }));
+            //            }
+            //        })
+            //    },
+            //    select: function (event, ui) {
 
-                    $('#VendorIdForMessage').val(ui.item.id);
-                },
-                response: function (event, ui) {
-                    console.dir(ui.content)
-                    if (ui.content.length === 0) {
-                        $("#empty-message-Vendor").text("No results found");
-                        $('#VendorIdForMessage').val("0");
+            //        $('#VendorIdForMessage').val(ui.item.id);
+            //    },
+            //    response: function (event, ui) {
+            //        console.dir(ui.content)
+            //        if (ui.content.length === 0) {
+            //            $("#empty-message-Vendor").text("No results found");
+            //            $('#VendorIdForMessage').val("0");
 
-                        $('#InputSubmit').attr("disabled", true)
-                    } else {
-                        $("#empty-message-Vendor").empty();
-                        $('#InputSubmit').attr("disabled", false)
-                    }
-                }
-            });
+            //            $('#InputSubmit').attr("disabled", true)
+            //        } else {
+            //            $("#empty-message-Vendor").empty();
+            //            $('#InputSubmit').attr("disabled", false)
+            //        }
+            //    }
+            //});
             $(".loader").hide();
             $("#dialog-box").dialog({
                 autoOpen: false,
@@ -425,13 +478,13 @@ margin-top: 9px;">
             var item = getUrlParameter('ItemType');
             var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
             var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
-            var Vendor = getUrlParameter('Vendor');
+            var Vendor = getUrlParameter('VendorId');
             var Status = getUrlParameter('Status');
-            if (Vendor == null || Vendor == "") {
-                $("#VendorIdForMessage").val(0);
-            }
+            //if (Vendor == null || Vendor == "") {
+            //    $("#VendorIdForMessage").val(0);
+            //}
             var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
-            var VendorId = $("#VendorIdForMessage").val();
+            //var VendorId = $("#VendorIdForMessage").val();
             if (item != null) {
                 debugger;
                 var res = item.split(",");
@@ -456,7 +509,7 @@ margin-top: 9px;">
                       debugger;
                       pageNo = page;
                       // add code which gets executed when user selects a page
-                      var url = '/Shipment/ShipmentHistoryListPartialView?page=' + page + "&SKU=" + SKU + "&Title=" + Title + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&VendorId=' + VendorId + '&EmptyFirstTime=' + EmptyFirstTime + '&Status=' + Status + '&ItemType=' + item + '&ShipmentId=' + ShipmentId;
+                      var url = '/Shipment/ShipmentHistoryListPartialView?page=' + page + "&SKU=" + SKU + "&Title=" + Title + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&VendorId=' + Vendor+ '&EmptyFirstTime=' + EmptyFirstTime + '&Status=' + Status + '&ItemType=' + item + '&ShipmentId=' + ShipmentId;
                       var completURL = url  ;
                       $(".loadertbl").show();
                       $(".loader").show();

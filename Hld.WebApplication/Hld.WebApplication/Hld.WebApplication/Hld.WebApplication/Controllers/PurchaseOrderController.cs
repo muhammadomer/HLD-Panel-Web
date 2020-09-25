@@ -743,6 +743,17 @@ namespace Hld.WebApplication.Controllers
 
         }
 
+        public bool UpdateTitle(string Sku, string Title)
+        {
+
+            bool status = false;
+            token = Request.Cookies["Token"];
+
+
+            status = _ApiAccess.UpdateTitle(ApiURL, token, Sku, Title);
+            return status;
+        }
+
 
     }
 }

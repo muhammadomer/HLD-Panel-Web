@@ -13,6 +13,7 @@ namespace Hld.WebApplication.ViewModel
         public string SKU { get; set; }
         public string ProductTitle { get; set; }
         public int? VendorId { get; set; }
+       public int ReservedQty { get; set; } 
         public string VendorAlias { get; set; }
         public decimal ApprovedUnitPrice { get; set; }
         public decimal CAD { get; set; }
@@ -32,6 +33,7 @@ namespace Hld.WebApplication.ViewModel
         public int QtyPerBox { get; set; }
         public string ShadowOf { get; set; }
         public string LocationNotes { get; set; }
+        public bool PredictIncluded { get; set; }
         public int InternalPOId { get; set; }
         public List<Vendorlist> list { get; set; }
         public List<int> InternalPOs { get; set; }
@@ -91,5 +93,6 @@ namespace Hld.WebApplication.ViewModel
         public bool Approved { get; set; }
         public string Title { get; set; }
         public int Type { get; set; }
+        public bool Excluded { get; set; }
     }
 }

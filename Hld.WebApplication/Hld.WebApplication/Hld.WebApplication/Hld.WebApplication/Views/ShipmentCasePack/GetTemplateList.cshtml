@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "GetTemplateList";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
-}
+}<link href="~/select2/css/select2.min.css" rel="stylesheet" />
 <style>
     .myclass {
         position: fixed;
@@ -67,6 +67,23 @@
     .ui-autocomplete {
         z-index: 2000;
     }
+    .select2 {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 27px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 27px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
 </style>
 <div class="container-fluid searchFormFixed" style="padding-left:30px;">
     <br />@*<h6>Product CasePack List</h6>*@
@@ -85,14 +102,20 @@
         margin-top: 15px;
 ">
                     @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-                    {<div class="col-md-1 p-0 mr-1">
+                    {
+                        <div class="col-md-2 p-0 mr-1">
+    <select class="js-example-basic-single form-control ShipmentHistoryManagecaskpack" name="VendorId" id="Vendor">
 
-                            <input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />
-                            @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
-                            <span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>
+        <option value="">Vendor</option>
 
-                            @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })
-                        </div>
+
+    </select>
+    @*<input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />*@
+    @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+
+
+    @*@Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })*@
+</div>
                     }
                     <div class="col-md-2 p-0 mr-1">
                         <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
@@ -130,7 +153,7 @@ margin-top: 9px;">
     </div>
 </div>
 <div class="container-fluid">
-    <div class="pagination">
+    <div class="pagination"style="margin-left:10px">
 
     </div>
 </div>
@@ -155,45 +178,76 @@ margin-top: 9px;">
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            function VendorlistgetInShipmentlistManage() {
 
-            $('#Vendor').autocomplete({
-                autoFocus: true,
-                source: function (request, response) {
-                    $.ajax({
-                        url: "/ApprovedPrice/GetAllVendorForAutoComplete",
-                        type: "POST",
-                        minLength: 3,
-                        dataType: "json",
-                        data: { Prefix: request.term },
-                        success: function (data, ui) {
-                            debugger;
-                            //if (data.length > 0) {
-                            response($.map(data, function (item) {
-                                if (item != null) {
-                                    return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
-                                }
+                $.ajax({
+                    url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        var content = '';
+                        $.each(data, function (index, value) {
 
-                            }));
-                        }
-                    })
-                },
-                select: function (event, ui) {
+                            content = content + '<option value = "' + value.UserName + '">' + value.UserAlias + '</option>';
 
-                    $('#VendorIdForMessage').val(ui.item.id);
-                },
-                response: function (event, ui) {
-                    console.dir(ui.content)
-                    if (ui.content.length === 0) {
-                        $("#empty-message-Vendor").text("No results found");
-                        $('#VendorIdForMessage').val("0");
 
-                        $('#InputSubmit').attr("disabled", true)
-                    } else {
-                        $("#empty-message-Vendor").empty();
-                        $('#InputSubmit').attr("disabled", false)
+
+                        });
+
+                        $(".ShipmentHistoryManagecaskpack").append(content);
+
+                        $(".ShipmentHistoryManagecaskpack").val(@Model.VendorId);
+
                     }
-                }
-            });
+        })
+
+
+
+            }
+
+            VendorlistgetInShipmentlistManage();
+            $(".ShipmentHistoryManagecaskpack").select2()
+
+            //$('#Vendor').autocomplete({
+            //    autoFocus: true,
+            //    source: function (request, response) {
+            //        $.ajax({
+            //            url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+            //            type: "POST",
+            //            minLength: 3,
+            //            dataType: "json",
+            //            data: { Prefix: request.term },
+            //            success: function (data, ui) {
+            //                debugger;
+            //                //if (data.length > 0) {
+            //                response($.map(data, function (item) {
+            //                    if (item != null) {
+            //                        return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+            //                    }
+
+            //                }));
+            //            }
+            //        })
+            //    },
+            //    select: function (event, ui) {
+
+            //        $('#VendorIdForMessage').val(ui.item.id);
+            //    },
+            //    response: function (event, ui) {
+            //        console.dir(ui.content)
+            //        if (ui.content.length === 0) {
+            //            $("#empty-message-Vendor").text("No results found");
+            //            $('#VendorIdForMessage').val("0");
+
+            //            $('#InputSubmit').attr("disabled", true)
+            //        } else {
+            //            $("#empty-message-Vendor").empty();
+            //            $('#InputSubmit').attr("disabled", false)
+            //        }
+            //    }
+            //});
 
             $(".loader").hide();
             $("#dialog-Delete").dialog({
@@ -251,11 +305,11 @@ margin-top: 9px;">
             };
             var SKU = getUrlParameter('SKU');
             var Title = getUrlParameter('Title');
-            var Vendor = getUrlParameter('Vendor');
-            if (Vendor == null || Vendor == "") {
-                $("#VendorIdForMessage").val(0);
-            }
-            var VendorId = $("#VendorIdForMessage").val();
+            var Vendor = getUrlParameter('VendorId');
+            //if (Vendor == null || Vendor == "") {
+            //    $("#VendorIdForMessage").val(0);
+            //}
+            //var VendorId = $("#VendorIdForMessage").val();
 
               $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
                   format: '[< nncnn >]',
@@ -267,7 +321,7 @@ margin-top: 9px;">
                       debugger;
                       pageNo = page;
                       // add code which gets executed when user selects a page
-                      var url = '/ShipmentCasePack/GetTemplateListPartial?page=' + page + "&SKU=" + SKU + "&Title=" + Title + "&VendorId=" + VendorId ;
+                      var url = '/ShipmentCasePack/GetTemplateListPartial?page=' + page + "&SKU=" + SKU + "&Title=" + Title + "&VendorId=" + Vendor;
                       var completURL = url  ;
                       $.ajax({
                           url: completURL,
@@ -322,7 +376,7 @@ margin-top: 9px;">
                     }
              });
             $(".table").tablesorter();
-            
+
         });
     </script>
 }

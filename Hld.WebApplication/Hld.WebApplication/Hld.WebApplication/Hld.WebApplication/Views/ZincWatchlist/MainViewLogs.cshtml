@@ -82,45 +82,55 @@
     <img src="~/Images/giffff.gif" />
 </div>
 <div class="container-fluid p-0">
-    <h4 style="margin-left: 13px;">Zinc WatchList Logs</h4>
+    <h4 style="margin-left: 13px;">Zinc WatchList Logs<span><a href="../BestBuyProduct/SummaryCount" target="_blank"style="margin-left:12px;font-size:18px!important">BB Price Logs</a></span></h4>
+    
+    
     <div class="row col col-12" id="fixActionMenu">
-        <div class="col col-md-2">
+        <div class="col col-md-8">
             <div class="row">
-                <div class="pagination col-md-6 col" style="margin-left: 10px;">
+                <div class="pagination col-md-3 col" style="margin-left: 10px;">
 
                 </div>
 
+                <span>Results Per Page: 100 </span>
+                <span style="margin-left:40px; margin-right:20px;">Results Found: @ViewBag.logsRecords</span>
+                <div style="margin-left:15px">
+                    @using (Html.BeginForm("MainViewLogs", "ZincWatchlist", FormMethod.Get))
+                    {
+                        <label class="radio-inline">
+                            <input type="radio" name="available" checked value="" /> All <span> (@ViewBag.Total)</span>
+                        </label>
+                        <label class="radio-inline" style="margin-left: 10px;">
+                            <input type="radio" name="available" value="Available" /> Available<span> (@ViewBag.AvailableCount)</span>
+                        </label>
+                        <label class="radio-inline" style="margin-left: 10px;">
+                            <input type="radio" name="available" value="Currently Unavailable" /> UnAvailable<span> (@ViewBag.UnAvailableCount)</span>
+                        </label>
+                        <label class="radio-inline" style="margin-left: 10px;">
+                            <input type="radio" name="available" value="Listing Removed" /> Listing Removed<span> (@ViewBag.ListingRemovedCount)</span>
+                        </label>
+
+                        <input type="hidden" name="ASIN" value="" id="ddlZincStatusValues" />
+                        <input type="hidden" name="jobID" value="@ViewBag.JobID" id="ddlDSStatusValues" />
+                    }
+                </div>
             </div>
         </div>
-        <div class="col col-md-2">
-            <span>Records Found : @ViewBag.logsRecords</span>
-        </div>
+        @*<div class="col col-md-2">
 
-        <div class="col col-md-4">
+            </div>*@
+        @*<div class="col col-md-2">
+                <span>Item Per Page :100</span>
+            </div>*@
+        @*<div class="col col-md-4">
 
-            @using (Html.BeginForm("MainViewLogs", "ZincWatchlist", FormMethod.Get))
-            {
-                <label class="radio-inline">
-                    <input type="radio" name="available" checked value="" />All
-                </label>
-                <label class="radio-inline" style="margin-left: 10px;">
-                    <input type="radio" name="available" value="Available" />Available
-                </label>
-                <label class="radio-inline" style="margin-left: 10px;">
-                    <input type="radio" name="available" value="Currently Unavailable" />UnAvailable
-                </label>
-                <label class="radio-inline" style="margin-left: 10px;">
-                    <input type="radio" name="available" value="Listing Removed" />Listing Removed
-                </label>
 
-                <input type="hidden" name="ASIN" value="" id="ddlZincStatusValues" />
-                <input type="hidden" name="jobID" value="@ViewBag.JobID" id="ddlDSStatusValues" />}
-        </div>
+            </div>*@
 
         <div class="col-md-4 p-0">
             <span class="" style="padding-top:4px !important;">
                 <input type="checkbox" id="selectall" value="" />
-                <label>Select All Pages</label>
+                <label>Select All Pages</label><span id="totalSelectedAll"></span>
             </span>
             <div class="row form-group" style="float: right;">
                 <div class="">
@@ -166,6 +176,37 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModaleBestBuy" style="margin-top: 130px;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modelwidth">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-check" style=" color: green;
+font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Update Succesfully!</span>
+                </strong>
+
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+
+            <div class="modal-body updatebestbuy" style="padding-left:0!important;">
+
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <div class="container-fluid">
     <div id="loadOrder">
 
@@ -186,25 +227,42 @@
         $(document).ready(function () {
             $(".loader").hide();
             $(document).on('click', '#headerCheckBox', function () {
-
-
+                var i = 0;
                 if ($(this).is(':checked')) {
-
+                    
                     $(".table tbody tr ").each(function () {
                         debugger;
                         var watchlistsku = $(this).find('.watchlistdata').val();
-                        console.log("watlhust", watchlistsku);
-                        if (watchlistsku == 1) {
-                            $(this).find('.checkboxSkForEnableDisable').attr('checked', true);
+                        var WHQ = $(this).find('.whq').val();
+                        var IsPrime = $(this).find('.isprime').val();
+
+                        if (watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
+                            $(this).find('.checkboxSkForEnableDisable').prop('checked', true);
+                            i++;
                         }
                     });
+                    
                 }
                 else {
 
                     $(".table tbody tr ").each(function () {
-                        $(this).find('.checkboxSkForEnableDisable').attr('checked', false);
+                        $(this).find('.checkboxSkForEnableDisable').prop('checked', false);
                     });
                 }
+                $("#totalSelected").text(i);
+            });
+
+       
+
+            $(document).on('click', '.checkboxSkForEnableDisable', function () {
+                var i = parseInt($("#totalSelected").text());
+                if ($(this).is(':checked')) {
+                    i++;
+                }
+                else {
+                    i--;
+                }
+                $("#totalSelected").text(i);
             });
 
 
@@ -213,35 +271,37 @@
                 $(".btnbuttonstyle").hide();
 
             }
-            $(document).on("dblclick", ".inputvalchange", function () {                $(".btnbuttonstyle").hide();                // $(this).closest('tr').find(".buttons-group").css("transform", "translateX(0)");                $(this).closest('tr').find(".btnbuttonstyle").show();            })
+            //$(document).on("dblclick", ".inputvalchange", function () {            //    $(".btnbuttonstyle").hide();            //    // $(this).closest('tr').find(".buttons-group").css("transform", "translateX(0)");            //    $(this).closest('tr').find(".btnbuttonstyle").show();            //})
 
-$(document).on("click", ".btnsavetable", function () {
-//var selectedRow = $(this);
-//var productid = $(selectedRow).parents('tr').find('.idZincProxy').val();
-var asin = $(this).closest('tr').find(".inputvalchange").attr("data-id");
-var maxprice = $(this).closest('tr').find(".inputvalchange").val();
-console.log("price get", maxprice);
-console.log("asin value", asin);
+            $(document).on("click", ".btnsavetable", function () {
+                //var selectedRow = $(this);
+                //var productid = $(selectedRow).parents('tr').find('.idZincProxy').val();
+                var asin = $(this).closest('tr').find(".inputvalchange").attr("data-id");
+                var maxprice = $(this).closest('tr').find(".inputvalchange").val();
+                var ThisContext = $(this).closest('tr');
+                console.log("price get", maxprice);
+                console.log("asin value", asin);
 
-$.ajax({
-type: 'GET',
-url: '../ZincWatchlist/UpdatePriceMax',
-data: {
-ASIN: asin,
-MaxPrice: maxprice
-},
-success: function (data) {
-//$("#dialog-Delete").dialog("close");
-//$(".loader").hide();
-//selectedRow.parents('tr').remove();
-$.notify('update Successfully', { globalPosition: 'bottom right', className: 'danger myclass' });
-},
-Error: function (err) {
+                $.ajax({
+                    type: 'GET',
+                    url: '../ZincWatchlist/UpdatePriceMax',
+                    data: {
+                        ASIN: asin,
+                        MaxPrice: maxprice
+                    },
+                    success: function (data) {
+                        //$("#dialog-Delete").dialog("close");
+                        //$(".loader").hide();
+                        //selectedRow.parents('tr').remove();
+                        $(ThisContext).find('.UpdatingSellingPrice').val(parseFloat(maxprice)*100);
+                        $.notify('update Successfully', { globalPosition: 'bottom right', className: 'danger myclass' });
+                    },
+                    Error: function (err) {
 
-}
-});
+                    }
+                });
 
-});
+            });
 
             $(document).on("click", ".btncanceltable", function () {
                 $(".btnbuttonstyle").hide();
@@ -250,13 +310,23 @@ Error: function (err) {
             })
 
 
-$(document).on("dblclick", ".inputvalchange", function () {
-$(this).closest('tr').find(".btnsavetable").show();
+            $(document).on("keypress", ".inputvalchange", function () {
+                $(".btnbuttonstyle").hide();
 
-$(this).closest('tr').find(".btncanceltable").show();
+                // $(this).closest('tr').find(".buttons-group").css("transform", "translateX(0)");
 
+                $(this).closest('tr').find(".btnbuttonstyle").show();
 
-})
+            });
+
+            $(document).on("change", ".inputvalchange", function () {
+                $(".btnbuttonstyle").hide();
+
+                // $(this).closest('tr').find(".buttons-group").css("transform", "translateX(0)");
+
+                $(this).closest('tr').find(".btnbuttonstyle").show();
+            });
+
               var getUrlParameter = function getUrlParameter(sParam) {
                 var sPageURL = window.location.search.substring(1),
                     sURLVariables = sPageURL.split('&'),
@@ -292,7 +362,7 @@ $(this).closest('tr').find(".btncanceltable").show();
           //pagination
                 $(".pagination").paging(parseInt('@ViewBag.logsRecords'), {
                 format: '[< nncnn >]',
-                perpage: 25, // show 10 elements per page
+                perpage: 100, // show 10 elements per page
                 lapping: 0, // don't overlap pages for the moment
                 page: 1, // start at page, can also be "null" or negative
                 stepwidth: 0, // =0 means blockwise next/prev steps
@@ -303,8 +373,8 @@ $(this).closest('tr').find(".btncanceltable").show();
 
                       var url = '/ZincWatchlist/ZincWatchListLogs?page=' + page + ''
                     var completURL = url + '&ASIN=' + ASIN + '&jobID=' + jobID+ '&available=' + available;
-                $(".loadertbl").show();
-
+                    $(".loadertbl").show();
+                    $(".loader").show();
                     $.ajax({
                         url: completURL,
                         data: {},
@@ -313,8 +383,10 @@ $(this).closest('tr').find(".btncanceltable").show();
                         success: function (data) {
                             $('#loadOrder').empty();
                             $('#loadOrder').html(data);
+                            SelectAllCount($("#selectall"));
                             hideclass();
                             $(".loadertbl").hide();
+                            $(".loader").hide();
                             // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
                         }
                     });
@@ -406,12 +478,11 @@ $(this).closest('tr').find(".btncanceltable").show();
             }
                     
             $(document).on('click', '#btnEnableDisableSKU', function () {
-               
                 {
-                     var checked = $('.table').find(':checked').length;                console.log("checked value", checked);                if (checked == 0) {                    $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });                    return;
-                }
                     var SKUArraryForSinglePage = [];
                     if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
+                        var checked = $('.table').find(':checked').length;                        console.log("checked value", checked);                        if (checked == 0) {                            $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });                            return;
+                        }
                         debugger
                         {
                             $(document).find('.checkboxSkuForUpdating').each(function (index) {
@@ -450,10 +521,11 @@ $(this).closest('tr').find(".btncanceltable").show();
                             $.ajax({
                                 type: 'Get',
                                 url: Url,
-
                                 success: function (res) {
                                     $(".loader").hide();
-                                    $.notify(`Job ID ${res}`, { globalPosition: 'bottom right', className: 'danger myclass' });
+                                    //$.notify(`Job ID ${res}`, { globalPosition: 'bottom right', className: 'danger myclass' });
+                                    $('.updatebestbuy').append("<a href='/BestBuyProduct/SummaryCount/" + res + "' target='_blank' style='font-weight: bold;text-decoration: underline !important;margin-left:20px!important'>Job ID is " + res + "</a >");
+                                    $("#myModaleBestBuy").modal({ backdrop: 'static', keyboard: false });
                                 },
                                 error: function (res) {
                                     debugger;
@@ -461,8 +533,9 @@ $(this).closest('tr').find(".btncanceltable").show();
                             });
                         }
                         else {
-                                var checked = $('.table').find(':checked').length;                console.log("checked value", checked);                if (checked == 0) {                    $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });                    return;
-                }
+
+                            var checked = $('.table').find(':checked').length;                            console.log("checked value", checked);                            if (checked == 0) {                                $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });                                return;
+                            }
                             $(".loader").show();
                             var data = [];
                             $(document).find('.checkboxSkuForUpdating').each(function (index) {
@@ -471,9 +544,9 @@ $(this).closest('tr').find(".btncanceltable").show();
                                     var ProductSku = $(this).closest('tr').find('#productSkuForUpdating').val();
                                     var ProductId = $(this).closest('tr').find('#productIdForUpdating').val();
                                     var MSRP = $(this).closest('tr').find('.MSRP').val();
-                                    var UpdateSelling = $(this).closest('tr').find('.UpdatingSellingPrice').val();
-                                    // var UpdateSellingPrice = $(this).closest('tr').find('#productSkuForUpdating').val();
-                                    data.push({ ProductSKU: ProductSku, BBProductId: ProductId, UnitOriginPrice_MSRP: MSRP, UnitOriginPrice_Max: UpdateSelling });
+                                    var UpdateSelling = parseFloat($(this).closest('tr').find('.UpdatingSellingPrice').val());
+                                   
+                                    data.push({ ProductSKU: ProductSku, BBProductId: ProductId, UnitOriginPrice_MSRP: MSRP, UnitOriginPrice_Max: UpdateSelling,ZincJobId:jobID });
                                 }
                             });
 
@@ -486,8 +559,9 @@ $(this).closest('tr').find(".btncanceltable").show();
                                 data: { data },
                                 success: function (res) {
                                     $(".loader").hide();
-                                    $.notify(`Job ID ${res}`, { globalPosition: 'bottom right', className: 'danger myclass' });
-                                    
+                                    //$.notify(`Job ID ${res}`, { globalPosition: 'bottom right', className: 'danger myclass' });
+                                    $('.updatebestbuy').append("<a href='/BestBuyProduct/SummaryCount/" + res + "' target='_blank' style='font-weight: bold;text-decoration: underline !important;margin-left:20px!important'>Job ID is " + res + "</a >");
+                                    $("#myModaleBestBuy").modal({ backdrop: 'static', keyboard: false });
                                 },
                                 error: function (res) {
                                     debugger;
@@ -498,8 +572,48 @@ $(this).closest('tr').find(".btncanceltable").show();
 
                     }
                 }
-        });
+            });
 
+            function SelectAllCount(_this) {
+                var i = 0;
+                debugger;
+                if ($(_this).is(':checked')) {
+                    var Url = '/ZincWatchlist/GetWatchlistLogsSelectAllCount?ASIN=' + ASIN + '&jobID=' + jobID + '&available=' + available;
+                    $.ajax({
+                        type: 'Get',
+                        url: Url,
+                        success: function (res) {
+                            $("#totalSelectedAll").text(': '+res);
+                        },
+                        error: function (res) {
+                            debugger;
+                        }
+                    });
+                    debugger;
+                    $(".table tbody tr ").each(function () {
+                        debugger;
+                        var watchlistsku = $(this).find('.watchlistdata').val();
+                        var WHQ = $(this).find('.whq').val();
+                        var IsPrime = $(this).find('.isprime').val();
+
+                        if (watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
+                            $(this).find('.checkboxSkForEnableDisable').prop('checked', true);
+                            i++;
+                        }
+                    });
+                }
+                else {
+                    $(".table tbody tr ").each(function () {
+                        $(this).find('.checkboxSkForEnableDisable').prop('checked', false);
+                        $("#totalSelectedAll").text('');
+                    });
+                }
+                $("#totalSelected").text(i);
+            }
+
+            $(document).on('click', '#selectall', function () {
+                SelectAllCount($(this));
+            });
 
         });
 

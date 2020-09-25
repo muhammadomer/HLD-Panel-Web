@@ -80,6 +80,7 @@
     <thead class="thead-light">
         <tr>
             <th data-sorter="false">
+                <div><span id="totalSelected">0</span></div>
                 <input type="checkbox" id="headerCheckBox" />
             </th>
             <th>
@@ -102,6 +103,9 @@
                 Seller Name
             </th>
             <th>
+                WHQ
+            </th>
+            <th>
                 Amazon Price
             </th>
             <th>
@@ -111,9 +115,15 @@
                 Fulfilled BY
             </th>
             <th>Product ID</th>
-            <th> Existing Selling Price</th>
+
+            <th style="width: 3%;"> Existing Selling Price</th>
+
             <th>Updated Selling Price</th>
+
             <th>MSRP Price</th>
+            <th>Import Id</th>
+            <th style="width: 6%;">BB Job ID</th>
+            <th style="width: 6%;">Updated Price BB</th>
         </tr>
     </thead>
     <tbody>
@@ -121,8 +131,9 @@
         {
         <tr>
             <td>
+                
                 <input type='text' style="display:none" class='form-control CheckApproved watchlistdata' value='@item.IsPrime'>
-                <input class="checkboxSkuForUpdating checkboxSkForEnableDisable " disabled="@(item.IsPrime==1?false:true)" type="checkbox" />
+                <input class="checkboxSkuForUpdating checkboxSkForEnableDisable " disabled="@(item.ZincResponse=="Available" && item.HLD_CA1<=0 &&item.IsPrime==1?false:true)" type="checkbox" />
                 <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />
                 <input type="hidden" asp-for="@item.BBProductId" id="productIdForUpdating" class="productSkuForEnableDisable" />
                 @*<input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />*@
@@ -142,12 +153,23 @@
             </td>
             <td>
                 <span><a style="cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-productsku="@item.ProductSKU" target="_blank">@item.ProductSKU</a></span><br />
+                <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BBProductId" target="_blank">
+                    <img height="13px" width="15px" src="~/Images/BestBuy-Gray.png" />
+
+                </a>
+                <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.BBProductId" target="_blank">
+                    <img height="10px" width="15px" src="~/Images/openbb.png" />
+                </a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ZincResponse)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SellerName)
+            </td>
+            <td>
+                <input style="display:none" value="@item.HLD_CA1" class="whq" />
+                @item.HLD_CA1
             </td>
             <td>
                 @{
@@ -163,6 +185,7 @@
 
             </td>
             <td>
+                <input style="display:none" class="isprime" value="@item.IsPrime"/>
                 @if (item.IsPrime == 1)
                 {
                     <span>Available</span>
@@ -182,11 +205,14 @@
                 @item.BBSellingPrice
             </td>
             <td>
-                <input style="display:none" value="@item.UnitOriginPrice_Max" class="UpdatingSellingPrice" />
-                <input style="display:none" value="@item.UnitOriginPrice_MSRP" class="MSRP" />
+
                 @{
-                    var maxprice = Math.Round(item.UnitOriginPrice_Max / 100, 2);
+                    //var maxprice = Math.Floor((item.UnitOriginPrice_Max / 100), 0)+0.95;
+                    var maxprice = Math.Floor((item.UnitOriginPrice_Max / 100)) + 0.95;
+                    var maxpriceText = maxprice * 100;
                 }
+                <input style="display:none" value="@maxpriceText" class="UpdatingSellingPrice" />
+                <input style="display:none" value="@item.UnitOriginPrice_MSRP" class="MSRP" />
                 <div class="btndivstyle form-group row">
                     <div class="row" style="width:150px!important">
                         <div class="col-md-12">
@@ -227,6 +253,9 @@
                 }
                 @MSRP
             </td>
+            <td>@item.ImportId</td>
+            <td><a href="../BestBuyUpdateLogs/Index?JobId=@item.BBJobID" target="_blank">@item.BBJobID</a></td>
+            <td>@item.UpdatedPriceBB</td>
         </tr>
             <tr style="width: 98%;" class="detail hidden_row" id=@(item.ASIN+item.jobID)>
             </tr>

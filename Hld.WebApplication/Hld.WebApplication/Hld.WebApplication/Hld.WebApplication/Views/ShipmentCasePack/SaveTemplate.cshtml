@@ -7,153 +7,205 @@
 @inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
-<style>
-    .controlabel {
-        width: 125px;
-        font-weight: bold;
-    }
-</style>
-<div class="">
+    <link href="~/select2/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .controlabel {
+            width: 125px;
+            font-weight: bold;
+        }
 
 
-    <h6>Product CasePack Template</h6>
-    <hr />
-    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-    {
-        <div class="row" style="">
-            <div class="col-md-4">
-                <form asp-action="SaveTemplate">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        .select2 {
+            width: 33.33333% !important;
+            height: 27px !important;
+        }
 
-                    <div class="form-group row">
-                        <label class="control-label col-md-3 controlabel offset-1">Vendor:</label>
-                        <input id="Vendor" class="form-control col-md-4" />
-                        @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
-                        <span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
-                    </div>
+       
 
-                    @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })
-                    <div class="form-group row">
-                        <label asp-for="SKU" class="control-label col-md-3 controlabel offset-1"> SKU:</label>
-                        <input asp-for="SKU" id="productsku" class="form-control col-md-4" />
-                        <span asp-validation-for="SKU" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="QtyPerBox" class="control-label col-md-3 controlabel offset-1" style="padding-right:0 !important;">Qty Per Box:</label>
-                        <input asp-for="QtyPerBox" class="form-control col-md-4" />
-                        <span asp-validation-for="QtyPerBox" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="Width" class="control-label col-md-3 controlabel offset-1"> Width cm:</label>
-                        <input asp-for="Width" class="form-control col-md-4" />
-                        <span asp-validation-for="Width" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="Height" class="control-label col-md-3 controlabel offset-1">Height cm:</label>
-                        <input asp-for="Height" class="form-control col-md-4" />
-                        <span asp-validation-for="Height" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="Length" class="control-label col-md-3 controlabel offset-1">Length cm:</label>
-                        <input asp-for="Length" class="form-control col-md-4" />
-                        <span asp-validation-for="Length" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="Weight" class="control-label col-md-3 controlabel offset-1">Weight Kg:</label>
-                        <input asp-for="Weight" class="form-control col-md-4" />
-                        <span asp-validation-for="Weight" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <input type="submit" value="Save" class="btn btn-primary offset-2" /> <a asp-action="GetTemplateList" style="margin-top: 2px;margin-left: 6px;">View List</a>
-                    </div>
-                </form>
+    </style>
+    <div class="">
+
+
+        <h6>Product CasePack Template</h6>
+        <hr />
+        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+        {
+            <div class="row" style="">
+                <div class="col-md-4">
+                    <form asp-action="SaveTemplate">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3 controlabel offset-1">Vendor:</label>
+                            @*<input id="Vendor" class="form-control col-md-4" />*@
+                            <select class="js-example-basic-single form-control col-md-4 ShipmentCasePack" name="VendorId" id="vendor">
+
+                                <option value="">Vendor</option>
+
+
+                            </select>
+                            @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                            @*<span style="color:red;padding-left:0px;" id="empty-message-Color"></span>*@
+                        </div>
+
+                        @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })
+                        <div class="form-group row">
+                            <label asp-for="SKU" class="control-label col-md-3 controlabel offset-1"> SKU:</label>
+                            <input asp-for="SKU" id="productsku" class="form-control col-md-4" />
+                            <span asp-validation-for="SKU" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="QtyPerBox" class="control-label col-md-3 controlabel offset-1" style="padding-right:0 !important;">Qty Per Box:</label>
+                            <input asp-for="QtyPerBox" class="form-control col-md-4" />
+                            <span asp-validation-for="QtyPerBox" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Width" class="control-label col-md-3 controlabel offset-1"> Width cm:</label>
+                            <input asp-for="Width" class="form-control col-md-4" />
+                            <span asp-validation-for="Width" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Height" class="control-label col-md-3 controlabel offset-1">Height cm:</label>
+                            <input asp-for="Height" class="form-control col-md-4" />
+                            <span asp-validation-for="Height" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Length" class="control-label col-md-3 controlabel offset-1">Length cm:</label>
+                            <input asp-for="Length" class="form-control col-md-4" />
+                            <span asp-validation-for="Length" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Weight" class="control-label col-md-3 controlabel offset-1">Weight Kg:</label>
+                            <input asp-for="Weight" class="form-control col-md-4" />
+                            <span asp-validation-for="Weight" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <input type="submit" value="Save" class="btn btn-primary offset-4" /> <a asp-action="GetTemplateList" style="margin-top: 2px;margin-left: 6px;">View List</a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-3" id="ProfileDive">
+
+                </div>
+                <div class="col-md-3" id="TitleDiv">
+
+                </div>
+            </div>
+        }
+        else
+        { <div class="row " style="">
+                <div class="col-md-4">
+                    <form asp-action="SaveTemplate">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group row">
+                            <label asp-for="SKU" class="control-label col-md-3 controlabel offset-1"> SKU:</label>
+                            <input asp-for="SKU" id="productsku" class="form-control col-md-4" />
+                            <span asp-validation-for="SKU" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="QtyPerBox" class="control-label col-md-3 controlabel offset-1" style="padding-right:0 !important;">Qty Per Box:</label>
+                            <input asp-for="QtyPerBox" class="form-control col-md-4" />
+                            <span asp-validation-for="QtyPerBox" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Width" class="control-label col-md-3 controlabel offset-1"> Width cm:</label>
+                            <input asp-for="Width" class="form-control col-md-4" />
+                            <span asp-validation-for="Width" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Height" class="control-label col-md-3 controlabel offset-1">Height cm:</label>
+                            <input asp-for="Height" class="form-control col-md-4" />
+                            <span asp-validation-for="Height" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Length" class="control-label col-md-3 controlabel offset-1">Length cm:</label>
+                            <input asp-for="Length" class="form-control col-md-4" />
+                            <span asp-validation-for="Length" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Weight" class="control-label col-md-3 controlabel offset-1">Weight Kg:</label>
+                            <input asp-for="Weight" class="form-control col-md-4" />
+                            <span asp-validation-for="Weight" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <input type="submit" value="Save" class="btn btn-primary offset-4" /> <a asp-action="GetTemplateList" style="margin-top: 2px;margin-left: 6px;">View List</a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-3" id="ProfileDive">
+
+                </div>
+                <div class="col-md-3" id="TitleDiv">
+
+                </div>
             </div>
 
-            <div class="col-md-3" id="ProfileDive">
-
-            </div>
-            <div class="col-md-3" id="TitleDiv">
-
-            </div>
-        </div>
-    }
-    else
-    { <div class="row " style="">
-            <div class="col-md-4">
-                <form asp-action="SaveTemplate">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group row">
-                        <label asp-for="SKU" class="control-label col-md-3 controlabel offset-1"> SKU:</label>
-                        <input asp-for="SKU" id="productsku" class="form-control col-md-4" />
-                        <span asp-validation-for="SKU" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="QtyPerBox" class="control-label col-md-3 controlabel offset-1" style="padding-right:0 !important;">Qty Per Box:</label>
-                        <input asp-for="QtyPerBox" class="form-control col-md-4" />
-                        <span asp-validation-for="QtyPerBox" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="Width" class="control-label col-md-3 controlabel offset-1"> Width cm:</label>
-                        <input asp-for="Width" class="form-control col-md-4" />
-                        <span asp-validation-for="Width" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="Height" class="control-label col-md-3 controlabel offset-1">Height cm:</label>
-                        <input asp-for="Height" class="form-control col-md-4" />
-                        <span asp-validation-for="Height" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="Length" class="control-label col-md-3 controlabel offset-1">Length cm:</label>
-                        <input asp-for="Length" class="form-control col-md-4" />
-                        <span asp-validation-for="Length" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <label asp-for="Weight" class="control-label col-md-3 controlabel offset-1">Weight Kg:</label>
-                        <input asp-for="Weight" class="form-control col-md-4" />
-                        <span asp-validation-for="Weight" class="text-danger"></span>
-                    </div>
-                    <div class="form-group row">
-                        <input type="submit" value="Save" class="btn btn-primary offset-2" /> <a asp-action="GetTemplateList" style="margin-top: 2px;margin-left: 6px;">View List</a>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-md-3" id="ProfileDive">
-
-            </div>
-            <div class="col-md-3" id="TitleDiv">
-
-            </div>
-        </div>
-
-    }
+        }
 
 
 
-</div>
-<div>
+    </div>
+    <div>
 
-</div>
+    </div>
 
-@section Scripts{
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @section Scripts{
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script src="~/select2/js/select2.full.min.js"></script>
+        <script type="text/javascript">
+           
+            $(document).ready(function () {
+                
+            function VendorlistgetInShipmentCasePack() {
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            function ImgShow(SKU) {
                 $.ajax({
-                    url: "/Product/GetProductDetailsForAPBySku",
+                    url: "/ApprovedPrice/GetAllVendorForAutoComplete",
                     type: "POST",
+                    minLength: 3,
                     dataType: "json",
-                    data: { Prefix: SKU },
+                    data: { Prefix: "" },
                     success: function (data, ui) {
-                        console.log("SKUProfile", data);
-                        console.log(val);
-                        $("#ProfileDive").html('<a target="_blank" href="' + val + '/' + data.image_name + '"><img src="' + val + '/' + data.image_name + '" class="rounded" height="300" width="300" /></a>');
-                        $("#TitleDiv").html('<p style="margin-top:100px;"><span>' + data.Title + '</span> </p> ');
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.UserName + '">' + value.UserAlias + '</option>';
+
+
+
+                        });
+
+                        $(".ShipmentCasePack").append(content);
+
+                        @*$(".ShipmentCasePack").val(@Model!=null?@Model.VendorId:"");*@
+
                     }
                 })
+
+
+
             }
+
+                VendorlistgetInShipmentCasePack();
+                $(".ShipmentCasePack").select2()
+
+
+
+                    function ImgShow(SKU) {
+                        $.ajax({
+                            url: "/Product/GetProductDetailsForAPBySku",
+                            type: "POST",
+                            dataType: "json",
+                            data: { Prefix: SKU },
+                            success: function (data, ui) {
+                                console.log("SKUProfile", data);
+                                console.log(val);
+                                $("#ProfileDive").html('<a target="_blank" href="' + val + '/' + data.image_name + '"><img src="' + val + '/' + data.image_name + '" class="rounded" height="300" width="300" /></a>');
+                                $("#TitleDiv").html('<p style="margin-top:100px;"><span>' + data.Title + '</span> </p> ');
+                            }
+                        })
+                    }
         var val = '@ViewBag.S3BucketURL_large';
         var getUrlParameter = function getUrlParameter(sParam) {
             var sPageURL = window.location.search.substring(1),
@@ -190,44 +242,44 @@
         //    $(".ForVendor").show();
         //}
 
-        $('#Vendor').autocomplete({
-            autoFocus: true,
-            source: function (request, response) {
-                $.ajax({
-                    url: "/ApprovedPrice/GetAllVendorForAutoComplete",
-                    type: "POST",
-                    minLength: 3,
-                    dataType: "json",
-                    data: { Prefix: request.term },
-                    success: function (data, ui) {
+        //$('#Vendor').autocomplete({
+        //    autoFocus: true,
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+        //            type: "POST",
+        //            minLength: 3,
+        //            dataType: "json",
+        //            data: { Prefix: request.term },
+        //            success: function (data, ui) {
 
-                        //if (data.length > 0) {
-                        response($.map(data, function (item) {
-                            if (item != null) {
-                                return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
-                            }
+        //                //if (data.length > 0) {
+        //                response($.map(data, function (item) {
+        //                    if (item != null) {
+        //                        return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+        //                    }
 
-                        }));
-                    }
-                })
-            },
-            select: function (event, ui) {
+        //                }));
+        //            }
+        //        })
+        //    },
+        //    select: function (event, ui) {
 
-                $('#ColorIdForMessage').val(ui.item.id);
-            },
-            response: function (event, ui) {
-                console.dir(ui.content)
-                if (ui.content.length === 0) {
-                    $("#empty-message-Color").text("No results found");
-                    $('#ColorIdForMessage').val("0");
+        //        $('#ColorIdForMessage').val(ui.item.id);
+        //    },
+        //    response: function (event, ui) {
+        //        console.dir(ui.content)
+        //        if (ui.content.length === 0) {
+        //            $("#empty-message-Color").text("No results found");
+        //            $('#ColorIdForMessage').val("0");
 
-                    $('#InputSubmit').attr("disabled", true)
-                } else {
-                    $("#empty-message-Color").empty();
-                    $('#InputSubmit').attr("disabled", false)
-                }
-            }
-        });
+        //            $('#InputSubmit').attr("disabled", true)
+        //        } else {
+        //            $("#empty-message-Color").empty();
+        //            $('#InputSubmit').attr("disabled", false)
+        //        }
+        //    }
+        //});
 
         $("#productsku").change(function () {
             $.ajax({
@@ -244,8 +296,8 @@
             })
         });
     });
-    </script>
-}
+        </script>
+    }
 
 
 

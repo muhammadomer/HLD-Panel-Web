@@ -1724,7 +1724,7 @@ var profitpercentagedetail = $(this).attr('data-profitpercentagedetail');
                         success: function (data) {
                                loader.css('display', 'none');
                             $.each(data, function (key1, value1) {
-
+                                debugger;
                                 $("." + SKu.replace(/\s/g, '')+value1.WarehouseName.replace(/\s/g, '') ).text(value1.AvailableQty);
                             });
                         }

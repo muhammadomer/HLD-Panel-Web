@@ -1,0 +1,55 @@
+﻿@model Hld.WebApplication.ViewModel.SendToZincProductViewModel
+@using Hld.WebApplication.Models
+
+<div class="">
+    @using (Html.BeginForm("SendToZincProduct", "Zinc", FormMethod.Post, new { id = "form11" }))
+        {
+    <div class="form-group row">
+        <label class="col-sm-2 control-label " style="padding-right:0px">ASIN</label>
+        <div class="col-sm-6">
+            <input asp-for="Asin" class="form-control" />
+            <span asp-validation-for="Asin" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 control-label " style="padding-right:0px">AMZ Price</label>
+        @*<div class="col-sm-6">
+            @Html.HiddenFor(e => e.City)
+            <input asp-for="v" id="ZincAmzPrice" class="form-control" />
+            <span asp-validation-for="OrderId" class="text-danger"></span>
+        </div>*@
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 control-label " style="padding-right:0px">Max Price</label>
+        @*<div class="col-sm-6" style="display:inline-flex">
+            @Html.HiddenFor(e => e.bb_product_zinc_id)
+            <input asp-for="max_price_limit" id="ZincMaxPrice" class="form-control" /><span style="width:100%"> = AMZ Price * 1.25</span>
+            <span asp-validation-for="max_price_limit" class="text-danger"></span>
+        </div>*@
+    </div>
+    @*<div class="form-group row">
+        <label class="col-sm-2 control-label " style="padding-right:0px">Priority</label>
+        <div class="col-sm-6">
+            <select style="padding:0px" asp-for="Priorty" class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+            </select>
+        </div>
+    </div>*@
+    <div class="form-group">
+        <input type="button" class="btn btn-primary" id="btnSaveASIN" value="Submit" onclick="return SubmitFormProductASINUpdate();" />
+    </div>
+        }
+
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

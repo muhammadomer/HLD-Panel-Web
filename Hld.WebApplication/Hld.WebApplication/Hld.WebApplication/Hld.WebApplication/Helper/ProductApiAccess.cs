@@ -918,6 +918,29 @@ namespace Hld.WebApplication.Helper
             return ID;
         }
 
+        public List<ProductWarehouseQtyViewModel> GetWareHousesQtyList(string ApiURL, string token, string SKU)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetWareHousesQtyList?SKU=" + SKU);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+
+
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<ProductWarehouseQtyViewModel> responses = JsonConvert.DeserializeObject<List<ProductWarehouseQtyViewModel>>(strResponse);
+
+            return responses;
+        }
+
+
     }
 }
 

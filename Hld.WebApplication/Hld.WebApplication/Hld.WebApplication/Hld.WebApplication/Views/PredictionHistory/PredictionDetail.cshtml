@@ -200,7 +200,7 @@
 
         .tooltipQtyShowDeficit_60 .tooltiptextShowDeficit_60 {
             visibility: hidden;
-            width: 226px;
+            width: 336px;
             background-color: #555;
             color: #fff;
             text-align: center;
@@ -209,10 +209,11 @@
             font-family: arial;
             position: absolute;
             z-index: 401;
-            bottom: 56%;
-            left: 179%;
-            margin-bottom: -49px;
-            margin-left: -238%;
+            
+            margin-top: 29px;
+          
+            margin-left: -176px;
+            
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -220,9 +221,9 @@
             .tooltipQtyShowDeficit_60 .tooltiptextShowDeficit_60::after {
                 content: "";
                 position: absolute;
-                top: -19%;
+                top: -37%;
                 left: 45%;
-                transform: rotate(0deg);
+                transform: rotate(180deg);
                 margin-left: -5px;
                 border-width: 5px;
                 border-style: solid;
@@ -251,11 +252,10 @@
             font-family: arial;
             position: absolute;
             z-index: 401;
-            bottom: 56%;
-            bottom: 56%;
-            left: 215%;
-            margin-bottom: -49px;
-            margin-left: -238px;
+           
+            margin-top: 26px;
+           
+            margin-left: -93px;
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -263,9 +263,9 @@
             .tooltipQtyShow .tooltiptextShow::after {
                 content: "";
                 position: absolute;
-                top: -19%;
+                top: -37%;
                 left: 45%;
-                transform: rotate(0deg);
+                transform: rotate(180deg);
                 margin-left: -5px;
                 border-width: 5px;
                 border-style: solid;
@@ -273,6 +273,48 @@
             }
 
         .tooltipQtyShow:hover .tooltiptextShow {
+            visibility: visible;
+            opacity: 1;
+        }
+    .tooltipQtyShowRes {
+        position: relative;
+        display: contents;
+        cursor: pointer !important;
+    }
+
+        .tooltipQtyShowRes .tooltiptextShowRes {
+            visibility: hidden;
+            
+            width: 250px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            font-family: arial;
+            position: absolute;
+            z-index: 401;
+            margin-left: -146px;
+            top: 33px;
+            
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltipQtyShowRes .tooltiptextShowRes::after {
+                content: "";
+                position: absolute;
+                top: -37%;
+                left: 51%;
+                transform: rotate(180deg);
+                margin-left: -5px;
+                border-width: 5px;
+               
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltipQtyShowRes:hover .tooltiptextShowRes {
             visibility: visible;
             opacity: 1;
         }
@@ -286,27 +328,37 @@
                 <th>
                     Image
                 </th>
-                <th>
+                <th style=" width: 11%;">
                     SKU
                 </th>
 
                 @*<th>
-                        Agg Qty
-                    </th>*@
-                <th style="cursor:pointer!important">
+            Agg Qty
+        </th>*@
+                <th style="        cursor: pointer !important;
+        width: 8%;
+">
                     Phy Qty
                 </th>
-                <th>On Order</th>
+                <th style=" width: 8%;">
+                   
+                    <span class="tooltipQtyShowRes" style="cursor:pointer!important">
+                        Resvd  Qty
+                        <span class="tooltiptextShowRes">  Reserved Qty for Orders & FBA Shipment</span>
+
+                    </span>
+                </th>
+                <th style=" width: 7%;">On Order</th>
                 <th>Sold60 </th>
                 <th class="sortCover">
 
 
                     <span class="tooltipQtyShowDeficit_60">
-                        Cover
-                        <span class="tooltiptextShowDeficit_60">Calculated on Phy Qty and On Order</span>
+                        Cover_T
+                        <span class="tooltiptextShowDeficit_60">Cover days with Phy Qty + OnOrder Qty + Reserved Qty</span>
                     </span>
                 </th>
-                <th style="        cursor: pointer !important
+                <th style="        cursor: pointer !important;width: 8%;
 ">
 
                     <span class="tooltipQtyShow" style="cursor:pointer!important">
@@ -316,31 +368,28 @@
                 </th>
                 <th>Velocity</th>
                 <th style="cursor:pointer!important" class="Def60Cover">
-
-                    <span class="tooltipQtyShowDeficit_60">
-                        D_60
-                        <span class="tooltiptextShowDeficit_60">D_60</span>
-                    </span>
+                    D_60
+                    
                 </th>
                 <th style="cursor:pointer!important" class="Def90Cover">
-                    <span class="tooltipQtyShowDeficit_90">
-                        D_90
-                        <span class="tooltiptextShowDeficit_90"> D_90</span>
-                    </span>
+                    D_90
+                    
 
                 </th>
 
-                <th>CP PO Qty</th>
+                <th style="width: 9%;">CP PO Qty</th>
                 <th>CasePack</th>
 
 
-                <th style="width:150px;">
+                <th style=" width: 12%;">
                     Vendor
                 </th>
                 <th>
                     Draft
                 </th>
-
+                <th>
+                    Status
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -370,7 +419,7 @@
                         </a>
                     </td>
                     <td>
-                        <input type='text' style="display:none" class='form-control SKU' value='@item.SKU'>
+                        <input type='text' style="opacity:0" class='form-control SKU' value='@item.SKU'>
 
                         <span class="tooltipTitle">
                             <a href="/BestBuyProduct/PropertyPage?ProductSKU=@item.SKU" class="skuspan" target="_blank">@item.SKU</a>
@@ -386,6 +435,7 @@
                             <span style="color:#D3D3D3">@item.ShadowOf</span><br />
                         }
                         <span style="font-size:10px;" class="locationNotes">@item.LocationNotes</span>
+                        <span style="margin-left:4px;color:gray"> <i class="fas fa-copy copyText"></i></span>
                         <br />
                         <div class="">
                             <a style="cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.SKU" target="_blank">
@@ -397,111 +447,131 @@
                                     <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
                                 </a>
                             }
-                        </div>
-                    </td>
-
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.POStatus)
-                        </td>*@
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.AggregatedQty)
-                        </td>*@
-                    <td>
-                        <span class="tooltipphyqty">
-                            <span class="phyqty" style="cursor:pointer;color:#007bff;font-size:12px;">@item.PhysicalQty</span>
-                            <span class="topdata phyqtyspan">
-
-                            </span>
-                        </span>
-
-
-                    </td>
-                    <td>
-                        <label class="OnOrder" style="cursor:pointer;color:#007bff;font-size:12px; text-decoration:underline" data-largimage="@ViewBag.S3BucketURL_large/@item.ImageName" data-SmallImage="@ViewBag.S3BucketURL/@item.CompressedImage">@item.OnOrder</label>
-                    </td>
-                    <td>
-                        <div class="tooltipqtysold">
-                            <div class="qtySoldSpan" style="cursor:pointer;color:#007bff;font-size:12px;">@item.QtySold60</div>
-                            <div class="topdata QtySold row">
-
-                            </div>
-                        </div>
-
-
-
-                    </td>
-                    <td>
-
-                        @item.CoverDays
-                    </td>
-                    <td>@item.CoverPhy</td>
-                    <td>
-
-                        @Velocity
-                    </td>
-                    <td>
-                        <input type='text' style="display:none" class='form-control POQty' value='@Math.Round(@item.LowStock60,2)'>
-                        @Math.Round(@item.LowStock60)
-                    </td>
-                    <td>
-                        <input type='text' style="display:none" class='form-control ' value='@Math.Round(@item.LowStock90,2)'>
-                        @Math.Round(@item.LowStock90)
-                    </td>
-                    <td>
-                        @{
-
-                            decimal CP = 0;
-                            decimal CP2 = 0;
-                            decimal dfdcp = 0;
-                            string dfdcp2 = "0";
-                            if (item.QtyPerBox > 0)
-                            {
-                                dfdcp = @item.LowStock60 / @item.QtyPerBox;
-                                CP = Math.Round(dfdcp, 2) * @item.QtyPerBox;
-                                CP2 = Math.Round(dfdcp) * @item.QtyPerBox;
-                                dfdcp2 = @Math.Round(dfdcp) + ".00";
-                            }
-
-                        }
-                        @if (@item.QtyPerBox > 0)
-                        {
-
-                            <span>@Math.Round(dfdcp, 2) * @item.QtyPerBox= @Math.Round(CP)</span><br />
-                            <span style="color:forestgreen">@dfdcp2 * @item.QtyPerBox= @Math.Round(CP2)</span><br />
-                        }
-                    </td>
-                    <td>
-                        <input type='text' style="display:none" class='form-control CasePackQty' value='@item.QtyPerBox'>
-                        @if (@item.QtyPerBox > 0)
-                        {
-
-                            <a href="/ShipmentCasePack/GetTemplateList?SKU=@item.SKU" target="_blank" style="cursor:pointer">@item.QtyPerBox</a>
-                        }
-                        else
-                        {
-                            <a style='cursor: pointer;' href='/ShipmentCasePack/SaveTemplate?SKU=@item.SKU&Vendor=Yes' target='_blank'>
-                                <span style="color:gray">CP</span>
+                            <a style="cursor:pointer" href="/PurchaseOrder/GetPOProduct?&sku=@item.SKU" title="Product in PO's" target="_blank">
+                                <img src="~/Images/right-1.png" height='20' />
                             </a>
-                        }
-                    </td>
-                    <td>
-                        @foreach (var inner in item.list)
+                        </div>
+                       
+              
+                </td>
+
+                @*<td>
+                @Html.DisplayFor(modelItem => item.POStatus)
+            </td>*@
+                @*<td>
+                @Html.DisplayFor(modelItem => item.AggregatedQty)
+            </td>*@
+<td>
+                    <span class="tooltipphyqty">
+                        <span class="phyqty" style="cursor:pointer;color:#007bff;font-size:12px;">@item.PhysicalQty</span>
+                        <span class="topdata phyqtyspan">
+
+                        </span>
+                    </span>
+
+
+                </td>
+                <td>@item.ReservedQty</td>
+                <td>
+                    <label class="OnOrder" style="cursor:pointer;color:#007bff;font-size:12px; text-decoration:underline" data-largimage="@ViewBag.S3BucketURL_large/@item.ImageName" data-SmallImage="@ViewBag.S3BucketURL/@item.CompressedImage">@item.OnOrder</label>
+                </td>
+                <td>
+                    <div class="tooltipqtysold">
+                        <div class="qtySoldSpan" style="cursor:pointer;color:#007bff;font-size:12px;">@item.QtySold60</div>
+                        <div class="topdata QtySold row">
+
+                        </div>
+                    </div>
+
+
+
+                </td>
+                <td>
+
+                    @item.CoverDays
+                </td>
+                <td>@item.CoverPhy</td>
+                <td>
+
+                    @Velocity
+                </td>
+                <td>
+                    <input type='text' style="display:none" class='form-control POQty' value='@Math.Round(@item.LowStock60,2)'>
+                    @Math.Round(@item.LowStock60)
+                </td>
+                <td>
+                    <input type='text' style="display:none" class='form-control ' value='@Math.Round(@item.LowStock90,2)'>
+                    @Math.Round(@item.LowStock90)
+                </td>
+                <td>
+                    @{
+
+                        decimal CP = 0;
+                        decimal CP2 = 0;
+                        decimal dfdcp = 0;
+                        string dfdcp2 = "0";
+                        if (item.QtyPerBox > 0)
                         {
-                            if (@inner.VendorAlias != "")
-                            {
-                                <input type="radio" value="@inner.VendorAlias" data-VendorId="@inner.VendorId" data-Currency="@inner.Currency" data-ApprovedUnitPrice="@inner.ApprovedUnitPrice" class="selectVendor" disabled name="@item.SKU" />
-                                <span>@inner.VendorAlias</span>
-                                <span><a style='cursor: pointer;' href='/ApprovedPrice?&sku=@item.SKU&title=' target='_blank'> @inner.ApprovedUnitPrice  </a> @inner.Currency</span><br />
-                            }
+                            dfdcp = @item.LowStock60 / @item.QtyPerBox;
+                            CP = Math.Round(dfdcp, 2) * @item.QtyPerBox;
+                            CP2 = Math.Round(dfdcp) * @item.QtyPerBox;
+                            dfdcp2 = @Math.Round(dfdcp) + ".00";
                         }
-                    </td>
-                    <td class="InternalPOID">
-                        @if (item.InternalPOId > 0)
+
+                    }
+                    @if (@item.QtyPerBox > 0)
+                    {
+
+                        <span>@Math.Round(dfdcp, 2) * @item.QtyPerBox= @Math.Round(CP)</span><br />
+                        <span style="color:forestgreen">@dfdcp2 * @item.QtyPerBox= @Math.Round(CP2)</span><br />
+                    }
+                </td>
+                <td>
+                    <input type='text' style="display:none" class='form-control CasePackQty' value='@item.QtyPerBox'>
+                    @if (@item.QtyPerBox > 0)
+                    {
+
+                        <a href="/ShipmentCasePack/GetTemplateList?SKU=@item.SKU" target="_blank" style="cursor:pointer">@item.QtyPerBox</a>
+                    }
+                    else
+                    {
+                        <a style='cursor: pointer;' href='/ShipmentCasePack/SaveTemplate?SKU=@item.SKU&Vendor=Yes' target='_blank'>
+                            <span style="color:gray">CP</span>
+                        </a>
+                    }
+                </td>
+                <td>
+                    @foreach (var inner in item.list)
+                    {
+                        if (@inner.VendorAlias != "")
                         {
-                            <a href="../PredictionHistory/PredictionList?data=@item.InternalPOId" target="_blank" style="cursor:pointer">@item.InternalPOId</a>
+                            <input type="radio" value="@inner.VendorAlias" data-VendorId="@inner.VendorId" data-Currency="@inner.Currency" data-ApprovedUnitPrice="@inner.ApprovedUnitPrice" class="selectVendor" disabled name="@item.SKU" />
+                            <span>@inner.VendorAlias</span>
+                            <span><a style='cursor: pointer;' href='/ApprovedPrice?&sku=@item.SKU&title=' target='_blank'> @inner.ApprovedUnitPrice  </a> @inner.Currency</span><br />
                         }
-                    </td>
-                </tr>
+                    }
+                </td>
+                <td class="InternalPOID">
+                    @if (item.InternalPOId > 0)
+                    {
+                        <a href="../PredictionHistory/PredictionList?data=@item.InternalPOId" target="_blank" style="cursor:pointer">@item.InternalPOId</a>
+                    }
+                </td>
+                <td>
+
+                    @if (item.PredictIncluded == true)
+                    {
+                        <span>Included</span>
+
+                    }
+                    else
+                    {
+                        <span>Excluded</span>
+                    }
+
+                </td>
+                    
+            </tr>
             }
         </tbody>
     </table>

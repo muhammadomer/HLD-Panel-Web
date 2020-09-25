@@ -10,6 +10,13 @@
 
 <link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
 <style>
+    .btngocalss {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 6px !important;
+        border-radius: 2px !important;
+    }
+
     .tooltipp {
         position: relative;
         display: contents;
@@ -154,6 +161,29 @@
         box-sizing: border-box;
         padding: 30px;
     }
+    .modelwidth{
+        width:125%!important;
+    }
+    .select2 {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 27px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 27px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    .myselectwidth {
+width: 230px!important;
+}
 </style>
 
 <div class="container-fluid" style="margin-left:15px">
@@ -166,7 +196,40 @@
         @*<a class="btn btn-success m-1 btnstyle" asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcode" target="_blank">Receive Shipments</a>*@
     }
 
-    <div class="modal fade" style="margin-top: 80px!important;" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="EditTrackingNumber" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 80px!important;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">Update Tracking</h4>
+                </div>
+
+                @using (Html.BeginForm("UpdateShipmentCourierInfo", "Shipment", FormMethod.Post))
+                {<div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="inputName"><b>Shipping Courier Code :</b></label>
+                            <input type="text" name="ShipmentId" class="form-control" id="TrackingShipmentId" style="display:none">
+                            <input type="text" name="CourierCode" class="form-control" id="idCourierCode">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName"><b>Traking Number :</b></label>
+                            <input type="text" name="TrakingNumber" class="form-control" id="idTrakingNumber">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName"><b>Shipping Date :</b></label>
+                            <input type="date" name="CreatedAt" class="form-control" id="idCreatedAt">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" style="margin-top: 80px !important;" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
@@ -253,11 +316,17 @@
                     @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
                     {<div class="col-md-1 p-0 mr-1">
 
-                            <input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />
-                            @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
-                            <span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>
+                            <select class="js-example-basic-single form-control Shipment" name="VendorId" id="vendor">
 
-                            @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })
+                                <option value="">Vendor</option>
+
+
+                            </select>
+                            @*<input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />*@
+                            @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                            @*<span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>
+
+                                @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })*@
                         </div>
                     }
                     <div class="col-md-2 p-0 mr-1">
@@ -282,7 +351,7 @@
                         <input type="hidden" name="ItemType" id="ddlQuantity" />
                     </div>
                     <div class="col-md-1 p-0 mr-1">
-                        <select asp-for="Type" name="Type"  class="form-control p-0">
+                        <select asp-for="Type" name="Type" class="form-control p-0">
                             <option value="ALL">ALL</option>
                             <option value="casepack">Case Pack</option>
                             <option value="mixed">Mixed</option>
@@ -317,14 +386,66 @@ margin-top: 9px;">
                 </div>
             </div>
         </div>
+
         <div class="col col-md-2">
             <span> Total Shipments Found : @ViewBag.TotalCount</span>
         </div>
-    </div>
+        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+        {
+            <div class="col-md-8">
+                <div class="form-group row" style="float:right">
+                    <select class="js-example-basic-single EditTrackingDetail myselectwidth" id="ActionMenu" name="state">
+
+                        <option value="">Select</option>
+
+
+                        <option value="EditTracking">Edit Tracking Detail</option>
+
+
+                    </select>
+
+                    <button class=" btn-success btngocalss BtnGoOrder" id="">Go</button>
+                </div>
+            </div>
+            }
+        </div>
+
 </div>
 <div class="container-fluid">
     <div id="loadOrder">
 
+    </div>
+</div>
+<div class="modal fade" id="myModalerror" style="margin-top: 130px;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modelwidth">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Warning!</span>
+                </strong>
+
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+
+            <div class="modal-body myclassshide" style="padding-left:0!important;">
+                <p class="modal-title" style=" padding-left: 15px;">
+                    Please Select one Item for Update Tracking Number!
+                </p>
+               
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
     </div>
 </div>
 <div class="container-fluid" style="margin-left:10px">
@@ -352,13 +473,120 @@ margin-top: 9px;">
     <script>
         var selectedDateFrom = "";
         var selectedDatTo = "";
+        $(".EditTrackingDetail").select2();
         $(document).ready(function () {
+
+            function VendorlistgetInShipment() {
+
+                $.ajax({
+                    url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.UserName + '">' + value.UserAlias + '</option>';
+
+
+
+                        });
+
+                        $(".Shipment").append(content);
+
+                        $(".Shipment").val(@Model.VendorId);
+
+                    }
+        })
+
+
+
+            }
+
+            VendorlistgetInShipment();
+            $(".Shipment").select2()
+
             debugger;
             $("#dialog-box").dialog({
                 autoOpen: false,
                 //title: 'Are u want to delete this reocord!',
                 modal: true,
             });
+
+            //$(document).on('click', '#headerCheckBox', function () {
+            //    var i = 0;
+            //    if ($(this).is(':checked')) {
+
+            //        $(".table tbody tr ").each(function () {
+
+            //             $(this).find('.checkboxSelect').prop('checked', true);
+            //        });
+
+            //    }
+            //    else {
+
+            //        $(".table tbody tr ").each(function () {
+            //            $(this).find('.checkboxSelect').prop('checked', false);
+            //        });
+            //    }
+
+            //});
+            debugger;
+            $(document).on('click', '.BtnGoOrder', function () {
+                var action = $('#ActionMenu').val();
+                debugger;
+
+                if (action == "") {
+                    $.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                    return;
+                }
+                if (action == "EditTracking") {
+                    debugger;
+                    var data = [];
+                    var shipmentId = "";
+                    var i = 0;
+
+                    $(".table tbody tr ").each(function () {
+
+                        if ($(this).find('.checkboxSelect').is(':checked')) {
+
+                            shipmentId= $(this).find(".ShipmentIdForTracking").val();
+                            i++;
+
+                        }
+                    });
+                    if (i == 1) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '../Shipment/GetShipmentCourierInfo?shipmentId=' + shipmentId,
+                            success: function (res) {
+                                $("#idCourierCode").val(res.CourierCode)
+                                $("#TrackingShipmentId").val(shipmentId)
+                                $("#idTrakingNumber").val(res.TrakingNumber)
+                                $("#idCreatedAt").val(res.CreatedAt)
+                                $('#EditTrackingNumber').modal('show');
+                            },
+                            Error: function (err) {
+                                //$.notify('some error occured!', { className: 'error mydelte' });
+                            }
+                        });
+
+                    }
+                    else {
+                        $("#myModalerror").modal({
+                            backdrop: 'static',
+                            keyboard: false
+
+                        });
+                    }
+                }
+
+           
+
+            });
+
             var start = moment().subtract(7, 'days');
             var end = moment();
 
@@ -418,11 +646,12 @@ margin-top: 9px;">
             };
             var item = getUrlParameter('ItemType');
             var ShipmentId = getUrlParameter('ShipmentId');
-            var Vendor = getUrlParameter('Vendor');
-            if (Vendor == null || Vendor== "") {
-                $("#VendorIdForMessage").val(0);
-            }
-            var VendorId = $("#VendorIdForMessage").val();
+            //var Vendor = getUrlParameter('Vendor');
+            //if (Vendor == null || Vendor== "") {
+            //    $("#VendorIdForMessage").val(0);
+            //}
+            var Vendor = getUrlParameter('VendorId');
+            //var VendorId = $("#VendorIdForMessage").val();
             var TrakingNumber = getUrlParameter('TrakingNumber');
             var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
             var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
@@ -452,7 +681,7 @@ margin-top: 9px;">
                       debugger;
                       pageNo = page;
                       // add code which gets executed when user selects a page
-                      var url = '/Shipment/getlist?page=' + page + "&ShipmentId=" + ShipmentId + "&VendorId=" + VendorId + "&TrakingNumber=" + TrakingNumber + "&ItemType=" + item + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo +'&Type='+Type;
+                      var url = '/Shipment/getlist?page=' + page + "&ShipmentId=" + ShipmentId + "&VendorId=" + Vendor + "&TrakingNumber=" + TrakingNumber + "&ItemType=" + item + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo +'&Type='+Type;
                       var completURL = url  ;
                       $(".loadertbl").show();
 
@@ -615,44 +844,45 @@ margin-top: 9px;">
             });
         });
 
-        $('#Vendor').autocomplete({
-            autoFocus: true,
-            source: function (request, response) {
-                $.ajax({
-                    url: "/ApprovedPrice/GetAllVendorForAutoComplete",
-                    type: "POST",
-                    minLength: 3,
-                    dataType: "json",
-                    data: { Prefix: request.term },
-                    success: function (data, ui) {
 
-                        //if (data.length > 0) {
-                        response($.map(data, function (item) {
-                            if (item != null) {
-                                return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
-                            }
+        //$('#Vendor').autocomplete({
+        //    autoFocus: true,
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+        //            type: "POST",
+        //            minLength: 3,
+        //            dataType: "json",
+        //            data: { Prefix: request.term },
+        //            success: function (data, ui) {
 
-                        }));
-                    }
-                })
-            },
-            select: function (event, ui) {
+        //                //if (data.length > 0) {
+        //                response($.map(data, function (item) {
+        //                    if (item != null) {
+        //                        return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+        //                    }
 
-                $('#VendorIdForMessage').val(ui.item.id);
-            },
-            response: function (event, ui) {
-                console.dir(ui.content)
-                if (ui.content.length === 0) {
-                    $("#empty-message-Vendor").text("No results found");
-                    $('#VendorIdForMessage').val("0");
+        //                }));
+        //            }
+        //        })
+        //    },
+        //    select: function (event, ui) {
 
-                    $('#InputSubmit').attr("disabled", true)
-                } else {
-                    $("#empty-message-Vendor").empty();
-                    $('#InputSubmit').attr("disabled", false)
-                }
-            }
-        });
+        //        $('#VendorIdForMessage').val(ui.item.id);
+        //    },
+        //    response: function (event, ui) {
+        //        console.dir(ui.content)
+        //        if (ui.content.length === 0) {
+        //            $("#empty-message-Vendor").text("No results found");
+        //            $('#VendorIdForMessage').val("0");
+
+        //            $('#InputSubmit').attr("disabled", true)
+        //        } else {
+        //            $("#empty-message-Vendor").empty();
+        //            $('#InputSubmit').attr("disabled", false)
+        //        }
+        //    }
+        //});
         $(document).on('click', '.edit', function () {
             debugger;
             $("#Idforedit").val($(this).attr("shipingId"));

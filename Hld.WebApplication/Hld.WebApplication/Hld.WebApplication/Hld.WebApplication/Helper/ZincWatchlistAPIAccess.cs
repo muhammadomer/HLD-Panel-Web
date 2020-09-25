@@ -433,5 +433,68 @@ namespace Hld.WebApplication.Helper
             }
             return Count;
         }
+
+        public int GetWatchlistLogsSelectAllCount(string ApiURL, string token, ZincWatchLogsSearchViewModel searchViewModel)
+        {
+            int ViewModel = 0;
+            try
+            {
+                var data = JsonConvert.SerializeObject(searchViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList/GetWatchlistLogsSelectAllCount");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewModel = JsonConvert.DeserializeObject<int>(strResponse);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return ViewModel;
+        }
+        public ZincWatchlistCountViewModel GetCount(string ApiURL, string token, ZincWatchLogsSearchViewModel searchViewModel)
+        {
+            ZincWatchlistCountViewModel ViewModel = new ZincWatchlistCountViewModel();
+            try
+            {
+                var data = JsonConvert.SerializeObject(searchViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList/GetCount");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewModel = JsonConvert.DeserializeObject<ZincWatchlistCountViewModel>(strResponse);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return ViewModel;
+        }
     }
 }

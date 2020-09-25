@@ -110,15 +110,15 @@
     }
 </style>
 
-<div class="container-fluid mt-3 maincontainer">
-    @*<div class="table-responsive">*@
-    <table class="table  tablesorter">
+<div class="container-fluid">
+  
+    <table class="table tablesorter">
         <thead style="background-color:darkgray;">
             <tr>
                 <th style="width: 38px !important;
 text-align: center;
 vertical-align: middle !important
-"><input type="checkbox" /></th>
+"><input type="checkbox"id="headerCheckBox" /></th>
 
                 <th style="max-width:220px;min-width:220px">
                     Shipment ID
@@ -164,7 +164,10 @@ vertical-align: middle !important
                 @{
                     decimal CNYAmount = (Convert.ToDecimal(7.07) * @item.AmountReceived);
                 }
-                <td style="width:38px!important;text-align:center;vertical-align:middle!important;"><input type="checkbox" /></td>
+                <td style="width:38px!important;text-align:center;vertical-align:middle!important;"><input type="checkbox"class="checkboxSelect" />
+                <input type="text"style="display:none"value="@item.ShipmentId"class="ShipmentIdForTracking"/>
+                
+                </td>
                 <td>
                     @if (item.Type == "casepack")
                     {
@@ -213,7 +216,12 @@ vertical-align: middle !important
                 </td>
                 <td>
                     <a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a>
-                </td>
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    {
+
+                        @*<span class="getshipmentId" data-shipmentId="@item.ShipmentId">Edit</span>*@
+                        }
+                    </td>
                 <td>
 
                     @if (item.Status == 1)
@@ -296,7 +304,7 @@ vertical-align: middle !important
 
         </tbody>
     </table>
-    @*</div>*@
+    
 </div>
 
 

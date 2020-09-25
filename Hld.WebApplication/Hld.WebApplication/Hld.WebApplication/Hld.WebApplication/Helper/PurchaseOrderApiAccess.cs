@@ -598,5 +598,30 @@ namespace Hld.WebApplication.Helper
 
             return responses;
         }
+
+        public bool UpdateTitle(string ApiURL, string token, string Sku, string Title)
+        {
+
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PurchaseOrder/UpdateTitle?Sku=" + Sku + "&Title=" + Title);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+
+
+            return Convert.ToBoolean(strResponse);
+        }
+
+
     }
 }

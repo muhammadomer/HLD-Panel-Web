@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewData["Title"] = "GetSendToZincCount";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+
+}
+@*<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">*@
+<link href="~/boots/bootstrap-toggle.min.css" rel="stylesheet" />
+
+
+<div class="container-fluid">
+
+    <div class="row col col-12" id="fixActionMenu"style="margin-left:15px">
+        <div class="col col-md-3">
+            <div class="row" >
+                <div class="pagination col-md-2 col">
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col col-md-3">
+            <span>Records Found: @ViewBag.Records</span>
+        </div>
+
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid"style="margin-left:15px">
+    <div class="pagination">
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    @*<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>*@
+    <script src="~/lib/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+           
+          //pagination
+    $(".pagination").paging(parseInt('@ViewBag.Records'), {
+    format: '[< nncnn >]',
+    perpage: 25, // show 10 elements per page
+    lapping: 0, // don't overlap pages for the moment
+    page: 1, // start at page, can also be "null" or negative
+    stepwidth: 0, // =0 means blockwise next/prev steps
+    onSelect: function (page) {
+
+    pageNo = page;
+    // add code which gets executed when user selects a page
+        var completURL = '/Zinc/GetSendToZincOrder?page=' + page + ''
+
+    $(".loadertbl").show();
+
+        $.ajax({
+            url: completURL,
+            data: {},
+            type: 'POST',
+            traditional: true,
+            success: function (data) {
+                $('#loadOrder').empty();
+                $('#loadOrder').html(data);
+                $(".loadertbl").hide();
+                // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+            }
+        });
+        if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+            if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                start = moment(OrderDateTimeFrom);
+                end = moment(OrderDateTimeTo);
+
+                cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+            }
+            else {
+                $('#reportrange span').html("No Date Selected");
+            }
+
+        }
+        else {
+            $('#reportrange span').html("No Date Selected");
+        }
+
+
+  
+    },
+        onFormat: function (type) {
+            switch (type) {
+                case 'block': // n and c
+                    if (this.page === this.value) {
+                        return '<span>' + this.value + '</span>';
+                    } else {
+                        return '<a href="#">' + this.value + '</a>';
+                    }
+                case 'next': // >
+                    return '<a href="#">&gt;</a>';
+                case 'prev': // <
+                    return '<a href="#">&lt;</a>';
+                case 'first': // [
+                    return '<a href="#">First</a>';
+                case 'last': // ]
+                    return '<a href="#">Last</a>';
+            }
+        }
+
+
+    });
+            
+
+
+       
+
+    });
+    </script>
+}
+
+

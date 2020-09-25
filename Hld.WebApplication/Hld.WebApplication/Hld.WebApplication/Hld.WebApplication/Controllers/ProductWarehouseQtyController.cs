@@ -71,7 +71,8 @@ namespace Hld.WebApplication.Controllers
             token = Request.Cookies["Token"];
             ProductWarehouseQtyViewModel model = new ProductWarehouseQtyViewModel();
             model.ProductSku = productSku;
-            List<ProductWarehouseQtyViewModel> data = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabase(ApiURL, token, model);
+            List<ProductWarehouseQtyViewModel> data = productApiAccess.GetWareHousesQtyList(ApiURL, token, productSku);
+            data = data.Where(s => s.AvailableQty != 0).ToList();
             return PartialView("~/Views/ProductWarehouseQty/GetProductWarehouseData.cshtml", data);
         }
 
@@ -153,14 +154,15 @@ namespace Hld.WebApplication.Controllers
 
                 throw;
             }
-            List<ProductWarehouseQtyViewModel> listmodel = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabase(ApiURL, token, new ProductWarehouseQtyViewModel() { ProductSku = sku });
+            //List<ProductWarehouseQtyViewModel> listmodel = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabase(ApiURL, token, new ProductWarehouseQtyViewModel() { ProductSku = sku });
 
-            listmodel = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabaseInvent(ApiURL, token, sku);
+            //listmodel = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabaseInvent(ApiURL, token, sku);
+            List<ProductWarehouseQtyViewModel> listmodel = productApiAccess.GetWareHousesQtyList(ApiURL, token, sku);
             //foreach (var item in listmodel)
             //{
             //    item.ProductSku = sku;
             //}
-            
+
             return  listmodel;
         }
 

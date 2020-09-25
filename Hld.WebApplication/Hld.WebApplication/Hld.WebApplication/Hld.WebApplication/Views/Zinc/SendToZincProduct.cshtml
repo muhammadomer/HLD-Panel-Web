@@ -1,0 +1,89 @@
+﻿@model Hld.WebApplication.ViewModel.SendToZincProductViewModel
+
+
+    <div class="container-fluid">
+        <div class="panel panel-default modal-lg">
+            <div class="panel-body ">
+                <div class=" p-2 bg-primary text-white" style="">Please confirm order detail before send to Zinc </div>
+               
+                    <div class="form-group row" style="margin-bottom:0!important">
+
+                        <div class="col-sm-12">
+                            <div class="row">
+
+
+                                <div class="col-sm-6">
+                                    <div class="col-sm-12 p-0">
+                                        <label id="skuvalue" data-sku="@Model.Sku"><span style="font-weight:bold">SKU</span>: @Model.Sku</label>
+
+                                    </div>
+                                    <div class="col-sm-12 p-0">
+                                        <div>
+                                            <label id="asinvalue" data-asin="@Model.Asin"><span style="font-weight:bold">ASIN</span>: @Model.Asin</label>
+                                        </div>
+
+
+                                        <div class="row col-sm-12" style="">
+
+                                            <label style="font-weight:bold;margin-right:38px">Qty: </label>
+
+                                            <input type="number" value="@Model.Qty" data-qty="@Model.Qty" style="box-shadow: none !important;width:170px" class="form-control" name="Qty" id="qty" />
+
+                                        </div>
+
+                                        <div class="row col-sm-12" style="margin-top:2px;">
+                                            <label style="font-weight:bold">Ship Days: </label>
+                                            <select class="form-control p-0" style="width:170px;" id="DeliveryDays">
+                                                <option value="0"> select </option>
+                                                <option value="5"> 5 </option>
+                                                <option value="6"> 6 </option>
+                                                <option value="7"> 7 </option>
+                                                <option value="8"> 8 </option>
+                                                <option value="9"> 9 </option>
+                                                <option value="10"> 10 </option>
+                                                <option value="11"> 11 </option>
+                                                <option value="12"> 12 </option>
+                                                <option value="13"> 13 </option>
+                                                <option value="14"> 14 </option>
+                                                <option value="15"> 15 </option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="col-sm-12 pl-0">
+                                        <p class="my-1" style="font-weight:bold">Shipping Address</p>
+                                        @Html.DropDownListFor(model => model.getaddressname, new SelectList(Model.getaddress, "WH_Name", "WH_Name"), new { @class = "form-control p-0", })
+                                    </div>
+
+                                    <div class="col-sm-12 pl-0">
+                                        <p class="my-1" style="font-weight:bold">Account Detail</p>
+                                        @Html.DropDownListFor(model => model.ZincAccountId, new SelectList(Model.ZincAccounts,  "ZincAccountsId", "UserNameShort"), new { @class = "form-control p-0",  })
+                                    </div>
+
+                                    <div class="col-sm-12 pl-0">
+                                        <p class="my-1" style="font-weight:bold">Credit Card Detail</p>
+                                        @Html.DropDownListFor(model => model.CreditCardId, new SelectList(Model.CreditCardDetail,"CreditCardDetailId", "name_on_cardShort"), new { @class = "form-control p-0",})
+                                    </div>`
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body" id="SendtozincModalBody">
+                        </div>
+                        <div class="col-sm-12 findParent">
+                            <div class="col-sm-4 pl-0 mt-2">
+                                <button type="submit" id="submitzincproduct" class="btn btn-primary">Submit</button>
+                               
+                            </div>
+                        </div>
+
+
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+

@@ -86,31 +86,93 @@
                 </div>
                 <div class="col-sm-3">
 
-                    <div class="col-sm">
-                        <div class="alert alert-success  successmessage1" style="padding:5px">
-                            <a href="#" class="close" aria-label="close">&times;</a>
-                            <strong>Success!</strong><span class="successAppend1"></span>
+                    @*<div class="col-sm">
+                            <div class="alert alert-success  successmessage1" style="padding:5px">
+                                <a href="#" class="close" aria-label="close">&times;</a>
+                                <strong>Success!</strong><span class="successAppend1"></span>
 
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="alert alert-danger  dangermessage1" style="padding:5px">
-                            <a href="#" class="close" aria-label="close">&times;</a>
-                            <strong>Error!</strong><span class="failureAppend1"></span>
-                        </div>
-                    </div>
+                        <div class="col-sm">
+                            <div class="alert alert-danger  dangermessage1" style="padding:5px">
+                                <a href="#" class="close" aria-label="close">&times;</a>
+                                <strong>Error!</strong><span class="failureAppend1"></span>
+                            </div>
+                        </div>*@
 
                 </div>
             </div>
         </div>
     </div>
-   
+
+    <div class="modal fade" id="myModalerror" style="margin-top: 130px;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modelwidth">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <span style="vertical-align: text-top;margin-left: 4px;color:green;
+">Success !Updated</span>
+                    </strong>
+
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <div class="modal-body myclassshide successAppend1" style="padding-left:0!important;">
+
+
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModalerrorwarning" style="margin-top: 130px;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modelwidth">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-warning" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Something Went Wrong!</span>
+                    </strong>
+
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <div class="modal-body myclassshide" style="padding-left:0!important;">
+
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid p-0">
         <table class="table MissingSkutable table-bordered">
             <thead style="background-color:lightgrey">
                 <tr>
 
-                    <th data-sorter="false"style="width:1%;">
+                    <th data-sorter="false" style="width:1%;">
                         <label>Image</label>
                     </th>
                     <th style="width:1%;">
@@ -127,7 +189,6 @@
                 </tr>
             </thead>
             <tbody id="getskulist">
-
             </tbody>
 
         </table>
@@ -204,29 +265,27 @@
                         contentType: false,
                         processData: false,
                         success: function (data) {
-
                             $('input[type=file]').val(null);
                             $('.uploadDSFileStatus').css('display', 'none');
                             if (data.success == true) {
                                 $('#btnUpload').removeAttr('disabled');
                                 $('.UpdateASINButtonLoader').css('display', 'none');
                                 $('.successAppend1').empty();
-                                $('.successAppend1').append('<span class="pl-1">Updated Successfully and Job ID is' + data.JobID)
-                                $('.successmessage1').show();
+                                //$('.successAppend1').append('<span class="pl-1">Updated Successfully and Job ID is' + data.JobID)
+                                //$('.successmessage1').show();
+                                $('.successAppend1').append("<a href='/UploadFilesToS3ForJobs/JobLogs/" + data.JobID + "' target='_blank' style='font-weight: bold;text-decoration: underline !important;margin-left:20px!important'>Job ID is " + data.JobID + "</a >");
+                                $("#myModalerror").modal({ backdrop: 'static', keyboard: false });
                             }
                             else {
-
                                 if (data.success == false) {
                                     $('#btnUpload').removeAttr('disabled');
                                     $('.uploadDSFileStatus').css('display', 'none');
-                                    $('.failureAppend1').empty();
-                                    $('.failureAppend1').append('<span class="pl-1"> Something Went Wrong')
-                                    $('.dangermessage1').show();
+                                    //$('.failureAppend1').empty();
+                                    //$('.failureAppend1').append('<span class="pl-1"> Something Went Wrong')
+                                    //$('.dangermessage1').show();
+                                    $("#myModalerrorwarning").modal({ backdrop: 'static', keyboard: false });
                                 }
-
-
                             }
-
                         }
                     });
                 }

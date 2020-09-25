@@ -3,6 +3,7 @@
     ViewData["Title"] = "GetVendorCurrancy";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
 }
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
 <style>
     .controlabel {
         width: 112px;
@@ -56,14 +57,29 @@
             <div class="form-group row">
                 <label class="col-form-label-sm  controlabel">Vendor Alias:</label>
                 <div class="col-sm-7 pl-0">
-                    <input id="VendorSearch" type="search" class="form-control" />
+                    @*<input id="VendorSearch" type="search" class="form-control" />*@
+
+                    <select class="js-example-basic-single form-control Aprrovedprice" id="VendorSearch">
+
+                        <option value="">Vendor</option>
+
+
+                    </select>
                 </div>
                 @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })
             </div>
             <div class="form-group row">
                 <label class="col-form-label-sm  controlabel">Currency:</label>
                 <div class="col-sm-7 pl-0">
-                    <input id="CurrencySearch" type="search" class="form-control" />
+                    @*<input id="CurrencySearch" type="search" class="form-control" />*@
+                    <select class="js-example-basic-single form-control CurrencySearch" id="CurrencySearch"style="box-shadow:none">
+
+                        <option value="CNY">CNY</option>
+                        <option value="USD">USD</option>
+
+
+                    </select>
+
                 </div>
 
             </div>
@@ -92,7 +108,7 @@
 
             </div>
             <div class="form-group" style="">
-                <input type="submit" value="Add Value" class="btn btn-primary offset-3 btnsave" />
+                <input type="submit" value="Add Value" class="btn btn-primary offset-2 btnsave" />
 
             </div>
         </div>
@@ -155,10 +171,56 @@ outline: none;border: none;" />
 </div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script src="~/js/ckeditor/ckeditor.js"></script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+          function VendorlistgetInShipmentlistApprovedprice() {
+
+                $.ajax({
+                    url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.UserName + '">' + value.UserAlias + '</option>';
+
+
+
+                        });
+
+                        $(".Aprrovedprice").append(content);
+
+                        @*$(".ShipmentHistoryManagecaskpack").val(@Model.VendorId);*@
+
+                    }
+        })
+
+
+
+            }
+
+            VendorlistgetInShipmentlistApprovedprice();
+            $(".Aprrovedprice").select2();
+            $(".CurrencySearch").select2();
+
+
+
             $("#dialog-box").dialog({
                 autoOpen: false,
                 //title: 'Are u want to delete this reocord!',
@@ -282,76 +344,76 @@ outline: none;border: none;" />
 
             })
 
-            $('#VendorSearch').autocomplete({
-                autoFocus: true,
-                source: function (request, response) {
-                    $.ajax({
-                        url: "/ApprovedPrice/GetAllVendorForAutoComplete",
-                        type: "POST",
-                        minLength: 3,
-                        dataType: "json",
-                        data: { Prefix: request.term },
-                        success: function (data, ui) {
+            //$('#VendorSearch').autocomplete({
+            //    autoFocus: true,
+            //    source: function (request, response) {
+            //        $.ajax({
+            //            url: "/ApprovedPrice/GetAllVendorForAutoComplete",
+            //            type: "POST",
+            //            minLength: 3,
+            //            dataType: "json",
+            //            data: { Prefix: request.term },
+            //            success: function (data, ui) {
 
-                            //if (data.length > 0) {
-                            response($.map(data, function (item) {
-                                if (item != null) {
-                                    return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
-                                }
+            //                //if (data.length > 0) {
+            //                response($.map(data, function (item) {
+            //                    if (item != null) {
+            //                        return { label: item.UserAlias, value: item.UserAlias, id: item.UserName };
+            //                    }
 
-                            }));
-                        }
-                    })
-                },
-                select: function (event, ui) {
+            //                }));
+            //            }
+            //        })
+            //    },
+            //    select: function (event, ui) {
 
-                    $('#ColorIdForMessage').val(ui.item.id);
-                },
-                response: function (event, ui) {
-                    console.dir(ui.content)
-                    if (ui.content.length === 0) {
-                        $("#empty-message-Color").text("No results found");
-                        $('#ColorIdForMessage').val("0");
+            //        $('#ColorIdForMessage').val(ui.item.id);
+            //    },
+            //    response: function (event, ui) {
+            //        console.dir(ui.content)
+            //        if (ui.content.length === 0) {
+            //            $("#empty-message-Color").text("No results found");
+            //            $('#ColorIdForMessage').val("0");
 
-                        $('#InputSubmit').attr("disabled", true)
-                    } else {
-                        $("#empty-message-Color").empty();
-                        $('#InputSubmit').attr("disabled", false)
-                    }
-                }
-            });
-            var Currency = [
-                { value: 'CNY', data: 'CNY' },
+            //            $('#InputSubmit').attr("disabled", true)
+            //        } else {
+            //            $("#empty-message-Color").empty();
+            //            $('#InputSubmit').attr("disabled", false)
+            //        }
+            //    }
+            //});
+            //var Currency = [
+            //    { value: 'CNY', data: 'CNY' },
 
-                { value: 'USD', data: 'USD' }
-            ];
-            $('#CurrencySearch').autocomplete({
-                autoFocus: true,
-                source: function (request, response) {
-                    response($.map(Currency, function (item) {
-                        if (item != null) {
-                            return { label: item.value, value: item.value, id: item.value };
-                        }
+            //    { value: 'USD', data: 'USD' }
+            //];
+            //$('#CurrencySearch').autocomplete({
+            //    autoFocus: true,
+            //    source: function (request, response) {
+            //        response($.map(Currency, function (item) {
+            //            if (item != null) {
+            //                return { label: item.value, value: item.value, id: item.value };
+            //            }
 
-                    }));
-                },
-                select: function (event, ui) {
+            //        }));
+            //    },
+            //    select: function (event, ui) {
 
-                    $('#CurrencyForMessage').val(ui.item.value);
-                },
-                response: function (event, ui) {
-                    console.dir(ui.content)
-                    if (ui.content.length === 0) {
-                        $("#empty-message-Currency").text("No results found");
-                        $('#CurrencyIdForMessage').val("0");
+            //        $('#CurrencyForMessage').val(ui.item.value);
+            //    },
+            //    response: function (event, ui) {
+            //        console.dir(ui.content)
+            //        if (ui.content.length === 0) {
+            //            $("#empty-message-Currency").text("No results found");
+            //            $('#CurrencyIdForMessage').val("0");
 
-                        $('#InputSubmit').attr("disabled", true)
-                    } else {
-                        $("#empty-message-Currency").empty();
-                        $('#InputSubmit').attr("disabled", false)
-                    }
-                }
-            });
+            //            $('#InputSubmit').attr("disabled", true)
+            //        } else {
+            //            $("#empty-message-Currency").empty();
+            //            $('#InputSubmit').attr("disabled", false)
+            //        }
+            //    }
+            //});
 
             $(".btnsubmit").click(function () {
                 var data = [];

@@ -57,10 +57,10 @@
                                 </div>
 
                                 @*<div class="row col-sm-12">
-            <label style="font-weight:bold">Ship Date:</label>
-            <input type="date" style="margin-right: 50px;box-shadow: none !important" placeholder="Ship Date" autocomplete="off" class="form-control" name="orderDateTimeShip" id="orderDateTimeShip" />
+                            <label style="font-weight:bold">Ship Date:</label>
+                            <input type="date" style="margin-right: 50px;box-shadow: none !important" placeholder="Ship Date" autocomplete="off" class="form-control" name="orderDateTimeShip" id="orderDateTimeShip" />
 
-        </div>*@
+                        </div>*@
 
                                 <div class="row col-sm-12" style="margin-top:2px;">
                                     <label style="font-weight:bold">Ship Days:</label>
@@ -87,7 +87,7 @@
                         <div class="col-sm-4">
                             <div class="col-sm-12 pl-0">
                                 <p class="my-1" style="font-weight:bold">Account Detail</p>
-                                @Html.DropDownListFor(model => model.ZincAccountsId, new SelectList(Model.ZincAccounts, "ZincAccountsId", "UserNameShort"), new { @class = "form-control p-0", @style="width:150px" })
+                                @Html.DropDownListFor(model => model.ZincAccountsId, new SelectList(Model.ZincAccounts, "ZincAccountsId", "UserNameShort"), new { @class = "form-control p-0", @style = "width:150px" })
                             </div>
 
                             <div class="col-sm-12 pl-0">
@@ -96,6 +96,8 @@
                             </div>`
                         </div>
                     </div>
+                </div>
+                <div class="modal-body" id="SendtozincModalBody">
                 </div>
                 <div class="col-sm-12 findParent">
                     <div class="col-sm-4 pl-0 mt-2">

@@ -107,6 +107,14 @@ namespace Hld.WebApplication.Controllers
             searchViewModel.Available = available;
 
             Count = _ApiAccess.GetWatchListLogsCount(ApiURL, token, searchViewModel);
+            ZincWatchlistCountViewModel obj = new ZincWatchlistCountViewModel();
+
+            obj = _ApiAccess.GetCount(ApiURL, token, searchViewModel);
+            ViewBag.Total = obj.Total;
+            ViewBag.TotalCount = obj.TotalCount;
+            ViewBag.AvailableCount = obj.Available;
+            ViewBag.UnAvailableCount = obj.UnAvailable;
+            ViewBag.ListingRemovedCount = obj.ListingRemoved;
             ViewBag.logsRecords = Count;
             ViewBag.JobID = jobID;
 
@@ -125,10 +133,10 @@ namespace Hld.WebApplication.Controllers
 
             int pageNumber = page;
             int offset = 0;
-            int pageSize = 25;
+            int pageSize = 100;
 
 
-            offset = (pageNumber - 1) * 25;
+            offset = (pageNumber - 1) * 100;
             ZincWatchLogsSearchViewModel searchViewModel = new ZincWatchLogsSearchViewModel();
             searchViewModel.ASIN = ASIN == "undefined" ? "" : ASIN;
             searchViewModel.JobID = jobID == "undefined" ? "" : jobID;
@@ -224,9 +232,28 @@ namespace Hld.WebApplication.Controllers
             searchViewModel.JobID = jobID == "undefined" ? "" : jobID;
             searchViewModel.Available = available == "undefined" ? "" : available;
             listmodel = _ApiAccess.UpdateBestBuyForAllPages(ApiURL, token, searchViewModel);
+
+            foreach(var item in listmodel)
+            {
+                item.UnitOriginPrice_Max = (Math.Floor((item.UnitOriginPrice_Max / 100)) + 0.95)*100;
+                item.ZincJobId = Convert.ToInt32(jobID);
+            }
+
             int ID = _ApiAccess.SaveBestBuyUpdateList(ApiURL, token, listmodel);
             return ID;
         }
+
+        public int GetWatchlistLogsSelectAllCount(string ASIN, string available, string jobID)
+        {
+            string token = Request.Cookies["Token"];
+            ZincWatchLogsSearchViewModel searchViewModel = new ZincWatchLogsSearchViewModel();
+            searchViewModel.ASIN = ASIN == "undefined" ? "" : ASIN;
+            searchViewModel.JobID = jobID == "undefined" ? "" : jobID;
+            searchViewModel.Available = available == "undefined" ? "" : available;
+            int count  = _ApiAccess.GetWatchlistLogsSelectAllCount(ApiURL, token, searchViewModel);
+            return count;
+        }
+
         public bool UpdatePriceMax(string ASIN, double MaxPrice)
         {
 

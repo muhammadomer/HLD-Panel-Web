@@ -427,7 +427,7 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="border"style="height: 235px!important;min-height:235px!important">
+                        <div class="border" style="height: 235px!important;min-height:235px!important">
                             <h6 class="mt-2 ml-2" style="font-size:14px;font-family:Arial;font-weight:bold">Ship To</h6>
                             <hr />
                             <address style="float: left;
@@ -457,9 +457,9 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12 mt-2 "id="searchrowclass">
+    <div class="col-sm-12 mt-2 " id="searchrowclass">
         <br />
-        
+
         @using (Html.BeginForm("PurchaseOrdersItems", "PurchaseOrder", FormMethod.Get, new { @class = "form-inline" }))
         {
             @*<select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>*@
@@ -490,7 +490,7 @@
                         <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important">
 
                         </th>
-                        <th >
+                        <th>
 
                         </th>
                         <th>
@@ -510,15 +510,15 @@
                         <th style="background:#D5EFFF !important">
 
                         </th>
-                      
+
                         <th style="background:#D1FFE8 !important">
 
                         </th>
                         <th style="background:#D1FFE8 !important">
 
                         </th>
-                        <th  style="background:#D1FFE8 !important"> Amount</th>
-                        <th  style="background:#D1FFE8 !important">
+                        <th style="background:#D1FFE8 !important"> Amount</th>
+                        <th style="background:#D1FFE8 !important">
 
                         </th>
 
@@ -537,8 +537,8 @@
                             Product ID
                         </th>
                         <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important">Product Title</th>
-                        <th style="min-height:46px;height:46px!important"class="">
-                         Price    @if (Model.CurrencyCode == 4)
+                        <th style="min-height:46px;height:46px!important" class="">
+                            Price    @if (Model.CurrencyCode == 4)
                             {
                                 <span>CAD</span>
                             }
@@ -551,8 +551,8 @@
                                 <span>CNY</span>
                             }
                         </th>
-                        <th style=""class="">
-                           Price USD
+                        <th style="" class="">
+                            Price USD
                         </th>
                         <th>
                             Ordered
@@ -611,16 +611,16 @@
                         <th class="qtyclass">
                             @Model.ListItems.Sum(p => p.QtyOnHand)
                         </th>
-                        <th class="purchaseEnd"style="">
+                        <th class="purchaseEnd" style="">
                             @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.OrderedAmount))
                         </th>
-                        <th class="purchaseEnd"style="">
+                        <th class="purchaseEnd" style="">
                             @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.ShippedAmount))
                         </th>
-                        <th class="purchaseEnd"style="">
+                        <th class="purchaseEnd" style="">
                             @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.ReceivedAmount))
                         </th>
-                        <th class="purchaseEnd"style="">
+                        <th class="purchaseEnd" style="">
                             @string.Format("{0:N2}", @Model.ListItems.Sum(p => p.OpenAmount))
                         </th>
                         <th></th>
@@ -664,7 +664,27 @@
                                 }
 
                             </td>
-                            <td style="text-align:left">@item.ProductTitle</td>
+                            <td style="text-align:left">
+                                <textarea class="form-control producttitleclasss" data-sku="@item.ProductID" data-title="@item.ProductTitle" style="margin-bottom: 3px;
+        box-shadow: none; display:none;
+">@item.ProductTitle</textarea>
+                                <span class="purchasetitle">@item.ProductTitle </span><span>
+                                    <span class=" btnedittitle" aria-hidden="true" style="    color: green;
+        margin-left: 2px;
+        font-family: arial;
+        font-size:10px;
+    ">  Edit</span>
+                                </span><span class="btndivlcass" style="display:none">
+                                    <span><button type="button" class="btn btn-warning btnsavetitle" style="box-shadow: none !important">Save</button></span><span style="margin-left:4px;">
+                                        <button type="button" class="btn btn-dark btncanceltitle" style="color: black !important;
+        border-color: #a3a7ab !important;
+        background-color: #52555870!important;box-shadow:none!important
+    ">
+                                            Cancel
+                                        </button>
+                                    </span>
+                                </span>
+                            </td>
                             <td class="purchaseEndunit">@item.UnitPrice</td>
                             <td class="purchaseEndunit">@item.UnitPriceUSD</td>
                             <td class="qtyclass">@item.QtyOrdered</td>
@@ -687,13 +707,13 @@
                             </td>
                         </tr>
                     }
-               
+
                 </tbody>
             </table>
         }
         else
         {
-            <table class="table tablesorter vendortable"style="">
+            <table class="table tablesorter vendortable" style="">
                 <thead style="background-color:lightgray;">
                     <tr style="border-bottom:none">
                         <th></th>
@@ -724,7 +744,7 @@
                         </th>
                         <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important">Product Title</th>
                         <th style="">
-                           Price    @if (Model.CurrencyCode == 4)
+                            Price    @if (Model.CurrencyCode == 4)
                             {
                                 <span>CAD</span>
                             }
@@ -737,8 +757,8 @@
                                 <span>CNY</span>
                             }
                         </th>
-                        <th style="" >
-                             Price USD
+                        <th style="">
+                            Price USD
                         </th>
                         <th>
                             Ordered
@@ -771,8 +791,8 @@
                         <th style="text-align:left!important">
                             @Model.ListItems.Count()
                         </th>
-                        <th  style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important"></th>
-                        <th >
+                        <th style="text-align:left;padding-left:5px;width:25%!important;min-width:25%!important"></th>
+                        <th>
 
                         </th>
                         <th>
@@ -821,7 +841,7 @@
                                 <br />
 
                                 <img src="~/Images/barcode-png.png" data-ID="@item.ProductID" class="print" height="25" width="25" style="cursor:pointer;margin-left: 14px;" />
-                               <br>
+                                <br>
                                 @if (@item.ID > 0)
                                 {
                                     <span style="color:gray;">@item.ID</span>
@@ -850,6 +870,38 @@
             </table>
         }
     </div>
+    <div class="modal fade" id="myModalTitle" style="margin-top: 130px;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content modelwidth">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-check" style="        color: green;
+        font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Title Update Succesfully!</span>
+                    </strong>
+
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <div class="modal-body myclasstitle" style="padding-left:0!important;">
+                   
+                    
+                    
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -860,7 +912,58 @@
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
 
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
+            $(".producttitleclasss").hide();
+            $(".btndivlcass").hide();
+
+            $(".btnedittitle").click(function () {
+                $(".btndivlcass").hide();
+                 $(this).hide();
+                $(".producttitleclasss").hide();
+                $(".purchasetitle").show();
+                $(this).closest('tr').find(".producttitleclasss").show();
+               
+                $(this).closest('tr').find(".btndivlcass").show();
+                $(this).closest('tr').find(".purchasetitle").hide();
+            })
+            $(".btncanceltitle").click(function () {
+                $(".btndivlcass").hide();
+                $(".producttitleclasss").hide();
+                $(".purchasetitle").show();
+                $(this).closest('tr').find(".btnedittitle").show();
+                
+               
+            })
+            $(".btnsavetitle").click(function () {
+                $(".btndivlcass").hide();
+                $(".producttitleclasss").hide();
+                $(".purchasetitle").show();
+                $(this).closest('tr').find(".btnedittitle").show();
+                var CurrentRow = $(this).closest('tr');
+                var title = $(this).closest('tr').find(".producttitleclasss").val();
+                var sku = $(this).closest('tr').find(".producttitleclasss").attr("data-sku");
+              
+                $.ajax({
+                    type: 'GET',
+                    url: '../PurchaseOrder/UpdateTitle',
+                    data: {
+                        Sku: sku,
+                        Title:title
+                    },
+                    success: function (data) {
+                        $(".myclasstitle").empty();
+                        $(CurrentRow).find(".purchasetitle").text(title);
+                        // $.notify('Title Update Successfully', { globalPosition: 'bottom right', className: 'danger myclass' });
+                        $(".myclasstitle").append("<p style='margin-left: 20px;'>" + title + "</p>");
+                        $("#myModalTitle").modal({ backdrop: 'static', keyboard: false });
+                    },
+                    Error: function (err) {
+
+                    }
+                });
+
+            })
+
           $("#dialog-box").dialog({
             autoOpen: false,
             //title: 'Are u want to delete this reocord!',

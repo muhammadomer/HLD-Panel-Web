@@ -242,6 +242,9 @@
         border-right: #ccc 1px solid !important;
         border-bottom: #ccc 1px solid !important;
     }
+    .modelwidth {
+        width: 140% !important;
+    }
 </style>
 
 
@@ -531,7 +534,44 @@ margin-left: 13px;">Case Pack Shipment Details</b>
             <input type="button" class="add-row btn btn-success" value="Add Product">
         }
     </form>
+    <div class="modal fade" id="myModalerror" style="margin-top: 130px;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modelwidth">
 
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Warning!</span>
+                    </strong>
+
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <div class="modal-body myclassshide" style="padding-left:0!important;">
+                    <p class="modal-title" style="margin-bottom: 10px; padding-left: 15px;">
+                        Please add case pack first prior to add product in the shipment
+                    </p>
+                    <p class="modal-title" style="margin-bottom: 10px; padding-left: 15px;">
+                        Use this link to manage your case packs
+                    </p>
+                    <li class="nav-item" style="text-decoration: underline!important;">
+                        <a class="nav-link" asp-controller="ShipmentCasePack" asp-action="SaveTemplate" target="_blank" style="font-weight: bold;text-decoration: underline !important;">Manage Case Pack</a>
+
+                    </li>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 <div class="hidedialogbox ">
     <div id="dialog-box">
@@ -699,7 +739,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
 
 
             $(document).on('keypress', '.sku', function (event) {
-                //var item = $(this).parents('tr');
+               var selectedrow = $(this).parents('tr');
                 if (event.keyCode == 13) {
                     var item = $(this);
                     if (item.val() == "")
@@ -710,7 +750,6 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                         url: '../ShipmentCasePack/GetTemplate?SKU=' + item.val(),
                         contentType: 'application/json',
                         success: function (res) {
-                            debugger;
                             var casepackId = res.CasePackId;
                             var qtyperbox = res.QtyPerBox;
                             var width = res.Width;
@@ -719,8 +758,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                             var weight = res.Weight;
                             //var totalweigth = weight * boxes;
                             if (width > 0) {
-
-
+                                 $(selectedrow).find('.submit').prop('disabled', false);
                                 $(item).parents('tr').find('.widthinch').val((width * 0.393701).toFixed(2));
                                 $(item).parents('tr').find('.heightinch').val((height * 0.393701).toFixed(2));
                                 $(item).parents('tr').find('.lengthinch').val((length * 0.393701).toFixed(2));
@@ -733,6 +771,17 @@ margin-left: 13px;">Case Pack Shipment Details</b>
 
                                 $(item).parents('tr').find('.qtybox').val((qtyperbox));
                                 $(item).parents('tr').find('.casepack').val((casepackId));
+                            }
+                            else {
+
+                                $(selectedrow).find('.submit').prop('disabled', true);
+                                $("#myModalerror").modal({
+backdrop: 'static',
+keyboard: false
+
+});
+                                //$.notify('Please Add CasePack for This SKU', { globalPosition: 'bottom right', className: 'success myclass' });
+                               
                             }
 
                             //$(item).parents('tr').find('.po').append(content);
@@ -856,7 +905,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                 if (count < 2) {
                     AddMarkup();
                     $('.sku').focus();
-                    keypressfunction();
+                    //keypressfunction();
 
 
                 }
@@ -879,7 +928,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
 
 
                     $('.sku').focus();
-                    keypressfunction();
+                    //  keypressfunction();
                 }
                 else {
                     if (sku == '') {
@@ -912,7 +961,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                 }
             });
 
-             $(document).on("click", ".submit", function () {
+            $(document).on("click", ".submit", function () {
 
                 var selectedRow = $(this).parents('tr');
                 $(selectedRow).parents('tr').next().find(".sku").focus();
@@ -932,166 +981,165 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                     Weight: $(selectedRow).find('.weightkg').val(),
                     QtyPerBox: $(selectedRow).find('.qtybox').val(),
                 }
-                 if (data.SKU != '' && data.POId != '' && data.QtyPerBox != '' && data.NoOfBoxes != '' && data.Height != '' && data.Width != '' && data.Length != '' && data.Weight != '' && data.ShipedQty !== '')
-                 {
+                if (data.SKU != '' && data.POId != '' && data.QtyPerBox != '' && data.NoOfBoxes != '' && data.Height != '' && data.Width != '' && data.Length != '' && data.Weight != '' && data.ShipedQty !== '') {
 
-                     var i = 0;
-                     $.ajax({
-                         type: 'POST',
-                         url: '../ShipmentCasePack/Save',
-                         data: { data },
-                         success: function (res) {
-                             i++;
-                             debugger;
-                             if (res > 0) {
-                                 $(selectedRow).find('.idShipmentProducts').val(res);
-                                 $(selectedRow).find('input').prop('readonly', true);
-                                 $(selectedRow).find('select').attr('disabled', true);
-                                 $(selectedRow).find('.edit').show();
-                                 $(selectedRow).find('.submit').hide();
-                                 if (editable == false) {
-                                     AddMarkup();
-                                     $(selectedRow).next().find(".sku").focus();
+                    var i = 0;
+                    $.ajax({
+                        type: 'POST',
+                        url: '../ShipmentCasePack/Save',
+                        data: { data },
+                        success: function (res) {
+                            i++;
+                            debugger;
+                            if (res > 0) {
+                                $(selectedRow).find('.idShipmentProducts').val(res);
+                                $(selectedRow).find('input').prop('readonly', true);
+                                $(selectedRow).find('select').attr('disabled', true);
+                                $(selectedRow).find('.edit').show();
+                                $(selectedRow).find('.submit').hide();
+                                if (editable == false) {
+                                    AddMarkup();
+                                    $(selectedRow).next().find(".sku").focus();
 
 
-                                 }
-                                 editable = false;
-                                 //SumShipedQty();
-                                 $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
-                             }
-                             else {
-                                 //$(selectedRow).find('.shipedqty').addClass('warning')
-                                 //$(selectedRow).find('.qtyerr').show();
-                                 //$(selectedRow).find('.qtyerr').text('Must be less then Open Qty');
-                                 $.notify('Quantity is higher then Open Qty', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
-                             }
-                         },
-                         Error: function (err) {
-                             debugger;
-                         }
-                     });
-                 }
-                 else {
-                     if (data.SKU == '') {
-                         selectedRow.find(".sku").addClass('warning')
-                     }
-                     if (data.POId  == '') {
-                         selectedRow.find(".po").addClass('warning')
-                     }
-                     if (data.QtyPerBox == '') {
-                         selectedRow.find(".qtybox").addClass('warning')
-                     }
-                     if (data.ShipedQty == '') {
-                         selectedRow.find(".qtyshipped").addClass('warning')
-                     }
-                     if (data.NoOfBoxes == '') {
-                         selectedRow.find(".boxes").addClass('warning')
-                     }
+                                }
+                                editable = false;
+                                //SumShipedQty();
+                                $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                            }
+                            else {
+                                //$(selectedRow).find('.shipedqty').addClass('warning')
+                                //$(selectedRow).find('.qtyerr').show();
+                                //$(selectedRow).find('.qtyerr').text('Must be less then Open Qty');
+                                $.notify('Quantity is higher then Open Qty', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
+                            }
+                        },
+                        Error: function (err) {
+                            debugger;
+                        }
+                    });
+                }
+                else {
+                    if (data.SKU == '') {
+                        selectedRow.find(".sku").addClass('warning')
+                    }
+                    if (data.POId == '') {
+                        selectedRow.find(".po").addClass('warning')
+                    }
+                    if (data.QtyPerBox == '') {
+                        selectedRow.find(".qtybox").addClass('warning')
+                    }
+                    if (data.ShipedQty == '') {
+                        selectedRow.find(".qtyshipped").addClass('warning')
+                    }
+                    if (data.NoOfBoxes == '') {
+                        selectedRow.find(".boxes").addClass('warning')
+                    }
 
-                     if (data.Width == '') {
-                         selectedRow.find(".widthcm").addClass('warning')
-                     }
-                     if (data.Height == '') {
-                         selectedRow.find(".heightcm").addClass('warning')
-                     }
-                     if (data.Length == '') {
-                         selectedRow.find(".lengthcm").addClass('warning')
-                     }
-                     if (data.Weight == '') {
-                         selectedRow.find(".weightkg").addClass('warning')
-                     }
-                 }
+                    if (data.Width == '') {
+                        selectedRow.find(".widthcm").addClass('warning')
+                    }
+                    if (data.Height == '') {
+                        selectedRow.find(".heightcm").addClass('warning')
+                    }
+                    if (data.Length == '') {
+                        selectedRow.find(".lengthcm").addClass('warning')
+                    }
+                    if (data.Weight == '') {
+                        selectedRow.find(".weightkg").addClass('warning')
+                    }
+                }
             });
 
             $(document).on('keypress', '.boxes', function (event) {
+              
                 if (event.keyCode == 13) {
 
-                var selectedRow = $(this).parents('tr');
+                    var selectedRow = $(this).parents('tr');
                     //$(selectedRow).find('.qtyshipped').val($(selectedRow).find('.boxes').val() * $(selectedRow).find('.qtybox').val());
-                var data =
-                {
-                    SKU: $(selectedRow).find('.sku').val(),
-                    POId: $(selectedRow).find('.po').val(),
-                    idShipmentProducts: $(selectedRow).find('.idShipmentProducts').val(),
-                    ShipmentId: '@Model.ShipmentId',
-                    ShipedQty: $(selectedRow).find('.qtyshipped').val(),
-                    //VendorId: $(row).find('.PO').val(),
-                    NoOfBoxes: $(selectedRow).find('.boxes').val(),
-                    CasePackId: $(selectedRow).find('.casepack').val(),
-                    Height: $(selectedRow).find('.heightcm').val(),
-                    Width: $(selectedRow).find('.widthcm').val(),
-                    Length: $(selectedRow).find('.lengthcm').val(),
-                    Weight: $(selectedRow).find('.weightkg').val(),
-                    QtyPerBox: $(selectedRow).find('.qtybox').val(),
-                }
-                 if (data.SKU != '' && data.POId != '' && data.QtyPerBox != '' && data.NoOfBoxes != '' && data.Height != '' && data.Width != '' && data.Length != '' && data.Weight != '' && data.ShipedQty !== '')
-                 {
+                    var data =
+                    {
+                        SKU: $(selectedRow).find('.sku').val(),
+                        POId: $(selectedRow).find('.po').val(),
+                        idShipmentProducts: $(selectedRow).find('.idShipmentProducts').val(),
+                        ShipmentId: '@Model.ShipmentId',
+                        ShipedQty: $(selectedRow).find('.qtyshipped').val(),
+                        //VendorId: $(row).find('.PO').val(),
+                        NoOfBoxes: $(selectedRow).find('.boxes').val(),
+                        CasePackId: $(selectedRow).find('.casepack').val(),
+                        Height: $(selectedRow).find('.heightcm').val(),
+                        Width: $(selectedRow).find('.widthcm').val(),
+                        Length: $(selectedRow).find('.lengthcm').val(),
+                        Weight: $(selectedRow).find('.weightkg').val(),
+                        QtyPerBox: $(selectedRow).find('.qtybox').val(),
+                    }
+                    if (data.SKU != '' && data.POId != '' && data.QtyPerBox != '' && data.NoOfBoxes != '' && data.Height != '' && data.Width != '' && data.Length != '' && data.Weight != '' && data.ShipedQty !== '') {
 
-                     var i = 0;
-                     $.ajax({
-                         type: 'POST',
-                         url: '../ShipmentCasePack/Save',
-                         data: { data },
-                         success: function (res) {
-                             i++;
-                             debugger;
-                             if (res > 0) {
-                                 $(selectedRow).find('.idShipmentProducts').val(res);
-                                 $(selectedRow).find('input').prop('readonly', true);
-                                 $(selectedRow).find('select').attr('disabled', true);
-                                 $(selectedRow).find('.edit').show();
-                                 $(selectedRow).find('.submit').hide();
-                                 if (editable == false) {
-                                     AddMarkup()
-                                     $(selectedRow).next().find(".sku").focus();
+                        var i = 0;
+                        $.ajax({
+                            type: 'POST',
+                            url: '../ShipmentCasePack/Save',
+                            data: { data },
+                            success: function (res) {
+                                i++;
+                                debugger;
+                                if (res > 0) {
+                                    $(selectedRow).find('.idShipmentProducts').val(res);
+                                    $(selectedRow).find('input').prop('readonly', true);
+                                    $(selectedRow).find('select').attr('disabled', true);
+                                    $(selectedRow).find('.edit').show();
+                                    $(selectedRow).find('.submit').hide();
+                                    if (editable == false) {
+                                        AddMarkup()
+                                        $(selectedRow).next().find(".sku").focus();
 
-                                 }
-                                 editable = false;
-                                 //SumShipedQty();
-                                 $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
-                             }
-                             else {
-                                 //$(selectedRow).find('.shipedqty').addClass('warning')
-                                 //$(selectedRow).find('.qtyerr').show();
-                                 //$(selectedRow).find('.qtyerr').text('Must be less then Open Qty');
-                                 $.notify('Quantity is higher then Open Qty', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
-                             }
-                         },
-                         Error: function (err) {
-                             debugger;
-                         }
-                     });
-                 }
-                 else {
-                     if (data.SKU == '') {
-                         selectedRow.find(".sku").addClass('warning')
-                     }
-                     if (data.POId  == '') {
-                         selectedRow.find(".po").addClass('warning')
-                     }
-                     if (data.QtyPerBox == '') {
-                         selectedRow.find(".qtybox").addClass('warning')
-                     }
-                     if (data.ShipedQty == '') {
-                         selectedRow.find(".qtyshipped").addClass('warning')
-                     }
-                     if (data.NoOfBoxes == '') {
-                         selectedRow.find(".boxes").addClass('warning')
-                     }
+                                    }
+                                    editable = false;
+                                    //SumShipedQty();
+                                    $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                                }
+                                else {
+                                    //$(selectedRow).find('.shipedqty').addClass('warning')
+                                    //$(selectedRow).find('.qtyerr').show();
+                                    //$(selectedRow).find('.qtyerr').text('Must be less then Open Qty');
+                                    $.notify('Quantity is higher then Open Qty', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
+                                }
+                            },
+                            Error: function (err) {
+                                debugger;
+                            }
+                        });
+                    }
+                    else {
+                        if (data.SKU == '') {
+                            selectedRow.find(".sku").addClass('warning')
+                        }
+                        if (data.POId == '') {
+                            selectedRow.find(".po").addClass('warning')
+                        }
+                        if (data.QtyPerBox == '') {
+                            selectedRow.find(".qtybox").addClass('warning')
+                        }
+                        if (data.ShipedQty == '') {
+                            selectedRow.find(".qtyshipped").addClass('warning')
+                        }
+                        if (data.NoOfBoxes == '') {
+                            selectedRow.find(".boxes").addClass('warning')
+                        }
 
-                     if (data.Width == '') {
-                         selectedRow.find(".widthcm").addClass('warning')
-                     }
-                     if (data.Height == '') {
-                         selectedRow.find(".heightcm").addClass('warning')
-                     }
-                     if (data.Length == '') {
-                         selectedRow.find(".lengthcm").addClass('warning')
-                     }
-                     if (data.Weight == '') {
-                         selectedRow.find(".weightkg").addClass('warning')
-                     }
-                 }
+                        if (data.Width == '') {
+                            selectedRow.find(".widthcm").addClass('warning')
+                        }
+                        if (data.Height == '') {
+                            selectedRow.find(".heightcm").addClass('warning')
+                        }
+                        if (data.Length == '') {
+                            selectedRow.find(".lengthcm").addClass('warning')
+                        }
+                        if (data.Weight == '') {
+                            selectedRow.find(".weightkg").addClass('warning')
+                        }
+                    }
 
 
                 }
@@ -1141,15 +1189,13 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                 if ($('.casepacktable tbody tr').length > 0) {
                     $("#dialog-box-Inform").dialog("open");
                 }
-                else
-                {
-                      $("#dialog-box").dialog("open");
+                else {
+                    $("#dialog-box").dialog("open");
                 }
             });
 
 
-            $(document).on('keydown', '.sku', function (event)
-            {
+            $(document).on('keydown', '.sku', function (event) {
                 if (event.keyCode == 9) {
                     event.preventDefault();
                     $(this).closest('tr').find(".qtybox").focus();
@@ -1164,6 +1210,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
             });
 
             $(document).on('keydown', '.boxes', function (event) {
+                debugger;
                 if (event.keyCode == 9) {
                     event.preventDefault();
                     $(this).closest('tr').find(".widthcm").focus();
@@ -1205,6 +1252,13 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                     $(this).closest('tr').find(".submit").focus();
                 }
             });
+
+            //$(document).on('keypress', '.boxes', function () {
+            //    debugger;
+            //    var selectedRow = $(this).parents('tr');
+            //    var qty = selectedRow.find('.qtybox').val();
+            //    console.log('qty', qty);
+            //});
 
         });
 

@@ -142,10 +142,13 @@
                                     <input type="hidden" asp-for="ShopSKU_OfferSKU" />
                                 </div>
                                 <input asp-for="BBProductID" type="hidden" class="form-control col-sm-2" />
-                                <div class="text-center" style="padding-bottom:0px">
+                                <div class="" style="padding-bottom:0px">
                                     <button class="btn btn-primary" type="submit" id="btnUpdateDetail">Update DropShip</button>
-                                    <span class="pl-sm-1">
+                                    <span class="">
                                         <a style="display:inline" class="nav-link" target="_blank" asp-action="ShowEnableDisableLog" asp-controller="DropshipEnableDisableLog" asp-route-ProductSku="@Model.Product_Sku">DS Log</a>
+                                    </span>
+                                    <span class="">
+                                        <a href="/BestBuyDropshipQtyMovement/AllDropshipQtyMovementList" style="display:inline" class="nav-link" target="_blank">BB Qty Update Log</a>
                                     </span>
                                 </div>
                             </div>

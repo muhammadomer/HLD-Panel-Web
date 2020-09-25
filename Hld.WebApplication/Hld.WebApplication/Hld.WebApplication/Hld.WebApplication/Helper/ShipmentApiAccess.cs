@@ -378,5 +378,58 @@ namespace Hld.WebApplication.Helper
             List<ShipmentHistoryViewModel> responses = JsonConvert.DeserializeObject<List<ShipmentHistoryViewModel>>(strResponse);
             return responses;
         }
+        public ShipmentCourierInfoViewModel GetShipmentCourierInfo(string apiurl, string token, string ShipmentId)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Shipment/GetShipmentCourierInfo?ShipmentId=" + ShipmentId);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            ShipmentCourierInfoViewModel responses = JsonConvert.DeserializeObject<ShipmentCourierInfoViewModel>(strResponse);
+            return responses;
+        }
+        public bool UpdateShipmentCourierInfo(string ApiURL, string token, ShipmentCourierInfoViewModel ViewModel)
+        {
+            bool Status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/UpdateShipmentCourierInfo");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                    string array = JObject.Parse(strResponse)["status"].ToString();
+                    Status = Convert.ToBoolean(array);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return Status;
+        }
     }
 }

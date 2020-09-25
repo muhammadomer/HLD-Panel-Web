@@ -184,13 +184,6 @@
         user-select: none;
         -webkit-user-select: none;
     }*/
-    .skucolorclsss {
-        color: white;
-        padding: 2px;
-        border: none;
-        border-radius: 2px;
-        background-color: blue;
-    }
 </style>
 
 <div class="modal fade" id="myModal" tabindex="-1" style="margin-top: 80px!important;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -291,7 +284,7 @@
             <h6>Predict PO</h6>
         </div>
         <div class="col-md-2">
-            <a href="/PredictionHistory/DraftPO" target="_blank" class="">Draft PO</a>
+            <a href="/PredictionHistory/DraftPO" target="_blank" class=""style="text-decoration:underline">Draft PO</a>
         </div>
     </div>
     <div class="mb-1 searchFormcard" id="searchForm">
@@ -477,6 +470,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script>
+
          $('#ActionMenu').select2();
         var selectedDateFrom = "";
         var selectedDatTo = "";
@@ -486,11 +480,9 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         var currency = "";
         var sort = "";
         $(document).ready(function () {
-
-
             var previoussku = "";
             $(document).on('click', '.copyText', function () {
-                debugger;
+
                 var id = $(this).closest("tr").find(".SKU");
                 var text = $(this).closest("tr").find(".skuspan");
                 id.select();
@@ -507,8 +499,8 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 previoussku = text
 
             });
-
-            function VendorlistgetInPrediction() {
+           
+              function VendorlistgetInPrediction() {
                   $.ajax({
                       url: "/ApprovedPrice/GetAllVendorForAutoComplete",
                       type: "POST",
@@ -752,7 +744,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             $(row).find(".InternalPOID").empty();
                             var tdContent = '<div>';
                             $.each(data, function (key, value) {
-                                tdContent = tdContent + '<input type="radio" value=' + value.InternalPOID + ' name="InternalPOId"  class="selectPOId" disabled  /><a href="../PredictionHistory/PredictionListDummy?data=' + value.InternalPOID + '" target="_blank" style="cursor:pointer">' + value.InternalPOID + '</a><span> ' + value.Vendor + '</span><br/>';
+                                tdContent = tdContent + '<input type="radio" value=' + value.InternalPOID + ' name="InternalPOId"  class="selectPOId" disabled  /><a href="../PredictionHistory/PredictionList?data=' + value.InternalPOID + '" target="_blank" style="cursor:pointer">' + value.InternalPOID + '</a><span> ' + value.Vendor + '</span><br/>';
                             })
                             $(row).find(".InternalPOID").append($(tdContent));
                             if (data == undefined) {
@@ -801,6 +793,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     return;
                 }
                 if (action == "SetNonDSIncludedPredict") {
+
                     var data = [];
                     $(".table tbody tr ").each(function () {
                         if ($(this).find('.selectRow').is(':checked')) {
@@ -808,6 +801,8 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                             data.push({ SKU: sku, PredictIncludedExcluded: true });
                         }
+
+
                     });
                     $(".loader").show();
                     $.ajax({
@@ -818,8 +813,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             $(".loader").hide();
                             $(".myclassIncluded").append("<p style='margin-left: 20px;'>Set as Non - DS & Included in Predict Succesfully!</p>");
                             $("#myModalIncluded").modal({ backdrop: 'static', keyboard: false });
-                         }
+                            //setInterval('location.reload()',1000);
+                            //setInterval($("#btnSearchOrder").click(),1000);
+                            //$.notify('Predict Included successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                        }
+
                     });
+                    // setInterval('location.reload()', 5000);
                 }
 
                 if (action == "SetDSExcludedPredict") {
@@ -840,8 +840,11 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             $(".loader").hide();
                             $(".myclassExcluded").append("<p style='margin-left: 20px;'>Set as DS & Excluded in Predict Succesfully!</p>");
                             $("#myModalExcluded").modal({ backdrop: 'static', keyboard: false });
+                            //setInterval($("#btnSearchOrder").click(), 1000);
+                            // $.notify('Predict Excluded successfully', { globalPosition: 'bottom right', className: 'danger myclassexcluded' });
                         }
                     });
+                    //setInterval('location.reload()', 5000);
                 }
 
                 if (action == "AddToPO") {
@@ -914,12 +917,15 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             console.log();
                             if (CheckApproved == "1") {
                                 POCreation = true;
+
                             }
                         }
                     });
                     if (POCreation == true) {
+
                         $.notify('Some selected SKUs does not have Vendor!', { globalPosition: 'bottom right', className: 'danger mydlete' });
                         return false;
+
                     }
                     var array = [];
                     $('.table tbody tr').each(function () {
@@ -929,15 +935,25 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                                 if (selectedVendor == $(this).val()) {
                                     price = parseFloat($(this).attr("data-ApprovedUnitPrice"))
                                 }
+
                             });
                             array.push({
-                                VendorId: parseInt(selectedId),
+                                LargImage: $(this).find('.LargImage').val(),
+                                SmallImage: $(this).find('.SmallImage').val(),
+                                CasePackQty: $(this).find('.CasePackQty').val(),
                                 SKU: $(this).find('.SKU').val(),
-                                InternalPOID: selectPOId,
+                                POQty: parseInt($(this).find('.POQty').val()),
+                                ApprovedUnitPrice: price
                             });
                         }
                     });
-                    var data = array
+                    var data = {
+                        VendorId: parseInt(selectedId),
+                        Vendor: selectedVendor,
+                        Currency: currency,
+                        InternalPOID: selectPOId,
+                        list: array
+                    };
                     if (array.length == 0) {
                         $.notify('Please select at least one product!', { globalPosition: 'bottom right', className: 'danger mydlete' });
                         return;
@@ -946,7 +962,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         $.notify('Please select a vendor!', { globalPosition: 'bottom right', className: 'danger mydlete' });
                         return;
                     }
-                    window.open("../PredictionHistory/PredictionListDummy?data=" + JSON.stringify(data), "_blank")
+                    window.open("../PredictionHistory/PredictionList?data=" + JSON.stringify(data), "_blank")
                 }
 
                 if (action == "GetOnDemand") {
@@ -1097,7 +1113,6 @@ setInterval('location.reload()', 5000);
             $(document).on('click', '.SelectPO', function () {
                 var array = [];
                 var POVender = $(this).attr('data-Vendor');
-                var internalPOID = parseInt($(this).text())
                 if (POVender == selectedVendor) {
                     $('.table tbody tr').each(function () {
                         if ($(this).find('.selectRow').is(':checked')) {
@@ -1109,14 +1124,23 @@ setInterval('location.reload()', 5000);
 
                             });
                             array.push({
-                                VendorId: parseInt(selectedId),
+                                LargImage: $(this).find('.LargImage').val(),
+                                SmallImage: $(this).find('.SmallImage').val(),
+                                CasePackQty: $(this).find('.CasePackQty').val(),
                                 SKU: $(this).find('.SKU').val(),
-                                InternalPOID: internalPOID,
+                                POQty: parseInt($(this).find('.POQty').val()),
+                                ApprovedUnitPrice: price
                             });
                         }
                     });
-                    var data = array;
-                    window.open("../PredictionHistory/PredictionListDummy?data=" + JSON.stringify(data), "_blank");
+                    var data = {
+                        VendorId: parseInt(selectedId),
+                        Vendor: selectedVendor,
+                        Currency: currency,
+                        InternalPOID: parseInt($(this).text()),
+                        list: array
+                    };
+                    window.open("../PredictionHistory/PredictionList?data=" + JSON.stringify(data), "_blank");
                 }
                 else {
                     $.notify('selected  vendor does not match!', { globalPosition: 'bottom right', className: 'danger mydlete' });

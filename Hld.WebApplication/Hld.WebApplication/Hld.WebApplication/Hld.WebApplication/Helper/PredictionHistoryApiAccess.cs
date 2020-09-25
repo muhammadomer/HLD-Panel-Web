@@ -82,10 +82,10 @@ namespace Hld.WebApplication.Helper
             return Id;
         }
 
-        public List<PredictionHistroyViewModel> GetPredictionDetail(string ApiURL, string token, int startLimit, int offset, int VendorId, string SKU, string Title, bool Approved, string Sort, string SortedType, int Type = 0)
+        public List<PredictionHistroyViewModel> GetPredictionDetail(string ApiURL, string token, int startLimit, int offset, int VendorId, string SKU, string Title, bool Approved, bool Excluded, string Sort, string SortedType, int Type = 0)
         {
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionHistroy?startLimit=" + startLimit + "&offset=" + offset + "&VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Sort=" + Sort + "&SortedType=" + SortedType + "&Type=" + Type);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionHistroy?startLimit=" + startLimit + "&offset=" + offset + "&VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Excluded=" + Excluded + "&Sort=" + Sort + "&SortedType=" + SortedType + "&Type=" + Type);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -106,13 +106,12 @@ namespace Hld.WebApplication.Helper
 
             return responses;
         }
-
-        public int PredictionSummaryCount(string ApiURL, string token, int VendorId, string SKU, string Title, bool Approved, int Type = 0)
+        public int PredictionSummaryCount(string ApiURL, string token, int VendorId, string SKU, string Title, bool Approved, bool Excluded, int Type = 0)
         {
             int Count = 0;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionSummaryCount?VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Type=" + Type);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionSummaryCount?VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Excluded=" + Excluded + "&Type=" + Type);
                 request.Method = "GET"; ;
                 request.Method = "GET";
                 request.Accept = "application/json;";
@@ -132,7 +131,6 @@ namespace Hld.WebApplication.Helper
             }
             return Count;
         }
-
         public PredictionPOViewModel GetPO(string ApiURL, string token, int Id)
         {
 
@@ -200,7 +198,7 @@ namespace Hld.WebApplication.Helper
             string strResponse = "";
 
 
-            using (WebResponse webResponse = request.GetResponse())
+            using ( WebResponse webResponse = request.GetResponse())
             {
                 using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
                 {
@@ -368,7 +366,70 @@ namespace Hld.WebApplication.Helper
 
             return responses;
         }
+        public string PredictIncludedExcluded(string ApiURL, string token, List<PredictIncludedExcludedViewModel> viewModel)
+        {
+            string status = "";
+            try
+            {
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionHistroy/PredictIncludedExcluded/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
+            }
+            return status;
+        }
 
+        public PredictionPOViewModel GetDataForPOCreation(string ApiURL, string token, List<PredictionInternalSKUList> ViewModel)
+        {
+            PredictionPOViewModel model = new PredictionPOViewModel();
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionHistroy/GetDataForPOCreation");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                    model = JsonConvert.DeserializeObject<PredictionPOViewModel>(strResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return model;
+        }
 
     }
 

@@ -3,7 +3,7 @@
     ViewData["Title"] = "PropertyPage";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
 }
-
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
 <style type="text/css">
     .removePadding {
         padding-left: 0px !important;
@@ -50,6 +50,17 @@
         transform: translate(-50%, -50%);
         box-sizing: border-box;
         padding: 30px;
+    }
+    .myselectwidth {
+        width: 230px !important;
+    }
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 26px!important;
+        user-select: none;
+        -webkit-user-select: none;
     }
 </style>
 
@@ -114,7 +125,7 @@
 
         <!--End Left Menu-->
         <!--Start MainSection-->
-        <div class="col-sm-8" id="">
+        <div class="col-sm-10" id="">
             @*<div class="row">
                     <div class="col-sm-2">
                         AvgCost (CA$)
@@ -171,6 +182,25 @@
                         <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                     </span>
                 </div>
+                <div class="col-sm-4 form-group">
+                    <div class=" form-group">
+                        <div class="col-sm-12">
+                            <select class="js-example-basic-single form-control Sendtozincoption myselectwidth" id="actionMenu">
+                                <option value="sendtozinc">Send To Zinc</option>
+
+                            </select>
+                            @*<select id="actionMenu" class="form-control p-sm-0">
+            <option value="sendtozinc">Send To Zinc</option>
+        </select>*@
+                          <button id="btnsendtozincproduct" class="btn btn-primary" data-SKU="@Model.Product_Sku" value="Go"style="height: 26px !important;box-shadow:none">Go</button>
+                        </div>
+                       
+                        <!--<div class="col-sm-1">-->
+
+                            @*<button  id="btnsendtozinc" class="ml-sm-1 btn btn-primary" value="Go" data-target="#myModal1" onclick="PopupForm('@Url.Action("SendToZincProduct","Zinc",new {id=0 })'") />Go</button>*@
+                        <!--</div>-->
+                    </div>
+                </div>
                 @*<div class="col-sm-2" style="padding:0">
                         <button id="btnZinJob" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary">Zinc Job</button>
                     </div>*@
@@ -205,8 +235,8 @@
 
 
 
-        <div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
-            <div class="modal-dialog" style="width:1000px;">
+        <div class="modal fade" style="margin-top: 80px!important;" id="SendtozincModal" role="dialog">
+            <div class="modal-dialog  modal-md">
 
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -215,8 +245,9 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
                     </div>
-                    <div class="modal-body" id="modelBody">
+                    <div class="modal-body" id="SendtozincModalBody">
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
@@ -224,7 +255,7 @@
 
             </div>
         </div>
-        <div class="modal fade"  style="margin-top: 80px!important;" id="myModalAzin" data-backdrop='static' data-keyboard='false'>
+        <div class="modal fade" style="margin-top: 80px!important;" id="myModalAzin" data-backdrop='static' data-keyboard='false'>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -245,6 +276,44 @@
         </div>
 
     </div>
+
+    <div class="modal fade" id="myModal" role="dialog" style="margin-top: 80px!important;">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content" style="width:88%!important">
+                <div class="modal-header">
+                    <h4 class="modal-title">Status</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body" id="modelBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal1" role="dialog" style="margin-top: 80px!important;">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content" style="width:88%!important">
+                <div class="modal-header">
+                    <h4 class="modal-title">Status</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body" id="modelBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
     @*<div id="dialog-box">
             <h6 style="color:red">Do you want to start zinc job!</h6>
         </div>*@
@@ -257,12 +326,12 @@
 
     @section Scripts{
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
+        <script src="~/select2/js/select2.full.min.js"></script>
         <script type="text/javascript">
 
         $(document).ready(function () {
 
-
+            $(".Sendtozincoption").select2();
              var productsku = $('#HfProductId').val();
             var indexURL = '/Zinc/Index';
             $.get(indexURL, { sku: productsku }).done(function (response) {
@@ -273,7 +342,105 @@
                 //title: 'Are u want to delete this reocord!',
                 modal: true,
             });
+            @*function btnsendtozinc() {
+                debugger
+                $.get('@Url.Action("SendToZincProduct","Zinc" )').done(function (response) {
+                    $('#SendtozincModalBody').empty();
+                    $('#SendtozincModalBody').html(response);
 
+                    var successMessage = $('#modelBody').find('.successmessage');
+                    $(successMessage).hide()
+
+                    $('#SendtozincModal').modal('show');
+                });
+             }*@
+            debugger;
+            function btnsendtozinc(Obj) {
+
+                $.get('/Zinc/SendToZincProduct?SKU=' + Obj.SKU + '&ASIN=' + Obj.ASIN + '').done(function (response) {
+                    $('#SendtozincModalBody').empty();
+                    $('#SendtozincModalBody').html(response);
+                    var successMessage = $('#modelBody').find('.successmessage');
+                    $(successMessage).hide()
+                    $('#SendtozincModal').modal('show');
+                    $("#submitzincproduct").click(function () {
+                        $('#SendtozincModal').modal('hide');
+                    })
+                });
+
+
+                //$('#SendtozincModal').modal('show');
+                // $.ajax({
+                //      type: 'Get',
+                //     url: '../Zinc/SendToZincProduct',
+                //     success: function (response) {
+                //         debugger
+                //          $('#SendtozincModalBody').empty();
+                //              $('#SendtozincModalBody').html(response);
+
+                //              //var successMessage = $('#SendtozincModalBody').find('.successmessage');
+                //              //$(successMessage).hide()
+                //              $('#SendtozincModal').modal('show');
+                //      }
+                //  });
+
+            }
+
+            $(document).on('click', '#btnsendtozincproduct', function () {
+                var Obj = {};
+                $(".table tbody tr ").each(function () {
+                    if ($(this).find('.radiobuttoncheckd').is(':checked')) {
+                        var Obj2 = {
+                            SKU: $(this).find('.skuvalue').val(),
+                            ASIN: $(this).find('.asinvalue').val()
+                        }
+                        Obj = Obj2;
+                        $('#skuappend').append(Obj.SKU);
+                    }
+                    debugger;
+                    btnsendtozinc(Obj);
+                })
+            });
+
+
+                function btnsendtozincproduct() {
+
+                sendToZincReferenceAferSubmit = $(this);
+
+                //var sku=$(this).attr('data-SKU');
+
+                //var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
+                //radioSKU=$(RadioButtonASINChecked).attr('value');
+                //var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
+                //  RadioButtonASIN = $(RadioButtonASINChecked).attr('data-ASIN')
+                //var RadioButtonMaxPrice = $(RadioButtonASINChecked).attr('data-MaxPrice')
+                //if (isRadioButtonChecked == true && sku== radioSKU) {
+
+                //    var profitlosedetail = $(this).attr('data-profitlosedetail');
+                //    var profitpercentagedetail = $(this).attr('data-profitpercentagedetail');
+                //    var OrderDetailID = $(this).attr('data-OrderDetailID');
+
+                //    var OrderId = $(this).attr('data-OrderId');
+
+                //    var SellerCloudOrderId = $(this).attr('data-SellerCloudOrderId');
+                    // var URL = '/Zinc/SendOrderToZinc';
+                    debugger
+
+                            $.get('@Url.Action("SendToZincProduct", "Zinc")', { Data: ""}).done(function (response) {
+
+                                $('#SendtozincModalBody').empty();
+                                $('#SendtozincModalBody').html(response);
+
+                                var successMessage = $('#modelBody').find('.successmessage');
+                                $(successMessage).hide()
+
+
+                                $('#SendtozincModal').modal('show');
+                                $('#SendtozincModal').modal('hide');
+                            });
+                    }
+
+            $(document).on('click', '#btnsendtozincproduct', btnsendtozincproduct);
             //$("#dialog-box").dialog({
             //    autoOpen: false,
             //    //title: 'Are u want to delete this reocord!',
@@ -404,8 +571,8 @@
                         });
                     });
 
+              });
 
-        });
 
             function CancelFormProductASIN() {
                 $('body #textboxZincASIN').val('');
@@ -451,20 +618,21 @@
                         }
                     }
                 });
-            }
-            return false;
-        }
+                }
 
-            //function DeleteASIN(id) {
-            //    var productSku = $('#HfProductId').val().trim();
-            //    var url = '/Zinc/DeleteProductASINZincDetail/' + id;
+            //    if ($('#form11').valid()) {
+            //        debugger
             //    $.ajax({
             //        type: "POST",
             //        url: url,
+            //        data: data,
             //        success: function (data) {
             //            if (data.success == true) {
             //                $.notify(data.message, { globalPosition: 'bottom right', className: 'success' });
-            //                $.get('/Zinc/Index', { sku: productSku }).done(function (response) {
+            //                $.get('/Zinc/GetModelData', { sku: productSku }).done(function (response) {
+            //                    $('#myModal1').modal('toggle');
+            //                    $('body #textboxZincASIN').val('');
+            //                    $('#showPartialView').empty();
             //                    $('#showPartialViewList').empty();
             //                    $('#showPartialViewList').html(response);
             //                });
@@ -472,6 +640,8 @@
             //        }
             //    });
             //}
+            return false;
+        }
 
 
             function DeleteASIN(id) {
@@ -650,7 +820,72 @@
                 $(loader).css('display', 'none');
                                  $(document).find('#warehouseQty').html(response);
            });
-       });
+        });
+
+            $(document).on('click', '#submitzincproduct', function () {
+
+                //var dataID = $(this).attr('data-id');
+                //var scOrderID = $(this).attr('data-scOrderID');
+                //var orderDateTimeShip = $('#orderDateTimeShip').val();
+
+                //var disableButton = $(this);
+                //$(disableButton).attr('disabled', true);
+                //var rootDivOfButton = $(disableButton).parents('.findParent');
+
+                //$(sendToZincReferenceAferSubmit).css('display', 'none');
+
+                //var mainTR = $(sendToZincReferenceAferSubmit).closest('tr');
+                //var mainAnchor = $(mainTR).find(".showZincOrderID a");
+                //var zincReteriveOrder = $(mainTR).find('#ZincOrderReterive');
+                //var orderStatus = $(mainTR).find('.ShowZincOrderLatestStatus');
+                //var processedOutSideZinc = $(mainTR).find('.processedOutSideZinc');
+                //var lockZincOrder = $(sendToZincReferenceAferSubmit).closest('div').find('#imgLockZincOrder');
+                //$(rootDivOfButton).find('.successmessage').show();
+                // console.log(JsonDataOfOrder);
+                debugger;
+                var getaddressname = $('#getaddressname').val();
+                var CreditCardId = $('#CreditCardId').val();
+                var ZincAccountId = $('#ZincAccountId').val();
+                //var DeliveryDays = $('#getaddressname').val();
+                var Shipdays = $('#DeliveryDays').val();
+                var qtyId = $('#qty').val();
+                var asin = $('#asinvalue').attr("data-asin");
+                var sku = $('#skuvalue').attr("data-sku");
+
+                var Url = '/Zinc/SubmitZincProduct/';
+                $.ajax({
+                    url: Url,
+                    data: {getaddressname:getaddressname, CreditCardId: CreditCardId, ZincAccountId: ZincAccountId, Shipdays: Shipdays, Asin: asin, Sku: sku, Qty: qtyId },
+                    type: 'POST',
+                    traditional: true,
+                    //contentType: 'application/json',
+                    success: function (data) {
+                        if (data.requestid != "") {
+                            var gettingHref = $(mainAnchor).attr('href');
+                            $(mainAnchor).attr('href', gettingHref + data.requestid)
+
+                            if ($(zincReteriveOrder).length) {
+                                $(zincReteriveOrder).attr("data-zincorderlogid", data.zincorderlogid);
+                                $(zincReteriveOrder).attr("data-zincrequestid", data.zincrequestid);
+                                $(zincReteriveOrder).css('display', 'block');
+                                $(orderStatus).text('Order Request Sent').css({ 'color': 'blue', 'display': 'inline' });
+                                if ($(processedOutSideZinc).length) {
+                                    $(processedOutSideZinc).css('display', 'none');
+                                }
+                            }
+
+                            $(mainAnchor).css('display', 'inline');
+                        }
+                    }
+                });
+
+                //commented code for display lock icone
+
+                //$(lockZincOrder).css('display', 'inline');
+                //    $(lockZincOrder).attr('data-status', false);
+
+            });
+
         </script>
 
     }

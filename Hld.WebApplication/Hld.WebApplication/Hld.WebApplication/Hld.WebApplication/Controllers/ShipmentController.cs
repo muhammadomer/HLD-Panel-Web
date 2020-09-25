@@ -89,7 +89,7 @@ namespace Hld.WebApplication.Controllers
                 Status += ")";
             }
 
-            if (VendorId != 0 && !string.IsNullOrEmpty(Vendor) && Vendor != "undefined")
+            if (VendorId != 0)
             {
                 POMasterID = VendorId;
             }
@@ -111,7 +111,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult getlist(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, int? page, string ShipmentId = "", int VendorId = 0, string Vendor = "", string TrakingNumber = "", string ItemType = "", string Type = "")
+        public IActionResult getlist(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, int? page, string ShipmentId = "", int VendorId = 0, string TrakingNumber = "", string ItemType = "", string Type = "")
         {
 
             string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
@@ -419,7 +419,7 @@ namespace Hld.WebApplication.Controllers
                 DateTo = viewModel.orderDateTimeTo.ToString("yyyy-MM-dd");
                 DateFrom = viewModel.orderDateTimeFrom.ToString("yyyy-MM-dd");
             }
-            if (viewModel.VendorId != 0 && !string.IsNullOrEmpty(viewModel.Vendor) && viewModel.Vendor != "undefined")
+            if (viewModel.VendorId != 0)
             {
                 POMasterID = viewModel.VendorId;
             }
@@ -468,7 +468,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult ShipmentHistoryListPartialView(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string SKU, string Title, int VendorId, string Vendor, string EmptyFirstTime, string ShipmentId, string ItemType = "")
+        public IActionResult ShipmentHistoryListPartialView(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string SKU, string Title, int VendorId,string EmptyFirstTime, string ShipmentId, string ItemType = "")
         {
             token = Request.Cookies["Token"];
             IPagedList<ShipmentHistoryViewModel> data = null;
@@ -594,6 +594,27 @@ namespace Hld.WebApplication.Controllers
             token = Request.Cookies["Token"];
             List<ShipmentHistoryViewModel> _viewModel = _ApiAccess.GetShipmentHistoryBYSKU(ApiURL, token, POID, SKU);
             return _viewModel;
+        }
+        public ShipmentCourierInfoViewModel GetShipmentCourierInfo(string shipmentId)
+        {
+
+            ShipmentCourierInfoViewModel _viewModel = new ShipmentCourierInfoViewModel();
+
+
+            token = Request.Cookies["Token"];
+            _viewModel = _ApiAccess.GetShipmentCourierInfo(ApiURL, token, shipmentId);
+            return _viewModel;
+        }
+
+        [HttpPost]
+        public IActionResult UpdateShipmentCourierInfo(ShipmentCourierInfoViewModel viewModel)
+        {
+            string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+            ViewBag.POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
+            token = Request.Cookies["Token"];
+            bool status = _ApiAccess.UpdateShipmentCourierInfo(ApiURL, token, viewModel);
+            return RedirectToAction("Create", "Shipment");
         }
     }
 }

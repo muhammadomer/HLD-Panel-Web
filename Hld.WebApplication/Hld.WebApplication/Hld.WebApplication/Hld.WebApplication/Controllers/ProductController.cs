@@ -237,7 +237,7 @@ namespace Hld.WebApplication.Controllers
                             DSTag = "No";
                         }
                     }
-                }
+                } 
                 else
                 {
                     DSTag = "ALL";
@@ -793,7 +793,8 @@ namespace Hld.WebApplication.Controllers
             if (!string.IsNullOrEmpty(sku))
             {
                 token = Request.Cookies["Token"];
-                List<ProductWarehouseQtyViewModel> listmodel = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabase(ApiURL, token, new ProductWarehouseQtyViewModel() { ProductSku = sku });
+          //      List<ProductWarehouseQtyViewModel> listmodel = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabase(ApiURL, token, new ProductWarehouseQtyViewModel() { ProductSku = sku });
+                List<ProductWarehouseQtyViewModel> listmodel = ProductApiAccess.GetWareHousesQtyList(ApiURL, token, sku);
                 ViewBag.ProductSku = sku;
                 return PartialView("~/Views/Product/_PoroductWarehouseQty.cshtml", listmodel);
             }
@@ -1005,6 +1006,15 @@ namespace Hld.WebApplication.Controllers
             return ID;
 
 
+        }
+
+        [HttpGet]
+        public List<ProductWarehouseQtyViewModel> GetWareHousesQtyList(string SKU)
+        {
+            token = Request.Cookies["Token"];
+            var Response = ProductApiAccess.GetWareHousesQtyList(ApiURL, token, SKU);
+            Response = Response.Where(s => s.AvailableQty != 0).ToList();
+            return Response;
         }
     }
 }

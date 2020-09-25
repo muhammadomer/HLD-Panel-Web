@@ -215,7 +215,6 @@ namespace Hld.WebApplication.Helper
             }
         }
 
-
         public SaveZincOrders.RootObject GetActiveZincAccountsList(string ApiURL, string token)
         {
 
@@ -545,6 +544,134 @@ namespace Hld.WebApplication.Helper
                 }
             }
             return Convert.ToBoolean(strResponse);
+        }
+        public int SendToZincProduct(string ApiURL, string token, SendToZincProductViewModel model)
+        {
+            var data = JsonConvert.SerializeObject(model);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/SendToZincProduct");
+            request.Method = "POST";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                streamWriter.Write(data);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            var response = (HttpWebResponse)request.GetResponse();
+            string strResponse = "";
+            using (var sr = new StreamReader(response.GetResponseStream()))
+            {
+                strResponse = sr.ReadToEnd();
+            }
+            if (strResponse != null)
+            {
+                return Convert.ToInt16(strResponse);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public int SendToZinzProduct(string ApiURL, string token, SendToZincProductViewModel model)
+        {
+            var data = JsonConvert.SerializeObject(model);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/SendToZinzProduct");
+            request.Method = "POST";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                streamWriter.Write(data);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            var response = (HttpWebResponse)request.GetResponse();
+            string strResponse = "";
+            using (var sr = new StreamReader(response.GetResponseStream()))
+            {
+                strResponse = sr.ReadToEnd();
+            }
+            if (strResponse != null)
+            {
+                return Convert.ToInt16(strResponse);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public List<GetAddressViewModel> GetAddress(string ApiURL, string token)
+        {
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetAddress/");
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+                List<GetAddressViewModel> rootObject = JsonConvert.DeserializeObject<List<GetAddressViewModel>>(strResponse);
+                return rootObject;
+            }
+        }
+
+        public int GetSendToZincCount(string ApiURL, string token)
+        {
+            int Count = 0;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetSendToZincOrderCount/");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                var response = (HttpWebResponse)request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                Count = JsonConvert.DeserializeObject<int>(strResponse);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Count;
+        }
+        public List<GetSendToZincOrderViewModel> GetSendToZincOrder(string ApiURL, string token, int _offset)
+        {
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetSendToZincOrder/" + _offset);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+
+                List<GetSendToZincOrderViewModel> responses = JsonConvert.DeserializeObject<List<GetSendToZincOrderViewModel>>(strResponse);
+
+                return responses;
+            }
+
         }
     }
 }

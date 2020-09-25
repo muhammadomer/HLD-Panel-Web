@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PagedList.Core;
 using ServiceReference1;
 using static Hld.WebApplication.ViewModel.SaveZincOrders;
 
@@ -187,7 +188,6 @@ namespace Hld.WebApplication.Controllers
                     zincOrderLogViewModel.SellerCloudOrderId = Convert.ToString(SellerCloudOrderID);
                     zincOrderLogViewModel.RequestIDOfZincOrder = RequestID;
                     zincOrderLogViewModel.OrderDatetime = DatetimeExtension.ConvertToEST(DateTime.Now); ;
-
                     _zincOrderLogID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLog(ApiURL, token, zincOrderLogViewModel);
 
                     ZincOrderLogDetailViewModel model = new ZincOrderLogDetailViewModel();
@@ -389,10 +389,85 @@ namespace Hld.WebApplication.Controllers
             var Object = _zincApiAccess.GetActiveZincAccountsList(ApiURL, token);
             rootObject.CreditCardDetail = Object.CreditCardDetail;
             rootObject.ZincAccounts = Object.ZincAccounts;
-
+            
             return PartialView("~/Views/Zinc/ConfirmationOfZincOrder.cshtml", rootObject);
         }
+        [HttpGet]
+        public IActionResult SendToZincProduct(GetSKUAndASINViewModel Data)
+        {
+            token = Request.Cookies["Token"];
 
+            SendToZincProductViewModel rootObject = new SendToZincProductViewModel();
+            var Object = _zincApiAccess.GetActiveZincAccountsList(ApiURL, token);
+            rootObject.getaddress = _zincApiAccess.GetAddress(ApiURL, token);
+            rootObject.CreditCardDetail = Object.CreditCardDetail;
+            rootObject.ZincAccounts = Object.ZincAccounts;
+            rootObject.Sku = Data.SKU;
+            rootObject.Asin = Data.ASIN;
+            return PartialView("~/Views/Zinc/SendToZincProduct.cshtml", rootObject);
+        }
+        public IActionResult GetZincProduct(string sku)
+        {
+            token = Request.Cookies["Token"];
+            List<ZincProductSaveViewModel> listViewModel = _zincApiAccess.GetZincASINBySKU(ApiURL, token, sku);
+            return PartialView("~/Views/Zinc/_GetModelData.cshtml", listViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult SubmitZincProduct(SendToZincProductViewModel model)
+        {
+            SaveZincOrders.RootObject ZincOrder = new SaveZincOrders.RootObject();
+            CreditCardApiAccess creditCardApiAccess = new CreditCardApiAccess();
+            token = Request.Cookies["Token"];
+            string RequestID = "";
+            var CreditCardDetail = creditCardApiAccess.GetCreditCardDetailById(ApiURL, token, model.CreditCardId);
+            var AccountDetail = creditCardApiAccess.GetAccountDetailById(ApiURL, token, model.ZincAccountId);
+            _Zinc = new GetChannelCredViewModel();
+            ZincOrder.retailer_credentials = new SaveZincOrders.RetailerCredentials();
+            ZincOrder.retailer_credentials.email = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.UserName);
+            ZincOrder.retailer_credentials.password = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.Password);
+            ZincOrder.retailer_credentials.totp_2fa_key = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.Key);
+            ZincOrder.payment_method = new SaveZincOrders.PaymentMethod();
+            ZincOrder.payment_method.use_gift = false;
+
+            ZincOrder.payment_method.name_on_card = CreditCardDetail.first_name + " " + CreditCardDetail.last_name;
+            ZincOrder.payment_method.number = _encDecChannel.DecryptStringFromBytes_Aes(CreditCardDetail.number);
+            ZincOrder.payment_method.security_code = _encDecChannel.DecryptStringFromBytes_Aes(CreditCardDetail.security_code);
+            ZincOrder.payment_method.expiration_month = Convert.ToInt32(CreditCardDetail.expiration_month);
+            ZincOrder.payment_method.expiration_year = Convert.ToInt32(CreditCardDetail.expiration_year);
+
+            ZincOrder.billing_address = new SaveZincOrders.BillingAddress();
+
+            ZincOrder.billing_address.address_line1 = CreditCardDetail.address_line1;
+            ZincOrder.billing_address.address_line2 = CreditCardDetail.address_line2;
+            ZincOrder.billing_address.city = CreditCardDetail.city;
+            ZincOrder.billing_address.country = CreditCardDetail.country;
+            ZincOrder.billing_address.first_name = CreditCardDetail.first_name;
+            ZincOrder.billing_address.last_name = CreditCardDetail.last_name;
+            ZincOrder.billing_address.phone_number = CreditCardDetail.PhoneNo;
+            ZincOrder.billing_address.state = CreditCardDetail.state;
+            ZincOrder.billing_address.zip_code = CreditCardDetail.zip_code;
+            ZincOrder.webhooks = new Webhooks();
+            ZincOrder.webhooks.request_succeeded = "";
+            ZincOrder.webhooks.request_failed = "";
+
+            ZincOrder.webhooks.tracking_obtained = "";
+            RequestID = "ABC";
+            // RequestID = SubmitOrderToZincForSave(ZincOrder);
+            model.ReqId = RequestID;
+            int status = _zincApiAccess.SendToZincProduct(ApiURL, token, model);
+
+            return Json(new { success = true, message = "Save successfully" });
+        }
+
+        [HttpGet]
+        public IActionResult GetAddress()
+        {
+            token = Request.Cookies["Token"];
+            GetAddressViewModel rootObject = new GetAddressViewModel();
+            var Object = _zincApiAccess.GetAddress(ApiURL, token);
+            return PartialView("~/Views/Zinc/SendToZincProduct.cshtml", rootObject);
+        }
 
         [HttpGet]
         public IActionResult AddUpdateZinc(int id = 0)
@@ -790,5 +865,33 @@ namespace Hld.WebApplication.Controllers
             catch (Exception ex) { }
             return status;
         }
+
+
+        public IActionResult GetSendToZincCount()
+        {
+            string token = Request.Cookies["Token"];
+            int count = 0;
+            count = _zincApiAccess.GetSendToZincCount(ApiURL, token);
+            ViewBag.Records = count;
+            return View();
+        }
+
+        public IActionResult GetSendToZincOrder(int page = 0)
+        {
+            IPagedList<GetSendToZincOrderViewModel> data = null;
+            string token = Request.Cookies["Token"];
+            int pageNumber = page;
+            int _offset = 0;
+            int pageSize = 25;
+
+
+            _offset = (pageNumber - 1) * 25;
+            List<GetSendToZincOrderViewModel> listViewModel = new List<GetSendToZincOrderViewModel>();
+            listViewModel = _zincApiAccess.GetSendToZincOrder(ApiURL, token, _offset);
+            data = new StaticPagedList<GetSendToZincOrderViewModel>(listViewModel, pageNumber, pageSize, listViewModel.Count);
+            return PartialView("~/Views/Zinc/_ZendToZincPartialView.cshtml", data);
+
+        }
+
     }
 }

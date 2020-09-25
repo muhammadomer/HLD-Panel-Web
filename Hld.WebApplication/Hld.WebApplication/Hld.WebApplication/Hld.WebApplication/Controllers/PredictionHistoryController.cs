@@ -59,7 +59,7 @@ namespace Hld.WebApplication.Controllers
         {
             string token = Request.Cookies["Token"];
 
-            if (viewModel.VendorId != 0 && !string.IsNullOrEmpty(viewModel.Vendor) && viewModel.Vendor != "undefined")
+            if (viewModel.VendorId != 0 )
             {
                 POMasterID = viewModel.VendorId;
             }
@@ -68,12 +68,12 @@ namespace Hld.WebApplication.Controllers
                 POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
             }
 
-            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, viewModel.Approved, viewModel.Type);
+            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, viewModel.Approved, viewModel.Excluded, viewModel.Type);
             ViewBag.TotalCount = Count;
             return View(viewModel);
         }
 
-        public IActionResult PredictionDetail(int? page, string SKU, string Title, int VendorId, string Vendor, bool Approved, string Sort, string SortedType, int Type = 0)
+        public IActionResult PredictionDetail(int? page, string SKU, string Title, int VendorId, bool Approved, bool Excluded, string Sort, string SortedType, int Type = 0)
         {
 
 
@@ -102,13 +102,12 @@ namespace Hld.WebApplication.Controllers
             if (string.IsNullOrEmpty(Title))
                 Title = "undefined";
             List<PredictionHistroyViewModel> listmodel = new List<PredictionHistroyViewModel>();
-            listmodel = _ApiAccess.GetPredictionDetail(ApiURL, token, startlimit, offset, POMasterID, SKU, Title, Approved, Sort, SortedType, Type);
+            listmodel = _ApiAccess.GetPredictionDetail(ApiURL, token, startlimit, offset, POMasterID, SKU, Title, Approved, Excluded, Sort, SortedType, Type);
             data = new StaticPagedList<PredictionHistroyViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             return PartialView("~/Views/PredictionHistory/PredictionDetail.cshtml", data);
         }
-
         public int Save(PredictionPOViewModel data)
         {
             token = Request.Cookies["Token"];
@@ -345,6 +344,8 @@ namespace Hld.WebApplication.Controllers
             }
         }
 
+        
+     
         [HttpDelete]
         public bool DeletePO(int Id)
         {
@@ -400,5 +401,72 @@ namespace Hld.WebApplication.Controllers
             var Response = _ApiAccess.GetWareHouseProductQuantitylistBySku(ApiURL, token, SKU);
             return Response;
         }
+
+        [HttpPost]
+        public string PredictIncludedExcluded(List<PredictIncludedExcludedViewModel> data)
+        {
+            string token = Request.Cookies["Token"];
+
+            var staus = _ApiAccess.PredictIncludedExcluded(ApiURL, token, data);
+            return staus;
+
+
+        }
+        [HttpGet]
+        public IActionResult PredictionListDummy(string data)
+        {
+            token = Request.Cookies["Token"];
+            if (data.Length < 20)
+            {
+
+                var responses = _ApiAccess.GetPO(ApiURL, token, Convert.ToInt32(data));
+                if (responses.POstatus == 6)
+                {
+
+                    ViewBag.S3BucketURL = s3BucketURL;
+                    ViewBag.S3BucketURL_large = s3BucketURL_large;
+                    return View(responses);
+
+                }
+                else
+                {
+                    ViewBag.S3BucketURL = s3BucketURL;
+                    ViewBag.S3BucketURL_large = s3BucketURL_large;
+                    //return View(responses);
+                    return RedirectToAction("Index");
+                }
+
+            }
+            else
+            {
+                List<PredictionInternalSKUList> Obj = JsonConvert.DeserializeObject<List<PredictionInternalSKUList>>(data);
+                PredictionPOViewModel responses = new PredictionPOViewModel();
+                responses = _ApiAccess.GetDataForPOCreation(ApiURL, token, Obj);
+                if (Obj[0].InternalPOID > 0)
+                {
+                    var responses2 = _ApiAccess.GetPO(ApiURL, token, Obj[0].InternalPOID);
+                    foreach (var item in responses.list)
+                    {
+                        var sku = responses2.list.Where(s => s.SKU == item.SKU).FirstOrDefault();
+                        if (sku == null)
+                            responses2.list.Add(item);
+                    }
+                    responses = responses2;
+                }
+                ViewBag.S3BucketURL = s3BucketURL;
+                ViewBag.S3BucketURL_large = s3BucketURL_large;
+                return View(responses);
+            }
+        }
+        [HttpPost]
+        public PredictionPOViewModel GetDropftPOList(List<PredictionInternalSKUList> data)
+        {
+           token = Request.Cookies["Token"];
+
+              var item =_ApiAccess.GetDataForPOCreation(ApiURL, token, data);
+
+            return item;
+        }
+
     }
 }

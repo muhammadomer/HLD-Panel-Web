@@ -1,0 +1,112 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.GetSendToZincOrderViewModel>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyOrdersViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@*@{
+        ViewData["Title"] = "Index";
+        Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+    }*@
+
+<style>
+    .table thead tr th {
+        position: sticky;
+        top: 50px;
+        padding: 5px;
+        z-index: 2;
+        background-color: lightgray !important;
+    }
+
+    .table tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container-fluid">
+    <h6>Zinc Account Details</h6>
+    <table class="table table-bordered">
+        <thead style="background-color:lightgrey">
+            <tr>
+
+                <th>
+                    SKU
+                </th>
+                <th>
+                    ASIN
+                </th>
+                <th>
+                    Qty
+                </th>
+                <th>
+                    AccountDetail
+                </th>
+
+                <th>
+                    TrackingNumber
+                </th>
+                
+                <th>
+                    Current Date
+                </th>
+                <th>
+                    Response
+                </th>
+                <th>
+                    Last Update
+                </th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sku)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Asin)
+
+                    </td>
+                    <td>
+                        @item.Qty
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountDetail)
+                    </td>
+
+                    <td>
+                        @item.TrackingNumber
+                    </td>
+                    <td>
+                        @item.Response
+                    </td>
+                    <td>
+
+
+                        @if (item.Date != DateTime.MinValue)
+                        {
+                            @string.Format("{0: MMM d, yyyy}", item.Date)
+                        }
+
+
+
+                    </td>
+                    <td>
+                        @if (item.LastUpdate != DateTime.MinValue)
+                        {
+                            @string.Format("{0: MMM d, yyyy}", item.LastUpdate)
+                        }
+
+
+
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
