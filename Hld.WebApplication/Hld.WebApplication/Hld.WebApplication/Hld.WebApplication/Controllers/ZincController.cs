@@ -876,7 +876,7 @@ namespace Hld.WebApplication.Controllers
             return View();
         }
 
-        public IActionResult GetSendToZincOrder(int page = 0)
+        public IActionResult GetSendToZincOrder(int page = 0, string Sku="", string Asin="", string FromDate="",string ToDate="")
         {
             IPagedList<GetSendToZincOrderViewModel> data = null;
             string token = Request.Cookies["Token"];
@@ -887,7 +887,7 @@ namespace Hld.WebApplication.Controllers
 
             _offset = (pageNumber - 1) * 25;
             List<GetSendToZincOrderViewModel> listViewModel = new List<GetSendToZincOrderViewModel>();
-            listViewModel = _zincApiAccess.GetSendToZincOrder(ApiURL, token, _offset);
+            listViewModel = _zincApiAccess.GetSendToZincOrder(ApiURL, token, _offset,Sku,Asin, FromDate, ToDate);
             data = new StaticPagedList<GetSendToZincOrderViewModel>(listViewModel, pageNumber, pageSize, listViewModel.Count);
             return PartialView("~/Views/Zinc/_ZendToZincPartialView.cshtml", data);
 

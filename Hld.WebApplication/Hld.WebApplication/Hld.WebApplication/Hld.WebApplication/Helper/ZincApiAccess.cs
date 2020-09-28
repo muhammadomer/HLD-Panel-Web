@@ -650,10 +650,10 @@ namespace Hld.WebApplication.Helper
             }
             return Count;
         }
-        public List<GetSendToZincOrderViewModel> GetSendToZincOrder(string ApiURL, string token, int _offset)
+        public List<GetSendToZincOrderViewModel> GetSendToZincOrder(string ApiURL, string token, int _offset, string Sku="", string Asin="", string FromDate = "", string ToDate = "")
         {
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetSendToZincOrder/" + _offset);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetSendToZincOrder?_offset=" + _offset+ "&Sku="+ Sku + "&Asin="+ Asin + "&Date="+ FromDate + "&UpDate="+ ToDate);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
