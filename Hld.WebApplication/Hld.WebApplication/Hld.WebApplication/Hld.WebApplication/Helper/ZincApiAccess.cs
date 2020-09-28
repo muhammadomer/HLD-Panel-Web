@@ -626,12 +626,12 @@ namespace Hld.WebApplication.Helper
             }
         }
 
-        public int GetSendToZincCount(string ApiURL, string token)
+        public int GetSendToZincCount(string ApiURL, string token,string Sku,string asin ,string StartDate, string EndDate)
         {
             int Count = 0;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetSendToZincOrderCount/");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetSendToZincOrderCount?SKU=" + Sku + "&asin="  + asin + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";

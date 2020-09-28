@@ -51,7 +51,7 @@
     }
 
         .table thead tr th {
-            width: 88px;
+           
             vertical-align: middle !important;
         }
 
@@ -191,6 +191,49 @@
         border-radius: 2px;
         background-color: blue;
     }
+    .tooltipQtyShow {
+        position: relative;
+        display: contents;
+        cursor: pointer !important;
+    }
+
+    .tooltipQtyShowApp .tooltiptextShowApp {
+        visibility: hidden;
+        width: 103px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        font-family: arial;
+        position: absolute;
+        z-index: 401;
+        margin-top: -50px;
+        margin-left: -80px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+        .tooltipQtyShowApp .tooltiptextShowApp::after {
+            content: "";
+            position: absolute;
+            top: 101%;
+            left: 51%;
+            transform: rotate(0deg);
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+   /* .tooltipQtyShowApp:hover .tooltiptextShowApp {
+        visibility: visible;
+        opacity: 1;
+    }*/
+    /*.tooltiptextShowApp {
+        visibility: visible;
+        opacity: 1;
+    }*/
 </style>
 
 <div class="modal fade" id="myModal" tabindex="-1" style="margin-top: 80px!important;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -487,25 +530,23 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         var sort = "";
         $(document).ready(function () {
 
-
+           
             var previoussku = "";
             $(document).on('click', '.copyText', function () {
+               
+                
+               //$(this).closest("tr").find(".tooltiptextShowApp").css({ "visibility": "hidden", "opacity": 1 });
+                //$(this).closest("tr").find(".tooltipQtyShowApp").css({ "visibility": "hidden", "opacity": 0 });
                 debugger;
                 var id = $(this).closest("tr").find(".SKU");
                 var text = $(this).closest("tr").find(".skuspan");
                 id.select();
-
-
-
                 document.execCommand("copy");
-                //$(id.css({ "background-color": "blue", "color": "white" }));
-
-                $(text.addClass("skucolorclsss"));
+                $(text.closest("tr").find(".tooltiptextShowApp").css({ "visibility": "visible", "opacity": 1 }));
                 if (previoussku != "") {
-                    $(previoussku).removeClass("skucolorclsss")
-                }
+                    $(previoussku).closest("tr").find(".tooltiptextShowApp").css({ "visibility": "hidden", "opacity": 0 })
+                }            
                 previoussku = text
-
             });
 
             function VendorlistgetInPrediction() {

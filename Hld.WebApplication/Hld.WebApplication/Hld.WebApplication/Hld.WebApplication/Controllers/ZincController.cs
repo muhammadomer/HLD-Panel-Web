@@ -30,6 +30,8 @@ namespace Hld.WebApplication.Controllers
         string request_succeeded = "";
         string request_failed = "";
         string tracking_obtained = "";
+        string s3BucketURL = "";
+        string s3BucketURL_large = "";
 
         ServiceReference1.AuthHeader authHeader = null;
         BBProductApiAccess _bBProductApiAccess = null;
@@ -49,7 +51,8 @@ namespace Hld.WebApplication.Controllers
             _environment = environment;
             this._configuration = configuration;
             ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
-
+            s3BucketURL = _configuration.GetValue<string>("S3BucketURL:URL");
+            s3BucketURL_large = _configuration.GetValue<string>("S3BucketURL:L_URL");
             _bBProductApiAccess = new BBProductApiAccess();
             _productApiAccess = new ProductApiAccess();
             _sellerCloudApiAccess = new SellerCloudApiAccess();
@@ -867,28 +870,51 @@ namespace Hld.WebApplication.Controllers
         }
 
 
-        public IActionResult GetSendToZincCount()
+        public IActionResult GetSendToZincCount(string Sku, string Asin, DateTime FromDate , DateTime ToDate)
         {
+            GetSendToZincOrderViewModel getSendTo = new GetSendToZincOrderViewModel();
             string token = Request.Cookies["Token"];
             int count = 0;
-            count = _zincApiAccess.GetSendToZincCount(ApiURL, token);
+            string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+
+            if ("0001-01-01" != FromDate.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = FromDate.ToString("yyyy-MM-dd");
+                PreviousDate = ToDate.ToString("yyyy-MM-dd");
+            }
+            
+
+            count = _zincApiAccess.GetSendToZincCount(ApiURL,token,Sku,Asin, CurrentDate, PreviousDate);
             ViewBag.Records = count;
-            return View();
+            return View(getSendTo);
         }
 
-        public IActionResult GetSendToZincOrder(int page = 0, string Sku="", string Asin="", string FromDate="",string ToDate="")
+        public IActionResult GetSendToZincOrder( string Sku, string Asin, DateTime FromDate, DateTime ToDate,int page = 0)
         {
             IPagedList<GetSendToZincOrderViewModel> data = null;
             string token = Request.Cookies["Token"];
+            string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+
+            if ("0001-01-01" != FromDate.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = FromDate.ToString("yyyy-MM-dd");
+                PreviousDate = ToDate.ToString("yyyy-MM-dd");
+            }
+
             int pageNumber = page;
             int _offset = 0;
             int pageSize = 25;
 
-
             _offset = (pageNumber - 1) * 25;
             List<GetSendToZincOrderViewModel> listViewModel = new List<GetSendToZincOrderViewModel>();
-            listViewModel = _zincApiAccess.GetSendToZincOrder(ApiURL, token, _offset,Sku,Asin, FromDate, ToDate);
+            listViewModel = _zincApiAccess.GetSendToZincOrder(ApiURL, token, _offset,Sku,Asin, CurrentDate, PreviousDate);
             data = new StaticPagedList<GetSendToZincOrderViewModel>(listViewModel, pageNumber, pageSize, listViewModel.Count);
+            ViewBag.S3BucketURL = s3BucketURL;
+            ViewBag.S3BucketURL_large = s3BucketURL_large;
             return PartialView("~/Views/Zinc/_ZendToZincPartialView.cshtml", data);
 
         }

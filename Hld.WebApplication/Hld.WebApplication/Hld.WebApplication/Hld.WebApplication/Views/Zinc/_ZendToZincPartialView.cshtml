@@ -15,6 +15,10 @@
         z-index: 2;
         background-color: lightgray !important;
     }
+    .table tbody tr td {
+        position: sticky;
+       vertical-align:middle!important;
+    }
 
     .table tbody tr:hover td {
         background: #f1f1f1;
@@ -22,90 +26,98 @@
     }
 </style>
 
-<div class="container-fluid">
-    <h6>Zinc Account Details</h6>
+<div class="container-fluid mt-2">
+    
     <table class="table table-bordered">
         <thead style="background-color:lightgrey">
             <tr>
-
+                <th>
+                    Image
+                </th>
                 <th>
                     SKU
                 </th>
                 <th>
                     ASIN
                 </th>
+
                 <th>
-                    Qty
+                    Price
                 </th>
                 <th>
-                    AccountDetail
+                    Account Detail
+                </th>
+
+
+
+                <th>
+                    Create Date
                 </th>
 
                 <th>
-                    TrackingNumber
+                    Update Date
                 </th>
-                
                 <th>
-                    Current Date
+                    Tracking Number
                 </th>
                 <th>
                     Response
                 </th>
-                <th>
-                    Last Update
-                </th>
-
-
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+            <tr>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Sku)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Asin)
+                <td>
+                    <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sku)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Asin)
 
-                    </td>
-                    <td>
-                        @item.Qty
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AccountDetail)
-                    </td>
-
-                    <td>
-                        @item.TrackingNumber
-                    </td>
-                    <td>
-                        @item.Response
-                    </td>
-                    <td>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td> @Html.DisplayFor(modelItem => item.AccountDetail)</td>
+                <td>
 
 
-                        @if (item.Date != DateTime.MinValue)
-                        {
-                            @string.Format("{0: MMM d, yyyy}", item.Date)
-                        }
+                    @if (item.Date != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", item.Date)
+                    }
 
 
 
-                    </td>
-                    <td>
-                        @if (item.LastUpdate != DateTime.MinValue)
-                        {
-                            @string.Format("{0: MMM d, yyyy}", item.LastUpdate)
-                        }
+                </td>
+                <td>
+                    @if (item.LastUpdate != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", item.LastUpdate)
+                    }
 
 
 
-                    </td>
+                </td>
 
 
-                </tr>
+
+                <td>
+                    @item.TrackingNumber
+                </td>
+                <td>
+                    @item.Response
+                </td>
+
+
+            </tr>
             }
         </tbody>
     </table>

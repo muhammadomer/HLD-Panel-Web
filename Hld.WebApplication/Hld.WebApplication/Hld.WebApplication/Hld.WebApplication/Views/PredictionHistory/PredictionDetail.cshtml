@@ -295,7 +295,7 @@
             position: absolute;
             z-index: 401;
             margin-left: -146px;
-            top: 33px;
+            top: 44px;
             
             opacity: 0;
             transition: opacity 0.3s;
@@ -318,6 +318,10 @@
             visibility: visible;
             opacity: 1;
         }
+    .thpaddingclass {
+        padding: 0!important;
+        padding-right: 15px!important;
+    }
 </style>
 <div class="container-fluid">
     <table class="table" style="margin-top: 175px;">
@@ -328,19 +332,18 @@
                 <th>
                     Image
                 </th>
-                <th style=" width: 11%;">
+                <th style="width:17%;">
                     SKU
                 </th>
 
                 @*<th>
             Agg Qty
         </th>*@
-                <th style="        cursor: pointer !important;
-        width: 8%;
+                <th clas="thpaddingclass"style="cursor: pointer !important;
 ">
                     Phy Qty
                 </th>
-                <th style=" width: 8%;">
+                <th clas="thpaddingclass"style="">
                    
                     <span class="tooltipQtyShowRes" style="cursor:pointer!important">
                         Resvd  Qty
@@ -348,9 +351,9 @@
 
                     </span>
                 </th>
-                <th style=" width: 7%;">On Order</th>
-                <th>Sold60 </th>
-                <th class="sortCover">
+                <th clas="thpaddingclass"style="">On Order</th>
+                <th clas="thpaddingclass">Sold60 </th>
+                <th class="sortCover thpaddingclass">
 
 
                     <span class="tooltipQtyShowDeficit_60">
@@ -358,7 +361,7 @@
                         <span class="tooltiptextShowDeficit_60">Cover days with Phy Qty + OnOrder Qty + Reserved Qty</span>
                     </span>
                 </th>
-                <th style="        cursor: pointer !important;width: 8%;
+                <th class="thpaddingclass" style="cursor: pointer !important;
 ">
 
                     <span class="tooltipQtyShow" style="cursor:pointer!important">
@@ -366,28 +369,26 @@
                         <span class="tooltiptextShow"> Calculated on Phy Qty</span>
                     </span>
                 </th>
-                <th>Velocity</th>
-                <th style="cursor:pointer!important" class="Def60Cover">
+                <th class="thpaddingclass">Velocity</th>
+                <th style="cursor:pointer!important" class="Def60Cover thpaddingclass">
                     D_60
                     
                 </th>
-                <th style="cursor:pointer!important" class="Def90Cover">
+                <th style="cursor:pointer!important" class="Def90Cover thpaddingclass">
                     D_90
-                    
-
                 </th>
 
-                <th style="width: 9%;">CP PO Qty</th>
-                <th>CasePack</th>
+                <th style="width: 15%;">CP PO Qty</th>
+                <th class="thpaddingclass">CasePack</th>
 
 
-                <th style=" width: 12%;">
+                <th style=" width: 17%;">
                     Vendor
                 </th>
-                <th>
+                <th style="width:15%;">
                     Draft
                 </th>
-                <th>
+                <th class="thpaddingclass">
                     Status
                 </th>
             </tr>
@@ -428,6 +429,7 @@
 
                             </span>
                         </span>
+                       
                         <br />
 
                         @if (@item.ShadowOf != "")
@@ -435,7 +437,8 @@
                             <span style="color:#D3D3D3">@item.ShadowOf</span><br />
                         }
                         <span style="font-size:10px;" class="locationNotes">@item.LocationNotes</span>
-                        <span style="margin-left:4px;color:gray"> <i class="fas fa-copy copyText"></i></span>
+                      
+                        <span style="margin-left:4px;color:gray" class="tooltipQtyShowApp"><i class="fas fa-copy copyText"></i><span class="tooltiptextShowApp">Sku Copied!</span></span>
                         <br />
                         <div class="">
                             <a style="cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.SKU" target="_blank">
@@ -451,9 +454,9 @@
                                 <img src="~/Images/right-1.png" height='20' />
                             </a>
                         </div>
-                       
-              
-                </td>
+
+
+                    </td>
 
                 @*<td>
                 @Html.DisplayFor(modelItem => item.POStatus)
