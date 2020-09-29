@@ -5,88 +5,89 @@
 
 }@using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
-    <link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
-    <link href="~/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
 
-    <link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
-    <div class="container-fluid"style="margin-left:15px">
-        @using (Html.BeginForm("GetSendToZincCount", "Zinc", FormMethod.Get))
-        {
-            <div class="card-body">
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+<div class="container-fluid" style="margin-left:15px">
+    <h6>Zinc Order Details</h6>
+</div>
+<div class="container-fluid" style="margin-left:20px">
+    @using (Html.BeginForm("GetSendToZincCount", "Zinc", FormMethod.Get))
+    {
+        <div class="card-body">
 
-                <div class="row">
+            <div class="row">
 
-                    <div class="col-md-2 p-0 mr-1">
-                        <input type="text" id="SKU" name="Sku" placeholder="SKU" value="@Model.Sku" class="form-control" style="box-shadow:none" />
-                    </div>
-                    <div class=" col-md-2 p-0 mr-1">
-                        <input type="text" id="ASIN" name="Asin" placeholder="Asin" value="@Model.Asin" class="form-control" style="box-shadow:none" />
-                    </div>
-                    <div class="col-md-3 p-0" style="margin-right: 15px;">
-                        <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width: 312px;box-shadow:none">
-                            <i class="fa fa-calendar"></i>&nbsp;
-                            <span></span> <i class="fa fa-caret-down"></i>
-                        </div>
-                        <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
-                        <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
-                    </div>
-                    <div class="col-md-1">
-                        <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
-                    </div>
+                <div class="col-md-2 p-0 mr-1">
+                    <input type="text" id="SKU" name="Sku" placeholder="SKU" value="@Model.Sku" class="form-control" style="box-shadow:none" />
                 </div>
-                <div class="form-group">
-
+                <div class=" col-md-2 p-0 mr-1">
+                    <input type="text" id="ASIN" name="Asin" placeholder="Asin" value="@Model.Asin" class="form-control" style="box-shadow:none" />
                 </div>
-            </div>
-
-        }
-    </div>
-    <div class="container-fluid" style="margin-left:15px">
-        <h6>Zinc Order Details</h6>
-    </div>
-    <div class="container-fluid" style="margin-left:15px">
-
-        <div class="row col col-12" id="fixActionMenu">
-            <div class="col col-md-1">
-                <div class="row">
-                    <div class="pagination col-md-2 col">
-
+                <div class="col-md-3 p-0" style="margin-right: 15px;">
+                    <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width: 312px;box-shadow:none">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span> <i class="fa fa-caret-down"></i>
                     </div>
-
+                    <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+                    <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
+                </div>
+                <div class="col-md-1">
+                    <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
                 </div>
             </div>
-            <div class="col col-md-2">
-                <span>Results Found: @ViewBag.Records</span>
+            <div class="form-group">
+
             </div>
-
-
         </div>
-    </div>
-    <div class="container-fluid">
-        <div id="loadOrder">
 
+    }
+</div>
+
+<div class="container-fluid" style="margin-left:15px">
+
+    <div class="row col col-12" id="fixActionMenu">
+        <div class="col col-md-1">
+            <div class="row">
+                <div class="pagination col-md-2 col">
+
+                </div>
+
+            </div>
         </div>
-    </div>
-    <div class="container-fluid" style="margin-left:15px">
-        <div class="pagination">
-
+        <div class="col col-md-2">
+            <span>Results Found: @ViewBag.Records</span>
         </div>
+
+
     </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid" style="margin-left:15px">
+    <div class="pagination">
+
+    </div>
+</div>
 
 
 
-    @section Scripts{
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
-        <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
-        <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
-        <script src="~/select2/js/select2.full.min.js"></script>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
 
-        <script src="~/lib/date-range-picker/moment.min.js"></script>
-        <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
 
-        <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
-        <script type="text/javascript">
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
 
         $(document).ready(function () {
             var selectedDateFrom = "";
@@ -152,7 +153,7 @@
     onSelect: function (page) {
 
     pageNo = page;
-    
+
 
         var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
         var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
@@ -219,7 +220,7 @@
 
 
     });
-        </script>
-    }
+    </script>
+}
 
 

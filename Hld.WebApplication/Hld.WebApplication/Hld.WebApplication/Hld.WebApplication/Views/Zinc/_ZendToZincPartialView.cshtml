@@ -45,6 +45,9 @@
                     Image
                 </th>
                 <th>
+                    Order#
+                </th>
+                <th>
                     SKU
                 </th>
                 <th>
@@ -87,6 +90,10 @@
                     </a>
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.OrderId)
+
+                </td>
+                <td>
                     @*@Html.DisplayFor(modelItem => item.Sku)*@
                     <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.Sku" target="_blank">@item.Sku</a>
                 </td>
@@ -97,8 +104,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
-                <td> @Html.DisplayFor(modelItem => item.name_on_card)<br />
-                 @Html.DisplayFor(modelItem => item.UserName)<br />
+                <td>
+                    @Html.DisplayFor(modelItem => item.name_on_card)<br />
+                    @Html.DisplayFor(modelItem => item.UserName)<br />
                 </td>
                 <td>
 
@@ -123,7 +131,7 @@
                     @item.amazon_tracking<br>
                     @item.carrier<br>
                 </td>
-                
+
                 <td>
                     @item.Response<br />
 
