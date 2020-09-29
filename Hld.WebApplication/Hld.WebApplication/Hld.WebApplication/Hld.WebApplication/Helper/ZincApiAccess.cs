@@ -575,6 +575,66 @@ namespace Hld.WebApplication.Helper
                 return 0;
             }
         }
+        public int UpdateReqIDafterOrderOnZinc(string ApiURL, string token, RequestIdUpdateViewModel model)
+        {
+            var data = JsonConvert.SerializeObject(model);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/UpdateReqIDafterOrderOnZinc");
+            request.Method = "POST";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                streamWriter.Write(data);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            var response = (HttpWebResponse)request.GetResponse();
+            string strResponse = "";
+            using (var sr = new StreamReader(response.GetResponseStream()))
+            {
+                strResponse = sr.ReadToEnd();
+            }
+            if (strResponse != null)
+            {
+                return Convert.ToInt16(strResponse);
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        public int SaveZincOrderBeforeCreating(string ApiURL, string token, SendToZincProductViewModel model)
+        {
+            var data = JsonConvert.SerializeObject(model);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/SaveZincOrderBeforeCreating");
+            request.Method = "POST";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                streamWriter.Write(data);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            var response = (HttpWebResponse)request.GetResponse();
+            string strResponse = "";
+            using (var sr = new StreamReader(response.GetResponseStream()))
+            {
+                strResponse = sr.ReadToEnd();
+            }
+            if (strResponse != null)
+            {
+                return Convert.ToInt16(strResponse);
+            }
+            else
+            {
+                return 0;
+            }
+        }
         public int SendToZinzProduct(string ApiURL, string token, SendToZincProductViewModel model)
         {
             var data = JsonConvert.SerializeObject(model);
@@ -653,7 +713,7 @@ namespace Hld.WebApplication.Helper
         public List<GetSendToZincOrderViewModel> GetSendToZincOrder(string ApiURL, string token, int _offset, string Sku="", string Asin="", string FromDate = "", string ToDate = "")
         {
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetSendToZincOrder?_offset=" + _offset+ "&Sku="+ Sku + "&Asin="+ Asin + "&Date="+ FromDate + "&UpDate="+ ToDate);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetSendToZincOrder?_offset=" + _offset+ "&Sku="+ Sku + "&Asin="+ Asin + "&FromDate=" + FromDate + "&ToDate=" + ToDate);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";

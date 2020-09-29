@@ -9,5 +9,6 @@ namespace Hld.WebApplication.ViewModel
     {
         public string SKU { get; set; }
         public string ASIN { get; set; }
+        public decimal max_price { get; set; }
     }
 }

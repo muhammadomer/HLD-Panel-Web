@@ -26,6 +26,7 @@ namespace Hld.WebApplication.ViewModel
         public string getaddressname { get; set; }
         public int CreditCardId { get; set; }
         public int ZincAccountId { get; set; }
+        public decimal max_price { get; set; }
         public List<GetAddressViewModel> getaddress { get; set; }
         public List<CreditCardDetailViewModel> CreditCardDetail { get; set; }
         public List<ZincAccountsViewModel> ZincAccounts { get; set; }

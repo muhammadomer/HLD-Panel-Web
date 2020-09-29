@@ -182,6 +182,11 @@ namespace Hld.WebApplication.Helper
                 model.Key = DecryptStringFromBytes_Aes(model.Key);
                 model.password = DecryptStringFromBytes_Aes(model.password);
             }
+            else if (Method.Equals("ZincDays"))
+            {
+                model = channelsApiAccess.GetCred(ApiURL, token, Method);
+              
+            }
             else
             {
 

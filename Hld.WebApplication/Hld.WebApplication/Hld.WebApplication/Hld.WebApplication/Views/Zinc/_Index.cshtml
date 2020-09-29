@@ -104,7 +104,7 @@
 <div class=""style="width:1060px">
 
 
-    <table id="table" class="table table-bordered table-hover">
+    <table id="table" class="table table-bordered table-hover table-AsinList">
         <thead>
             <tr>
                 <th>
@@ -254,6 +254,7 @@
 
                     }
                     $@itemprice
+                    <input type="text" value="@item.itemprice" data-maxprice="@item.itemprice" style="display:none" class="MaxPriceValue" />
                 </td>
                 <td>
                     @{

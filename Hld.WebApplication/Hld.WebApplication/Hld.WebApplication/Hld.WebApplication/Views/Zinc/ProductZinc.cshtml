@@ -357,7 +357,7 @@
             debugger;
             function btnsendtozinc(Obj) {
 
-                $.get('/Zinc/SendToZincProduct?SKU=' + Obj.SKU + '&ASIN=' + Obj.ASIN + '').done(function (response) {
+                $.get('/Zinc/SendToZincProduct?SKU=' + Obj.SKU + '&ASIN=' + Obj.ASIN + '&max_price=' + Obj.max_price + '').done(function (response) {
                     $('#SendtozincModalBody').empty();
                     $('#SendtozincModalBody').html(response);
                     var successMessage = $('#modelBody').find('.successmessage');
@@ -388,22 +388,24 @@
 
             $(document).on('click', '#btnsendtozincproduct', function () {
                 var Obj = {};
-                $(".table tbody tr ").each(function () {
+                $(".table-AsinList tbody tr ").each(function () {
                     if ($(this).find('.radiobuttoncheckd').is(':checked')) {
                         var Obj2 = {
                             SKU: $(this).find('.skuvalue').val(),
-                            ASIN: $(this).find('.asinvalue').val()
+                            ASIN: $(this).find('.asinvalue').val(),
+                            max_price: $(this).find('.MaxPriceValue').val()
                         }
                         Obj = Obj2;
                         $('#skuappend').append(Obj.SKU);
                     }
-                    debugger;
-                    btnsendtozinc(Obj);
+                
+                   
                 })
+                btnsendtozinc(Obj);
             });
 
 
-                function btnsendtozincproduct() {
+                @*function btnsendtozincproduct() {
 
                 sendToZincReferenceAferSubmit = $(this);
 
@@ -440,7 +442,7 @@
                             });
                     }
 
-            $(document).on('click', '#btnsendtozincproduct', btnsendtozincproduct);
+            $(document).on('click', '#btnsendtozincproduct', btnsendtozincproduct);*@
             //$("#dialog-box").dialog({
             //    autoOpen: false,
             //    //title: 'Are u want to delete this reocord!',
@@ -851,11 +853,12 @@
                 var qtyId = $('#qty').val();
                 var asin = $('#asinvalue').attr("data-asin");
                 var sku = $('#skuvalue').attr("data-sku");
+                var max_price = $('#MaxPrice').attr("data-maxprice");
 
                 var Url = '/Zinc/SubmitZincProduct/';
                 $.ajax({
                     url: Url,
-                    data: {getaddressname:getaddressname, CreditCardId: CreditCardId, ZincAccountId: ZincAccountId, Shipdays: Shipdays, Asin: asin, Sku: sku, Qty: qtyId },
+                    data: { getaddressname: getaddressname, CreditCardId: CreditCardId, ZincAccountId: ZincAccountId, Shipdays: Shipdays, Asin: asin, Sku: sku, Qty: qtyId, max_price: max_price},
                     type: 'POST',
                     traditional: true,
                     //contentType: 'application/json',

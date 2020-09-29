@@ -45,6 +45,7 @@ namespace Hld.WebApplication.Controllers
 
         GetChannelCredViewModel _Selller = null;
         GetChannelCredViewModel _Zinc = null;
+        GetChannelCredViewModel ZincDays = null;
 
         public ZincController(IConfiguration configuration, IHostingEnvironment environment)
         {
@@ -407,6 +408,7 @@ namespace Hld.WebApplication.Controllers
             rootObject.ZincAccounts = Object.ZincAccounts;
             rootObject.Sku = Data.SKU;
             rootObject.Asin = Data.ASIN;
+            rootObject.max_price = Data.max_price;
             return PartialView("~/Views/Zinc/SendToZincProduct.cshtml", rootObject);
         }
         public IActionResult GetZincProduct(string sku)
@@ -425,7 +427,59 @@ namespace Hld.WebApplication.Controllers
             string RequestID = "";
             var CreditCardDetail = creditCardApiAccess.GetCreditCardDetailById(ApiURL, token, model.CreditCardId);
             var AccountDetail = creditCardApiAccess.GetAccountDetailById(ApiURL, token, model.ZincAccountId);
-            _Zinc = new GetChannelCredViewModel();
+
+         
+
+            _Zinc = _encDecChannel.DecryptedData(ApiURL, token, "Zinc");
+            ZincDays = _encDecChannel.DecryptedData(ApiURL, token, "ZincDays");
+         
+            ZincOrder.retailer = "amazon_ca";
+            ZincOrder.max_price = Convert.ToInt32(model.max_price * model.Qty);
+            ZincOrder.shipping_address = new SaveZincOrders.ShippingAddress();
+
+            ZincOrder.shipping_address.first_name = CreditCardDetail.first_name;
+            ZincOrder.shipping_address.last_name = CreditCardDetail.last_name;
+            ZincOrder.shipping_address.phone_number = CreditCardDetail.PhoneNo;
+            ZincOrder.shipping_address.state = CreditCardDetail.state;
+            ZincOrder.shipping_address.zip_code = CreditCardDetail.zip_code;
+            ZincOrder.shipping_address.city = CreditCardDetail.city;
+            ZincOrder.shipping_address.address_line1 = CreditCardDetail.address_line1;
+            ZincOrder.shipping_address.address_line2 = CreditCardDetail.address_line2;
+            ZincOrder.shipping_address.country = "CA";
+            ZincOrder.is_gift = false;
+            ZincOrder.gift_message = "";
+            ZincOrder.shipping = new SaveZincOrders.Shipping();
+        
+            if (!model.Shipdays.Equals("0"))
+            {
+                ZincOrder.shipping.max_days = Convert.ToInt32(model.Shipdays);
+            }
+            else {
+                ZincOrder.shipping.max_days = Convert.ToInt32(ZincDays.password);
+            }
+
+            model.Shipdays = Convert.ToString(ZincOrder.shipping.max_days);
+            model.FirstName = CreditCardDetail.first_name;
+            model.LastName = CreditCardDetail.last_name;
+            model.Phone = CreditCardDetail.PhoneNo;
+            model.State = CreditCardDetail.state;
+          
+            model.City = CreditCardDetail.city;
+            model.Address1 = CreditCardDetail.country;
+            model.Address2 = CreditCardDetail.address_line2;
+            model.Country = "CA";
+            int OrderID = _zincApiAccess.SaveZincOrderBeforeCreating(ApiURL, token, model);
+            ZincOrder.shipping.max_price = 0;
+            ZincOrder.shipping.order_by = "price";
+            ZincOrder.client_notes = new SaveZincOrders.ClientNotes();
+            ZincOrder.client_notes.our_internal_order_id = OrderID;
+            ZincOrder.products = new List<SaveZincOrders.Product>();
+            ZincOrder.products.Add(new SaveZincOrders.Product()
+            {
+                product_id = model.Asin,
+                quantity = model.Qty
+            });
+
             ZincOrder.retailer_credentials = new SaveZincOrders.RetailerCredentials();
             ZincOrder.retailer_credentials.email = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.UserName);
             ZincOrder.retailer_credentials.password = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.Password);
@@ -451,14 +505,22 @@ namespace Hld.WebApplication.Controllers
             ZincOrder.billing_address.state = CreditCardDetail.state;
             ZincOrder.billing_address.zip_code = CreditCardDetail.zip_code;
             ZincOrder.webhooks = new Webhooks();
-            ZincOrder.webhooks.request_succeeded = "";
-            ZincOrder.webhooks.request_failed = "";
+            ZincOrder.webhooks.request_succeeded = "http://apitest-prod.us-east-2.elasticbeanstalk.com/api/ProductWebhooks/Success";
+            ZincOrder.webhooks.request_failed = "http://apitest-prod.us-east-2.elasticbeanstalk.com/api/ProductWebhooks/failure";
+            ZincOrder.webhooks.tracking_obtained = "http://apitest-prod.us-east-2.elasticbeanstalk.com/api/ProductWebhooks/tracking";
 
-            ZincOrder.webhooks.tracking_obtained = "";
-            RequestID = "ABC";
-            // RequestID = SubmitOrderToZincForSave(ZincOrder);
+      
+          //  RequestID = "ABC";
+             RequestID = SubmitOrderToZincForSave(ZincOrder);
             model.ReqId = RequestID;
-            int status = _zincApiAccess.SendToZincProduct(ApiURL, token, model);
+
+            //int status = _zincApiAccess.SendToZincProduct(ApiURL, token, model);
+            RequestIdUpdateViewModel requestIdUpdate = new RequestIdUpdateViewModel();
+            requestIdUpdate._OrderId = OrderID;
+            requestIdUpdate._ReqId = RequestID;
+            requestIdUpdate._order_message = "";
+            int status = _zincApiAccess.UpdateReqIDafterOrderOnZinc(ApiURL, token, requestIdUpdate);
+           
 
             return Json(new { success = true, message = "Save successfully" });
         }
