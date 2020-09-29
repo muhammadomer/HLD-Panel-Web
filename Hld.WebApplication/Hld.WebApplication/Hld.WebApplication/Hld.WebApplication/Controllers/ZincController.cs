@@ -510,8 +510,8 @@ namespace Hld.WebApplication.Controllers
             ZincOrder.webhooks.tracking_obtained = "http://apitest-prod.us-east-2.elasticbeanstalk.com/api/ProductWebhooks/tracking";
 
       
-            RequestID = "ABC";
-            // RequestID = SubmitOrderToZincForSave(ZincOrder);
+          //  RequestID = "ABC";
+             RequestID = SubmitOrderToZincForSave(ZincOrder);
             model.ReqId = RequestID;
 
             //int status = _zincApiAccess.SendToZincProduct(ApiURL, token, model);
