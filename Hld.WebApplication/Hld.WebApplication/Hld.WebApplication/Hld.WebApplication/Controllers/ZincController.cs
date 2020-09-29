@@ -974,7 +974,14 @@ namespace Hld.WebApplication.Controllers
             _offset = (pageNumber - 1) * 25;
             List<GetSendToZincOrderViewModel> listViewModel = new List<GetSendToZincOrderViewModel>();
             listViewModel = _zincApiAccess.GetSendToZincOrder(ApiURL, token, _offset,Sku,Asin, CurrentDate, PreviousDate);
+            
+            
             data = new StaticPagedList<GetSendToZincOrderViewModel>(listViewModel, pageNumber, pageSize, listViewModel.Count);
+            foreach (var item in listViewModel)
+            {
+                item.name_on_card = _encDecChannel.DecryptStringFromBytes_Aes(item.name_on_card);
+                item.UserName = _encDecChannel.DecryptStringFromBytes_Aes(item.UserName);
+            }
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             return PartialView("~/Views/Zinc/_ZendToZincPartialView.cshtml", data);

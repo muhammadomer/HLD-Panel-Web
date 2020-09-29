@@ -48,20 +48,21 @@
                     Account Detail
                 </th>
 
-
-
                 <th>
-                    Create Date
+                    Created On
                 </th>
 
                 <th>
-                    Update Date
+                    Last Update
                 </th>
                 <th>
                     Tracking Number
                 </th>
                 <th>
                     Response
+                </th>
+                <th>
+                    Shipping Date
                 </th>
             </tr>
         </thead>
@@ -85,7 +86,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
-                <td> @Html.DisplayFor(modelItem => item.AccountDetail)</td>
+                <td> @Html.DisplayFor(modelItem => item.name_on_card)<br />
+                 @Html.DisplayFor(modelItem => item.UserName)<br />
+                </td>
                 <td>
 
 
@@ -102,18 +105,20 @@
                     {
                         @string.Format("{0: MMM d, yyyy}", item.LastUpdate)
                     }
-
-
-
-                </td>
-
-
-
-                <td>
-                    @item.TrackingNumber
                 </td>
                 <td>
-                    @item.Response
+                    @item.TrackingNumber<br />
+                    @item._tracking<br>
+                    @item.amazon_tracking<br>
+                    @item.carrier<br>
+                </td>
+                
+                <td>
+                    @item.Response<br />
+
+                </td>
+                <td>
+                    @item.shpping_date
                 </td>
 
 
