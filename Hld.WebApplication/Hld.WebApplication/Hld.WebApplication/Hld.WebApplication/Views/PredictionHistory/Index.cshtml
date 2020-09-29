@@ -13,7 +13,7 @@
     .ui-autocomplete {
         z-index: 2000;
     }
-
+    
     .table thead th {
         background-color: lightgray !important;
     }
@@ -49,10 +49,11 @@
     .table {
         margin-top: 96px;
     }
+        
 
         .table thead tr th {
            
-            vertical-align: middle !important;
+            vertical-align: top !important;
         }
 
         /*.table td {
@@ -63,7 +64,7 @@
         .table thead tr th {
             position: sticky;
             top: 168px;
-            padding: 5px;
+            
             z-index: 2;
             background-color: lightgray;
         }
@@ -208,7 +209,7 @@
         font-family: arial;
         position: absolute;
         z-index: 401;
-        margin-top: -50px;
+        margin-top: -35px;
         margin-left: -80px;
         opacity: 0;
         transition: opacity 0.3s;
@@ -1401,9 +1402,9 @@ setInterval('location.reload()', 5000);
 
                               $('#loadOrder').empty();
                               $('#loadOrder').html(data);
-                              $(function () {
-                                  $(".table").tablesorter();
-                              })
+                              //$(function () {
+                              //    $(".table").tablesorter();
+                              //})
                               $(".loadertbl").hide();
                               GetInternalPOIdBySku();
                               $(".loader").hide();
@@ -1447,7 +1448,7 @@ setInterval('location.reload()', 5000);
                         }
                     }
              });
-            $(".table").tablesorter();
+           // $(".table").tablesorter();
 
             $(document).on('click', '.sortCover', function () {
                 debugger;

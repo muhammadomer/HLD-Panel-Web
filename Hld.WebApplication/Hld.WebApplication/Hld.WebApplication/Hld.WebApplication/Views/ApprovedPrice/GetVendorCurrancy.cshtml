@@ -59,14 +59,14 @@
                 <div class="col-sm-7 pl-0">
                     @*<input id="VendorSearch" type="search" class="form-control" />*@
 
-                    <select class="js-example-basic-single form-control Aprrovedprice" id="VendorSearch">
+                    <select class="js-example-basic-single form-control Aprrovedprice" name="VendorId" id="VendorSearch">
 
                         <option value="">Vendor</option>
 
 
                     </select>
                 </div>
-                @Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })
+                @*@Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })*@
             </div>
             <div class="form-group row">
                 <label class="col-form-label-sm  controlabel">Currency:</label>
@@ -419,8 +419,8 @@ outline: none;border: none;" />
                 var data = [];
                 $(".table tbody tr ").each(function () {
                     Obj = {
-                        VendorId: $('#ColorIdForMessage').val(),
-                        VendorAlias: $('#VendorSearch').val(),
+                        VendorId: $('#VendorSearch').val(),
+                        VendorAlias: $("#VendorSearch :selected").text(),
                         ApprovedUnitPrice: $(this).find('.aprovepricecol').text(),
                         Currency: $('#CurrencySearch').val(),
                         SKU: $(this).find('.skucol').text(),

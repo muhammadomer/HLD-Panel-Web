@@ -62,6 +62,15 @@
         user-select: none;
         -webkit-user-select: none;
     }
+    .mydlete {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 60px;
+    }
 </style>
 
 <h6 style="color: #60ABAF; font-weight: 600;">Product Dashboard </h6>
@@ -363,9 +372,7 @@
                     var successMessage = $('#modelBody').find('.successmessage');
                     $(successMessage).hide()
                     $('#SendtozincModal').modal('show');
-                    $("#submitzincproduct").click(function () {
-                        $('#SendtozincModal').modal('hide');
-                    })
+                   
                 });
 
 
@@ -385,11 +392,15 @@
                 //  });
 
             }
-
+            
             $(document).on('click', '#btnsendtozincproduct', function () {
+                var count = 0;
+
                 var Obj = {};
                 $(".table-AsinList tbody tr ").each(function () {
+
                     if ($(this).find('.radiobuttoncheckd').is(':checked')) {
+                        count++;
                         var Obj2 = {
                             SKU: $(this).find('.skuvalue').val(),
                             ASIN: $(this).find('.asinvalue').val(),
@@ -398,10 +409,17 @@
                         Obj = Obj2;
                         $('#skuappend').append(Obj.SKU);
                     }
+
+                });
+                if (count == 1) {
+                    btnsendtozinc(Obj);
+                }
+                else {
+                    $.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                }
                 
-                   
-                })
-                btnsendtozinc(Obj);
+
+                //btnsendtozinc(Obj);
             });
 
 
@@ -826,8 +844,7 @@
 
             $(document).on('click', '#submitzincproduct', function () {
 
-                //var dataID = $(this).attr('data-id');
-                //var scOrderID = $(this).attr('data-scOrderID');
+               
                 //var orderDateTimeShip = $('#orderDateTimeShip').val();
 
                 //var disableButton = $(this);
@@ -848,7 +865,7 @@
                 var getaddressname = $('#getaddressname').val();
                 var CreditCardId = $('#CreditCardId').val();
                 var ZincAccountId = $('#ZincAccountId').val();
-                //var DeliveryDays = $('#getaddressname').val();
+               
                 var Shipdays = $('#DeliveryDays').val();
                 var qtyId = $('#qty').val();
                 var asin = $('#asinvalue').attr("data-asin");
@@ -861,32 +878,20 @@
                     data: { getaddressname: getaddressname, CreditCardId: CreditCardId, ZincAccountId: ZincAccountId, Shipdays: Shipdays, Asin: asin, Sku: sku, Qty: qtyId, max_price: max_price},
                     type: 'POST',
                     traditional: true,
-                    //contentType: 'application/json',
+                   
                     success: function (data) {
-                        if (data.requestid != "") {
-                            var gettingHref = $(mainAnchor).attr('href');
-                            $(mainAnchor).attr('href', gettingHref + data.requestid)
+                        if (data.RequestID != "") {
+                            $("#requestid").text(data.RequestID);
+                            $("#ordertid").text(data.OrderID);
 
-                            if ($(zincReteriveOrder).length) {
-                                $(zincReteriveOrder).attr("data-zincorderlogid", data.zincorderlogid);
-                                $(zincReteriveOrder).attr("data-zincrequestid", data.zincrequestid);
-                                $(zincReteriveOrder).css('display', 'block');
-                                $(orderStatus).text('Order Request Sent').css({ 'color': 'blue', 'display': 'inline' });
-                                if ($(processedOutSideZinc).length) {
-                                    $(processedOutSideZinc).css('display', 'none');
-                                }
-                            }
-
-                            $(mainAnchor).css('display', 'inline');
                         }
-                    }
+                       
+                            
+                        }
+                    
                 });
 
-                //commented code for display lock icone
-
-                //$(lockZincOrder).css('display', 'inline');
-                //    $(lockZincOrder).attr('data-status', false);
-
+               
             });
 
         </script>

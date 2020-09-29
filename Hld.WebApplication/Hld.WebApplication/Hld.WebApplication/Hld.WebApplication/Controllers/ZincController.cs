@@ -510,8 +510,8 @@ namespace Hld.WebApplication.Controllers
             ZincOrder.webhooks.tracking_obtained = "http://apitest-prod.us-east-2.elasticbeanstalk.com/api/ProductWebhooks/tracking";
 
       
-          //  RequestID = "ABC";
-             RequestID = SubmitOrderToZincForSave(ZincOrder);
+            RequestID = "ABC";
+            // RequestID = SubmitOrderToZincForSave(ZincOrder);
             model.ReqId = RequestID;
 
             //int status = _zincApiAccess.SendToZincProduct(ApiURL, token, model);
@@ -522,7 +522,7 @@ namespace Hld.WebApplication.Controllers
             int status = _zincApiAccess.UpdateReqIDafterOrderOnZinc(ApiURL, token, requestIdUpdate);
            
 
-            return Json(new { success = true, message = "Save successfully" });
+            return Json(new {RequestID=RequestID,OrderID=OrderID, success = true, message = "Save successfully" });
         }
 
         [HttpGet]
@@ -931,10 +931,11 @@ namespace Hld.WebApplication.Controllers
             return status;
         }
 
-
         public IActionResult GetSendToZincCount(string Sku, string Asin, DateTime FromDate , DateTime ToDate)
         {
             GetSendToZincOrderViewModel getSendTo = new GetSendToZincOrderViewModel();
+            getSendTo.Sku = Sku;
+            getSendTo.Asin = Asin;
             string token = Request.Cookies["Token"];
             int count = 0;
             string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");

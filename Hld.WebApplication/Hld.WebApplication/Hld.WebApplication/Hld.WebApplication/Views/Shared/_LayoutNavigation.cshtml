@@ -376,7 +376,7 @@
                                         <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ImportSCOrder" asp-action="ImportChildOrder">Import Child Order</a></li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Zinc" asp-action="GetSendToZincCount">Zinc Orders</a></li>
+                               
                             </ul>
                         </li>
                     }
@@ -384,7 +384,7 @@
                     {
 
                         <li class="nav-item dropdown pr-0 pl-0">
-                            <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Purchase Order</a>
+                            <a class="nav-link dropdown-toggle" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Purchasing</a>
                             <ul class="dropdown-menu" aria-labelledby="dropdown1">
 
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Import PO")).Succeeded)
@@ -399,27 +399,28 @@
 
                                 <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="Index">Approved Price </a></li>
                                 @*<li class="dropdown-item dropdown">
-                                                                <a class="dropdown-toggle nav-item " style="font-size:12px;color:cadetblue;" asp-controller="ApprovedPrice" asp-action="Index" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Approved Price</a>
-                                                                <ul class="dropdown-menu sub-dropdown" aria-labelledby="dropdown1-1" style="        margin-left: 158px;
-                                    top: 0;">
-                                                                    <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="Index">Price List</a></li>
-                                                                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-                                                                    {
-                                                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="AddUpdateApprovedPrice">Add Price</a></li>
-                                                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="GetVendorCurrancy">Add Multiple Prices</a></li>
-                                                                    }
-                                                                </ul>
-                                                            </li>*@
-                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="PurchaseOrders">Purchase Orders</a></li>
+                                    <a class="dropdown-toggle nav-item " style="font-size:12px;color:cadetblue;" asp-controller="ApprovedPrice" asp-action="Index" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Approved Price</a>
+                                    <ul class="dropdown-menu sub-dropdown" aria-labelledby="dropdown1-1" style="        margin-left: 158px;
+        top: 0;">
+                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="Index">Price List</a></li>
+                                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                                        {
+                                            <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="AddUpdateApprovedPrice">Add Price</a></li>
+                                            <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ApprovedPrice" asp-action="GetVendorCurrancy">Add Multiple Prices</a></li>
+                                        }
+                                    </ul>
+                                </li>*@
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="PurchaseOrders">Purchase Orders-SC</a></li>
 
                                 <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="GetPOProduct">Products In PO`s</a></li>
+                                <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Zinc" asp-action="GetSendToZincCount">Purchase Orders-Zinc</a></li>
 
 
                                 <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Shipment" asp-action="Create">Shipments</a></li>
                                 @*@if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-                                    {
-                                        <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcode">Receive Shipments</a></li>
-                                    }*@
+        {
+            <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcode">Receive Shipments</a></li>
+        }*@
                             </ul>
                         </li>
                     }

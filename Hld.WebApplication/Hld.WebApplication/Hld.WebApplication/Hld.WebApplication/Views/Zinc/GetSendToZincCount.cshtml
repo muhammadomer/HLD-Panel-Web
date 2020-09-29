@@ -22,8 +22,8 @@
                     <div class=" col-md-2 p-0 mr-1">
                         <input type="text" id="ASIN" name="Asin" placeholder="Asin" value="@Model.Asin" class="form-control" style="box-shadow:none" />
                     </div>
-                    <div class="col-md-1 p-0" style="margin-right: 15px;">
-                        <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width: 132px;box-shadow:none">
+                    <div class="col-md-3 p-0" style="margin-right: 15px;">
+                        <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width: 312px;box-shadow:none">
                             <i class="fa fa-calendar"></i>&nbsp;
                             <span></span> <i class="fa fa-caret-down"></i>
                         </div>
@@ -152,18 +152,17 @@
     onSelect: function (page) {
 
     pageNo = page;
-    // add code which gets executed when user selects a page
-       // var completURL = '/Zinc/GetSendToZincOrder?page=' + page + ''
+    
 
         var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
         var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
-        var SKU = $("#SKU").val();
-        var asin = $("#ASIN").val();
+        var SKU = getUrlParameter('Sku');
+        var asin = getUrlParameter('Asin');
 
     $(".loadertbl").show();
 
         $.ajax({
-            url: url = '/Zinc/GetSendToZincOrder?page=' + page + '&Sku=' + SKU + '&Asin=' + asin + '&FromDate=' + OrderDateTimeFrom + '&ToDate=' + OrderDateTimeTo,
+            url: url = '/Zinc/GetSendToZincOrder?page=' + page + '&Sku=' + SKU + '&Asin=' + asin + '&orderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo,
             data: {},
             type: 'POST',
             traditional: true,
