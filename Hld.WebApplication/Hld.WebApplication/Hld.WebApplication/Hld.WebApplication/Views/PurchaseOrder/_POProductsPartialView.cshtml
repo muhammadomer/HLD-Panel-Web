@@ -18,13 +18,15 @@
     }*/
     .purchaseEnd {
         text-align: right !important;
+        padding-right: 15px !important;
     }
+
     .purchaseEndth {
-        padding-right:4px!important;
+       
         text-align: right !important;
     }
     .purchaseEndthamount {
-        padding-right: 0!important;
+        
         text-align: center !important;
     }
         .table-bordered thead th, .table-bordered thead td {
@@ -35,11 +37,11 @@
     .table thead th {
         vertical-align: middle !important;
         /*border-bottom: 2px solid #DEE2E6;*/
-        text-align: center;
+        
     }
 
     .table td {
-        padding: 0.40rem;
+       
         vertical-align: top;
         border-top: 1px solid #DEE2E6;
         vertical-align: middle !important;
@@ -49,9 +51,7 @@
         border-bottom: 2px solid #DEE2E6;
         text-align: center;
     }*/
-    .table td {
-        text-align: center;
-    }
+   
 
 
 
@@ -100,21 +100,23 @@
     .table {
         border-left: #ccc 1px solid !important;
         border-right: #ccc 1px solid !important;
+      
     }
     .unitpriceheight {
         max-height: 63px !important;
         min-height: 63px !important;
         height: 63px !important;
+        text-align:right!important;
     }
 </style>
 
-<div class="container-fluid ">
+<div class="container-fluid">
     <div>
         <div>
             <table class="table  tablesorter" style="margin-top: 250px;">
                 <thead style="background-color:lightgrey;">
                     <tr style="border-bottom:none">
-                        <th colspan="7"></th>
+                        <th colspan="8"></th>
                         <th colspan="4" style="background:#D5EFFF !important">Quantity</th>
                         <th colspan="4" style="background:#D1FFE8 !important">Amount</th>
                     </tr>
@@ -122,23 +124,25 @@
                         <th class="">
                             Image
                         </th>
+                        <th>PO Date</th>
                         <th class="">
                             PO #
                         </th>
                         <th class=""style="text-align:left">
                             Vendor
                         </th>
-                        <th style="width: 9%;padding-left:25px!important;text-align:left">
+                        <th style="width: 11%;padding-left:24px!important;text-align:left">
                             Product SKU
                         </th>
                         <th style="width:24%;text-align:left!important">
                             Product Title
                         </th>
 
-                        <th class="unitpriceheight"style="width: 9%!important;">
+                        <th class="unitpriceheight"style="width: 8%!important;">
                             Unit Price
                         </th>
-                        <th class="unitpriceheight">
+                        <th class="unitpriceheight"style="width:11%;
+">
                              Price
                             USD <img src="~/Images/country.png" style="height:17px;width:20px" />
                         </th>
@@ -153,19 +157,22 @@
                             Open
                         </th>
 
-                        <th class="">
+                        <th class="purchaseEndth">
                             Ordered
                         </th>
-                        <th>Shipped</th>
-                        <th class="">
+                        <th class="purchaseEndth">Shipped</th>
+                        <th class="purchaseEndth">
                             Received
                         </th>
-                        <th class="">
+                        <th class="purchaseEndth">
                             Open
                         </th>
                     </tr>
                     <tr>
-                        <th class="">
+                        <th class="purchaseEnd">
+
+                        </th>
+                        <th class="purchaseEnd">
 
                         </th>
                         <th class=""style="text-align: center;">
@@ -227,6 +234,13 @@
                                     <img src="@ViewBag.S3BucketURL/@item.Compress_image" class="rounded" height="50" width="50" />
                                 </a>
                             </td>
+                            <td>
+                                @if (item.OrderedOn != DateTime.MinValue)
+                                {
+                                    @string.Format("{0: MMM d, yyyy}", @item.OrderedOn)
+                                }
+                                
+                            </td>
                             <td style="text-align: left;">
 
                                 <a style="padding-left:18px;cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@item.PurchaseID" target="_blank">@item.PurchaseID</a>
@@ -256,8 +270,8 @@
                                 </div>
                             </td>
                             <td class="purchaseEnd" style="">@item.UnitPriceUSD</td>
-                            <td>@item.QtyOrdered</td>
-                            <td>
+                            <td class="purchaseEndthamount">@item.QtyOrdered</td>
+                            <td class="purchaseEndthamount">
                                 @*@if (item.QtyReceived == 0)
                                     {
                                     <a style="cursor:pointer" asp-action="ShipmentHistoryList" asp-controller="Shipment" asp-route-EmptyFirstTime="No" asp-route-SKU="@item.ProductID" target="_blank">@item.ShippedQty</a>
@@ -272,8 +286,8 @@
                                     @item.ShippedQty
                                 </a>
                             </td>
-                            <td>@item.QtyReceived</td>
-                            <td>@item.OpenQty</td>
+                            <td class="purchaseEndthamount">@item.QtyReceived</td>
+                            <td class="purchaseEndthamount">@item.OpenQty</td>
                             <td class="purchaseEnd"> @string.Format("{0:N2}", @item.OrderedAmount)</td>
                             <td class="purchaseEnd">@string.Format("{0:N2}", @item.ShippedAmount)</td>
                             <td class="purchaseEnd"> @string.Format("{0:N2}", @item.ReceivedAmount)</td>

@@ -73,6 +73,7 @@ namespace Hld.WebApplication.ViewModel
         public decimal OpenAmount { get; set; }
 
         public decimal UnitPrice { get; set; }
+        public DateTime OrderedOn { get; set; }
         public decimal UnitPriceUSD { get; set; }
 
         public int ShippedQty { get; set; }

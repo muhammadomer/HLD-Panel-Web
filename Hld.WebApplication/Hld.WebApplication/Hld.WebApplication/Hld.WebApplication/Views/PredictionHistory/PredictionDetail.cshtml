@@ -11,6 +11,7 @@
     .table {
         border-left: #ccc 1px solid !important;
         border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
     }
 @@media only screen and (max-width: 1366px) {
   .skuwidth {
@@ -34,7 +35,7 @@
             width: 9% !important;
         }
         .vendorwidth {
-            width: 9% !important;
+            width: 13% !important;
         }
         .cprwidth {
             width: 9% !important;
@@ -418,76 +419,77 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    @{
-                        var Velocity = Math.Round(Convert.ToDecimal(item.QtySold60) / Convert.ToDecimal(60), 2);
-                        decimal Days = 0;
-                        if (Velocity != 0)
-                        {
-                            Days = Math.Round((Convert.ToDecimal(item.PhysicalQty) + Convert.ToDecimal(item.OnOrder)) / Velocity);
-                        }
-                        var vendor = item.list[0].VendorAlias != "" ? false : true;
-                        var vendorValue = item.list[0].VendorAlias != "" ? "0" : "1";
-
+            <tr>
+                @{
+                    var Velocity = Math.Round(Convert.ToDecimal(item.QtySold60) / Convert.ToDecimal(60), 2);
+                    decimal Days = 0;
+                    if (Velocity != 0)
+                    {
+                        Days = Math.Round((Convert.ToDecimal(item.PhysicalQty) + Convert.ToDecimal(item.OnOrder)) / Velocity);
                     }
-                    <td>
-                        <input type='text' style="display:none" class='form-control CheckApproved' value='@vendorValue'>
-                        <input type="checkbox" class="checkboxes selectRow" id="checkbox" />
-                    </td>
-                    <td>
-                        <input type='text' style="display:none" class='form-control LargImage' value='@item.ImageName'>
-                        <input type='text' style="display:none" class='form-control SmallImage' value='@item.CompressedImage'>
-                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                            <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
-                        </a>
-                    </td>
-                    <td>
-                        <input type='text' style="opacity:0" class='form-control SKU' value='@item.SKU'>
+                    var vendor = item.list[0].VendorAlias != "" ? false : true;
+                    var vendorValue = item.list[0].VendorAlias != "" ? "0" : "1";
 
-                        <span class="tooltipTitle">
-                            <a href="/BestBuyProduct/PropertyPage?ProductSKU=@item.SKU" class="skuspan" target="_blank">@item.SKU</a>
-                            <span style="margin-left:4px;color:lightgrey" class="tooltipQtyShowApp"><i class="fas fa-copy copyText"></i><span class="tooltiptextShowApp">Sku Copied!</span></span>
-                            @*<i class=" Getproductid fa fa-info" style="cursor:pointer"  data-SKU="@item.SKU" height="18px" width="18px" alt=""></i>*@
-                            <span class="topdata ProducTitle">
+                }
+                <td>
+                    <input type='text' style="display:none" class='form-control CheckApproved' value='@vendorValue'>
+                    <input type="checkbox" class="checkboxes selectRow" id="checkbox" />
+                </td>
+                <td>
+                    <input type='text' style="display:none" class='form-control LargImage' value='@item.ImageName'>
+                    <input type='text' style="display:none" class='form-control SmallImage' value='@item.CompressedImage'>
+                    <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                    </a>
+                </td>
+                
+                <td>
 
-                            </span>
+
+                    <span class="tooltipTitle">
+                        <a href="/BestBuyProduct/PropertyPage?ProductSKU=@item.SKU" class="skuspan" target="_blank">@item.SKU</a>
+                        <span style="margin-left:4px;color:lightgrey" class="tooltipQtyShowApp"><i class="fas fa-copy copyText"></i><span class="tooltiptextShowApp">Sku Copied!</span></span>
+                        @*<i class=" Getproductid fa fa-info" style="cursor:pointer"  data-SKU="@item.SKU" height="18px" width="18px" alt=""></i>*@
+                        <span class="topdata ProducTitle">
+
                         </span>
-                       
-                        <br />
+                    </span>
 
-                        @if (@item.ShadowOf != "")
+                    <br />
+
+                    @if (@item.ShadowOf != "")
+                    {
+                        <span style="color:#D3D3D3">@item.ShadowOf</span><br />
+                    }
+                    <span style="font-size:10px;" class="locationNotes">@item.LocationNotes</span>
+                    <input type='text' style="opacity:0;width:5px" class='SKU' value='@item.SKU'>
+
+                    <br />
+                    <div class="">
+                        <a style="cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.SKU" target="_blank">
+                            <img height="15px" width="20px" src="~/Images/sellercloud-gray.png" />
+                        </a>
+                        @if (vendorValue == "0")
                         {
-                            <span style="color:#D3D3D3">@item.ShadowOf</span><br />
+                            <a style='margin-left:5px; cursor: pointer;' href='/ApprovedPrice?&sku=@item.SKU' target='_blank'>
+                                <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
+                            </a>
                         }
-                        <span style="font-size:10px;" class="locationNotes">@item.LocationNotes</span>
-                      
-                       
-                        <br />
-                        <div class="">
-                            <a style="cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.SKU" target="_blank">
-                                <img height="15px" width="20px" src="~/Images/sellercloud-gray.png" />
-                            </a>
-                            @if (vendorValue == "0")
-                            {
-                                <a style='margin-left:5px; cursor: pointer;' href='/ApprovedPrice?&sku=@item.SKU' target='_blank'>
-                                    <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
-                                </a>
-                            }
-                            <a style="cursor:pointer" href="/PurchaseOrder/GetPOProduct?&sku=@item.SKU" title="Product in PO's" target="_blank">
-                                <img src="~/Images/right-1.png" height='20' />
-                            </a>
-                        </div>
+                        <a style="cursor:pointer" href="/PurchaseOrder/GetPOProduct?&sku=@item.SKU" title="Product in PO's" target="_blank">
+                            <img src="~/Images/right-1.png" height='20' />
+                        </a>
+                    </div>
 
 
-                    </td>
+                </td>
 
                 @*<td>
-                @Html.DisplayFor(modelItem => item.POStatus)
-            </td>*@
+            @Html.DisplayFor(modelItem => item.POStatus)
+        </td>*@
                 @*<td>
-                @Html.DisplayFor(modelItem => item.AggregatedQty)
-            </td>*@
-<td>
+            @Html.DisplayFor(modelItem => item.AggregatedQty)
+        </td>*@
+                <td>
                     <span class="tooltipphyqty">
                         <span class="phyqty" style="cursor:pointer;color:#007bff;font-size:12px;">@item.PhysicalQty</span>
                         <span class="topdata phyqtyspan">
@@ -596,7 +598,7 @@
                     }
 
                 </td>
-                    
+
             </tr>
             }
         </tbody>

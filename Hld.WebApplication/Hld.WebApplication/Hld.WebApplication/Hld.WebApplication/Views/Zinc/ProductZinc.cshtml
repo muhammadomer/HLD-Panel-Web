@@ -51,17 +51,20 @@
         box-sizing: border-box;
         padding: 30px;
     }
+
     .myselectwidth {
         width: 230px !important;
     }
+
     .select2-container .select2-selection--single {
         box-sizing: border-box;
         cursor: pointer;
         display: block;
-        height: 26px!important;
+        height: 26px !important;
         user-select: none;
         -webkit-user-select: none;
     }
+
     .mydlete {
         position: fixed;
         top: 17%;
@@ -71,7 +74,31 @@
         box-sizing: border-box;
         padding: 60px;
     }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
 </style>
+
+<div class="loader">
+    <img src="~/Images/giffff.gif" />
+</div>
 
 <h6 style="color: #60ABAF; font-weight: 600;">Product Dashboard </h6>
 <hr />
@@ -175,38 +202,39 @@
                         2345
                     </div>
                 </div>*@
-            <div style="padding-top:5px;padding-bottom:5px;" class="row">
+            <div style="padding-top: 5px;
+        padding-bottom: 5px;
+        width: 1090px;
+" class="row">
                 <div class="col-sm-3">
                     <input type="text" class="form-control" id="textboxZincASIN" />
                 </div>
-                <div class="col-sm-2" style="padding:0">
+                <div class="" style="padding:0">
                     <button id="btnGetAsinDetail" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary">Get ASIN Detail</button>
                     <span>
                         <img style="display:none;" class="ButtonLoaderForAdd" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                     </span>
                 </div>
-                <div class="col-sm-3" style="padding:0">
+                <div class="" style="padding:0">
                     <button id="btnAddAsinManually" style="padding-top:1.5px;padding-bottom:1.5px" class="btn btn-primary ml-2" data-toggle="modal" data-target="#myModal" onclick="PopupForm('@Url.Action("AddUpdateZinc","Zinc",new {id=0 })')">Add ASIN Manually</button>
                     <span>
                         <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                     </span>
                 </div>
-                <div class="col-sm-4 form-group">
+                <div class="" style="padding:0"> <span><a class="nav-link " target="_blank" asp-controller="Zinc" asp-action="GetSendToZincCount">Purchase Orders - Zinc</a></span></div>
+                <div class="form-group" style="margin-left: 88px;">
                     <div class=" form-group">
                         <div class="col-sm-12">
                             <select class="js-example-basic-single form-control Sendtozincoption myselectwidth" id="actionMenu">
                                 <option value="sendtozinc">Send To Zinc</option>
 
                             </select>
-                            @*<select id="actionMenu" class="form-control p-sm-0">
-            <option value="sendtozinc">Send To Zinc</option>
-        </select>*@
-                          <button id="btnsendtozincproduct" class="btn btn-primary" data-SKU="@Model.Product_Sku" value="Go"style="height: 26px !important;box-shadow:none">Go</button>
-                        </div>
-                       
-                        <!--<div class="col-sm-1">-->
 
-                            @*<button  id="btnsendtozinc" class="ml-sm-1 btn btn-primary" value="Go" data-target="#myModal1" onclick="PopupForm('@Url.Action("SendToZincProduct","Zinc",new {id=0 })'") />Go</button>*@
+                            <button id="btnsendtozincproduct" class="btn btn-primary" data-SKU="@Model.Product_Sku" value="Go" style="height: 26px !important;box-shadow:none">Go</button>
+                        </div>
+
+                        <!--<div class="col-sm-1">-->
+                        @*<button  id="btnsendtozinc" class="ml-sm-1 btn btn-primary" value="Go" data-target="#myModal1" onclick="PopupForm('@Url.Action("SendToZincProduct","Zinc",new {id=0 })'") />Go</button>*@
                         <!--</div>-->
                     </div>
                 </div>
@@ -339,7 +367,8 @@
         <script type="text/javascript">
 
         $(document).ready(function () {
-
+            $(".loader").hide();
+          
             $(".Sendtozincoption").select2();
              var productsku = $('#HfProductId').val();
             var indexURL = '/Zinc/Index';
@@ -372,7 +401,7 @@
                     var successMessage = $('#modelBody').find('.successmessage');
                     $(successMessage).hide()
                     $('#SendtozincModal').modal('show');
-                   
+
                 });
 
 
@@ -392,10 +421,11 @@
                 //  });
 
             }
-            
-            $(document).on('click', '#btnsendtozincproduct', function () {
-                var count = 0;
 
+            $(document).on('click', '#btnsendtozincproduct', function () {
+                $("#submitzincproduct").prop('disabled', false);
+                var count = 0;
+                
                 var Obj = {};
                 $(".table-AsinList tbody tr ").each(function () {
 
@@ -417,7 +447,7 @@
                 else {
                     $.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
                 }
-                
+
 
                 //btnsendtozinc(Obj);
             });
@@ -844,7 +874,7 @@
 
             $(document).on('click', '#submitzincproduct', function () {
 
-               
+
                 //var orderDateTimeShip = $('#orderDateTimeShip').val();
 
                 //var disableButton = $(this);
@@ -865,33 +895,36 @@
                 var getaddressname = $('#getaddressname').val();
                 var CreditCardId = $('#CreditCardId').val();
                 var ZincAccountId = $('#ZincAccountId').val();
-               
+
                 var Shipdays = $('#DeliveryDays').val();
                 var qtyId = $('#qty').val();
                 var asin = $('#asinvalue').attr("data-asin");
                 var sku = $('#skuvalue').attr("data-sku");
                 var max_price = $('#MaxPrice').attr("data-maxprice");
-
+                $(".loader").show();
                 var Url = '/Zinc/SubmitZincProduct/';
                 $.ajax({
                     url: Url,
                     data: { getaddressname: getaddressname, CreditCardId: CreditCardId, ZincAccountId: ZincAccountId, Shipdays: Shipdays, Asin: asin, Sku: sku, Qty: qtyId, max_price: max_price},
                     type: 'POST',
                     traditional: true,
-                   
+
                     success: function (data) {
+                        $(".loader").hide();
+                        $(".reqestidshow").show();
+                        $("#submitzincproduct").prop('disabled', true);
                         if (data.RequestID != "") {
                             $("#requestid").text(data.RequestID);
                             $("#ordertid").text(data.OrderID);
 
                         }
-                       
-                            
+
+
                         }
-                    
+
                 });
 
-               
+
             });
 
         </script>
