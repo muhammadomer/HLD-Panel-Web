@@ -1,0 +1,96 @@
+﻿@model Hld.WebApplication.ViewModel.GetSendToZincOrderViewModel
+
+
+<div class="container-fluid">
+    <div class="panel panel-default modal-lg">
+        <div class="panel-body ">
+            <div class=" p-2 bg-primary text-white" style="">Please confirm order detail before Update </div>
+
+            <div class="form-group row" style="margin-bottom:0!important">
+
+                <div class="col-sm-12">
+                    <div class="row">
+
+
+                        <div class="col-sm-6">
+                            <div class="col-sm-12 p-0">
+                                <label id="ordervalue" data-orderId="@Model.OrderId"><span style="font-weight:bold">OrderId</span>: @Model.OrderId</label>
+
+                            </div>
+                            <div class="col-sm-12 p-0">
+                                <label id="skuvalue" data-sku="@Model.Sku"><span style="font-weight:bold">SKU</span>: @Model.Sku</label>
+
+                            </div>
+                            <div class="col-sm-12 p-0">
+                                <div>
+                                    <label id="asinvalue" data-asin="@Model.Asin"><span style="font-weight:bold">ASIN</span>: @Model.Asin</label>
+                                </div>
+
+
+                               
+
+                             
+
+                            </div>
+                            <div class="col-sm-12 p-0">
+                                @{
+                                    var Price = (@Model.Price);
+                                }
+
+                                <label id="MaxPrice" data-maxprice="@Model.Price"><span style="font-weight:bold">Price</span>: @Price </label>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label style="font-weight:bold;margin-right:38px">Received Date:</label>
+                            <div class="col-sm-12 p-0">
+                                <input type="date" name="date" class="form-control" id="date-input" required />
+                            </div>
+                            <label style="font-weight:bold;margin-right:38px">Received Qty: </label>
+                            <div  class="col-sm-12 p-0" style="">
+
+
+                                @{
+                                    // Model.Qty = Model.Qty == 0 ? 1 : Model.Qty;
+                                    var qty = Model.Qty;
+                                    if (qty == 0)
+                                    {
+                                        qty = 1;
+
+                                    }
+                                    else
+                                    {
+                                        qty = Model.Qty;
+
+                                    }
+                                }
+                                <input type="number" value="@qty" data-qty="@Model.Qty" style="box-shadow: none !important;" class="form-control" name="Qty" id="qty" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-body" id="SendtozincModalBody">
+                </div>
+                <div class="col-sm-12 findParent">
+                    <div class="col-sm-4 pl-0 mt-2">
+                        <button type="submit" id="updatezincorder" class="btn btn-primary">Update Order</button>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

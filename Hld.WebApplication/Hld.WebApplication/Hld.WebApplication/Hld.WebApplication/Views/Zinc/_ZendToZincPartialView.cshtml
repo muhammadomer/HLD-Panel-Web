@@ -38,9 +38,12 @@
 
 <div class="container-fluid mt-2">
     
-    <table class="table">
+    <table class="table table-bordered table-hover table-AsinList">
         <thead style="background-color:lightgrey">
             <tr>
+                <th>
+
+                </th>
                 <th>
                     Image
                 </th>
@@ -77,17 +80,32 @@
                 <th>
                     Shipping Date
                 </th>
+                <th>
+                    Received Order Qty
+                </th>
+                <th>
+                    Received Order Date
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
             <tr>
-
+                <td>
+                    <input type="text" value="@item.Sku" style="display:none" class="skuvalue" />
+                    <input type="text" value="@item.Asin" style="display:none" class="asinvalue" />
+                    <input type="text" value="@item.Price" style="display:none" class="MaxPrice" />
+                    <input type="text" value="@item.OrderId" style="display:none" class="ordervalue" />
+                    <p>
+                        <label><input type="radio" name="radiobutton" value="radiobutton" class="radiobuttoncheckd"></label>
+                    </p>
+                </td>
                 <td>
                     <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
                         <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
                     </a>
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.OrderId)
@@ -139,7 +157,15 @@
                 <td>
                     @item.shpping_date
                 </td>
-
+                <td>
+                    @item.RecievedOrderQty
+                </td>
+                <td>
+                    @if (item.RecievedOrderDate != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", item.RecievedOrderDate)
+                    }
+                </td>
 
             </tr>
             }

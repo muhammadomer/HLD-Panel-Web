@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Hld.WebApplication.ViewModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Hld.WebApplication.Helper
 {
@@ -732,6 +733,65 @@ namespace Hld.WebApplication.Helper
                 return responses;
             }
 
+        }
+
+        //public bool UpdateZincOrder(string ApiURL, string token, UpdateZincOrderViewModel model)
+        //{
+        //    var data = JsonConvert.SerializeObject(model);
+        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/UpdateZincOrder");
+        //    request.Method = "POST";
+        //    request.Accept = "application/json;";
+        //    request.ContentType = "application/json";
+        //    request.Headers["Authorization"] = "Bearer " + token;
+
+        //    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+        //    {
+        //        streamWriter.Write(data);
+        //        streamWriter.Flush();
+        //        streamWriter.Close();
+        //    }
+        //    var response = (HttpWebResponse)request.GetResponse();
+        //    string strResponse = "";
+        //    using (var sr = new StreamReader(response.GetResponseStream()))
+        //    {
+        //        strResponse = sr.ReadToEnd();
+        //    }
+        //    return Convert.ToBoolean(strResponse);
+        //}
+
+        public bool UpdateZincOrder(string ApiURL, string token, UpdateZincOrderViewModel ViewModel)
+        {
+            bool Status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/UpdateZincOrder");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                   
+                    Status = Convert.ToBoolean(strResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return Status;
         }
     }
 }

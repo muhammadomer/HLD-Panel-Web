@@ -29,5 +29,7 @@ namespace Hld.WebApplication.ViewModel
         public DateTime LastUpdate { get; set; }
         public int Qty { get; set; }
         public decimal Price { get; set; }
+        public int RecievedOrderQty { get; set; }
+        public DateTime RecievedOrderDate { get; set; }
     }
 }

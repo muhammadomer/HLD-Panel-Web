@@ -380,19 +380,7 @@
                 //title: 'Are u want to delete this reocord!',
                 modal: true,
             });
-            @*function btnsendtozinc() {
-                debugger
-                $.get('@Url.Action("SendToZincProduct","Zinc" )').done(function (response) {
-                    $('#SendtozincModalBody').empty();
-                    $('#SendtozincModalBody').html(response);
-
-                    var successMessage = $('#modelBody').find('.successmessage');
-                    $(successMessage).hide()
-
-                    $('#SendtozincModal').modal('show');
-                });
-             }*@
-            debugger;
+            
             function btnsendtozinc(Obj) {
 
                 $.get('/Zinc/SendToZincProduct?SKU=' + Obj.SKU + '&ASIN=' + Obj.ASIN + '&max_price=' + Obj.max_price + '').done(function (response) {
@@ -874,7 +862,6 @@
 
             $(document).on('click', '#submitzincproduct', function () {
 
-
                 //var orderDateTimeShip = $('#orderDateTimeShip').val();
 
                 //var disableButton = $(this);
@@ -891,7 +878,7 @@
                 //var lockZincOrder = $(sendToZincReferenceAferSubmit).closest('div').find('#imgLockZincOrder');
                 //$(rootDivOfButton).find('.successmessage').show();
                 // console.log(JsonDataOfOrder);
-                debugger;
+             
                 var getaddressname = $('#getaddressname').val();
                 var CreditCardId = $('#CreditCardId').val();
                 var ZincAccountId = $('#ZincAccountId').val();
@@ -916,20 +903,12 @@
                         if (data.RequestID != "") {
                             $("#requestid").text(data.RequestID);
                             $("#ordertid").text(data.OrderID);
-
                         }
-
-
-                        }
-
+                    }
                 });
-
-
             });
-
         </script>
-
-    }
+}
 
 
 

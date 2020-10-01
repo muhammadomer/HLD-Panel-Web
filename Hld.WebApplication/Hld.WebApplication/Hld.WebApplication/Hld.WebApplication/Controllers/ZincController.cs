@@ -342,20 +342,7 @@ namespace Hld.WebApplication.Controllers
                     {
                         model.ZincOrderStatusInternal = ZincOrderLogInternalStatus.Canceled.ToString();
                     }
-
-
                 }
-
-                //if (model.ZincOrderStatusInternal==ZincOrderLogInternalStatus.Canceled.ToString())
-                //{
-                //    UpdateSCDropshipStatusViewModel updateSCViewModel = new UpdateSCDropshipStatusViewModel();
-                //    updateSCViewModel.StatusName = "None";
-                //    updateSCViewModel.SCOrderID = Convert.ToInt32(sellerCloudID);
-                //    updateSCViewModel.LogDate = DatetimeExtension.ConvertToEST(DateTime.Now); ;
-
-                //    status = await ctrl.UpdateDropShipStatus(Convert.ToInt32(sellerCloudID), "None");
-                //    status = _sellerCloudApiAccess.UpdateSellerCloudOrderDropShipStatus(ApiURL, token, updateSCViewModel);
-                //}
 
                 model.OrderDatetime = DatetimeExtension.ConvertToEST(DateTime.Now);
                 model.ZincOrderLogID = Convert.ToInt32(zincOrderLogID);
@@ -411,6 +398,23 @@ namespace Hld.WebApplication.Controllers
             rootObject.max_price = Data.max_price;
             return PartialView("~/Views/Zinc/SendToZincProduct.cshtml", rootObject);
         }
+        [HttpGet]
+        public IActionResult UpdateZincOrder(GetZincOrderViewModel Data)
+        {
+            token = Request.Cookies["Token"];
+
+            GetSendToZincOrderViewModel rootObject = new GetSendToZincOrderViewModel();
+            //var Object = _zincApiAccess.GetActiveZincAccountsList(ApiURL, token);
+            //rootObject.getaddress = _zincApiAccess.GetAddress(ApiURL, token);
+            //rootObject.CreditCardDetail = Object.CreditCardDetail;
+            //rootObject.ZincAccounts = Object.ZincAccounts;
+            rootObject.Sku = Data.SKU;
+            rootObject.Asin = Data.ASIN;
+            rootObject.Price = Data.max_price;
+            rootObject.OrderId = Data.OrderId;
+            return PartialView("~/Views/Zinc/UpdateZincOrder.cshtml", rootObject);
+        }
+
         public IActionResult GetZincProduct(string sku)
         {
             token = Request.Cookies["Token"];
@@ -524,7 +528,13 @@ namespace Hld.WebApplication.Controllers
 
             return Json(new {RequestID=RequestID,OrderID=OrderID, success = true, message = "Save successfully" });
         }
-
+        [HttpPost]
+        public IActionResult UpdateZincOrder(UpdateZincOrderViewModel data)
+        {
+            token = Request.Cookies["Token"];
+            _zincApiAccess.UpdateZincOrder(ApiURL, token, data);
+            return Json(new {success = true, message = "Save successfully" });
+        }
         [HttpGet]
         public IActionResult GetAddress()
         {
@@ -782,24 +792,7 @@ namespace Hld.WebApplication.Controllers
         }
 
 
-        public IActionResult GetProductOfferDataFromZincAndUpdateDatabase(string orderid, string ProductSKU, string bbZincID)
-        {
-            try
-            {
-                token = Request.Cookies["Token"];
-                bool status = false;
-                ZincProductSaveViewModel zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
-                zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
-                status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
-                return Json(new { success = true });
-            }
-            catch (Exception)
-            {
-
-
-            }
-            return Json(new { success = false });
-        }
+        
 
 
         public IActionResult GetProductOfferDataFromZinc(string orderid, string ProductSKU)
