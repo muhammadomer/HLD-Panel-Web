@@ -1402,9 +1402,9 @@ setInterval('location.reload()', 5000);
 
                               $('#loadOrder').empty();
                               $('#loadOrder').html(data);
-                              //$(function () {
-                              //    $(".table").tablesorter();
-                              //})
+                              $(function () {
+                                  $(".table").tablesorter();
+                              })
                               $(".loadertbl").hide();
                               GetInternalPOIdBySku();
                               $(".loader").hide();

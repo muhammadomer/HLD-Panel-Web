@@ -924,7 +924,7 @@ namespace Hld.WebApplication.Controllers
             return status;
         }
 
-        public IActionResult GetSendToZincCount(string Sku, string Asin, DateTime FromDate , DateTime ToDate)
+        public IActionResult GetSendToZincCount(string Sku, string Asin, DateTime orderDateTimeFrom, DateTime orderDateTimeTo)
         {
             GetSendToZincOrderViewModel getSendTo = new GetSendToZincOrderViewModel();
             getSendTo.Sku = Sku;
@@ -934,11 +934,11 @@ namespace Hld.WebApplication.Controllers
             string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
             string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
 
-            if ("0001-01-01" != FromDate.ToString("yyyy-MM-dd"))
+            if ("0001-01-01" != orderDateTimeFrom.ToString("yyyy-MM-dd"))
             {
 
-                CurrentDate = FromDate.ToString("yyyy-MM-dd");
-                PreviousDate = ToDate.ToString("yyyy-MM-dd");
+                CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd"); 
+                PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
             }
             
 
@@ -947,18 +947,17 @@ namespace Hld.WebApplication.Controllers
             return View(getSendTo);
         }
 
-        public IActionResult GetSendToZincOrder( string Sku, string Asin, DateTime FromDate, DateTime ToDate,int page = 0)
+        public IActionResult GetSendToZincOrder( string Sku, string Asin, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, int page = 0)
         {
             IPagedList<GetSendToZincOrderViewModel> data = null;
             string token = Request.Cookies["Token"];
             string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
             string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
 
-            if ("0001-01-01" != FromDate.ToString("yyyy-MM-dd"))
+            if ("0001-01-01" != orderDateTimeFrom.ToString("yyyy-MM-dd"))
             {
-
-                CurrentDate = FromDate.ToString("yyyy-MM-dd");
-                PreviousDate = ToDate.ToString("yyyy-MM-dd");
+                CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+                PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
             }
 
             int pageNumber = page;
