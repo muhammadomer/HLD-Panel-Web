@@ -204,6 +204,7 @@ namespace Hld.WebApplication.Controllers
         [HttpPost]
         public IActionResult Edit(ShipmentViewModel viewModel)
         {
+            token = Request.Cookies["Token"];
             string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
             string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
             ViewBag.POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);

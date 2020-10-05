@@ -398,7 +398,7 @@ namespace Hld.WebApplication.Controllers
         {
             return View();
         }
-
+        // UploadInventoryToS3 by Mehdi
         public IActionResult UploadInventoryToS3(IFormFile files)
         {
             JobIdReturnViewModel jobIdReturnView = new JobIdReturnViewModel();
