@@ -46,6 +46,14 @@
             margin-right: -50%;
             transform: translate(-50%,-50%);
         }
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }.form-group{
+         margin-bottom:0!important;
+     }
+    .card-body{
+        padding:0!important;
+    }
 </style>
 <div class="loader">
     <img src="~/Images/giffff.gif" />
@@ -58,7 +66,7 @@
     {
         <div class="card-body">
 
-            <div class="row">
+            <div class="row"style="margin-left:5px">
 
                 <div class="col-md-2 p-0 mr-1">
                     <input type="text" id="SKU" name="Sku" placeholder="SKU" value="@Model.Sku" class="form-control" style="box-shadow:none" />
@@ -313,13 +321,16 @@
     $(".loadertbl").show();
 
         $.ajax({
-            url: url = '/Zinc/GetSendToZincOrder?page=' + page + '&Sku=' + SKU + '&Asin=' + asin + '&orderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo,
+            url: url = '/Zinc/GetSendToZincOrder?page=' + page + '&Sku=' + SKU + '&Asin=' + asin + '&FromDate=' + OrderDateTimeFrom + '&ToDate=' + OrderDateTimeTo,
             data: {},
             type: 'POST',
             traditional: true,
             success: function (data) {
                 $('#loadOrder').empty();
                 $('#loadOrder').html(data);
+                $(function () {
+                                $(".table").tablesorter();
+                              })
                 $(".loadertbl").hide();
                 // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
             }
@@ -362,6 +373,7 @@
             }
         }
     });
+            $(".table").tablesorter();
     });
     </script>
 }

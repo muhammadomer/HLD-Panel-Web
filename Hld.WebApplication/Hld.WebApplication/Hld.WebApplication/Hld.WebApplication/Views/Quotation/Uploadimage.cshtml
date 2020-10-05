@@ -1,0 +1,242 @@
+﻿@{
+    ViewData["Title"] = "Uploadimage";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+
+<script src="~/AdeelFie/dist/image-uploader.min.js"></script>
+<link href="~/AdeelFie/src/image-uploader.css" rel="stylesheet" />
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-weight: normal;
+    }
+
+
+
+    main {
+        text-align: justify;
+        position: relative;
+        margin: 4rem 0;
+    }
+
+
+
+
+    .input-images-1 {
+        cursor: pointer !important;
+    }
+
+
+
+
+
+
+
+
+    .container {
+        width: 60%;
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+
+
+    .modal {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, .5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .modal .content {
+            background: #fff;
+            display: inline-block;
+            padding: 2rem;
+            position: relative;
+        }
+
+
+            .modal .content a.close {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                color: inherit;
+                font-size: 1.4rem;
+                line-height: 1;
+                font-family: 'Montserrat', sans-serif;
+            }
+</style>
+
+
+
+
+
+<div class="container" style="margin-top:100px">
+
+
+
+
+    <form method="POST" name="form-example-1" id="form-example-1" enctype="multipart/form-data">
+
+
+
+        <div class="input-field">
+            <label class="active" style="font-size:15px">Photos</label>
+            <div class="input-images-1" style="padding-top: .5rem;"></div>
+        </div>
+
+        <button class="btn btn-success mt-1">Save Image</button>
+
+    </form>
+
+
+
+
+    @*<form method="POST" name="form-example-2" id="form-example-2" enctype="multipart/form-data">
+
+            <div class="input-field">
+                <input type="text" name="name-2" id="name-2" value="John Doe">
+                <label for="name-2" class="active">Name</label>
+            </div>
+
+            <div class="input-field">
+                <input type="text" name="description-2" id="description-2"
+                       value="This form is already filed with some data, including images!">
+                <label for="description-2" class="active">Description</label>
+            </div>
+
+            <div class="input-field">
+                <label class="active">Photos</label>
+                <div class="input-images-2" style="padding-top: .5rem;"></div>
+            </div>
+
+            <button>Submit and display data</button>
+
+        </form>*@
+
+
+
+</div>
+
+
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/AdeelFie/src/image-uploader.js"></script>
+   
+    <script src="~/AdeelFie/src/image-uploader.js"></script>
+    <script src="~/AdeelFie/dist/image-uploader.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(function () {
+
+                // $('.input-images-1').imageUploader();
+                $('.input-images-1').imageUploader({
+
+                    imagesInputName: 'photos',
+                    preloadedInputName: 'old',
+                    maxSize: 2 * 1024 * 1024,
+                    extensions: ['.jpg', '.jpeg', '.png', '.gif', '.svg'],
+                    mimes: ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'],
+                    maxFiles: 12
+                });
+
+                //let preloaded = [
+                //    { id: 1, src: 'https://picsum.photos/500/500?random=1' },
+                //    { id: 2, src: 'https://picsum.photos/500/500?random=2' },
+                //    { id: 3, src: 'https://picsum.photos/500/500?random=3' },
+                //    { id: 4, src: 'https://picsum.photos/500/500?random=4' },
+                //    { id: 5, src: 'https://picsum.photos/500/500?random=5' },
+                //    { id: 6, src: 'https://picsum.photos/500/500?random=6' },
+                //];
+
+                //$('.input-images-2').imageUploader({
+                //    preloaded: preloaded,
+                //    imagesInputName: 'photos',
+                //    preloadedInputName: 'old',
+                //    maxSize: 2 * 1024 * 1024,
+                //    maxFiles: 10
+                //});
+
+                $('form').on('submit', function (event) {
+
+                    // Stop propagation
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    // Get some vars
+                    let $form = $(this),
+                        $modal = $('.modal');
+
+                    // Set name and description
+                    $modal.find('#display-name span').text($form.find('input[id^="name"]').val());
+                    $modal.find('#display-description span').text($form.find('input[id^="description"]').val());
+
+                    // Get the input file
+                    let $inputImages = $form.find('input[name^="images"]');
+                    if (!$inputImages.length) {
+                        $inputImages = $form.find('input[name^="photos"]')
+                    }
+
+                    // Get the new files names
+                    let $fileNames = $('<ul>');
+                    for (let file of $inputImages.prop('files')) {
+                        $('<li>', { text: file.name }).appendTo($fileNames);
+                    }
+
+                    // Set the new files names
+                    $modal.find('#display-new-images').html($fileNames.html());
+
+                    // Get the preloaded inputs
+                    let $inputPreloaded = $form.find('input[name^="old"]');
+                    if ($inputPreloaded.length) {
+
+                        // Get the ids
+                        let $preloadedIds = $('<ul>');
+                        for (let iP of $inputPreloaded) {
+                            $('<li>', { text: '#' + iP.value }).appendTo($preloadedIds);
+                        }
+
+                        // Show the preloadede info and set the list of ids
+                        $modal.find('#display-preloaded-images').show().html($preloadedIds.html());
+
+                    } else {
+
+                        // Hide the preloaded info
+                        $modal.find('#display-preloaded-images').hide();
+
+                    }
+
+                    // Show the modal
+                    $modal.css('visibility', 'visible');
+                });
+
+
+
+
+
+
+
+
+            });
+        })
+
+
+    </script>
+}

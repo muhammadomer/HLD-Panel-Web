@@ -15,14 +15,14 @@
     .table thead tr th {
         position: sticky;
         top: 50px;
-       
+
         z-index: 2;
         background-color: lightgray !important;
     }
     .table tbody tr td {
-        
+        text-align: inherit !important;
         position: sticky;
-       vertical-align:middle!important;
+       
     }
 
     .table tbody tr:hover td {
@@ -34,11 +34,15 @@
         border-right: #ccc 1px solid !important;
         border-bottom: #ccc 1px solid !important;
     }
+        .table thead th {
+            vertical-align: inherit!important;
+            border-bottom: 2px solid #dee2e6;
+        }
 </style>
 
-<div class="container-fluid mt-2">
+<div class="container-fluid">
     
-    <table class="table table-bordered table-hover table-AsinList">
+    <table class="table tablesorter table-AsinList">
         <thead style="background-color:lightgrey">
             <tr>
                 <th>
@@ -50,7 +54,7 @@
                 <th>
                     Order#
                 </th>
-                <th>
+                <th style="width:8%">
                     SKU
                 </th>
                 <th>
@@ -113,7 +117,7 @@
                 </td>
                 <td>
                     @*@Html.DisplayFor(modelItem => item.Sku)*@
-                    <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.Sku" target="_blank">@item.Sku</a>
+                    <a style="cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.Sku" target="_blank">@item.Sku</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Asin)
@@ -123,7 +127,9 @@
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
+                    <span class="my-1" style="font-weight:bold">Account Detail</span>
                     @Html.DisplayFor(modelItem => item.name_on_card)<br />
+                    <span class="my-1" style="font-weight:bold">Credit Card Detail</span>
                     @Html.DisplayFor(modelItem => item.UserName)<br />
                 </td>
                 <td>
