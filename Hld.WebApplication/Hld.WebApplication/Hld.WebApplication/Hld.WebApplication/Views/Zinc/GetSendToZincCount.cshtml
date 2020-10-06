@@ -12,14 +12,17 @@
 <style>
     .myselectwidth {
         width: 230px !important;
-    }.btngocalss {
+    }
+
+    .btngocalss {
         box-shadow: none !important;
         border: none !important;
-        
-         height: 28px !important;
+        height: 28px !important;
         margin-left: -6px !important;
         border-radius: 5px !important;
-    }  .mydlete {
+    }
+
+    .mydlete {
         position: fixed;
         top: 24%;
         left: 70%;
@@ -27,7 +30,9 @@
         transform: translate(-50%, -50%);
         box-sizing: border-box;
         padding: 60px;
-    }.loader {
+    }
+
+    .loader {
         position: fixed;
         left: 0px;
         top: 0px;
@@ -46,13 +51,35 @@
             margin-right: -50%;
             transform: translate(-50%,-50%);
         }
+
     .tablesorter-default .tablesorter-header {
         outline: none !important;
-    }.form-group{
-         margin-bottom:0!important;
-     }
-    .card-body{
-        padding:0!important;
+    }
+
+    .form-group {
+        margin-bottom: 0 !important;
+    }
+
+    .card-body {
+        padding: 0 !important;
+    }
+
+    .mydlete {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
     }
 </style>
 <div class="loader">
@@ -66,7 +93,7 @@
     {
         <div class="card-body">
 
-            <div class="row"style="margin-left:5px">
+            <div class="row" style="margin-left:5px">
 
                 <div class="col-md-2 p-0 mr-1">
                     <input type="text" id="SKU" name="Sku" placeholder="SKU" value="@Model.Sku" class="form-control" style="box-shadow:none" />
@@ -95,9 +122,9 @@
 
     }
 
-    
-        
-    
+
+
+
 </div>
 
 <div class="modal fade" style="margin-top: 80px!important;" id="SendtozincModal" role="dialog">
@@ -125,7 +152,7 @@
 
     <div class="row col col-12 p-0" id="fixActionMenu">
         <div class="col col-md-2">
-            <div class="row"style="margin-left: 10px;">
+            <div class="row" style="margin-left: 10px;">
                 <div class="pagination col-md-2 col">
 
                 </div>
@@ -135,34 +162,71 @@
         <div class="col col-md-2">
             <span style="vertical-align: sub;">Results Found: @ViewBag.Records</span>
         </div>
-        <div class="form-group col-md-8 p-0">
-            <div style="float: right;">
-                <select class="js-example-basic-single form-control updatezincorder myselectwidth" id="actionMenu">
-                    <option value="updatezincorder">Mark As Received</option>
-                </select>
-                <span>
-                    <button class="ml-1 btn btn-success btngocalss" type="submit" id="btnUpdateZincOrder">Go</button>
-                </span>
-            </div>  
-        
-    </div>
-</div>
-<div class="container-fluid p-0">
-    <div id="loadOrder">
+        @*<div class="form-group col-md-8 p-0">
+                    <div style="float: right;">
+                        <select class="js-example-basic-single form-control updatezincorder myselectwidth" id="actionMenu">
+                            <option value="updatezincorder">Mark As Received</option>
 
+                        </select>
+                        <span>
+                            <button class="ml-1 btn btn-success btngocalss" type="submit" id="btnUpdateZincOrder">Go</button>
+                        </span>
+                    </div>
+
+            </div>*@
     </div>
-</div>
-<div class="container-fluid">
-    <div class="row" style="margin-left: -5px;">
-        <div class="pagination col-md-2 col">
+    <div class="container-fluid p-0">
+        <div id="loadOrder">
 
         </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row" style="margin-left: -5px;">
+            <div class="pagination col-md-2 col">
 
+            </div>
+
+        </div>
+    </div>
+    <div class="hidedialogbox">
+        <div id="dialog-box">
+            <h6 style="color:red">Do you want to Cancel this Order!</h6>
+        </div>
     </div>
 </div>
+<div class="modal fade" id="myModalerror" style="margin-top: 130px;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modelwidth">
 
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Warning!</span>
+                </strong>
+
+
+                <button type="button" class="close closebtn" data-dismiss="modal">&times;</button>
+            </div>
+
+
+            <div class="modal-body myclassshide" style="padding-left:0!important;">
+                <p class="modal-title" style="margin-bottom: 10px; padding-left: 15px;">
+                    Your Zinc Order Status has been Cancelled Successfully
+                </p>
+               
+               
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default closebtn" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
 </div>
-
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
@@ -177,11 +241,16 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-             $(".loader").hide();
+            $(".loader").hide();
             var selectedDateFrom = "";
             var selectedDatTo = "";
             var start = moment().subtract(7, 'days');
             var end = moment();
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
             $(".updatezincorder").select2();
             function cb(start, end) {
                 $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -200,30 +269,105 @@
                 });
             }
 
-            $(document).on('click', '#btnUpdateZincOrder', function () {
-                debugger
-                var count = 0;
-                var Obj = {};
-                $(".table-AsinList tbody tr ").each(function () {
-                    if ($(this).find('.radiobuttoncheckd').is(':checked')) {
-                        count++;
-                        var Obj2 = {
-                            OrderId:$(this).find('.ordervalue').val(),
-                            SKU: $(this).find('.skuvalue').val(),
-                            ASIN: $(this).find('.asinvalue').val(),
-                            max_price: $(this).find('.MaxPrice').val()
-                        }
-                        Obj = Obj2;
-                        $('#skuappend').append(Obj.SKU);
+
+
+
+
+
+            $(document).on('change', ".selectBox", function () {
+                if ($(this).val() == "MarkAsReceived") {
+                    debugger
+                    var Obj = {};
+                    var Obj2 = {
+                        OrderId: $(this).closest("tr").find('.ordervalue').val(),
+                        SKU: $(this).closest("tr").find('.skuvalue').val(),
+                        ASIN: $(this).closest("tr").find('.asinvalue').val(),
+                        max_price: $(this).closest("tr").find('.MaxPrice').val()
                     }
-                });
-                if (count == 1) {
+                    Obj = Obj2;
+                    $('#skuappend').append(Obj.SKU);
                     btnUpdateZincOrder(Obj);
                 }
+
                 else {
-                    $.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
+
+                        debugger
+
+                        orderId=$(this).closest("tr").find('.ordervalue').val(),
+                        data = { orderId: orderId, internalStatus: false };
+
+                    $("#dialog-box").dialog({
+                        buttons: {
+                            "Confirm": function () {
+                                var data = {
+                                   orderId: orderId, internalStatus: false
+                                };
+
+                                $.ajax({
+                                    type: 'post',
+                                    url: '../Zinc/UpdateZincOrderInternalStatus',
+                                    data: { orderId: orderId, internalStatus: false },
+                                    success: function (res) {
+                                        $("#dialog-box").dialog("close");
+                                        //if (res.internalStatus == false) {
+                                        //    $(this).closest("tr").find(".selectBox option[value='MarkAsReceived']").attr('disabled', true);
+                                        //}
+                                        //else {
+                                        //    $(this).closest("tr").find(".selectBox option[value='MarkAsReceived']").attr('disabled', false);
+                                        //}
+
+                                         
+                                        $("#myModalerror").modal({
+                                            backdrop: 'static',
+                                            keyboard: false
+                                             
+                                        });
+                                        $(".closebtn").click(function(){
+                                            location.reload();
+                                        })
+                                    }
+
+
+
+                                });
+                                
+                            }
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                            $.notify('Cancel Successfully ', { globalPosition: 'bottom right', className: 'warning mydelte' });
+                        }
+
+                    });
+                    $("#dialog-box").dialog("open");
+
                 }
             });
+            //$(document).on('click', '#btnUpdateZincOrder', function () {
+            //    debugger
+            //    var count = 0;
+            //    var Obj = {};
+            //    $(".table-AsinList tbody tr ").each(function () {
+            //        if ($(this).find('.radiobuttoncheckd').is(':checked')) {
+            //            count++;
+            //            var Obj2 = {
+            //                OrderId:$(this).find('.ordervalue').val(),
+            //                SKU: $(this).find('.skuvalue').val(),
+            //                ASIN: $(this).find('.asinvalue').val(),
+            //                max_price: $(this).find('.MaxPrice').val()
+            //            }
+            //            Obj = Obj2;
+            //            $('#skuappend').append(Obj.SKU);
+            //        }
+            //    });
+            //    if (count == 1) {
+            //        btnUpdateZincOrder(Obj);
+            //    }
+            //    else {
+            //        $.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
+            //    }
+            //});
+
             //end update zinc order
             //Update Zinc Order
             $(document).on('click', '#updatezincorder', function () {
@@ -256,7 +400,7 @@
                 else {
                     $.notify('Please select select date', { globalPosition: 'bottom right', className: 'danger mydlete' });
                 }
-               
+
             });
             //End Update Zinc Order
             $('#reportrange').daterangepicker({
@@ -373,7 +517,7 @@
             }
         }
     });
-            $(".table").tablesorter();
+            //$(".table").tablesorter();
     });
     </script>
 }

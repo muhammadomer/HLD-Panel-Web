@@ -793,5 +793,37 @@ namespace Hld.WebApplication.Helper
             }
             return Status;
         }
+
+        public string UpdateZincOrderInternalStatus(string ApiURL, string token, bool internalStatus, int orderId)
+        {
+            string status = "";
+            try
+            {
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/UpdateZincOrderInternalStatus?orderId=" + orderId + "&internalStatus=" + internalStatus);
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
+            }
+            return status;
+        }
+
     }
 }

@@ -9,6 +9,7 @@ namespace Hld.WebApplication.ViewModel
     {
         public int OrderId { get; set; }
         public string order_type { get; set; }
+        public bool internalStatus { get; set; }
         public string amazon_tracking { get; set; }
         public string _tracking { get; set; }
         public string carrier { get; set; }
@@ -17,6 +18,9 @@ namespace Hld.WebApplication.ViewModel
         public string RequestId { get; set; }
         public string Asin { get; set; }
         public string Sku { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Shipping { get; set; }
+        public decimal AmzSubTotal { get; set; }
         public string AccountDetail { get; set; }
         public string name_on_card { get; set; }
         public string UserName { get; set; }

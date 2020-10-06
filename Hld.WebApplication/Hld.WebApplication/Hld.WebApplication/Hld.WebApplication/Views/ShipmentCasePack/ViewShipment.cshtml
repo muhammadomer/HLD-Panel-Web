@@ -162,7 +162,7 @@
             <b style="margin-left: 13px;">Shipment Details</b>
             @if (Model.Item.Status != 5)
             {
-                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Receive Shipment")).Succeeded)
                 {
                     <div style="float: right;">
                         <button class="btn btn-success MarkAsReceived">Mark As Received</button>
@@ -170,12 +170,16 @@
                     <div style="float: right;">
                         <a class="btn btn-success mr-2" href="#" target="_blank">Received Shipment</a>
                     </div>
+
+                }
+                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                {
                     <div style="float: right;">
                         <a class="btn btn-success mr-2" href="/ShipmentCasePack/Index?ShipmentId=@Model.Item.ShipmentId" target="_blank">Edit Shipment</a>
                     </div>
+                    }
                 }
-            }
-        </div>
+            </div>
         <div class="row ml-0 mt-1" style="
 line-height: 1!important;
 ">
@@ -496,7 +500,7 @@ line-height: 1!important;
                     <td class="openqtytbl">@item.OpenQty</td>
                     <td>
 
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Receive Shipment")).Succeeded)
                         {
                             @if (item.ShipedQty != item.ReceivedQty)
                             {

@@ -981,5 +981,16 @@ namespace Hld.WebApplication.Controllers
 
         }
 
+        [HttpPost]
+        public string UpdateZincOrderInternalStatus(bool internalStatus, int orderId)
+        {
+            string token = Request.Cookies["Token"];
+
+            var staus = _zincApiAccess.UpdateZincOrderInternalStatus(ApiURL, token, internalStatus, orderId);
+            return staus;
+
+
+        }
+
     }
 }

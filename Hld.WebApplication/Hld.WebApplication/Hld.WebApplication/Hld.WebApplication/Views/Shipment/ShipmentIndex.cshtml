@@ -228,7 +228,7 @@
         <div class="card mt-3">
             <div style="padding:2px 0px" class="card-header">
                 <b style="margin-left: 13px;">Shipment Details</b>
-                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Receive Shipment")).Succeeded)
                 {
                     @if (Model.Item.Status != 5)
                     {
@@ -243,7 +243,7 @@
                     <div style="float: right;">
                         <a href="../ShipmentBox/Create?ShipmentId=@Model.Item.ShipmentId" target="_blank" class="btn btn-success mr-2 btn-style" style="color:white;">Boxes Detail</a>
                     </div>
-                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Receive Shipment")).Succeeded)
                     {
                         @if (Model.Item.Status != 5)
                         {

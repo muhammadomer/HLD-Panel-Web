@@ -87,6 +87,12 @@ namespace Hld.WebApplication
                 options.AddPolicy("Access to Admin Tab", policy => { policy.RequireClaim("Access to Admin Tab", "Access to Admin Tab"); });
                 options.AddPolicy("Access to Product Link in PO", policy => { policy.RequireClaim("Access to Product Link in PO", "Access to Product Link in PO"); });
                 options.AddPolicy("Access to P&L on Order list view page", policy => { policy.RequireClaim("Access to P&L on Order list view page", "Access to P&L on Order list view page"); });
+                options.AddPolicy("Access to Shipment List", policy => { policy.RequireClaim("Access to Shipment List", "Access to Shipment List"); });
+                options.AddPolicy("Access to Create & Edit Shipment", policy => { policy.RequireClaim("Access to Create & Edit Shipment", "Access to Create & Edit Shipment"); });
+         
+                options.AddPolicy("Access to View Shipment", policy => { policy.RequireClaim("Access to View Shipment", "Access to View Shipment"); });
+                options.AddPolicy("Access to Receive Shipment", policy => { policy.RequireClaim("Access to Receive Shipment", "Access to Receive Shipment"); });
+                options.AddPolicy("Case Pack managemant", policy => { policy.RequireClaim("Case Pack managemant", "Case Pack managemant"); });
 
                 options.AddPolicy("ShippersPolicy", policy =>
                  policy.RequireRole("Shippers"));

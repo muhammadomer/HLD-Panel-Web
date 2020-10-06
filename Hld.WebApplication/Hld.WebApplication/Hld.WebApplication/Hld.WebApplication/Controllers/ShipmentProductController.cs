@@ -6,6 +6,7 @@ using DataAccess.ViewModels;
 using Hld.WebApplication.Helper;
 using Hld.WebApplication.ViewModel;
 using Hld.WebApplication.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PagedList.Core;
@@ -39,7 +40,7 @@ namespace Hld.WebApplication.Controllers
             _OrderApiAccess = new OrderNotesAPiAccess();
             _BoxApiAccess = new ShipmentBoxApiAccess();
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         public IActionResult Index(string BoxId)
         {
             token = Request.Cookies["Token"];
@@ -49,7 +50,7 @@ namespace Hld.WebApplication.Controllers
 
             return View(item);
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         [HttpPost]
         public int CreateBox(ShipmentProductViewModel data)
         {
@@ -69,7 +70,7 @@ namespace Hld.WebApplication.Controllers
             }
             return Id;
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         [HttpPut]
         public int Update(ShipmentProductViewModel data)
         {
@@ -81,7 +82,7 @@ namespace Hld.WebApplication.Controllers
             int Id = _ApiAccess.Create(ApiURL, token, data);
             return Id;
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         public int Delete(List<ShipmentProductViewModel> data)
         {
             token = Request.Cookies["Token"];

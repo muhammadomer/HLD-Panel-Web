@@ -87,15 +87,22 @@ namespace Hld.WebApplication.Controllers
                             Response.Cookies.Append("Token", responses.Token, cookieOption);
                             Response.Cookies.Append("UserId", responses.UserId.ToString(), cookieOption);
                             Response.Cookies.Append("UserName", responses.UserName, cookieOption);
-                            Response.Cookies.Append("POMasterID", appUser.UserName, cookieOption);
+                           
                             Response.Cookies.Append("expiration", responses.expiration.ToString(), cookieOption);
                             Response.Cookies.Append("UserAlias", appUser.UserAlias.ToString(),cookieOption);
                             if (await userManager.IsInRoleAsync(appUser, "Vendor"))
                             {
+                                Response.Cookies.Append("POMasterID", appUser.UserName, cookieOption);
                                 return RedirectToAction("PurchaseOrders", "PurchaseOrder");
+                            }
+                            else if (await userManager.IsInRoleAsync(appUser, "Receiver"))
+                            {
+                                Response.Cookies.Append("POMasterID", "1278", cookieOption);
+                                return RedirectToAction("Create", "Shipment");
                             }
                             else
                             {
+                                Response.Cookies.Append("POMasterID", appUser.UserName, cookieOption);
                                 return RedirectToAction("Dashboard", "HLDHistory");
                             }
                             //if (User.IsInRole("Vendor"))

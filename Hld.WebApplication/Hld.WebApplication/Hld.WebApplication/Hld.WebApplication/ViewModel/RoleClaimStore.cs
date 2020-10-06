@@ -25,8 +25,13 @@ namespace Hld.WebApplication.ViewModel
         new Claim("Access to Setting Tab","Access to Setting Tab"),
         new Claim("Access to Admin Tab","Access to Admin Tab"),
         new Claim("Access to Product Link in PO","Access to Product Link in PO"),
-       
+
         new Claim("Access to P&L on Order list view page","Access to P&L on Order list view page"),
+        new Claim("Access to Shipment List","Access to Shipment List"),
+        new Claim("Access to Create & Edit Shipment","Access to Create & Edit Shipment"),
+        new Claim("Access to View Shipment","Access to View Shipment"),
+        new Claim("Access to Receive Shipment","Access to Receive Shipment"),
+        new Claim("Case Pack managemant","Case Pack managemant"),
     };
     }
     public class RoleClaimsViewModel

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
+using Amazon.Auth.AccessControlPolicy;
 using Amazon.S3;
 using DataAccess.ViewModels;
 using Hld.WebApplication.Helper;
 using Hld.WebApplication.ViewModel;
 using Hld.WebApplication.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -55,7 +57,7 @@ namespace Hld.WebApplication.Controllers
             _OrderApiAccess = new OrderNotesAPiAccess();
             _ApiAccess = new ShipmentCasePackApiAccess();
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         public IActionResult Index(string ShipmentId)
         {
             ViewBag.S3BucketURL = s3BucketURL;
@@ -73,7 +75,7 @@ namespace Hld.WebApplication.Controllers
 
             return View(viewModel);
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         public int Save(ShipmentCasePackProductViewModel data)
         {
             POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
@@ -90,7 +92,7 @@ namespace Hld.WebApplication.Controllers
             }
             return Id;
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         public CasePackViewModel GetTemplate(string SKU)
         {
             POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
@@ -98,14 +100,14 @@ namespace Hld.WebApplication.Controllers
             var Item = _ApiAccess.GetTemplate(ApiURL, token, POMasterID, SKU);
             return Item;
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         public IActionResult SaveTemplate()
         {
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             return View();
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         [HttpPost]
         public IActionResult SaveTemplate(CasePackViewModel data)
         {
@@ -133,7 +135,7 @@ namespace Hld.WebApplication.Controllers
                 return View(data);
 
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         public IActionResult GetTemplateList(CasePackSearchViewModel viewModel)
         {
             POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
@@ -153,7 +155,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             return View(viewModel);
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         [HttpPost]
         public IActionResult GetTemplateListPartial(int? page, int VendorId = 0, string SKU = "", string Title = "")
         {
@@ -191,7 +193,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             return PartialView("~/Views/ShipmentCasePack/TemplatelistPartialView.cshtml", data);
         }
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         [HttpPost]
         public int Delete(int Id)
         {
@@ -201,7 +203,7 @@ namespace Hld.WebApplication.Controllers
             return Item;
         }
 
-
+        [Authorize(Policy = "Access to Create & Edit Shipment")]
         [HttpPost]
         public int DeleteCasePack(int Id)
         {

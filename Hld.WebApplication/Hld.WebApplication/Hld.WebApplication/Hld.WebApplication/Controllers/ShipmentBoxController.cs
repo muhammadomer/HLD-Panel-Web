@@ -12,6 +12,7 @@ using Hld.WebApplication.ViewModel;
 using Hld.WebApplication.ViewModels;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ using Microsoft.Extensions.Logging;
 namespace Hld.WebApplication.Controllers
 {
     [TokenExpires]
+    [Authorize(Policy = "Access to Create & Edit Shipment")]
     public class ShipmentBoxController : Controller
     {
         private IHostingEnvironment _hostingEnvironment;

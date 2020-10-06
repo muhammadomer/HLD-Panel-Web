@@ -194,126 +194,132 @@ width: 230px!important;
 
 <div class="container-fluid" style="margin-left:15px">
     <h6>Shipment Creation</h6>
-    <button type="button" class="btn btn-primary ml-1 btnstyle" onclick="showModal()">Create New Shipment</button>
-    <a class="btn btn-success m-1 btnstyle" asp-controller="ShipmentCasePack" asp-action="GetTemplateList" target="_blank">Manage Case Pack</a>
-    <a class="btn btn-success m-1 btnstyle" asp-controller="Shipment" asp-action="ShipmentHistoryList" target="_blank">Shipment History</a>
-    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Create & Edit Shipment")).Succeeded)
     {
-        @*<a class="btn btn-success m-1 btnstyle" asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcode" target="_blank">Receive Shipments</a>*@
+        <button type="button" class="btn btn-primary ml-1 btnstyle" onclick="showModal()">Create New Shipment</button>
     }
+        @if ((await AuthorizationService.AuthorizeAsync(User, "Case Pack managemant")).Succeeded)
+        {
+            <a class="btn btn-success m-1 btnstyle" asp-controller="ShipmentCasePack" asp-action="GetTemplateList" target="_blank">Manage Case Pack</a>
+        }
+        <a class="btn btn-success m-1 btnstyle" asp-controller="Shipment" asp-action="ShipmentHistoryList" target="_blank">Shipment History</a>
+        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+        {
+            @*<a class="btn btn-success m-1 btnstyle" asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcode" target="_blank">Receive Shipments</a>*@
+        }
 
-    <div class="modal fade" id="EditTrackingNumber" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 80px!important;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">Update Tracking</h4>
-                </div>
-
-                @using (Html.BeginForm("UpdateShipmentCourierInfo", "Shipment", FormMethod.Post))
-                {<div class="modal-body">
-
-                        <div class="form-group">
-                            <label for="inputName"><b>Shipping Courier Code :</b></label>
-                            <input type="text" name="ShipmentId" class="form-control" id="TrackingShipmentId" style="display:none">
-                            <input type="text" name="CourierCode" class="form-control" id="idCourierCode">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputName"><b>Traking Number :</b></label>
-                            <input type="text" name="TrakingNumber" class="form-control" id="idTrakingNumber">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputName"><b>Shipping Date :</b></label>
-                            @*<input type="date" name="CreatedAt" class="form-control" id="idCreatedAt">*@
-                            <input type="text" name="CreatedAt" class="form-control" id="idCreatedAt">
-                        </div>
+        <div class="modal fade" id="EditTrackingNumber" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 80px!important;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Update Tracking</h4>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" style="margin-top: 80px !important;" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel"><b>Shipment Creation</b></h4>
-                </div>
 
-                @*@using (Html.BeginForm("Create", "Shipment", FormMethod.Post))
-                    {*@
-                <div class="modal-body">
+                    @using (Html.BeginForm("UpdateShipmentCourierInfo", "Shipment", FormMethod.Post))
+                    {<div class="modal-body">
 
-                    <div class="form-group">
-                        <label for="inputName">Shipment Name :</label>
-                        <input type="text" value="@Model.ShipmentName" name="ShipmentName" maxlength="50" class="form-control" id="inputName2">
-                    </div>
-                    <div class="form-row row" style="margin-top:50px">
-
-                        <div class="form-check form-check-inline" style="margin-left:25px; vertical-align: middle!important;">
-                            <input type="radio" class="form-check-input" id="Type" name="Type" value="mixed" style="margin-right:10px">
-                            <label class="form-check-label" for="mix" style="font-weight:bold">Mix SKUs</label>
-                            <div style="margin-left:25px;">
-                                <span class="tooltipp"><i class="fa fa-info" aria-hidden="true"></i><span class="tooltiptextt">Multiple SKUs in One Box.</span></span>
+                            <div class="form-group">
+                                <label for="inputName"><b>Shipping Courier Code :</b></label>
+                                <input type="text" name="ShipmentId" class="form-control" id="TrackingShipmentId" style="display:none">
+                                <input type="text" name="CourierCode" class="form-control" id="idCourierCode">
                             </div>
-                            <input type="radio" class="form-check-input" id="Type" name="Type" value="casepack" style="margin-left:123px;margin-right:10px">
-                            <label class="form-check-label" for="casepack" style="font-weight:bold">Case Pack</label>
-                            <div style="margin-left:25px;">
-                                <span class="tooltipp"><i class="fa fa-info" aria-hidden="true"></i><span class="tooltiptextt">One SKU in one Box</span></span>
+                            <div class="form-group">
+                                <label for="inputName"><b>Traking Number :</b></label>
+                                <input type="text" name="TrakingNumber" class="form-control" id="idTrakingNumber">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputName"><b>Shipping Date :</b></label>
+                                @*<input type="date" name="CreatedAt" class="form-control" id="idCreatedAt">*@
+                                <input type="text" name="CreatedAt" class="form-control" id="idCreatedAt">
                             </div>
                         </div>
-                    </div>
-                    @*<div class="form-group">
-                                                    <label for="inputComment">Notes:</label>
-                        <textarea class="form-control myInput" value="@Model.Notes" name="Notes" maxlength="50" id="IdmyInput" rows="4"></textarea><span class="notescounter"></span>
-                                                </div>*@
-
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    }
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary btncreate" style="display:none">Save</button>
-                    <button type="button" class="btn btn-primary btnvalidation">Save</button>
-                </div>
-                @*}*@
             </div>
         </div>
-    </div>
+        <div class="modal fade" style="margin-top: 80px !important;" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel"><b>Shipment Creation</b></h4>
+                    </div>
 
-    <div class="modal fade" style="margin-top: 80px!important;" id="myModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">Shipment Edit</h4>
-                </div>
+                    @*@using (Html.BeginForm("Create", "Shipment", FormMethod.Post))
+                        {*@
+                    <div class="modal-body">
 
-                @using (Html.BeginForm("Edit", "Shipment"))
-                {<div class="modal-body">
                         <div class="form-group">
-                            <label for="inputName"><b>Shipment Name :</b></label>
-                            <input type="text" value="@Model.ShipmentName" name="ShipmentName" maxlength="50" class="form-control" id="idShipmentName">
+                            <label for="inputName">Shipment Name :</label>
+                            <input type="text" value="@Model.ShipmentName" name="ShipmentName" maxlength="50" class="form-control" id="inputName2">
                         </div>
-                        <div class="form-group">
-                            <input type="number" style="display:none" value="@Model.ShipmentAutoID" name="ShipmentAutoID" id="Idforedit" />
-                            @*<label for="inputComment"><b>Notes:</b></label>*@
-                            @*<textarea class="form-control myInput" maxlength="50" value="@Model.Notes" name="Notes" id="IdNotesEdit" rows="4"></textarea><span class="notescounter"></span>*@
+                        <div class="form-row row" style="margin-top:50px">
+
+                            <div class="form-check form-check-inline" style="margin-left:25px; vertical-align: middle!important;">
+                                <input type="radio" class="form-check-input" id="Type" name="Type" value="mixed" style="margin-right:10px">
+                                <label class="form-check-label" for="mix" style="font-weight:bold">Mix SKUs</label>
+                                <div style="margin-left:25px;">
+                                    <span class="tooltipp"><i class="fa fa-info" aria-hidden="true"></i><span class="tooltiptextt">Multiple SKUs in One Box.</span></span>
+                                </div>
+                                <input type="radio" class="form-check-input" id="Type" name="Type" value="casepack" style="margin-left:123px;margin-right:10px">
+                                <label class="form-check-label" for="casepack" style="font-weight:bold">Case Pack</label>
+                                <div style="margin-left:25px;">
+                                    <span class="tooltipp"><i class="fa fa-info" aria-hidden="true"></i><span class="tooltiptextt">One SKU in one Box</span></span>
+                                </div>
+                            </div>
                         </div>
+                        @*<div class="form-group">
+                                                        <label for="inputComment">Notes:</label>
+                            <textarea class="form-control myInput" value="@Model.Notes" name="Notes" maxlength="50" id="IdmyInput" rows="4"></textarea><span class="notescounter"></span>
+                                                    </div>*@
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary btnsave">Save</button>
+                        <button type="submit" class="btn btn-primary btncreate" style="display:none">Save</button>
+                        <button type="button" class="btn btn-primary btnvalidation">Save</button>
                     </div>
-                }
+                    @*}*@
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+        <div class="modal fade" style="margin-top: 80px!important;" id="myModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="display:flex;flex-direction:row-reverse!important">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Shipment Edit</h4>
+                    </div>
+
+                    @using (Html.BeginForm("Edit", "Shipment"))
+                    {<div class="modal-body">
+                            <div class="form-group">
+                                <label for="inputName"><b>Shipment Name :</b></label>
+                                <input type="text" value="@Model.ShipmentName" name="ShipmentName" maxlength="50" class="form-control" id="idShipmentName">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" style="display:none" value="@Model.ShipmentAutoID" name="ShipmentAutoID" id="Idforedit" />
+                                @*<label for="inputComment"><b>Notes:</b></label>*@
+                                @*<textarea class="form-control myInput" maxlength="50" value="@Model.Notes" name="Notes" id="IdNotesEdit" rows="4"></textarea><span class="notescounter"></span>*@
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default btncancel" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary btnsave">Save</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
 <div class="container-fluid">
     <div class="mb-1 searchFormcard" id="searchForm">
         <div class="col-sm-12">
