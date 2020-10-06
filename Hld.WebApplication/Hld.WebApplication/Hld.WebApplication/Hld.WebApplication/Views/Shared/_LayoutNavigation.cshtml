@@ -8,7 +8,7 @@
     @using Microsoft.AspNetCore.Authorization
     @inject IAuthorizationService AuthorizationService
     @*Production , Development*@
-    <environment include="Development">
+    <environment include="Production">
         <link href="~/Images/d.ico" rel="icon" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
@@ -411,17 +411,20 @@
                                     </ul>
                                 </li>*@
                                 <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="PurchaseOrders">Purchase Orders - SC</a></li>
-                                <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Zinc" asp-action="GetSendToZincCount">Purchase Orders - Zinc</a></li>
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Import PO")).Succeeded)
+                                {
+                                    <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Zinc" asp-action="GetSendToZincCount">Purchase Orders - Zinc</a></li>
+                                }
 
-                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="GetPOProduct">Products In PO`s</a></li>
+                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="GetPOProduct">Products In PO`s</a></li>
 
 
-                                <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Shipment" asp-action="Create">Shipments</a></li>
-                                @*@if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-        {
-            <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcode">Receive Shipments</a></li>
-        }*@
-                            </ul>
+                                    <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="Shipment" asp-action="Create">Shipments</a></li>
+                                    @*@if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+            {
+                <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcode">Receive Shipments</a></li>
+            }*@
+                                </ul>
                         </li>
                     }
 
@@ -562,7 +565,7 @@
         </footer>*@
 
 
-    <environment include="Development">
+    <environment include="Production">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
