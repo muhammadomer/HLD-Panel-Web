@@ -28,6 +28,7 @@ namespace Hld.WebApplication.ViewModel
         public int OnOrder { get; set; }
         public decimal LowStock60 { get; set; }
         public decimal LowStock90 { get; set; }
+        public bool Continue { get; set; }
         public decimal CoverDays { get; set; }
         public int CoverPhy { get; set; }
         public int QtyPerBox { get; set; }
@@ -94,5 +95,6 @@ namespace Hld.WebApplication.ViewModel
         public string Title { get; set; }
         public int Type { get; set; }
         public bool Excluded { get; set; }
+        public bool Continue { get; set; }
     }
 }

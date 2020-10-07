@@ -68,12 +68,12 @@ namespace Hld.WebApplication.Controllers
                 POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
             }
 
-            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, viewModel.Approved, viewModel.Excluded, viewModel.Type);
+            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, viewModel.Approved, viewModel.Excluded, viewModel.Continue, viewModel.Type);
             ViewBag.TotalCount = Count;
             return View(viewModel);
         }
 
-        public IActionResult PredictionDetail(int? page, string SKU, string Title, int VendorId, bool Approved, bool Excluded, string Sort, string SortedType, int Type = 0)
+        public IActionResult PredictionDetail(int? page, string SKU, string Title, int VendorId, bool Approved, bool Excluded, bool Continue, string Sort, string SortedType, int Type = 0)
         {
 
 
@@ -102,7 +102,7 @@ namespace Hld.WebApplication.Controllers
             if (string.IsNullOrEmpty(Title))
                 Title = "undefined";
             List<PredictionHistroyViewModel> listmodel = new List<PredictionHistroyViewModel>();
-            listmodel = _ApiAccess.GetPredictionDetail(ApiURL, token, startlimit, offset, POMasterID, SKU, Title, Approved, Excluded, Sort, SortedType, Type);
+            listmodel = _ApiAccess.GetPredictionDetail(ApiURL, token, startlimit, offset, POMasterID, SKU, Title, Approved, Excluded, Continue, Sort, SortedType, Type);
             data = new StaticPagedList<PredictionHistroyViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;

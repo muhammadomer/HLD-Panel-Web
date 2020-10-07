@@ -342,50 +342,54 @@
         <div class="col-sm-12">
             @using (Html.BeginForm("Index", "PredictionHistory", FormMethod.Get))
             {
-                <div class="row" style="margin-left:2px;margin-top:15px;">
-                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-                    {<div class="col-md-1 p-0 mr-1">
+            <div class="row" style="margin-left:2px;margin-top:15px;">
+                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                {<div class="col-md-1 p-0 mr-1">
 
-                            <!--<input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />-->
-                            @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
-                            <!--<span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>-->
-                            <select class="js-example-basic-single form-control Prediction" name="VendorId" id="vendor">
-                                <option value="">Vendor</option>
-                            </select>
-                            @*@Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })*@
-                        </div>
-                    }
-                    <div class="col-md-2 p-0 mr-1">
-                        <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
-                        <input type="text" id="Sorted" name="Sorted" value="@Model.Sorted" class="form-control" style="box-shadow:none;display:none" />
-                        <input type="text" id="SortedType" name="SortedType" value="@Model.SortedType" class="form-control" style="box-shadow:none;display:none" />
-
-
-                    </div>
-                    <div class="col-md-3 p-0 mr-1">
-                        <input type="text" id="Title" name="Title" value="@Model.Title" placeholder="Title" class="form-control" style="box-shadow: none" />
-                    </div>
-                    <div class="col-md-1 p-0 mr-1">
-                        <select asp-for="Type" name="Type" class="form-control p-0">
-                            <option value="0">Cover Days</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                            <option value="60">60</option>
-                            <option value="90">90</option>
+                        <!--<input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />-->
+                        @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                        <!--<span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>-->
+                        <select class="js-example-basic-single form-control Prediction" name="VendorId" id="vendor">
+                            <option value="">Vendor</option>
                         </select>
+                        @*@Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })*@
                     </div>
-                    <div class="col-md-1 p-0 mr-1">
-                        <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Approved Price</label>
-                    </div>
-                    <div class="col-md-1 p-0 mr-1">
-                        <input type="checkbox" id="Excluded" name="Excluded" asp-for="@Model.Excluded" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Excluded Item's</label>
-                    </div>
-                    <div class="col-md-1 p-0">
-                        <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
-                    </div>
+                }
+                <div class="col-md-2 p-0 mr-1">
+                    <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
+                    <input type="text" id="Sorted" name="Sorted" value="@Model.Sorted" class="form-control" style="box-shadow:none;display:none" />
+                    <input type="text" id="SortedType" name="SortedType" value="@Model.SortedType" class="form-control" style="box-shadow:none;display:none" />
+
 
                 </div>
+                <div class="col-md-3 p-0 mr-1">
+                    <input type="text" id="Title" name="Title" value="@Model.Title" placeholder="Title" class="form-control" style="box-shadow: none" />
+                </div>
+                <div class="col-md-1 p-0 mr-1">
+                    <select asp-for="Type" name="Type" class="form-control p-0">
+                        <option value="0">Cover Days</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                        <option value="60">60</option>
+                        <option value="90">90</option>
+                    </select>
+                </div>
+                <div class="col-md-1 p-0 mr-1">
+                    <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Approved Price</label>
+                </div>
+                <div class="col-md-1 p-0 mr-1">
+                    <input type="checkbox" id="Excluded" name="Excluded" asp-for="@Model.Excluded" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Excluded Item's</label>
+                </div>
+
+                <div class="col-md-1 p-0 mr-1">
+                    <input type="checkbox" id="Continue" name="Continue" asp-for="@Model.Continue" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Continue</label>
+                </div>
+                <div class="col-md-1 p-0">
+                    <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                </div>
+
+            </div>
                 <div class="form-group">
 
                 </div>
@@ -481,6 +485,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 <strong>
                     <i class="fa fa-exclamation-triangle" style=" color: red;font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;">Excluded!</span>
                 </strong>
+
                 <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body myclassExcluded" style="padding-left:0!important;">
@@ -1375,6 +1380,7 @@ setInterval('location.reload()', 5000);
             }
             var Type = getUrlParameter('Type');
             var Excluded = getUrlParameter('Excluded');
+            var Continue = getUrlParameter('Continue');
 
 
 
@@ -1389,7 +1395,7 @@ setInterval('location.reload()', 5000);
                       debugger;
                       pageNo = page;
                       // add code which gets executed when user selects a page
-                      var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type + '&Excluded=' + Excluded;
+                      var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type + '&Excluded=' + Excluded + '&Continue=' + Continue;
                       var completURL = url  ;
                       $(".loadertbl").show();
                       $(".loader").show();
