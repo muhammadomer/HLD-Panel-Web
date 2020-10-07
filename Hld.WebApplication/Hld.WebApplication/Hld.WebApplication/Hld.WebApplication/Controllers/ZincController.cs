@@ -982,7 +982,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public string UpdateZincOrderInternalStatus(bool internalStatus, int orderId)
+        public string UpdateZincOrderInternalStatus(int internalStatus, int orderId)
         {
             string token = Request.Cookies["Token"];
 

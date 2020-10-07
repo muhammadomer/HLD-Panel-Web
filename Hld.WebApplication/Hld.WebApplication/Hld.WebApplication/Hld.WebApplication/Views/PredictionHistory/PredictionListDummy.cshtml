@@ -650,8 +650,10 @@
                     }
                     <td class="coverdays">
                        @{
-                           var coverday = @item.Velocity!=0?Convert.ToInt32(Convert.ToInt32(Convert.ToDecimal(item.PhysicalQty) + Convert.ToDecimal(item.OnOrder) + Convert.ToDecimal(item.ReservedQty)+ Convert.ToDecimal(item.POQty))/ Convert.ToDecimal(@item.Velocity)):0;
-                           var date = DateTime.Now.AddDays(item.CoverDays);
+                           //var coverday = @item.Velocity!=0?Convert.ToInt32(Convert.ToInt32(Convert.ToDecimal(item.PhysicalQty) + Convert.ToDecimal(item.OnOrder) + Convert.ToDecimal(item.ReservedQty)+ Convert.ToDecimal(item.POQty))/ Convert.ToDecimal(@item.Velocity)):0;
+                           //var date = DateTime.Now.AddDays(item.CoverDays);
+                           var coverday = @item.Velocity != 0 ? Convert.ToInt32(Convert.ToInt32(Convert.ToDecimal(item.PhysicalQty) + Convert.ToDecimal(item.OnOrder) + Convert.ToDecimal(item.ReservedQty) + Convert.ToDecimal(item.POQty)) / Convert.ToDecimal(@item.Velocity)) : 0;
+                           var date = DateTime.Now.AddDays(coverday);
                        } 
                         @coverday
                     </td>
@@ -928,8 +930,8 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
             $(document).on('keypress', '.SKU', function (event) {
                
-                var myStr = $(".SKU").val();
-                var trimStr = $.trim(myStr);
+                //var myStr = $(".SKU").val();
+                //var trimStr = $.trim(myStr);
 
                 if (event.keyCode == 13) {
                     var skuadd = $(this);

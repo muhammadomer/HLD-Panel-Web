@@ -74,7 +74,7 @@
         padding: 30px;
     }
 
-    .hidedialogbox {
+   .hidedialogbox {
         font-family: Arial;
         position: absolute;
         top: 1000px;
@@ -175,6 +175,12 @@
 
             </div>*@
     </div>
+
+    <div class="hidedialogbox">
+        <div id="dialog-box">
+            <h6 style="color:red">Do you want to Cancel this Order!</h6>
+        </div>
+    </div>
     <div class="container-fluid p-0">
         <div id="loadOrder">
 
@@ -186,11 +192,6 @@
 
             </div>
 
-        </div>
-    </div>
-    <div class="hidedialogbox">
-        <div id="dialog-box">
-            <h6 style="color:red">Do you want to Cancel this Order!</h6>
         </div>
     </div>
 </div>
@@ -241,6 +242,8 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+           
             $(".loader").hide();
             var selectedDateFrom = "";
             var selectedDatTo = "";
@@ -257,12 +260,19 @@
             }
 
             //UpdateZincOrder
+            function getDate() {
+                var today = new Date();
 
+                document.getElementById("date-input").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+
+
+            }
             function btnUpdateZincOrder(Obj) {
                 debugger
                 $.get('/Zinc/UpdateZincOrder?Sku=' + Obj.SKU + '&ASIN=' + Obj.ASIN + '&max_price=' + Obj.max_price +'&OrderId='+ Obj.OrderId + '').done(function (response) {
                     $('#SendtozincModalBody').empty();
                     $('#SendtozincModalBody').html(response);
+                    getDate();
                     var successMessage = $('#modelBody').find('.successmessage');
                     $(successMessage).hide()
                     $('#SendtozincModal').modal('show');
@@ -271,14 +281,15 @@
 
 
 
-
-
+            
 
             $(document).on('change', ".selectBox", function () {
                 if ($(this).val() == "MarkAsReceived") {
                     debugger
                     var Obj = {};
                     var Obj2 = {
+
+                        date:new Date(),
                         OrderId: $(this).closest("tr").find('.ordervalue').val(),
                         SKU: $(this).closest("tr").find('.skuvalue').val(),
                         ASIN: $(this).closest("tr").find('.asinvalue').val(),
@@ -289,24 +300,24 @@
                     btnUpdateZincOrder(Obj);
                 }
 
-                else {
+                else if ($(this).val() == "MarkAsCancel") {
 
-                        debugger
+                    
 
-                        orderId=$(this).closest("tr").find('.ordervalue').val(),
-                        data = { orderId: orderId, internalStatus: false };
+                    orderId = $(this).closest("tr").find('.ordervalue').val(),
+                    data = { orderId: orderId, internalStatus: 0 };
 
                     $("#dialog-box").dialog({
                         buttons: {
                             "Confirm": function () {
                                 var data = {
-                                   orderId: orderId, internalStatus: false
+                                    orderId: orderId, internalStatus: 0
                                 };
 
                                 $.ajax({
                                     type: 'post',
                                     url: '../Zinc/UpdateZincOrderInternalStatus',
-                                    data: { orderId: orderId, internalStatus: false },
+                                    data: { orderId: orderId, internalStatus: 0 },
                                     success: function (res) {
                                         $("#dialog-box").dialog("close");
                                         //if (res.internalStatus == false) {
@@ -316,13 +327,13 @@
                                         //    $(this).closest("tr").find(".selectBox option[value='MarkAsReceived']").attr('disabled', false);
                                         //}
 
-                                         
+
                                         $("#myModalerror").modal({
                                             backdrop: 'static',
                                             keyboard: false
-                                             
+
                                         });
-                                        $(".closebtn").click(function(){
+                                        $(".closebtn").click(function () {
                                             location.reload();
                                         })
                                     }
@@ -330,7 +341,7 @@
 
 
                                 });
-                                
+
                             }
                         },
                         "Cancel": function () {
@@ -341,6 +352,41 @@
                     });
                     $("#dialog-box").dialog("open");
 
+                }
+                    else {
+                    orderId = $(this).closest("tr").find('.ordervalue').val(),
+                        data = { orderId: orderId, internalStatus: 2 };
+
+                    $("#dialog-box").dialog({
+                        buttons: {
+                            "Confirm": function () {
+                                var data = {
+                                    orderId: orderId, internalStatus: 2
+                                };
+
+                                $.ajax({
+                                    type: 'post',
+                                    url: '../Zinc/UpdateZincOrderInternalStatus',
+                                    data: { orderId: orderId, internalStatus: 2 },
+                                    success: function (res) {
+                                        $("#dialog-box").dialog("close");   
+                                        $("#myModalerror").modal({
+                                            backdrop: 'static',
+                                            keyboard: false
+                                        });
+                                        $(".closebtn").click(function () {
+                                            location.reload();
+                                        })
+                                    }
+                                });
+                            }
+                        },
+                        "Cancel": function () {
+                            $(this).dialog("close");
+                            $.notify('Cancel Successfully ', { globalPosition: 'bottom right', className: 'warning mydelte' });
+                        }
+                    });
+                    $("#dialog-box").dialog("open");
                 }
             });
             //$(document).on('click', '#btnUpdateZincOrder', function () {

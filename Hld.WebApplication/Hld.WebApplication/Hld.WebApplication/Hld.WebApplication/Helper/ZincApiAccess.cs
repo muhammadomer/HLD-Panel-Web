@@ -794,7 +794,7 @@ namespace Hld.WebApplication.Helper
             return Status;
         }
 
-        public string UpdateZincOrderInternalStatus(string ApiURL, string token, bool internalStatus, int orderId)
+        public string UpdateZincOrderInternalStatus(string ApiURL, string token, int internalStatus, int orderId)
         {
             string status = "";
             try

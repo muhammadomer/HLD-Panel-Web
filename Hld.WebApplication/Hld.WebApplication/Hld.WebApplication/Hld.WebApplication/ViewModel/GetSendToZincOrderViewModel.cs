@@ -9,7 +9,7 @@ namespace Hld.WebApplication.ViewModel
     {
         public int OrderId { get; set; }
         public string order_type { get; set; }
-        public bool internalStatus { get; set; }
+        public int internalStatus { get; set; }
         public string amazon_tracking { get; set; }
         public string _tracking { get; set; }
         public string carrier { get; set; }

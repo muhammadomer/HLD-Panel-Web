@@ -45,276 +45,306 @@
        font-size:12px;
         border-radius: 2px;
         font-family: Arial;
+        cursor:pointer!important;
+        /*position:relative;*/
     }
-         
+    .btnclickclass {
+        position: absolute;
+        right: 39px;
+        width: 106px;
+    }
 </style>
 
 <div class="container-fluid">
-    
-    <table class="table tablesorter table-AsinList">
-        <thead style="background-color:lightgrey">
-           
-            <tr>
-              
-                <th>
-                    Image
-                </th>
-                <th>
-                    Order#
-                </th>
-                <th>
-                    SKU
-                </th>
-                <th>
-                    Qty
-                </th>
-                <th>
-                    ASIN
-                </th>
+   
+            <table class="table tablesorter table-AsinList">
+                <thead style="background-color:lightgrey">
 
-                <th>
-                    Price
-                </th>
-                <th>
-                    Amz<br />SubTotal
-                </th>
-                <th>
-                    Shipping
-                </th>
-                <th>
-                    Tax
-                </th>
-                <th>
-                    Account<br />Detail
-                </th>
+                    <tr>
 
-                <th>
-                    Created<br/> On
-                </th>
+                        <th>
+                            Image
+                        </th>
+                        <th>
+                            Order#
+                        </th>
+                        <th>
+                            SKU
+                        </th>
+                        <th>
+                            Qty
+                        </th>
+                        <th>
+                            ASIN
+                        </th>
 
-                <th>
-                    Last<br/>Update
-                </th>
-                <th>
-                    Tracking <br/>Number
-                </th>
-                <th>
-                    Merchant <br /> Order #
-                </th>
-                <th>
-                    Response
-                </th>
-                <th>
-                    Shipping<br /> Date
-                </th>
-                <th>
-                    RecQty
-                </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Amz<br />SubTotal
+                        </th>
+                        <th>
+                            Shipping
+                        </th>
+                        <th>
+                            Tax
+                        </th>
+                        <th>
+                            Account<br />Detail
+                        </th>
 
-                <th>
-                    RecOn
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>
+                        <th>
+                            Created<br /> On
+                        </th>
 
-                    <input type="text" value="@item.Sku" style="display:none" class="skuvalue" />
-                    <input type="text" value="@item.Asin" style="display:none" class="asinvalue" />
-                    <input type="text" value="@item.Price" style="display:none" class="MaxPrice" />
-                    <input type="text" value="@item.OrderId" style="display:none" class="ordervalue" />
-                    @*<p>
-                        <label><input type="radio" name="radiobutton" value="radiobutton" class="radiobuttoncheckd"></label>
-                    </p>*@
-                
-                    <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
-                    </a>
+                        <th>
+                            Last<br />Update
+                        </th>
+                        <th>
+                            Tracking <br />Number
+                        </th>
+                        <th>
+                            Merchant <br /> Order #
+                        </th>
+                        <th>
+                            Response
+                        </th>
+                        <th>
+                            Shipping<br /> Date
+                        </th>
+                        <th>
+                            RecQty
+                        </th>
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderId)
+                        <th>
+                            RecOn
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="word-break: break-all;">
 
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.Sku)*@
-                    <a style="cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.Sku" target="_blank">@item.Sku</a>
-                    <br />
-                    <a style="cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.Sku" target="_blank">
-                        <img height="13px" width="15px" src="~/Images/sellercloud-gray.png" />
-                    </a>
-                    <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.Sku" target="_blank">
-                        <img height="10px" width="15px" src="~/Images/openbb.png" />
-                    </a>
-                </td>
-                <td>
-                    @item.Qty
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Asin)
-
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @{var AmzSubTotal = @item.AmzSubTotal / 100;
-                    }
-                   
-                    @Math.Round(AmzSubTotal, 2)
-
-                </td>
-                <td>
-                    @{var ship = @item.Shipping / 100;
-                        }
-                        @Math.Round(ship, 2)
-
-
-                </td>
-                <td>
-                    @Math.Round(@item.Tax,2)
-                  
-                </td>
-                <td>
-
-                    @Html.DisplayFor(modelItem => item.name_on_card)<br />
-
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-
-
-                    @if (item.Date != DateTime.MinValue)
+                    @foreach (var item in Model)
                     {
-                        @string.Format("{0: MMM d, yyyy}", item.Date)
-                    }
+                        <tr>
+                            <td>
+
+                                <input type="text" value="@item.Sku" style="display:none" class="skuvalue" />
+                                <input type="text" value="@item.Asin" style="display:none" class="asinvalue" />
+                                <input type="text" value="@item.Price" style="display:none" class="MaxPrice" />
+                                <input type="text" value="@item.OrderId" style="display:none" class="ordervalue" />
+                               
+                                @*<p>
+                                        <label><input type="radio" name="radiobutton" value="radiobutton" class="radiobuttoncheckd"></label>
+                                    </p>*@
+
+                                <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                                    <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                                </a>
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OrderId)
+
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.Sku)*@
+                                <a style="cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.Sku" target="_blank">@item.Sku</a>
+                                <br />
+                                <a style="cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.Sku" target="_blank">
+                                    <img height="13px" width="15px" src="~/Images/sellercloud-gray.png" />
+                                </a>
+                                <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.Sku" target="_blank">
+                                    <img height="10px" width="15px" src="~/Images/openbb.png" />
+                                </a>
+                            </td>
+                            <td>
+                                @item.Qty
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Asin)
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                @{var AmzSubTotal = @item.AmzSubTotal / 100;
+                                }
+
+                                @Math.Round(AmzSubTotal, 2)
+
+                            </td>
+                            <td>
+                                @{var ship = @item.Shipping / 100;
+                                }
+                                @Math.Round(ship, 2)
+
+
+                            </td>
+                            <td>
+                                @Math.Round(@item.Tax, 2)
+
+                            </td>
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.name_on_card)<br />
+
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td>
+
+
+                                @if (item.Date != DateTime.MinValue)
+                                {
+                                    @string.Format("{0: MMM d, yyyy}", item.Date)
+                                }
 
 
 
-                </td>
-                <td>
-                    @if (item.LastUpdate != DateTime.MinValue)
-                    {
-                        @string.Format("{0: MMM d, yyyy}", item.LastUpdate)
-                    }
-                </td>
-                <td>
-                    @item.TrackingNumber<br />
-                  
-                    @*<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a>*@
-                    @*@item._tracking<br>
+                            </td>
+                            <td>
+                                @if (item.LastUpdate != DateTime.MinValue)
+                                {
+                                    @string.Format("{0: MMM d, yyyy}", item.LastUpdate)
+                                }
+                            </td>
+                            <td>
+                                @item.TrackingNumber<br />
+                                                    <a style="cursor:pointer" href="https://t.17track.net/en#nums=@item.TrackingNumber" target="_blank">
+                                                        <img height="15px" width="17px" src="~/Images/17link.png" />
+                                                        
+                                                    </a>
+                                                   
+                      
+                                                        <a style="cursor:pointer" href="https://www.amazon.ca/progress-tracker/package/ref=ppx_yo_dt_b_track_package?_encoding=UTF8&itemId=lmmjmriooortwn&orderId=@item.TrackingNumber" target="_blank">
+
+                                                            <img  height="18px" width="21px" src="~/Images/right-1.png" />
+                                                            
+                                                        </a>
+                                @*<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a>*@
+                                @*@item._tracking<br>
         @item.amazon_tracking<br>
         @item.carrier<br>*@
-                </td>
-                <td>
-                    <a style="cursor:pointer" href="https://www.amazon.ca/gp/your-account/order-details/ref=ppx_yo_dt_b_order_details_o00?ie=UTF8&orderID=@item.OrderId" target="_blank">@item.merchant_order_id</a>
-                </td>
-                <td>
-                    @{
-                        string ZincStatus = item.Response;
+                            </td>
+                            <td>
+                                <a style="cursor:pointer" href="https://www.amazon.ca/gp/your-account/order-details/ref=ppx_yo_dt_b_order_details_o00?ie=UTF8&orderID=@item.merchant_order_id" target="_blank">@item.merchant_order_id</a>
+                            </td>
+                            <td>
+                                @{
+                                    string ZincStatus = item.Response;
+                                }
+                                @if (ZincStatus == "Shipped")
+                                {
+                                    <span style="color:forestgreen;font-weight:bold"> @ZincStatus</span>
+                                }
+                                @if (ZincStatus == "InProgressSuccess")
+                                {
+                                    <span style="color:green;"> InProgress (Success)</span>
+                                }
+                                @if (ZincStatus == "Order Request Sent")
+                                {
+                                    <span style="color:blue;"> @ZincStatus</span>
+                                }
+
+
+                                <br />
+                                @if (item.internalStatus == 0)
+                                {
+
+                                    <span style="color:red;font-weight:bold">Cancelled</span>
+                                }
+                                else if (item.internalStatus == 1)
+                                {
+                                    <span style="color:white;background-color:green;font-weight:bold">Received</span>
+                                }
+                               
+                                else
+                                {
+
+                                }
+                                <br />
+                                @{
+                                    var Orderdate = @item.OrderDate;
+
+                                }
+                                @if (Orderdate != null)
+                                {
+                                    @Orderdate
+                                }
+                                else
+                                {
+
+
+                                }
+
+
+
+                            </td>
+                            <td>
+
+                                @{
+                                    DateTime date = DateTime.MinValue;
+                                    if (string.IsNullOrEmpty(@item.shpping_date) || @item.shpping_date == "undefined")
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        date = Convert.ToDateTime(@item.shpping_date);
+                                    }
+                                }
+
+
+                                @if (date != DateTime.MinValue)
+                                {
+                                    @string.Format("{0: MMM d, yyyy}", date)
+                                }
+
+                            </td>
+                            <td>
+                                @{
+                                    var RecievedOrderQt = @item.RecievedOrderQty;
+                                }
+                                @if (RecievedOrderQt > 0)
+                                {
+                                    @RecievedOrderQt
+                                }
+                                else
+                                {
+
+                                }
+
+                            </td>
+
+                            <td>
+                                @if (item.RecievedOrderDate != DateTime.MinValue)
+                                {
+                                    @string.Format("{0: MMM d, yyyy}", item.RecievedOrderDate)
+                                }
+                            </td>
+                            <td>
+                                
+                                    @*<button class="btn btn-primary btnclickclass">click</button>*@
+                                    <select class="selectBox">
+
+                                        <option  selected="selected"disabled value="0">Edit</option>
+                                        <option value="MarkAsReceived">Mark as Received</option>
+                                        <option value="MarkAsCancel">Mark as Cancelled</option>
+                                        <option value="MarkAsInProcess">Mark As In-Process</option>
+
+                                    </select>
+                                
+                               
+                               
+                            </td> 
+
+                        </tr>
                     }
-                    @if (ZincStatus == "Shipped")
-                    {
-                        <span style="color:forestgreen;font-weight:bold"> @ZincStatus</span>
-                    }
-                    @if (ZincStatus == "InProgressSuccess")
-                    {
-                        <span style="color:green;"> InProgress (Success)</span>
-                    }
-                    @if (ZincStatus == "OrderRequestSent")
-                    {
-                        <span style="color:blue;"> @ZincStatus</span>
-                    }
-
-
-                    <br />
-                    @if (item.internalStatus == false)
-                    {
-
-                        <span style="color:red;font-weight:bold">Cancelled</span>
-                    }
-                    else
-                    {
-
-                    }
-                    <br />
-                    @{
-                        var Orderdate = @item.OrderDate;
-
-                    }
-                    @if (Orderdate != null)
-                    {
-                        @Orderdate
-                    }
-                    else
-                    {
-
-
-                    }
-
-
-
-                </td>
-                <td>
-
-                    @{
-                        DateTime date = DateTime.MinValue;
-                        if (string.IsNullOrEmpty(@item.shpping_date) || @item.shpping_date == "undefined")
-                        {
-
-                        }
-                        else
-                        {
-                            date = Convert.ToDateTime(@item.shpping_date);
-                        }
-                    }
-
-
-                    @if (date != DateTime.MinValue)
-                    {
-                        @string.Format("{0: MMM d, yyyy}", date)
-                    }
-
-                </td>
-                <td>
-                    @{
-                        var RecievedOrderQt = @item.RecievedOrderQty;
-                    }
-                    @if (RecievedOrderQt > 0)
-                    {
-                        @RecievedOrderQt
-                    }
-                    else
-                    {
-
-                    }
-
-                </td>
-
-                <td>
-                    @if (item.RecievedOrderDate != DateTime.MinValue)
-                    {
-                        @string.Format("{0: MMM d, yyyy}", item.RecievedOrderDate)
-                    }
-                </td>
-                <td>
-                    <select class="selectBox"disabled="@(item.internalStatus==true?false:true)">
-                        <option selected="selected" value="0"disabled>Receive</option>
-                        <option value="MarkAsReceived">Mark as Received</option>
-                        <option value="MarkAsCancel">Mark as Cancelled</option>
-                        
-                    </select>
-                </td>
-
-            </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                </tbody>
+            </table>
+        </div>
+   
