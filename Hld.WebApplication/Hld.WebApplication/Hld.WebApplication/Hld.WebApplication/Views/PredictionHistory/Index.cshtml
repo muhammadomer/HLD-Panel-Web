@@ -138,7 +138,7 @@
 
     .searchFormFixed {
         position: fixed;
-        top: 39px;
+        top: 41px;
         width: 100%;
         z-index: 500;
         padding-bottom: 0px;
@@ -350,7 +350,7 @@
         <div class="col-sm-12">
             @using (Html.BeginForm("Index", "PredictionHistory", FormMethod.Get))
             {
-            <div class="row" style="margin-left:2px;margin-top:17px;">
+            <div class="row" style="margin-left:2px;margin-top:15px;">
                 @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
                 {<div class="col-md-1 p-0 mr-1">
 
@@ -384,16 +384,15 @@
                     </select>
                 </div>
                 
-                @*<div class="col-md-1 p-0 mr-1">
+                <div class="p-0 mr-1"style="margin-right:12px">
                     <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Approved Price</label>
                 </div>
                 <div class="col-md-1 p-0 mr-1">
-                    <input type="checkbox" id="Excluded" name="Excluded" asp-for="@Model.Excluded" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Excluded Item's</label>
+                    <input type="checkbox" id="Excluded" name="Excluded" asp-for="@Model.Excluded" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">DS Excluded Products</label>
                 </div>
-
                 <div class="col-md-1 p-0 mr-1">
-                    <input type="checkbox" id="Continue" name="Continue" asp-for="@Model.Continue" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Continue</label>
-                </div>*@
+                    <input type="checkbox" id="Continue" name="Continue" asp-for="@Model.Continue" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Discontinued Products</label>
+                </div>
                 <div class="col-md-1 p-0">
                     <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
                 </div>
@@ -412,8 +411,8 @@
 </div>
 
 <div class="container-fluid ">
-    <div class="form-group row col-md-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: -5px;
-margin-top: 11px;">
+    <div class="row col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: -5px;
+margin-top: 13px;">
 
         <div class="col col-md-2">
             <div class="row">
@@ -429,26 +428,9 @@ margin-top: 11px;">
             <span> Total Records Found : @ViewBag.TotalCount</span>
 
         </div>
-        <div class="col-md-6 form-group row">
-            <div class="p-0">
-                <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="        margin-left: 5px;
-        vertical-align: super;
-        margin-right: 20px;
-">Approved Price</label>
-            </div>
-            <div class="p-0">
-                <input type="checkbox" id="Excluded" name="Excluded" asp-for="@Model.Excluded" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="        margin-left: 5px;
-        vertical-align: super;
-        margin-right: 20px;
-">DS Excluded Products</label>
-            </div>
-            <div class="p-0">
-                <input type="checkbox" id="Continue" name="Continue" asp-for="@Model.Continue" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Discontinued Products</label>
-            </div>
-        </div>
 
-        <div class="col col-md-12">
-            <div style="float: right; display: flex;margin-bottom: 5px; margin-right:41px;"class="">
+        <div class="col col-md-6">
+            <div style="float: right; display: flex;margin-bottom: 5px; margin-right:41px;" class="ml-auto">
                 <span>
                     <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                 </span>
@@ -471,8 +453,9 @@ margin-top: 11px;">
             </div>
 
         </div>
+
     </div>
-   
+  
 </div>
 <div class="modal fade" id="myModalIncluded" style="margin-top: 130px;">
     <div class="modal-dialog modal-md">

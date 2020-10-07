@@ -213,18 +213,22 @@
                                 }
                             </td>
                             <td>
-                                @item.TrackingNumber<br />
-                                                    <a style="cursor:pointer" href="https://t.17track.net/en#nums=@item.TrackingNumber" target="_blank">
-                                                        <img height="15px" width="17px" src="~/Images/17link.png" />
-                                                        
-                                                    </a>
-                                                   
-                      
-                                                        <a style="cursor:pointer" href="https://www.amazon.ca/progress-tracker/package/ref=ppx_yo_dt_b_track_package?_encoding=UTF8&itemId=lmmjmriooortwn&orderId=@item.TrackingNumber" target="_blank">
 
-                                                            <img  height="18px" width="21px" src="~/Images/right-1.png" />
-                                                            
-                                                        </a>
+                                @item.TrackingNumber<br />
+                                @if ( !string.IsNullOrEmpty(item.TrackingNumber))
+                                {
+                                <a style="cursor:pointer" href="https://t.17track.net/en#nums=@item.TrackingNumber" target="_blank">
+                                    <img height="15px" width="17px" src="~/Images/17link.png" />
+
+                                </a>
+
+
+                                <a style="cursor:pointer" href="https://www.amazon.ca/progress-tracker/package/ref=ppx_yo_dt_b_track_package?_encoding=UTF8&itemId=lmmjmriooortwn&orderId=@item.TrackingNumber" target="_blank">
+
+                                    <img height="18px" width="21px" src="~/Images/right-1.png" />
+
+                                </a>
+                                }
                                 @*<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a>*@
                                 @*@item._tracking<br>
         @item.amazon_tracking<br>
