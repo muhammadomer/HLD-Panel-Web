@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.SaveAndEditShipmentCourierVM>
+
+@{
+    ViewData["Title"] = "CourierDetail";
+}
+
+<style type="text/css">
+
+
+
+    .table thead th {
+        vertical-align: middle !important;
+    }
+
+    .table td {
+        vertical-align: top;
+        border-top: 1px solid #DEE2E6;
+        vertical-align: middle !important;
+    }
+
+
+
+    .table thead tr th {
+        position: sticky;
+        top: 50px;
+        padding: 0px;
+        padding-right: 16px;
+        z-index: 2;
+        background-color: lightgray !important;
+    }
+
+
+
+
+
+
+    .table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+</style>
+<div class="container">
+    <div class=" form-group row">
+        <div style=" margin-left: 14px;margin-right:20px">
+            <h6> Courier Detail</h6>
+
+        </div>
+        <div>
+            <span>
+                <a asp-action="Index">Create New Courier</a>
+            </span>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <table class="table table-bordered">
+        <thead style="background-color:lightgrey;">
+            <tr>
+
+                <th>
+                    Courier Code
+
+                </th>
+                <th>
+                    Courier URL
+                </th>
+              
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        <input style='display:none' class='form-control' value='@item.ShipmentCourier_ID'>
+                        @Html.DisplayFor(modelItem => item.CourierCode)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourierURL)
+                    </td>
+                          
+                    <td>
+                        <a href="/ShipmentCourier/Index?=@item.ShipmentCourier_ID" style="cursor:pointer;"><img src="~/Images/icon-edit-512.png" height="20" /></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+
+  
+</div>

@@ -22,6 +22,7 @@ namespace Hld.WebApplication.ViewModels
         public DateTime CreatedOn { get; set; }
         public int ShipmentAutoID { get; set; }
         public string TrakingNumber { get; set; }
+        public string TrakingURL { get; set; }
         public string CourierCode { get; set; }
         public int QtyReceived { get; set; }
         public string Type { get; set; }

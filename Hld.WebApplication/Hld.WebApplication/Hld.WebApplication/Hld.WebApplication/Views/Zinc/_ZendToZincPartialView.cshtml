@@ -53,6 +53,17 @@
         right: 39px;
         width: 106px;
     }
+    .inputsearchbtn {
+       
+        width: 192px;
+        margin-left: -228px;
+        border-left: none !important;
+        box-shadow: none !important;
+        border-radius: 1px !important;
+        outline: none !important;
+        border-right: none !important;
+        height: 26px;
+    }
 </style>
 
 <div class="container-fluid">
@@ -218,16 +229,12 @@
                                 @if ( !string.IsNullOrEmpty(item.TrackingNumber))
                                 {
                                 <a style="cursor:pointer" href="https://t.17track.net/en#nums=@item.TrackingNumber" target="_blank">
-                                    <img height="15px" width="17px" src="~/Images/17link.png" />
-
+                                  
+                                    <img height="14px" width="15px" src="~/Images/246x0w.jpg"style="border-radius: 3px;" />
                                 </a>
 
 
-                                <a style="cursor:pointer" href="https://www.amazon.ca/progress-tracker/package/ref=ppx_yo_dt_b_track_package?_encoding=UTF8&itemId=lmmjmriooortwn&orderId=@item.TrackingNumber" target="_blank">
-
-                                    <img height="18px" width="21px" src="~/Images/right-1.png" />
-
-                                </a>
+                               
                                 }
                                 @*<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a>*@
                                 @*@item._tracking<br>
@@ -332,15 +339,20 @@
                             </td>
                             <td>
                                 
-                                    @*<button class="btn btn-primary btnclickclass">click</button>*@
-                                    <select class="selectBox">
+                                <div class=" pl-0" style="width:230px;">
+                                    @*<select class="form-control" style="width: 230px; float: left;" id="BoxesDrpDown" onchange="this.nextElementSibling.value=this.value">
+                                    </select>*@
+                                    <select class="form-control selectBox"style="width:188px;float:left;">
 
-                                        <option  selected="selected"disabled value="0">Edit</option>
+                                        <option selected="selected" disabled value="0">Edit</option>
                                         <option value="MarkAsReceived">Mark as Received</option>
                                         <option value="MarkAsCancel">Mark as Cancelled</option>
                                         <option value="MarkAsInProcess">Mark As In-Process</option>
 
                                     </select>
+                                    <button type="button" class="btn inputsearchbtn">Mark as Received</button>
+                                </div>
+                                    
                                 
                                
                                

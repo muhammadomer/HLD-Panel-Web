@@ -58,6 +58,30 @@ namespace Hld.WebApplication.Controllers
         public IActionResult Index(HistorySearchViewModel viewModel)
         {
             string token = Request.Cookies["Token"];
+            bool Approved = false;
+            bool Excluded = false;
+            bool Continue = false;
+            if (!string.IsNullOrEmpty(viewModel.ItemType) && viewModel.ItemType != "undefined")
+            {
+                string[] Val = viewModel.ItemType.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Approved")
+                    {
+                        Approved = true;
+                    }
+                    if (item == "Excluded")
+                    {
+                        Excluded = true;
+                    }
+                    if (item == "Continue")
+                    {
+                        Continue = true;
+                    }
+                  
+                }
+            }
 
             if (viewModel.VendorId != 0 )
             {
@@ -68,16 +92,38 @@ namespace Hld.WebApplication.Controllers
                 POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
             }
 
-            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, viewModel.Approved, viewModel.Excluded, viewModel.Continue, viewModel.Type);
+            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, Approved,Excluded,Continue, viewModel.Type);
             ViewBag.TotalCount = Count;
             return View(viewModel);
         }
 
-        public IActionResult PredictionDetail(int? page, string SKU, string Title, int VendorId, bool Approved, bool Excluded, bool Continue, string Sort, string SortedType, int Type = 0)
+        public IActionResult PredictionDetail(int? page, string SKU, string Title, int VendorId, string Sort, string SortedType, string ItemType = "", int Type = 0)
         {
+            bool Approved = false;
+            bool Excluded = false;
+            bool Continue = false;
+            if (!string.IsNullOrEmpty(ItemType) && ItemType != "undefined")
+            {
+                string[] Val = ItemType.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Approved")
+                    {
+                        Approved = true;
+                    }
+                    if (item == "Excluded")
+                    {
+                        Excluded = true;
+                    }
+                    if (item == "Continue")
+                    {
+                        Continue = true;
+                    }
 
-
-            string token = Request.Cookies["Token"];
+                }
+            }
+                string token = Request.Cookies["Token"];
             IPagedList<PredictionHistroyViewModel> data = null;
             int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
             int pageSize = 50;

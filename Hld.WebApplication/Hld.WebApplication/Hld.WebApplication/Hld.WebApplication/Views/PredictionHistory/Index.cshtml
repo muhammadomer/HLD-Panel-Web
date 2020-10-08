@@ -148,7 +148,7 @@
     .fixedclassforpagination {
         position: fixed;
         top: 133px;
-        padding-bottom: 0px;
+        padding-bottom: 5px;
         z-index: 400;
         background: white;
     }
@@ -242,6 +242,28 @@
         height: 26px!important;
         user-select: none;
         -webkit-user-select: none;
+    }
+    .select2-container--default .select2-results > .select2-results__options {
+        max-height: 350px!important;
+        overflow-y: auto;
+    }
+    .ms-options-wrap.ms-active > .ms-options {
+        max-width: 400px !important;
+        min-height: 92px !important;
+    }
+
+    .ms-options-wrap > button:focus, .ms-options-wrap > button {
+        border-radius: 4px;
+        height: 25px;
+        outline: none !important;
+    }
+
+    ms-options-wrap > button:focus, .ms-options-wrap > button {
+        padding: 1px 0px 1px 2px !important;
+    }
+
+    .ms-options-wrap > .ms-options > ul label {
+        width: 101% !important;
     }
 </style>
 
@@ -383,8 +405,17 @@
                         <option value="90">90</option>
                     </select>
                 </div>
-                
-                <div class="p-0 mr-1"style="margin-right:12px">
+                <div class=" col-md-2 p-0 mr-1" style="">
+                    <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 QuantityStatus" multiple="multiple" style="padding:0px;box-shadow: none; width:130px!important;">
+                        <option value="Approved">Approved Price</option>
+                        <option value="Excluded">DS Excluded Products</option>
+                        <option value="Continue">Discontinued Products</option>
+                        
+                    </select>
+                    <input type="hidden" name="ItemType" id="ddlQuantity" />
+                </div>
+
+                @*<div class="p-0 mr-1" style="margin-right:12px">
                     <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Approved Price</label>
                 </div>
                 <div class="col-md-1 p-0 mr-1">
@@ -392,9 +423,9 @@
                 </div>
                 <div class="col-md-1 p-0 mr-1">
                     <input type="checkbox" id="Continue" name="Continue" asp-for="@Model.Continue" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Discontinued Products</label>
-                </div>
+                </div>*@
                 <div class="col-md-1 p-0">
-                    <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                    <button class=" btn btn-primary" type="submit" id="btnSearchOrder"style="height: 26px;box-shadow:none!important">Search</button>
                 </div>
 
             </div>
@@ -412,7 +443,7 @@
 
 <div class="container-fluid ">
     <div class="row col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: -5px;
-margin-top: 13px;">
+margin-top: 10px;">
 
         <div class="col col-md-2">
             <div class="row">
@@ -422,7 +453,7 @@ margin-top: 13px;">
             </div>
         </div>
         <div class="col-md-2" style="padding-top:5px;">
-            <span style="margin-right: 15px;"> Items Per Page : 50</span>
+            <span style="margin-right: 15px;">Records Per Page : 50</span>
         </div>
         <div class="col-md-2" style="padding-top: 5px;">
             <span> Total Records Found : @ViewBag.TotalCount</span>
@@ -443,6 +474,7 @@ margin-top: 13px;">
                     <option value="AddToPO">Add to Draft PO</option>
                     <option value="GetOnDemand">Get Update From SC</option>
                     <option value="DisableProduct">Set as Discontinued</option>
+                    <option value="Continued">Set as Continued</option>
                     <option value="SetAsKit">Set as Kit</option>
                     <option value="SetAsShadow">Set as Shadow</option>
                     <option value="SetNonDSIncludedPredict">Set as Non-DS & Included in Predict</option>
@@ -1087,6 +1119,40 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     });
                     setInterval('location.reload()', 5000);
                 }
+                if (action == "Continued") {
+
+                    var data = [];
+                    $(".table tbody tr ").each(function () {
+                        if ($(this).find('.selectRow').is(':checked')) {
+                            var sku = $(this).find('.SKU').val();
+
+                            data.push({ SKU: sku, Continue: true });
+                        }
+
+
+                    });
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'post',
+                        url: '../product/productcontinuediscontinue',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                            $.notify('Product disabled successfully', { globalPosition: 'bottom right', className: 'danger myclasspo' });
+                            //$('#btnGoOrder').click()
+                            //$('#btnGoOrder').click(1000);
+
+
+
+                            //$('#btnGoOrder').delay(3500, function () {
+                            // window.location = toLoad;
+                            //});
+                            //$("#btnSearchOrder").click();
+                        }
+
+                    });
+                    setInterval('location.reload()', 5000);
+                }
 
                 if (action == "SetAsKit") {
                     var data = [];
@@ -1408,7 +1474,7 @@ setInterval('location.reload()', 5000);
                       debugger;
                       pageNo = page;
                       // add code which gets executed when user selects a page
-                      var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type + '&Excluded=' + Excluded + '&Continue=' + Continue;
+                      var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type + '&Excluded=' + Excluded + '&Continue=' + Continue + '&ItemType=' + item;
                       var completURL = url  ;
                       $(".loadertbl").show();
                       $(".loader").show();
@@ -1527,6 +1593,18 @@ setInterval('location.reload()', 5000);
                 //window.open('/PredictionHistory/Index?VendorId=' + VendorId + '&Vendor=' + Vendor + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved);
                 $("#btnSearchOrder").click();
             });
+            if (item != null) {
+                var res = item.split(",");
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+                            $('#ddlQuantity').val($(this).val());
+                        }
+                    });
+                });
+            }
         });
     </script>
 }

@@ -217,12 +217,17 @@ vertical-align: middle !important
                         USD @string.Format("{0:N2}", @item.AmountReceived) <br /> CNY @string.Format("{0:N2}", @item.RecivedAmountCNY)
                     </td>
                     <td>
-                        <a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a>
+                        @if (string.IsNullOrEmpty(item.TrakingURL))
+                        {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a> }
+
+                    else
+                    {<a style="cursor:pointer" href="@item.TrakingURL.Replace("{TrackingNumber}", item.TrakingNumber)" target="_blank"> @item.CourierCode @item.TrakingNumber</a>}
                         @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
                         {
 
                             @*<span class="getshipmentId" data-shipmentId="@item.ShipmentId">Edit</span>*@
                         }
+                      
                     </td>
                     <td>
 

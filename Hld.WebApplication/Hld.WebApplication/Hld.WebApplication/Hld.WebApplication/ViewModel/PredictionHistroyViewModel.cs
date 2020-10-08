@@ -87,6 +87,7 @@ namespace Hld.WebApplication.ViewModel
         public string Vendor { get; set; }
         public int VendorId { get; set; }
         public string SKU { get; set; }
+        public string ItemType { get; set; }
         public string Sorted { get; set; }
         public string SortedType { get; set; }
         //public string D_60 { get; set; }

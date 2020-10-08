@@ -243,7 +243,7 @@
 
         $(document).ready(function () {
 
-           
+
             $(".loader").hide();
             var selectedDateFrom = "";
             var selectedDatTo = "";
@@ -269,7 +269,7 @@
             }
             function btnUpdateZincOrder(Obj) {
                 debugger
-                $.get('/Zinc/UpdateZincOrder?Sku=' + Obj.SKU + '&ASIN=' + Obj.ASIN + '&max_price=' + Obj.max_price +'&OrderId='+ Obj.OrderId + '').done(function (response) {
+                $.get('/Zinc/UpdateZincOrder?Sku=' + Obj.SKU + '&ASIN=' + Obj.ASIN + '&max_price=' + Obj.max_price + '&OrderId=' + Obj.OrderId + '').done(function (response) {
                     $('#SendtozincModalBody').empty();
                     $('#SendtozincModalBody').html(response);
                     getDate();
@@ -278,8 +278,26 @@
                     $('#SendtozincModal').modal('show');
                 });
             }
+            //$(document).on('click', ".inputsearchbtn", function () {
+            //    alert("gg");
+            //})
+            $(document).on('click', ".inputsearchbtn", function () {
+               
+                    debugger
+                    var Obj = {};
+                    var Obj2 = {
 
-
+                        date: new Date(),
+                        OrderId: $(this).closest("tr").find('.ordervalue').val(),
+                        SKU: $(this).closest("tr").find('.skuvalue').val(),
+                        ASIN: $(this).closest("tr").find('.asinvalue').val(),
+                        max_price: $(this).closest("tr").find('.MaxPrice').val()
+                    }
+                    Obj = Obj2;
+                    $('#skuappend').append(Obj.SKU);
+                    btnUpdateZincOrder(Obj);
+                
+            });
 
             
 

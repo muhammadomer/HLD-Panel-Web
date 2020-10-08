@@ -259,13 +259,19 @@
 
             @using (Html.BeginForm("CreateShipmentCourier", "Shipment"))
             {<div class="modal-body">
-                    <div class="form-group">
-                        <label for="inputName"><b>Shipping Courier Code :</b></label>
-                        <input type="text" name="CourierCode" class="form-control" id="idCourierCode">
-                    </div>
+                 <div class="form-group">
+                     <label for="inputName"><b>Shipping Courier Code :</b></label>
+                     @*<input type="text" name="CourierCode" class="form-control" id="idCourierCode">*@
+                 <input type="text" name="TrakingURL" class="form-control" id="TrakingURL" style="display:none">
+                 <select class="form-control" id="DrpDown" style="padding:0px;" name="CourierCode">
+                     
+                 </select>
+
+                 </div>
                     <div class="form-group">
                         <label for="inputName"><b>Traking Number :</b></label>
                         <input type="text" name="TrakingNumber" class="form-control" id="idTrakingNumber">
+                       
                     </div>
                     <div class="form-group">
                         <label for="inputName"><b>Shipping Date :</b></label>
@@ -596,6 +602,32 @@ margin-left: 13px;">Case Pack Shipment Details</b>
 
     <script>
         $(document).ready(function () {
+
+             function loadBoxes() {
+            $.ajax({
+                type: 'GET',
+                url: '../ShipmentCourier/CourierDetailGet',
+                data: {},
+                success: function (res) {
+                  
+                    $("#DrpDown").html("");
+                    var content = '';
+                    $.each(res, function (index, value) {
+                        content = content + '<option value = "' + value.CourierCode + '" data-URL="'+value.TrakingURL+'" class="optionn" >' + value.CourierCode + '</option>';
+                    });
+                    $("#DrpDown").append(content);
+                   @*// $("#DrpDown").val('@Model.BoxId');*@
+                }
+            });
+            }
+            debugger;
+            $(document).on('change', '#DrpDown :selected', function ()
+            {
+                debugger;
+                var TrakingURL = $(this).find(".optionn").attr("data-URL");
+                $("#TrakingURL").val(TrakingURL);
+                console.log(TrakingURL)
+            });
             $("#dialog-box").dialog({
                 autoOpen: false,
                 modal: true,
@@ -679,6 +711,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
 
 
             $(".btnMarkedAsShipped").click(function () {
+
                 $('#myModalMarkShiped').modal('hide');
                 $.notify('Marked As Shipped successfully', { globalPosition: 'bottom right', className: 'success myclass' });
 
@@ -730,7 +763,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                 }
                 else {
                     $("#MarkedShipmentId").val($(this).attr("ShipmentId"));
-
+                    loadBoxes();
                     $('#myModalMarkShiped').modal('show');
                     $(this).find('input[type="text"]').focus();
                 }
@@ -781,7 +814,7 @@ keyboard: false
 
 });
                                 //$.notify('Please Add CasePack for This SKU', { globalPosition: 'bottom right', className: 'success myclass' });
-                               
+
                             }
 
                             //$(item).parents('tr').find('.po').append(content);
@@ -1052,7 +1085,7 @@ keyboard: false
             });
 
             $(document).on('keypress', '.boxes', function (event) {
-              
+
                 if (event.keyCode == 13) {
 
                     var selectedRow = $(this).parents('tr');
