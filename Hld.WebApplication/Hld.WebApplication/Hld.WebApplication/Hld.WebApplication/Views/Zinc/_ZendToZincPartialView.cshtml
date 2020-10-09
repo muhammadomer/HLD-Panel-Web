@@ -54,15 +54,16 @@
         width: 106px;
     }
     .inputsearchbtn {
-       
-        width: 192px;
-        margin-left: -228px;
-        border-left: none !important;
+        width: 130px;
+        margin-left: -155px;
+        padding-left: 0px!important;
         box-shadow: none !important;
         border-radius: 1px !important;
         outline: none !important;
         border-right: none !important;
-        height: 26px;
+        height: 24px;
+        border: 1px solid gainsboro;
+        background: white;
     }
 </style>
 
@@ -339,12 +340,13 @@
                             </td>
                             <td>
                                 
-                                <div class=" pl-0" style="width:230px;">
+                                <div class=" pl-0"style="width:156px;float: right;
+">
                                     @*<select class="form-control" style="width: 230px; float: left;" id="BoxesDrpDown" onchange="this.nextElementSibling.value=this.value">
                                     </select>*@
-                                    <select class="form-control selectBox"style="width:188px;float:left;">
+                                    <select class="form-control selectBox"style="width:155px;float:left;box-shadow:none">
 
-                                        <option selected="selected" disabled value="0">Edit</option>
+                                        @*<option selected="selected" disabled value="0">Edit</option>*@
                                         <option value="MarkAsReceived">Mark as Received</option>
                                         <option value="MarkAsCancel">Mark as Cancelled</option>
                                         <option value="MarkAsInProcess">Mark As In-Process</option>

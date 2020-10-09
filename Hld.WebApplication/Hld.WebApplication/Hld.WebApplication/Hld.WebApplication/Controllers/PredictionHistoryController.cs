@@ -61,6 +61,7 @@ namespace Hld.WebApplication.Controllers
             bool Approved = false;
             bool Excluded = false;
             bool Continue = false;
+            bool KitShadowStatus = false;
             if (!string.IsNullOrEmpty(viewModel.ItemType) && viewModel.ItemType != "undefined")
             {
                 string[] Val = viewModel.ItemType.Split(',');
@@ -79,7 +80,11 @@ namespace Hld.WebApplication.Controllers
                     {
                         Continue = true;
                     }
-                  
+                    if (item == "KitShadowStatus")
+                    {
+                        KitShadowStatus = true;
+                    }
+
                 }
             }
 
@@ -92,7 +97,7 @@ namespace Hld.WebApplication.Controllers
                 POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
             }
 
-            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, Approved,Excluded,Continue, viewModel.Type);
+            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, Approved,Excluded, KitShadowStatus,Continue, viewModel.Type);
             ViewBag.TotalCount = Count;
             return View(viewModel);
         }
@@ -102,6 +107,7 @@ namespace Hld.WebApplication.Controllers
             bool Approved = false;
             bool Excluded = false;
             bool Continue = false;
+            bool KitShadowStatus = false;
             if (!string.IsNullOrEmpty(ItemType) && ItemType != "undefined")
             {
                 string[] Val = ItemType.Split(',');
@@ -120,10 +126,14 @@ namespace Hld.WebApplication.Controllers
                     {
                         Continue = true;
                     }
+                    if (item == "KitShadowStatus")
+                    {
+                        KitShadowStatus = true;
+                    }
 
                 }
             }
-                string token = Request.Cookies["Token"];
+            string token = Request.Cookies["Token"];
             IPagedList<PredictionHistroyViewModel> data = null;
             int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
             int pageSize = 50;
@@ -148,7 +158,7 @@ namespace Hld.WebApplication.Controllers
             if (string.IsNullOrEmpty(Title))
                 Title = "undefined";
             List<PredictionHistroyViewModel> listmodel = new List<PredictionHistroyViewModel>();
-            listmodel = _ApiAccess.GetPredictionDetail(ApiURL, token, startlimit, offset, POMasterID, SKU, Title, Approved, Excluded, Continue, Sort, SortedType, Type);
+            listmodel = _ApiAccess.GetPredictionDetail(ApiURL, token, startlimit, offset, POMasterID, SKU, Title, Approved, Excluded, KitShadowStatus, Continue, Sort, SortedType, Type);
             data = new StaticPagedList<PredictionHistroyViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;

@@ -32,10 +32,10 @@
     <div class="container-fluid">
         <div class="row col-md-12">
             <input type="text" asp-for="ShipmentCourier_ID" name="ShipmentCourier_ID" style="display:none">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group row">
                     <label class="col-form-label-sm  controlabel">Courier Name:</label>
-                    <div class="col-sm-6 pl-0">
+                    <div class="col-sm-8 pl-0">
 
                         <input type="text" asp-for="CourierCode" class="form-control form-control-sm inputstyle" id="sku" placeholder="Courier Code">
                         <span asp-validation-for="CourierCode" class="text-danger"></span>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="form-group row">
                     <label class="col-form-label-sm  controlabel">Tracking URL:</label>
-                    <div class="col-sm-6 pl-0">
+                    <div class="col-sm-8 pl-0">
                         <input type="text" asp-for="CourierURL" class="form-control form-control-sm inputstyle" id="" placeholder="Courier URL">
                         <span asp-validation-for="CourierURL" class="text-danger"></span>
 
@@ -68,7 +68,30 @@
 
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                   
+                    <div class="col-sm-12 pl-0">
+                        <h5>Note:</h5>
+                        <span style="font-family:Arial;font-size:12px">
+                            Please replace your Tracking number In URL with below variable <span style="background-color:yellow;padding:2px">{TrackingNumber}</span>
 
+                            <br /><br />
+                            <span style="font-weight:bold">For Example :</span>
+                            <br />
+                           
+                            <span style="font-family:Arial;font-size:12px">
+
+                                https://www.fedex.com/apps/fedextrack/?tracknumbers=<span style="background-color: yellow;
+        padding: 2px
+">{TrackingNumber}</span>&language=en&cntry_code=ca
+                            </span>
+                        </span>
+
+                    </div>
+
+                </div>
+            </div>
 
 
         </div>

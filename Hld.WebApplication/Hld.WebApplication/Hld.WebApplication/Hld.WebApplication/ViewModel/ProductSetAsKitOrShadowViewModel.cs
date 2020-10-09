@@ -7,7 +7,7 @@ namespace Hld.WebApplication.ViewModel
 {
     public class ProductSetAsKitOrShadowViewModel
     {
-        public bool KitOrShadow { get; set; }
+        public int KitOrShadow { get; set; }
         public string SKU { get; set; }
 
     }

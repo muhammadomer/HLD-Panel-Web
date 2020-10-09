@@ -117,7 +117,8 @@ namespace Hld.WebApplication.Controllers
 
                 throw;
             }
-            List<ProductWarehouseQtyViewModel> listmodel = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabase(ApiURL, token, new ProductWarehouseQtyViewModel() { ProductSku = sku });
+            //List<ProductWarehouseQtyViewModel> listmodel = productWarehouseQtyApiAccess.GetProductWarehouseQtyFromDatabase(ApiURL, token, new ProductWarehouseQtyViewModel() { ProductSku = sku });
+            List<ProductWarehouseQtyViewModel> listmodel = productApiAccess.GetWareHousesQtyList(ApiURL, token, sku);
             ViewBag.ProductSku = sku;
 
             return PartialView("~/Views/Product/_PoroductWarehouseQty.cshtml", listmodel);

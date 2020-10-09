@@ -35,6 +35,9 @@ namespace Hld.WebApplication.ViewModel
         public string ShadowOf { get; set; }
         public string LocationNotes { get; set; }
         public bool PredictIncluded { get; set; }
+        public bool  KitShadowStatus { get; set; }
+        public int ProductDependency { get; set; }
+        public string ProductType { get; set; }
         public int InternalPOId { get; set; }
         public List<Vendorlist> list { get; set; }
         public List<int> InternalPOs { get; set; }
@@ -97,5 +100,6 @@ namespace Hld.WebApplication.ViewModel
         public int Type { get; set; }
         public bool Excluded { get; set; }
         public bool Continue { get; set; }
+        public bool KitShadowStatus { get; set; }
     }
 }

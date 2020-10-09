@@ -389,7 +389,8 @@
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Import PO")).Succeeded)
                                 {
                                     @*<li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PredictionHistory" asp-action="Index">Predict PO</a></li>*@
-                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " href="../PredictionHistory/Index?SKU=&Sorted=&SortedType=&Title=&Type=30&Approved=true&Excluded=true">Predict PO</a></li>
+                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " href="../PredictionHistory/Index?SKU=&Sorted=&SortedType=&Title=&Type=30&ItemType=Approved%2CExcluded">Predict PO</a></li>
+                                    @*<li class="dropdown-item nav-item" href="#"> <a class="nav-link " href="../PredictionHistory/Index?SKU=&Sorted=&SortedType=&Title=&Type=30&Approved=true&Excluded=true">Predict PO</a></li>*@
                                     <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="PurchaseOrder" asp-action="ImportPurchaseOrders">Import PO</a></li>
 
                                     <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="WarehouseAddress" asp-action="WareHouseAddressList">WH Address</a></li>

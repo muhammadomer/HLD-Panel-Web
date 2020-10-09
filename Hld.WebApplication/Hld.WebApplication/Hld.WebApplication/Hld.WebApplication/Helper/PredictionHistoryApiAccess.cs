@@ -82,10 +82,10 @@ namespace Hld.WebApplication.Helper
             return Id;
         }
 
-        public List<PredictionHistroyViewModel> GetPredictionDetail(string ApiURL, string token, int startLimit, int offset, int VendorId, string SKU, string Title, bool Approved, bool Excluded, bool Continue, string Sort, string SortedType, int Type = 0)
+        public List<PredictionHistroyViewModel> GetPredictionDetail(string ApiURL, string token, int startLimit, int offset, int VendorId, string SKU, string Title, bool Approved, bool Excluded, bool KitShadowStatus, bool Continue, string Sort, string SortedType, int Type = 0)
         {
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionHistroy?startLimit=" + startLimit + "&offset=" + offset + "&VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Excluded=" + Excluded + "&Continue=" + Continue + "&Sort=" + Sort + "&SortedType=" + SortedType + "&Type=" + Type);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionHistroy?startLimit=" + startLimit + "&offset=" + offset + "&VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Excluded=" + Excluded+ "&KitShadowStatus=" + KitShadowStatus+ "&Continue=" + Continue + "&Sort=" + Sort + "&SortedType=" + SortedType + "&Type=" + Type);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -106,12 +106,12 @@ namespace Hld.WebApplication.Helper
 
             return responses;
         }
-        public int PredictionSummaryCount(string ApiURL, string token, int VendorId, string SKU, string Title, bool Approved, bool Excluded, bool Continue, int Type = 0)
+        public int PredictionSummaryCount(string ApiURL, string token, int VendorId, string SKU, string Title, bool Approved, bool Excluded, bool KitShadowStatus, bool Continue, int Type = 0)
         {
             int Count = 0;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionSummaryCount?VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Excluded=" + Excluded + "&Continue=" + Continue + "&Type=" + Type);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionSummaryCount?VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Excluded=" + Excluded +"&KitShadowStatus=" + KitShadowStatus+"&Continue=" + Continue + "&Type=" + Type);
                 request.Method = "GET"; ;
                 request.Method = "GET";
                 request.Accept = "application/json;";

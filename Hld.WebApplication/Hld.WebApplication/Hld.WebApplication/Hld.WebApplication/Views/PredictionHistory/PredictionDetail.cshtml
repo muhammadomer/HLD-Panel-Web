@@ -606,7 +606,23 @@
                     {
                         <span>Discontinued</span>
                     }
+                    <br />
 
+
+                    @if(item.ProductDependency==1)
+                    {
+                        <span>Shadow</span>
+
+                    }
+                    else if(item.ProductDependency == 0)
+                    {
+                        <span>Kit</span>
+                    }
+                    else
+                    {
+                        <span></span>
+                    }
+                    @*@item.ProductType*@
                 </td>
 
             </tr>

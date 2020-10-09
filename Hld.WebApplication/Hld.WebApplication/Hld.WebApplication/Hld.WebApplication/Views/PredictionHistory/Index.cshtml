@@ -410,6 +410,7 @@
                         <option value="Approved">Approved Price</option>
                         <option value="Excluded">DS Excluded Products</option>
                         <option value="Continue">Discontinued Products</option>
+                        <option value="KitShadowStatus">Kit & Shadow status of Products</option>
                         
                     </select>
                     <input type="hidden" name="ItemType" id="ddlQuantity" />
@@ -477,6 +478,7 @@ margin-top: 10px;">
                     <option value="Continued">Set as Continued</option>
                     <option value="SetAsKit">Set as Kit</option>
                     <option value="SetAsShadow">Set as Shadow</option>
+                    <option value="SetAsNonKitNonShadow">Set As Non-Kit & Non-Shadow</option>
                     <option value="SetNonDSIncludedPredict">Set as Non-DS & Included in Predict</option>
                     <option value="SetDSExcludedPredict">Set as DS & Excluded from Predict</option>
 
@@ -1159,7 +1161,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     $(".table tbody tr ").each(function () {
                         if ($(this).find('.selectRow').is(':checked')) {
                             var sku = $(this).find('.SKU').val();
-                            data.push({ SKU: sku, KitOrShadow: false });
+                            data.push({ SKU: sku, KitOrShadow: 0 });
                         }
                     });
                     $(".loader").show();
@@ -1191,7 +1193,7 @@ setInterval('location.reload()', 5000);
                         if ($(this).find('.selectRow').is(':checked')) {
                             var sku = $(this).find('.SKU').val();
 
-                            data.push({ SKU: sku, KitOrShadow: true });
+                            data.push({ SKU: sku, KitOrShadow: 1 });
                         }
 
 
@@ -1217,7 +1219,42 @@ setInterval('location.reload()', 5000);
 
                     });
 setInterval('location.reload()', 5000);
-}
+                }
+
+                if (action == "SetAsNonKitNonShadow") {
+
+                    var data = [];
+                    $(".table tbody tr ").each(function () {
+                        if ($(this).find('.selectRow').is(':checked')) {
+                            var sku = $(this).find('.SKU').val();
+
+                            data.push({ SKU: sku,KitOrShadow:2});
+                        }
+
+
+                    });
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'post',
+                        url: '../product/ProductSetAsKitOrShadow',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                            $.notify('Product Set As Non-Kit & Non-Shadow successfully', { globalPosition: 'bottom right', className: 'danger myclasspo' });
+                            //$('#btnGoOrder').click()
+                            //$('#btnGoOrder').click(1000);
+
+
+
+                            //$('#btnGoOrder').delay(3500, function () {
+                            // window.location = toLoad;
+                            //});
+                            //$("#btnSearchOrder").click();
+                        }
+
+                    });
+                    setInterval('location.reload()', 5000);
+                }
             });
 
             $(document).on('click', '.SelectPO', function () {
@@ -1460,6 +1497,7 @@ setInterval('location.reload()', 5000);
             var Type = getUrlParameter('Type');
             var Excluded = getUrlParameter('Excluded');
             var Continue = getUrlParameter('Continue');
+            var KitShadowStatus = getUrlParameter('KitShadowStatus');
 
 
 
@@ -1474,7 +1512,7 @@ setInterval('location.reload()', 5000);
                       debugger;
                       pageNo = page;
                       // add code which gets executed when user selects a page
-                      var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type + '&Excluded=' + Excluded + '&Continue=' + Continue + '&ItemType=' + item;
+                      var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type + '&Excluded=' + Excluded + '&Continue=' + Continue + '&ItemType=' + item + '&KitShadowStatus=' + KitShadowStatus;
                       var completURL = url  ;
                       $(".loadertbl").show();
                       $(".loader").show();
