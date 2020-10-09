@@ -991,6 +991,25 @@ namespace Hld.WebApplication.Controllers
 
 
         }
+       
+        [HttpPost]
+        public IActionResult GetProductOfferDataFromZincAndUpdateDatabase(string orderid, string ProductSKU, string bbZincID)
+        {
+            try
+            {
+                token = Request.Cookies["Token"];
+                bool status = false;
+                ZincProductSaveViewModel zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
+                zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
+                status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+                return Json(new { success = true });
+            }
+            catch (Exception)
+            {
 
+
+            }
+            return Json(new { success = false });
+        }
     }
 }
