@@ -437,10 +437,10 @@ namespace Hld.WebApplication.Helper
         }
 
 
-        public List<PurchaseOrderItemsViewModel> GetPOProductsList(string apiurl, string token, string StartDate, string EndDate, int VendorId, int Limit, int OffSet, int POID = 0, string SKU = "", string title = "", string OpenItem = "", string ReceivedItem = "", string OrderdItem = "", string NotShipped = "")
+        public List<PurchaseOrderItemsViewModel> GetPOProductsList(string apiurl, string token, string StartDate, string EndDate, int VendorId, int Limit, int OffSet, int POID = 0, string SKU = "", string title = "", string OpenItem = "", string ReceivedItem = "", string OrderdItem = "", string NotShipped = "",string ShippedButNotReceived="")
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest
-                .Create(apiurl + "/api/PurchaseOrder/GetPOProductDetails?VendorId=" + VendorId + "&limit=" + Limit + "&offSet=" + OffSet + "&POID=" + POID + "&sku=" + SKU + "&title=" + title + "&OpenItem=" + OpenItem + "&ReceivedItem=" + ReceivedItem + "&OrderItem=" + OrderdItem + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate + "&NotShipped=" + NotShipped);
+                .Create(apiurl + "/api/PurchaseOrder/GetPOProductDetails?VendorId=" + VendorId + "&limit=" + Limit + "&offSet=" + OffSet + "&POID=" + POID + "&sku=" + SKU + "&title=" + title + "&OpenItem=" + OpenItem + "&ReceivedItem=" + ReceivedItem + "&OrderItem=" + OrderdItem + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate + "&NotShipped=" + NotShipped + "&ShippedButNotReceived=" + ShippedButNotReceived);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -464,12 +464,12 @@ namespace Hld.WebApplication.Helper
             return responses;
         }
 
-        public GetSummaryandCountPOViewModel GetCounter(string ApiURL, string token, string StartDate, string EndDate, int VendorId, int POID = 0, string SKU = "", string title = "", string OpenItem = "", string ReceivedItem = "", string OrderdItem = "", string NotShipped = "")
+        public GetSummaryandCountPOViewModel GetCounter(string ApiURL, string token, string StartDate, string EndDate, int VendorId, int POID = 0, string SKU = "", string title = "", string OpenItem = "", string ReceivedItem = "", string OrderdItem = "", string NotShipped = "", string ShippedButNotReceived = "")
         {
             GetSummaryandCountPOViewModel responses = new GetSummaryandCountPOViewModel();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PurchaseOrder/GetCount?VendorId=" + VendorId + "&POID=" + POID + "&SKU=" + SKU + "&title=" + title + "&OpenItem=" + OpenItem + "&ReceivedItem=" + ReceivedItem + "&OrderItem=" + OrderdItem + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate + "&NotShipped=" + NotShipped);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PurchaseOrder/GetCount?VendorId=" + VendorId + "&POID=" + POID + "&SKU=" + SKU + "&title=" + title + "&OpenItem=" + OpenItem + "&ReceivedItem=" + ReceivedItem + "&OrderItem=" + OrderdItem + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate + "&NotShipped=" + NotShipped + "&ShippedButNotReceived=" + ShippedButNotReceived);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";

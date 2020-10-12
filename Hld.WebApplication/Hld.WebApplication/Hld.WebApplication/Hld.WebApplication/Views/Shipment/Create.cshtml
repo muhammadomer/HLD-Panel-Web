@@ -184,12 +184,12 @@
     .myselectwidth {
 width: 230px!important;
 }
-    .ui-widget-content {
+/*    .ui-widget-content {
         border: 1px solid #ddd;
         background: #fff;
         color: #333;
         width: 26%!important;
-    }
+    }*/
 </style>
 
 <div class="container-fluid" style="margin-left:15px">
@@ -231,7 +231,7 @@ width: 230px!important;
                             <div class="form-group">
                                 <label for="inputName"><b>Shipping Date :</b></label>
                                 @*<input type="date" name="CreatedAt" class="form-control" id="idCreatedAt">*@
-                                <input type="text" name="CreatedAt" class="form-control" id="idCreatedAt">
+                                <input type="text" name="CreatedAt" class="form-control"  id="idCreatedAt"/>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -484,6 +484,10 @@ margin-top: 9px;">
     <script>
         var selectedDateFrom = "";
         var selectedDatTo = "";
+        function datechange() {
+            $("#idCreatedAt").attr("type", "date");
+        }
+      
         $(".EditTrackingDetail").select2();
         $(document).ready(function () {
 
@@ -545,6 +549,13 @@ margin-top: 9px;">
 
             //});
             debugger;
+            //function getDate() {
+            //    var today = createdate();
+
+            //    document.getElementById("idCreatedAt").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+
+
+            //}
             $(document).on('click', '.BtnGoOrder', function () {
                 var action = $('#ActionMenu').val();
                 debugger;
@@ -583,7 +594,9 @@ margin-top: 9px;">
 
                                 var createdate = $.datepicker.formatDate('m-dd-yy', new Date(res.CreatedAt));
                                 $("#idCreatedAt").val(createdate);
+                                getDate();
                                 $('#EditTrackingNumber').modal('show');
+                                
                             },
                             Error: function (err) {
                                 //$.notify('some error occured!', { className: 'error mydelte' });
@@ -853,7 +866,7 @@ margin-top: 9px;">
                     },
                     "Cancel": function () {
                         $(this).dialog("close");
-                        $.notify('Cancel Successfully ', { globalPosition: 'bottom right', className: 'warning mydelte' });
+                       
                     }
 
                 });
@@ -907,10 +920,12 @@ margin-top: 9px;">
             $("#idShipmentName").val($(this).attr("shipmentname"));
 
             $('#myModalEdit').modal('show');
+          
             $(this).find('input[type="text"]').focus();
         });
         function showModal() {
             $('#myModal').modal('show');
+            
             $(this).find('input[type="text"]').focus();
         }
 

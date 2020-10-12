@@ -404,7 +404,7 @@ namespace Hld.WebApplication.Controllers
             string ReceivedItem = "";
             string OrderdItem = "";
             string NotShipped = "";
-
+            string ShippedButNotReceived = "";
             string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
             string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
 
@@ -436,6 +436,10 @@ namespace Hld.WebApplication.Controllers
                     if (item == "NotShipped")
                     {
                         NotShipped = "HasValue";
+                    }
+                    if (item == "ShippedButNotReceived")
+                    {
+                        ShippedButNotReceived = "HasValue";
                     }
                 }
             }
@@ -464,7 +468,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             // var list = _ApiAccess.GetPOProductsList(ApiURL, token, ID, 10, 0, POID, SKU, title, OpenItem, ReceivedItem, OrderdItem);
-            GetSummaryandCountPOViewModel getSummaryand = _ApiAccess.GetCounter(ApiURL, token, CurrentDate, PreviousDate, POMasterID, POID, SKU, title, OpenItem, ReceivedItem, OrderdItem, NotShipped);
+            GetSummaryandCountPOViewModel getSummaryand = _ApiAccess.GetCounter(ApiURL, token, CurrentDate, PreviousDate, POMasterID, POID, SKU, title, OpenItem, ReceivedItem, OrderdItem, NotShipped, ShippedButNotReceived);
 
             ViewBag.TotalCount = getSummaryand.count;
             TempData["recQty"] = getSummaryand.recQty;
@@ -486,6 +490,7 @@ namespace Hld.WebApplication.Controllers
             string ReceivedItem = "";
             string OrderdItem = "";
             string NotShipped = "";
+            string ShippedButNotReceived = "";
             string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
             string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
 
@@ -521,6 +526,10 @@ namespace Hld.WebApplication.Controllers
                     if (item == "NotShipped")
                     {
                         NotShipped = "HasValue";
+                    }
+                    if (item == "ShippedButNotReceived")
+                    {
+                        ShippedButNotReceived = "HasValue";
                     }
                 }
             }
@@ -562,12 +571,10 @@ namespace Hld.WebApplication.Controllers
             ViewBag.count = Convert.ToInt32(TempData["count"]);
             ViewBag.shiQty = Convert.ToInt32(TempData["shiQty"]);
             ViewBag.shipedamount = Convert.ToDecimal(TempData["shipedamount"]);
-            _viewModel = _ApiAccess.GetPOProductsList(ApiURL, token, CurrentDate, PreviousDate, POMasterID, startlimit, endLimit, POID, SKU, title, OpenItem, ReceivedItem, OrderdItem, NotShipped);
+            _viewModel = _ApiAccess.GetPOProductsList(ApiURL, token, CurrentDate, PreviousDate, POMasterID, startlimit, endLimit, POID, SKU, title, OpenItem, ReceivedItem, OrderdItem, NotShipped, ShippedButNotReceived);
             data = new StaticPagedList<PurchaseOrderItemsViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
             return PartialView("~/Views/PurchaseOrder/_POProductsPartialView.cshtml", data);
         }
-
-
         public IActionResult UpdatepurchaseOrder(int POID)
         {
             PurchaseOrderViewModel.PurchaseOrderData purchaseOrderData = new PurchaseOrderViewModel.PurchaseOrderData();

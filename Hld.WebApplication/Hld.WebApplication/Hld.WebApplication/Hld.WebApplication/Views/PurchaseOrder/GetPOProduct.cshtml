@@ -193,12 +193,13 @@
                             <div class=" col-md-3 p-0 mr-1">
                                 <input type="text" id="title" name="title" placeholder="Title" value="@Model.ProductTitle" class="form-control" style="box-shadow:none" />
                             </div>
-                            <div class=" col-md-1 p-0 mr-1">
+                            <div class=" col-md-2 p-0 mr-1">
                                 <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 QuantityStatus" multiple="multiple" style="box-shadow:none">
                                     <option value="OpenItem">Open Item</option>
                                     <option value="ReceivedItem">Received Item</option>
                                     <option value="OrderdItem">Ordered Item</option>
                                     <option value="NotShipped">Not Shipped</option>
+                                    <option value="ShippedButNotReceived">Shipped But Not Received</option>
                                 </select>
                                 <input type="hidden" name="ItemType" id="ddlQuantity" />
                             </div>
@@ -210,7 +211,7 @@
                                 <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
                                 <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
                             </div>
-                            <div class="col-md-1">
+                            <div class="ml-3">
                                 <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
                             </div>
                         </div>
