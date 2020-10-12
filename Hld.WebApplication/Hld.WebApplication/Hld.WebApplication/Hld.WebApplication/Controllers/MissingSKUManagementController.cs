@@ -373,5 +373,36 @@ namespace Hld.WebApplication.Controllers
             model.ProductSKU = productInfo.ID;
             return model;
         }
+        public async Task<IActionResult> UpdateBulkFieldAsync( )
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateBulkFieldAsync(IFormFile _file)
+        {
+            token = Request.Cookies["Token"];
+            _Selller = new GetChannelCredViewModel();
+            _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+            authHeader = new AuthHeader();
+            authHeader.ValidateDeviceID = false;
+            authHeader.UserName = _Selller.UserName;
+            authHeader.Password = _Selller.Key;
+            string content = "";
+            if (_file.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    _file.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    content = Convert.ToBase64String(fileBytes);
+                    // act on the Base64 data
+                }
+            }
+            ServiceReference1.SCServiceSoapClient sCServiceSoap =
+                      new ServiceReference1.SCServiceSoapClient(ServiceReference1.SCServiceSoapClient.EndpointConfiguration.SCServiceSoap12);
+            var request = await sCServiceSoap.BulkUpdateFieldsAsync(authHeader,null ,content, false);
+            
+            return Ok();
+        }
     }
 }
