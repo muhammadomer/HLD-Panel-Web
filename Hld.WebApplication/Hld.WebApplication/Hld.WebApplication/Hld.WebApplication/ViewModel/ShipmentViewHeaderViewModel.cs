@@ -24,6 +24,7 @@ namespace Hld.WebApplication.ViewModel
         public decimal ShipedAmountCNY { get; set; }
         public decimal ReceivedAmountCNY { get; set; }
         public string TrakingNumber { get; set; }
+        public string TrakingURL { get; set; }
         public string CourierCode { get; set; }
         public int TotalShipedQty { get; set; }
         public int TotalReceivedQty { get; set; }

@@ -324,7 +324,7 @@ namespace Hld.WebApplication.Controllers
                 return PartialView("~/Views/Product/_Index.cshtml", viewModels);
             }
         }
-
+       
         [HttpPost]
         public async Task<JsonResult> Index(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag)
         {
@@ -407,12 +407,10 @@ namespace Hld.WebApplication.Controllers
             string _message = "";
             bool _status = false;
             token = Request.Cookies["Token"];
-
-
             return RedirectToAction("ProductAddUpdate");
-
         }
 
+      
         [Authorize(Policy = "Access to Add or Edit Product")]
         [HttpGet]
         public IActionResult ProductAddUpdate(string ProductSKU)
@@ -442,7 +440,35 @@ namespace Hld.WebApplication.Controllers
 
             return View(model);
         }
+        [Authorize(Policy = "Access to Add or Edit Product")]
+        [HttpGet]
+        public IActionResult productAddMultipleSku(string ProductSKU)
+        {
+            token = Request.Cookies["Token"];
+            double currencyRate = currencyExchangeApiAccess.GetLatestCurrencyRate(ApiURL, token);
+            ProductInsetUpdateViewModel model = ProductPageIndexMethod();
+            if (!string.IsNullOrEmpty(ProductSKU))
+            {
 
+                int productID = 0;
+                productID = ProductApiAccess.GetProductIDBySKU(ApiURL, token, ProductSKU);
+
+
+                if (ProductSKU.Length > 0)
+                {
+                    ProductInsetUpdateViewModel viewModelUpdate = ProductApiAccess.GetProductDetail_ProductID(ApiURL, token, ProductSKU);
+
+                    viewModelUpdate.Condition = model.Condition;
+                    viewModelUpdate.CADPrice = Convert.ToDouble(viewModelUpdate.AvgCost) * currencyRate;
+                    viewModelUpdate.CurrencyRate = currencyRate;
+                    TempData["ProductId"] = productID;
+                    return View(viewModelUpdate);
+                }
+            }
+            model.CurrencyRate = currencyRate;
+
+            return View(model);
+        }
         [HttpPost]
         public async Task<IActionResult> ProductAddUpdate(ProductInsetUpdateViewModel model, string action)
         {
@@ -505,6 +531,71 @@ namespace Hld.WebApplication.Controllers
 
             return View(viewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> productAddMultipleSku(ProductInsetUpdateViewModel model, string action)
+        {
+
+            token = Request.Cookies["Token"];
+            if (action == "Delete")
+            {
+
+                bool _status = false;
+                DeleteProductViewModel deleteViewModel = new DeleteProductViewModel();
+                deleteViewModel.PorductSku = model.ProductSKU;
+                deleteViewModel.status = 0;
+                _status = ProductApiAccess.DeleteProduct(ApiURL, token, deleteViewModel);
+                if (_status == false)
+                {
+                    TempData["DeleteProductMessage"] = "Deleted successfully";
+                }
+                else
+                {
+                    TempData["DeleteProductMessage"] = "Can't be deleted,because it exists in SellerCloud Orders";
+                }
+                return RedirectToAction("productAddMultipleSku");
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    if (model.ProductId > 0)
+                    {
+                        int ProductId = 0;
+                        ProductId = ProductApiAccess.UpdateProduct(ApiURL, token, model);
+                        if (ProductId > 0)
+                        {
+
+                            TempData["SaveProductMessage"] = "update";
+                            return RedirectToAction("productAddMultipleSku");
+                        }
+                    }
+                    else
+                    {
+                        model.ProductSKU = model.ProductSKU.ToUpper();
+                        int ProductId = ProductApiAccess.AddProduct(ApiURL, token, model);
+                        if (ProductId > 0)
+                        {
+                            await SaveImages(model.UploadImages, model.ProductSKU);
+                            TempData["SaveProductMessage"] = "Save";
+                            return RedirectToAction("productAddMultipleSku");
+                        }
+                        else
+                        {
+                            return RedirectToAction("productAddMultipleSku");
+                        }
+                    }
+                }
+            }
+
+            //repopulate form if error is occured
+
+            ProductInsetUpdateViewModel viewModel = ProductPageIndexMethod();
+
+            return View(viewModel);
+        }
+
+
 
         [HttpPost]
         public JsonResult GetAllCategoriesForAutoComplete(string Prefix)

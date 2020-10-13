@@ -390,7 +390,18 @@
                     <label class="control-label colorhead mb-0"><b>TrakingNumber :</b></label>
                     <label class="control-label mb-0" id="">
                     </label>
-                    <a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@Model.Item.TrakingNumber'&brand='@Model.Item.CourierCode'" target="_blank"> @*@Model.Item.CourierCode*@ @Model.Item.TrakingNumber</a>
+                    @if (string.IsNullOrEmpty(@Model.Item.TrakingURL))
+                    {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@Model.Item.TrakingNumber'&brand='@Model.Item.CourierCode'" target="_blank"> @Model.Item.CourierCode  @Model.Item.TrakingNumber</a> }
+
+                else
+                {<a style="cursor:pointer" href="@Model.Item.TrakingURL.Replace("{TrackingNumber}", @Model.Item.TrakingNumber)" target="_blank"> @Model.Item.CourierCode @Model.Item.TrakingNumber</a>}
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    {
+
+                        @*<span class="getshipmentId" data-shipmentId="@item.ShipmentId">Edit</span>*@
+                    }
+
+                    <!--<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@Model.Item.TrakingNumber'&brand='@Model.Item.CourierCode'" target="_blank">--> @*@Model.Item.CourierCode*@ <!--@Model.Item.TrakingNumber</a>-->
                     <div class="" style="">
                     </div>
                 </div>
@@ -504,6 +515,7 @@
                 //title: 'Are u want to delete this reocord!',
                 modal: true,
             });
+
             //$(".table").tablesorter();
             $(document).on('click', '.viewbtn', function () {
                 debugger;

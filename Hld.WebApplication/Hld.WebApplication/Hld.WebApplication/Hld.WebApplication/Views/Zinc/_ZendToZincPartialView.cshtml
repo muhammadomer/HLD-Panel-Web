@@ -39,14 +39,12 @@
             border-bottom: 2px solid #dee2e6;
         }
     .selectBox {
-        height: 24px;
        
         color: green;
-       font-size:12px;
+        font-size: 12px;
         border-radius: 2px;
         font-family: Arial;
-        cursor:pointer!important;
-        /*position:relative;*/
+        cursor: pointer !important;
     }
     .btnclickclass {
         position: absolute;
@@ -61,10 +59,17 @@
         border-radius: 1px !important;
         outline: none !important;
         border-right: none !important;
-        height: 24px;
+       
         border: 1px solid gainsboro;
         background: white;
+        cursor:pointer!important;
     }
+
+   option{
+       color:red;
+       height:30px!important;
+   }
+   
 </style>
 
 <div class="container-fluid">
@@ -340,16 +345,15 @@
                             </td>
                             <td>
                                 
-                                <div class=" pl-0"style="width:156px;float: right;
+                                <div class="pl-0"style="width:156px;float: right;
 ">
-                                    @*<select class="form-control" style="width: 230px; float: left;" id="BoxesDrpDown" onchange="this.nextElementSibling.value=this.value">
-                                    </select>*@
+                                    
                                     <select class="form-control selectBox"style="width:155px;float:left;box-shadow:none">
 
-                                        @*<option selected="selected" disabled value="0">Edit</option>*@
                                         <option value="MarkAsReceived">Mark as Received</option>
+                                      
                                         <option value="MarkAsCancel">Mark as Cancelled</option>
-                                        <option value="MarkAsInProcess">Mark As In-Process</option>
+                                        <option value="MarkAsInProcess">Mark as In-Process</option>
 
                                     </select>
                                     <button type="button" class="btn inputsearchbtn">Mark as Received</button>
