@@ -82,6 +82,7 @@ namespace Hld.WebApplication.Controllers
             token = Request.Cookies["Token"];
             data.VendorId = POMasterID;
             int Id = 0;
+            
             if (data.idShipmentProducts == 0)
             {
                 Id = _ApiAccess.Create(ApiURL, token, data);
@@ -89,6 +90,7 @@ namespace Hld.WebApplication.Controllers
             else
             {
                 Id = _ApiAccess.Update(ApiURL, token, data);
+                
             }
             return Id;
         }

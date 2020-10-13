@@ -229,6 +229,7 @@ namespace Hld.WebApplication.Controllers
                 List<SellerCloudOrder_CustomerViewModel> _mainOrderDetailCustomerList = new List<SellerCloudOrder_CustomerViewModel>();
 
                 var ordersDetail = await sCServiceSoap.Orders_GetDatasAsync(authHeader, null, missingOrderList.ToArray());
+             
 
 
                 List<ImagesClass> imagesList = new List<ImagesClass>();

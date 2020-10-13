@@ -41,14 +41,15 @@ namespace Hld.WebApplication.Helper
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             return Id;
         }
 
         public int Update(string ApiURL, string token, ShipmentCasePackProductViewModel ViewModel)
         {
-            int Id = 0;
+            int Id =0;
+            
             try
             {
                 var data = JsonConvert.SerializeObject(ViewModel);
@@ -74,7 +75,7 @@ namespace Hld.WebApplication.Helper
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             return Id;
         }
