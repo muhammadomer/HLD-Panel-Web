@@ -164,8 +164,16 @@
                         {
                             <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.SKU" target="_blank">@item.SKU</a>
                         }
+                        else if ((await AuthorizationService.AuthorizeAsync(User, "Access to Receive Shipment")).Succeeded)
+                        {
+
+                    <a style="cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.SKU" target="_blank">
+                        @item.SKU
+                    </a>
+
+                        }
                         else
-                        {@item.SKU}
+                        { @item.SKU}
                     </td>
                     <td>@item.Title</td>
                     <td class="">
@@ -183,7 +191,18 @@
                         }
                     </td>
                     <td>
-                        <a style="cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@item.POId" target="_blank">@item.POId</a>
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                        {
+                            <a style="cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@item.POId" target="_blank">@item.POId</a>
+                        }
+                        else if ((await AuthorizationService.AuthorizeAsync(User, "Access to Receive Shipment")).Succeeded)
+                        {
+                            @item.POId
+
+                        }
+                        else
+                        { <a style="cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@item.POId" target="_blank">@item.POId</a>}
+
                     </td>
 
                     <td width="80px">
