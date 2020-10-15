@@ -28,6 +28,15 @@
     .error {
         outline: 1px solid red;
     }
+    .mydlete {
+        position: fixed;
+        top: 25%;
+        left: 70%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 60px;
+    }
 
     .form-group {
         margin-bottom: 0px !important;
@@ -53,64 +62,67 @@
 <div class="container-fluid">
     <div class="row col-md-12">
         <div class="col-md-4">
-
-            <div class="form-group row">
-                <label class="col-form-label-sm  controlabel">Vendor Alias:</label>
-                <div class="col-sm-7 pl-0">
-                    @*<input id="VendorSearch" type="search" class="form-control" />*@
-
-                    <select class="js-example-basic-single form-control Aprrovedprice" name="VendorId" id="VendorSearch">
-
-                        <option value="">Vendor</option>
-
-
-                    </select>
-                </div>
-                @*@Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })*@
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label-sm  controlabel">Currency:</label>
-                <div class="col-sm-7 pl-0">
-                    @*<input id="CurrencySearch" type="search" class="form-control" />*@
-                    <select class="js-example-basic-single form-control CurrencySearch" id="CurrencySearch"style="box-shadow:none">
-
-                        <option value="CNY">CNY</option>
-                        <option value="USD">USD</option>
-
-
-                    </select>
-
-                </div>
-
-            </div>
-            <div class="form-group row">
-                <label class="col-form-label-sm  controlabel">Date:</label>
-                <div class="col-sm-7 pl-0">
-                    <input type="date" id="datetxt" class="form-control" />
-                    <span class="text-danger"></span>
-                </div>
-            </div>
-            @*<div class="form-group row">
-                    <label class="col-form-label-sm  controlabel">Approved Price:</label>
+           
+                <div class="form-group row">
+                    
+                    <label class="col-form-label-sm  controlabel">Vendor Alias:</label>
                     <div class="col-sm-7 pl-0">
-                        <input class="form-control ApprovedPrice" />
+                        @*<input id="VendorSearch" type="search" class="form-control" />*@
+
+                        <select class="js-example-basic-single form-control Aprrovedprice" name="VendorId" id="VendorSearch">
+
+                            @*<option value="">Vendor</option>*@
+
+
+                        </select>
+                        <span asp-validation-for="VendorAlias" class="text-danger"></span>
+                    </div>
+                    @*@Html.HiddenFor(e => Model.VendorId, htmlAttributes: new { @id = "ColorIdForMessage" })*@
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label-sm  controlabel">Currency:</label>
+                    <div class="col-sm-7 pl-0">
+                        @*<input id="CurrencySearch" type="search" class="form-control" />*@
+                        <select class="js-example-basic-single form-control CurrencySearch" id="CurrencySearch" style="box-shadow:none">
+
+                            <option value="CNY">CNY</option>
+                            <option value="USD">USD</option>
+
+
+                        </select>
 
                     </div>
-                </div>*@
-            <div class="form-group row">
-                <label class="col-form-label-sm  controlabel">SKU:</label>
-                <div class="col-sm-7 pl-0">
-                    @*<input id="productskuSearch" type="search" class="form-control" />*@
-                    <textarea id="productskuSearchsku" cols="30" rows="10" style="width:100%"></textarea>
-                    <span class="text-danger"></span>
-                    <span style="color:red;padding-left:0px;" id="sku-empty-message-Color"></span>
+
                 </div>
+                <div class="form-group row">
+                    <label class="col-form-label-sm  controlabel">Date:</label>
+                    <div class="col-sm-7 pl-0">
+                        <input type="date" id="datetxt" class="form-control" />
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                @*<div class="form-group row">
+                <label class="col-form-label-sm  controlabel">Approved Price:</label>
+                <div class="col-sm-7 pl-0">
+                    <input class="form-control ApprovedPrice" />
 
-            </div>
-            <div class="form-group" style="">
-                <input type="submit" value="Add Value" class="btn btn-primary offset-2 btnsave" />
+                </div>
+            </div>*@
+                <div class="form-group row">
+                    <label class="col-form-label-sm  controlabel">SKU:</label>
+                    <div class="col-sm-7 pl-0">
+                        @*<input id="productskuSearch" type="search" class="form-control" />*@
+                        <textarea id="productskuSearchsku" cols="30" rows="10" style="width:100%"></textarea>
+                        <span class="text-danger"></span>
+                        <span asp-validation-for="SKU" class="text-danger"></span>
+                        <span style="color:red;padding-left:0px;" id="sku-empty-message-Color"></span>
+                    </div>
 
-            </div>
+                </div>
+                <div class="form-group" style="">
+                    <input type="submit" value="Add Value" class="btn btn-primary offset-2 btnsave" />
+                </div>
+                
         </div>
 
         <div class="col-md-8">
@@ -128,7 +140,7 @@
         </div>
 
     </div>
-    <div class="container-fluid p-0" style="">
+    <!--<div class="container-fluid p-0" style="">
 
         <form asp-action="AddNotesInApprovedPrice" style="margin-top: 70px;">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -142,14 +154,14 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row">-->
                 @*<div class="col-md-2">
                     <div class="form-group">
 
 
                     </div>
                     </div>*@
-                <div class="col-md-12">
+                <!--<div class="col-md-12">
                     <div class="form-group">
 
                         <input type="submit" name="" value="Save" class="btn btn-block" style="color:white;box-shadow: none;background-color:darkgrey!important;
@@ -162,7 +174,7 @@ outline: none;border: none;" />
         </form>
 
 
-    </div>
+    </div>-->
 </div>
 <div class="hidedialogbox ">
     <div id="dialog-box">
@@ -264,26 +276,42 @@ outline: none;border: none;" />
                     if (data) {
                         //lines.push(data);
                         var sku = data.split(" ")[0];
-                        var aproveprice = data.split(" ")[1];
+                       
+                            var aproveprice = data.split(" ")[1];
                         $.ajax({
                             url: "/Product/GetProductDetailsForAPBySku",
                             type: "POST",
                             dataType: "json",
                             data: { Prefix: sku },
                             success: function (data, ui) {
-
-
                                 $(".btnsubmit").show();
                                 //$("#productskuSearch").val('');
                                 //$(".ApprovedPrice").val('');
-
                                 $(".table tbody").append("<tr><td>" + '<a target="_blank" href="' + val + '/' + data.image_name + '"><img src="' + val + '/' + data.image_name + '" class="rounded" height="50" width="50" /></a>' + "</td><td class='skucol'>" + sku + "</td><td>" + data.Title + "</td><td class='aprovepricecol'>" + aproveprice + "</td><td><a style='cursor: pointer' id='DeleteButton' data-ID=''><img src='/Images/trash-can-1.1s-128px.png' height='25'/></a></td></tr>")
 
 
                             }
-                        })
+                        });
+                        
+                      
+                        //var aproveprice = data.split(" ")[1];
+                        //$.ajax({
+                        //    url: "/Product/GetProductDetailsForAPBySku",
+                        //    type: "POST",
+                        //    dataType: "json",
+                        //    data: { Prefix: sku },
+                        //    success: function (data, ui) {
+                        //        $(".btnsubmit").show();
+                        //        //$("#productskuSearch").val('');
+                        //        //$(".ApprovedPrice").val('');
+                        //        $(".table tbody").append("<tr><td>" + '<a target="_blank" href="' + val + '/' + data.image_name + '"><img src="' + val + '/' + data.image_name + '" class="rounded" height="50" width="50" /></a>' + "</td><td class='skucol'>" + sku + "</td><td>" + data.Title + "</td><td class='aprovepricecol'>" + aproveprice + "</td><td><a style='cursor: pointer' id='DeleteButton' data-ID=''><img src='/Images/trash-can-1.1s-128px.png' height='25'/></a></td></tr>")
+
+
+                        //    }
+                        //})
                     } else {
-                        lines.push("");
+                        $.notify('Please select vendor and Sku!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                        //lines.push("");
                     }
                 });
 

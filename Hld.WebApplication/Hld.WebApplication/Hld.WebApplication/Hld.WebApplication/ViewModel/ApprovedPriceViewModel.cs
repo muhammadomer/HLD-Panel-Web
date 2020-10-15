@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,11 @@ namespace Hld.WebApplication.ViewModels
     public class ApprovedPriceViewModel
     {
         public int idApprovedPrice { get; set; }
+        [Required(ErrorMessage = "Sku is required")]
         public string SKU { get; set; }
         public string ProductTitle { get; set; }
         public int VendorId { get; set; }
+        [Required(ErrorMessage = "Please select vendor")]
         public string VendorAlias { get; set; }
         public decimal ApprovedUnitPrice { get; set; }
         public decimal CAD { get; set; }
