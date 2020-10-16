@@ -273,10 +273,10 @@ width: 230px!important;
                                 </div>
                             </div>
                         </div>
-                        @*<div class="form-group">
-                                                        <label for="inputComment">Notes:</label>
+                        <div class="form-group">
+                            <label for="inputComment">Notes:</label>
                             <textarea class="form-control myInput" value="@Model.Notes" name="Notes" maxlength="50" id="IdmyInput" rows="4"></textarea><span class="notescounter"></span>
-                                                    </div>*@
+                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -305,8 +305,8 @@ width: 230px!important;
                             </div>
                             <div class="form-group">
                                 <input type="number" style="display:none" value="@Model.ShipmentAutoID" name="ShipmentAutoID" id="Idforedit" />
-                                @*<label for="inputComment"><b>Notes:</b></label>*@
-                                @*<textarea class="form-control myInput" maxlength="50" value="@Model.Notes" name="Notes" id="IdNotesEdit" rows="4"></textarea><span class="notescounter"></span>*@
+                                <label for="inputComment"><b>Notes:</b></label>
+                                <textarea class="form-control myInput" maxlength="50" value="@Model.Notes" name="Notes" id="IdNotesEdit" rows="4"></textarea><span class="notescounter"></span>
                             </div>
 
                         </div>
@@ -794,12 +794,16 @@ margin-top: 9px;">
             //    //$.notify('Createed successfully', { globalPosition: 'bottom right', className: 'success myclass' });
 
             //});
-
+            
             $(".btnvalidation").click(function () {
-
+                debugger
                 var shipmentname = $('#inputName2').val();
+                //var notesname = $('#IdmyInput').val();
+                var notesname = $.trim($("#IdmyInput").val());
+                console.log(notesname);
                 var viewModel = {
                     ShipmentName: shipmentname,
+                    Notes: notesname,
                     Type: $('input[type=radio][name=Type]:checked').val(),
                 };
                 console.log(viewModel);

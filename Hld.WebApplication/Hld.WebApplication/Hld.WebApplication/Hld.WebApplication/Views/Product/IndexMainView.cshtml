@@ -598,7 +598,7 @@ $('.successmessage').hide();
 
 
             $(document).on('click', '#btnEnableDisableSKU', function () {
-
+                
                 var SKUArraryForSinglePage = [];
                 if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
                     var status = $('#checkAllPages').is(':checked');
@@ -639,6 +639,33 @@ $('.successmessage').hide();
                                 }
 
                             });
+                        }
+                    }
+                    else {
+                         $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                            var status = $(this).is(':checked');
+                            if (status) {
+                                var productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+                                SKUArraryForSinglePage.push(productSKU)
+                            }
+                        });
+                        if (typeof SKUArraryForSinglePage !== 'undefined' && SKUArraryForSinglePage.length > 0) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("ShowBulkSKUStatusFor_DropshipEnableDisable_Inventory", "Product")',
+                                data: { skuList: SKUArraryForSinglePage },
+                                dataType: 'html',
+                                traditional: true,
+                                success: function (data) {
+                                    $('#modelBody').empty();
+                                    $('#modelBody').html(data);
+                                    $('#myModal').modal('show');
+                                }
+
+                            });
+                        }
+                        else {
+                              $.notify('Product not selected', { globalPosition: 'bottom right', className: 'warning myclass' });
                         }
                     }
 
