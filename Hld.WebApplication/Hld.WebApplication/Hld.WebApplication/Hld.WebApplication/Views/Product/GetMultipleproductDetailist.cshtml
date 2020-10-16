@@ -1,345 +1,143 @@
-﻿@model Hld.WebApplication.ViewModel.SaveParentSkuVM
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.SaveParentSkuVM>
 
 @{
-    ViewData["Title"] = "productAddMultipleSku";
-    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+    ViewData["Title"] = "GetMultipleproductDetailist";
 }
-
-<style type="text/css">
-    .form-control {
+<style>
+    .table-bordered thead th, .table-bordered thead td {
         padding: 0px;
+        border-bottom-width: 2px;
     }
 
-    input[type="file"] {
-        display: block;
-    }
-
-    .imageThumb {
-        height: 75px;
-        width: 75px;
-        padding: 1px;
-        cursor: pointer;
-    }
-
-    .pip {
-        display: inline-block;
-        margin: 10px 10px 0 0;
-    }
-
-    .remove {
-        width: 75px;
-        display: block;
-        background: #444;
-        border: 1px solid black;
-        color: white;
+    .table thead th {
+        vertical-align: middle !important;
         text-align: center;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .table th, .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+        vertical-align: middle !important;
+    }
+
+    .table td {
+        text-align: center;
+    }
+
+    .table tbody tr:hover td {
+        background: #f1f1f1;
         cursor: pointer;
     }
 
-        .remove:hover {
-            background: white;
-            color: black;
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+
+    .colorhead {
+        color: #548b8d;
+    }
+
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
         }
 
-    .requiredCustomClass {
-        color: red;
-    }
-
-    .col-sm-3, .col-sm-8 {
-        padding-right: 3px;
-    }.form-control{
-         box-shadow:none!important;
-     }
-    .btn {
-        vertical-align: initial!important;
-    }
-    .warning {
-        border: 1px solid red;
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
     }
 </style>
-<div class="row">
-    <div class="col-sm-3">
-        <span style="font-size:17px;margin-right:10px;">Add/Edit Product </span>
-        <span style="font-size: 12px; text-decoration: underline; margin-right: 15px;
-"><a href="../Product/ProductAddUpdate">Single SKU</a> </span>
-        <span style="font-size:12px;text-decoration:underline;font-weight:bold"><a href="../Product/ProductAddUpdate">Multiple SKU</a> </span>
-    </div>
-    <div class="col-sm-3">
-        @*@if (Model.Sku != null)
-        {
-            <a asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@Model.Sku">Back To Product</a>
-        }*@
-    </div>
-    <div class="col-sm-3">
-        <div class="text-right">
-            @*@if (Model.Sku != null)
+
+
+<div class="container">
+    <h6>Multiple Product SKU</h6>
+    <table id="tableProductList" style="width:100%" class="table table-hover tablesorter">
+        <thead style="background-color:lightgrey">
+            <tr>
+               
+                <th>SKU</th>
+                <th>Title</th>
+                <th>Action</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
             {
-                <form asp-action="productAddMultipleSku" id="AddEditForm" enctype="multipart/form-data">
-                    @Html.HiddenFor(e => e.Sku)
-                    <button name="action" value="Delete" type="submit" data-ProductSKU="@Model.Sku" class="btn btn-danger">Delete Product</button>
+            <tr>
+                @*<td>
+            @{
+                <a target="_blank" href="@ViewBag.S3BucketURL/@item.ImageName">
+                    <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                </a>
+            }
+        </td>*@
+                <td>
+                    @item.Sku
+                    <input type="text" style="display:none" value="@item.productstatus" />
+                    <input type="text" style="display:none" value="@item.product_id" />
+                </td>
+                <td>
+                    @item.ProductTitle
+                </td>
+                <!--<td>
+        @item.Color-->
+                @*@item.ColorAlias
+        @item.ColorId*@
 
-                </form>
-            }*@
-        </div>
-
-    </div>
+                <!--</td>-->
+                @*<td>
+            @item.Upc
+        </td>*@
+              
+            <td>
+                
+                <a href="/product/GetproductById?=@item.product_id" target="_blank">Create Child SKU</a>
+            </td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
-
-<hr />
-
-
-<div style="margin-left:20px;">
-    <div class="row">
-        <div class="col-md-12">
-            <form asp-action="productAddMultipleSku" id="AddEditForm" enctype="multipart/form-data">
-                @*<input type="hidden" id="currencyRate" value="@Model." />*@
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group row">
-                    <label asp-for="Sku" class="col-sm-1 text-sm-right control-label"></label>
-                    <div class="col-sm-3">
-                        
-                        @*<input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value='@Model.ColorAlias'>*@
-
-                        <input asp-for="Sku" id="SKU" class="form-control" />
-                        <input asp-for="productstatus" id="" class="form-control"style="display:none" />
-                        <span asp-validation-for="Sku" class="text-danger"></span>
-                    </div>
-                    <span class="requiredCustomClass">*</span>
-                    <span id="IsExistsSKU" style="padding-left:4px;padding-right:4px;"></span>
-                    <span style="margin-left:30px;" id="SKUCounter"></span>
-                </div>
-                <div class="form-group row">
-                    <label asp-for="ProductTitle" class="col-sm-1 text-sm-right control-label"></label>
-                    <div class="col-sm-8">
-                        <input asp-for="ProductTitle" id="ProductTitle" class="form-control" />
-                        <span asp-validation-for="ProductTitle" class="text-danger"></span>
-                    </div>
-
-                </div>
-
-                <div class="form-group row">
-                    <label asp-for="ConditionId" class="col-sm-1 text-sm-right  control-label"></label>
-                    <div class="col-sm-3">
-                        @Html.DropDownListFor(x => x.ConditionId, new SelectList(Model.Condition, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Condition" })
-                        @*<span asp-validation-for="ConditionId" class="text-danger"></span>*@
-                    </div>
-                    <span class="requiredCustomClass">*</span>
-                </div>
-
-
-                <!--<div class="form-group row">
-    <label class="col-sm-1 text-sm-right control-label">Color</label>
-    <div class="col-sm-3">
-        <input asp-for="Color" type="search" id="Color" class="form-control" />-->
-                @*<span asp-validation-for="Color" class="text-danger"></span>*@
-                <!--<span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
-
-        </div>
-        <div style=" padding-left: 0px;" class="col-sm-1 text-sm-left">
-            <span class="requiredCustomClass">*</span>
-            <span style="margin-left:10px;"> <a target="_blank" asp-controller="Color" asp-action="MainView">Add Color</a></span>
-        </div>
-        <label asp-for="BrandId" class="col-sm-1 text-sm-right control-label"></label>
-        <div class="col-sm-3">
-            <input asp-for="Brand" type="search" id="Brand" class="form-control" />
-            <span asp-validation-for="Brand" class="text-danger"></span>
-            <span style="color:red" id="empty-message-Brand"></span>
-
-
-        </div>
-        <span style="margin-left:10px;">
-            <a asp-controller="Brand" target="_blank" asp-action="MainView">Add Brand</a>
-        </span>
-    </div>-->
-                <div class="form-group row">
-                    <label asp-for="CatagoryName" class="col-sm-1 text-sm-right control-label"></label>
-                    <div class="col-sm-8">
-                        <input asp-for="CatagoryName" type="search" id="CategoryId" class="form-control" />
-                        <span asp-validation-for="CatagoryName" class="text-danger"></span>
-                        <span style="color:red" id="empty-message"></span>
-                    </div>
-                    <span class="requiredCustomClass">*</span>
-                    <span style="margin-left:10px;">   <a asp-controller="Catageory" target="_blank" asp-action="MainView">Add Category</a></span>
-
-
-                </div>
-
-
-                <div class="form-group row">
-
-                    <label asp-for="ShipWt" class="col-sm-1 text-sm-right control-label"></label>
-                    <div class="col-sm-3">
-                        <input asp-for="ShipWt" id="ShipmentWeightId" class="form-control" />
-
-                        <span class="UpcError"></span>
-                    </div>
-                    <span style="margin-left:20px;" id="UPCCounter"></span>
-                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label text-sm-right col-sm-1">Ship L x W x H (inch)</label>
-                    <div class="input-group col-sm-3">
-
-                        <input asp-for="ShipLt" id="shipmentLenghtId" placeholder="Lenght" class=" form-control" />
-                        <input asp-for="ShipHt" id="shipmentHeightId" placeholder="Width" class="form-control" />
-                        <input asp-for="ShipWt" id="shipmentWidthId" placeholder="Height" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group row">
-
-                    <label class="col-sm-1 text-sm-right control-label">Manufacturer</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" asp-for="Menufacture" />
-                        <span asp-validation-for="Menufacture" class="text-danger"></span>
-                        <span class="UpcError"></span>
-                    </div>
-                    <span class="requiredCustomClass">*</span>
-
-                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
-                </div>
-                <div class="form-group row">
-
-                    <label class="col-sm-1 text-sm-right control-label">Manufacturer Model</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" asp-for="MenufactureModel"/>
-                        <span asp-validation-for="MenufactureModel" class="text-danger"></span>
-                        <span class="UpcError"></span>
-                    </div>
-                    <span style="margin-left:20px;" id="UPCCounter"></span>
-                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
-                </div>
-                <div class="form-group row">
-
-                    <label class="col-sm-1 text-sm-right control-label">Device Model</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" asp-for="DeviceModel"/>
-                        <span asp-validation-for="DeviceModel" class="text-danger"></span>
-                       
-                    </div>
-                    <span style="margin-left:20px;" id="UPCCounter"></span>
-                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
-                </div>
-                <div class="form-group row">
-
-                    <label class="col-sm-1 text-sm-right control-label">Style</label>
-                    <div class="col-sm-3">
-                        <input class="form-control" asp-for="Style"/>
-                        <span asp-validation-for="Style" class="text-danger"></span>
-                        <span class="UpcError"></span>
-                    </div>
-                    <span style="margin-left:20px;" id="UPCCounter"></span>
-                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
-                </div>
-                <div class="form-group row">
-                    <label asp-for="Feature" class="col-sm-1 text-sm-right control-label">Features</label>
-                    <div class="col-sm-8">
-                        @Html.TextAreaFor(e => Model.Feature, htmlAttributes: new { @class = "form-control", @id = "productDescription" })
-
-                    </div>
-                    <span id="productDescriptionCounter"></span>
-                </div>
-                <div class="form-group row">
-                    <label asp-for="Description" class="col-sm-1 text-sm-right control-label"></label>
-                    <div class="col-sm-8">
-                        @Html.TextAreaFor(e => Model.Description, htmlAttributes: new { @class = "form-control", @id = "productDescription" })
-
-                    </div>
-                    <span id="productDescriptionCounter"></span>
-                </div>
-
-
-                @*@if (TempData["ProductId"] == null)
-        {
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <input type="file" id="SaveImages" asp-for="UploadImages" multiple class="form-control" />
-                </div>
-            </div>
-        }*@
-
-                <input type="hidden" id="HfProductId" value="@Model.Sku" />
-
-                @Html.HiddenFor(e => Model.product_id)
-
-
-
-                @Html.HiddenFor(e => Model.CatagoryName, htmlAttributes: new { @id = "categoriesValueId" })
-
-                <div id="imagesDivMainView"></div>
-
-                <div class="form-group col-sm-4" style="float:right;margin-bottom:0!important">
-                    @*<input type="submit" name="action" id="InputSubmit" value="Submit" class="btn btn-primary" />*@
-                    @if (TempData["ProductId"] != null)
-                    {
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal" onclick="OpenUploadImagesForm('@Url.Action("UploadImagesOfSku","Product",new {id=@Model.Sku })')">Upload Images</button>
-                    }
-                    @if (TempData["SaveProductMessage"] != null)
-                    {
-                        <div style="margin-top:10px;" class="alert alert-success alert-dismissible">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <strong>Success!</strong> Product @TempData["SaveProductMessage"].ToString() successfully . . .
-                        </div>
-                    }
-                    @if (TempData["DeleteProductMessage"] != null && TempData["DeleteProductMessage"].ToString() == "Deleted successfully")
-                    {
-                        <div style="margin-top:10px;" class="alert alert-success alert-dismissible">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <strong>Success!</strong> Product  @TempData["DeleteProductMessage"].ToString()
-                        </div>
-                    }
-                    @if (TempData["DeleteProductMessage"] != null && TempData["DeleteProductMessage"].ToString() == "Can't be deleted,because it exists in SellerCloud Orders")
-                    {
-                        <div style="margin-top:10px;" class="alert alert-danger alert-dismissible">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <strong>Alert!</strong> Product  @TempData["DeleteProductMessage"].ToString()
-                        </div>
-                    }
-
-
-                    @*id="DeleteProduct"*@
-                </div>
-                <input type="submit" name="action" id="InputSubmit" value="Submit" class="btn btn-primary" style="float:right" />
-            </form>
-
-           
-        </div>
-    </div>
-</div>
-
-
-
-
-<!-- Upload Sku Images -->
-
-
-<div class="modal fade" id="myModal" role="dialog" style="margin-top: 80px!important;">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add Product Images</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body" id="modelBody">
-            </div>
-            <div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
         $(document).ready(function () {
             debugger;
@@ -398,7 +196,7 @@
             //});
             debugger;
             $('.AddColor').change(function () {
-              
+
                 var topsku = $("#SKU").val();
                 var title = $("#ProductTitle").val();
                 var AddColor = $(".AddColor").val();
@@ -407,11 +205,11 @@
                 $(this).closest('tr').find(".AddSku").val(topsku + " - " + ColorAlias);
 
                     $(this).closest('tr').find(".AddTitle").val(title + " [ " + AddColor + " ]");
-                
+
             });
             function addsku() {
                 $('.AddColor').change(function () {
-                   
+
                         var topsku = $("#SKU").val();
                         var title = $("#ProductTitle").val();
                         var AddColor = $(".AddColor").val();
@@ -422,11 +220,11 @@
                     });
 
             }
-            
+
             function AddMarkup() {
                 var markup = "<tr><td><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color'/><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value=''><span style='color:red;padding-left:0px;'id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU'/><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC'/></td><td><button type='button'class='btn btn-success addproduct' >Save</button> <button type='button' class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
                 $("table tbody").append(markup);
-               
+
             }
             var count = 0;
             $("#btnAddItem").click(function() {
@@ -843,5 +641,5 @@
         });
 
 
-</script>
+    </script>
 }

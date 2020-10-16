@@ -373,12 +373,12 @@ namespace Hld.WebApplication.Controllers
             model.ProductSKU = productInfo.ID;
             return model;
         }
-        public async Task<IActionResult> UpdateBulkFieldAsync( )
+        public IActionResult UpdateBulkFieldAsync()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateBulkFieldAsync(IFormFile _file)
+        public async Task<IActionResult> UpdateBulkFieldAsync(IFormFile files)
         {
             token = Request.Cookies["Token"];
             _Selller = new GetChannelCredViewModel();
@@ -388,11 +388,11 @@ namespace Hld.WebApplication.Controllers
             authHeader.UserName = _Selller.UserName;
             authHeader.Password = _Selller.Key;
             string content = "";
-            if (_file.Length > 0)
+            if (files.Length > 0)
             {
                 using (var ms = new MemoryStream())
                 {
-                    _file.CopyTo(ms);
+                    files.CopyTo(ms);
                     var fileBytes = ms.ToArray();
                     content = Convert.ToBase64String(fileBytes);
                     // act on the Base64 data

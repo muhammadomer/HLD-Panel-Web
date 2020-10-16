@@ -30,7 +30,8 @@ namespace Hld.WebApplication.ViewModel
         public int ColorId { get; set; }
         //[Required(ErrorMessage = "Color is required")]
         public String Color { get; set; }
-
+     
+        public string ColorAlias { get; set; }
         [Display(Name = "Brand")]
         public int BrandId { get; set; }
         public String Brand { get; set; }
@@ -84,6 +85,7 @@ namespace Hld.WebApplication.ViewModel
         public int ConditionId { get; set; }
         public IEnumerable<SelectListItem> Condition { get; set; }
         public String Color { get; set; }
+        public string ColorAlias { get; set; }
         public int ColorId { get; set; }
         public int BrandId { get; set; }
         public String Brand { get; set; }

@@ -940,6 +940,120 @@ namespace Hld.WebApplication.Helper
             return responses;
         }
 
+        public bool productAddMultipleSku(string ApiURL, string token, SaveParentSkuVM ViewModel)
+        {
+            bool status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SaveParentSKU/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return status;
+        }
+        public SaveParentSkuVM GetProductDetail_ProductIDByid(string ApiURL, string token, string id)
+        {
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetParentSkuWithId/" + id + "");
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            SaveParentSkuVM responses = JsonConvert.DeserializeObject<SaveParentSkuVM>(strResponse);
+
+            return responses;
+        }
+
+        public List<SaveParentSkuVM> GetMultipleproductDetailist(string ApiURL, string token)
+        {
+            List<SaveParentSkuVM> listmodel = new List<SaveParentSkuVM>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetAllParentSKUList/");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                listmodel = JsonConvert.DeserializeObject<List<SaveParentSkuVM>>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return listmodel;
+        }
+
+        public GetParentSkuById GetproductById(string ApiURL, string token, int id)
+        {
+            GetParentSkuById ViewModel = new GetParentSkuById();
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetParentSkuWithId?id=" + id);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewModel = JsonConvert.DeserializeObject<GetParentSkuById>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return ViewModel;
+        }
 
     }
 }

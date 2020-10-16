@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.ViewModels;
@@ -441,12 +442,15 @@ namespace Hld.WebApplication.Controllers
             return View(model);
         }
         [Authorize(Policy = "Access to Add or Edit Product")]
+       
         [HttpGet]
         public IActionResult productAddMultipleSku(string ProductSKU)
         {
             token = Request.Cookies["Token"];
             double currencyRate = currencyExchangeApiAccess.GetLatestCurrencyRate(ApiURL, token);
             ProductInsetUpdateViewModel model = ProductPageIndexMethod();
+            SaveParentSkuVM viewModelUpdate = new SaveParentSkuVM();
+            viewModelUpdate.Condition = model.Condition;
             if (!string.IsNullOrEmpty(ProductSKU))
             {
 
@@ -456,19 +460,91 @@ namespace Hld.WebApplication.Controllers
 
                 if (ProductSKU.Length > 0)
                 {
-                    ProductInsetUpdateViewModel viewModelUpdate = ProductApiAccess.GetProductDetail_ProductID(ApiURL, token, ProductSKU);
+                     viewModelUpdate = ProductApiAccess.GetProductDetail_ProductIDByid(ApiURL, token, ProductSKU);
 
-                    viewModelUpdate.Condition = model.Condition;
-                    viewModelUpdate.CADPrice = Convert.ToDouble(viewModelUpdate.AvgCost) * currencyRate;
-                    viewModelUpdate.CurrencyRate = currencyRate;
+                    
+                    //viewModelUpdate.CADPrice = Convert.ToDouble(viewModelUpdate.AvgCost) * currencyRate;
+                    //viewModelUpdate.CurrencyRate = currencyRate;
                     TempData["ProductId"] = productID;
                     return View(viewModelUpdate);
                 }
             }
-            model.CurrencyRate = currencyRate;
+            //model.CurrencyRate = currencyRate;
 
-            return View(model);
+            return View(viewModelUpdate);
         }
+        [HttpPost]
+        public IActionResult productAddMultipleSku(SaveParentSkuVM ViewModel)
+        {
+            token = Request.Cookies["Token"];
+            
+            //getting condition list
+            List<ConditionViewModel> ListconditionViewModels = conditionApiAccess.GetAllCondition(ApiURL, token);
+            List<SelectListItem> _listConditionSelectListItems = new List<SelectListItem>();
+            _listConditionSelectListItems.Insert(0, new SelectListItem() { Value = "0", Text = "Select Condition" });
+            if (ListconditionViewModels.Count > 0)
+            {
+
+                if (ListconditionViewModels.Count > 0)
+                {
+
+                    foreach (var item in ListconditionViewModels)
+                    {
+                        SelectListItem selectListItem = new SelectListItem();
+
+                        selectListItem.Value = item.ConditionId.ToString();
+                        selectListItem.Text = item.ConditionName;
+                        _listConditionSelectListItems.Add(selectListItem);
+                    }
+                }
+            }
+
+            ViewModel.Condition = _listConditionSelectListItems;
+           
+            conditionApiAccess.GetAllCondition(ApiURL, token);
+            ProductApiAccess.productAddMultipleSku(ApiURL, token, ViewModel);
+            ViewBag.S3BucketURL = s3BucketURL;
+            ViewBag.S3BucketURL_large = s3BucketURL_large;
+            return RedirectToAction("GetMultipleproductDetailist", "Product",ViewModel);
+            //return View(ViewModel);
+            //return RedirectToAction("ProductAddUpdate", ViewModel);
+        }
+        [HttpGet]
+        public IActionResult GetproductById(int id)
+        {
+            string token = Request.Cookies["Token"];
+            GetParentSkuById ViewModel = new GetParentSkuById();
+            ViewModel = ProductApiAccess.GetproductById(ApiURL, token, id);
+            return View(ViewModel);
+        }
+
+        //public IActionResult productAddMultipleSku(string ProductSKU)
+        //{
+        //    token = Request.Cookies["Token"];
+        //    double currencyRate = currencyExchangeApiAccess.GetLatestCurrencyRate(ApiURL, token);
+        //    ProductInsetUpdateViewModel model = ProductPageIndexMethod();
+        //    if (!string.IsNullOrEmpty(ProductSKU))
+        //    {
+
+        //        int productID = 0;
+        //        productID = ProductApiAccess.GetProductIDBySKU(ApiURL, token, ProductSKU);
+
+
+        //        if (ProductSKU.Length > 0)
+        //        {
+        //            ProductInsetUpdateViewModel viewModelUpdate = ProductApiAccess.GetProductDetail_ProductID(ApiURL, token, ProductSKU);
+
+        //            viewModelUpdate.Condition = model.Condition;
+        //            viewModelUpdate.CADPrice = Convert.ToDouble(viewModelUpdate.AvgCost) * currencyRate;
+        //            viewModelUpdate.CurrencyRate = currencyRate;
+        //            TempData["ProductId"] = productID;
+        //            return View(viewModelUpdate);
+        //        }
+        //    }
+        //    model.CurrencyRate = currencyRate;
+
+        //    return View(model);
+        //}
         [HttpPost]
         public async Task<IActionResult> ProductAddUpdate(ProductInsetUpdateViewModel model, string action)
         {
@@ -531,69 +607,76 @@ namespace Hld.WebApplication.Controllers
 
             return View(viewModel);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> productAddMultipleSku(ProductInsetUpdateViewModel model, string action)
+        [HttpGet]
+        public IActionResult GetMultipleproductDetailist()
         {
-
-            token = Request.Cookies["Token"];
-            if (action == "Delete")
-            {
-
-                bool _status = false;
-                DeleteProductViewModel deleteViewModel = new DeleteProductViewModel();
-                deleteViewModel.PorductSku = model.ProductSKU;
-                deleteViewModel.status = 0;
-                _status = ProductApiAccess.DeleteProduct(ApiURL, token, deleteViewModel);
-                if (_status == false)
-                {
-                    TempData["DeleteProductMessage"] = "Deleted successfully";
-                }
-                else
-                {
-                    TempData["DeleteProductMessage"] = "Can't be deleted,because it exists in SellerCloud Orders";
-                }
-                return RedirectToAction("productAddMultipleSku");
-            }
-            else
-            {
-                if (ModelState.IsValid)
-                {
-                    if (model.ProductId > 0)
-                    {
-                        int ProductId = 0;
-                        ProductId = ProductApiAccess.UpdateProduct(ApiURL, token, model);
-                        if (ProductId > 0)
-                        {
-
-                            TempData["SaveProductMessage"] = "update";
-                            return RedirectToAction("productAddMultipleSku");
-                        }
-                    }
-                    else
-                    {
-                        model.ProductSKU = model.ProductSKU.ToUpper();
-                        int ProductId = ProductApiAccess.AddProduct(ApiURL, token, model);
-                        if (ProductId > 0)
-                        {
-                            await SaveImages(model.UploadImages, model.ProductSKU);
-                            TempData["SaveProductMessage"] = "Save";
-                            return RedirectToAction("productAddMultipleSku");
-                        }
-                        else
-                        {
-                            return RedirectToAction("productAddMultipleSku");
-                        }
-                    }
-                }
-            }
-
-            //repopulate form if error is occured
-
-            ProductInsetUpdateViewModel viewModel = ProductPageIndexMethod();
-
-            return View(viewModel);
+            string token = Request.Cookies["Token"];
+            List<SaveParentSkuVM> listmodel = new List<SaveParentSkuVM>();
+            listmodel = ProductApiAccess.GetMultipleproductDetailist(ApiURL, token);
+            return View(listmodel);
         }
+        [HttpPost]
+        //public async Task<IActionResult> productAddMultipleSku(ProductInsetUpdateViewModel model, string action)
+        //{
+
+        //    token = Request.Cookies["Token"];
+        //    if (action == "Delete")
+        //    {
+
+        //        bool _status = false;
+        //        DeleteProductViewModel deleteViewModel = new DeleteProductViewModel();
+        //        deleteViewModel.PorductSku = model.ProductSKU;
+        //        deleteViewModel.status = 0;
+        //        _status = ProductApiAccess.DeleteProduct(ApiURL, token, deleteViewModel);
+        //        if (_status == false)
+        //        {
+        //            TempData["DeleteProductMessage"] = "Deleted successfully";
+        //        }
+        //        else
+        //        {
+        //            TempData["DeleteProductMessage"] = "Can't be deleted,because it exists in SellerCloud Orders";
+        //        }
+        //        return RedirectToAction("productAddMultipleSku");
+        //    }
+        //    else
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            if (model.ProductId > 0)
+        //            {
+        //                int ProductId = 0;
+        //                ProductId = ProductApiAccess.UpdateProduct(ApiURL, token, model);
+        //                if (ProductId > 0)
+        //                {
+
+        //                    TempData["SaveProductMessage"] = "update";
+        //                    return RedirectToAction("productAddMultipleSku");
+        //                }
+        //            }
+        //            else
+        //            {
+        //                model.ProductSKU = model.ProductSKU.ToUpper();
+        //                int ProductId = ProductApiAccess.AddProduct(ApiURL, token, model);
+        //                if (ProductId > 0)
+        //                {
+        //                    await SaveImages(model.UploadImages, model.ProductSKU);
+        //                    TempData["SaveProductMessage"] = "Save";
+        //                    return RedirectToAction("productAddMultipleSku");
+        //                }
+        //                else
+        //                {
+        //                    return RedirectToAction("productAddMultipleSku");
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    //repopulate form if error is occured
+
+        //    ProductInsetUpdateViewModel viewModel = ProductPageIndexMethod();
+
+        //    return View(viewModel);
+        //}
 
 
 
@@ -631,8 +714,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetAlColorForAutoComplete(string Prefix)
-        {
+        public JsonResult GetAlColorForAutoComplete(string Prefix){
             token = Request.Cookies["Token"];
             List<ColorAutoCompleteViewModel> model = colorApiAccess.GetAllColorsByName(ApiURL, token, Prefix);
             if (model == null)
