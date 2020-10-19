@@ -514,10 +514,31 @@ namespace Hld.WebApplication.Controllers
         {
             string token = Request.Cookies["Token"];
             GetParentSkuById ViewModel = new GetParentSkuById();
+            var list = ProductApiAccess.GetChildProductList(ApiURL, token,id);
             ViewModel = ProductApiAccess.GetproductById(ApiURL, token, id);
+            ViewModel.list = list;
+         
             return View(ViewModel);
         }
+        [HttpPost]
+       
+        
+        public string SaveChildSku(List<SaveChildSkuVM> data)
+        {
+            string token = Request.Cookies["Token"];
 
+            var staus = ProductApiAccess.SaveChildSku(ApiURL, token, data);
+            return staus;
+
+
+        }
+        public IActionResult DeleteChildProduct(int product_id)
+        {
+            bool status = false;
+            token = Request.Cookies["Token"];
+            status = ProductApiAccess.DeleteChildProduct(ApiURL, token, product_id);
+            return RedirectToAction("GetMultipleproductDetailist", "product", status);
+        }
         //public IActionResult productAddMultipleSku(string ProductSKU)
         //{
         //    token = Request.Cookies["Token"];
