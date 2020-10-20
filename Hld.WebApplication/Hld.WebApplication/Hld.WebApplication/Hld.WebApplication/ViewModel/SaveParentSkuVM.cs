@@ -8,7 +8,9 @@ namespace Hld.WebApplication.ViewModel
 {
     public class SaveParentSkuVM
     {
-        public int product_id { get; set; }
+       
+        public int Parentproduct_id { get; set; }
+        public int Childproduct_id { get; set; }
         public int productstatus { get; set; }
         public string Sku { get; set; }
         public string Upc { get; set; }

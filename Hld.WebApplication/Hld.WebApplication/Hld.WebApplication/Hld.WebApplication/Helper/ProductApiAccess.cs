@@ -1037,7 +1037,6 @@ namespace Hld.WebApplication.Helper
                 request.ContentType = "application/json";
                 request.Headers["Authorization"] = "Bearer " + token;
                 string strResponse = "";
-
                 var response = (HttpWebResponse)request.GetResponse();
 
                 using (var sr = new StreamReader(response.GetResponseStream()))
@@ -1103,13 +1102,13 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
-        public bool DeleteChildProduct(string ApiURL, string token, int product_id)
+        public bool DeleteChildProduct(string ApiURL, string token, int child_id)
         {
             bool status = false;
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/DeleteChildSku?product_id=" + product_id);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/DeleteChildSku?child_id=" + child_id);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";

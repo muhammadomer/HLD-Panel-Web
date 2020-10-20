@@ -532,11 +532,29 @@ namespace Hld.WebApplication.Controllers
 
 
         }
-        public IActionResult DeleteChildProduct(int product_id)
+        //[HttpPost]
+        //public int CreateBox(SaveChildSkuVM data)
+        //{           
+        //    token = Request.Cookies["Token"];
+        //    //data.ShipmentId = "12";
+        //    //data.BoxId = "15";
+            
+        //    int Id = 0;
+        //    if (data.idShipmentProducts == 0)
+        //    {
+        //        Id = ProductApiAccess.Create(ApiURL, token, data);
+        //    }
+        //    else
+        //    {
+        //        Id = ProductApiAccess.Update(ApiURL, token, data);
+        //    }
+        //    return Id;
+        //}
+        public IActionResult DeleteChildProduct(int child_id)
         {
             bool status = false;
             token = Request.Cookies["Token"];
-            status = ProductApiAccess.DeleteChildProduct(ApiURL, token, product_id);
+            status = ProductApiAccess.DeleteChildProduct(ApiURL, token, child_id);
             return RedirectToAction("GetMultipleproductDetailist", "product", status);
         }
         //public IActionResult productAddMultipleSku(string ProductSKU)

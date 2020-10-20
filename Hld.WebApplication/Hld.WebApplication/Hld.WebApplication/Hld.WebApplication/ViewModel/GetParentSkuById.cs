@@ -11,8 +11,9 @@ namespace Hld.WebApplication.ViewModel
         {
             list = new List<SaveChildSkuVM>();
         }
-        public int product_id { get; set; }
+        public int Parentproduct_id { get; set; }
         public int productstatus { get; set; }
+        public int ColorIds { get; set; }
         public int ID { get; set; }
         public string Sku { get; set; }
         public string ProductTitle { get; set; }

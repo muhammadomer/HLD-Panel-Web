@@ -109,7 +109,7 @@
                 <td>
                     @item.Sku
                     <input type="text" style="display:none" value="@item.productstatus" />
-                    <input type="text" style="display:none" value="@item.product_id" />
+                    <input type="text" style="display:none" value="@item.Parentproduct_id" />
                 </td>
                 <td>
                     @item.ProductTitle
@@ -126,7 +126,7 @@
               
             <td>
                 
-                <a href="/product/GetproductById?=@item.product_id" target="_blank">Create Child SKU</a>
+                <a href="/product/GetproductById?=@item.Parentproduct_id" target="_blank">Create Child SKU</a>
             </td>
             </tr>
             }

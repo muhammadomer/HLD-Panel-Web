@@ -160,6 +160,25 @@
         box-sizing: border-box;
         padding: 30px;
     }
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .myclasscancel {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: black;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
 </style>
 
 <div class="container-fluid"style="margin-bottom:40px">
@@ -210,26 +229,29 @@
                          
                                 <tr>
                                     <td>
-                                        <input type="search" class="form-control AddColor" id="Color" name="Color" placeholder="Color" value='@item.Colorname' />
+                                        <input type="search" class="form-control AddColor" id="Color" name="Color" placeholder="Color" value='@item.Colorname' readonly/>
                                        
                                         <input type='text'style="display:none" class='form-control AddSku' value='@item.Sku'>
-                                        <input type='text' style="display:none" class='form-control ColorId' value=''>
+                                        <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
                                         <span style="color:red;padding-left:0px;" id="empty-message-Color"></span> <span class="requiredCustomClass" style="float: right;">*</span>
                                         @*@Html.HiddenFor(e => Model.ColorId, htmlAttributes: new { @id = "ColorIdForMessage" })*@
                                         <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
                                        
                                         <input type='text' style="display:none" class='form-control productstatus' value='@item.title'>
-                                        <input type='text' style="display:none" class='form-control product_id' value='@item.product_id'>
+                                        <input type='text' style="display:none" class='form-control product_id' value='@item.Parentproduct_id'>
+                                        <input type='text' style="display:none" class='form-control child_id' value='@item.Childproduct_id'>
 
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control AddSku" placeholder="SKU"value='@item.Sku' />
+                                        <input type="text" class="form-control AddSku" placeholder="SKU"value='@item.Sku'readonly />
                                        
                                     </td>
-                                    <td><input type="text" class="form-control AddTitle" placeholder="Title" value='@item.title' /></td>
-                                    <td><input type="text" class="form-control AddUpc" placeholder="UPC" value="@item.upc"/></td>
+                                    <td><input type="text" class="form-control AddTitle" placeholder="Title" value='@item.title'readonly /></td>
+                                    <td><input type="text" class="form-control AddUpc" placeholder="UPC" value="@item.upc" readonly/></td>
                                     <td>
-                                        @*<button type='button' class='btn btn-success addproduct'>Save</button>*@
+
+                                        <button type='button' class='btn btn-sm btn-success submit' style="display:none;" value=''>Save</button>
+                                        <button type='button' class='btn btn-sm btn-success edit' value=''>Edit</button>
                                         <button type='button' class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button>
                                     </td>
                                 </tr>
@@ -238,7 +260,7 @@
                     </table>
                     <button class=" btn btn-primary btn-style " id="btnAddItem" value="" style="box-shadow:none;float:left"> Add Item</button>
                     @*<input type="submit" name="action" id="InputSubmit" value="Submit" class="btn btn-primary" style="float:right" />*@
-                    <button class=" btn btn-success" id="btnSave" value="" style="        box-shadow: none;
+                    <button class=" btn btn-success" id="btnSave" value="" style="box-shadow: none;
         float: right;
         margin-left: 3px"> Save</button>
                 </div>
@@ -257,7 +279,7 @@
 
 
     $(document).ready(function () {
-        
+
             debugger;
             var ColorId = 0;
             function autocolor() {
@@ -323,7 +345,7 @@
                 //var AddColor = $(".AddColor").val();
                 //var ColorAlias = $('.ColorAlias').val();
                 var AddColor = $(this).closest('tr').find(".AddColor").val();
-               
+
                 var ColorAlias = $(this).closest('tr').find('.ColorAlias').val();
                 ColorId = $(this).closest('tr').find('.ColorId').val();
                 console.log("gggg", ColorId);
@@ -349,7 +371,7 @@
             }
             function AddMarkup() {
 
-                var markup = "<tr><td><input type='text'style='display:none' class='form-control product_id' value='" +@Model.product_id+"'><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color'/><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value=''><span style='color:red;padding-left:0px;'id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU'/><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC'/></td><td><button type='button'class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
+                var markup = "<tr><td><input type='text'style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text'style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color'/><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value=''><span style='color:red;padding-left:0px;'id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU'/><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC'/></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button'class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
                 $("table tbody").append(markup);
 
             }
@@ -412,7 +434,8 @@
                          var Obj =
                          {
                              Sku: $(this).find('.AddSku').val(),
-                             product_id: $(this).find('.product_id').val(),
+                             Parentproduct_id: $(this).find('.product_id').val(),
+                             Childproduct_id: $(this).find('.child_id').val(),
                              productstatus: $(this).find('.productstatus').val(),
                              title: $(this).find(".AddTitle").val(),
                              upc: $(this).find(".AddUpc").val(),
@@ -428,15 +451,15 @@
                     url: '../product/SaveChildSku',
                     data: { data },
                     success: function (res) {
-                        
+
                         console.log("data", res);
                         if (res > 0) {
                             $.notify(`Saved  Successfully`, { globalPosition: 'bottom right', className: 'Success myclass' });
-                            window.location.href = '../Product/GetMultipleproductDetailist';
+                           
                         }
                         else {
                             $.notify('Saved  Successfully', { globalPosition: 'bottom right', className: 'Success myclass' });
-                           
+
                         }
 
                     }
@@ -476,8 +499,8 @@
 
                 var currentElem = $(this).closest('tr');
                 var selectedRow = $(this);
-                var product_id = $(selectedRow).parents('tr').find('.product_id').val();
-                console.log("product idddd",product_id)
+                var child_id = $(selectedRow).parents('tr').find('.child_id').val();
+                console.log("product idddd", child_id)
                 $("#dialog-box").dialog({
                     buttons: {
                         "Confirm": function () {
@@ -485,19 +508,21 @@
                             debugger;
                             $.ajax({
                                 type: 'GET',
-                                url: '../product/DeleteChildProduct?product_id=' + product_id,
+                                url: '../product/DeleteChildProduct?child_id=' + child_id,
 
                                 success: function (res) {
                                     debugger;
                                     $("#dialog-box").dialog("close");
                                     selectedRow.parents('tr').remove();
-                                    location.href = '../product/GetMultipleproductDetailist';
+                                    
                                     $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger mydelte' });
+                                   
                                     debugger;
                                 },
                                 Error: function (err) {
                                     debugger;
                                 }
+                               
                             });
 
 
@@ -511,6 +536,18 @@
                 })
                 $("#dialog-box").dialog("open");
             });
+        var editable = false;
+        $(document).on("click", ".edit", function () {
+            var selectedRow = $(this).parents('tr');
+            editable = true;
+            $(selectedRow).find('.AddColor').prop('readonly', false);
+            $(selectedRow).find('.AddSku').prop('readonly', false);
+            $(selectedRow).find('.AddTitle').prop('readonly', false);
+            $(selectedRow).find('.AddUpc').prop('readonly', false);
+            $(selectedRow).find('.edit').hide();
+            $(selectedRow).find('.submit').show();
+        });
+
 
             $('#DeleteProduct').click(function () {
                 var productSku = $(this).attr('data-ProductSKU');
@@ -845,6 +882,72 @@
             });
         });
 
+    //$(document).on("click", ".submit", function () {
+
+    //    var selectedRow = $(this).parents('tr');
+    //    $(selectedRow).parents('tr').next().find(".sku").focus();
+    //    var data =
+    //    {
+
+    //        Sku: $(selectedRow).find('.AddSku').val(),
+    //        product_id: $(selectedRow).find('.product_id').val(),
+    //        productstatus: $(selectedRow).find('.productstatus').val(),
+    //        title: $(selectedRow).find(".AddTitle").val(),
+    //        upc: $(selectedRow).find(".AddUpc").val(),
+    //        ColorIds: $(selectedRow).find(".AddColor").val(),
+    //        Colorname: $(selectedRow).find(".AddColor").val()
+    //    };
+    //    console.log("save data",data)
+    //    if (data.Sku != '' && data.title != '' && data.Colorname != '') {
+
+    //        var i = 0;
+    //        //$.ajax({
+    //        //    type: 'POST',
+    //        //    url: '../ShipmentCasePack/Save',
+    //        //    data: { data },
+    //        //    success: function (res) {
+    //        //        i++;
+    //        //        debugger;
+    //        //        if (res > 0) {
+    //        //            $(selectedRow).find('.product_id').val(res);
+    //        //            $(selectedRow).find('input').prop('readonly', true);
+    //        //            $(selectedRow).find('select').attr('disabled', true);
+    //        //            $(selectedRow).find('.edit').show();
+    //        //            $(selectedRow).find('.submit').hide();
+    //        //            if (editable == false) {
+    //        //                AddMarkup();
+    //        //                $(selectedRow).next().find(".sku").focus();
+
+
+    //        //            }
+    //        //            editable = false;
+
+    //        //            $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+    //        //        }
+    //        //        else {
+
+
+    //        //            $.notify('not save', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
+    //        //        }
+    //        //    },
+    //        //    Error: function (err) {
+    //        //        debugger;
+    //        //    }
+    //        //});
+    //    }
+    //    else {
+    //        if (data.Sku == '') {
+    //            selectedRow.find(".AddSku").addClass('warning')
+    //        }
+    //        if (data.title == '') {
+    //            selectedRow.find(".AddTitle").addClass('warning')
+    //        }
+    //        if (data.Colorname == '') {
+    //            selectedRow.find(".AddColor").addClass('warning')
+    //        }
+
+    //    }
+    //});
 
 
         $('body').on('keyup', '#UPCID', function () {
