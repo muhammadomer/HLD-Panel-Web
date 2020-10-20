@@ -772,15 +772,17 @@ margin-left: 13px;">Case Pack Shipment Details</b>
 
 
             $(document).on('keypress', '.sku', function (event) {
+                console.log("MEHDI")
                var selectedrow = $(this).parents('tr');
                 if (event.keyCode == 13) {
                     var item = $(this);
-                    if (item.val() == "")
+                    var skuValue = item.val().trim();
+                    if (skuValue == "")
                         return;
 
                     $.ajax({
                         type: 'GET',
-                        url: '../ShipmentCasePack/GetTemplate?SKU=' + item.val(),
+                        url: '../ShipmentCasePack/GetTemplate?SKU=' + skuValue,
                         contentType: 'application/json',
                         success: function (res) {
                             var casepackId = res.CasePackId;
@@ -826,7 +828,7 @@ keyboard: false
 
                     $.ajax({
                         type: 'GET',
-                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + item.val(),
+                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + skuValue,
                         contentType: 'application/json',
                         success: function (res) {
                             $(item).parents('tr').find('.po').empty();
@@ -846,7 +848,7 @@ keyboard: false
                         url: "/Product/GetProductDetailsForAPBySku",
                         type: "POST",
                         dataType: "json",
-                        data: { Prefix: item.val() },
+                        data: { Prefix: skuValue },
                         success: function (data, ui) {
                             console.log("SKUProfile", data);
                             $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
@@ -855,6 +857,7 @@ keyboard: false
                             debugger;
                         }
                     });
+                    $(this).val(skuValue);
                 }
             });
 
@@ -942,8 +945,9 @@ keyboard: false
 
 
                 }
+                debugger
                 var tbody_tr_last = $('table>tbody>tr:last');
-                var sku = tbody_tr_last.find(".sku").val();
+                var sku = tbody_tr_last.find(".sku").val().trim();
                 var qtybox = tbody_tr_last.find(".qtybox").val();
                 var po = tbody_tr_last.find(".po").val();
                 var boxes = tbody_tr_last.find(".boxes").val();
@@ -1093,7 +1097,7 @@ keyboard: false
                     //$(selectedRow).find('.qtyshipped').val($(selectedRow).find('.boxes').val() * $(selectedRow).find('.qtybox').val());
                     var data =
                     {
-                        SKU: $(selectedRow).find('.sku').val(),
+                        SKU: $(selectedRow).find('.sku').val().trim(),
                         POId: $(selectedRow).find('.po').val(),
                         idShipmentProducts: $(selectedRow).find('.idShipmentProducts').val(),
                         ShipmentId: '@Model.ShipmentId',

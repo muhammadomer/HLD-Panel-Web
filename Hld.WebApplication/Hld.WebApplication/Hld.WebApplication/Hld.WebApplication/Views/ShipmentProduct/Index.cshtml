@@ -469,11 +469,12 @@
                 //var item = $(this).parents('tr');
                 if (event.keyCode == 13) {
                     var item = $(this);
+                    var skuValue = item.val().trim();
                     if (item.val() == "")
                         return;
                     $.ajax({
                         type: 'GET',
-                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + item.val(),
+                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + skuValue,
                         contentType: 'application/json',
                         success: function (res) {
                             $(item).parents('tr').find('.PO').empty();
@@ -493,7 +494,7 @@
                         url: "/Product/GetProductDetailsForAPBySku",
                         type: "POST",
                         dataType: "json",
-                        data: { Prefix: item.val() },
+                        data: { Prefix: skuValue },
                         success: function (data, ui) {
                             console.log("SKUProfile", data);
                             $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
@@ -502,6 +503,7 @@
                             debugger;
                         }
                     });
+                       $(this).val(skuValue);
                 }
             });
 
