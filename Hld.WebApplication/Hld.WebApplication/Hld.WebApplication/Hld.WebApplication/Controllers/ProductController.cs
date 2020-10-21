@@ -520,9 +520,7 @@ namespace Hld.WebApplication.Controllers
          
             return View(ViewModel);
         }
-        [HttpPost]
-       
-        
+        [HttpPost]           
         public string SaveChildSku(List<SaveChildSkuVM> data)
         {
             string token = Request.Cookies["Token"];
@@ -532,24 +530,13 @@ namespace Hld.WebApplication.Controllers
 
 
         }
-        //[HttpPost]
-        //public int CreateBox(SaveChildSkuVM data)
-        //{           
-        //    token = Request.Cookies["Token"];
-        //    //data.ShipmentId = "12";
-        //    //data.BoxId = "15";
-            
-        //    int Id = 0;
-        //    if (data.idShipmentProducts == 0)
-        //    {
-        //        Id = ProductApiAccess.Create(ApiURL, token, data);
-        //    }
-        //    else
-        //    {
-        //        Id = ProductApiAccess.Update(ApiURL, token, data);
-        //    }
-        //    return Id;
-        //}
+        [HttpPost]
+        public IActionResult UpdateChildSku(SaveChildSkuVM data)
+        {
+            token = Request.Cookies["Token"];
+            ProductApiAccess.Update(ApiURL, token, data);
+            return RedirectToAction("GetproductById", "product", data);
+        }
         public IActionResult DeleteChildProduct(int child_id)
         {
             bool status = false;
@@ -838,7 +825,7 @@ namespace Hld.WebApplication.Controllers
             }
             else return PartialView("~/Views/Product/_ShowImages.cshtml", new List<ProductImagesViewModel>());
         }
-
+       [HttpPost]
         private async Task<bool> SaveImages(List<IFormFile> files, string ProductSKU)
         {
             bool status = false;
@@ -868,6 +855,18 @@ namespace Hld.WebApplication.Controllers
                 }
             }
             return status;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveImagesSingle(List<IFormFile> files)
+        {
+            token = Request.Cookies["Token"];
+            if (files.Count > 0)
+            {
+                await SaveImages(files, Convert.ToString(HttpContext.Request.Form["ProductSKU"]));
+
+            }
+            return Json(new { message = "data is save successfully" });
         }
 
         [HttpGet]

@@ -179,6 +179,36 @@
         box-sizing: border-box;
         padding: 30px;
     }
+    .image-upload {
+        width: 70px;
+        height: 57px;
+        display: block;
+        margin: 0 auto;
+        cursor:pointer;
+    }
+    .image-upload > input {
+        display: none;
+       cursor:pointer;
+    }
+    .file-input input[type="file"] {
+        cursor: pointer;
+        
+    }
+    .input-label{
+        cursor: pointer;     
+       
+    }
+    img{
+        cursor:pointer!important;
+    }
+    .imgupload {
+        margin: 0 auto;
+        width: 70px;
+        height: 55px;
+        border-radius: 3px;
+        cursor: pointer !important;
+        display: block;
+    }
 </style>
 
 <div class="container-fluid"style="margin-bottom:40px">
@@ -215,11 +245,12 @@
                     <table class="table table-bordered ">
                         <thead style="background-color:lightgray">
                             <tr>
+                                <th style=" width: 10%;">Image</th>
                                 <th style=" width: 10%;">Color</th>
                                 <th>SKU</th>
                                 <th style="width: 45%;">Title</th>
                                 <th>UPC</th>
-                                <th>Action</th>
+                                <th style="width:10%;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -229,21 +260,29 @@
                          
                                 <tr>
                                     <td>
-                                        <input type="search" class="form-control AddColor" id="Color" name="Color" placeholder="Color" value='@item.Colorname' readonly/>
-                                       
-                                        <input type='text'style="display:none" class='form-control AddSku' value='@item.Sku'>
-                                        <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
-                                        <span style="color:red;padding-left:0px;" id="empty-message-Color"></span> <span class="requiredCustomClass" style="float: right;">*</span>
-                                        @*@Html.HiddenFor(e => Model.ColorId, htmlAttributes: new { @id = "ColorIdForMessage" })*@
+                                        <div class="image-upload">
+                                            <label class="input-label">
+                                                <img class="imgupload" src="/Images/img-icon-2.jpg" id="uploader" />
+                                            </label>
+                                            <input id="file-input" type="file" />
+                                        </div>
                                         <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
-                                       
+                                        <input type='text' style="display:none" class='form-control AddSku' value='@item.Sku' id="SKU">
                                         <input type='text' style="display:none" class='form-control productstatus' value='@item.title'>
                                         <input type='text' style="display:none" class='form-control product_id' value='@item.Parentproduct_id'>
                                         <input type='text' style="display:none" class='form-control child_id' value='@item.Childproduct_id'>
+                                        <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
+                                        <input type="search" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
+                                    </td>
+                                    <td>
+                                        <input type="search" class="form-control AddColor" id="Color" name="Color" placeholder="Color" value='@item.Colorname' readonly/>                                       
+                                        <span style="color:red;padding-left:0px;" id="empty-message-Color"></span> <span class="requiredCustomClass" style="float: right;">*</span>
+                                        @*@Html.HiddenFor(e => Model.ColorId, htmlAttributes: new { @id = "ColorIdForMessage" })*@
+                                       
 
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control AddSku" placeholder="SKU"value='@item.Sku'readonly />
+                                        <input type="text" class="form-control AddSku" placeholder="SKU"value='@item.Sku'readonly id="SKU" />
                                        
                                     </td>
                                     <td><input type="text" class="form-control AddTitle" placeholder="Title" value='@item.title'readonly /></td>
@@ -279,7 +318,38 @@
 
 
     $(document).ready(function () {
+        function readURL(input) {
+            var $this = $(input);
+            console.log("this", $this)
+           
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
+                reader.onload = function (e) {
+                    //$this.parents(".image-upload").find("#imgupload").attr('src', e.target.result);
+                    $this.parents(".image-upload").find(".imgupload").attr('src', e.target.result);
+                    //$('#imgupload').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $(".image-upload img:first-child").click(function () {
+            $(this).parent().nextAll("input").trigger("click");
+        })
+        $(".image-upload >input").change(function () {
+            readURL(this);
+        });
+        function imgchage() {
+            $(".image-upload >input").change(function () {
+                readURL(this);
+            });
+        }
+        function imgupload() {
+            $(".image-upload img:first-child").click(function () {
+                $(this).parent().nextAll("input").trigger("click");
+            })
+        }
             debugger;
             var ColorId = 0;
             function autocolor() {
@@ -371,7 +441,7 @@
             }
             function AddMarkup() {
 
-                var markup = "<tr><td><input type='text'style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text'style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color'/><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value=''><span style='color:red;padding-left:0px;'id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU'/><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC'/></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button'class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
+                var markup = "<tr><td><div class='image-upload'><label class='input-label'><img class='imgupload' src='/Images/img-icon-2.jpg' id='uploader'/></label><input id='file-input' type='file'/></div><input type='text'style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text'style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value=''id='SKU'></td><td><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color'/><span style='color:red;padding-left:0px;'id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU'/><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC'/></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button'class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
                 $("table tbody").append(markup);
 
             }
@@ -383,6 +453,8 @@
                     AddMarkup()
                     autocolor();
                     addsku();
+                    imgchage()
+                    imgupload() 
                 }
                 var tbody_tr_last = $('table>tbody>tr:last');
                 var color = tbody_tr_last.find(".AddColor").val();
@@ -393,8 +465,8 @@
                     AddMarkup()
                    autocolor();
                    addsku();
-
-
+                    imgupload() 
+                    imgchage()
                 }
                 else {
                     if (color == '') {
@@ -455,11 +527,11 @@
                         console.log("data", res);
                         if (res > 0) {
                             $.notify(`Saved  Successfully`, { globalPosition: 'bottom right', className: 'Success myclass' });
-                           
-                        }
+                            location.reload();
+                        } 
                         else {
                             $.notify('Saved  Successfully', { globalPosition: 'bottom right', className: 'Success myclass' });
-
+                            location.reload();
                         }
 
                     }
@@ -514,15 +586,15 @@
                                     debugger;
                                     $("#dialog-box").dialog("close");
                                     selectedRow.parents('tr').remove();
-                                    
+
                                     $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger mydelte' });
-                                   
+                                    location.reload();
                                     debugger;
                                 },
                                 Error: function (err) {
                                     debugger;
                                 }
-                               
+
                             });
 
 
@@ -824,32 +896,32 @@
         });
 
 
-        function SubmitForm() {
-            var files = $('#UloadImages').find('#fUpload').prop("files");
-            var fdata = new FormData();
-            for (var i = 0; i < files.length; i++) {
-                fdata.append("files", files[i]);
-            }
-            fdata.append("ProductId", $('#HfProductId').val())
-            if (files.length > 0) {
-                $.ajax({
-                    type: "POST",
-                    url: "/Product/UploadImagesOfSku",
-                    data: fdata ,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
+        //function SubmitForm() {
+        //    var files = $('#UloadImages').find('#fUpload').prop("files");
+        //    var fdata = new FormData();
+        //    for (var i = 0; i < files.length; i++) {
+        //        fdata.append("files", files[i]);
+        //    }
+        //    fdata.append("ProductId", $('#HfProductId').val())
+        //    if (files.length > 0) {
+        //        $.ajax({
+        //            type: "POST",
+        //            url: "/Product/UploadImagesOfSku",
+        //            data: fdata ,
+        //            contentType: false,
+        //            processData: false,
+        //            success: function (response) {
 
-                        $.get('/Product/ShowImages/' + $('#HfProductId').val()+'').done(function (response) {
-                            $('#imagesDIV').html(response);
-                        });
-                    }
-                });
-            }
-            else {
-                alert('Please select a file.')
-            }
-        }
+        //                $.get('/Product/ShowImages/' + $('#HfProductId').val()+'').done(function (response) {
+        //                    $('#imagesDIV').html(response);
+        //                });
+        //            }
+        //        });
+        //    }
+        //    else {
+        //        alert('Please select a file.')
+        //    }
+        //}
 
 
         function OpenUploadImagesForm(url) {
@@ -881,73 +953,75 @@
                 }
             });
         });
+    debugger;
+    $(document).on("click", ".submit", function () {
 
-    //$(document).on("click", ".submit", function () {
+        var selectedRow = $(this).parents('tr');
+        $(selectedRow).parents('tr').next().find(".sku").focus();
+        var data =
+        {
 
-    //    var selectedRow = $(this).parents('tr');
-    //    $(selectedRow).parents('tr').next().find(".sku").focus();
-    //    var data =
-    //    {
+            Sku: $(selectedRow).find('.AddSku').val(),
+            Childproduct_id: $(selectedRow).find('.child_id').val(),
+            productstatus: $(selectedRow).find('.productstatus').val(),
+            title: $(selectedRow).find(".AddTitle").val(),
+            upc: $(selectedRow).find(".AddUpc").val(),
+           
+            images2: $(selectedRow).find('input#file-input').val(),
+            //Colorname: $(selectedRow).find(".AddColor").val(),
+            ColorIds: $(selectedRow).find(".ColorId").val(),
+        };
+        console.log("imges are", data.images),
+            console.log("imges are", data.images2),
+        console.log("save data child??",data)
+        if (data.Sku != '' && data.title != '' && data.Colorname != '') {
 
-    //        Sku: $(selectedRow).find('.AddSku').val(),
-    //        product_id: $(selectedRow).find('.product_id').val(),
-    //        productstatus: $(selectedRow).find('.productstatus').val(),
-    //        title: $(selectedRow).find(".AddTitle").val(),
-    //        upc: $(selectedRow).find(".AddUpc").val(),
-    //        ColorIds: $(selectedRow).find(".AddColor").val(),
-    //        Colorname: $(selectedRow).find(".AddColor").val()
-    //    };
-    //    console.log("save data",data)
-    //    if (data.Sku != '' && data.title != '' && data.Colorname != '') {
+            var i = 0;
+            $.ajax({
+                type: 'POST',
+                url: '../product/UpdateChildSku',
+                data: { data },
+                success: function (res) {
+                    i++;
+                    debugger;
+                    if (res > 0) {
+                        $(selectedRow).find('.child_id').val(res);
+                        $(selectedRow).find('input').prop('readonly', true);
+                        $(selectedRow).find('select').attr('disabled', true);
+                        $(selectedRow).find('.edit').show();
+                        $(selectedRow).find('.submit').hide();
+                        if (editable == false) {
+                            //AddMarkup();
+                            $(selectedRow).next().find(".sku").focus();
+                        }
+                        editable = false;
 
-    //        var i = 0;
-    //        //$.ajax({
-    //        //    type: 'POST',
-    //        //    url: '../ShipmentCasePack/Save',
-    //        //    data: { data },
-    //        //    success: function (res) {
-    //        //        i++;
-    //        //        debugger;
-    //        //        if (res > 0) {
-    //        //            $(selectedRow).find('.product_id').val(res);
-    //        //            $(selectedRow).find('input').prop('readonly', true);
-    //        //            $(selectedRow).find('select').attr('disabled', true);
-    //        //            $(selectedRow).find('.edit').show();
-    //        //            $(selectedRow).find('.submit').hide();
-    //        //            if (editable == false) {
-    //        //                AddMarkup();
-    //        //                $(selectedRow).next().find(".sku").focus();
+                        $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
+                        location.reload();
+                    }
+                    else {
+                        $.notify('not save', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
+                        location.reload();
+                    }
+                },
+                Error: function (err) {
+                    debugger;
+                }
+            });
+        }
+        else {
+            if (data.Sku == '') {
+                selectedRow.find(".AddSku").addClass('warning')
+            }
+            if (data.title == '') {
+                selectedRow.find(".AddTitle").addClass('warning')
+            }
+            if (data.Colorname == '') {
+                selectedRow.find(".AddColor").addClass('warning')
+            }
 
-
-    //        //            }
-    //        //            editable = false;
-
-    //        //            $.notify('Save Successfully', { globalPosition: 'bottom right', className: 'success myclass' });
-    //        //        }
-    //        //        else {
-
-
-    //        //            $.notify('not save', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
-    //        //        }
-    //        //    },
-    //        //    Error: function (err) {
-    //        //        debugger;
-    //        //    }
-    //        //});
-    //    }
-    //    else {
-    //        if (data.Sku == '') {
-    //            selectedRow.find(".AddSku").addClass('warning')
-    //        }
-    //        if (data.title == '') {
-    //            selectedRow.find(".AddTitle").addClass('warning')
-    //        }
-    //        if (data.Colorname == '') {
-    //            selectedRow.find(".AddColor").addClass('warning')
-    //        }
-
-    //    }
-    //});
+        }
+    });
 
 
         $('body').on('keyup', '#UPCID', function () {
@@ -973,7 +1047,88 @@
                 $('#IsExistsUPC').text("");
             }
         });
+    $('input#file-input').change(function (e) {
+        
+        var selectedRow = $(this).parents('tr');
+        $(selectedRow).parents('tr').next().find(".sku").focus();
+      
+            /*$(selectedRow).find('input#file-input').val()*/          
+        
+     var files = $(selectedRow).find('input#file-input').val();
+        //
+        var fdata = new FormData();
+        for (var i = 0; i < files.length; i++) {
+            fdata.append("files", files[i]);
+        }
+      
+     
+        var SKU = $(selectedRow).find('.AddSku').val();
+        
 
+    //    getBase64(e.target.files[0]);
+            
+        if (files.length > 0) {
+            var formData = new FormData();
+            formData.append('files', e.target.files[0])
+            $.ajax({
+                type: "POST",
+                url: "/Product/SaveImagesSingle",
+                contentType: false,
+                processData: false,
+                data: formData,
+                
+                success: function (response) {
 
+                }
+            });
+        }
+        else {
+            alert('Please select a file.')
+        }
+      
+    });
+    function getBase64(file) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log("abc")
+            console.log(reader.result);
+            $.ajax({
+                type: "POST",
+                url: "/Product/SaveImagesSingle",
+                contentType: false,
+                processData: false,
+                data: { files: makeblob(reader.result)  },
+
+                success: function (response) {
+
+                }
+            });
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+    makeblob = function (dataURL) {
+        var BASE64_MARKER = ';base64,';
+        if (dataURL.indexOf(BASE64_MARKER) == -1) {
+            var parts = dataURL.split(',');
+            var contentType = parts[0].split(':')[1];
+            var raw = decodeURIComponent(parts[1]);
+            return new Blob([raw], { type: contentType });
+        }
+        var parts = dataURL.split(BASE64_MARKER);
+        var contentType = parts[0].split(':')[1];
+        var raw = window.atob(parts[1]);
+        var rawLength = raw.length;
+
+        var uInt8Array = new Uint8Array(rawLength);
+
+        for (var i = 0; i < rawLength; ++i) {
+            uInt8Array[i] = raw.charCodeAt(i);
+        }
+
+        return new Blob([uInt8Array], { type: contentType });
+    }
 </script>
 }

@@ -1131,6 +1131,39 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+
+        public bool Update(string ApiURL, string token, SaveChildSkuVM ViewModel)
+        {
+            bool status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/UpdateChildSKU");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                    status = Convert.ToBoolean(strResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return status;
+        }
     }
 }
 
