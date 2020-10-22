@@ -1053,7 +1053,7 @@ namespace Hld.WebApplication.Helper
             }
             return ViewModel;
         }
-        public List<SaveChildSkuVM> GetChildProductList(string apiurl, string token,int id)
+        public List<GetChildSkuVM> GetChildProductList(string apiurl, string token,int id)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Product/GetChildSkuById?id=" + id);
             request.Method = "GET";
@@ -1068,7 +1068,7 @@ namespace Hld.WebApplication.Helper
                     strResponse = stream.ReadToEnd();
                 }
             }
-            List<SaveChildSkuVM> responses = JsonConvert.DeserializeObject<List<SaveChildSkuVM>>(strResponse);
+            List<GetChildSkuVM> responses = JsonConvert.DeserializeObject<List<GetChildSkuVM>>(strResponse);
             return responses;
         }
 
@@ -1131,7 +1131,35 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+        public bool DeleteChildProductChildImage(string ApiURL, string token, int ChildImage)
+        {
+            bool status = false;
 
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/DeleteChildImage?ChildImage=" + ChildImage);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return status;
+        }
         public bool Update(string ApiURL, string token, SaveChildSkuVM ViewModel)
         {
             bool status = false;
@@ -1161,6 +1189,37 @@ namespace Hld.WebApplication.Helper
             catch (Exception ex)
             {
                 throw;
+            }
+            return status;
+        }
+
+        public string ShadowCreate(string ApiURL, string token,List<SaveSkuShadowViewModel> viewModel)
+        {
+            string status = "";
+            try
+            {
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SaveChildSkuShadow/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
             }
             return status;
         }

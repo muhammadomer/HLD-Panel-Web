@@ -516,9 +516,23 @@ namespace Hld.WebApplication.Controllers
             GetParentSkuById ViewModel = new GetParentSkuById();
             var list = ProductApiAccess.GetChildProductList(ApiURL, token,id);
             ViewModel = ProductApiAccess.GetproductById(ApiURL, token, id);
+
             ViewModel.list = list;
-         
+            ViewBag.S3BucketURL = s3BucketURL;
+            ViewBag.S3BucketURL_large = s3BucketURL_large;
             return View(ViewModel);
+        }
+
+
+        [HttpPost]
+        public string ShadowCreate(List<SaveSkuShadowViewModel> data)
+        {
+            string token = Request.Cookies["Token"];
+
+            var staus=ProductApiAccess.ShadowCreate(ApiURL, token, data);
+            return staus;
+
+
         }
         [HttpPost]           
         public string SaveChildSku(List<SaveChildSkuVM> data)
@@ -542,6 +556,13 @@ namespace Hld.WebApplication.Controllers
             bool status = false;
             token = Request.Cookies["Token"];
             status = ProductApiAccess.DeleteChildProduct(ApiURL, token, child_id);
+            return RedirectToAction("GetMultipleproductDetailist", "product", status);
+        }
+        public IActionResult DeleteChildProductChildImage(int ChildImage)
+        {
+            bool status = false;
+            token = Request.Cookies["Token"];
+            status = ProductApiAccess.DeleteChildProductChildImage(ApiURL, token, ChildImage);
             return RedirectToAction("GetMultipleproductDetailist", "product", status);
         }
         //public IActionResult productAddMultipleSku(string ProductSKU)
@@ -858,7 +879,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveImagesSingle(List<IFormFile> files)
+        public async Task<IActionResult> SaveImagesSingle(List<IFormFile> files, string ProductSKU)
         {
             token = Request.Cookies["Token"];
             if (files.Count > 0)
