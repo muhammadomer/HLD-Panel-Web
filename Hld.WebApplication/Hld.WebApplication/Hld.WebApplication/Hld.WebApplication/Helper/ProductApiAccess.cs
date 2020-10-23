@@ -1223,6 +1223,41 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+
+        public bool SaveSellerCloudImagesForChildSku(string ApiURL, string token, ImagesSaveToDatabaseWithURLViewMOdel viewModel)
+        {
+            try
+            {
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/product/SaveProductImages");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+
+                return Convert.ToBoolean(strResponse);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
     }
 }
 
