@@ -95,7 +95,7 @@
                 @*<input type="hidden" id="currencyRate" value="@Model." />*@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group row">
-                    <label asp-for="Sku" class="col-sm-1 text-sm-right control-label"></label>
+                    <label class="col-sm-1 text-sm-right control-label">SKU</label>
                     <div class="col-sm-3">
                         
                         @*<input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value='@Model.ColorAlias'>*@
@@ -109,7 +109,7 @@
                     <span style="margin-left:30px;" id="SKUCounter"></span>
                 </div>
                 <div class="form-group row">
-                    <label asp-for="ProductTitle" class="col-sm-1 text-sm-right control-label"></label>
+                    <label class="col-sm-1 text-sm-right control-label">Product Title</label>
                     <div class="col-sm-8">
                         <input asp-for="ProductTitle" id="ProductTitle" class="form-control" />
                         <span asp-validation-for="ProductTitle" class="text-danger"></span>
@@ -118,7 +118,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label asp-for="ConditionId" class="col-sm-1 text-sm-right  control-label"></label>
+                    <label class="col-sm-1 text-sm-right  control-label">Condition</label>
                     <div class="col-sm-3">
                         @Html.DropDownListFor(x => x.ConditionId, new SelectList(Model.Condition, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Condition" })
                         @*<span asp-validation-for="ConditionId" class="text-danger"></span>*@
@@ -152,7 +152,7 @@
         </span>
     </div>-->
                 <div class="form-group row">
-                    <label asp-for="CatagoryName" class="col-sm-1 text-sm-right control-label"></label>
+                    <label class="col-sm-1 text-sm-right control-label">Catagory</label>
                     <div class="col-sm-8">
                         <input asp-for="CatagoryName" type="search" id="CategoryId" class="form-control" />
                         <span asp-validation-for="CatagoryName" class="text-danger"></span>
@@ -167,7 +167,7 @@
 
                 <div class="form-group row">
 
-                    <label asp-for="ShipWt" class="col-sm-1 text-sm-right control-label"></label>
+                    <label  class="col-sm-1 text-sm-right control-label">Ship Wt (oz)</label>
                     <div class="col-sm-3">
                         <input asp-for="ShipWt" id="ShipmentWeightId" class="form-control" />
 
@@ -298,7 +298,7 @@
 
                     @*id="DeleteProduct"*@
                 </div>
-                <input type="submit" name="action" id="InputSubmit" value="Submit" class="btn btn-primary" style="float:right" />
+                <input type="submit" name="action" id="InputSubmit" value="Submit" class="btn btn-primary" style="text-align:center;margin-left:158px" />
             </form>
 
            
@@ -470,11 +470,11 @@
 
                 }
             })
-            if ($('#HfProductId').length > 0) {
-                $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
-                    $('#imagesDivMainView').html(response);
-                });
-            }
+            //if ($('#HfProductId').length > 0) {
+            //    $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
+            //        $('#imagesDivMainView').html(response);
+            //    });
+            //}
             $('.addproduct').click(function () {
 
                 $('.table tbody tr').each(function () {
