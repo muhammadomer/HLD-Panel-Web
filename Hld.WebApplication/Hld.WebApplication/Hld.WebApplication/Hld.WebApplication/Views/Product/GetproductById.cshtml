@@ -449,7 +449,7 @@
                             <img src="~/Images/cross.jpg" height="15px" width="15px" style="float:right;cursor:pointer" class="delteimg" />
 
                         </div>
-                        @if (String.IsNullOrEmpty(item.CompressedImage))
+                        @if (string.IsNullOrEmpty(item.ImageName))
                         {
 
                             <div class="image-upload image-uploadshadow">
@@ -471,7 +471,7 @@
                     </a>*@
                                 <label class="input-label">
                                     <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded imgupload imguploadshadow" height="50" width="50" id="uploader" />
+                                        <img src="@ViewBag.S3BucketURL/@item.ImageName" class="rounded imgupload imguploadshadow" height="50" width="50" id="uploader" />
                                     </a>
                                 </label>
                                 <input id="file-input" type="file" />
