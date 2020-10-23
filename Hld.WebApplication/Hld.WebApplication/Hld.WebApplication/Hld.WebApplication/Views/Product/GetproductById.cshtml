@@ -203,6 +203,13 @@
         margin: 0 auto;
         cursor: pointer;
     }
+    .image-uploadshadow {
+        width: 25px;
+        height: 25px;
+        display: block;
+        margin: 0 auto;
+        cursor: pointer;
+    }
 
         .image-upload > input {
             display: none;
@@ -229,7 +236,14 @@
         cursor: pointer !important;
         display: block;
     }
-
+    .imguploadshadow {
+        margin: 0 auto;
+        width: 25px;
+        height: 25px;
+        border-radius: 3px;
+        cursor: pointer !important;
+        display: block;
+    }
     .select2-container .select2-selection--single {
         box-sizing: border-box;
         cursor: pointer;
@@ -301,7 +315,7 @@
 
         </label>
         <div class="col-sm-12">
-            <table class="table table-bordered ">
+            <table class="FirstTable table table-bordered ">
                 <thead style="background-color:lightgray">
                     <tr>
                         <th style="width:0.1%"><input type="checkbox" class="checkboxes " id="headerCheckBox" /></th>
@@ -313,7 +327,7 @@
                         <th style="width:10%;">Action</th>
                     </tr>
                 </thead>
-                <tbody class="FirstTable">
+                <tbody>
                     @foreach (var item in Model.list)
                     {
                         @if (item.ShadowOff == "")
@@ -416,7 +430,7 @@
                         <input type="checkbox" class="checkbox2">
                     </th>
                     <th style=" width: 10%;">Image</th>
-                   
+                    <th>SKU</th>
                     <th>Shadows</th>
                     <th>Company</th>
                     <th style="width:10%;">Status</th>
@@ -428,59 +442,61 @@
 
                     @if (item.ShadowOff != "")
                     {
-                        <tr>
-                            <td> <input type="checkbox" class="checkboxes " id="checkbox" /></td>
-                            <td>
-                                <div>
-                                    <img src="~/Images/cross.jpg" height="15px" width="15px" style="float:right;cursor:pointer" class="delteimg" />
+                <tr>
+                    <td> <input type="checkbox" class="checkboxes " id="checkbox" /></td>
+                    <td>
+                        <div>
+                            <img src="~/Images/cross.jpg" height="15px" width="15px" style="float:right;cursor:pointer" class="delteimg" />
 
-                                </div>
-                                @if (String.IsNullOrEmpty(item.CompressedImage))
-                                {
+                        </div>
+                        @if (String.IsNullOrEmpty(item.CompressedImage))
+                        {
 
-                                    <div class="image-upload">
-
-
-                                        <label class="input-label">
-                                            <img class="imgupload" src="/Images/img-icon-2.jpg" id="uploader" />
-                                        </label>
-                                        <input id="file-input" type="file" />
-                                    </div>
+                            <div class="image-upload image-uploadshadow">
 
 
-                                }
-                                else
-                                {
-                                    <div class="image-upload">
-                                        @*<a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                                    <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
-                                </a>*@
-                                        <label class="input-label">
-                                            <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                                                <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded imgupload" height="50" width="50" id="uploader" />
-                                            </a>
-                                        </label>
-                                        <input id="file-input" type="file" />
-                                    </div>
-                                }
+                                <label class="input-label">
+                                    <img class="imgupload imguploadshadow" src="/Images/img-icon-2.jpg" id="uploader" />
+                                </label>
+                                <input id="file-input" type="file" />
+                            </div>
 
-                                <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
-                                <input type='text' style="display:none" class='form-control AddSku' value='@item.Sku' id="SKU">
-                                <input type='text' style="display:none" class='form-control productstatus' value='@item.title'>
-                                <input type='text' style="display:none" class='form-control product_id' value='@item.Parentproduct_id'>
-                                <input type='text' style="display:none" class='form-control child_id' value='@item.Childproduct_id'>
-                                <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
-                                <input type="text" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
-                            </td>
 
-                            <td>
-                                <input type="text" class="form-control AddSku" placeholder="SKU" value='@item.Sku' readonly id="SKU" />
+                        }
+                        else
+                        {
+                            <div class="image-upload image-uploadshadow">
+                                @*<a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                    </a>*@
+                                <label class="input-label">
+                                    <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded imgupload imguploadshadow" height="50" width="50" id="uploader" />
+                                    </a>
+                                </label>
+                                <input id="file-input" type="file" />
+                            </div>
+                        }
 
-                            </td>
-                            <td></td>
-                            
-                            <td></td>
-                        </tr>
+                        <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
+                        <input type='text' style="display:none" class='form-control AddSku' value='@item.Sku' id="SKU">
+                        <input type='text' style="display:none" class='form-control productstatus' value='@item.title'>
+                        <input type='text' style="display:none" class='form-control product_id' value='@item.Parentproduct_id'>
+                        <input type='text' style="display:none" class='form-control child_id' value='@item.Childproduct_id'>
+                        <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
+                        <input type="text" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
+                    </td>
+
+                    <td>
+                        <input type="text" class="form-control AddSku" placeholder="SKU" value='@item.ShadowOff' readonly id="SKU" />
+
+                    </td>
+
+                    <td> <input type="text" class="form-control AddSku" placeholder="SKU" value='@item.Sku' readonly id="SKU" /></td>
+
+                    <td>@item.CompanyName</td>
+                    <td></td>
+                </tr>
                     }
   
 
@@ -637,12 +653,12 @@
     $('#ActionMenu').select2();
     $('#headerCheckBox').click(function () {
     if ($(this).is(':checked')) {
-    $("table tbody tr ").each(function () {
+        $(".FirstTable tbody tr ").each(function () {
     $(this).find('.checkboxes').attr('checked', true);
     });
     }
     else {
-    $("table tbody tr ").each(function () {
+        $(".FirstTable tbody tr ").each(function () {
     $(this).find('.checkboxes').attr('checked', false);
     });
     }
@@ -658,7 +674,7 @@
                 if (action == "CreateShadow") {
 
                     var data = [];
-                    $('table tbody tr ').each(function () {
+                    $('.FirstTable tbody tr ').each(function () {
                         var Obj =
                         {
                             Sku: $(this).find('.AddSku').val(),
@@ -848,7 +864,7 @@
     function AddMarkup() {
 
     var markup = "<tr><td><input type='checkbox' class='checkboxes' id='checkbox' /></td><td><div class='image-upload'><label class='input-label'><img class='imgupload' src='/Images/img-icon-2.jpg' id='uploader' /></label><input id='file-input' type='file' /></div><input type='text' style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text' style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value='' id='SKU'></td><td><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color' /><span style='color:red;padding-left:0px;' id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU' /><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC' /></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button' class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
-        $(".FirstTable").append(markup);
+        $(".FirstTable tbody").append(markup);
 
     }
     var count = 0;
@@ -862,7 +878,7 @@
                  imgchage()
                  imgupload()
                  }
-        var tbody_tr_last=$('table> tbody>tr:last');
+        var tbody_tr_last = $('.FirstTable> tbody>tr:last');
         var color = tbody_tr_last.find(".AddColor").val();
         var sku = tbody_tr_last.find(".AddSku").val();
         var title = tbody_tr_last.find(".AddTitle").val();
@@ -908,7 +924,7 @@
         $(document).on('click', '#btnSave', function () {
 
         var data = [];
-        $('table tbody tr ').each(function () {
+            $('.FirstTable tbody tr ').each(function () {
         var Obj =
         {
         Sku: $(this).find('.AddSku').val(),

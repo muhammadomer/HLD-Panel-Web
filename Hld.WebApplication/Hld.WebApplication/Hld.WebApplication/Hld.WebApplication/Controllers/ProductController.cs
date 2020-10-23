@@ -877,6 +877,37 @@ namespace Hld.WebApplication.Controllers
             }
             return status;
         }
+        [HttpPost]
+        private async Task<bool> SaveImagesChildSku(List<IFormFile> files, string ProductSKU)
+        {
+            bool status = false;
+            List<ImagesSaveToDatabaseWithURLViewMOdel> listImagesUrl = new List<ImagesSaveToDatabaseWithURLViewMOdel>();
+            if (files != null)
+            {
+                if (files.Count > 0)
+                {
+                    foreach (var Imagefile in files)
+                    {
+                        string fileName = Imagefile.FileName + "-" + ProductSKU + Path.GetExtension(Imagefile.FileName);
+                        Image img = Image.FromStream(Imagefile.OpenReadStream(), true, true);
+                        using (Stream ms = new MemoryStream())
+                        {
+                            Imagefile.CopyTo(ms);
+                            await uploadFiles.uploadToS3(ms, fileName);
+                            await uploadFiles.uploadCompressedToS3(GetStreamOfReducedImage(img), fileName);
+
+                        }
+                        ImagesSaveToDatabaseWithURLViewMOdel databaseImagesURL = new ImagesSaveToDatabaseWithURLViewMOdel();
+                        databaseImagesURL.product_Sku = ProductSKU;
+                        databaseImagesURL.FileName = fileName;
+
+                        status = ProductApiAccess.SaveSellerCloudImagesForChildSku(ApiURL, token, databaseImagesURL);
+                    }
+
+                }
+            }
+            return status;
+        }
 
         [HttpPost]
         public async Task<IActionResult> SaveImagesSingle(List<IFormFile> files, string ProductSKU)
@@ -884,7 +915,7 @@ namespace Hld.WebApplication.Controllers
             token = Request.Cookies["Token"];
             if (files.Count > 0)
             {
-                await SaveImages(files, Convert.ToString(HttpContext.Request.Form["ProductSKU"]));
+                await SaveImagesChildSku(files, Convert.ToString(HttpContext.Request.Form["ProductSKU"]));
 
             }
             return Json(new { message = "data is save successfully" });
