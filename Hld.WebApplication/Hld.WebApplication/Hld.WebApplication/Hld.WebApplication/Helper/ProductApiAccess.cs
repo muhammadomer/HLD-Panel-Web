@@ -1102,6 +1102,120 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+
+
+        public string CreateProductOnSellerCloud(string ApiURL, string token, CreateProductOnSallerCloudViewModel viewModel)
+        {
+            string status = "";
+            try
+            {
+                
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/Products");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
+            }
+            return status;
+        }
+
+        public string CreateProductShadowOnSellerCloud(string ApiURL, string token, List<CreateshadowOnSellerCloudViewModel> viewModel)
+        {
+            string status = "";
+            try
+            {
+
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/Catalog/Imports/Shadows");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
+            }
+            return status;
+        }
+        public List<GetShadowsOfChildViewModel> GetShadowsOfChild(string ApiURL, string token,string childSku)
+        {
+            List<GetShadowsOfChildViewModel> listmodel = new List<GetShadowsOfChildViewModel>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetShadowsOfChild?childSku="+ childSku);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                listmodel = JsonConvert.DeserializeObject<List<GetShadowsOfChildViewModel>>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return listmodel;
+        }
+        public CheckChildOrShadowCreatedOnSCViewModel CheckChildOrShadowCreatedOnSC(string ApiURL, string token, string sku)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/CheckChildOrShadowCreatedOnSC?sku=" + sku);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+
+
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            CheckChildOrShadowCreatedOnSCViewModel responses = JsonConvert.DeserializeObject<CheckChildOrShadowCreatedOnSCViewModel>(strResponse);
+
+            return responses;
+        }
         public bool DeleteChildProduct(string ApiURL, string token, int child_id)
         {
             bool status = false;
@@ -1192,7 +1306,38 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+        public bool UpdateSkustatusonsellercloud(string ApiURL, string token, string sku)
+        {
+            bool status = false;
+            try
+            {
+              
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/UpdateProductStatusWhenProductCreatedOnSC?sku="+sku);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
 
+
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                        status = Convert.ToBoolean(strResponse);
+                    }
+                }
+               
+                
+                
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return status;
+        }
         public string ShadowCreate(string ApiURL, string token,List<SaveSkuShadowViewModel> viewModel)
         {
             string status = "";

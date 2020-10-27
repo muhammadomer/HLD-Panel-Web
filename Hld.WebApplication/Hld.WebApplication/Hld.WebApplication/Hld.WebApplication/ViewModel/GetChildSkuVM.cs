@@ -20,6 +20,7 @@ namespace Hld.WebApplication.ViewModel
         public string ShadowOff { get; set; }
         public int CompanyId { get; set; }
         public string Shadow_Key { get; set; }
+        public int IsCreatedOnSC { get; set; }
         public string CompanyName { get; set; }
     }
 }

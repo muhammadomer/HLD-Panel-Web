@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
@@ -32,6 +33,7 @@ namespace Hld.WebApplication.Controllers
         private readonly IConfiguration _configuration;
         string ApiURL = "";
         string token = "";
+        string SCRestURL = "";
         SellerCloudApiAccess sellerCloudApiAccess = null;
         BrandApiAccess brandApiAccess = null;
         ColorApiAccess colorApiAccess = null;
@@ -39,11 +41,13 @@ namespace Hld.WebApplication.Controllers
         CategoryApiAccess categoryApiAccess = null;
         ProductApiAccess ProductApiAccess = null;
         UploadFilesToS3 uploadFiles = null;
+        EncDecChannel _encDecChannel = null;
+        GetChannelCredViewModel _Selller = null;
         ProductWarehouseQtyApiAccess productWarehouseQtyApiAccess = null;
         CurrencyExchangeApiAccess currencyExchangeApiAccess = null;
         string s3BucketURL = "";
         string s3BucketURL_large = "";
-
+        OrderNotesAPiAccess _OrderApiAccess = null;
         public static IHostingEnvironment _environment;
         public ProductController(IConfiguration configuration, IHostingEnvironment environment)
         {
@@ -62,6 +66,9 @@ namespace Hld.WebApplication.Controllers
             uploadFiles = new UploadFilesToS3(_environment, _configuration);
             currencyExchangeApiAccess = new CurrencyExchangeApiAccess();
             productWarehouseQtyApiAccess = new ProductWarehouseQtyApiAccess();
+            _OrderApiAccess = new OrderNotesAPiAccess();
+            SCRestURL = _configuration.GetValue<string>("WebApiURL:SCRestURL");
+            _encDecChannel = new EncDecChannel();
         }
         [Authorize(Policy = "Access to Inventory")]
         public IActionResult IndexMainView(ProductInventorySearchViewModel model, string input)
@@ -544,6 +551,102 @@ namespace Hld.WebApplication.Controllers
 
 
         }
+        [HttpGet]
+        public List<GetShadowsOfChildViewModel> GetShadowsOfChild(string childSku)
+        {
+            string token = Request.Cookies["Token"];
+            List<GetShadowsOfChildViewModel> listmodel = new List<GetShadowsOfChildViewModel>();
+            listmodel = ProductApiAccess.GetShadowsOfChild(ApiURL, token, childSku);
+            return listmodel;
+        }
+        [HttpGet]
+        public CheckChildOrShadowCreatedOnSCViewModel CheckChildOrShadowCreatedOnSC(string SKU)
+        {
+            token = Request.Cookies["Token"];
+            var Response = ProductApiAccess.CheckChildOrShadowCreatedOnSC(ApiURL, token, SKU);
+            return Response;
+        }
+        [HttpPost]
+        public string CreateProductOnSellerCloud(List<CreateProductOnSallerCloudViewModel> data)
+        {
+            string token = Request.Cookies["Token"];
+            _Selller = new GetChannelCredViewModel();
+            _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+            AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+            List<GetShadowsOfChildViewModel> childskuShadow = new List<GetShadowsOfChildViewModel>();
+            CheckChildOrShadowCreatedOnSCViewModel model = new CheckChildOrShadowCreatedOnSCViewModel();
+            data.FirstOrDefault().CompanyId = 513;
+            data.FirstOrDefault().ProductTypeName = "Misc";
+            data.FirstOrDefault().PurchaserId = 0;
+            data.FirstOrDefault().SiteCost = 0;
+            data.FirstOrDefault().DefaultPrice = 0;
+            data.FirstOrDefault().ManufacturerId = 0;
+            data.FirstOrDefault().AutoAssignUPC = false;
+            data.FirstOrDefault().ProductNotes = "Create by Hld Panel";
+            var status = "";
+            foreach (var item in data)
+            {
+                var isCreated=CheckChildOrShadowCreatedOnSC(item.ProductSKU);
+                    if (isCreated.IsCreatedOnSC == 0) {
+
+                    status = ProductApiAccess.CreateProductOnSellerCloud(ApiURL, authenticate.access_token, item);
+                    if (!string.IsNullOrEmpty(status))
+                    {
+                        ProductApiAccess.UpdateSkustatusonsellercloud(ApiURL, token, status);
+                        childskuShadow = GetShadowsOfChild(item.ProductSKU);
+                        foreach (var childshadowList in childskuShadow)
+                        {
+                            CreateProductOnSallerCloudViewModel shadowSKU = new CreateProductOnSallerCloudViewModel();
+                            shadowSKU.ProductName = childshadowList.title;
+                            shadowSKU.ProductSKU = childshadowList.sku;
+                            shadowSKU.CompanyId = 513;
+                            shadowSKU.ProductTypeName = "Misc";
+                            shadowSKU.PurchaserId = 0;
+                            shadowSKU.SiteCost = 0;
+                            shadowSKU.DefaultPrice = 0;
+                            shadowSKU.ManufacturerId = 0;
+                            shadowSKU.AutoAssignUPC = false; 
+                            shadowSKU.ProductNotes = "Create by Hld Panel"; 
+
+                            status = ProductApiAccess.CreateProductOnSellerCloud(ApiURL, authenticate.access_token, shadowSKU);
+                            ProductApiAccess.UpdateSkustatusonsellercloud(ApiURL, token, status);
+                        }
+                    }
+                    else
+                    {
+                        TempData["status"] = "Some Error Occure during PO Creation!";
+                    }
+                }
+                else
+                {
+                    TempData["status"] = "Some Error Occure during PO Creation!";
+                }
+
+            }           
+            return status;
+        }
+
+        [HttpPost]
+        public string CreateProductShadowOnSellerCloud(List<CreateshadowOnSellerCloudViewModel> data)
+        {
+            string token = Request.Cookies["Token"];
+            _Selller = new GetChannelCredViewModel();
+            _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+            AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+
+
+            data.FirstOrDefault().Metadata.CompanyId = 512;
+            data.FirstOrDefault().Metadata.ScheduleDate = "";
+            data.FirstOrDefault().FileContents = "0M8R4KGxGuEAAAAAAAAAAAAAAAAAAAAAPgADAP7AAAAAA";
+            data.FirstOrDefault().Format = 2;
+
+            var status = "";
+
+            status = ProductApiAccess.CreateProductShadowOnSellerCloud(ApiURL, authenticate.access_token, data);
+            return status;
+        }
+
+        
         [HttpPost]
         public IActionResult UpdateChildSku(SaveChildSkuVM data)
         {
@@ -773,7 +876,7 @@ namespace Hld.WebApplication.Controllers
                 return Json(model);
             }
 
-        }
+        } 
 
 
         public ProductInsetUpdateViewModel ProductPageIndexMethod()
