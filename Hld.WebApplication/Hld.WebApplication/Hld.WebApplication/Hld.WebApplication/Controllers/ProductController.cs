@@ -400,6 +400,9 @@ namespace Hld.WebApplication.Controllers
             return Json(new { filePath = Path.GetTempPath(), fileName = excelName });
             // return downloadFile(Path.GetTempPath(), excelName, excelName); 
         }
+
+     
+       
         public FileResult downloadFile(string filePath, string fileName, string file)
         {
 
@@ -567,7 +570,7 @@ namespace Hld.WebApplication.Controllers
             return Response;
         }
         [HttpPost]
-        public string CreateProductOnSellerCloud(List<CreateProductOnSallerCloudViewModel> data)
+        public async Task<string> CreateProductOnSellerCloudAsync(List<CreateProductOnSallerCloudViewModel> data)
         {
             string token = Request.Cookies["Token"];
             _Selller = new GetChannelCredViewModel();
@@ -575,19 +578,22 @@ namespace Hld.WebApplication.Controllers
             AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
             List<GetShadowsOfChildViewModel> childskuShadow = new List<GetShadowsOfChildViewModel>();
             CheckChildOrShadowCreatedOnSCViewModel model = new CheckChildOrShadowCreatedOnSCViewModel();
-            data.FirstOrDefault().CompanyId = 513;
-            data.FirstOrDefault().ProductTypeName = "Misc";
-            data.FirstOrDefault().PurchaserId = 0;
-            data.FirstOrDefault().SiteCost = 0;
-            data.FirstOrDefault().DefaultPrice = 0;
-            data.FirstOrDefault().ManufacturerId = 0;
-            data.FirstOrDefault().AutoAssignUPC = false;
-            data.FirstOrDefault().ProductNotes = "Create by Hld Panel";
+           
             var status = "";
+            FileContents _fileContents = new FileContents();
             foreach (var item in data)
             {
+                
                 var isCreated=CheckChildOrShadowCreatedOnSC(item.ProductSKU);
                     if (isCreated.IsCreatedOnSC == 0) {
+                    item.CompanyId = 513;
+                    item.ProductTypeName = "Misc";
+                    item.PurchaserId = 0;
+                    item.SiteCost = 0;
+                    item.DefaultPrice = 0;
+                    item.ManufacturerId = 0;
+                    item.AutoAssignUPC = false;
+                    item.ProductNotes = "Create by Hld Panel";
 
                     status = ProductApiAccess.CreateProductOnSellerCloud(ApiURL, authenticate.access_token, item);
                     if (!string.IsNullOrEmpty(status))
@@ -610,7 +616,36 @@ namespace Hld.WebApplication.Controllers
 
                             status = ProductApiAccess.CreateProductOnSellerCloud(ApiURL, authenticate.access_token, shadowSKU);
                             ProductApiAccess.UpdateSkustatusonsellercloud(ApiURL, token, status);
+                         
                         }
+
+                        CreateshadowOnSellerCloudViewModel createshadowOnSeller = new CreateshadowOnSellerCloudViewModel();
+                    
+                        string excelName = $"ShadowData.xls";
+                        FileInfo file = new FileInfo(Path.GetTempPath() + excelName);
+                        if (file.Exists)
+                        {
+                            file.Delete();
+                            file = new FileInfo(Path.GetTempPath() + excelName);
+                        }
+
+                        List<FileContents> viewModels = ProductApiAccess.GetShadowsOfChildSku(ApiURL, token, item.ProductSKU);
+                        await Task.Yield();
+                        using (var package = new ExcelPackage(file))
+                        {
+                            var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                            workSheet.Cells.LoadFromCollection(viewModels, true);
+                            package.Save();
+                        }
+                        Byte[] bytes = System.IO.File.ReadAllBytes(Path.GetTempPath() + excelName);
+                        Metadata metadata = new Metadata();
+                        metadata.CompanyId = 512;
+                        metadata.ScheduleDate = "";
+                        createshadowOnSeller.FileContents = Convert.ToBase64String(bytes);
+                        createshadowOnSeller.Format = 2;
+                        createshadowOnSeller.Metadata = metadata;
+
+                        CreateProductShadowOnSellerCloud(createshadowOnSeller);
                     }
                     else
                     {
@@ -627,26 +662,35 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public string CreateProductShadowOnSellerCloud(List<CreateshadowOnSellerCloudViewModel> data)
+        public string CreateProductShadowOnSellerCloud(CreateshadowOnSellerCloudViewModel data)
         {
             string token = Request.Cookies["Token"];
             _Selller = new GetChannelCredViewModel();
             _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
             AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
-
-
-            data.FirstOrDefault().Metadata.CompanyId = 512;
-            data.FirstOrDefault().Metadata.ScheduleDate = "";
-            data.FirstOrDefault().FileContents = "0M8R4KGxGuEAAAAAAAAAAAAAAAAAAAAAPgADAP7AAAAAA";
-            data.FirstOrDefault().Format = 2;
-
             var status = "";
-
             status = ProductApiAccess.CreateProductShadowOnSellerCloud(ApiURL, authenticate.access_token, data);
             return status;
         }
 
-        
+        public async Task<JsonResult> GenerateXls(string childsku)
+
+        {
+            string Basefile = "";
+            try
+            {
+                token = Request.Cookies["Token"];
+               
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+             return Json(new {  BaseData = Basefile });
+
+        }
         [HttpPost]
         public IActionResult UpdateChildSku(SaveChildSkuVM data)
         {

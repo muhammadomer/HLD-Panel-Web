@@ -9,5 +9,7 @@ namespace Hld.WebApplication.ViewModel
     {
         public string sku { get; set; }
         public string title { get; set; }
+        public int CompanyId { get; set; }
+
     }
 }

@@ -273,6 +273,28 @@ namespace Hld.WebApplication.Helper
 
             return responses;
         }
+
+        public List<FileContents> GetShadowsOfChildSku(string ApiURL, string token, string childSku)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetShadowsOfChildForXls?childSku=" + childSku);
+            // var data = JsonConvert.SerializeObject(childsku);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<FileContents> responses = JsonConvert.DeserializeObject<List<FileContents>>(strResponse);
+
+            return responses;
+        }
         public ProductDisplayViewModel GetProductDetailBySKU(string ApiURL, string token, string sku)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/ProductDeatil?sku=" + sku);
@@ -1136,7 +1158,7 @@ namespace Hld.WebApplication.Helper
             return status;
         }
 
-        public string CreateProductShadowOnSellerCloud(string ApiURL, string token, List<CreateshadowOnSellerCloudViewModel> viewModel)
+        public string CreateProductShadowOnSellerCloud(string ApiURL, string token, CreateshadowOnSellerCloudViewModel viewModel)
         {
             string status = "";
             try
