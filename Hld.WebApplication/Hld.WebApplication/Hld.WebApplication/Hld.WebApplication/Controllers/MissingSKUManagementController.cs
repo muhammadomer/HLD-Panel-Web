@@ -398,9 +398,18 @@ namespace Hld.WebApplication.Controllers
                     // act on the Base64 data
                 }
             }
-            ServiceReference1.SCServiceSoapClient sCServiceSoap =
-                      new ServiceReference1.SCServiceSoapClient(ServiceReference1.SCServiceSoapClient.EndpointConfiguration.SCServiceSoap12);
-            var request = await sCServiceSoap.BulkUpdateFieldsAsync(authHeader,null ,content, false);
+            try
+            {
+                ServiceReference1.SCServiceSoapClient sCServiceSoap =
+                    new ServiceReference1.SCServiceSoapClient(ServiceReference1.SCServiceSoapClient.EndpointConfiguration.SCServiceSoap12);
+                var request = await sCServiceSoap.BulkUpdateFieldsAsync(authHeader, null, content, false);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+          
             
             return Ok();
         }

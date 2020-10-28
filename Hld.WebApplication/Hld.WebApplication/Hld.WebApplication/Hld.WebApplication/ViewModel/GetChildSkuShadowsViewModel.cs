@@ -13,8 +13,8 @@ namespace Hld.WebApplication.ViewModel
     }
     public class FileContents
     {
-        public int ParentSKU { get; set; }
-        public int ShadowSKU { get; set; }
+        public string ParentSKU { get; set; }
+        public string ShadowSKU { get; set; }
         public int CompanyID { get; set; }
     }
 }
