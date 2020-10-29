@@ -741,6 +741,7 @@ namespace Hld.WebApplication.Controllers
             string Basefile = "";
             try
             {
+                data = data.GroupBy(s => s.ProductSKU).Select(p => p.FirstOrDefault()).Distinct().ToList();
                 token = Request.Cookies["Token"];
                 foreach (var item in data)
                 {
