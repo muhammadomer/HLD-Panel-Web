@@ -544,6 +544,94 @@ namespace Hld.WebApplication.Controllers
 
 
         }
+        [HttpGet]
+        public List<GetImageUrlOfChildSkuViewModel> GetImageUrlOfChildSku(string childSku)
+        {
+            string token = Request.Cookies["Token"];
+            List<GetImageUrlOfChildSkuViewModel> listmodel = new List<GetImageUrlOfChildSkuViewModel>();
+            listmodel = ProductApiAccess.GetImageUrlOfChildSku(ApiURL, token, childSku);
+            return listmodel;
+        }
+        [HttpGet]
+        public CheckChildSkuImageUpdatedOnSCViewModel CheckChildSkuImageUpdatedOnSC(string SKU)
+        {
+            token = Request.Cookies["Token"];
+            var Response = ProductApiAccess.CheckChildSkuImageUpdatedOnSC(ApiURL, token, SKU);
+            return Response;
+        }
+        [HttpPost]
+        public string ImageUpdateOnSellerCloud(List<UpdateImageOnScViewModel> data)
+        {
+            var status = "";
+            string token = Request.Cookies["Token"];
+            _Selller = new GetChannelCredViewModel();
+            _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+            AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+            List<GetImageUrlOfChildSkuViewModel> getImage = new List<GetImageUrlOfChildSkuViewModel>();
+            foreach (var item in data)
+            {
+                var IsIamgeCreatedOnSC = CheckChildSkuImageUpdatedOnSC(item.ProductID);
+                if (IsIamgeCreatedOnSC.IsImageUpdateOnSC==0) {
+                    getImage = GetImageUrlOfChildSku(item.ProductID);
+                    
+                    foreach (var url in getImage)
+                    {
+                      var getBase64=  DownloadImageFromUrl(s3BucketURL_large+"/"+url.ChildSkuImageUrl);
+                        item.Content = getBase64 ;
+                        item.FileName = item.ProductID;
+                        item.Caption = "";
+                        status = ProductApiAccess.ImageUpdateOnSellerCloud(ApiURL, authenticate.access_token, item);
+                    }
+                    
+                }
+                else
+                {
+
+                }
+               
+            }
+
+            return status;
+        }
+
+        public string DownloadImageFromUrl(string imageUrl)
+        {
+            System.Drawing.Image image = null;
+            string base64String = "";
+            try
+            {
+                Uri ImageUri = new Uri(imageUrl, UriKind.Absolute);
+                System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(ImageUri);
+                webRequest.AllowWriteStreamBuffering = true;
+                webRequest.Timeout = 30000;
+
+                System.Net.WebResponse webResponse = webRequest.GetResponse();
+
+                System.IO.Stream stream = webResponse.GetResponseStream();
+
+                image = System.Drawing.Image.FromStream(stream);
+
+               
+                    using (MemoryStream m = new MemoryStream())
+                    {
+                        image.Save(m, image.RawFormat);
+                        byte[] imageBytes = m.ToArray();
+
+                        // Convert byte[] to Base64 String
+                         base64String = Convert.ToBase64String(imageBytes);
+                        
+                    }
+               
+
+                webResponse.Close();
+            }
+            catch (Exception ex)
+            {
+                 throw ex;
+            }
+
+            return base64String;
+        }
         [HttpPost]           
         public string SaveChildSku(List<SaveChildSkuVM> data)
         {
@@ -570,7 +658,7 @@ namespace Hld.WebApplication.Controllers
             return Response;
         }
         [HttpPost]
-        public async Task<string> CreateProductOnSellerCloudAsync(List<CreateProductOnSallerCloudViewModel> data)
+        public string CreateProductOnSellerCloudAsync(List<CreateProductOnSallerCloudViewModel> data)
         {
             string token = Request.Cookies["Token"];
             _Selller = new GetChannelCredViewModel();
@@ -613,53 +701,26 @@ namespace Hld.WebApplication.Controllers
                             shadowSKU.ManufacturerId = 0;
                             shadowSKU.AutoAssignUPC = false; 
                             shadowSKU.ProductNotes = "Create by Hld Panel"; 
-
                             status = ProductApiAccess.CreateProductOnSellerCloud(ApiURL, authenticate.access_token, shadowSKU);
                             ProductApiAccess.UpdateSkustatusonsellercloud(ApiURL, token, status);
                          
                         }
 
-                        CreateshadowOnSellerCloudViewModel createshadowOnSeller = new CreateshadowOnSellerCloudViewModel();
-                    
-                        string excelName = $"ShadowData.xls";
-                        FileInfo file = new FileInfo(Path.GetTempPath() + excelName);
-                        if (file.Exists)
-                        {
-                            file.Delete();
-                            file = new FileInfo(Path.GetTempPath() + excelName);
-                        }
-
-                        List<FileContents> viewModels = ProductApiAccess.GetShadowsOfChildSku(ApiURL, token, item.ProductSKU);
-                        await Task.Yield();
-                        using (var package = new ExcelPackage(file))
-                        {
-                            var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-                            workSheet.Cells.LoadFromCollection(viewModels, true);
-                            package.Save();
-                        }
-                        Byte[] bytes = System.IO.File.ReadAllBytes(Path.GetTempPath() + excelName);
-                        Metadata metadata = new Metadata();
-                        metadata.CompanyId = 512;
-                        metadata.ScheduleDate = "";
-                        createshadowOnSeller.FileContents = Convert.ToBase64String(bytes);
-                        createshadowOnSeller.Format = 2;
-                        createshadowOnSeller.Metadata = metadata;
-
-                        CreateProductShadowOnSellerCloud(createshadowOnSeller);
                     }
                     else
                     {
-                        TempData["status"] = "Some Error Occure during PO Creation!";
+                        TempData["status"] = "Product Already Created Against This SKU!";
                     }
                 }
                 else
                 {
-                    TempData["status"] = "Some Error Occure during PO Creation!";
+                    TempData["status"] = "Product Already Created Against This SKU!!";
                 }
 
             }           
             return status;
         }
+       
 
         [HttpPost]
         public string CreateProductShadowOnSellerCloud(CreateshadowOnSellerCloudViewModel data)
@@ -669,18 +730,50 @@ namespace Hld.WebApplication.Controllers
             _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
             AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
             var status = "";
+           
             status = ProductApiAccess.CreateProductShadowOnSellerCloud(ApiURL, authenticate.access_token, data);
             return status;
         }
-
-        public async Task<JsonResult> GenerateXls(string childsku)
+        [HttpPost]
+        public async Task<JsonResult> GenerateXls(List<CreateProductOnSallerCloudViewModel> data)
 
         {
             string Basefile = "";
             try
             {
                 token = Request.Cookies["Token"];
-               
+                foreach (var item in data)
+                {
+                    CreateshadowOnSellerCloudViewModel createshadowOnSeller = new CreateshadowOnSellerCloudViewModel();
+
+                    string excelName = $"ShadowData.xls";
+                    FileInfo file = new FileInfo(Path.GetTempPath() + excelName);
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                        file = new FileInfo(Path.GetTempPath() + excelName);
+                    }
+
+                    List<FileContents> viewModels = ProductApiAccess.GetShadowsOfChildSku(ApiURL, token, item.ProductSKU);
+                    await Task.Yield();
+                    using (var package = new ExcelPackage(file))
+                    {
+                        var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                        workSheet.Cells.LoadFromCollection(viewModels, true);
+                        package.Save();
+                    }
+                    Byte[] bytes = System.IO.File.ReadAllBytes(Path.GetTempPath() + excelName);
+                    Metadata metadata = new Metadata();
+                    metadata.CompanyId = 512;
+                    metadata.ScheduleDate = "";
+                    createshadowOnSeller.FileContents = Convert.ToBase64String(bytes);
+                    createshadowOnSeller.Format = 2;
+                    createshadowOnSeller.Metadata = metadata;
+
+                    CreateProductShadowOnSellerCloud(createshadowOnSeller);
+                }
+                
+
             }
             catch (Exception)
             {
@@ -688,9 +781,13 @@ namespace Hld.WebApplication.Controllers
                 throw;
             }
 
-             return Json(new {  BaseData = Basefile });
+             return Json(new {BaseData = Basefile });
 
         }
+
+     
+
+
         [HttpPost]
         public IActionResult UpdateChildSku(SaveChildSkuVM data)
         {

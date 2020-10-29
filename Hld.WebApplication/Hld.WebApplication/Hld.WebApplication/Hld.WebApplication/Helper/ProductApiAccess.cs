@@ -1125,13 +1125,12 @@ namespace Hld.WebApplication.Helper
             return status;
         }
 
-
         public string CreateProductOnSellerCloud(string ApiURL, string token, CreateProductOnSallerCloudViewModel viewModel)
         {
             string status = "";
             try
             {
-                
+
                 var data = JsonConvert.SerializeObject(viewModel);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/Products");
                 request.Method = "POST";
@@ -1157,7 +1156,86 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+        public string ImageUpdateOnSellerCloud(string ApiURL, string token, UpdateImageOnScViewModel viewModel)
+        {
+            string status = "";
+            try
+            {
+                
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/ProductImage");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
+            }
+            return status;
+        }
+        public List<GetImageUrlOfChildSkuViewModel> GetImageUrlOfChildSku(string ApiURL, string token, string childSku)
+        {
+            List<GetImageUrlOfChildSkuViewModel> listmodel = new List<GetImageUrlOfChildSkuViewModel>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetChildSkuImageUrl?childSku=" + childSku);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
 
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                listmodel = JsonConvert.DeserializeObject<List<GetImageUrlOfChildSkuViewModel>>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return listmodel;
+        }
+        public CheckChildSkuImageUpdatedOnSCViewModel CheckChildSkuImageUpdatedOnSC(string ApiURL, string token, string sku)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/CheckChildSkuImageUpdatedOnSC?sku=" + sku);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+
+
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            CheckChildSkuImageUpdatedOnSCViewModel responses = JsonConvert.DeserializeObject<CheckChildSkuImageUpdatedOnSCViewModel>(strResponse);
+
+            return responses;
+        }
         public string CreateProductShadowOnSellerCloud(string ApiURL, string token, CreateshadowOnSellerCloudViewModel viewModel)
         {
             string status = "";
@@ -1390,6 +1468,7 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+       
 
         public bool SaveSellerCloudImagesForChildSku(string ApiURL, string token, ImagesSaveToDatabaseWithURLViewMOdel viewModel)
         {
