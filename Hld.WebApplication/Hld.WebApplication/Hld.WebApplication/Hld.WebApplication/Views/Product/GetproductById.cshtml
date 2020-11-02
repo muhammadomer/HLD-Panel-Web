@@ -358,8 +358,8 @@
                     <tr>
                         <th style="width:0.1%"><input type="checkbox" class="" id="headerCheckBox" /></th>
                         <th style=" width: 10%;">Image</th>
-                        <th style=" width: 10%;">Color</th>
-                        <th style=" width: 15%;">SKU</th>
+                        <th style=" width: 10%;">Color  <span style="color:red" id="empty-message-Color"></span> <span class="requiredCustomClass" style="">*</span></th>
+                        <th style=" width: 15%;">SKU <span class="requiredCustomClass">*</span></th>
                         <th style="width: 30%;">Title</th>
                         <th>UPC</th>
                         <th style="width: 9%;">Status</th>
@@ -420,7 +420,7 @@
                                 </td>
                                 <td>
                                     <input type="search" class="form-control AddColor" id="Color" name="Color" placeholder="Color" value='@item.Colorname' readonly />
-                                    <span style="color:red;padding-left:0px;" id="empty-message-Color"></span> <span class="requiredCustomClass" style="float: right;">*</span>
+                                    @*<span style="color:red;padding-left:0px;" id="empty-message-Color"></span> <span class="requiredCustomClass" style="float: right;">*</span>*@
                                     @*@Html.HiddenFor(e => Model.ColorId, htmlAttributes: new { @id = "ColorIdForMessage" })*@
 
 
@@ -428,7 +428,7 @@
                                 <td>
                                     <input type="text" class="form-control AddSku" placeholder="SKU" value='@item.Sku' readonly id="SKU" />
                                     <span asp-validation-for="Sku" class="text-danger"></span>
-                                    <span class="requiredCustomClass">*</span>
+                                    @*<span class="requiredCustomClass">*</span>*@
                                     <span class="IsExistsSKU" style="padding-left:4px;padding-right:4px;"></span>
                                     <span style="margin-left:60px;" id="SKUCounter"></span>
                                 </td>
@@ -560,7 +560,14 @@
 
                         <td> <input type="text" class="form-control AddSku" placeholder="SKU" value='@item.Sku' readonly id="SKU" style="border:none;background-color:white" /></td>
 
-                        <td>@item.CompanyName @item.CompanyId</td>
+                        <td>
+
+                            @item.CompanyName
+                            @item.CompanyId
+                            
+                               
+                           
+                        </td>
                         <td>
 
                             @if (@item.IsCreatedOnSC == 1)
@@ -695,7 +702,7 @@
 
             <div class="modal-body myclassshide" style="padding-left:0!important;">
                 <p class="modal-title" style=" padding-left: 15px;">
-                    Please select option first before creating Shadows
+                     Shadows already created against this Child SKU!
                 </p>
 
             </div>
@@ -936,6 +943,39 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="optionselectfirst" style="margin-top: 130px;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modelwidth">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Wrong!</span>
+                </strong>
+
+
+                <button type="button" class="close closeimg" data-dismiss="modal">&times;</button>
+            </div>
+
+
+            <div class="modal-body myclassshide" style="padding-left:0!important;">
+                <p class="modal-title" style=" padding-left: 15px;">
+                    Please select a option first
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default closeimg" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
@@ -999,7 +1039,17 @@
 
                 var action = $('#ActionMenuShadow').val();
                 if (action == "") {
-                    $.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
+
+                    $("#optionselectfirst").modal({
+                        backdrop: 'static',
+                        keyboard: false
+
+                    });
+                    $(".closeimg").click(function () {
+                        location.reload();
+                    })
+
+                    //$.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
                     return;
                 }
                 if (action == "Realated") {
@@ -1053,7 +1103,15 @@
 
                 var action = $('#ActionMenu').val();
                 if (action == "") {
-                    $.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                    $("#optionselectfirst").modal({
+                        backdrop: 'static',
+                        keyboard: false
+
+                    });
+                    $(".closeimg").click(function () {
+                        location.reload();
+                    })
+                    //$.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
                     return;
                 }
                 if (action == "CreateShadow") {
@@ -1083,8 +1141,8 @@
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();
-                            if (res > 0) {
-
+                            if (res == "true") {
+                                console.log("responce1",res)
                                 $("#myModalerrorCreaedShadow").modal({
                                     backdrop: 'static',
                                     keyboard: false
@@ -1093,8 +1151,9 @@
                                 $(".closeimg").click(function () {
                                     location.reload();
                                 })
-                            } else {
-
+                            }
+                            else {
+                                console.log("responce2", res)
                                 $("#myModalerrorCreaedShadowerror").modal({
 
                                     backdrop: 'static',
@@ -1188,8 +1247,6 @@
                             var Obj =
                             {
                                 ProductID: $(this).find('.AddSku').val(),
-
-
 
                             };
                             data.push(Obj);
@@ -1465,7 +1522,7 @@
     }
     function AddMarkup() {
 
-        var markup = "<tr><td><input type='checkbox' class='checkboxes' id='checkbox' /></td><td><div class='image-upload'><label class='input-label'><img class='imgupload' src='/Images/img-icon-2.jpg' id='uploader' /></label><input id='file-input' type='file' /></div><input type='text' style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text' style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value='' id='SKU'></td><td><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color' /><span style='color:red;padding-left:0px;' id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU' id='SKU'/><span class='requiredCustomClass'>*</span><span class='IsExistsSKU' style='padding-left:4px;padding-right:4px;'></span><span style='margin-left:60px;' id='SKUCounter'></span><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC' /></td><td class=''></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button' class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
+        var markup = "<tr><td><input type='checkbox' class='checkboxes' id='checkbox' /></td><td><div class='image-upload'><label class='input-label'><img class='imgupload' src='/Images/img-icon-2.jpg' id='uploader' /></label><input id='file-input' type='file' /></div><input type='text' style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text' style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value='' id='SKU'></td><td><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color' /><span style='color:red;padding-left:0px;' id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU' id='SKU'/><span class='IsExistsSKU' style='padding-left:4px;padding-right:4px;'></span><span style='margin-left:60px;' id='SKUCounter'></span><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC' /></td><td class=''></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button' class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
         $(".FirstTable tbody").append(markup);
 
 
@@ -1555,14 +1612,14 @@
 
             console.log("data", res);
             $(".loader").hide();
-            if (res > 0) {
+            if (res=="true") {
 
 
-        $.notify(`Saved  Successfully`, { globalPosition: 'bottom right', className: 'Success myclass' });
+        $.notify(`Saved  Successfully!`, { globalPosition: 'bottom right', className: 'Success myclass' });
         location.reload();
         }
         else {
-        $.notify('Saved  Successfully', { globalPosition: 'bottom right', className: 'Success myclass' });
+                $.notify('Not Saved this SKU!', { globalPosition: 'bottom right', className: 'danger mydelte' });
         location.reload();
         }
 
@@ -1661,9 +1718,9 @@
         $(document).on("click", ".edit", function () {
         var selectedRow = $(this).parents('tr');
         editable = true;
-        $(selectedRow).find('.AddColor').prop('readonly', false);
-        $(selectedRow).find('.AddSku').prop('readonly', false);
-        $(selectedRow).find('.AddTitle').prop('readonly', false);
+        //$(selectedRow).find('.AddColor').prop('readonly', false);
+        //$(selectedRow).find('.AddSku').prop('readonly', false);
+        //$(selectedRow).find('.AddTitle').prop('readonly', false);
         $(selectedRow).find('.AddUpc').prop('readonly', false);
         $(selectedRow).find('.edit').hide();
         $(selectedRow).find('.submit').show();

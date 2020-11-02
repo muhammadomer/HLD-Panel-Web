@@ -581,6 +581,7 @@ namespace Hld.WebApplication.Controllers
                         item.FileName = item.ProductID;
                         item.Caption = "";
                         status = ProductApiAccess.ImageUpdateOnSellerCloud(ApiURL, authenticate.access_token, item);
+                        
                     }
                     
                 }
