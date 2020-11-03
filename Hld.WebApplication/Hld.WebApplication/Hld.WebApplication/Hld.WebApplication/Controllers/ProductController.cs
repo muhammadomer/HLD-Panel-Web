@@ -8,6 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.ViewModels;
+using ExcelLibrary.SpreadSheet;
 using Hld.WebApplication.Helper;
 using Hld.WebApplication.ViewModel;
 using ImageMagick;
@@ -724,66 +725,86 @@ namespace Hld.WebApplication.Controllers
        
 
         [HttpPost]
-        public string CreateProductShadowOnSellerCloud(CreateshadowOnSellerCloudViewModel data)
+        public GetXlsFileResponseViewModel CreateProductShadowOnSellerCloud(CreateshadowOnSellerCloudViewModel data)
         {
+            GetXlsFileResponseViewModel status = new GetXlsFileResponseViewModel();
             string token = Request.Cookies["Token"];
             _Selller = new GetChannelCredViewModel();
             _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
             AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
-            var status = "";
+            //var status = "";
            
             status = ProductApiAccess.CreateProductShadowOnSellerCloud(ApiURL, authenticate.access_token, data);
+            if (status != null)
+            {
+                ViewBag.status = "Relation Created Succesfully";
+            }
+
             return status;
         }
         [HttpPost]
-        public async Task<JsonResult> GenerateXls(List<CreateProductOnSallerCloudViewModel> data)
+        public async Task<JsonResult> GenerateXls(List<CreateRelationOnSCViewModel> data)
 
         {
             string Basefile = "";
             try
             {
-                data = data.GroupBy(s => s.ProductSKU).Select(p => p.FirstOrDefault()).Distinct().ToList();
+                string excelName="";
+                data = data.GroupBy(s => s.ProductSku).Select(p => p.FirstOrDefault()).Distinct().ToList();
                 token = Request.Cookies["Token"];
-                foreach (var item in data)
+                CreateshadowOnSellerCloudViewModel createshadowOnSeller = new CreateshadowOnSellerCloudViewModel();
+                excelName = @"ShadowData.xls";
+                //// excelName =ExcelLibrary.DataSetHelper.CreateWorkbook($"ShadowData.xls");
+                //ExcelPackage ExcelPkg = new ExcelPackage();
+                //FileInfo file = new FileInfo(Path.GetTempPath() + excelName);
+                //if (file.Exists)
+                //{
+                //    file.Delete();
+                //    file = new FileInfo(Path.GetTempPath() + excelName);
+                //}
+                //var package = new ExcelPackage(file);
+                //var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                string file = Path.GetTempPath() + excelName; 
+                Workbook workbook = new Workbook();
+                Worksheet worksheet = new Worksheet("FirstSheet");
+                worksheet.Cells[0, 0] = new Cell("ParentSKU");
+                worksheet.Cells[0, 1] = new Cell("ShadowSKU");
+                worksheet.Cells[0, 2] = new Cell("CompanyID");
+                List<FileContents> viewModels = ProductApiAccess.GetShadowsOfChildSku(ApiURL, token, data);
+              
+                for (int row = 1; row <= viewModels.Count; row++)
                 {
-                    CreateshadowOnSellerCloudViewModel createshadowOnSeller = new CreateshadowOnSellerCloudViewModel();
-
-                    string excelName = $"ShadowData.xls";
-                    FileInfo file = new FileInfo(Path.GetTempPath() + excelName);
-                    if (file.Exists)
-                    {
-                        file.Delete();
-                        file = new FileInfo(Path.GetTempPath() + excelName);
-                    }
-
-                    List<FileContents> viewModels = ProductApiAccess.GetShadowsOfChildSku(ApiURL, token, item.ProductSKU);
-                    await Task.Yield();
-                    using (var package = new ExcelPackage(file))
-                    {
-                        var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-                        workSheet.Cells.LoadFromCollection(viewModels, true);
-                        package.Save();
-                    }
-                    Byte[] bytes = System.IO.File.ReadAllBytes(Path.GetTempPath() + excelName);
-                    Metadata metadata = new Metadata();
-                    metadata.CompanyId = 512;
-                    metadata.ScheduleDate = "";
-                    createshadowOnSeller.FileContents = Convert.ToBase64String(bytes);
-                    createshadowOnSeller.Format = 2;
-                    createshadowOnSeller.Metadata = metadata;
-
-                    CreateProductShadowOnSellerCloud(createshadowOnSeller);
+                   
+                        worksheet.Cells[row, 0] = new Cell(viewModels[row-1].ParentSKU.Trim().ToString());
+                        worksheet.Cells[row, 1] = new Cell(viewModels[row-1].ShadowSKU.Trim().ToString());
+                        worksheet.Cells[row, 2] = new Cell(viewModels[row-1].CompanyID.ToString().Trim());
+                    
                 }
-                
+                workbook.Worksheets.Add(worksheet); 
+                workbook.Save(file);
+               
+               // await Task.Yield();
+               // workSheet.Cells.LoadFromCollection(viewModels, true);
+               //// package.Save();
+               // package.SaveAs(file);
+                Byte[] bytes = System.IO.File.ReadAllBytes(file);
+                Metadata metadata = new Metadata();
+                metadata.CompanyId = 512;
+                metadata.ScheduleDate = "";
+                createshadowOnSeller.FileContents = Convert.ToBase64String(bytes);
+                createshadowOnSeller.Format = 2;
+                createshadowOnSeller.Metadata = metadata;
+
+                CreateProductShadowOnSellerCloud(createshadowOnSeller);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
 
-             return Json(new {BaseData = Basefile });
+             return ViewBag.status;
 
         }
 
@@ -1104,7 +1125,7 @@ namespace Hld.WebApplication.Controllers
                     foreach (var Imagefile in files)
                     {
                         string fileName = Imagefile.FileName + "-" + ProductSKU + Path.GetExtension(Imagefile.FileName);
-                        Image img = Image.FromStream(Imagefile.OpenReadStream(), true, true);
+                        System.Drawing.Image img = System.Drawing.Image.FromStream(Imagefile.OpenReadStream(), true, true);
                         using (Stream ms = new MemoryStream())
                         {
                             Imagefile.CopyTo(ms);
@@ -1135,7 +1156,7 @@ namespace Hld.WebApplication.Controllers
                     foreach (var Imagefile in files)
                     {
                         string fileName = Imagefile.FileName + "-" + ProductSKU + Path.GetExtension(Imagefile.FileName);
-                        Image img = Image.FromStream(Imagefile.OpenReadStream(), true, true);
+                        System.Drawing.Image img = System.Drawing.Image.FromStream(Imagefile.OpenReadStream(), true, true);
                         using (Stream ms = new MemoryStream())
                         {
                             Imagefile.CopyTo(ms);
@@ -1478,7 +1499,7 @@ namespace Hld.WebApplication.Controllers
             }
         }
 
-        public Stream GetStreamOfReducedImage(Image inputPath)
+        public Stream GetStreamOfReducedImage(System.Drawing.Image inputPath)
         {
             MemoryStream memoryStream = new MemoryStream();
             try

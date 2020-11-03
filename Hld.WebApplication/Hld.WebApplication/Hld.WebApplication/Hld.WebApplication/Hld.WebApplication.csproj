@@ -13,6 +13,7 @@
     <PackageReference Include="AWSSDK.S3" Version="3.3.102.21" />
     <PackageReference Include="BarcodeLib" Version="2.2.5" />
     <PackageReference Include="EPPlus" Version="4.5.2.1" />
+    <PackageReference Include="ExcelLibrary" Version="1.2011.7.31" />
     <PackageReference Include="iTextSharp" Version="5.5.13.1" />
     <PackageReference Include="jQWidgets.AspNetCore.Mvc.TagHelpers" Version="2.0.1" />
     <PackageReference Include="jQWidgets_Framework" Version="8.1.4">

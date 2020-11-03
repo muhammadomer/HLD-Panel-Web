@@ -10,6 +10,7 @@ namespace Hld.WebApplication.ViewModel
         public string FileContents { get; set; }
         public int CompanyId { get; set; }
         public int Format { get; set; }
+        public Metadata Metadata { get; set; }
     }
     public class FileContents
     {

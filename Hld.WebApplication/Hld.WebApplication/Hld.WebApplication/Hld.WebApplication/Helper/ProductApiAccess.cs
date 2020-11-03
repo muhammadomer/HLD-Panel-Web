@@ -274,24 +274,40 @@ namespace Hld.WebApplication.Helper
             return responses;
         }
 
-        public List<FileContents> GetShadowsOfChildSku(string ApiURL, string token, string childSku)
+        public List<FileContents> GetShadowsOfChildSku(string ApiURL, string token, List<CreateRelationOnSCViewModel> dataSKU)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetShadowsOfChildForXls?childSku=" + childSku);
-            // var data = JsonConvert.SerializeObject(childsku);
-            request.Method = "GET";
-            request.Accept = "application/json;";
-            request.ContentType = "application/json";
-            request.Headers["Authorization"] = "Bearer " + token;
-
-            string strResponse = "";
-            using (WebResponse webResponse = request.GetResponse())
+            List<FileContents> responses = new List<FileContents>();
+            try
             {
-                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetShadowsOfChildForXls");
+                var data = JsonConvert.SerializeObject(dataSKU);
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
-                    strResponse = stream.ReadToEnd();
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
                 }
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                    }
+                }
+
+                 responses = JsonConvert.DeserializeObject<List<FileContents>>(strResponse);
             }
-            List<FileContents> responses = JsonConvert.DeserializeObject<List<FileContents>>(strResponse);
+            catch (Exception)
+            {
+
+                throw;
+            }
+         
 
             return responses;
         }
@@ -1236,9 +1252,10 @@ namespace Hld.WebApplication.Helper
 
             return responses;
         }
-        public string CreateProductShadowOnSellerCloud(string ApiURL, string token, CreateshadowOnSellerCloudViewModel viewModel)
+        public GetXlsFileResponseViewModel CreateProductShadowOnSellerCloud(string ApiURL, string token, CreateshadowOnSellerCloudViewModel viewModel)
         {
-            string status = "";
+            //string status = "";
+            GetXlsFileResponseViewModel status = new GetXlsFileResponseViewModel();
             try
             {
 
@@ -1260,10 +1277,11 @@ namespace Hld.WebApplication.Helper
                 {
                     strResponse = sr.ReadToEnd();
                 }
-                status = JsonConvert.DeserializeObject<string>(strResponse);
+                status = JsonConvert.DeserializeObject<GetXlsFileResponseViewModel>(strResponse);
             }
             catch (Exception ex)
             {
+                throw ex;
             }
             return status;
         }

@@ -196,9 +196,10 @@ namespace Hld.WebApplication.Controllers
 
                 var Images = sellerCloudApiAccess.GetSCImagesBySKU(SCRestURL, authenticate.access_token, sku.Trim());
 
-                //foreach (var Image in Images)
+                foreach (var Image in Images)
                 {
-                    var imageURL = Images.FirstOrDefault().Url;
+                   // var imageURL = Images.FirstOrDefault().Url;
+                    var imageURL = Image.Url;
 
 
                     //var imageURL = await sCServiceSoap.GetGalleryImageURLAsync(authHeader, null, sku.Trim());

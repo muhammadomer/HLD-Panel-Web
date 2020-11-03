@@ -358,7 +358,7 @@
                     <tr>
                         <th style="width:0.1%"><input type="checkbox" class="" id="headerCheckBox" /></th>
                         <th style=" width: 10%;">Image</th>
-                        <th style=" width: 10%;">Color  <span style="color:red" id="empty-message-Color"></span> <span class="requiredCustomClass" style="">*</span></th>
+                        <th style=" width: 10%;">Color  <span class="requiredCustomClass" style="">*</span></th>
                         <th style=" width: 15%;">SKU <span class="requiredCustomClass">*</span></th>
                         <th style="width: 30%;">Title</th>
                         <th>UPC</th>
@@ -420,7 +420,7 @@
                                 </td>
                                 <td>
                                     <input type="search" class="form-control AddColor" id="Color" name="Color" placeholder="Color" value='@item.Colorname' readonly />
-                                    @*<span style="color:red;padding-left:0px;" id="empty-message-Color"></span> <span class="requiredCustomClass" style="float: right;">*</span>*@
+                                    <span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
                                     @*@Html.HiddenFor(e => Model.ColorId, htmlAttributes: new { @id = "ColorIdForMessage" })*@
 
 
@@ -1360,8 +1360,8 @@
 
                     $(this).parents('tr').find('#SKUCounter').text(remaining + "/" + 20);
 
-                    var textBoxValue = $(this).val().trim();
-                    var selectedRow = $(this).parents('tr');
+                    var textBoxValue =  $(selectedRow).find('.AddSku').val().trim();
+                    var selectedRow = $(selectedRow);
                     if (textBoxValue.length > 0) {
                         $.ajax({
                             type: "POST",
