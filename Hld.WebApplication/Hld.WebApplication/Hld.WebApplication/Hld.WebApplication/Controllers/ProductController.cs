@@ -1251,6 +1251,36 @@ namespace Hld.WebApplication.Controllers
             return Json(new { success = status });
         }
 
+        public JsonResult CheckManufactureExists(string name)
+        {
+
+
+            bool status = false;
+            try
+            {
+                string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
+                string token = Request.Cookies["Token"];
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/CheckManufactureExists/" + name + "");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = Convert.ToBoolean(JObject.Parse(strResponse)["status"].ToString());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Json(new { success = status });
+        }
+
 
         [HttpPost]
         public JsonResult CheckProductUPCExists(string name)
@@ -1524,6 +1554,99 @@ namespace Hld.WebApplication.Controllers
             var Response = ProductApiAccess.GetWareHousesQtyList(ApiURL, token, SKU);
             Response = Response.Where(s => s.AvailableQty != 0).ToList();
             return Response;
+        }
+        
+        public IActionResult ProductManufactured()
+        {
+            string token = Request.Cookies["Token"];
+
+
+         
+            return View();
+
+
+        }
+        [HttpPost]
+        public IActionResult ProductManufactured(ProductManufacturedViewModel viewmodel)
+        {
+            string token = Request.Cookies["Token"];
+
+            
+            ProductApiAccess.SaveProductManufactured(ApiURL, token, viewmodel);
+            ModelState.Clear();
+            return View();
+
+
+        }
+        [HttpPost]
+        public bool ProductManufacturedModel(ProductManufacturedViewModel model)
+        {
+            string token = Request.Cookies["Token"];
+            
+            var status= ProductApiAccess.SaveProductManufacturedModel(ApiURL, token, model);
+           
+            return status;
+            
+
+        }
+        //public List<ProductManufacturedViewModel> GetManufacture()
+        //{
+
+        //    string token = Request.Cookies["Token"];
+        //    List<ProductManufacturedViewModel> listmodel = new List<ProductManufacturedViewModel>();
+        //    listmodel = ProductApiAccess.GetManufacture(ApiURL, token);
+        //    return listmodel;
+        //}
+
+        [HttpPost]
+        public JsonResult GetAllVendorForAutoComplete(string Prefix)
+        {
+            token = Request.Cookies["Token"];
+            if (Prefix == null)
+            { Prefix = ""; }
+            List<ProductManufacturedViewModel> model = ProductApiAccess.GetManufacture(ApiURL, token, Prefix);
+            model = model.Where(x => !string.IsNullOrWhiteSpace(x.ManufactureName)).ToList();
+            if (model == null)
+            {
+                return Json(model);
+            }
+            else
+            {
+                return Json(model);
+            }
+
+        }
+
+        [HttpGet]
+        public List<GetManufactureModelViewModel> GetManufactureIdByNameChange(int ManufactureId)
+        {
+            token = Request.Cookies["Token"];
+            var list = ProductApiAccess.GetManufactureIdByNameChange(ApiURL, token, ManufactureId);
+            list = list.Where(x => !string.IsNullOrWhiteSpace(x.ManufactureModel)).ToList();
+            return list;
+            
+        }
+
+        [HttpGet]
+        public List<AddDeviceModelView> GetManufactureDeviceIdByNameChange(int ManufactureModel)
+        {
+            token = Request.Cookies["Token"];
+            var list = ProductApiAccess.GetManufactureDeviceIdByNameChange(ApiURL, token, ManufactureModel);
+            list = list.Where(x => !string.IsNullOrWhiteSpace(x.DeviceModel)).ToList();
+            return list;
+
+        }
+
+        [HttpPost]
+        public bool ProductDeviceModel(ProductManufacturedViewModel model)
+        {
+            string token = Request.Cookies["Token"];
+
+            var status = ProductApiAccess.ProductDeviceModel(ApiURL, token, model);
+            ModelState.Clear();
+            return status;
+           
+
         }
     }
 }

@@ -249,7 +249,7 @@ outline: none;border: none;" />
                     dataType: "json",
                     data: { Prefix: $("#productskuSearch").val() },
                     success: function (data, ui) {
-                        //console.log("SKUProfile", data);
+                        console.log("SKUProfile", data);
 
                         $("#ProfileDive").html('<a target="_blank" href="' + val + '/' + data.image_name + '"><img src="' + val + '/' + data.image_name + '" class="rounded" height="50" width="50" /></a>');
                         $("#TitleDiv").html('<p style="margin-top:100px;"><span>' + data.Title + '</span> </p> ');

@@ -1,0 +1,378 @@
+﻿@model Hld.WebApplication.ViewModel.ProductManufacturedViewModel
+
+@{
+    ViewData["Title"] = "ProductManufactured";
+}
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    .controlabel {
+        width: 112px;
+    }
+
+
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+
+
+    .inputstyle {
+        height: 27px;
+        box-shadow: none !important;
+    }
+    .requiredCustomClass {
+        color: red;
+    }
+</style>
+<h6>Create Manufacturer Product</h6>
+<div class="container-fluid p-0" style="">
+    <hr />
+</div>
+<div class="container-fluid p-0">
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="ProductManufactured">
+                <div class="container-fluid">
+                    <div class="row col-md-12">
+                        <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
+                        <input type="text" asp-for="ManufactureId" name="ManufactureId" style="display:none">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-form-label-sm  controlabel">Manufacturer:</label>
+                                <div class="col-sm-8 pl-0">
+                                    <input asp-for="ManufactureName" class="form-control form-control-sm inputstyle" id="ManufactureName">
+                                    <span asp-validation-for="ManufactureName" class="text-danger"style="margin-top:3px;margin-bottom:3px;"></span>
+
+                                </div>
+                                <span class="requiredCustomClass">*</span>
+                            </div>
+                            <div class="form-group row" style="width:100%">
+                                <div class="" style="margin-left: 110px;">
+                                    <input type="submit" value="Create" class="btn btn-primary" id="InputSubmit"/>
+                                </div>
+                                
+                                <span id="IsExistsSKU" style="padding-left:4px;padding-right:4px;"></span>
+                                <span style="margin-left:30px;" id="SKUCounter"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4">
+            
+                <div class="container-fluid">
+                    <div class="row col-md-12">
+                        <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
+                        <input type="text" asp-for="ManufactureId" name="ManufactureId"  style="display:none;">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-form-label-sm  controlabel"> Manufacturer:</label>
+                                <div class="col-sm-8 pl-0">
+                                    <select class="js-example-basic-single form-control GetManufacture" name="ManufactureName" id="ManufactureName"asp-for="ManufactureName">
+
+                                        <option value="">Manufacturer</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label-sm  controlabel"> Manufac Model:</label>
+                                <div class="col-sm-8 pl-0">
+                                    <input type="text" asp-for="ManufactureModel" class="form-control form-control-sm inputstyle ManufactureModel">
+
+                                    <span asp-validation-for="ManufactureModel" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="width:100%">
+                                <div class="" style="margin-left: 110px;">
+                                    <input type="submit" value="Create" class="btn btn-primary btnsave" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+        </div>
+        <div class="col-md-4">
+           
+                <div class="container-fluid">
+                    <div class="row col-md-12">
+                        <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
+                        <input type="text" asp-for="ManufactureId" name="ManufactureId" style="display:none">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label class="col-form-label-sm  controlabel"> Manufacturer:</label>
+                                <div class="col-sm-8 pl-0">
+                                    <select class="js-example-basic-single form-control GetManufacture1" name="ManufactureName" id="ManufactureName1" asp-for="ManufactureName">
+
+                                        <option value="">Manufacturer</option>
+
+                                    </select>
+                                    <span asp-validation-for="ManufactureName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label-sm  controlabel"> Manufac Model:</label>
+                                <div class="col-sm-8 pl-0">
+                                    <select class="js-example-basic-single form-control ManufactureModel" name="ManufactureModel" id="ManufactureModel" asp-for="ManufactureModel">
+
+                                        <option value="">Manufacturer Model</option>
+
+                                    </select>
+                                    <span asp-validation-for="ManufactureModel" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label-sm  controlabel"> Device Model:</label>
+                                <div class="col-sm-8 pl-0">
+                                    <input type="text" asp-for="DeviceModel" class="form-control form-control-sm inputstyle DeviceModel">
+                                    <span asp-validation-for="DeviceModel" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" style="width:100%">
+                                <div class="" style="margin-left: 110px;">
+                                    <input type="submit" value="Create" class="btn btn-primary btnsavedata" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+
+
+</div>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+          
+
+            $(".btnsave").click(function () {
+
+                var ManufactureId = $("select#ManufactureName option").filter(":selected").val();
+                var ManufactureModel = $(".ManufactureModel").val();
+                console.log(ManufactureId)
+                console.log("manufacddd",ManufactureModel)
+            $.ajax({
+                type: 'post',
+                url: '../Product/ProductManufacturedModel',
+                data: { ManufactureId: ManufactureId, ManufactureModel: ManufactureModel },
+                success: function (res) {
+                    $(".ManufactureModel").val("");
+                    $(".ManufactureName").val("");
+                },
+                error: function (err) {
+                    $.notify('some error occured!', { classname: 'error ' });
+                }
+            });
+            });
+
+            $(".btnsavedata").click(function () {
+
+                var ManufactureId = $("select#ManufactureModel option").filter(":selected").val();
+               
+                var DeviceModel = $(".DeviceModel").val();
+                console.log("DeviceModelg",DeviceModel)
+                console.log("manufacddddolll", ManufactureId)
+              
+                $.ajax({
+                    type: 'post',
+                    url: '../Product/ProductDeviceModel',
+                    data: { ManufactureId: ManufactureId, DeviceModel: DeviceModel },
+                    success: function (res) {
+                        $(".ManufactureModel").val("");
+                        $(".DeviceModel").val("");
+                    },
+                    error: function (err) {
+                        $.notify('some error occured!', { classname: 'error ' });
+                    }
+                });
+            });
+            $('input[id=ManufactureName]').keyup(function (e) {
+                $(this).val($(this).val().replace(/ +?/g, ''));
+                $(this).addClass('text-uppercase');
+                var remaining = 20 - $('#ManufactureName').val().length;
+                if (e.which == 32)
+                    return false;
+
+                $('#SKUCounter').text(remaining + "/" + 20);
+
+                 var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckManufactureExists", "Product")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExistsSKU').text("Already Exists").css("color", "red");
+                            console.log("check",data)
+                            $('#InputSubmit').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExistsSKU').text("Available").css("color", "green");
+                            $('#InputSubmit').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExistsSKU').text("");
+            }
+
+
+            });
+
+
+
+            function GetManufacture() {
+                debugger;
+                $.ajax({
+                    url: "/Product/GetAllVendorForAutoComplete/",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        console.log("ddd", data)
+
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
+
+
+
+                        });
+
+                        $(".GetManufacture").append(content);
+                        @* $(".vendorlistgetFromPOProduct").val(@Model.Manufacturer);*@
+
+
+                    }
+                });
+
+
+
+            }
+
+            GetManufacture();
+            $(".GetManufacture").select2();
+
+            function GetManufacture1() {
+                debugger;
+                $.ajax({
+                    url: "/Product/GetAllVendorForAutoComplete/",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        console.log("ddd", data)
+
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
+
+
+
+                        });
+
+                        $(".GetManufacture1").append(content);
+                        @* $(".vendorlistgetFromPOProduct").val(@Model.Manufacturer);*@
+
+
+                    }
+                });
+
+
+
+            }
+
+            GetManufacture1();
+            $(".GetManufacture1").select2();
+
+          
+            $(document).on("change", ".GetManufacture1", function () {
+                
+                var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
+                console.log("product ManufactureId", ManufactureId)
+                
+                $.ajax({
+                    type: 'GET',
+                    url: '../product/GetManufactureIdByNameChange?ManufactureId=' + ManufactureId,
+                   
+                    success: function (data) {
+                        console.log("rrr", data)
+                        $(".ManufactureModel").empty();
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureModel + '</option>';
+
+
+
+                      });
+
+                       $(".ManufactureModel").append(content);
+                      }
+                });
+
+                
+            });
+            function ManufactureModel() {
+                debugger;
+                $.ajax({
+                    url: "/product/getallvendorforautocomplete/",
+                    type: "post",
+                    minlength: 3,
+                    datatype: "json",
+                    data: { prefix: "" },
+                    success: function (data, ui) {
+                        console.log("ddd", data)
+
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
+
+
+
+                        });
+
+                        $(".ManufactureModel").append(content);
+
+
+
+                    }
+                });
+
+
+
+            }
+
+            ManufactureModel();
+            $(".ManufactureModel").select2();
+
+
+
+        });
+
+       
+
+    </script>
+}

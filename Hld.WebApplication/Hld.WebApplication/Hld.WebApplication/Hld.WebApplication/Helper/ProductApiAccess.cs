@@ -1504,6 +1504,227 @@ namespace Hld.WebApplication.Helper
             }
 
         }
+        public bool SaveProductManufactured(string ApiURL, string token, ProductManufacturedViewModel ViewModel)
+        {
+            bool status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/AddManufacturer/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return status;
+        }
+
+        public bool SaveProductManufacturedModel(string ApiURL, string token, ProductManufacturedViewModel Model)
+        {
+            bool status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(Model);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/AddManufacturerModel/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return status;
+        }
+
+        //public List<ProductManufacturedViewModel> GetManufacture(string ApiURL, string token)
+        //{
+        //    List<ProductManufacturedViewModel> listmodel = new List<ProductManufacturedViewModel>();
+        //    try
+        //    {
+
+
+
+        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/GetManufacture/");
+        //        request.Method = "GET";
+        //        request.Accept = "application/json;";
+        //        request.ContentType = "application/json";
+        //        request.Headers["Authorization"] = "Bearer " + token;
+        //        string strResponse = "";
+
+        //        var response = (HttpWebResponse)request.GetResponse();
+
+        //        using (var sr = new StreamReader(response.GetResponseStream()))
+        //        {
+        //            strResponse = sr.ReadToEnd();
+        //        }
+        //        listmodel = JsonConvert.DeserializeObject<List<ProductManufacturedViewModel>>(strResponse);
+
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //    return listmodel;
+        //}
+        public List<ProductManufacturedViewModel> GetManufacture(string apiurl, string token, string name)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetManufacture/" + name + "");
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<ProductManufacturedViewModel> responses = JsonConvert.DeserializeObject<List<ProductManufacturedViewModel>>(strResponse);
+            return responses;
+        }
+
+        //public bool GetManufactureIdByNameChange(string ApiURL, string token, int ManufactureId)
+        //{
+        //    bool status = false;
+
+        //    try
+        //    {
+        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/GetManufactureModel?ManufactureId=" + ManufactureId);
+        //        request.Method = "GET";
+        //        request.Accept = "application/json;";
+        //        request.ContentType = "application/json";
+        //        request.Headers["Authorization"] = "Bearer " + token;
+        //        string strResponse = "";
+
+        //        var response = (HttpWebResponse)request.GetResponse();
+
+        //        using (var sr = new StreamReader(response.GetResponseStream()))
+        //        {
+        //            strResponse = sr.ReadToEnd();
+        //        }
+        //        status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //    return status;
+        //}
+
+        public List<GetManufactureModelViewModel> GetManufactureIdByNameChange(string apiurl, string token, int ManufactureId)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetManufactureModel?ManufactureId=" + ManufactureId);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<GetManufactureModelViewModel> responses = JsonConvert.DeserializeObject<List<GetManufactureModelViewModel>>(strResponse);
+            return responses;
+        }
+        public List<AddDeviceModelView> GetManufactureDeviceIdByNameChange(string apiurl, string token, int ManufactureModel)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetDeviceModelModel?ManufactureModel=" + ManufactureModel);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<AddDeviceModelView> responses = JsonConvert.DeserializeObject<List<AddDeviceModelView>>(strResponse);
+            return responses;
+        }
+        public bool ProductDeviceModel(string ApiURL, string token, ProductManufacturedViewModel Model)
+        {
+            bool status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(Model);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/AddDeviceModel/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return status;
+        }
     }
 }
 
