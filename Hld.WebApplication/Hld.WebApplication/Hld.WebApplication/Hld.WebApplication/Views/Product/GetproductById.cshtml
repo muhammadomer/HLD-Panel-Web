@@ -767,7 +767,7 @@
             <div class="modal-body myclassshide" style="padding-left:0!important;">
                 <p class="modal-title" style=" padding-left: 15px;">
                     @TempData["status"]
-                    Some Error Occure during PO Creation!
+                    Product created on sellercloud.
                 </p>
 
             </div>
@@ -1078,7 +1078,7 @@
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();
-                            if (res.BaseData != "") {
+                            if (res.status != "") {
                                 $("#CreaedShadow").modal({
                                     backdrop: 'static',
                                     keyboard: false

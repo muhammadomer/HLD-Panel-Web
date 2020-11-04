@@ -804,7 +804,7 @@ namespace Hld.WebApplication.Controllers
                 throw ex;
             }
 
-             return ViewBag.status;
+            return Json(new { status = true});
 
         }
 
