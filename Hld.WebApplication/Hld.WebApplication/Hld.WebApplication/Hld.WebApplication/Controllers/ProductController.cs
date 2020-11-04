@@ -746,7 +746,7 @@ namespace Hld.WebApplication.Controllers
         public async Task<JsonResult> GenerateXls(List<CreateRelationOnSCViewModel> data)
 
         {
-            string Basefile = "";
+            UpdateIsRelationViewModel updateIsRelation = new UpdateIsRelationViewModel();
             try
             {
                 string excelName="";
@@ -754,16 +754,6 @@ namespace Hld.WebApplication.Controllers
                 token = Request.Cookies["Token"];
                 CreateshadowOnSellerCloudViewModel createshadowOnSeller = new CreateshadowOnSellerCloudViewModel();
                 excelName = @"ShadowData.xls";
-                //// excelName =ExcelLibrary.DataSetHelper.CreateWorkbook($"ShadowData.xls");
-                //ExcelPackage ExcelPkg = new ExcelPackage();
-                //FileInfo file = new FileInfo(Path.GetTempPath() + excelName);
-                //if (file.Exists)
-                //{
-                //    file.Delete();
-                //    file = new FileInfo(Path.GetTempPath() + excelName);
-                //}
-                //var package = new ExcelPackage(file);
-                //var workSheet = package.Workbook.Worksheets.Add("Sheet1");
                 string file = Path.GetTempPath() + excelName; 
                 Workbook workbook = new Workbook();
                 Worksheet worksheet = new Worksheet("FirstSheet");
@@ -782,11 +772,6 @@ namespace Hld.WebApplication.Controllers
                 }
                 workbook.Worksheets.Add(worksheet); 
                 workbook.Save(file);
-               
-               // await Task.Yield();
-               // workSheet.Cells.LoadFromCollection(viewModels, true);
-               //// package.Save();
-               // package.SaveAs(file);
                 Byte[] bytes = System.IO.File.ReadAllBytes(file);
                 Metadata metadata = new Metadata();
                 metadata.CompanyId = 512;
@@ -795,22 +780,22 @@ namespace Hld.WebApplication.Controllers
                 createshadowOnSeller.Format = 2;
                 createshadowOnSeller.Metadata = metadata;
 
-                CreateProductShadowOnSellerCloud(createshadowOnSeller);
+            var status=   CreateProductShadowOnSellerCloud(createshadowOnSeller);
 
+                foreach (var item in viewModels)
+                {
+                    updateIsRelation.QueuedJobLink = status.QueuedJobLink;
+                    updateIsRelation.shadow = item.ShadowSKU;
+                    ProductApiAccess.UpdateRelation(ApiURL, token, updateIsRelation);
+                }
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-
-            return Json(new { status = true});
-
+            return Json(new { status = true });
         }
-
-     
-
-
         [HttpPost]
         public IActionResult UpdateChildSku(SaveChildSkuVM data)
         {

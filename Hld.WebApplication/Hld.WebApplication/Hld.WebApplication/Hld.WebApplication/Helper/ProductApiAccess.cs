@@ -1424,6 +1424,40 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+
+        public bool UpdateRelation(string ApiURL, string token, UpdateIsRelationViewModel updateIsRelation)
+        {
+            bool status = false;
+            
+            try
+            {
+                var data = JsonConvert.SerializeObject(updateIsRelation);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/UpdateRelation");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                    status = Convert.ToBoolean(strResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return status;
+        }
         public bool UpdateSkustatusonsellercloud(string ApiURL, string token, string sku)
         {
             bool status = false;
