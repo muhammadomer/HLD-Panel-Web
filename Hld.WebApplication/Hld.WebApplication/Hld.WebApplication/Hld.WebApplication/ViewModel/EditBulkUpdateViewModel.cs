@@ -13,6 +13,7 @@ namespace Hld.WebApplication.ViewModel
         public string FulfilledBy { get; set; }
         public string AmazonFBASKU { get; set; }
         public string WebsiteEnabled { get; set; }
-        public string ShadowSku { get; set; }
+        public string ChildSKU { get; set; }
+        public string ShadowOffSKU { get; set; }
     }
 }

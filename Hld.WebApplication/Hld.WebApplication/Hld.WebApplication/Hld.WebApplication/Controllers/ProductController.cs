@@ -1691,7 +1691,19 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public string BulkUpdate(List<EditBulkUpdateViewModel> data)
+        public string ManufacturedUpdate(EditManufactureListModelView data)
+        {
+            string token = Request.Cookies["Token"];
+
+            var staus = ProductApiAccess.ManufacturedUpdate(ApiURL, token, data);
+            return staus;
+
+
+        }
+
+
+        [HttpPost]
+        public string BulkUpdate(EditBulkUpdateViewModel data)
         {
             string token = Request.Cookies["Token"];
 
@@ -1700,5 +1712,38 @@ namespace Hld.WebApplication.Controllers
 
 
         }
+
+        public IActionResult Style()
+        {
+            string token = Request.Cookies["Token"];
+
+
+
+            return View();
+
+
+        }
+        [HttpPost]
+        public IActionResult Style(AddStyleViewModel viewmodel)
+        {
+            string token = Request.Cookies["Token"];
+
+
+            ProductApiAccess.Style(ApiURL, token, viewmodel);
+            ModelState.Clear();
+            return View();
+
+
+        }
+        //[HttpGet]
+        //public List<AddStyleViewModel> Stylelist()
+        //{
+        //    token = Request.Cookies["Token"];
+        //    var list = ProductApiAccess.Stylelist(ApiURL, token);
+            
+        //    return list;
+
+        //}
+       
     }
 }

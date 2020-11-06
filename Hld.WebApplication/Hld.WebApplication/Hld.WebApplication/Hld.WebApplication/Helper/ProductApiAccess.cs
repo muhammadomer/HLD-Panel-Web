@@ -1797,7 +1797,37 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
-        public string BulkUpdateList(string ApiURL, string token, List<EditBulkUpdateViewModel> viewModel)
+        public string ManufacturedUpdate(string ApiURL, string token, EditManufactureListModelView viewModel)
+        {
+            string status = "";
+            try
+            {
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/EditManufactureList/");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
+            }
+            return status;
+        }
+        public string BulkUpdateList(string ApiURL, string token,EditBulkUpdateViewModel viewModel)
         {
             string status = "";
             try
@@ -1824,6 +1854,41 @@ namespace Hld.WebApplication.Helper
             }
             catch (Exception ex)
             {
+            }
+            return status;
+        }
+
+        public bool Style(string ApiURL, string token, AddStyleViewModel ViewModel)
+        {
+            bool status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/AddStyle/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             return status;
         }
