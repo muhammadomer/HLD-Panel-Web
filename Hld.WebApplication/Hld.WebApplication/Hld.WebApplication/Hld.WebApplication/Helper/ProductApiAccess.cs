@@ -1,5 +1,6 @@
 ﻿using DataAccess.ViewModels;
 using Hld.WebApplication.ViewModel;
+using Hld.WebApplication.Views.Product;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -1725,9 +1726,10 @@ namespace Hld.WebApplication.Helper
             List<GetManufactureModelViewModel> responses = JsonConvert.DeserializeObject<List<GetManufactureModelViewModel>>(strResponse);
             return responses;
         }
-        public List<AddDeviceModelView> GetManufactureDeviceIdByNameChange(string apiurl, string token, int ManufactureModel)
+
+        public List<ProductManufactureListViewModel> GetManufactureList(string apiurl, string token, int ManufactureId)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetDeviceModelModel?ManufactureModel=" + ManufactureModel);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetManufactureList?ManufactureId=" + ManufactureId);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -1740,10 +1742,28 @@ namespace Hld.WebApplication.Helper
                     strResponse = stream.ReadToEnd();
                 }
             }
-            List<AddDeviceModelView> responses = JsonConvert.DeserializeObject<List<AddDeviceModelView>>(strResponse);
+            List<ProductManufactureListViewModel> responses = JsonConvert.DeserializeObject<List<ProductManufactureListViewModel>>(strResponse);
             return responses;
         }
-        public bool ProductDeviceModel(string ApiURL, string token, ProductManufacturedViewModel Model)
+        public List<GetDeviceModelViewMdel> GetManufactureDeviceIdByNameChange(string apiurl, string token, int ManufactureModel,int ManufactureId)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetDeviceModelModel?ManufactureModel=" + ManufactureModel+ "&ManufactureId=" + ManufactureId);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<GetDeviceModelViewMdel> responses = JsonConvert.DeserializeObject<List<GetDeviceModelViewMdel>>(strResponse);
+            return responses;
+        }
+        public bool ProductDeviceModel(string ApiURL, string token, AddDeviceModelView Model)
         {
             bool status = false;
             try
@@ -1774,6 +1794,36 @@ namespace Hld.WebApplication.Helper
             {
 
                 throw;
+            }
+            return status;
+        }
+        public string BulkUpdateList(string ApiURL, string token, List<EditBulkUpdateViewModel> viewModel)
+        {
+            string status = "";
+            try
+            {
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BulkUpdate/EditBulkUpdate/");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
             }
             return status;
         }

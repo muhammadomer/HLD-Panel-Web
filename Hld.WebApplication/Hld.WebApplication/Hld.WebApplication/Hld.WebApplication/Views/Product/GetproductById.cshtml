@@ -481,6 +481,7 @@
 
             <option value="">Select</option>
             <option value="Realated">Create Shadow Relation on SC</option>
+            <option value="BulkUpdate">Bulk Update</option>
 
         </select>
         <button class=" btn-success btngocalss" id="btnGoOrderShadow">Go</button>
@@ -493,99 +494,200 @@
         <thead style="background-color:lightgray">
             <tr>
                 <th style="width:0.1%"><input type="checkbox" class="" id="headerCheckBoxShadow" /></th>
-                <th style=" width: 10%;">Image</th>
+                <th>Image</th>
                 <th>SKU</th>
                 <th>Shadows</th>
                 <th>Company</th>
-                <th style="width:10%;">Status</th>
+                <th>Amz Merchant SKU</th>
+                <th>Amazon Enabled</th>
+                <th>ASIN</th>
+                <th>Fulfilled By</th>
+                <th>Amz FBA SKU</th>
+                <th>Website Enabled</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody class="abs">
-            @foreach (var item in Model.list)
+           @{ 
+               var skutemp = "";
+               @foreach (var item in Model.list)
             {
+
+
+
 
                 @if (item.ShadowOff != "")
                 {
-                    <tr>
-                        <td> <input type="checkbox" class="checkboxesShadow" id="checkbox" /></td>
-                        <td>
-                            @*<div>
-                                    <img src="~/Images/cross.jpg" height="15px" width="15px" style="float:right;cursor:pointer" class="delteimg" />
+            <tr>
+                <td> <input type="checkbox" class="checkboxesShadow" id="checkbox" /></td>
+                <td>
+                    @*<div>
+                <img src="~/Images/cross.jpg" height="15px" width="15px" style="float:right;cursor:pointer" class="delteimg" />
 
-                                </div>*@
-                            @if (string.IsNullOrEmpty(item.ImageName))
-                            {
-
-                                <div class="image-upload image-uploadshadow">
+            </div>*@
 
 
-                                    <label class="input-label">
-                                        <img class="imgupload imguploadshadow" src="/Images/img-icon-2.jpg" id="uploader" />
-                                    </label>
-                                    <input id="file-input" type="file" />
-                                </div>
+                    <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
+                    <input type='text' style="display:none" class='form-control AddSku' value='@item.Sku' id="SKU">
+                    <input type='text' style="display:none" class='form-control productstatus' value='@item.title'>
+                    <input type='text' style="display:none" class='form-control product_id' value='@item.Parentproduct_id'>
+                    <input type='text' style="display:none" class='form-control child_id' value='@item.Childproduct_id'>
+                    <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
+                    <input type="text" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
+                </td>
+                @{
+                    if (skutemp != item.ShadowOff)
+                    {
+                        skutemp = item.ShadowOff;
 
-
-                            }
-                            else
-                            {
-                                <div class="image-upload image-uploadshadow">
-                                    @*<a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                                            <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
-                                        </a>*@
-                                    <label class="input-label">
-                                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                                            <img src="@ViewBag.S3BucketURL/@item.ImageName" class="rounded imgupload imguploadshadow" height="50" width="50" id="uploader" />
-                                        </a>
-                                    </label>
-                                    <input id="file-input" type="file" />
-                                </div>
-                            }
-
-                            <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
-                            <input type='text' style="display:none" class='form-control AddSku' value='@item.Sku' id="SKU">
-                            <input type='text' style="display:none" class='form-control productstatus' value='@item.title'>
-                            <input type='text' style="display:none" class='form-control product_id' value='@item.Parentproduct_id'>
-                            <input type='text' style="display:none" class='form-control child_id' value='@item.Childproduct_id'>
-                            <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
-                            <input type="text" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
-                        </td>
 
                         <td>
-                            <input type="text" class="form-control ShadowOff" placeholder="SKU" value='@item.ShadowOff' readonly id="SKU" style="border:none;background-color:white" />
+                            <input type="text" class="form-control ShadowOff" placeholder="SKU" value='@skutemp' readonly id="SKU" style="border:none;background-color:white" />
 
                         </td>
-
-
-
-                        <td> <input type="text" class="form-control AddSku" placeholder="SKU" value='@item.Sku' readonly id="SKU" style="border:none;background-color:white" /></td>
-
+                    }
+                    else
+                    {
                         <td>
+                            @*<input type="text" class="form-control ShadowOff" placeholder="SKU" value='@skutemp' readonly id="SKU" style="border:none;background-color:white" />*@
 
-                            @item.CompanyName
-                            @item.CompanyId
-                            
-                               
-                           
                         </td>
-                        <td>
-
-                            @if (@item.IsCreatedOnSC == 1)
-                            {
-                                <span style="color:green;font-weight:bold">Created on SC</span>
-                            }
-                            else
-                            {
-                                <span></span>
-                            }
-                        </td>
-                    </tr>
+                    }
                 }
 
+                <td> <input type="text" class="form-control AddSku shadowsku" placeholder="SKU" value='@item.Sku' readonly id="SKU" style="border:none;background-color:white" /></td>
 
-            }
+                <td>
+
+                    @item.CompanyName
+                    @item.CompanyId
+
+
+                </td>
+
+                @if (item.CompanyId == 520)
+                {
+                    <td>
+                        <input type="text" class="form-control AmazonMerchantSKU" value="@item.Sku" @item.AmazonMerchantSKU name="AmazonMerchantSKU" readonly />
+
+                    </td>
+                    <td>
+                        @*<input type="text" class="form-control AmazonEnabled" value=" @item.AmazonEnabled" />*@
+                        <select asp-for="@item.AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled" disabled>
+                            <option value="" selected disabled hidden>AmazonEnabled</option>
+                            <option value="TRUE" selected>TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control ASIN" value="@item.ASIN" name="ASIN" readonly />
+                    </td>
+                    @if (item.CompanyId == 512 || item.CompanyId == 513)
+                    {
+                        <td>
+                            <input type="text" class="form-control FulfilledBy" value="Amazon" @item.FulfilledBy name="FulfilledBy" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" class="form-control FulfilledBy" value="Merchant" @item.FulfilledBy name="FulfilledBy" readonly />
+                        </td>
+                    }
+                    <td>
+                        <input type="text" class="form-control AmazonFBASKU" value="Amazon" @item.AmazonFBASKU name="AmazonFBASKU" readonly />
+                    </td>
+                    <td>
+                        <select asp-for="@item.WebsiteEnabled" class="form-control form-control WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
+                            <option value="" selected disabled hidden>WebsiteEnabled</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE" selected>FALSE</option>
+                        </select>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <input type="text" class="form-control AmazonMerchantSKU" value="@item.Sku" @item.AmazonMerchantSKU name="AmazonMerchantSKU" />
+
+                    </td>
+                    <td>
+                        @*<input type="text" class="form-control AmazonEnabled" value=" @item.AmazonEnabled" />*@
+                        <select asp-for="@item.AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled">
+                            <option value="" selected disabled hidden>AmazonEnabled</option>
+                            <option value="TRUE" selected>TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control ASIN" value="@item.ASIN" name="ASIN" />
+                    </td>
+                    @if (item.CompanyId == 512 || item.CompanyId == 513)
+                    {
+                        <td>
+                            <input type="text" class="form-control FulfilledBy" value="Amazon" @item.FulfilledBy name="FulfilledBy" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="text" class="form-control FulfilledBy" value="Merchant" @item.FulfilledBy name="FulfilledBy" readonly />
+                        </td>
+                    }
+                    @*<td>
+                <input type="text" class="form-control FulfilledBy" value="Merchant" @item.FulfilledBy name="FulfilledBy" />
+
+
+
+            </td>*@
+                    <td>
+                        <input type="text" class="form-control AmazonFBASKU" value="Amazon" @item.AmazonFBASKU name="AmazonFBASKU" />
+
+
+                    </td>
+                    <td>
+
+                        <select asp-for="@item.WebsiteEnabled" class="form-control form-control WebsiteEnabled" style="" id="WebsiteEnabled">
+                            <option value="" selected disabled hidden>WebsiteEnabled</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE" selected>FALSE</option>
+                        </select>
+                    </td>
+
+                }
+
+                <td>
+
+                    @if (@item.IsCreatedOnSC == 1)
+                    {
+                        <span style="color:green;font-weight:bold">Created on SC</span>
+                    }
+                    else
+                    {
+                        <span></span>
+                    }<br />
+
+                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@item.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(@item.IsRelated.Length - 6)</a></span>
+                </td>
+                <td>
+
+                    <button type='button' class='btn btn-sm btn-success submitSave' style="display:none;" value=''>Save</button>
+                    <button type='button' class='btn btn-sm btn-success editUpdate' value=''>Update</button>
+                </td>
+            </tr>
+                            }
+
+
+                            }
+                            }
         </tbody>
     </table>
+    @*<button class=" btn btn-success" id="btnUpdate" value="" style="box-shadow: none;
+        float: right;
+        margin-left: 3px">
+        Update
+    </button>*@
 </div>
 <div class="modal fade" id="CreaedShadow" style="margin-top: 130px;">
     <div class="modal-dialog modal-sm">
@@ -976,6 +1078,39 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="bulkupdated" style="margin-top: 130px;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modelwidth">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                </strong>
+
+
+                <button type="button" class="close closeimg" data-dismiss="modal">&times;</button>
+            </div>
+
+
+            <div class="modal-body myclassshide" style="padding-left:0!important;">
+                <p class="modal-title" style=" padding-left: 15px;">
+                    Bulk Updated Successfully!
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default closeimg" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
@@ -992,8 +1127,73 @@
     <script>
         $(document).ready(function () {
             $(".loader").hide();
+
+            var editable = false;
+            $(document).on("click", ".editUpdate", function () {
+               
+                
+                //var selectedRow = $(this).parents('tr');
+                //editable = true;
+
+               
+
+                //$(selectedRow).find('#AmazonEnabled').prop('disabled', false);
+                //$(selectedRow).find('#AmazonEnabled').prop('disabled', 'disabled');
+
+
+                ////$(selectedRow).find('#WebsiteEnabled').prop('disabled', 'disabled');
+                ////$(selectedRow).find('#WebsiteEnabled').prop('disabled', false);     
+                
+                //$(selectedRow).find('.ASIN').prop('readonly', false);
+                //$(selectedRow).find('.FulfilledBy').prop('readonly', false);
+                //$(selectedRow).find('.AmazonFBASKU').prop('readonly', false);
+                //$(selectedRow).find('.AmazonMerchantSKU').prop('readonly', false);               
+                //$(selectedRow).find('.editUpdate').hide();
+                //$(selectedRow).find('.submitSave').show();
+            });
+
+            $("#btnUpdate").click(function () {
+                var data = [];
+                $(".SecondTableShadow tbody tr ").each(function () {
+                    var selectedRow = $(this);
+                    var Obj =
+                    {
+                        AmazonMerchantSKU: $(this).find(".AmazonMerchantSKU").val(),
+                        AmazonEnabled: $(this).find(".AmazonEnabled option:selected").val(),
+                        ASIN: $(this).find(".ASIN").val(),
+                        FulfilledBy: $(this).find(".FulfilledBy").val(),
+                        AmazonFBASKU: $(this).find(".AmazonFBASKU").val(),
+                        WebsiteEnabled: $(this).find(".WebsiteEnabled option:selected").val(),
+                    };
+                    data.push(Obj);
+
+                    console.log("AmazonEnabled333355", data)
+
+                });
+                $(".loader").show();
+                $.ajax({
+                    type: 'post',
+                    url: '../Product/BulkUpdate',
+                    data: { data },
+                    success: function (res) {
+                        $(".loader").hide();
+                        $("#bulkupdated").modal({
+                            backdrop: 'static',
+                            keyboard: false
+
+                        });
+                        $(".closeimg").click(function () {
+                            location.reload();
+                        })
+                    },
+                    error: function (err) {
+                        $.notify('some error occured!', { classname: 'error ' });
+                    }
+                });
+            });
+           
     $('#ActionMenu').select2();
-            $('#ActionMenuShadow').select2();
+    $('#ActionMenuShadow').select2();
     $('#headerCheckBox').click(function () {
     if ($(this).is(':checked')) {
         $(".FirstTable tbody tr ").each(function () {
@@ -1095,7 +1295,32 @@
                     });
                 }
 
+                if (action == "BulkUpdate") {
 
+                    var data = [];
+
+                    $('.SecondTableShadow tbody tr ').each(function () {
+                        if ($(this).find('.checkboxesShadow').is(':checked')) {
+                            var Obj =
+                            {
+                                AmazonMerchantSKU: $(this).find('.shadowsku').val(),
+
+                            };
+                            data.push(Obj);
+                        }
+
+                    });
+                    console.log(" ShadowOffShadowOffShadowOff>>>", data)
+                    $(".loader").show();
+                    $.ajax({
+                        type: 'GET',
+                        url: '../BulkUpdate/BulkUpdate',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();                           
+                        }
+                    });
+                }
 
             });
             $(document).on('click', '#btnGoOrder', function () {
@@ -1372,12 +1597,12 @@
 
 
                                     $(selectedRow).find('.IsExistsSKU').text("Already Exists").css("color", "red");
-                                    $('#InputSubmit').attr("disabled", true)
+                                    $('#btnSave').attr("disabled", true)
 
                                 }
                                 else {
                                     $(selectedRow).find('.IsExistsSKU').text("Available").css("color", "green");
-                                    $('#InputSubmit').attr("disabled", false)
+                                    $('#btnSave').attr("disabled", false)
 
                                 }
                             }
@@ -1411,12 +1636,12 @@
             if (data.success == true) {
                 $(selectedRow).find('.AddSku').trigger('change');
                 $(selectedRow).find('.IsExistsSKU').text("Already Exists").css("color", "red");
-                $('#InputSubmit').attr("disabled", true)
+                $('#btnSave').attr("disabled", true)
 
         }
             else {
                 $(selectedRow).find('.IsExistsSKU').text("Available").css("color", "green");
-                $('#InputSubmit').attr("disabled", false)
+                $('#btnSave').attr("disabled", false)
 
         }
         }
@@ -1522,14 +1747,14 @@
     }
     function AddMarkup() {
 
-        var markup = "<tr><td><input type='checkbox' class='checkboxes' id='checkbox' /></td><td><div class='image-upload'><label class='input-label'><img class='imgupload' src='/Images/img-icon-2.jpg' id='uploader' /></label><input id='file-input' type='file' /></div><input type='text' style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text' style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value='' id='SKU'></td><td><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color' /><span style='color:red;padding-left:0px;' id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU' id='SKU'/><span class='IsExistsSKU' style='padding-left:4px;padding-right:4px;'></span><span style='margin-left:60px;' id='SKUCounter'></span><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC' /></td><td class=''></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button' class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
+        var markup = "<tr><td><input type='checkbox' class='checkboxes' id='checkbox' /></td><td><div class='image-upload'><label class='input-label'><img class='imgupload' src='/Images/img-icon-2.jpg' id='uploader' /></label><input id='file-input' type='file' /></div><input type='text' style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text' style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value='' id='SKU'></td><td><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color' /><span style='color:red;padding-left:0px;' id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU' id='SKU'/><span class='IsExistsSKU' style='padding-left:4px;padding-right:4px;'></span><span style='margin-left:60px;' id='SKUCounter'></span><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC' /></td><td class=''></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;display:none'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button' class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";
         $(".FirstTable tbody").append(markup);
 
 
     }
     var count = 0;
     $("#btnAddItem").click(function() {
-
+        $('.submit').hide();
     count++;
     if (count<1) {
                  AddMarkup()
@@ -2227,5 +2452,7 @@
 
         return new Blob([uInt8Array], { type: contentType });
         }
+         
+
     </script>
 }

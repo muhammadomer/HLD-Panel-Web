@@ -20,129 +20,241 @@
         height: 27px;
         box-shadow: none !important;
     }
+
     .requiredCustomClass {
         color: red;
     }
+
+    .mydlete {
+        position: fixed;
+        top: 17%;
+        left: 70%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
 </style>
-<h6>Create Manufacturer Product</h6>
+<div class="form-group row"style=" margin-left: 0px; ">
+    <h6>Create Manufacturer Product</h6><span style="margin-left:15px;"><a asp-controller="Product" target="_blank" asp-action="ProductManufacturedList">Manufacturer</a></span>
+</div>
+
 <div class="container-fluid p-0" style="">
     <hr />
 </div>
 <div class="container-fluid p-0">
+
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="ProductManufactured">
-                <div class="container-fluid">
-                    <div class="row col-md-12">
-                        <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
-                        <input type="text" asp-for="ManufactureId" name="ManufactureId" style="display:none">
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <label class="col-form-label-sm  controlabel">Manufacturer:</label>
-                                <div class="col-sm-8 pl-0">
-                                    <input asp-for="ManufactureName" class="form-control form-control-sm inputstyle" id="ManufactureName">
-                                    <span asp-validation-for="ManufactureName" class="text-danger"style="margin-top:3px;margin-bottom:3px;"></span>
 
-                                </div>
-                                <span class="requiredCustomClass">*</span>
+            <div class="container-fluid">
+                <div class="row col-md-12">
+                    <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
+                    <input type="text" asp-for="ManufactureId" name="ManufactureId" style="display:none">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-form-label-sm  controlabel">Manufacturer:</label>
+                            <div class="col-sm-8 pl-0">
+                                <input asp-for="ManufactureName" class="form-control form-control-sm inputstyle ManufactureNamevalue" id="ManufactureName" style="margin-bottom:5px;">
+                                <span asp-validation-for="ManufactureName" class="text-danger"></span>
+
                             </div>
-                            <div class="form-group row" style="width:100%">
-                                <div class="" style="margin-left: 110px;">
-                                    <input type="submit" value="Create" class="btn btn-primary" id="InputSubmit"/>
-                                </div>
-                                
-                                <span id="IsExistsSKU" style="padding-left:4px;padding-right:4px;"></span>
-                                <span style="margin-left:30px;" id="SKUCounter"></span>
+                            <span class="requiredCustomClass">*</span>
+                        </div>
+                        <div class="form-group row" style="width:100%;margin-top:5px">
+                            <div class="" style="margin-left: 110px;">
+                                <input type="submit" value="Create" class="btn btn-primary btnmanufacturedsave" id="InputSubmit" />
                             </div>
+
+                            <span id="IsExistsSKU" style="padding-left:4px;padding-right:4px;"></span>
+                            <span style="margin-left:30px;" id="SKUCounter"></span>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
+
         </div>
         <div class="col-md-4">
-            
-                <div class="container-fluid">
-                    <div class="row col-md-12">
-                        <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
-                        <input type="text" asp-for="ManufactureId" name="ManufactureId"  style="display:none;">
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <label class="col-form-label-sm  controlabel"> Manufacturer:</label>
-                                <div class="col-sm-8 pl-0">
-                                    <select class="js-example-basic-single form-control GetManufacture" name="ManufactureName" id="ManufactureName"asp-for="ManufactureName">
 
-                                        <option value="">Manufacturer</option>
+            <div class="container-fluid">
+                <div class="row col-md-12">
+                    <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
+                    <input type="text" asp-for="ManufactureId" name="ManufactureId" style="display:none;">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-form-label-sm  controlabel"> Manufacturer:</label>
+                            <div class="col-sm-8 pl-0">
+                                <select class="js-example-basic-single form-control GetManufacture" name="ManufactureName" id="ManufactureName" asp-for="ManufactureName">
 
-                                    </select>
-                                </div>
+                                    <option value="">Manufacturer</option>
+
+                                </select>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-form-label-sm  controlabel"> Manufac Model:</label>
-                                <div class="col-sm-8 pl-0">
-                                    <input type="text" asp-for="ManufactureModel" class="form-control form-control-sm inputstyle ManufactureModel">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label-sm  controlabel"> Manufac Model:</label>
+                            <div class="col-sm-8 pl-0">
+                                <input type="text" asp-for="ManufactureModel" class="form-control form-control-sm inputstyle ManufactureModel">
 
-                                    <span asp-validation-for="ManufactureModel" class="text-danger"></span>
-                                </div>
+                                <span asp-validation-for="ManufactureModel" class="text-danger"></span>
                             </div>
-                            <div class="form-group row" style="width:100%">
-                                <div class="" style="margin-left: 110px;">
-                                    <input type="submit" value="Create" class="btn btn-primary btnsave" />
-                                </div>
+                        </div>
+                        <div class="form-group row" style="width:100%">
+                            <div class="" style="margin-left: 110px;">
+                                <input type="submit" value="Create" class="btn btn-primary btnsave" />
                             </div>
                         </div>
                     </div>
                 </div>
-        
+            </div>
+
         </div>
         <div class="col-md-4">
-           
-                <div class="container-fluid">
-                    <div class="row col-md-12">
-                        <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
-                        <input type="text" asp-for="ManufactureId" name="ManufactureId" style="display:none">
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <label class="col-form-label-sm  controlabel"> Manufacturer:</label>
-                                <div class="col-sm-8 pl-0">
-                                    <select class="js-example-basic-single form-control GetManufacture1" name="ManufactureName" id="ManufactureName1" asp-for="ManufactureName">
 
-                                        <option value="">Manufacturer</option>
+            <div class="container-fluid">
+                <div class="row col-md-12">
+                    <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
+                    <input type="text" asp-for="ManufactureId" name="ManufactureId" style="display:none">
+                    <input type="text" asp-for="ManufactureModelId" name="ManufactureId" style="display:none">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-form-label-sm  controlabel"> Manufacturer:</label>
+                            <div class="col-sm-8 pl-0">
+                                <select class="js-example-basic-single form-control GetManufacture1" name="ManufactureName" id="ManufactureName1" asp-for="ManufactureName">
 
-                                    </select>
-                                    <span asp-validation-for="ManufactureName" class="text-danger"></span>
-                                </div>
+                                    <option value="">Manufacturer</option>
+
+                                </select>
+                                <span asp-validation-for="ManufactureName" class="text-danger"></span>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-form-label-sm  controlabel"> Manufac Model:</label>
-                                <div class="col-sm-8 pl-0">
-                                    <select class="js-example-basic-single form-control ManufactureModel" name="ManufactureModel" id="ManufactureModel" asp-for="ManufactureModel">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label-sm  controlabel"> Manufac Model:</label>
+                            <div class="col-sm-8 pl-0">
+                                <select class="js-example-basic-single form-control ManufactureModel" name="ManufactureModel" id="ManufactureModel" asp-for="ManufactureModel">
 
-                                        <option value="">Manufacturer Model</option>
+                                    <option value="">Manufacturer Model</option>
 
-                                    </select>
-                                    <span asp-validation-for="ManufactureModel" class="text-danger"></span>
-                                </div>
+                                </select>
+                                <span asp-validation-for="ManufactureModel" class="text-danger"></span>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-form-label-sm  controlabel"> Device Model:</label>
-                                <div class="col-sm-8 pl-0">
-                                    <input type="text" asp-for="DeviceModel" class="form-control form-control-sm inputstyle DeviceModel">
-                                    <span asp-validation-for="DeviceModel" class="text-danger"></span>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label-sm  controlabel"> Device Model:</label>
+                            <div class="col-sm-8 pl-0">
+                                <input type="text" asp-for="DeviceModel" class="form-control form-control-sm inputstyle DeviceModel">
+                                <span asp-validation-for="DeviceModel" class="text-danger"></span>
                             </div>
-                            <div class="form-group row" style="width:100%">
-                                <div class="" style="margin-left: 110px;">
-                                    <input type="submit" value="Create" class="btn btn-primary btnsavedata" />
-                                </div>
+                        </div>
+                        <div class="form-group row" style="width:100%">
+                            <div class="" style="margin-left: 110px;">
+                                <input type="submit" value="Create" class="btn btn-primary btnsavedata" />
                             </div>
                         </div>
                     </div>
                 </div>
-            
+            </div>
+
         </div>
     </div>
 
+    <div class="modal fade" id="Manufacturer" style="margin-top: 130px;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modelwidth">
 
+
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                    </strong>
+
+
+                    <button type="button" class="close InputSubmit" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <div class="modal-body myclassshide" style="padding-left:0!important;">
+                    <p class="modal-title" style=" padding-left: 15px;">
+                        Manufacturer Name Added Successfully!
+                    </p>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default InputSubmit" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ManufactureModell" style="margin-top: 130px;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modelwidth">
+
+
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                    </strong>
+
+
+                    <button type="button" class="close InputSubmit" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <div class="modal-body myclassshide" style="padding-left:0!important;">
+                    <p class="modal-title" style=" padding-left: 15px;">
+                        Manufacturer Model Name Added Successfully!
+                    </p>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default InputSubmit" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DeviceModelshow" style="margin-top: 130px;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content modelwidth">
+
+
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                    </strong>
+
+
+                    <button type="button" class="close InputSubmit" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <div class="modal-body myclassshide" style="padding-left:0!important;">
+                    <p class="modal-title" style=" padding-left: 15px;">
+                        Device Model Name Added Successfully!
+                    </p>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default InputSubmit" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -157,49 +269,138 @@
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $(document).on('click', '#InputSubmit', function () {
 
-          
+                var ManufactureModel = $(".ManufactureNamevalue").val();
+                if (ManufactureModel != '') {
+                    $("#Manufacturer").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $(".InputSubmit").click(function () {
+
+                        location.reload();
+                    })
+                }
+                else { }
+
+            });
+
+            $(".btnmanufacturedsave").click(function () {
+
+
+                var ManufactureName = $(".ManufactureNamevalue").val();
+
+                console.log("ManufactureName", ManufactureName)
+                if (ManufactureName != '') {
+                    $.ajax({
+                        type: 'post',
+                        url: '../Product/ProductManufactured',
+                        data: { ManufactureName: ManufactureName },
+                        success: function (res) {
+                            $(".ManufactureName").val("");
+
+                            if (res = "true") {
+                                $("#Manufacturer").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+                                });
+                                $(".InputSubmit").click(function () {
+
+                                    location.reload();
+                                });
+
+                            } else { }
+                        },
+                        error: function (err) {
+                            $.notify('some error occured!', { classname: 'error ' });
+                        }
+                    });
+                }
+                else {
+                    $.notify('Please Add Menufacture Model  first', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                }
+            });
 
             $(".btnsave").click(function () {
 
                 var ManufactureId = $("select#ManufactureName option").filter(":selected").val();
                 var ManufactureModel = $(".ManufactureModel").val();
                 console.log(ManufactureId)
-                console.log("manufacddd",ManufactureModel)
-            $.ajax({
-                type: 'post',
-                url: '../Product/ProductManufacturedModel',
-                data: { ManufactureId: ManufactureId, ManufactureModel: ManufactureModel },
-                success: function (res) {
-                    $(".ManufactureModel").val("");
-                    $(".ManufactureName").val("");
-                },
-                error: function (err) {
-                    $.notify('some error occured!', { classname: 'error ' });
+                console.log("manufacddd", ManufactureModel)
+                if (ManufactureModel != '') {
+                    $.ajax({
+                        type: 'post',
+                        url: '../Product/ProductManufacturedModel',
+                        data: { ManufactureId: ManufactureId, ManufactureModel: ManufactureModel },
+                        success: function (res) {
+                            $(".ManufactureModel").val("");
+                            $(".ManufactureName").val("");
+                            if (res = "true") {
+                                $("#ManufactureModell").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+                                });
+                                $(".InputSubmit").click(function () {
+
+                                    location.reload();
+                                });
+
+                            } else { }
+                        },
+                        error: function (err) {
+                            $.notify('some error occured!', { classname: 'error ' });
+                        }
+                    });
                 }
-            });
+                else {
+                    $.notify('Please Add Menufacture Model  first', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                    }
             });
 
             $(".btnsavedata").click(function () {
 
-                var ManufactureId = $("select#ManufactureModel option").filter(":selected").val();
-               
+                var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
+
+                var ManufactureModelId = $("select#ManufactureModel option").filter(":selected").val();
+
+
                 var DeviceModel = $(".DeviceModel").val();
-                console.log("DeviceModelg",DeviceModel)
-                console.log("manufacddddolll", ManufactureId)
-              
-                $.ajax({
-                    type: 'post',
-                    url: '../Product/ProductDeviceModel',
-                    data: { ManufactureId: ManufactureId, DeviceModel: DeviceModel },
-                    success: function (res) {
-                        $(".ManufactureModel").val("");
-                        $(".DeviceModel").val("");
-                    },
-                    error: function (err) {
-                        $.notify('some error occured!', { classname: 'error ' });
-                    }
-                });
+
+                console.log("ManufactureName is>>>", ManufactureId)
+                console.log("ManufactureModel>>>", ManufactureModel)
+                console.log("DeviceModel>>>", DeviceModel)
+                if (DeviceModel != '') {
+                    $.ajax({
+                        type: 'post',
+                        url: '../Product/ProductDeviceModel',
+                        data: { ManufactureId: ManufactureId, ManufactureModelId: ManufactureModelId, DeviceModel: DeviceModel },
+                        success: function (res) {
+                            $(".ManufactureModel").val("");
+                            $(".DeviceModel").val("");
+
+                            if (res = "true") {
+                                $("#DeviceModelshow").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+                                });
+                                $(".InputSubmit").click(function () {
+
+                                    location.reload();
+                                });
+                            }
+                            else { }
+                        },
+                        error: function (err) {
+                            $.notify('some error occured!', { classname: 'error ' });
+                        }
+                    });
+                }
+                else {
+
+                    $.notify('Please Add Device Model first', { globalPosition: 'bottom right', className: 'danger mydlete' });
+
+                }
             });
             $('input[id=ManufactureName]').keyup(function (e) {
                 $(this).val($(this).val().replace(/ +?/g, ''));
@@ -306,16 +507,16 @@
             GetManufacture1();
             $(".GetManufacture1").select2();
 
-          
+
             $(document).on("change", ".GetManufacture1", function () {
-                
+
                 var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
                 console.log("product ManufactureId", ManufactureId)
-                
+
                 $.ajax({
                     type: 'GET',
                     url: '../product/GetManufactureIdByNameChange?ManufactureId=' + ManufactureId,
-                   
+
                     success: function (data) {
                         console.log("rrr", data)
                         $(".ManufactureModel").empty();
@@ -332,7 +533,7 @@
                       }
                 });
 
-                
+
             });
             function ManufactureModel() {
                 debugger;
@@ -372,7 +573,7 @@
 
         });
 
-       
+
 
     </script>
 }

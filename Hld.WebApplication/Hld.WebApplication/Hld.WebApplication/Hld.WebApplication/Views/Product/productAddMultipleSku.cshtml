@@ -164,8 +164,6 @@
                     </div>
                     <span class="requiredCustomClass">*</span>
                     <span style="margin-left:10px;">   <a asp-controller="Catageory" target="_blank" asp-action="MainView">Add Category</a></span>
-
-
                 </div>
 
 
@@ -196,7 +194,7 @@
                         @*<input class="form-control" asp-for="Menufacture" />
             <span asp-validation-for="Menufacture" class="text-danger"></span>
             <span class="UpcError"></span>*@
-                        <select class="js-example-basic-single form-control GetManufacture1" name="ManufactureName" id="ManufactureName1" asp-for="Menufacture">
+                        <select class="js-example-basic-single form-control GetManufacture1" name="ManufactureName" id="ManufactureName1" asp-for="ManufactureName">
 
                             <option value="">Manufacturer</option>
 
@@ -215,7 +213,7 @@
                         @*<input class="form-control" asp-for="MenufactureModel"/>*@
                         @*<span asp-validation-for="MenufactureModel" class="text-danger"></span>
             <span class="UpcError"></span>*@
-                        <select class="js-example-basic-single form-control ManufactureModel" name="ManufactureModel" id="ManufactureModel" asp-for="MenufactureModel">
+                        <select class="js-example-basic-single form-control ManufactureModel" name="ManufactureModel" id="ManufactureModel" asp-for="ManufactureModel">
 
                             <option value="">Manufacturer Model</option>
 
@@ -426,16 +424,11 @@
                         $.each(data, function (index, value) {
 
                             content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureModel + '</option>';
-
-
-
                         });
 
                         $(".ManufactureModel").append(content);
                     }
                 });
-
-
             });
             function ManufactureModel() {
                 debugger;
@@ -469,19 +462,21 @@
             }
 
             ManufactureModel();
-            $(".ManufactureModel").select2();
-
-
-
-            
+            $(".ManufactureModel").select2();       
             $(document).on("change", ".ManufactureModel", function () {
-
+                var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
                 var ManufactureModel = $("select#ManufactureModel option").filter(":selected").val();
+               
+             
+
+             
+
                 console.log("product ManufactureModel", ManufactureModel)
+                console.log("product ManufactureId", ManufactureId)
 
                 $.ajax({
                     type: 'GET',
-                    url: '../product/GetManufactureDeviceIdByNameChange?ManufactureModel=' + ManufactureModel,
+                    url: '../product/GetManufactureDeviceIdByNameChange?ManufactureModel=' + ManufactureModel + "&ManufactureId=" + ManufactureId,
 
                     success: function (data) {
                         console.log("rrr", data)

@@ -10,12 +10,14 @@ namespace Hld.WebApplication.ViewModel
 {
     public class ProductManufacturedViewModel
     {
-        public int ManufactureId { get;set;}     
+        public int ManufactureId { get;set;}
+        public int ManufactureModelId { get; set; }
         public int ParentID { get;set;}
         [Required(ErrorMessage = "ManufactureName is required")]
         [MaxLength(20, ErrorMessage = "Maximum 20 characters allowed")]
         public  string ManufactureName { get;set;}     
-        public string ManufactureModel { get;set;}     
+        public string ManufactureModel { get;set;}
+        [Required(ErrorMessage = "DeviceModel is required")]
         public string DeviceModel { get;set;}     
     }
 }

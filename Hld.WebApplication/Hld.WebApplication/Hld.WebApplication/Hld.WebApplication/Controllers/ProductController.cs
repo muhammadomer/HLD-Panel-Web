@@ -11,6 +11,7 @@ using DataAccess.ViewModels;
 using ExcelLibrary.SpreadSheet;
 using Hld.WebApplication.Helper;
 using Hld.WebApplication.ViewModel;
+using Hld.WebApplication.Views.Product;
 using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -737,6 +738,7 @@ namespace Hld.WebApplication.Controllers
             status = ProductApiAccess.CreateProductShadowOnSellerCloud(ApiURL, authenticate.access_token, data);
             if (status != null)
             {
+                
                 ViewBag.status = "Relation Created Succesfully";
             }
 
@@ -1632,19 +1634,29 @@ namespace Hld.WebApplication.Controllers
             return list;
             
         }
-
         [HttpGet]
-        public List<AddDeviceModelView> GetManufactureDeviceIdByNameChange(int ManufactureModel)
+        public List<ProductManufactureListViewModel> GetManufactureList(int ManufactureId)
         {
             token = Request.Cookies["Token"];
-            var list = ProductApiAccess.GetManufactureDeviceIdByNameChange(ApiURL, token, ManufactureModel);
-            list = list.Where(x => !string.IsNullOrWhiteSpace(x.DeviceModel)).ToList();
+            var list = ProductApiAccess.GetManufactureList(ApiURL, token, ManufactureId);
+            //list = list.Where(x => !string.IsNullOrEmpty(x.ManufactureModel)).ToList();
+           
+            return list;
+
+        }
+
+        [HttpGet]
+        public List<GetDeviceModelViewMdel> GetManufactureDeviceIdByNameChange(int ManufactureModel, int ManufactureId)
+        {
+            token = Request.Cookies["Token"];
+            var list = ProductApiAccess.GetManufactureDeviceIdByNameChange(ApiURL, token, ManufactureModel, ManufactureId);
+            list = list.Where(x => !string.IsNullOrEmpty(x.DeviceModel)).ToList();
             return list;
 
         }
 
         [HttpPost]
-        public bool ProductDeviceModel(ProductManufacturedViewModel model)
+        public bool ProductDeviceModel(AddDeviceModelView model)
         {
             string token = Request.Cookies["Token"];
 
@@ -1652,6 +1664,40 @@ namespace Hld.WebApplication.Controllers
             ModelState.Clear();
             return status;
            
+
+        }
+
+        public IActionResult ProductManufacturedList()
+        {
+            string token = Request.Cookies["Token"];
+
+
+
+            return View();
+
+
+        }
+        [HttpPost]
+        public IActionResult ProductManufacturedList(ProductManufacturedViewModel viewmodel)
+        {
+            string token = Request.Cookies["Token"];
+
+
+            ProductApiAccess.SaveProductManufactured(ApiURL, token, viewmodel);
+            ModelState.Clear();
+            return View();
+
+
+        }
+
+        [HttpPost]
+        public string BulkUpdate(List<EditBulkUpdateViewModel> data)
+        {
+            string token = Request.Cookies["Token"];
+
+            var staus = ProductApiAccess.BulkUpdateList(ApiURL, token, data);
+            return staus;
+
 
         }
     }

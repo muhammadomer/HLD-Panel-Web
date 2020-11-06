@@ -1,0 +1,124 @@
+﻿@model Hld.WebApplication.ViewModel.BulkUpdateViewModel
+
+@{
+    ViewData["Title"] = "BulkUpdate";
+}<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+<style>
+   
+
+    .form-group,.form-control {
+        margin-bottom: 0px !important;
+        box-shadow: none !important;
+    }
+ 
+</style>
+
+<h6>Bulk Update</h6>
+<hr />
+<div class="container-fluid p-0">
+
+    <table class="table table-bordered">
+        <thead style="background-color:lightgray">
+            <tr><th>AmazonMerchantSKU</th><th>AmazonEnabled</th><th>ASIN</th><th>FulfilledBy</th><th>AmazonFBASKU</th><th>WebsiteEnabled</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input asp-for="AmazonMerchantSKU" class="form-control" />
+                </td>
+                <td>
+                    <input asp-for="AmazonEnabled" class="form-control" />
+                </td>
+                <td>
+                    <input asp-for="ASIN" class="form-control" />
+                </td>
+                <td>
+                    <input asp-for="FulfilledBy" class="form-control" />
+                </td>
+                <td>
+                    <input asp-for="AmazonFBASKU" class="form-control" />
+                </td>
+                <td>
+                    <input asp-for="WebsiteEnabled" class="form-control" />
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+</div>
+
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".loader").hide();
+            function GetManufacture() {
+                debugger;
+                $.ajax({
+                    url: "/Product/GetAllVendorForAutoComplete/",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        console.log("ddd", data)
+
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
+
+
+
+                        });
+
+                        $(".GetManufacture").append(content);
+                        @* $(".vendorlistgetFromPOProduct").val(@Model.Manufacturer);*@
+
+
+                    }
+                });
+            }
+            GetManufacture();
+            $(".GetManufacture").select2();
+            $(document).on("change", ".GetManufacture", function () {
+
+                var ManufactureId = $("select#ManufactureName option").filter(":selected").val();
+                console.log("product ManufactureId", ManufactureId)
+                $(".loader").show();
+                $.ajax({
+                    type: 'GET',
+                    url: '../product/GetManufactureList?ManufactureId=' + ManufactureId,
+
+                    success: function (data) {
+                        $(".loader").hide();
+                        console.log("rrr", data)
+                        $(".table tbody").empty();
+
+                        $.each(data, function (index, value) {
+                            $(".table tbody").append("<tr><td>" + value.ManufactureName + "</td><td>" + value.ManufactureModel + "</td><td>" + value.DeviceModel + "</td></tr >");
+                        });
+
+                    }
+                });
+
+
+            });
+
+        });
+    </script>
+}

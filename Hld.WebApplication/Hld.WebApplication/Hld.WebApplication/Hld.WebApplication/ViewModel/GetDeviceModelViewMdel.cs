@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace Hld.WebApplication.ViewModel
 {
-    public class AddDeviceModelView
+    public class GetDeviceModelViewMdel
     {
         public int ManufactureId { get; set; }
         public string Manufacture { get; set; }
         public string ManufactureModel { get; set; }
-        public int ManufactureModelId { get; set; }
         public string DeviceModel { get; set; }
     }
 }
