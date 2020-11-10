@@ -86,7 +86,7 @@ namespace Hld.WebApplication.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 

@@ -303,13 +303,12 @@ namespace Hld.WebApplication.Helper
 
                  responses = JsonConvert.DeserializeObject<List<FileContents>>(strResponse);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
          
-
             return responses;
         }
         public ProductDisplayViewModel GetProductDetailBySKU(string ApiURL, string token, string sku)
@@ -1170,6 +1169,7 @@ namespace Hld.WebApplication.Helper
             }
             catch (Exception ex)
             {
+                throw ex;
             }
             return status;
         }
@@ -1824,6 +1824,7 @@ namespace Hld.WebApplication.Helper
             }
             catch (Exception ex)
             {
+                throw ex;
             }
             return status;
         }

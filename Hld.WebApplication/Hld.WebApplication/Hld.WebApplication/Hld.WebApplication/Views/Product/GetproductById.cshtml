@@ -237,6 +237,7 @@
         cursor: pointer !important;
         display: block;
     }
+
     .imguploads {
         margin: 0 auto;
         width: 30px;
@@ -381,7 +382,7 @@
                         {
 
                             <tr>
-                                <td> <input type="checkbox" class="checkboxes" id="checkbox" @*disabled="@(item.IsCreatedOnSC==1)"*@ /></td>
+                                <td> <input type="checkbox" class="checkboxes" @*disabled="@(item.IsCreatedOnSC==1)"*@ /></td>
                                 <td>
                                     <div>
                                         <img src="~/Images/cross.jpg" height="15px" width="15px" style="float:right;cursor:pointer" class="delteimg" />
@@ -528,7 +529,7 @@
                             <td>
                                 <input type="checkbox" class="checkboxesShadow" id="checkbox" />
                             </td>
-                           
+
                             <td>
                                 @if (String.IsNullOrEmpty(item.CompressedImage))
                                 {
@@ -548,8 +549,8 @@
                                 {
                                     <div class="image-upload">
                                         @*<a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                    <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
-                </a>*@
+                                                <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                                            </a>*@
                                         <label class="input-label">
                                             <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
                                                 <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded imgupload imguploads" height="30" width="30" id="uploader" />
@@ -568,12 +569,12 @@
                             </td>
 
                             <td>
-                                <input type="text" class="form-control ShadowOff" placeholder="SKU" value='@item.Sku' id="SKU" name="ShadowOff" style="border:none;"readonly/>
+                                <input type="text" class="form-control ShadowOff" placeholder="SKU" value='@item.Sku' id="SKU" name="ShadowOff" style="border:none;" readonly />
 
                             </td>
                             <td>
                                 @*@item.CompanyName
-                                @item.CompanyId*@
+                                    @item.CompanyId*@
                                 512
 
                             </td>
@@ -603,9 +604,9 @@
                                 }
                                 else
                                 {
-                        <td>
-                            <input type="text" class="form-control FulfilledBy" value="@item.FulfilledBy" name="FulfilledBy" />
-                        </td>
+                                    <td>
+                                        <input type="text" class="form-control FulfilledBy" value="@item.FulfilledBy" name="FulfilledBy" />
+                                    </td>
                                 }
                                 <td>
                                     <input type="text" class="form-control AmazonFBASKU" value="@item.AmazonFBASKU" name="AmazonFBASKU" readonly />
@@ -621,7 +622,7 @@
                             else
                             {
                                 <td>
-                                    <input type="text" class="form-control AmazonMerchantSKU" value="@item.Sku" @item.AmazonMerchantSKU name="AmazonMerchantSKU"readonly />
+                                    <input type="text" class="form-control AmazonMerchantSKU" value="@item.Sku" @item.AmazonMerchantSKU name="AmazonMerchantSKU" readonly />
 
                                 </td>
                                 <td>
@@ -648,11 +649,11 @@
                                     </td>
                                 }
                                 @*<td>
-                                <input type="text" class="form-control FulfilledBy" value="Merchant" @item.FulfilledBy name="FulfilledBy" />
+                                        <input type="text" class="form-control FulfilledBy" value="Merchant" @item.FulfilledBy name="FulfilledBy" />
 
 
 
-                            </td>*@
+                                    </td>*@
                                 <td>
                                     <input type="text" class="form-control AmazonFBASKU" value="@item.AmazonFBASKU" name="AmazonFBASKU" />
 
@@ -696,7 +697,7 @@
                             <td>
                                 <input type="checkbox" class="checkboxesShadow" id="checkbox" />
                             </td>
-                            
+
                             <td colspan="2">
 
                                 <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
@@ -710,8 +711,8 @@
                             </td>
 
                             @*<td>
-                               
-                            </td>*@
+
+                                </td>*@
                             <td>
                                 @itemShadow.CompanyName
                                 @itemShadow.CompanyId
@@ -749,7 +750,7 @@
                                     </td>
                                 }
                                 <td>
-                                    <input type="text" class="form-control AmazonFBASKU" value="Amazon" @itemShadow.AmazonFBASKU name="AmazonFBASKU" readonly />
+                                    <input type="text" class="form-control AmazonFBASKU" @itemShadow.AmazonFBASKU name="AmazonFBASKU" readonly />
                                 </td>
                                 <td>
                                     <select asp-for="@itemShadow.WebsiteEnabled" class="form-control form-control WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
@@ -762,7 +763,7 @@
                             else
                             {
                                 <td>
-                                    <input type="text" class="form-control AmazonMerchantSKU" value="@itemShadow.Sku" @itemShadow.AmazonMerchantSKU name="AmazonMerchantSKU" readonly/>
+                                    <input type="text" class="form-control AmazonMerchantSKU" value="@itemShadow.Sku" @itemShadow.AmazonMerchantSKU name="AmazonMerchantSKU" readonly />
 
                                 </td>
                                 <td>
@@ -779,7 +780,7 @@
                                 @if (itemShadow.CompanyId == 512 || itemShadow.CompanyId == 513)
                                 {
                                     <td>
-                                        <input type="text" class="form-control FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy" />
+                                        <input type="text" class="form-control FulfilledBy" value="Amazon" @itemShadow.FulfilledBy name="FulfilledBy" />
                                     </td>
                                 }
                                 else
@@ -789,13 +790,13 @@
                                     </td>
                                 }
                                 @*<td>
-                                <input type="text" class="form-control FulfilledBy" value="Merchant" @itemShadow.FulfilledBy name="FulfilledBy" />
+                                        <input type="text" class="form-control FulfilledBy" value="Merchant" @itemShadow.FulfilledBy name="FulfilledBy" />
 
 
 
-                            </td>*@
+                                    </td>*@
                                 <td>
-                                    <input type="text" class="form-control AmazonFBASKU" value="Amazon" @itemShadow.AmazonFBASKU name="AmazonFBASKU" />
+                                    <input type="text" class="form-control AmazonFBASKU" @itemShadow.AmazonFBASKU name="AmazonFBASKU" />
 
 
                                 </td>
@@ -810,19 +811,20 @@
 
                             }
 
-                            <td>
+                        <td>
 
-                                @if (@itemShadow.IsCreatedOnSC == 1)
-                                {
-                                    <span style="color:green;font-weight:bold">Created on SC</span>
-                                }
-                                else
-                                {
-                                    <span></span>
-                                }<br />
-
-                                <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@itemShadow.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
-                            </td>
+                            @if (@itemShadow.IsCreatedOnSC == 1)
+                            {
+                                <span style="color:green;font-weight:bold">Created on SC</span>
+                               
+                            }
+                            else
+                            {
+                                <span></span>
+                            }<br />
+                            @* commented by Mehdi*@
+                            @* <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@itemShadow.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>*@
+                        </td>
                             <td>
 
                                 <button type='button' class='btn btn-sm btn-success submitSave' style="display:none;" value=''>Save</button>
@@ -862,6 +864,7 @@
             <div class="modal-body myclassshide" style="padding-left:0!important;">
                 <p class="modal-title" style=" padding-left: 15px;">
                     Shadow Relation Updated Successfully!
+                    
                 </p>
 
             </div>
@@ -925,7 +928,7 @@
 
             <div class="modal-body myclassshide" style="padding-left:0!important;">
                 <p class="modal-title" style=" padding-left: 15px;">
-                    Product Shadow Created Successfully!
+                    Create Shadows in Panel
                 </p>
 
             </div>
@@ -946,8 +949,8 @@
             <div class="modal-header">
 
                 <strong>
-                    <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
-">Wrong!</span>
+                    <i style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success</span>
                 </strong>
 
 
@@ -1010,8 +1013,8 @@
             <div class="modal-header">
 
                 <strong>
-                    <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
-">Wrong!</span>
+                    <i style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success</span>
                 </strong>
 
 
@@ -1021,8 +1024,8 @@
 
             <div class="modal-body myclassshide" style="padding-left:0!important;">
                 <p class="modal-title" style=" padding-left: 15px;">
-                    @TempData["status"]
-                    Product created on sellercloud.
+                    @* @TempData["status"]*@
+                    Create Products & Shadows on SC
                 </p>
 
             </div>
@@ -1077,8 +1080,7 @@
             <div class="modal-header">
 
                 <strong>
-                    <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;
-">Success!</span>
+                    <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;">Success</span>
                 </strong>
 
 
@@ -1283,7 +1285,7 @@
             $(document).on("click", ".editUpdate", function () {
 
                 var selectedRow = $(this).parents('tr');
-              
+
                 var data =
                 {
 
@@ -1296,14 +1298,14 @@
                     ShadowOffSKU: $(selectedRow).find(".AddSkuShadow").val(),
                     WebsiteEnabled: $(selectedRow).find(".WebsiteEnabled option:selected").val(),
                 };
-                console.log("AmazonMerchantSKU are", data.AmazonMerchantSKU), 
-                    console.log("AmazonEnabled are", data.AmazonEnabled), 
-                    console.log("ASIN are", data.ASIN), 
-                    console.log("ChildSKU are", data.ChildSKU), 
-                    console.log("WebsiteEnabled are", data.WebsiteEnabled), 
-                    console.log("ShadowOffSKU are", data.ShadowOffSKU), 
+                console.log("AmazonMerchantSKU are", data.AmazonMerchantSKU),
+                    console.log("AmazonEnabled are", data.AmazonEnabled),
+                    console.log("ASIN are", data.ASIN),
+                    console.log("ChildSKU are", data.ChildSKU),
+                    console.log("WebsiteEnabled are", data.WebsiteEnabled),
+                    console.log("ShadowOffSKU are", data.ShadowOffSKU),
                     $(".loader").show();
-                   
+
                     $.ajax({
                         type: 'POST',
                         url: '../product/BulkUpdate',
@@ -1324,8 +1326,8 @@
 
                         }
                     });
-                
-              
+
+
             });
             var editable = false;
             $(document).on("click", ".editUpdate", function () {
@@ -1435,7 +1437,7 @@
             });
             $(document).on('click', '#btnGoOrderShadow', function () {
                 //window.open('../PredictionHistory/PredictionList', '_blank');
-
+                debugger;
                 var action = $('#ActionMenuShadow').val();
                 if (action == "") {
 
@@ -1463,7 +1465,9 @@
 
 
                             };
-                            data.push(Obj);
+                            if (Obj.ProductSKU != undefined) {
+                                data.push(Obj);
+                            }
                         }
 
                         console.log("get ShadowOff", data)
@@ -2009,12 +2013,11 @@
         });
         }
 
-        $(document).on('click', '#btnSave', function () {
-
+            $(document).on('click', '#btnSave', function () {
+                debugger
         var data = [];
             $('.FirstTable tbody tr ').each(function () {
-        var Obj =
-        {
+        var Obj = {
         Sku: $(this).find('.AddSku').val(),
         Parentproduct_id: $(this).find('.product_id').val(),
         Childproduct_id: $(this).find('.child_id').val(),

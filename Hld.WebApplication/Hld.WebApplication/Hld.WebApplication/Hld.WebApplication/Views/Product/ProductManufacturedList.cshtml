@@ -64,30 +64,41 @@
 <div class="container-fluid p-0" style="">
 
     <div class="row">
-        <div class="col-md-4">
-            <div class="container-fluid">
-                <div class="row col-md-12">
+        <div class="col-md-12">
+            <div class="container" style="max-width:100%">
+                <div class="">
                     <input type="text" asp-for="ParentID" name="ParentID" style="display:none">
                     <input type="text" asp-for="ManufactureId" name="ManufactureId" style="display:none;">
                     <div class="col-md-12">
                         <div class="form-group row">
-                            <label class="col-form-label-sm  controlabel"> Manufacturer:</label>
-                            <div class="col-sm-8 pl-0">
+                          @*  <label class="col-form-label-sm  controlabel"> Manufacturer:</label>*@
+                            <div class="col-sm-1 pr-0" style="margin-left:auto">
                                 <select class="js-example-basic-single form-control GetManufacture" name="ManufactureName" id="ManufactureName" asp-for="ManufactureName">
-
                                     <option value="">Manufacturer</option>
-
                                 </select>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        @*<div class="col-md-8">
             <div class="container">
+                <table class="table table-bordered">
+                    <thead style="background-color:lightgray">
+                        <tr><th>Manufacturer</th><th>Manufacturer Model</th><th>Device Model</th><th>Action</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>*@
+    </div>
+    
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container" style="max-width:100%">
                 <table class="table table-bordered">
                     <thead style="background-color:lightgray">
                         <tr><th>Manufacturer</th><th>Manufacturer Model</th><th>Device Model</th><th>Action</th></tr>
@@ -98,35 +109,26 @@
         </div>
     </div>
 
+
     <div class="modal fade" id="Manufacturer" style="margin-top: 130px;">
         <div class="modal-dialog modal-sm">
             <div class="modal-content modelwidth">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-
                     <strong>
-                        <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;
-">Success!</span>
+                        <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;">Success!</span>
                     </strong>
-
-
                     <button type="button" class="close closeimg" data-dismiss="modal">&times;</button>
                 </div>
-
-
                 <div class="modal-body myclassshide" style="padding-left:0!important;">
                     <p class="modal-title" style=" padding-left: 15px;">
                         Manufacturer Updated Successfully!
                     </p>
-
                 </div>
-
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default closeimg" data-dismiss="modal">Close</button>
                 </div>
-
             </div>
         </div>
     </div>

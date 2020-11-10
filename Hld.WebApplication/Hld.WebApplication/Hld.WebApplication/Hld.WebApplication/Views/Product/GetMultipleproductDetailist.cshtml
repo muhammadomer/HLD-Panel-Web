@@ -89,6 +89,7 @@
                
                 <th>Parent SKU</th>
                 <th>Parent Title</th>
+                <th>SKU Creation Date</th>
                 <th>Action</th>
 
 
@@ -114,8 +115,12 @@
                 <td>
                     @item.ProductTitle
                 </td>
+                <td>
+                    @string.Format("{0: MMM d, yyyy}", @item.SkuCreationDate)
+                    
+                </td>
                 <!--<td>
-        @item.Color-->
+    @item.Color-->
                 @*@item.ColorAlias
         @item.ColorId*@
 
@@ -123,11 +128,11 @@
                 @*<td>
             @item.Upc
         </td>*@
-              
-            <td>
-                
-                <a href="/product/GetproductById?=@item.Parentproduct_id" target="_blank">Create Child SKU</a>
-            </td>
+
+                <td>
+
+                    <a href="/product/GetproductById?=@item.Parentproduct_id" target="_blank">Create Child SKU</a>
+                </td>
             </tr>
             }
         </tbody>

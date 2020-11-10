@@ -706,7 +706,6 @@ namespace Hld.WebApplication.Controllers
                             shadowSKU.ProductNotes = "Create by Hld Panel"; 
                             status = ProductApiAccess.CreateProductOnSellerCloud(ApiURL, authenticate.access_token, shadowSKU);
                             ProductApiAccess.UpdateSkustatusonsellercloud(ApiURL, token, status);
-                         
                         }
 
                     }
@@ -1134,33 +1133,43 @@ namespace Hld.WebApplication.Controllers
         [HttpPost]
         private async Task<bool> SaveImagesChildSku(List<IFormFile> files, string ProductSKU)
         {
-            bool status = false;
-            List<ImagesSaveToDatabaseWithURLViewMOdel> listImagesUrl = new List<ImagesSaveToDatabaseWithURLViewMOdel>();
-            if (files != null)
+            try
             {
-                if (files.Count > 0)
+                bool status = false;
+                List<ImagesSaveToDatabaseWithURLViewMOdel> listImagesUrl = new List<ImagesSaveToDatabaseWithURLViewMOdel>();
+                if (files != null)
                 {
-                    foreach (var Imagefile in files)
+                    if (files.Count > 0)
                     {
-                        string fileName = Imagefile.FileName + "-" + ProductSKU + Path.GetExtension(Imagefile.FileName);
-                        System.Drawing.Image img = System.Drawing.Image.FromStream(Imagefile.OpenReadStream(), true, true);
-                        using (Stream ms = new MemoryStream())
+                        foreach (var Imagefile in files)
                         {
-                            Imagefile.CopyTo(ms);
-                            await uploadFiles.uploadToS3(ms, fileName);
-                            await uploadFiles.uploadCompressedToS3(GetStreamOfReducedImage(img), fileName);
+                            string fileName = Imagefile.FileName + "-" + ProductSKU + Path.GetExtension(Imagefile.FileName);
+                            System.Drawing.Image img = System.Drawing.Image.FromStream(Imagefile.OpenReadStream(), true, true);
+                            using (Stream ms = new MemoryStream())
+                            {
+                                Imagefile.CopyTo(ms);
+                                await uploadFiles.uploadToS3(ms, fileName);
+                                await uploadFiles.uploadCompressedToS3(GetStreamOfReducedImage(img), fileName);
 
+                            }
+                            ImagesSaveToDatabaseWithURLViewMOdel databaseImagesURL = new ImagesSaveToDatabaseWithURLViewMOdel();
+                            databaseImagesURL.product_Sku = ProductSKU;
+                            databaseImagesURL.FileName = fileName;
+
+                            status = ProductApiAccess.SaveSellerCloudImagesForChildSku(ApiURL, token, databaseImagesURL);
                         }
-                        ImagesSaveToDatabaseWithURLViewMOdel databaseImagesURL = new ImagesSaveToDatabaseWithURLViewMOdel();
-                        databaseImagesURL.product_Sku = ProductSKU;
-                        databaseImagesURL.FileName = fileName;
 
-                        status = ProductApiAccess.SaveSellerCloudImagesForChildSku(ApiURL, token, databaseImagesURL);
                     }
-
                 }
+                return status;
             }
-            return status;
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
+           
         }
 
         [HttpPost]
@@ -1670,12 +1679,7 @@ namespace Hld.WebApplication.Controllers
         public IActionResult ProductManufacturedList()
         {
             string token = Request.Cookies["Token"];
-
-
-
             return View();
-
-
         }
         [HttpPost]
         public IActionResult ProductManufacturedList(ProductManufacturedViewModel viewmodel)

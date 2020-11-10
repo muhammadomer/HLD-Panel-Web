@@ -35,5 +35,6 @@ namespace Hld.WebApplication.ViewModel
         public string ColorAlias { get; set; }
         public string ImageName { get; set; }
         public string CompressedImage { get; set; }
+        public DateTime SkuCreationDate { get; set; }
     }
 }
