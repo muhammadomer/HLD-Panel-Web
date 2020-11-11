@@ -729,9 +729,9 @@
                                 <td>
                                     @*<input type="text" class="form-control AmazonEnabled" value=" @itemShadow.AmazonEnabled" />*@
                                     <select asp-for="@itemShadow.AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled" disabled>
-                                        <option value="" selected disabled hidden>AmazonEnabled</option>
+                                        <option value=""  disabled hidden>AmazonEnabled</option>
                                         <option value="TRUE">TRUE</option>
-                                        <option value="FALSE">FALSE</option>
+                                        <option value="FALSE"selected>FALSE</option>
                                     </select>
                                 </td>
                                 <td>
@@ -754,8 +754,8 @@
                                 </td>
                                 <td>
                                     <select asp-for="@itemShadow.WebsiteEnabled" class="form-control form-control WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
-                                        <option value="" selected disabled hidden>WebsiteEnabled</option>
-                                        <option value="TRUE">TRUE</option>
+                                        <option value=""  disabled hidden>WebsiteEnabled</option>
+                                        <option value="TRUE"selected>TRUE</option>
                                         <option value="FALSE">FALSE</option>
                                     </select>
                                 </td>
@@ -769,8 +769,8 @@
                                 <td>
                                     @*<input type="text" class="form-control AmazonEnabled" value=" @itemShadow.AmazonEnabled" />*@
                                     <select asp-for="@itemShadow.AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled">
-                                        <option value="" selected disabled hidden>AmazonEnabled</option>
-                                        <option value="TRUE">TRUE</option>
+                                        <option value="" disabled hidden>AmazonEnabled</option>
+                                        <option value="TRUE" selected >TRUE</option>
                                         <option value="FALSE">FALSE</option>
                                     </select>
                                 </td>
@@ -796,16 +796,16 @@
 
                                     </td>*@
                                 <td>
-                                    <input type="text" class="form-control AmazonFBASKU" @itemShadow.AmazonFBASKU name="AmazonFBASKU" />
+                                    <input type="text" class="form-control AmazonFBASKU" value= "@itemShadow.AmazonFBASKU" name="AmazonFBASKU" />
 
 
                                 </td>
                                 <td>
 
                                     <select asp-for="@itemShadow.WebsiteEnabled" class="form-control form-control WebsiteEnabled" style="" id="WebsiteEnabled">
-                                        <option value="" selected disabled hidden>WebsiteEnabled</option>
+                                        <option value=""  disabled hidden>WebsiteEnabled</option>
                                         <option value="TRUE">TRUE</option>
-                                        <option value="FALSE">FALSE</option>
+                                        <option value="FALSE" selected>FALSE</option>
                                     </select>
                                 </td>
 
