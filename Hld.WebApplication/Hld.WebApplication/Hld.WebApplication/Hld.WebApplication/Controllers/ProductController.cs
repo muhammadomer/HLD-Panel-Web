@@ -1717,13 +1717,17 @@ namespace Hld.WebApplication.Controllers
 
         }
 
-        public IActionResult Style()
+        [HttpGet]
+        public IActionResult Style(int StyleId)
         {
             string token = Request.Cookies["Token"];
-
-
-
-            return View();
+            AddStyleViewModel viewModel = new AddStyleViewModel();
+            
+            
+            viewModel = ProductApiAccess.EditStyle(ApiURL, token, StyleId);
+            var list = ProductApiAccess.GetAllStyle(ApiURL, token);
+            viewModel.list = list;
+            return View(viewModel);
 
 
         }
@@ -1733,12 +1737,23 @@ namespace Hld.WebApplication.Controllers
             string token = Request.Cookies["Token"];
 
 
-            ProductApiAccess.Style(ApiURL, token, viewmodel);
-            ModelState.Clear();
-            return View();
+            if (viewmodel.StyleId > 0)
+            {
+                ProductApiAccess.Style(ApiURL, token, viewmodel);
+            }
+            else
+            {
+                ProductApiAccess.Style(ApiURL, token, viewmodel);
+            }
+            var list = ProductApiAccess.GetAllStyle(ApiURL, token);
+            viewmodel.list = list;
+            
+            return RedirectToAction("Style","Product");
 
 
         }
+       
+
         //[HttpGet]
         //public List<AddStyleViewModel> Stylelist()
         //{
@@ -1749,12 +1764,30 @@ namespace Hld.WebApplication.Controllers
 
         //}
         [HttpPut]
-        public IActionResult UpdateShadowSingleColoumn(UpdateShadowSingleColoumnViewModel data)
+        public bool UpdateShadowSingleColoumn(UpdateShadowSingleColoumnViewModel data)
+        
         {
             token = Request.Cookies["Token"];
             ProductApiAccess.UpdateShadowSingleColoumn(ApiURL, token, data);
-            return RedirectToAction("GetproductById", "product", data);
+            return true;
         }
+        [HttpPost]
+        public JsonResult GetAllVendorForAutoCompleteStyle(string Prefix)
+        {
+            token = Request.Cookies["Token"];
+            if (Prefix == null)
+            { Prefix = ""; }
+            List<StyleListViewModel> model = ProductApiAccess.GetAllStyleList(ApiURL, token, Prefix);
+            model = model.Where(x => !string.IsNullOrWhiteSpace(x.StyleName)).ToList();
+            if (model == null)
+            {
+                return Json(model);
+            }
+            else
+            {
+                return Json(model);
+            }
 
+        }
     }
 }

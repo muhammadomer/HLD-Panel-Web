@@ -246,12 +246,18 @@
 
                     <label class="col-sm-1 text-sm-right control-label">Style</label>
                     <div class="col-sm-3">
-                        <input class="form-control" asp-for="Style" />
+
+                        <select class="js-example-basic-single form-control Style" name="Style" id="Style" asp-for="Style">
+
+                            <option value="">Style</option>
+
+                        </select>
                         <span asp-validation-for="Style" class="text-danger"></span>
-                        <span class="UpcError"></span>
+                        @*<span class="UpcError"></span>*@
                     </div>
-                    <span style="margin-left:20px;" id="UPCCounter"></span>
-                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
+                    <span style="margin-left: 5px;text-decoration:underline;cursor:pointer"><a asp-controller="Product" target="_blank" asp-action="Style" style="vertical-align: sub;cursor:pointer">Add</a></span>
+                    @*<span style="margin-left:20px;" id="UPCCounter"></span>*@
+                    @*<span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>*@
                 </div>
                 @*<div class="form-group row">
                         <label asp-for="Feature" class="col-sm-1 text-sm-right control-label">Features</label>
@@ -373,6 +379,40 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            function StyleNameList() {
+                debugger;
+                $.ajax({
+                    url: "/Product/GetAllVendorForAutoCompleteStyle/",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        console.log("stylelist", data)
+
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.StyleId + '">' + value.StyleName + '</option>';
+
+
+
+                        });
+
+                        $(".Style").append(content);
+                        @* $(".vendorlistgetFromPOProduct").val(@Model.Manufacturer);*@
+
+
+                    }
+        });
+
+
+
+            }
+
+            StyleNameList();
+            $(".Style").select2();
 
             function GetManufacture1() {
                 debugger;
@@ -951,7 +991,7 @@
             });
         });
 
-
+        $(".Style").select2();
         function SubmitForm() {
             var files = $('#UloadImages').find('#fUpload').prop("files");
             var fdata = new FormData();

@@ -42,7 +42,7 @@
 
             <div class="container-fluid">
                 <div class="row col-md-12">
-                    <input type="text" asp-for="StyleId" name="StyleId" style="display:none">
+                    <input type="text" asp-for="StyleId" name="StyleId" style="display:none"class="StyleId">
 
                     <div class="col-md-12">
                         <div class="form-group row">
@@ -82,9 +82,20 @@
 
                                 <table class="table table-bordered">
                                     <thead style="background-color:lightgray">
+                                       
                                         <tr><th>Style Name</th><th>Action</th></tr>
                                     </thead>
-                                    <tbody></tbody>
+                                    <tbody>
+                                        @foreach (var item in Model.list)
+                                        {<tr>
+    <td>@item.StyleName</td>
+    <td>
+        <a href="/Product/Style?=@item.StyleId" style="cursor:pointer;"><img src="~/Images/icon-edit-512.png" height="20" /></a>
+    </td>
+</tr>
+                                            
+                                        }
+                                    </tbody>
                                 </table>
                             </div>
                            
@@ -126,6 +137,33 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="StyleNameEdit" style="margin-top: 130px;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modelwidth">
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                </strong>
+
+                <button type="button" class="close InputSubmit" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body myclassshide" style="padding-left:0!important;">
+                <p class="modal-title" style=" padding-left: 15px;">
+                    Style Name Updated Successfully!
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default InputSubmit" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
@@ -149,8 +187,9 @@
                     });
                     $(".InputSubmit").click(function () {
 
-                        location.reload();
+                        window.location.href = "../Product/Style";
                     })
+                    window.location.href = "../Product/Style";
                 }
                 else { }
 
@@ -160,28 +199,39 @@
 
 
                 var StyleName = $(".StyleName").val();
+                var StyleId = $(".StyleId").val();
 
                 console.log("StyleName", StyleName)
                 if (StyleName != '') {
                     $.ajax({
                         type: 'post',
                         url: '../Product/Style',
-                        data: { StyleName: StyleName },
+                        data: { StyleName: StyleName, StyleId: StyleId },
                         success: function (res) {
                             $(".StyleName").val("");
-
-                            if (res = "true") {
+                            console.log(res,"resssssssss")
+                            if (res.StyleId) {
+                                $("#StyleNameEdit").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+                                });
+                                $(".InputSubmit").click(function () {
+                                    window.location.href = "../Product/Style";
+                                   
+                                });
+                                window.location.href = ".../Product/Style";
+                            }
+                            else {
                                 $("#StyleName1").modal({
                                     backdrop: 'static',
                                     keyboard: false
                                 });
                                 $(".InputSubmit").click(function () {
+                                    window.location.href = "../Product/Style";
 
-                                    location.reload();
                                 });
-
+                                window.location.href = ".../Product/Style";
                             }
-                            else { }
                         },
                         error: function (err) {
                             $.notify('some error occured!', { classname: 'error ' });
@@ -197,7 +247,7 @@
                 $(".loader").show();
                 $.ajax({
                     type: 'GET',
-                    url: '../product/GetManufactureList?ManufactureId=' + ManufactureId,
+                    url: '../product/GetManufactureList',
 
                     success: function (data) {
                         $(".loader").hide();

@@ -346,7 +346,7 @@
 
             <option value="">Select</option>
             <option value="CreateShadow">Create Shadow</option>
-            <option value="CreateProductOnSellerCloud">Create Product and Shadows On SC</option>
+            <option value="CreateProductOnSellerCloud">Create Products & Shadows on SellerCloud</option>
             <option value="ImageUpdateOnSellerCloud">Update Image On SellerCloud</option>
             <option value="CreateKits">Create Kits</option>
         </select>
@@ -509,11 +509,11 @@
                 <th>Company</th>
                 <th>Amz Merchant SKU</th>
                 <th>Amazon Enabled</th>
-                <th >ASIN</th>
-                <th>Fulfilled By</th>
-                <th>Amz FBA SKU</th>
-                <th>Website Enabled</th>
-                <th>Status</th>
+                <th style="width:7%" >ASIN</th>
+                <th style="width:7%">Fulfilled By</th>
+                <th style="width:8%">Amz FBA SKU</th>
+                <th style="width:9%">Website Enabled</th>
+                <th style="width:8%">Status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -581,8 +581,7 @@
 
 
                             <td>
-                                <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@item.Sku" @item.AmazonMerchantSKU name="AmazonMerchantSKU" readonly />
-
+                                <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@item.AmazonMerchantSKU" @item.AmazonMerchantSKU name="AmazonMerchantSKU" />
                             </td>
                             <td>
                                 @*<input type="text" class="form-control AmazonEnabled" value=" @item.AmazonEnabled" />*@
@@ -598,7 +597,10 @@
 
 
                             <td>
-                                <input type="text" class="form-control FulfilledBy" value="Merchant @item.FulfilledBy" name="FulfilledBy" readonly />
+                                <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@item.FulfilledBy" name="FulfilledBy" readonly />
+                                <span>
+                                    <img style="display:none;" class="ButtonLoaderForAdd" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                </span>
                             </td>
 
                             <td>
@@ -627,7 +629,14 @@
                                 {
                                     <span></span>
                                 }<br />
-
+                                @if (item.IsRelated.Length >= 6)
+                                {
+                                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@item.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)</a></span>
+                                }
+                                else
+                                {
+                                    <span></span>
+                                }
                                 @*<span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@item.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(@item.IsRelated.Length - 6)</a></span>*@
                             </td>
                             <td>
@@ -670,15 +679,20 @@
             @if (itemShadow.CompanyId == 520)
             {
                 <td>
-                    <input type="text" class="form-control AmazonMerchantSKU"  data-ColumnName="AmazonMerchantSKU" name="AmazonMerchantSKU" readonly />
+                    <input type="text" class="form-control AmazonMerchantSKU"  data-ColumnName="AmazonMerchantSKU" name="AmazonMerchantSKU" readonly  />
 
                 </td>
                 <td>
                     @*<input type="text" class="form-control AmazonEnabled" value=" @itemShadow.AmazonEnabled" />*@
-                    <select asp-for="@itemShadow.AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled" disabled>
-                        <option value="" disabled hidden>AmazonEnabled</option>
-                        <option value="TRUE">TRUE</option>
-                        <option value="FALSE" selected>FALSE</option>
+                    @*<select asp-for="@itemShadow.AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled" disabled>
+            <option value="" disabled hidden>AmazonEnabled</option>
+            <option value="TRUE">TRUE</option>
+            <option value="FALSE" selected>FALSE</option>
+        </select>*@
+                    <select asp-for="@itemShadow.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled">
+                        <option value="" selected disabled hidden>AmazonEnabled</option>
+                        <option value="TRUE" selected>TRUE</option>
+                        <option value="FALSE">FALSE</option>
                     </select>
                 </td>
                 <td>
@@ -687,11 +701,15 @@
 
 
                 <td>
-                    <input type="text" class="form-control FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy" readonly />
+                    
+                    <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy" readonly />
+                    <span>
+                        <img style="display:none;" class="ButtonLoaderForAdd" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                    </span>
                 </td>
 
                 <td>
-                    <input type="text" class="form-control AmazonFBASKU" @itemShadow.AmazonFBASKU name="AmazonFBASKU" readonly />
+                    <input type="text" class="form-control AmazonFBASKU"data-ColumnName="AmazonFBASKU" @itemShadow.AmazonFBASKU name="AmazonFBASKU" readonly />
                 </td>
                 <td>
                     <select asp-for="@itemShadow.WebsiteEnabled" class="form-control form-control WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
@@ -705,7 +723,7 @@
             else
             {
                 <td>
-                    <input type="text" class="form-control AmazonMerchantSKU"  data-ColumnName="AmazonMerchantSKU" value="@itemShadow.Sku" @itemShadow.AmazonMerchantSKU name="AmazonMerchantSKU" onfocusout="updateShadowSingleColoumn()"/>
+                    <input type="text" class="form-control AmazonMerchantSKU"  data-ColumnName="AmazonMerchantSKU" value="@itemShadow.AmazonMerchantSKU" @itemShadow.AmazonMerchantSKU name="AmazonMerchantSKU"/>
 
                 </td>
                 <td>
@@ -721,22 +739,28 @@
                 </td>
                 @if (itemShadow.CompanyId == 512 || (itemShadow.CompanyId == 513 && itemShadow.Sku.Contains("CA-FBA")))
                 {
+        <td>
+            <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" @itemShadow.FulfilledBy name="FulfilledBy" />
+            <span>
+                <img style="display:none;" class="ButtonLoaderForAdd" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+            </span>
+        </td>
                     <td>
-                        <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="Amazon" @itemShadow.FulfilledBy name="FulfilledBy" onfocusout="myFunction()" />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control AmazonFBASKU" value="@itemShadow.AmazonFBASKU" name="AmazonFBASKU" />
+                        <input type="text" class="form-control AmazonFBASKU"data-ColumnName="AmazonFBASKU" value="@itemShadow.AmazonFBASKU" name="AmazonFBASKU" />
 
 
                     </td>
                 }
                 else
                 {
+        <td>
+            <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" @itemShadow.FulfilledBy name="FulfilledBy" readonly />
+            <span>
+                <img style="display:none;" class="ButtonLoaderForAdd" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+            </span>
+        </td>
                     <td>
-                        <input type="text" class="form-control FulfilledBy" value="Merchant" @itemShadow.FulfilledBy name="FulfilledBy" readonly />
-                    </td>
-                    <td>
-                        <input type="text" class="form-control AmazonFBASKU" value="@itemShadow.AmazonFBASKU" name="AmazonFBASKU" readonly />
+                        <input type="text" class="form-control AmazonFBASKU"data-ColumnName="AmazonFBASKU" value="@itemShadow.AmazonFBASKU" name="AmazonFBASKU" readonly />
 
 
                     </td>
@@ -754,20 +778,27 @@
 
             }
 
-            <td>
+        <td>
 
-                @if (@itemShadow.IsCreatedOnSC == 1)
-                {
-                    <span style="color:green;font-weight:bold">Created on SC</span>
+            @if (@itemShadow.IsCreatedOnSC == 1)
+            {
+                <span style="color:green;font-weight:bold">Created on SC</span>
 
-                }
-                else
-                {
-                    <span></span>
-                }<br />
-                @* commented by Mehdi*@
-                @* <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@itemShadow.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>*@
-            </td>
+            }
+            else
+            {
+                <span></span>
+            }<br />
+            @* commented by Mehdi*@
+            @if (@itemShadow.IsRelated.Length >= 6)
+            {
+                <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@itemShadow.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
+            }
+            else
+            {
+                <span></span>
+            }
+        </td>
             <td>
 
                 <button type='button' class='btn btn-sm btn-success submitSave' style="display:none;" value=''>Save</button>
@@ -1223,7 +1254,160 @@
 
     <script>
         $(document).ready(function () {
+
+            $(document).on("focusout", ".AmazonFBASKU", function () {
+
+                var selectedRow = $(this).parents('tr');
+
+                var data =
+                {
+
+                    ColoumnName: $(selectedRow).find(".AmazonFBASKU").attr("data-ColumnName"),
+                    ColoumnValue: $(selectedRow).find(".AmazonFBASKU").val(),
+                    //ShadowSKU: $(selectedRow).find(".ShadowOff").val(),
+                    ShadowSKU: $(selectedRow).find(".shadowsku").val(),
+
+                };
+                console.log("ColoumnName are", data.ColoumnName);
+                console.log("ColoumnValue are", data.ColoumnValue);
+                console.log("ShadowSKU are", data.ShadowSKU);
+                $(".loader").show();
+                $.ajax({
+                    type: 'PUT',
+                    url: '../product/UpdateShadowSingleColoumn',
+                    data: { data },
+                    success: function (res) {
+                        $(".loader").hide();
+                    },
+                    Error: function (err) {
+                    }
+                });
+
+
+            });
+            $(document).on("focusout", ".FulfilledBy", function () {
+
+                var selectedRow = $(this).parents('tr');
+
+                var data =
+                {
+
+                    ColoumnName: $(selectedRow).find(".FulfilledBy").attr("data-ColumnName"),
+                    ColoumnValue: $(selectedRow).find(".FulfilledBy").val(),
+                    //ShadowSKU: $(selectedRow).find(".ShadowOff").val(),
+                    ShadowSKU: $(selectedRow).find(".shadowsku").val(),
+
+                };
+                console.log("ColoumnName are", data.ColoumnName);
+                console.log("ColoumnValue are", data.ColoumnValue);
+                console.log("ShadowSKU are", data.ShadowSKU);
+                $(selectedRow).find('.ButtonLoaderForAdd').css('display', 'inline');
+                $.ajax({
+                    type: 'PUT',
+                    url: '../product/UpdateShadowSingleColoumn',
+                    data: { data },
+                    success: function (res) {
+                        //$(".loader").hide();
+                        $(selectedRow).find('.ButtonLoaderForAdd').css('display', 'none');
+
+                    },
+                    Error: function (err) {
+                    }
+                });
+
+
+            });
+            $(document).on("focusout", ".AmazonMerchantSKU", function () {
+
+                var selectedRow = $(this).parents('tr');
+
+                var data =
+                {
+
+                    ColoumnName: $(selectedRow).find(".AmazonMerchantSKU").attr("data-ColumnName"),
+                    ColoumnValue: $(selectedRow).find(".AmazonMerchantSKU").val(),
+                    //ShadowSKU: $(selectedRow).find(".ShadowOff").val(),
+                    ShadowSKU: $(selectedRow).find(".shadowsku").val(),
+
+                };
+                console.log("ColoumnName are", data.ColoumnName);
+                console.log("ColoumnValue are", data.ColoumnValue);
+                console.log("ShadowSKU are", data.ShadowSKU);
+                $(".loader").show();
+                $.ajax({
+                    type: 'PUT',
+                    url: '../product/UpdateShadowSingleColoumn',
+                    data: { data },
+                    success: function (res) {
+                        $(".loader").hide();
+                    },
+                    Error: function (err) {
+                    }
+                });
+
+
+            });
+
+            //
+
+            $(document).on("change", ".AmazonEnabled", function () {
+
+                var selectedRow = $(this).parents('tr');
+
+                var data =
+                {
+
+                    ColoumnName: $(selectedRow).find(".AmazonEnabled:selected").attr("data-ColumnName"),
+                    ColoumnValue: $(selectedRow).find(".AmazonEnabled option:selected").val(),
+                    //ColoumnValue: $(selectedRow).find(".AmazonMerchantSKU").val(),
+                    //ShadowSKU: $(selectedRow).find(".ShadowOff").val(),
+                    ShadowSKU: $(selectedRow).find(".shadowsku").val(),
+
+                };
+                console.log("ColoumnName are", data.ColoumnName);
+                console.log("ColoumnValue are", data.ColoumnValue);
+                console.log("ShadowSKU are", data.ShadowSKU);
+                //$(".loader").show();
+                //$.ajax({
+                //    type: 'PUT',
+                //    url: '../product/UpdateShadowSingleColoumn',
+                //    data: { data },
+                //    success: function (res) {
+                //        $(".loader").hide();
+                //    },
+                //    Error: function (err) {
+                //    }
+                //});
+
+
+            });
+            //
+            $(document).on("keyup", ".ASIN", function () {
+                debugger
+                var selectedRow = $(this).parents('tr');
+
+                var asin = $(selectedRow).find(".ASIN").val();
+                var ShadowOff = $(selectedRow).find(".ShadowOff").val();
+
+                $(".SecondTableShadow tbody tr ").each(function () {
+
+                    var child = $(this).find(".shadowsku").val();
+                    if (child) {
+                        var childcharacter = child.substring(0, ShadowOff.length);
+                        var childcharacterFBA = child.substr(child.length - 3);
+
+                        if (childcharacterFBA == "FBA" && childcharacter == ShadowOff) {
+                            $(this).find('.ASIN').val(asin);
+                        }
+                    }
+
+
+
+                });
+            });
             $(".loader").hide();
+
+
             $(document).on("click", ".editUpdate", function () {
 
                 var selectedRow = $(this).parents('tr');
@@ -1271,38 +1455,38 @@
 
 
             });
-            function updateShadowSingleColoumn() {
-                var selectedRow = $(this).parents('tr');
+            //function updateShadowSingleColoumn() {
+            //    var selectedRow = $(this).parents('tr');
 
-                var data =
-                {
+            //    var data =
+            //    {
 
-                    ColoumnName: $(selectedRow).find(".AmazonMerchantSKU").name(),
-                    ColoumnValue: $(selectedRow).find(".AmazonEnabled option:selected").val(),
-                    ShadowSKU: $(selectedRow).find(".ASIN").val()
-                    
-                    $.ajax({
-                        type: 'PUT',
-                        url: '../product/UpdateShadowSingleColoumn',
-                        data: { data },
-                        success: function (res) {
-                            $(".loader").hide();
-                            $("#bulkupdated").modal({
-                                backdrop: 'static',
-                                keyboard: false
+            //        ColoumnName: $(selectedRow).find(".AmazonMerchantSKU").name(),
+            //        ColoumnValue: $(selectedRow).find(".AmazonEnabled option:selected").val(),
+            //        ShadowSKU: $(selectedRow).find(".ASIN").val()
 
-                            });
-                            $(".closeimg").click(function () {
-                                location.reload();
-                            })
-                            console.log("responce", res)
-                        },
-                        Error: function (err) {
+            //        $.ajax({
+            //            type: 'PUT',
+            //            url: '../product/UpdateShadowSingleColoumn',
+            //            data: { data },
+            //            success: function (res) {
+            //                $(".loader").hide();
+            //                $("#bulkupdated").modal({
+            //                    backdrop: 'static',
+            //                    keyboard: false
 
-                        }
-                    });
-                };
-            } 
+            //                });
+            //                $(".closeimg").click(function () {
+            //                    location.reload();
+            //                })
+            //                console.log("responce", res)
+            //            },
+            //            Error: function (err) {
+
+            //            }
+            //        });
+            //    };
+            //}
             var editable = false;
             $(document).on("click", ".editUpdate", function () {
 

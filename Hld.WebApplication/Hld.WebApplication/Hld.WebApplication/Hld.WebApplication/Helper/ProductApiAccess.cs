@@ -1926,6 +1926,71 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+        public List<StyleListViewModel> GetAllStyle(string apiurl, string token)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetAllStyle");
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<StyleListViewModel> responses = JsonConvert.DeserializeObject<List<StyleListViewModel>>(strResponse);
+            return responses;
+        }
+        public AddStyleViewModel EditStyle(string ApiURL, string token, int styleId)
+        {
+            AddStyleViewModel ViewModel = new AddStyleViewModel();
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Manufacture/GetStyleWithId?styleId=" + styleId);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewModel = JsonConvert.DeserializeObject<AddStyleViewModel>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return ViewModel;
+        }
+        public List<StyleListViewModel> GetAllStyleList(string apiurl, string token, string name)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetAllStyle/" + name + "");
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<StyleListViewModel> responses = JsonConvert.DeserializeObject<List<StyleListViewModel>>(strResponse);
+            return responses;
+        }
     }
 }
 
