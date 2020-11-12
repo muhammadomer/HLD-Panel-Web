@@ -1744,10 +1744,17 @@ namespace Hld.WebApplication.Controllers
         //{
         //    token = Request.Cookies["Token"];
         //    var list = ProductApiAccess.Stylelist(ApiURL, token);
-            
+
         //    return list;
 
         //}
-       
+        [HttpPut]
+        public IActionResult UpdateShadowSingleColoumn(UpdateShadowSingleColoumnViewModel data)
+        {
+            token = Request.Cookies["Token"];
+            ProductApiAccess.UpdateShadowSingleColoumn(ApiURL, token, data);
+            return RedirectToAction("GetproductById", "product", data);
+        }
+
     }
 }
