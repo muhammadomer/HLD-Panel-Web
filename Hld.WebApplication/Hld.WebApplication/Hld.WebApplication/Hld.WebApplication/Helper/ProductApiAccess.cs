@@ -311,6 +311,42 @@ namespace Hld.WebApplication.Helper
          
             return responses;
         }
+        public List<BulkUpdateFileContents> GetDataOfSku(string ApiURL, string token, List<GetBulkUpdateSkuViewModel> dataSKU)
+        {
+            List<BulkUpdateFileContents> responses = new List<BulkUpdateFileContents>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetShadowsOfChildForXls");
+                var data = JsonConvert.SerializeObject(dataSKU);
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                    }
+                }
+
+                responses = JsonConvert.DeserializeObject<List<BulkUpdateFileContents>>(strResponse);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return responses;
+        }
         public ProductDisplayViewModel GetProductDetailBySKU(string ApiURL, string token, string sku)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/ProductDeatil?sku=" + sku);
@@ -1279,6 +1315,40 @@ namespace Hld.WebApplication.Helper
                     strResponse = sr.ReadToEnd();
                 }
                 status = JsonConvert.DeserializeObject<GetXlsFileResponseViewModel>(strResponse);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return status;
+        }
+
+        public GetBulkUpdateResponseViewModel CreateBulkUpdateOnSellerCloud(string ApiURL, string token, CreateBulkUpdateOnSellerCloudViewModel viewModel)
+        {
+            //string status = "";
+            GetBulkUpdateResponseViewModel status = new GetBulkUpdateResponseViewModel();
+            try
+            {
+
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/Catalog/Imports/Custom");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<GetBulkUpdateResponseViewModel>(strResponse);
             }
             catch (Exception ex)
             {

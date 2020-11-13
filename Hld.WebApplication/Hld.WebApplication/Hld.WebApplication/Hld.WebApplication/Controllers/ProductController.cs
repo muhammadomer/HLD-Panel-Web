@@ -743,6 +743,26 @@ namespace Hld.WebApplication.Controllers
 
             return status;
         }
+
+        [HttpPost]
+        public GetBulkUpdateResponseViewModel CreateBulkUpdateOnSellerCloud(CreateBulkUpdateOnSellerCloudViewModel data)
+        {
+            GetBulkUpdateResponseViewModel status = new GetBulkUpdateResponseViewModel();
+            string token = Request.Cookies["Token"];
+            _Selller = new GetChannelCredViewModel();
+            _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+            AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+            //var status = "";
+
+            status = ProductApiAccess.CreateBulkUpdateOnSellerCloud(ApiURL, authenticate.access_token, data);
+            if (status != null)
+            {
+
+                ViewBag.status = "Relation Created Succesfully";
+            }
+
+            return status;
+        }
         [HttpPost]
         public async Task<JsonResult> GenerateXls(List<CreateRelationOnSCViewModel> data)
 
@@ -789,6 +809,89 @@ namespace Hld.WebApplication.Controllers
                     updateIsRelation.shadow = item.ShadowSKU;
                     ProductApiAccess.UpdateRelation(ApiURL, token, updateIsRelation);
                 }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return Json(new { status = true });
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GenerateBulkUpdateXls(List<GetBulkUpdateSkuViewModel> data)
+
+        {
+           
+            try
+            {
+                string excelName = "";
+                data = data.GroupBy(s => s.Sku).Select(p => p.FirstOrDefault()).Distinct().ToList();
+                token = Request.Cookies["Token"];
+                CreateBulkUpdateOnSellerCloudViewModel createBulkUpdateOnSellerCloudViewModel = new CreateBulkUpdateOnSellerCloudViewModel();
+                excelName = @"BulkUpdateData.xls";
+                string file = Path.GetTempPath() + excelName;
+                Workbook workbook = new Workbook();
+                Worksheet worksheet = new Worksheet("FirstSheet");
+                worksheet.Cells[0, 0] = new Cell("ProductID");
+                worksheet.Cells[0, 1] = new Cell("UPC");
+                worksheet.Cells[0, 2] = new Cell("BrandName");
+                worksheet.Cells[0, 3] = new Cell("Manufacturer");
+                worksheet.Cells[0, 4] = new Cell("ManufacturerSKU");
+                worksheet.Cells[0, 5] = new Cell("PackageWeightOz");
+                worksheet.Cells[0, 6] = new Cell("ShippingWidth");
+                worksheet.Cells[0, 7] = new Cell("ShippingHeight");
+                worksheet.Cells[0, 8] = new Cell("ShippingLength");
+                worksheet.Cells[0, 9] = new Cell("ShortDescription");
+                worksheet.Cells[0, 10] = new Cell("LongDescription");
+                worksheet.Cells[0, 11] = new Cell("AmazonEnabled");
+                worksheet.Cells[0, 12] = new Cell("ASIN");
+                worksheet.Cells[0, 13] = new Cell("AmazonMerchantSKU");
+                worksheet.Cells[0, 14] = new Cell("FulfilledBy");
+                worksheet.Cells[0, 15] = new Cell("AmazonFBASKU");
+                worksheet.Cells[0, 16] = new Cell("CompanyID");
+                List<BulkUpdateFileContents> viewModels = ProductApiAccess.GetDataOfSku(ApiURL, token, data);
+
+                for (int row = 1; row <= data.Count; row++)
+                {
+                    worksheet.Cells[row, 0] = new Cell(viewModels[row - 1].ProductID.Trim().ToString());
+                    worksheet.Cells[row, 1] = new Cell(viewModels[row - 1].UPC);
+                    worksheet.Cells[row, 2] = new Cell(viewModels[row - 1].BrandName.ToString().Trim());
+                    worksheet.Cells[row, 3] = new Cell(viewModels[row - 1].Manufacturer.ToString().Trim());
+                    worksheet.Cells[row, 4] = new Cell(viewModels[row - 1].ManufacturerSKU.ToString().Trim());
+                    worksheet.Cells[row, 5] = new Cell(viewModels[row - 1].PackageWeightOz.ToString().Trim());
+                    worksheet.Cells[row, 6] = new Cell(viewModels[row - 1].ShippingWidth.ToString().Trim());
+                    worksheet.Cells[row, 7] = new Cell(viewModels[row - 1].ShippingHeight.ToString());
+                    worksheet.Cells[row, 8] = new Cell(viewModels[row - 1].ShippingLength.ToString().Trim());
+                    worksheet.Cells[row, 9] = new Cell(viewModels[row - 1].ShortDescription.ToString().Trim());
+                    worksheet.Cells[row, 10] = new Cell(viewModels[row - 1].LongDescription.ToString().Trim());
+                    worksheet.Cells[row, 11] = new Cell(viewModels[row - 1].AmazonEnabled.ToString().Trim());
+                    worksheet.Cells[row, 12] = new Cell(viewModels[row - 1].ASIN.ToString().Trim());
+                    worksheet.Cells[row, 13] = new Cell(viewModels[row - 1].AmazonMerchantSKU.Trim().ToString());
+                    worksheet.Cells[row, 14] = new Cell(viewModels[row - 1].FulfilledBy.ToString().Trim());
+                    worksheet.Cells[row, 15] = new Cell(viewModels[row - 1].AmazonFBASKU.ToString().Trim());
+                    worksheet.Cells[row, 16] = new Cell(viewModels[row - 1].CompanyID.ToString().Trim());
+                }
+                workbook.Worksheets.Add(worksheet);
+                workbook.Save(file);
+                Byte[] bytes = System.IO.File.ReadAllBytes(file);
+                MetadataForBulkUpdate metadata = new MetadataForBulkUpdate();
+                metadata.ScheduleDate = "";
+                metadata.CreateProductIfDoesntExist = true;
+                metadata.CompanyIdForNewProduct = 512;
+                metadata.DoNotUpdateProducts = false;
+                createBulkUpdateOnSellerCloudViewModel.FileContents = Convert.ToBase64String(bytes);
+                createBulkUpdateOnSellerCloudViewModel.Format = 2;
+                createBulkUpdateOnSellerCloudViewModel.metadataForBulkUpdate = metadata;
+
+                var status = CreateBulkUpdateOnSellerCloud(createBulkUpdateOnSellerCloudViewModel);
+
+                //foreach (var item in viewModels)
+                //{
+                //    updateIsRelation.QueuedJobLink = status.QueuedJobLink;
+                //    updateIsRelation.shadow = item.ShadowSKU;
+                //    ProductApiAccess.UpdateRelation(ApiURL, token, updateIsRelation);
+                //}
             }
             catch (Exception ex)
             {
