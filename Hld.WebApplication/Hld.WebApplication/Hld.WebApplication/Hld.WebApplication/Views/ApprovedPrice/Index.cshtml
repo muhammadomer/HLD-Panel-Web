@@ -85,9 +85,10 @@
                     </div>
                     @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
                     {
-                        <div>
-                            <a class="btn btn-sm btn-info " target="_blank" role="button" asp-action="GetVendorCurrancy" asp-controller="ApprovedPrice">Add Approved Prices</a>
-                        </div>
+                <div>
+                    <a class="btn btn-sm btn-info " target="_blank" role="button" asp-action="GetVendorCurrancy" asp-controller="ApprovedPrice">Add Approved Prices</a>
+                    <a class="btn btn-sm btn-info " target="_blank" role="button" asp-action="GetTemplateList" asp-controller="ShipmentCasePack">Manage Case Pack</a>
+                </div>
                     }
                 </div>
 
