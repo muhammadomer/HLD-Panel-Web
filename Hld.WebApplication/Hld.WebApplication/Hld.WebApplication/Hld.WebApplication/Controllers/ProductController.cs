@@ -1771,6 +1771,17 @@ namespace Hld.WebApplication.Controllers
             ProductApiAccess.UpdateShadowSingleColoumn(ApiURL, token, data);
             return true;
         }
+
+        [HttpPut]
+        public string UpdateShadowSingleColoumnForistAsin(List<UpdateShadowSingleColoumnViewModel> list)
+        {
+            string token = Request.Cookies["Token"];
+
+            var staus= ProductApiAccess.UpdateShadowSingleColoumnForistAsin(ApiURL, token, list);
+            return staus;
+
+
+        }
         [HttpPost]
         public JsonResult GetAllVendorForAutoCompleteStyle(string Prefix)
         {
@@ -1789,5 +1800,6 @@ namespace Hld.WebApplication.Controllers
             }
 
         }
+
     }
 }

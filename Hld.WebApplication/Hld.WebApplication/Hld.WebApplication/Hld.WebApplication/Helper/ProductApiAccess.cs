@@ -1926,6 +1926,40 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+
+        public string UpdateShadowSingleColoumnForistAsin(string ApiURL, string token, List<UpdateShadowSingleColoumnViewModel> viewModel)
+        {
+            string status = "";
+            try
+            {
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/UpdateShadowSingleColoumnForistAsin/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
+            }
+            return status;
+        }
+
+
+
         public List<StyleListViewModel> GetAllStyle(string apiurl, string token)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetAllStyle");

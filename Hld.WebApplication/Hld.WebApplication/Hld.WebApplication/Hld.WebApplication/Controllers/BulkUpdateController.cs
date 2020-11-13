@@ -48,8 +48,8 @@ namespace Hld.WebApplication.Controllers
         {
             return View();
         }
-       
-        //public List<BulkUpdateViewModel> BulkUpdate(List<> data)
+
+        //public List<BulkUpdateViewModel> BulkUpdate(List<BulkUpdateViewModel> data)
         //{
         //    token = Request.Cookies["Token"];
         //    List<BulkUpdateViewModel> viewlList = new List<BulkUpdateViewModel>();
