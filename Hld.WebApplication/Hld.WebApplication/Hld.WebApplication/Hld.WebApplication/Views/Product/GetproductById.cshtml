@@ -1985,7 +1985,7 @@
                         if ($(this).find('.checkboxesShadow').is(':checked')) {
                             var Obj =
                             {
-                                AmazonMerchantSKU: $(this).find('.shadowsku').val(),
+                                Sku: $(this).find('.shadowsku').val(),
 
                             };
                             data.push(Obj);
@@ -1994,14 +1994,14 @@
                     });
                     console.log(" ShadowOffShadowOffShadowOff alll>>>", data)
                     $(".loader").show();
-                    //$.ajax({
-                    //    type: 'GET',
-                    //    url: '../BulkUpdate/BulkUpdate',
-                    //    data: { data },
-                    //    success: function (res) {
-                    //        $(".loader").hide();
-                    //    }
-                    //});
+                    $.ajax({
+                        type: 'POST',
+                        url: '../Product/GenerateBulkUpdateXls',
+                        data: { data },
+                        success: function (res) {
+                            $(".loader").hide();
+                        }
+                    });
                 }
 
             });

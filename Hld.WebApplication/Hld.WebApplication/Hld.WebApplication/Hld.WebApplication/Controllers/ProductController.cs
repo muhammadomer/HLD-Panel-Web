@@ -852,25 +852,25 @@ namespace Hld.WebApplication.Controllers
                 worksheet.Cells[0, 16] = new Cell("CompanyID");
                 List<BulkUpdateFileContents> viewModels = ProductApiAccess.GetDataOfSku(ApiURL, token, data);
 
-                for (int row = 1; row <= data.Count; row++)
+                for (int row = 1; row <= viewModels.Count; row++)
                 {
                     worksheet.Cells[row, 0] = new Cell(viewModels[row - 1].ProductID.Trim().ToString());
                     worksheet.Cells[row, 1] = new Cell(viewModels[row - 1].UPC);
-                    worksheet.Cells[row, 2] = new Cell(viewModels[row - 1].BrandName.ToString().Trim());
-                    worksheet.Cells[row, 3] = new Cell(viewModels[row - 1].Manufacturer.ToString().Trim());
-                    worksheet.Cells[row, 4] = new Cell(viewModels[row - 1].ManufacturerSKU.ToString().Trim());
-                    worksheet.Cells[row, 5] = new Cell(viewModels[row - 1].PackageWeightOz.ToString().Trim());
-                    worksheet.Cells[row, 6] = new Cell(viewModels[row - 1].ShippingWidth.ToString().Trim());
-                    worksheet.Cells[row, 7] = new Cell(viewModels[row - 1].ShippingHeight.ToString());
-                    worksheet.Cells[row, 8] = new Cell(viewModels[row - 1].ShippingLength.ToString().Trim());
-                    worksheet.Cells[row, 9] = new Cell(viewModels[row - 1].ShortDescription.ToString().Trim());
-                    worksheet.Cells[row, 10] = new Cell(viewModels[row - 1].LongDescription.ToString().Trim());
-                    worksheet.Cells[row, 11] = new Cell(viewModels[row - 1].AmazonEnabled.ToString().Trim());
-                    worksheet.Cells[row, 12] = new Cell(viewModels[row - 1].ASIN.ToString().Trim());
-                    worksheet.Cells[row, 13] = new Cell(viewModels[row - 1].AmazonMerchantSKU.Trim().ToString());
-                    worksheet.Cells[row, 14] = new Cell(viewModels[row - 1].FulfilledBy.ToString().Trim());
-                    worksheet.Cells[row, 15] = new Cell(viewModels[row - 1].AmazonFBASKU.ToString().Trim());
-                    worksheet.Cells[row, 16] = new Cell(viewModels[row - 1].CompanyID.ToString().Trim());
+                    worksheet.Cells[row, 2] = new Cell(viewModels[row - 1].BrandName);
+                    worksheet.Cells[row, 3] = new Cell(viewModels[row - 1].Manufacturer);
+                    worksheet.Cells[row, 4] = new Cell(viewModels[row - 1].ManufacturerSKU);
+                    worksheet.Cells[row, 5] = new Cell(viewModels[row - 1].PackageWeightOz);
+                    worksheet.Cells[row, 6] = new Cell(viewModels[row - 1].ShippingWidth);
+                    worksheet.Cells[row, 7] = new Cell(viewModels[row - 1].ShippingHeight);
+                    worksheet.Cells[row, 8] = new Cell(viewModels[row - 1].ShippingLength);
+                    worksheet.Cells[row, 9] = new Cell(viewModels[row - 1].ShortDescription);
+                    worksheet.Cells[row, 10] = new Cell(viewModels[row - 1].LongDescription);
+                    worksheet.Cells[row, 11] = new Cell(viewModels[row - 1].AmazonEnabled);
+                    worksheet.Cells[row, 12] = new Cell(viewModels[row - 1].ASIN);
+                    worksheet.Cells[row, 13] = new Cell(viewModels[row - 1].AmazonMerchantSKU);
+                    worksheet.Cells[row, 14] = new Cell(viewModels[row - 1].FulfilledBy);
+                    worksheet.Cells[row, 15] = new Cell(viewModels[row - 1].AmazonFBASKU);
+                    worksheet.Cells[row, 16] = new Cell(viewModels[row - 1].CompanyID);
                 }
                 workbook.Worksheets.Add(worksheet);
                 workbook.Save(file);
@@ -882,7 +882,7 @@ namespace Hld.WebApplication.Controllers
                 metadata.DoNotUpdateProducts = false;
                 createBulkUpdateOnSellerCloudViewModel.FileContents = Convert.ToBase64String(bytes);
                 createBulkUpdateOnSellerCloudViewModel.Format = 2;
-                createBulkUpdateOnSellerCloudViewModel.metadataForBulkUpdate = metadata;
+                createBulkUpdateOnSellerCloudViewModel.Metadata = metadata;
 
                 var status = CreateBulkUpdateOnSellerCloud(createBulkUpdateOnSellerCloudViewModel);
 

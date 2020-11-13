@@ -7,7 +7,7 @@ namespace Hld.WebApplication.ViewModel
 {
     public class CreateBulkUpdateOnSellerCloudViewModel
     {
-        public MetadataForBulkUpdate metadataForBulkUpdate { get; set; }
+        public MetadataForBulkUpdate Metadata { get; set; }
         public string FileContents { get; set; }
         public int Format { get; set; }
     }

@@ -316,7 +316,7 @@ namespace Hld.WebApplication.Helper
             List<BulkUpdateFileContents> responses = new List<BulkUpdateFileContents>();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetShadowsOfChildForXls");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetDataForBulkUpdate");
                 var data = JsonConvert.SerializeObject(dataSKU);
                 request.Method = "POST";
                 request.Accept = "application/json;";
