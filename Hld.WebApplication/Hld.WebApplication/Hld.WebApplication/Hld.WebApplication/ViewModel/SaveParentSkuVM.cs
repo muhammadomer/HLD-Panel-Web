@@ -21,12 +21,12 @@ namespace Hld.WebApplication.ViewModel
         public decimal ShipWt { get; set; }
         public decimal ShipLt { get; set; }
         public decimal ShipHt { get; set; }
-        public string ManufactureName { get; set; }
-        public string ManufactureModel { get; set; }
+        public int ManufactureName { get; set; }
+        public int ManufactureModel { get; set; }
         //public string Menufacture { get; set; }
         //public string MenufactureModel { get; set; }
-        public string DeviceModel { get; set; }
-        public string Style { get; set; }
+        public int DeviceModel { get; set; }
+        public int Style { get; set; }
         public bool IsCreatedOnSC { get; set; }
         public string Feature { get; set; }
         public string Description { get; set; }
