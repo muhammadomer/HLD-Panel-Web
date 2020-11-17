@@ -1725,7 +1725,7 @@ namespace Hld.WebApplication.Controllers
             if (Prefix == null)
             { Prefix = ""; }
             List<ProductManufacturedViewModel> model = ProductApiAccess.GetManufacture(ApiURL, token, Prefix);
-            model = model.Where(x => !string.IsNullOrWhiteSpace(x.ManufactureName)).ToList();
+            model = model.Where(x =>!string.IsNullOrWhiteSpace(x.ManufactureName)).ToList();
             if (model == null)
             {
                 return Json(model);
@@ -1742,7 +1742,7 @@ namespace Hld.WebApplication.Controllers
         {
             token = Request.Cookies["Token"];
             var list = ProductApiAccess.GetManufactureIdByNameChange(ApiURL, token, ManufactureId);
-            list = list.Where(x => !string.IsNullOrWhiteSpace(x.ManufactureModel)).ToList();
+            list = list.Where(x => x.ManufactureModel !="0").ToList();
             return list;
             
         }
@@ -1751,7 +1751,7 @@ namespace Hld.WebApplication.Controllers
         {
             token = Request.Cookies["Token"];
             var list = ProductApiAccess.GetManufactureList(ApiURL, token, ManufactureId);
-            //list = list.Where(x => !string.IsNullOrEmpty(x.ManufactureModel)).ToList();
+            list = list.Where(x => x.ManufactureModel != "0").ToList();
            
             return list;
 
@@ -1762,7 +1762,7 @@ namespace Hld.WebApplication.Controllers
         {
             token = Request.Cookies["Token"];
             var list = ProductApiAccess.GetManufactureDeviceIdByNameChange(ApiURL, token, ManufactureModel, ManufactureId);
-            list = list.Where(x => !string.IsNullOrEmpty(x.DeviceModel)).ToList();
+            list = list.Where(x =>!string.IsNullOrWhiteSpace(x.DeviceModel)).ToList();
             return list;
 
         }
@@ -1904,5 +1904,13 @@ namespace Hld.WebApplication.Controllers
 
         }
 
+        public IActionResult GetDataListForBulkUpdate()
+        {
+            string token = Request.Cookies["Token"];
+            List<GetDataForBulkUpdateViewModel> listviewmodel = new List<GetDataForBulkUpdateViewModel>();
+               listviewmodel = ProductApiAccess.GetDataListForBulkUpdate(ApiURL, token);
+               return View(listviewmodel);
+        }
+        
     }
 }

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.GetDataForBulkUpdateViewModel>
+
+@{
+    ViewData["Title"] = "GetDataListForBulkUpdate";
+}
+
+<h6>Bulk Update</h6>
+<div class="container-fluid p-0">
+    <table class="table table-bordered">
+        <thead style="background-color:lightgray">
+            <tr>
+                <th>
+                    Job ID
+                </th>
+                <th>
+
+                    Job Type
+                </th>
+                <th>
+                    File
+                </th>
+                <th>
+                    Status
+                </th>
+
+                <th>
+                    Start Time
+                </th>
+                <th>
+                    Completion Time
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.JobId
+                    </td>
+                    <td>
+                        @item.JobType
+                    </td>
+                    <td>
+                        @item.File
+                    </td>
+                    <td>
+                        @item.Status
+                    </td>
+                    <td>
+                        @item.StartTime
+                    </td>
+                    <td>
+                        @item.CompletionTime
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

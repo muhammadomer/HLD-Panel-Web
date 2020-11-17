@@ -62,13 +62,13 @@
     }
 </style>
 <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-5">
         <span style="font-size:17px;margin-right:10px;">Add/Edit Product </span>
         <span style="font-size: 12px; text-decoration: underline; margin-right: 15px;
 "><a href="../Product/ProductAddUpdate">Single SKU</a> </span>
         <span style="font-size:12px;text-decoration:underline;font-weight:bold"><a href="../Product/ProductAddUpdate">Multiple SKU</a></span>
 
-        <span style="font-size:12px;text-decoration:underline;margin-left:15px; font-weight:bold"><a href="../Product/GetMultipleproductDetailist">Parent SKU List</a> </span>
+        <span style="font-size:12px;text-decoration:underline;margin-left:15px;"><a href="../Product/GetMultipleproductDetailist">Parent SKU List</a> </span>
     </div>
     <div class="col-sm-3">
         @*@if (Model.Sku != null)
@@ -538,7 +538,6 @@
 
 
             });
-
             function DeviceModel() {
                 debugger;
                 $.ajax({
@@ -548,34 +547,17 @@
                     datatype: "json",
                     data: { prefix: "" },
                     success: function (data, ui) {
-                        console.log("ddd", data)
-
+                        console.log("ddd get deivce color", data)
                         var content = '';
                         $.each(data, function (index, value) {
-
                             content = content + '<option value = "' + value.ManufactureId + '">' + value.DeviceModel + '</option>';
-
-
-
                         });
-
                         $(".DeviceModel").append(content);
-
-
-
                     }
                 });
-
-
-
-            }
-
+   }
             DeviceModel();
             $(".DeviceModel").select2();
-
-
-
-
             debugger;
             function autocolor() {
                 $('.AddColor').autocomplete({

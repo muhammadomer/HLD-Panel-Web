@@ -187,9 +187,9 @@
                     });
                     $(".InputSubmit").click(function () {
 
-                        window.location.href = "../Product/Style";
+                        window.location.href = '/Product/Style';
                     })
-                    window.location.href = "../Product/Style";
+                    window.location.href = '/Product/Style';
                 }
                 else { }
 
@@ -208,6 +208,7 @@
                         url: '../Product/Style',
                         data: { StyleName: StyleName, StyleId: StyleId },
                         success: function (res) {
+                           
                             $(".StyleName").val("");
                             console.log(res,"resssssssss")
                             if (res.StyleId) {
@@ -216,10 +217,10 @@
                                     keyboard: false
                                 });
                                 $(".InputSubmit").click(function () {
-                                    window.location.href = "../Product/Style";
+                                    window.location.href = '/Product/Style';
                                    
                                 });
-                                window.location.href = ".../Product/Style";
+                                window.location.href = '/Product/Style';
                             }
                             else {
                                 $("#StyleName1").modal({
@@ -227,10 +228,10 @@
                                     keyboard: false
                                 });
                                 $(".InputSubmit").click(function () {
-                                    window.location.href = "../Product/Style";
+                                    window.location.href = '/Product/Style';
 
                                 });
-                                window.location.href = ".../Product/Style";
+                                window.location.href = '/Product/Style';
                             }
                         },
                         error: function (err) {
