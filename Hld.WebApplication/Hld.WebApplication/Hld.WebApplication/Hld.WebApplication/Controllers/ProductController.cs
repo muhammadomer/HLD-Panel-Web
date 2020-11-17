@@ -7,6 +7,9 @@ using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal.Util;
+using Amazon.S3;
+using Amazon.S3.Transfer;
 using DataAccess.ViewModels;
 using ExcelLibrary.SpreadSheet;
 using Hld.WebApplication.Helper;
@@ -21,6 +24,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
@@ -35,6 +39,9 @@ namespace Hld.WebApplication.Controllers
         private readonly IConfiguration _configuration;
         string ApiURL = "";
         string token = "";
+        private readonly Microsoft.Extensions.Logging.ILogger logger;
+        private static string _bucketSubdirectory = "ASINSKUMapping-Jobs";
+        private string _bucketName = "jobsfilesbucket";//this is my Amazon Bucket name
         string SCRestURL = "";
         SellerCloudApiAccess sellerCloudApiAccess = null;
         BrandApiAccess brandApiAccess = null;
@@ -51,7 +58,8 @@ namespace Hld.WebApplication.Controllers
         string s3BucketURL_large = "";
         OrderNotesAPiAccess _OrderApiAccess = null;
         public static IHostingEnvironment _environment;
-        public ProductController(IConfiguration configuration, IHostingEnvironment environment)
+        
+        public ProductController(IConfiguration configuration, IHostingEnvironment environment, ILogger<ProductController> _logger)
         {
 
             _environment = environment;
@@ -65,12 +73,14 @@ namespace Hld.WebApplication.Controllers
             categoryApiAccess = new CategoryApiAccess();
             ProductApiAccess = new ProductApiAccess();
             sellerCloudApiAccess = new SellerCloudApiAccess();
-            uploadFiles = new UploadFilesToS3(_environment, _configuration);
+            //uploadFiles = new UploadFilesToS3(_environment, _configuration);
             currencyExchangeApiAccess = new CurrencyExchangeApiAccess();
             productWarehouseQtyApiAccess = new ProductWarehouseQtyApiAccess();
             _OrderApiAccess = new OrderNotesAPiAccess();
             SCRestURL = _configuration.GetValue<string>("WebApiURL:SCRestURL");
             _encDecChannel = new EncDecChannel();
+            this.logger = _logger;
+
         }
         [Authorize(Policy = "Access to Inventory")]
         public IActionResult IndexMainView(ProductInventorySearchViewModel model, string input)
@@ -757,7 +767,6 @@ namespace Hld.WebApplication.Controllers
             status = ProductApiAccess.CreateBulkUpdateOnSellerCloud(ApiURL, authenticate.access_token, data);
             if (status != null)
             {
-
                 ViewBag.status = "Relation Created Succesfully";
             }
 
@@ -825,6 +834,7 @@ namespace Hld.WebApplication.Controllers
            
             try
             {
+                UpdateJobIdForBulkUpdateViewModel updateJobIdForBulkUpdate = new UpdateJobIdForBulkUpdateViewModel();
                 string excelName = "";
                 data = data.GroupBy(s => s.Sku).Select(p => p.FirstOrDefault()).Distinct().ToList();
                 token = Request.Cookies["Token"];
@@ -874,6 +884,7 @@ namespace Hld.WebApplication.Controllers
                 }
                 workbook.Worksheets.Add(worksheet);
                 workbook.Save(file);
+               var getS3FilePath= uploadExcellToS3(file);
                 Byte[] bytes = System.IO.File.ReadAllBytes(file);
                 MetadataForBulkUpdate metadata = new MetadataForBulkUpdate();
                 metadata.ScheduleDate = "";
@@ -886,12 +897,18 @@ namespace Hld.WebApplication.Controllers
 
                 var status = CreateBulkUpdateOnSellerCloud(createBulkUpdateOnSellerCloudViewModel);
 
-                //foreach (var item in viewModels)
-                //{
-                //    updateIsRelation.QueuedJobLink = status.QueuedJobLink;
-                //    updateIsRelation.shadow = item.ShadowSKU;
-                //    ProductApiAccess.UpdateRelation(ApiURL, token, updateIsRelation);
-                //}
+                if (status != null)
+                {
+                    foreach (var item in data)
+                    {
+                        updateJobIdForBulkUpdate.Sku = item.Sku;
+                        updateJobIdForBulkUpdate.JobId = status.JobId;
+                        updateJobIdForBulkUpdate.CreatedDate = DateTime.Now;
+                        updateJobIdForBulkUpdate.S3FilePath = getS3FilePath;
+                        ProductApiAccess.BulkUpdateJobId(ApiURL, token, updateJobIdForBulkUpdate);
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -899,6 +916,41 @@ namespace Hld.WebApplication.Controllers
                 throw ex;
             }
             return Json(new { status = true });
+        }
+        public string uploadExcellToS3(string filePath)
+        {
+            string bucketName = "";
+            try
+            {
+                TransferUtility fileTransferUtility = new
+                    TransferUtility(new AmazonS3Client(Amazon.RegionEndpoint.USEast2));
+
+                logger.LogInformation("uploadExcellToS3 in uploading file filename = " + filePath);
+
+
+                if (_bucketSubdirectory == "" || _bucketSubdirectory == null)
+                {
+                    bucketName = _bucketName; //no subdirectory just bucket name  
+                }
+                else
+                {   // subdirectory and bucket name  
+                    bucketName = _bucketName + @"/" + _bucketSubdirectory;
+                }
+
+
+                // 1. Upload a file, file name is used as the object key name.
+                fileTransferUtility.Upload(filePath, bucketName);
+
+
+
+            }
+            catch (AmazonS3Exception s3Exception)
+            {
+                Console.WriteLine(s3Exception.Message,
+                                  s3Exception.InnerException);
+                logger.LogInformation("uploadExcellToS3 in exception  = " + s3Exception.Message);
+            }
+            return bucketName;
         }
         [HttpPost]
         public IActionResult UpdateChildSku(SaveChildSkuVM data)

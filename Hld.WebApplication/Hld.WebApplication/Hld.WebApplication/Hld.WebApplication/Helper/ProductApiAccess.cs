@@ -1529,6 +1529,40 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+
+        public bool BulkUpdateJobId(string ApiURL, string token, UpdateJobIdForBulkUpdateViewModel updateJobIdForBulkUpdate)
+        {
+            bool status = false;
+
+            try
+            {
+                var data = JsonConvert.SerializeObject(updateJobIdForBulkUpdate);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/UpdateJobIdForBulkUpdate");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                    status = Convert.ToBoolean(strResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return status;
+        }
         public bool UpdateSkustatusonsellercloud(string ApiURL, string token, string sku)
         {
             bool status = false;
