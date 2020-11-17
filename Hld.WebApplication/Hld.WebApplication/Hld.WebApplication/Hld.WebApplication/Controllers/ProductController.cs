@@ -902,7 +902,8 @@ namespace Hld.WebApplication.Controllers
                     foreach (var item in data)
                     {
                         updateJobIdForBulkUpdate.Sku = item.Sku;
-                        updateJobIdForBulkUpdate.JobId = status.JobId;
+                        updateJobIdForBulkUpdate.ID = status.ID;
+                        updateJobIdForBulkUpdate.QueuedJobLink = status.QueuedJobLink;
                         updateJobIdForBulkUpdate.CreatedDate = DateTime.Now;
                         updateJobIdForBulkUpdate.S3FilePath = getS3FilePath;
                         ProductApiAccess.BulkUpdateJobId(ApiURL, token, updateJobIdForBulkUpdate);

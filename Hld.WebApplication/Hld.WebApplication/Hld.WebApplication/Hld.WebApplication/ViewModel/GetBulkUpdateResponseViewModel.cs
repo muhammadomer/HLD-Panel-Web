@@ -7,6 +7,7 @@ namespace Hld.WebApplication.ViewModel
 {
     public class GetBulkUpdateResponseViewModel
     {
-        public string JobId { get; set; }
+        public string QueuedJobLink { get; set; }
+        public int ID { get; set; }
     }
 }
