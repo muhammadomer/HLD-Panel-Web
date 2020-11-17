@@ -1957,11 +1957,11 @@ namespace Hld.WebApplication.Controllers
 
         }
 
-        public IActionResult GetDataListForBulkUpdate()
+        public IActionResult GetDataListForBulkUpdate(string ParentID)
         {
             string token = Request.Cookies["Token"];
             List<GetDataForBulkUpdateViewModel> listviewmodel = new List<GetDataForBulkUpdateViewModel>();
-               listviewmodel = ProductApiAccess.GetDataListForBulkUpdate(ApiURL, token);
+               listviewmodel = ProductApiAccess.GetDataListForBulkUpdate(ApiURL, token, ParentID);
                return View(listviewmodel);
         }
         

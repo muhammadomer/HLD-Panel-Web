@@ -317,15 +317,18 @@
     <div class="card mt-5">
         <div style="padding:0px" class="card-header">
             <b style="vertical-align: sub; margin-left: 13px;">Add Multiple SKU</b>
-
+            @*<b style="vertical-align: sub; margin-right: 13px;">Bulk Update List</b>*@
+            @*<a class="btn btn-sm btn-info " style="float:right ;margin-right:13px" target="_blank" role="button" asp-action="GetDataListForBulkUpdate" asp-controller="Product">Bulk Update List</a>*@
+            <a  style="float:right ;margin-right:13px" target="_blank" asp-action="GetDataListForBulkUpdate" asp-controller="Product" asp-route-ParentID="@Model.Sku">Bulk Update List</a>
         </div>
+        
         <div class="row ml-0">
 
             <div class="col-4 mt-2 mb-2">
 
                 <div class="mt-2" style="">
                     <label class="control-label mb-0 colorhead"><b>Parent SKU:</b></label>
-                    <span class="AddSku">@Model.Sku</span>
+                    <span class="AddSku" id="getparentsku">@Model.Sku</span>
 
                 </div>
             </div>

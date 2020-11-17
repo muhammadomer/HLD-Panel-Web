@@ -2129,13 +2129,13 @@ namespace Hld.WebApplication.Helper
             List<StyleListViewModel> responses = JsonConvert.DeserializeObject<List<StyleListViewModel>>(strResponse);
             return responses;
         }
-        public List<GetDataForBulkUpdateViewModel> GetDataListForBulkUpdate(string ApiURL, string token)
+        public List<GetDataForBulkUpdateViewModel> GetDataListForBulkUpdate(string ApiURL, string token, string ParentID)
         {
             List<GetDataForBulkUpdateViewModel> listmodel = new List<GetDataForBulkUpdateViewModel>();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product//");
-                request.Method = "GET";
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetDataForBulkUpdateJob?ParentID=" + ParentID );
+                request.Method = "POST";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
                 request.Headers["Authorization"] = "Bearer " + token;
