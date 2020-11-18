@@ -510,6 +510,7 @@
                 <th>SKU</th>
                 @*<th>Shadows</th>*@
                 <th style="width:5%">Company</th>
+                @*<th style="width:5%">CompanyName</th>*@
                 <th>Amz Merchant SKU</th>
                 <th style="width:6%">Amazon Enabled</th>
                 <th style="width:11%">ASIN</th>
@@ -576,9 +577,9 @@
 
                             </td>
                             <td>
-                                @*@item.CompanyName
-                                    @item.CompanyId*@
-                                512
+                                @item.CompanyName
+                                    @item.CompanyId
+                                @*512*@
 
                             </td>
 
@@ -733,41 +734,40 @@
             <td>
                 @itemShadow.CompanyName
                 @itemShadow.CompanyId
-
-
             </td>
+            
 
             @if (itemShadow.CompanyId == 520)
             {
-        <td>
-            @if (String.IsNullOrEmpty(itemShadow.AmazonMerchantSKU))
-            {
-                <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@itemShadow.Sku" name="AmazonMerchantSKU" readonly />
-                <span>
-                    <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                </span>
-            }
+                <td>
+                    @if (String.IsNullOrEmpty(itemShadow.AmazonMerchantSKU))
+                    {
+                        <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@itemShadow.Sku" name="AmazonMerchantSKU" readonly />
+                        <span>
+                            <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
 
-            else
-            {
-                <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" name="AmazonMerchantSKU" readonly />
+                    else
+                    {
+                        <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" name="AmazonMerchantSKU" readonly />
+                        <span>
+                            <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+                    @*<input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" name="AmazonMerchantSKU" readonly />
                 <span>
                     <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                </span>
-            }
-            @*<input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" name="AmazonMerchantSKU" readonly />
-            <span>
-                <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-            </span>*@
-        </td>
+                </span>*@
+                </td>
                 <td>
                     @*<input type="text" class="form-control AmazonEnabled" value=" @itemShadow.AmazonEnabled" />*@
                     @*<select asp-for="@itemShadow.AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled" disabled>
-            <option value="" disabled hidden>AmazonEnabled</option>
-            <option value="TRUE">TRUE</option>
-            <option value="FALSE" selected>FALSE</option>
-        </select>*@
-                    <select asp-for="@itemShadow.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled"disabled>
+                    <option value="" disabled hidden>AmazonEnabled</option>
+                    <option value="TRUE">TRUE</option>
+                    <option value="FALSE" selected>FALSE</option>
+                </select>*@
+                    <select asp-for="@itemShadow.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled" disabled>
                         <option value="" selected disabled hidden>AmazonEnabled</option>
                         <option value="TRUE" selected>TRUE</option>
                         <option value="FALSE">FALSE</option>
@@ -785,14 +785,14 @@
 
 
                 <td>
-                   
-                    
-                        <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy" readonly />
-                        <span>
-                            <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                        </span>
 
-                    
+
+                    <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy" readonly />
+                    <span>
+                        <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                    </span>
+
+
 
                 </td>
 
@@ -808,7 +808,7 @@
                         <select asp-for="@item.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
                             <option value="" disabled hidden>WebsiteEnabled</option>
                             <option value="TRUE">TRUE</option>
-                            <option value="FALSE"selected>FALSE</option>
+                            <option value="FALSE" selected>FALSE</option>
                         </select>
                         <span>
                             <img style="display:none;" class="WebsiteEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
@@ -833,24 +833,24 @@
 
             else
             {
-        <td>
-            @if (String.IsNullOrEmpty(itemShadow.AmazonMerchantSKU))
-            {
-                <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@itemShadow.Sku" name="AmazonMerchantSKU" />
-                <span>
-                    <img style="display:none;" class="AmazonMerchantSKUloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                </span>
-            }
+                <td>
+                    @if (String.IsNullOrEmpty(itemShadow.AmazonMerchantSKU))
+                    {
+                        <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@itemShadow.Sku" name="AmazonMerchantSKU" />
+                        <span>
+                            <img style="display:none;" class="AmazonMerchantSKUloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
 
-            else
-            {
-                <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@itemShadow.AmazonMerchantSKU" name="AmazonMerchantSKU" />
-                <span>
-                    <img style="display:none;" class="AmazonMerchantSKUloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                </span>
-            }
+                    else
+                    {
+                        <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@itemShadow.AmazonMerchantSKU" name="AmazonMerchantSKU" />
+                        <span>
+                            <img style="display:none;" class="AmazonMerchantSKUloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
 
-        </td>
+                </td>
                 <td>
                     @*<input type="text" class="form-control AmazonEnabled" value=" @itemShadow.AmazonEnabled" />*@
                     <select asp-for="@itemShadow.AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled">
@@ -870,119 +870,119 @@
                 </td>
                 @if (itemShadow.CompanyId == 512 || (itemShadow.CompanyId == 513 && itemShadow.Sku.Contains("CA-FBA")))
                 {
-        <td>
-            @if (String.IsNullOrEmpty(itemShadow.FulfilledBy))
-            {
-                <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="Amazon" name="FulfilledBy"  />
-                <span>
-                    <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                </span>
-            }
-           
-            else
-            {
-                <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy" />
-                <span>
-                    <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                </span>
+                    <td>
+                        @if (String.IsNullOrEmpty(itemShadow.FulfilledBy))
+                        {
+                            <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="Amazon" name="FulfilledBy" />
+                            <span>
+                                <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                            </span>
+                        }
 
-            }
-         
-        </td>
-        <td>
-            <input type="text" class="form-control AmazonFBASKU" data-ColumnName="AmazonFBASKU" value="@itemShadow.AmazonFBASKU" name="AmazonFBASKU" />
-            <span>
-                <img style="display:none;" class="AmazonFBASKUloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-            </span>
+                        else
+                        {
+                            <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy" />
+                            <span>
+                                <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                            </span>
 
-        </td>
+                        }
+
+                    </td>
+                    <td>
+                        <input type="text" class="form-control AmazonFBASKU" data-ColumnName="AmazonFBASKU" value="@itemShadow.AmazonFBASKU" name="AmazonFBASKU" />
+                        <span>
+                            <img style="display:none;" class="AmazonFBASKUloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </span>
+
+                    </td>
                 }
                 else
                 {
-        <td>
-            @if (String.IsNullOrEmpty(itemShadow.FulfilledBy))
-            {
-                <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="Merchant" name="FulfilledBy"  />
-                <span>
-                    <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                </span>
-            }
-          
-            else
-            {
-                <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy"  />
-                <span>
-                    <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                </span>
+                    <td>
+                        @if (String.IsNullOrEmpty(itemShadow.FulfilledBy))
+                        {
+                            <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="Merchant" name="FulfilledBy" />
+                            <span>
+                                <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                            </span>
+                        }
 
-            }
-            
-        </td>
-        <td>
-            <input type="text" class="form-control AmazonFBASKU" data-ColumnName="AmazonFBASKU" value="@itemShadow.AmazonFBASKU" name="AmazonFBASKU" readonly />
-            <span>
-                <img style="display:none;" class="AmazonFBASKUloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-            </span>
+                        else
+                        {
+                            <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@itemShadow.FulfilledBy" name="FulfilledBy" />
+                            <span>
+                                <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                            </span>
 
-        </td>
+                        }
+
+                    </td>
+                    <td>
+                        <input type="text" class="form-control AmazonFBASKU" data-ColumnName="AmazonFBASKU" value="@itemShadow.AmazonFBASKU" name="AmazonFBASKU" readonly />
+                        <span>
+                            <img style="display:none;" class="AmazonFBASKUloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </span>
+
+                    </td>
                 }
 
 
-        <td>
+                <td>
 
-            @if (String.IsNullOrEmpty(itemShadow.WebsiteEnabled))
-            {
-                <select asp-for="@itemShadow.WebsiteEnabled" data-ColumnName="WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
-                    <option value="" disabled hidden>WebsiteEnabled</option>
-                    <option value="TRUE">TRUE</option>
-                    <option value="FALSE"selected>FALSE</option>
-                </select>
-                <span>
-                    <img style="display:none;" class="WebsiteEnabledloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                </span>
-            }
-            else
-            {
-                <select asp-for="@itemShadow.WebsiteEnabled" data-ColumnName="WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
-                    <option value="" disabled hidden>WebsiteEnabled</option>
-                    <option value="TRUE">TRUE</option>
-                    <option value="FALSE">FALSE</option>
-                </select>
-                <span>
-                    <img style="display:none;" class="WebsiteEnabledloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                </span>
-            }
+                    @if (String.IsNullOrEmpty(itemShadow.WebsiteEnabled))
+                    {
+                        <select asp-for="@itemShadow.WebsiteEnabled" data-ColumnName="WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
+                            <option value="" disabled hidden>WebsiteEnabled</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE" selected>FALSE</option>
+                        </select>
+                        <span>
+                            <img style="display:none;" class="WebsiteEnabledloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+                    else
+                    {
+                        <select asp-for="@itemShadow.WebsiteEnabled" data-ColumnName="WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
+                            <option value="" disabled hidden>WebsiteEnabled</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE">FALSE</option>
+                        </select>
+                        <span>
+                            <img style="display:none;" class="WebsiteEnabledloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
 
-        </td>
-
-            }
-
-        <td>
-
-            @if (@itemShadow.IsCreatedOnSC == 1)
-            {
-                <span style="color:green;font-weight:bold">Created on SC</span>
+                </td>
 
             }
-            else
-            {
-                <span></span>
-            }<br />
-            @* commented by Mehdi*@
-            @if (@itemShadow.IsRelated.Length >= 6)
-            {
-                <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@itemShadow.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
-            }
-            else
-            {
-                <span></span>
-            }
-        </td>
+
+            <td>
+
+                @if (@itemShadow.IsCreatedOnSC == 1)
+                {
+                    <span style="color:green;font-weight:bold">Created on SC</span>
+
+                }
+                else
+                {
+                    <span></span>
+                }<br />
+                @* commented by Mehdi*@
+                @if (@itemShadow.IsRelated.Length >= 6)
+                {
+                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@itemShadow.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
+                }
+                else
+                {
+                    <span></span>
+                }
+            </td>
             @*<td>
 
-                <button type='button' class='btn btn-sm btn-success submitSave' style="display:none;" value=''>Save</button>
-                <button type='button' class='btn btn-sm btn-success editUpdate' value=''>Update</button>
-            </td>*@
+            <button type='button' class='btn btn-sm btn-success submitSave' style="display:none;" value=''>Save</button>
+            <button type='button' class='btn btn-sm btn-success editUpdate' value=''>Update</button>
+        </td>*@
         </tr>
 
                     }

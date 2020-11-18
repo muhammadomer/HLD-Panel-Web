@@ -780,6 +780,7 @@ namespace Hld.WebApplication.Controllers
             try
             {
                 string excelName="";
+                string fileCreationDate = DateTime.Now.ToString("yyyyMMddHHmmssfff"); 
                 data = data.GroupBy(s => s.ProductSku).Select(p => p.FirstOrDefault()).Distinct().ToList();
                 token = Request.Cookies["Token"];
                 CreateshadowOnSellerCloudViewModel createshadowOnSeller = new CreateshadowOnSellerCloudViewModel();
@@ -802,6 +803,7 @@ namespace Hld.WebApplication.Controllers
                 }
                 workbook.Worksheets.Add(worksheet); 
                 workbook.Save(file);
+               var getFileDiractory= uploadExcellToS3(file);
                 Byte[] bytes = System.IO.File.ReadAllBytes(file);
                 Metadata metadata = new Metadata();
                 metadata.CompanyId = 512;
@@ -811,12 +813,17 @@ namespace Hld.WebApplication.Controllers
                 createshadowOnSeller.Metadata = metadata;
 
             var status=   CreateProductShadowOnSellerCloud(createshadowOnSeller);
-
+                updateIsRelation.QueuedJobLink = status.QueuedJobLink;
+                updateIsRelation.ParentSKU = viewModels.Select(a => a.ParentSKU).FirstOrDefault();
+                updateIsRelation.FileDirectory = getFileDiractory;
+                updateIsRelation.FileName = fileCreationDate+ excelName ;
+                updateIsRelation.JobCreationTime = DateTime.Now;
+                ProductApiAccess.UpdateRelationInBulkUpdateTable(ApiURL, token, updateIsRelation);
                 foreach (var item in viewModels)
                 {
                     updateIsRelation.QueuedJobLink = status.QueuedJobLink;
-                    updateIsRelation.shadow = item.ShadowSKU;
-                    ProductApiAccess.UpdateRelation(ApiURL, token, updateIsRelation);
+                    updateIsRelation.ParentSKU = item.ShadowSKU;
+                    ProductApiAccess.UpdateRelationInProductTable(ApiURL, token, updateIsRelation);
                 }
             }
             catch (Exception ex)
@@ -834,6 +841,7 @@ namespace Hld.WebApplication.Controllers
            
             try
             {
+                string fileCreationDate = DateTime.Now.ToString("yyyyMMddHHmmssfff");
                 UpdateJobIdForBulkUpdateViewModel updateJobIdForBulkUpdate = new UpdateJobIdForBulkUpdateViewModel();
                 string excelName = "";
                 data = data.GroupBy(s => s.Sku).Select(p => p.FirstOrDefault()).Distinct().ToList();
@@ -899,14 +907,23 @@ namespace Hld.WebApplication.Controllers
 
                 if (status != null)
                 {
+                    updateJobIdForBulkUpdate.Sku = data.Select(a=>a.Sku).FirstOrDefault();
+                    updateJobIdForBulkUpdate.ID = status.ID;
+                    updateJobIdForBulkUpdate.QueuedJobLink = status.QueuedJobLink;
+                    updateJobIdForBulkUpdate.CreatedDate = DateTime.Now;
+                    updateJobIdForBulkUpdate.S3FileDirectoryPath = getS3FilePath;
+                    updateJobIdForBulkUpdate.FileNames = fileCreationDate+ excelName;
+                    updateJobIdForBulkUpdate.JobType = "Bulk Update";
+                    updateJobIdForBulkUpdate.Status = "Completed";
+                    ProductApiAccess.BulkUpdateJobId(ApiURL, token, updateJobIdForBulkUpdate);
                     foreach (var item in data)
                     {
+                        
                         updateJobIdForBulkUpdate.Sku = item.Sku;
                         updateJobIdForBulkUpdate.ID = status.ID;
                         updateJobIdForBulkUpdate.QueuedJobLink = status.QueuedJobLink;
-                        updateJobIdForBulkUpdate.CreatedDate = DateTime.Now;
-                        updateJobIdForBulkUpdate.S3FilePath = getS3FilePath;
-                        ProductApiAccess.BulkUpdateJobId(ApiURL, token, updateJobIdForBulkUpdate);
+                        
+                        ProductApiAccess.BulkUpdateJobIdForProductData(ApiURL, token, updateJobIdForBulkUpdate);
                     }
                 }
 

@@ -11,6 +11,9 @@ namespace Hld.WebApplication.ViewModel
         public int ID { get; set; }
         public DateTime CreatedDate { get; set; }
         public string Sku { get; set; }
-        public string S3FilePath { get; set; }
+        public string S3FileDirectoryPath { get; set; }
+        public string FileNames { get; set; }
+        public string JobType { get; set; }
+        public string Status { get; set; }
     }
 }

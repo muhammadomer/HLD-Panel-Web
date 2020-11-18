@@ -7,7 +7,12 @@ namespace Hld.WebApplication.ViewModel
 {
     public class UpdateIsRelationViewModel
     {
-        public string shadow { get; set; }
+        public string ParentSKU { get; set; }
         public string QueuedJobLink { get; set; }
+        public string Status { get; set; }
+        public string JobType { get; set; }
+        public string FileDirectory { get; set; }
+        public string FileName { get; set; }
+        public DateTime JobCreationTime { get; set; }
     }
 }
