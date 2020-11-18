@@ -367,7 +367,36 @@ namespace Hld.WebApplication.Helper
             return responses;
         }
 
+        public GetParentSku GetParentOfThisSku(string ApiURL, string token, string sku)
+        {
+            try
+            {
+                GetParentSku getParentSku = new GetParentSku();
+                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetParentOfThisSku?sku=" + sku);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
 
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                    }
+                }
+                //string responses = JsonConvert.DeserializeObject<string>(strResponse);
+                getParentSku.ParentSku = strResponse.ToString();
+                return getParentSku;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
+        }
         public int GetAllProductsCount(string ApiURL, string token, ProductInventorySearchViewModel ViewModel)
         {
             var data = JsonConvert.SerializeObject(ViewModel);

@@ -801,6 +801,7 @@ namespace Hld.WebApplication.Controllers
                         worksheet.Cells[row, 2] = new Cell(viewModels[row-1].CompanyID.ToString().Trim());
                     
                 }
+                var getParentSku = ProductApiAccess.GetParentOfThisSku(ApiURL, token, viewModels.Select(a => a.ParentSKU).FirstOrDefault());
                 workbook.Worksheets.Add(worksheet); 
                 workbook.Save(file);
                var getFileDiractory= uploadExcellToS3(file);
@@ -814,7 +815,7 @@ namespace Hld.WebApplication.Controllers
 
             var status=   CreateProductShadowOnSellerCloud(createshadowOnSeller);
                 updateIsRelation.QueuedJobLink = status.QueuedJobLink;
-                updateIsRelation.ParentSKU = viewModels.Select(a => a.ParentSKU).FirstOrDefault();
+                updateIsRelation.ParentSKU = getParentSku.ToString();
                 updateIsRelation.FileDirectory = getFileDiractory;
                 updateIsRelation.FileName = fileCreationDate+ excelName ;
                 updateIsRelation.JobCreationTime = DateTime.Now;
@@ -907,7 +908,8 @@ namespace Hld.WebApplication.Controllers
 
                 if (status != null)
                 {
-                    updateJobIdForBulkUpdate.Sku = data.Select(a=>a.Sku).FirstOrDefault();
+                    var getParentSku = ProductApiAccess.GetParentOfThisSku(ApiURL, token, data.Select(a => a.Sku).FirstOrDefault());
+                    updateJobIdForBulkUpdate.Sku = getParentSku.ToString();
                     updateJobIdForBulkUpdate.ID = status.ID;
                     updateJobIdForBulkUpdate.QueuedJobLink = status.QueuedJobLink;
                     updateJobIdForBulkUpdate.CreatedDate = DateTime.Now;
