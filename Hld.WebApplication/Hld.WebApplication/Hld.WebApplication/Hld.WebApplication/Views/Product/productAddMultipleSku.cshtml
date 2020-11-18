@@ -504,7 +504,9 @@
             }
 
             ManufactureModel();
-            $(".ManufactureModel").select2();       
+            $(".ManufactureModel").select2();    
+
+
             $(document).on("change", ".ManufactureModel", function () {
                 var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
                 var ManufactureModel = $("select#ManufactureModel option").filter(":selected").val();

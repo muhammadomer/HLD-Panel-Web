@@ -1946,6 +1946,15 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPut]
+        public bool UpdateShadowSingleColoumnASIN(UpdateShadowSingleColoumnViewModel data)
+
+        {
+            token = Request.Cookies["Token"];
+            ProductApiAccess.UpdateShadowSingleColoumnASIN(ApiURL, token, data);
+            return true;
+        }
+
+        [HttpPut]
         public string UpdateShadowSingleColoumnForistAsin(List<UpdateShadowSingleColoumnViewModel> list)
         {
             string token = Request.Cookies["Token"];
@@ -1955,6 +1964,7 @@ namespace Hld.WebApplication.Controllers
 
 
         }
+
         [HttpPost]
         public JsonResult GetAllVendorForAutoCompleteStyle(string Prefix)
         {

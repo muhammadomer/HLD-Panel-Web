@@ -617,7 +617,7 @@
                             </td>
                             <td>
                                
-                                <input type="text" class="form-control ASIN" data-ColumnName="ASIN" value="@item.ASIN" name="ASIN" />
+                                <input type="text" class="form-control ASIN" data-ColumnName="z_asin_ca" value="@item.ASIN" name="ASIN" />
                                 <span>
                                     <img style="display:none;" class="ASINloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
                                 </span>
@@ -777,7 +777,7 @@
                     </span>
                 </td>
                 <td>
-                    <input type="text" class="form-control ASIN" data-ColumnName="ASIN" value="@itemShadow.ASIN" name="ASIN" readonly />
+                    <input type="text" class="form-control ASIN" data-ColumnName="z_asin_ca" value="@itemShadow.ASIN" name="ASIN" readonly />
                     <span>
                         <img style="display:none;" class="ASINloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
                     </span>
@@ -863,7 +863,7 @@
                     </span>
                 </td>
                 <td>
-                    <input type="text" class="form-control ASIN" data-ColumnName="ASIN" value="@itemShadow.ASIN" name="ASIN" />
+                    <input type="text" class="form-control ASIN" data-ColumnName="z_asin_ca" value="@itemShadow.ASIN" name="ASIN" />
                     <span>
                         <img style="display:none;" class="ASINloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                     </span>
@@ -1545,7 +1545,7 @@
                 $(selectedRow).find('.ASINloader').css('display', 'inline');
                 $.ajax({
                     type: 'PUT',
-                    url: '../product/UpdateShadowSingleColoumn',
+                    url: '../product/UpdateShadowSingleColoumnASIN',
                     data: { data },
                     success: function (res) {
                         $(selectedRow).find('.ASINloader').css('display', 'none');

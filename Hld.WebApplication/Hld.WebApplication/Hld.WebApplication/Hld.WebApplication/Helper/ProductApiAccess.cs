@@ -2098,6 +2098,38 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+        public bool UpdateShadowSingleColoumnASIN(string ApiURL, string token, UpdateShadowSingleColoumnViewModel ViewModel)
+        {
+            bool status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/UpdateShadowSingleColoumnASIN");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                    status = Convert.ToBoolean(strResponse);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return status;
+        }
 
         public string UpdateShadowSingleColoumnForistAsin(string ApiURL, string token, List<UpdateShadowSingleColoumnViewModel> viewModel)
         {

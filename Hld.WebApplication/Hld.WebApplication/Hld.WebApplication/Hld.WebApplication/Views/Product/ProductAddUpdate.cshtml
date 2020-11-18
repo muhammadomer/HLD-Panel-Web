@@ -4,7 +4,7 @@
     ViewData["Title"] = "ProductAddUpdate";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
 }
-
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
 <style type="text/css">
     .form-control {
         padding: 0px;
@@ -189,7 +189,75 @@
                         <input asp-for="shipmentWidth" id="shipmentWidthId" placeholder="Height" class="form-control" />
                     </div>
                 </div>
+                <div class="form-group row">
 
+                    <label class="col-sm-1 text-sm-right control-label">Manufacturer</label>
+                    <div class="col-sm-3">
+                        @*<input class="form-control" asp-for="Menufacture" />
+                <span asp-validation-for="Menufacture" class="text-danger"></span>
+                <span class="UpcError"></span>*@
+                        <select class="js-example-basic-single form-control GetManufacturesingle" name="ManufactureName" id="ManufactureName1">
+
+                            <option value="">Manufacturer</option>
+
+                        </select>
+
+
+                    </div>
+
+                    <span style="margin-left: 5px;text-decoration:underline;cursor:pointer"><a asp-controller="Product" target="_blank" asp-action="ProductManufactured" style="vertical-align: sub;cursor:pointer">Add</a></span>
+
+                </div>
+                <div class="form-group row">
+
+                    <label class="col-sm-1 text-sm-right control-label">Manufacturer Model</label>
+                    <div class="col-sm-3">
+                        @*<input class="form-control" asp-for="MenufactureModel"/>*@
+                        @*<span asp-validation-for="MenufactureModel" class="text-danger"></span>
+                <span class="UpcError"></span>*@
+                        <select class="js-example-basic-single form-control ManufactureModelsingle" name="ManufactureModel" id="ManufactureModel">
+
+                            <option value="">Manufacturer Model</option>
+
+                        </select>
+                    </div>
+                    <span style="margin-left: 5px;text-decoration:underline;cursor:pointer"><a asp-controller="Product" target="_blank" asp-action="ProductManufactured" style="vertical-align: sub;cursor:pointer">Add</a></span>
+                    <span style="margin-left:20px;" id="UPCCounter"></span>
+                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
+                </div>
+                <div class="form-group row">
+
+                    <label class="col-sm-1 text-sm-right control-label">Device Model</label>
+                    <div class="col-sm-3">
+                        @*<input class="form-control" asp-for="DeviceModel" />*@
+                        <select class="js-example-basic-single form-control DeviceModelsingle" name="DeviceModel" id="DeviceModel">
+
+                            <option value="">DeviceModel Model</option>
+
+                        </select>
+                      
+                    </div>
+                    <span style="margin-left: 5px;text-decoration:underline;cursor:pointer"><a asp-controller="Product" target="_blank" asp-action="ProductManufactured" style="vertical-align: sub;cursor:pointer">Add</a></span>
+                    <span style="margin-left:20px;" id="UPCCounter"></span>
+                    <span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>
+                </div>
+                <div class="form-group row">
+
+                    <label class="col-sm-1 text-sm-right control-label">Style</label>
+                    <div class="col-sm-3">
+
+                        <select class="js-example-basic-single form-control Stylesingle" name="Style" id="Style">
+
+                            <option value="">Style</option>
+
+                        </select>
+
+                        @*<span class="UpcError"></span>*@
+                    </div>
+                    <span style="margin-left: 5px;text-decoration:underline;cursor:pointer"><a asp-controller="Product" target="_blank" asp-action="Style" style="vertical-align: sub;cursor:pointer">Add</a></span>
+                    @*<span style="margin-left:20px;" id="UPCCounter"></span>*@
+                    @*<span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>*@
+                </div>
                 <div class="form-group row">
                     <label asp-for="Description" class="col-sm-1 text-sm-right control-label"></label>
                     <div class="col-sm-8">
@@ -286,10 +354,200 @@
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
 
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
 
         $(document).ready(function () {
+            function StyleNameListsingle() {
+                debugger;
+                $.ajax({
+                    url: "/Product/GetAllVendorForAutoCompleteStyle/",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        console.log("stylelist", data)
+
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.StyleId + '">' + value.StyleName + '</option>';
+
+
+
+                        });
+
+                        $(".Stylesingle").append(content);
+                        @* $(".vendorlistgetFromPOProduct").val(@Model.Manufacturer);*@
+
+
+                    }
+        });
+
+
+
+            }
+
+        StyleNameListsingle();
+            $(".Stylesingle").select2();
+
+            function GetManufacturesingle() {
+                debugger;
+                $.ajax({
+                    url: "/Product/GetAllVendorForAutoComplete/",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: "" },
+                    success: function (data, ui) {
+                        console.log("ddd", data)
+
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
+
+
+
+                        });
+
+                        $(".GetManufacturesingle").append(content);
+                        @* $(".vendorlistgetFromPOProduct").val(@Model.Manufacturer);*@
+
+
+                    }
+        });
+
+
+
+            }
+
+            GetManufacturesingle();
+            $(".GetManufacturesingle").select2();
+
+            $(document).on("change", ".GetManufacturesingle", function () {
+
+                var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
+                console.log("product ManufactureId", ManufactureId)
+
+                $.ajax({
+                    type: 'GET',
+                    url: '../product/GetManufactureIdByNameChange?ManufactureId=' + ManufactureId,
+
+                    success: function (data) {
+                        console.log("rrr", data)
+                        $(".ManufactureModelsingle").empty();
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureModel + '</option>';
+                        });
+
+                        $(".ManufactureModelsingle").append(content);
+                    }
+                });
+            });
+
+
+
+
+            function ManufactureModelsingle() {
+                debugger;
+                $.ajax({
+                    url: "/product/getallvendorforautocomplete/",
+                    type: "post",
+                    minlength: 3,
+                    datatype: "json",
+                    data: { prefix: "" },
+                    success: function (data, ui) {
+                        console.log("ddd", data)
+
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
+
+
+
+                        });
+
+                        $(".ManufactureModelsingle").append(content);
+
+
+
+                    }
+                });
+
+
+
+            }
+
+            ManufactureModelsingle();
+            $(".ManufactureModelsingle").select2();    
+
+            $(document).on("change", ".ManufactureModelsingle", function () {
+                var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
+                var ManufactureModel = $("select#ManufactureModel option").filter(":selected").val();
+
+
+
+
+
+                console.log("product ManufactureModel", ManufactureModel)
+                console.log("product ManufactureId", ManufactureId)
+
+                $.ajax({
+                    type: 'GET',
+                    url: '../product/GetManufactureDeviceIdByNameChange?ManufactureModel=' + ManufactureModel + "&ManufactureId=" + ManufactureId,
+
+                    success: function (data) {
+                        console.log("rrr", data)
+                        $(".DeviceModelsingle").empty();
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.DeviceModel + '</option>';
+
+
+
+                        });
+
+                        $(".DeviceModelsingle").append(content);
+                    }
+                });
+
+
+            });
+
+            function DeviceModelsingle() {
+                debugger;
+                $.ajax({
+                    url: "/product/getallvendorforautocomplete/",
+                    type: "post",
+                    minlength: 3,
+                    datatype: "json",
+                    data: { prefix: "" },
+                    success: function (data, ui) {
+                        console.log("ddd get deivce color", data)
+                        var content = '';
+                        $.each(data, function (index, value) {
+                            content = content + '<option value = "' + value.ManufactureId + '">' + value.DeviceModel + '</option>';
+                        });
+                        $(".DeviceModelsingle").append(content);
+                    }
+                });
+            }
+            DeviceModelsingle();
+            $(".DeviceModelsingle").select2();
 
             if ($('#HfProductId').length > 0) {
                 $.get('/Product/ShowImages/' + $('#HfProductId').val() + '').done(function (response) {
