@@ -73,7 +73,7 @@ namespace Hld.WebApplication.Controllers
             categoryApiAccess = new CategoryApiAccess();
             ProductApiAccess = new ProductApiAccess();
             sellerCloudApiAccess = new SellerCloudApiAccess();
-            //uploadFiles = new UploadFilesToS3(_environment, _configuration);
+            uploadFiles = new UploadFilesToS3(_environment, _configuration);
             currencyExchangeApiAccess = new CurrencyExchangeApiAccess();
             productWarehouseQtyApiAccess = new ProductWarehouseQtyApiAccess();
             _OrderApiAccess = new OrderNotesAPiAccess();

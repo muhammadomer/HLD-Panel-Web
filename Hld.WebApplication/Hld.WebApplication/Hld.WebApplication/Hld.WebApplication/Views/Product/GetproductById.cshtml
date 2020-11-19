@@ -1498,17 +1498,21 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-                $(selectedRow).find('.AmazonFBASKUloader').css('display', 'inline');
-                $.ajax({
-                    type: 'PUT',
-                    url: '../product/UpdateShadowSingleColoumn',
-                    data: { data },
-                    success: function (res) {
-                        $(selectedRow).find('.AmazonFBASKUloader').css('display', 'none');
-                    },
-                    Error: function (err) {
-                    }
-                });
+               
+                if (data.ColoumnValue != "") {
+                    $(selectedRow).find('.AmazonFBASKUloader').css('display', 'inline');
+                    $.ajax({
+                        type: 'PUT',
+                        url: '../product/UpdateShadowSingleColoumn',
+                        data: { data },
+                        success: function (res) {
+                            $(selectedRow).find('.AmazonFBASKUloader').css('display', 'none');
+                        },
+                        Error: function (err) {
+                        }
+                    });
+                } else { }
+       
 
 
             });
@@ -1528,19 +1532,26 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-                $(selectedRow).find('.FulfilledByloader').css('display', 'inline');
-                $.ajax({
-                    type: 'PUT',
-                    url: '../product/UpdateShadowSingleColoumn',
-                    data: { data },
-                    success: function (res) {
-                        //$(".loader").hide();
-                        $(selectedRow).find('.FulfilledByloader').css('display', 'none');
+                
+                if (data.ColoumnValue != "") {
+                    $(selectedRow).find('.FulfilledByloader').css('display', 'inline');
+                    $.ajax({
+                        type: 'PUT',
+                        url: '../product/UpdateShadowSingleColoumn',
+                        data: { data },
+                        success: function (res) {
+                            //$(".loader").hide();
+                            $(selectedRow).find('.FulfilledByloader').css('display', 'none');
 
-                    },
-                    Error: function (err) {
-                    }
-                });
+                        },
+                        Error: function (err) {
+                        }
+                    });
+                }
+                else {
+
+                }
+             
 
 
             });
@@ -1560,18 +1571,21 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-                $(selectedRow).find('.AmazonMerchantSKUloader').css('display', 'inline');
-                $.ajax({
-                    type: 'PUT',
-                    url: '../product/UpdateShadowSingleColoumn',
-                    data: { data },
-                    success: function (res) {
-                        $(selectedRow).find('.AmazonMerchantSKUloader').css('display', 'none');
-                    },
-                    Error: function (err) {
-                    }
-                });
+                if (data.ColoumnValue != "") {
+                    $(selectedRow).find('.AmazonMerchantSKUloader').css('display', 'inline');
+                    $.ajax({
+                        type: 'PUT',
+                        url: '../product/UpdateShadowSingleColoumn',
+                        data: { data },
+                        success: function (res) {
+                            $(selectedRow).find('.AmazonMerchantSKUloader').css('display', 'none');
+                        },
+                        Error: function (err) {
+                        }
+                    });
 
+                } else { }
+              
 
             });
             $(document).on("focusout", ".ASIN", function () {
@@ -1590,17 +1604,21 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-                $(selectedRow).find('.ASINloader').css('display', 'inline');
-                $.ajax({
-                    type: 'PUT',
-                    url: '../product/UpdateShadowSingleColoumnASIN',
-                    data: { data },
-                    success: function (res) {
-                        $(selectedRow).find('.ASINloader').css('display', 'none');
-                    },
-                    Error: function (err) {
-                    }
-                });
+                if (data.ColoumnValue != "") {
+                    $(selectedRow).find('.ASINloader').css('display', 'inline');
+                    $.ajax({
+                        type: 'PUT',
+                        url: '../product/UpdateShadowSingleColoumnASIN',
+                        data: { data },
+                        success: function (res) {
+                            $(selectedRow).find('.ASINloader').css('display', 'none');
+                        },
+                        Error: function (err) {
+                        }
+                    });
+                }
+                else { }
+              
 
 
             });
@@ -1671,18 +1689,24 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-                $(selectedRow).find('.ASINloader').css('display', 'inline');
-                $.ajax({
-                    type: 'put',
-                    url: '../product/updateshadowsinglecoloumnforistasin',
-                    data: { list },
-                    success: function (res) {
-                        $(selectedrow).find('.ASINloader').css('display', 'none');
-                    },
-                    error: function (err) {
-                    }
-                });
+                if (data.ColoumnValue != "") {
+                    $(selectedRow).find('.ASINloader').css('display', 'inline');
+                    $.ajax({
+                        type: 'put',
+                        url: '../product/updateshadowsinglecoloumnforistasin',
+                        data: { list },
+                        success: function (res) {
+                            $(selectedrow).find('.ASINloader').css('display', 'none');
+                        },
+                        error: function (err) {
+                        }
+                    });
 
+                }
+                else {
+
+                }
+            
 
             });
             //
@@ -1704,19 +1728,19 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-                $(selectedRow).find('.AmazonEnabledloader').css('display', 'inline');
-                $.ajax({
-                    type: 'PUT',
-                    url: '../product/UpdateShadowSingleColoumn',
-                    data: { data },
-                    success: function (res) {
-                        $(selectedRow).find('.AmazonEnabledloader').css('display', 'none');
-                    },
-                    Error: function (err) {
-                    }
-                });
-
-
+                
+                    $(selectedRow).find('.AmazonEnabledloader').css('display', 'inline');
+                    $.ajax({
+                        type: 'PUT',
+                        url: '../product/UpdateShadowSingleColoumn',
+                        data: { data },
+                        success: function (res) {
+                            $(selectedRow).find('.AmazonEnabledloader').css('display', 'none');
+                        },
+                        Error: function (err) {
+                        }
+                    });
+               
             });
             $(document).on("change", ".WebsiteEnabled", function () {
 
@@ -2529,7 +2553,7 @@
 
         //end
 
-        $(document).on("input", "table input", function () {
+            $(document).on("input", "FirstTable input", function () {
         if ($(this).val() == "") {
         $(this).addClass("warning")
         } else {
