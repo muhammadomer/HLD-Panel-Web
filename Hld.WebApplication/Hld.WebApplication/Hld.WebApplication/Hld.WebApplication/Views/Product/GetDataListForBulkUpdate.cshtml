@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hld.WebApplication.ViewModel.GetDataForBulkUpdateViewModel>
+﻿@model IEnumerable<Hld.WebApplication.ViewModel.GetDataForBulkUpdatejobViewModel>
 
 @{
     ViewData["Title"] = "GetDataListForBulkUpdate";
@@ -13,49 +13,69 @@
                     Job ID
                 </th>
                 <th>
+                    SKU
+                </th>
+                <th>
 
                     Job Type
                 </th>
                 <th>
-                    File
+                    File Name
                 </th>
+                @*<th>
+                    FileDirectory
+                </th>*@
+
                 <th>
                     Status
                 </th>
 
                 <th>
-                    Start Time
+                    Creation Date
                 </th>
-                <th>
-                    Completion Time
-                </th>
+
 
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @item.JobId
-                    </td>
-                    <td>
-                        @item.JobType
-                    </td>
-                    <td>
-                        @item.File
-                    </td>
-                    <td>
-                        @item.Status
-                    </td>
-                    <td>
-                        @item.StartTime
-                    </td>
-                    <td>
-                        @item.CompletionTime
-                    </td>
-                    
-                </tr>
+            <tr>
+                <td>
+                   
+                    @if (item.QueuedJobLink.Length >= 6)
+                    {
+                        <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@item.QueuedJobLink" target="_blank" style="vertical-align: sub;cursor:pointer">@item.QueuedJobLink.Substring(item.QueuedJobLink.Length - 6)</a></span>
+                    }
+                    else
+                    {
+                        <span></span>
+                    }
+                </td>
+                <td>
+                    @item.ProductSku
+                </td>
+                <td>
+                    @item.JobType
+                </td>
+                <td>
+                    @Html.ActionLink(item.FileName, "DownloadformS3", "UploadFilesToS3ForJobs", new { file = item.FileName, bucket = item.FileDirectory })
+                    @*@item.FileName*@
+
+                </td>
+                @*<td>
+                   
+                    @item.FileDirectory
+                </td>*@
+                <td>
+                    @item.Status
+                </td>
+                <td>
+                    @string.Format("{0: MMM d, yyyy}", @item.CreationDate)
+                </td>
+
+
+            </tr>
             }
         </tbody>
     </table>

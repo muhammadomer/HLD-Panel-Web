@@ -784,8 +784,8 @@ namespace Hld.WebApplication.Controllers
                 data = data.GroupBy(s => s.ProductSku).Select(p => p.FirstOrDefault()).Distinct().ToList();
                 token = Request.Cookies["Token"];
                 CreateshadowOnSellerCloudViewModel createshadowOnSeller = new CreateshadowOnSellerCloudViewModel();
-                excelName = @"ShadowData.xls";
-                string file = Path.GetTempPath() + excelName; 
+                excelName =fileCreationDate + @"ShadowData.xls";
+                string file = Path.GetTempPath() +excelName; 
                 Workbook workbook = new Workbook();
                 Worksheet worksheet = new Worksheet("FirstSheet");
                 worksheet.Cells[0, 0] = new Cell("ParentSKU");
@@ -817,8 +817,10 @@ namespace Hld.WebApplication.Controllers
                 updateIsRelation.QueuedJobLink = status.QueuedJobLink;
                 updateIsRelation.ParentSKU = getParentSku.ParentSku.ToString();
                 updateIsRelation.FileDirectory = getFileDiractory;
-                updateIsRelation.FileName = fileCreationDate+ excelName ;
+                updateIsRelation.FileName = excelName ;
                 updateIsRelation.JobCreationTime = DateTime.Now;
+                updateIsRelation.JobType = "Relation Created";
+                updateIsRelation.Status = "Completed";
                 ProductApiAccess.UpdateRelationInBulkUpdateTable(ApiURL, token, updateIsRelation);
                 foreach (var item in viewModels)
                 {
@@ -848,7 +850,7 @@ namespace Hld.WebApplication.Controllers
                 data = data.GroupBy(s => s.Sku).Select(p => p.FirstOrDefault()).Distinct().ToList();
                 token = Request.Cookies["Token"];
                 CreateBulkUpdateOnSellerCloudViewModel createBulkUpdateOnSellerCloudViewModel = new CreateBulkUpdateOnSellerCloudViewModel();
-                excelName = @"BulkUpdateData.xls";
+                excelName = fileCreationDate+@"BulkUpdateData.xls";
                 string file = Path.GetTempPath() + excelName;
                 Workbook workbook = new Workbook();
                 Worksheet worksheet = new Worksheet("FirstSheet");
@@ -909,12 +911,12 @@ namespace Hld.WebApplication.Controllers
                 if (status != null)
                 {
                     var getParentSku = ProductApiAccess.GetParentOfThisSku(ApiURL, token, data.Select(a => a.Sku).FirstOrDefault());
-                    updateJobIdForBulkUpdate.Sku = getParentSku.ToString();
+                    updateJobIdForBulkUpdate.Sku = getParentSku.ParentSku.ToString();
                     updateJobIdForBulkUpdate.ID = status.ID;
                     updateJobIdForBulkUpdate.QueuedJobLink = status.QueuedJobLink;
                     updateJobIdForBulkUpdate.CreatedDate = DateTime.Now;
                     updateJobIdForBulkUpdate.S3FileDirectoryPath = getS3FilePath;
-                    updateJobIdForBulkUpdate.FileNames = fileCreationDate+ excelName;
+                    updateJobIdForBulkUpdate.FileNames = excelName;
                     updateJobIdForBulkUpdate.JobType = "Bulk Update";
                     updateJobIdForBulkUpdate.Status = "Completed";
                     ProductApiAccess.BulkUpdateJobId(ApiURL, token, updateJobIdForBulkUpdate);
@@ -1989,7 +1991,7 @@ namespace Hld.WebApplication.Controllers
         public IActionResult GetDataListForBulkUpdate(string ParentID)
         {
             string token = Request.Cookies["Token"];
-            List<GetDataForBulkUpdateViewModel> listviewmodel = new List<GetDataForBulkUpdateViewModel>();
+            List<GetDataForBulkUpdatejobViewModel> listviewmodel = new List<GetDataForBulkUpdatejobViewModel>();
                listviewmodel = ProductApiAccess.GetDataListForBulkUpdate(ApiURL, token, ParentID);
                return View(listviewmodel);
         }

@@ -75,7 +75,8 @@
             </td>
             <td>
 
-                @Html.ActionLink(item.File_Name, "DownloadformS3", new { file = item.File_Name,bucket = item.File_Bucket })
+                @Html.ActionLink(item.File_Name, "DownloadformS3", new { file = item.File_Name, bucket = item.File_Bucket })
+               
             </td>
             <td>
                 @if (item.Status == 0 && item.Running == 0)

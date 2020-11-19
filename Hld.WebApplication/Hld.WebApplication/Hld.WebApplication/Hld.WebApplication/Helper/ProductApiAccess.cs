@@ -2258,9 +2258,9 @@ namespace Hld.WebApplication.Helper
             List<StyleListViewModel> responses = JsonConvert.DeserializeObject<List<StyleListViewModel>>(strResponse);
             return responses;
         }
-        public List<GetDataForBulkUpdateViewModel> GetDataListForBulkUpdate(string ApiURL, string token, string ParentID)
+        public List<GetDataForBulkUpdatejobViewModel> GetDataListForBulkUpdate(string ApiURL, string token, string ParentID)
         {
-            List<GetDataForBulkUpdateViewModel> listmodel = new List<GetDataForBulkUpdateViewModel>();
+            List<GetDataForBulkUpdatejobViewModel> listmodel = new List<GetDataForBulkUpdatejobViewModel>();
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetDataForBulkUpdateJob?ParentID=" + ParentID );
@@ -2276,10 +2276,10 @@ namespace Hld.WebApplication.Helper
                 {
                     strResponse = sr.ReadToEnd();
                 }
-                listmodel = JsonConvert.DeserializeObject<List<GetDataForBulkUpdateViewModel>>(strResponse);
-
+                listmodel = JsonConvert.DeserializeObject<List<GetDataForBulkUpdatejobViewModel>>(strResponse);
+                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
