@@ -815,7 +815,7 @@ namespace Hld.WebApplication.Controllers
 
             var status=   CreateProductShadowOnSellerCloud(createshadowOnSeller);
                 updateIsRelation.QueuedJobLink = status.QueuedJobLink;
-                updateIsRelation.ParentSKU = getParentSku.ToString();
+                updateIsRelation.ParentSKU = getParentSku.ParentSku.ToString();
                 updateIsRelation.FileDirectory = getFileDiractory;
                 updateIsRelation.FileName = fileCreationDate+ excelName ;
                 updateIsRelation.JobCreationTime = DateTime.Now;
