@@ -21,6 +21,7 @@ namespace Hld.WebApplication.ViewModel
         public decimal ShipWt { get; set; }
         public decimal ShipLt { get; set; }
         public decimal ShipHt { get; set; }
+        public decimal ShipmentWeight { get; set; }
         public int ManufactureName { get; set; }
         public int ManufactureModel { get; set; }
         //public string Menufacture { get; set; }

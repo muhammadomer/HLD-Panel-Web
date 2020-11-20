@@ -578,10 +578,10 @@
                     <input type="text" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
                 </td>
                 <td>
-                    @item.CompanyId
-                    @item.CompanyName
+                   
+                 
 
-                    @*512*@
+                    <span>@item.CompanyName ( @item.CompanyId)</span>
 
                 </td>
 
@@ -750,8 +750,7 @@
 
         </td>*@
         <td>
-            @itemShadow.CompanyId
-            @itemShadow.CompanyName
+            <span>@itemShadow.CompanyName ( @itemShadow.CompanyId)</span>
 
         </td>
             
@@ -786,7 +785,7 @@
             <option value="TRUE">TRUE</option>
             <option value="FALSE" selected>FALSE</option>
         </select>*@
-                    @if (item.AmazonEnabled == true)
+                    @if (itemShadow.AmazonEnabled == true)
                     {
                         <select asp-for="@itemShadow.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled" disabled>
                             <option value="" selected disabled hidden>AmazonEnabled</option>
@@ -835,9 +834,9 @@
                     </span>
                 </td>
                 <td>
-                    @if (item.WebsiteEnabled==false)
+                    @if (itemShadow.WebsiteEnabled==false)
                     {
-                        <select asp-for="@item.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
+                        <select asp-for="@itemShadow.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
                             <option value="" selected disabled hidden>WebsiteEnabled</option>
                             <option value="1">TRUE</option>
                             <option value="0" selected>FALSE</option>
@@ -849,7 +848,7 @@
 
                     else
                     {
-                        <select asp-for="@item.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
+                        <select asp-for="@itemShadow.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
                             <option value="" selected disabled hidden>WebsiteEnabled</option>
                             <option value="1" selected>TRUE</option>
                             <option value="0">FALSE</option>
