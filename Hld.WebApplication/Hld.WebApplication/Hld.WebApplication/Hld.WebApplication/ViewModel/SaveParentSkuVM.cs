@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,7 +33,10 @@ namespace Hld.WebApplication.ViewModel
         public string Feature { get; set; }
         public string Description { get; set; }
         public int ColorId { get; set; }
-        public String Color { get; set; }
+        public string Color { get; set; }
+        [Display(Name = "Brand")]
+        public int BrandId { get; set; }
+        public string Brand { get; set; }
         public string ColorAlias { get; set; }
         public string ImageName { get; set; }
         public string CompressedImage { get; set; }

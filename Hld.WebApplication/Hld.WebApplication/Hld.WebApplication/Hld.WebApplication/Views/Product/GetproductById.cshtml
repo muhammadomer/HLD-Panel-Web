@@ -307,56 +307,117 @@
             margin-right: -50%;
             transform: translate(-50%,-50%);
         }
+    .searchFormcard {
+        position: fixed;
+        background: white;
+        width: 97%;
+        margin-left: 15px;
+        padding: 60px 0px 0px 0px;
+        top: 10px;
+        z-index: 500;
+    }
 </style>
 
 <div class="loader">
     <img src="~/Images/giffff.gif" />
 </div>
 
-<div class="container-fluid" style="margin-bottom:40px">
-    <div class="card mt-5">
+<div class="searchFormcard">
+    <div class="card">
         <div style="padding:0px" class="card-header">
             <b style="vertical-align: sub; margin-left: 13px;">Add Multiple SKU</b>
             @*<b style="vertical-align: sub; margin-right: 13px;">Bulk Update List</b>*@
             @*<a class="btn btn-sm btn-info " style="float:right ;margin-right:13px" target="_blank" role="button" asp-action="GetDataListForBulkUpdate" asp-controller="Product">Bulk Update List</a>*@
-            <a  style="float:right ;margin-right:13px" target="_blank" asp-action="GetDataListForBulkUpdate" asp-controller="Product" asp-route-ParentID="@Model.Sku">Bulk Update List</a>
+            <a style="float:right ;margin-right:13px" target="_blank" asp-action="GetDataListForBulkUpdate" asp-controller="Product" asp-route-ParentID="@Model.Sku">Bulk Update List</a>
         </div>
-        
-        <div class="row ml-0">
 
-            <div class="col-4 mt-2 mb-2">
+        <div class="row ml-1">
 
-                <div class="mt-2" style="">
+            <div class="col-4 p-0 mt-0">
+
+                <div class="" style="">
                     <label class="control-label mb-0 colorhead"><b>Parent SKU:</b></label>
                     <span class="AddSku" id="getparentsku">@Model.Sku</span>
 
                 </div>
             </div>
-            <div class="col-8 mt-2 mb-2">
-                <div class="mt-2" style="">
+            <div class="col-8 p-0 mt-0">
+                <div class="" style="">
                     <label class="control-label mb-0 colorhead"><b>Title:</b></label>
                     <span class="AddTitle">@Model.ProductTitle</span>
 
                 </div>
             </div>
         </div>
+        <div class="row ml-1">
+            <div class="col-2 p-0 mt-0">
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Manufacred Name:</b></label>
+                    <span class="">@Model.ManufactureName</span>
+
+                </div>
+            </div>
+            <div class="col-2 p-0 mt-0">
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Brand:</b></label>
+                    <span class="">@Model.Brand</span>
+
+                </div>
+            </div>
+            <div class="col-2 p-0 mt-0">
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Condition:</b></label>
+                    <span class="">@Model.Condition</span>
+
+                </div>
+            </div>
+            <div class="col-2 p-0 mt-0">
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Style:</b></label>
+                    <span class="">@Model.Style</span>
+
+                </div>
+            </div>
+            <div class="col-2 p-0 mt-0">
+
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Color:</b></label>
+                    <span class="" id="">@Model.Color</span>
+
+                </div>
+            </div>
+
+
+
+
+            <div class="col-2 p-0 mt-0">
+                <div class="" style="">
+                    <label class="control-label mb-0 colorhead"><b>Feature:</b></label>
+                    <span class="">@Model.Feature</span>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="col col-md-6" style="float: right;">
-    <div style="float: right; display: flex;margin-bottom: 5px;" class="">
+<div class="container-fluid p-0"style="margin-top: 170px">
+    <div class="col col-md-6" style="float: right;">
+        <div style="float: right; display: flex;margin-bottom: 5px;" class="">
 
-        <select class="js-example-basic-single GoToURL" id="ActionMenu" name="state">
+            <select class="js-example-basic-single GoToURL" id="ActionMenu" name="state">
 
-            <option value="">Select</option>
-            <option value="CreateShadow">Create Shadow</option>
-            <option value="CreateProductOnSellerCloud">Create Products & Shadows on SellerCloud</option>
-            <option value="ImageUpdateOnSellerCloud">Update Image On SellerCloud</option>
-            <option value="CreateKits">Create Kits</option>
-        </select>
-        <button class=" btn-success btngocalss" id="btnGoOrder">Go</button>
+                <option value="">Select</option>
+                <option value="CreateShadow">Create Shadow</option>
+                <option value="CreateProductOnSellerCloud">Create Products & Shadows on SellerCloud</option>
+                <option value="ImageUpdateOnSellerCloud">Update Image On SellerCloud</option>
+                <option value="CreateKits">Create Kits</option>
+            </select>
+            <button class=" btn-success btngocalss" id="btnGoOrder">Go</button>
+        </div>
+
     </div>
-
 </div>
+
 <div class="container-fluid" style="padding: 0; margin-bottom: 100px;">
 
     <div class="" style="padding:0">
@@ -506,8 +567,9 @@
         <thead style="background-color:lightgray">
             <tr>
                 <th style="width:0.1%"><input type="checkbox" class="" id="headerCheckBoxShadow" /></th>
-                <th>SKU</th>
                 <th>Image</th>
+                <th>SKU</th>
+
                 @*<th>Shadows</th>*@
                 <th style="width:9%">Company</th>
                 @*<th style="width:5%">CompanyName</th>*@
@@ -534,12 +596,6 @@
                     <input type="checkbox" class="checkboxesShadow" id="checkbox" />
                 </td>
 
-
-
-                <td>
-                    <input type="text" class="form-control ShadowOff shadowsku" placeholder="SKU" value='@item.Sku' id="SKU" name="ShadowOff" style="border:none;" readonly />
-
-                </td>
                 <td>
                     @if (String.IsNullOrEmpty(item.CompressedImage))
                     {
@@ -577,9 +633,15 @@
                     <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
                     <input type="text" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
                 </td>
+
                 <td>
-                   
-                 
+                    <input type="text" class="form-control ShadowOff shadowsku" placeholder="SKU" value='@item.Sku' id="SKU" name="ShadowOff" style="border:none;" readonly />
+
+                </td>
+
+                <td>
+
+
 
                     <span>@item.CompanyName ( @item.CompanyId)</span>
 
@@ -626,7 +688,7 @@
                         <select asp-for="@item.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled">
                             <option value="" selected disabled hidden>AmazonEnabled</option>
                             <option value="1">TRUE</option>
-                            <option value="0"selected>FALSE</option>
+                            <option value="0" selected>FALSE</option>
                         </select>
                         <span>
                             <img style="display:none;" class="AmazonEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
@@ -671,7 +733,7 @@
 
                 </td>
                 <td>
-                    @if (item.WebsiteEnabled==false)
+                    @if (item.WebsiteEnabled == false)
                     {
                         <select asp-for="@item.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
                             <option value="" selected disabled hidden>WebsiteEnabled</option>
@@ -733,8 +795,10 @@
             <td>
                 <input type="checkbox" class="checkboxesShadow" id="checkbox" />
             </td>
+            <td style="border:none;border-color:white!important;border-right:none!important">
 
-            <td colspan="2">
+        </td>
+            <td style="">
 
                 <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
                 <input type='text' style="display:none" class='form-control AddSkuShadow' value='@itemShadow.Sku' id="SKU">
@@ -746,14 +810,13 @@
                 <span style="text-align:center"><input type="text" class="form-control AddSku shadowsku" placeholder="SKU" value='@itemShadow.Sku' readonly id="SKU" style="border:none;background-color:white" /></span>
             </td>
 
-            @*<td>
 
-        </td>*@
-        <td>
-            <span>@itemShadow.CompanyName ( @itemShadow.CompanyId)</span>
 
-        </td>
-            
+            <td>
+                <span>@itemShadow.CompanyName ( @itemShadow.CompanyId)</span>
+
+            </td>
+
 
             @if (itemShadow.CompanyId == 520)
             {
@@ -781,10 +844,10 @@
                 <td>
                     @*<input type="text" class="form-control AmazonEnabled" value=" @itemShadow.AmazonEnabled" />*@
                     @*<select asp-for="@itemShadow.AmazonEnabled" class="form-control form-control AmazonEnabled" style="" id="AmazonEnabled" disabled>
-            <option value="" disabled hidden>AmazonEnabled</option>
-            <option value="TRUE">TRUE</option>
-            <option value="FALSE" selected>FALSE</option>
-        </select>*@
+                    <option value="" disabled hidden>AmazonEnabled</option>
+                    <option value="TRUE">TRUE</option>
+                    <option value="FALSE" selected>FALSE</option>
+                </select>*@
                     @if (itemShadow.AmazonEnabled == true)
                     {
                         <select asp-for="@itemShadow.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled" disabled>
@@ -800,12 +863,12 @@
                         <select asp-for="@itemShadow.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled" disabled>
                             <option value="" selected disabled hidden>AmazonEnabled</option>
                             <option value="1">TRUE</option>
-                            <option value="0"selected>FALSE</option>
+                            <option value="0" selected>FALSE</option>
                         </select>
                         <span>
                             <img style="display:none;" class="AmazonEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
                         </span>}
-                    
+
                 </td>
                 <td>
                     <input type="text" class="form-control ASIN" data-ColumnName="z_asin_ca" value="@itemShadow.ASIN" name="ASIN" readonly />
@@ -834,7 +897,7 @@
                     </span>
                 </td>
                 <td>
-                    @if (itemShadow.WebsiteEnabled==false)
+                    @if (itemShadow.WebsiteEnabled == false)
                     {
                         <select asp-for="@itemShadow.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled" disabled>
                             <option value="" selected disabled hidden>WebsiteEnabled</option>
@@ -884,8 +947,8 @@
                 </td>
                 <td>
                     @*<input type="text" class="form-control AmazonEnabled" value=" @itemShadow.AmazonEnabled" />*@
-                    
-                    @if(itemShadow.AmazonEnabled==true)
+
+                    @if (itemShadow.AmazonEnabled == true)
                     {<select asp-for="@itemShadow.AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled">
                             <option value="" selected disabled hidden>AmazonEnabled</option>
                             <option value="1" selected>TRUE</option>
@@ -901,7 +964,7 @@
                         <select asp-for="@itemShadow.AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled">
                             <option value="" selected disabled hidden>AmazonEnabled</option>
                             <option value="1">TRUE</option>
-                            <option value="0"selected>FALSE</option>
+                            <option value="0" selected>FALSE</option>
                         </select>
                         <span>
                             <img style="display:none;" class="AmazonEnabledloader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
@@ -977,7 +1040,7 @@
 
                 <td>
 
-                    @if (itemShadow.WebsiteEnabled==false)
+                    @if (itemShadow.WebsiteEnabled == false)
                     {
                         <select asp-for="@itemShadow.WebsiteEnabled" data-ColumnName="WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
                             <option value="" selected disabled hidden>WebsiteEnabled</option>
@@ -992,7 +1055,7 @@
                     {
                         <select asp-for="@itemShadow.WebsiteEnabled" data-ColumnName="WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
                             <option value="" selected disabled hidden>WebsiteEnabled</option>
-                            <option value="1"selected>TRUE</option>
+                            <option value="1" selected>TRUE</option>
                             <option value="0">FALSE</option>
                         </select>
                         <span>

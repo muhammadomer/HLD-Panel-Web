@@ -132,14 +132,14 @@
                     <span class="requiredCustomClass">*</span>
                 </div>
 
+                <div class="form-group row">
+                    <label class="col-sm-1 text-sm-right control-label">Color</label>
+                    <div class="col-sm-3">
+                        <input asp-for="Color" type="search" id="Color" class="form-control" />
+                        @*<span asp-validation-for="Color" class="text-danger"></span>*@
+                        <span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
 
-                <!--<div class="form-group row">
-                <label class="col-sm-1 text-sm-right control-label">Color</label>
-                <div class="col-sm-3">
-                    <input asp-for="Color" type="search" id="Color" class="form-control" />-->
-                @*<span asp-validation-for="Color" class="text-danger"></span>*@
-                <!--<span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
-
+                        @Html.HiddenFor(e => Model.ColorId, htmlAttributes: new { @id = "ColorIdForMessage" })
                     </div>
                     <div style=" padding-left: 0px;" class="col-sm-1 text-sm-left">
                         <span class="requiredCustomClass">*</span>
@@ -147,16 +147,40 @@
                     </div>
                     <label asp-for="BrandId" class="col-sm-1 text-sm-right control-label"></label>
                     <div class="col-sm-3">
-                        <input asp-for="Brand" type="search" id="Brand" class="form-control" />
+                        <input asp-for="Brand" type="search" id="Brand" class="form-control" name="Brand" />
                         <span asp-validation-for="Brand" class="text-danger"></span>
                         <span style="color:red" id="empty-message-Brand"></span>
 
-
+                        @Html.HiddenFor(e => Model.BrandId, htmlAttributes: new { @id = "BrandIdForMessage" })
                     </div>
                     <span style="margin-left:10px;">
                         <a asp-controller="Brand" target="_blank" asp-action="MainView">Add Brand</a>
                     </span>
-                </div>-->
+                </div>
+                <!--<div class="form-group row">
+    <label class="col-sm-1 text-sm-right control-label">Color</label>
+    <div class="col-sm-3">
+        <input asp-for="Color" type="search" id="Color" class="form-control" />-->
+                @*<span asp-validation-for="Color" class="text-danger"></span>*@
+                <!--<span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
+
+        </div>
+        <div style=" padding-left: 0px;" class="col-sm-1 text-sm-left">
+            <span class="requiredCustomClass">*</span>
+            <span style="margin-left:10px;"> <a target="_blank" asp-controller="Color" asp-action="MainView">Add Color</a></span>
+        </div>
+        <label asp-for="BrandId" class="col-sm-1 text-sm-right control-label"></label>
+        <div class="col-sm-3">
+            <input asp-for="Brand" type="search" id="Brand" class="form-control" />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+            <span style="color:red" id="empty-message-Brand"></span>
+
+
+        </div>
+        <span style="margin-left:10px;">
+            <a asp-controller="Brand" target="_blank" asp-action="MainView">Add Brand</a>
+        </span>
+    </div>-->
                 <div class="form-group row">
                     <label class="col-sm-1 text-sm-right control-label">Catagory</label>
                     <div class="col-sm-8">
@@ -194,8 +218,8 @@
                     <label class="col-sm-1 text-sm-right control-label">Manufacturer</label>
                     <div class="col-sm-3">
                         @*<input class="form-control" asp-for="Menufacture" />
-            <span asp-validation-for="Menufacture" class="text-danger"></span>
-            <span class="UpcError"></span>*@
+                <span asp-validation-for="Menufacture" class="text-danger"></span>
+                <span class="UpcError"></span>*@
                         <select class="js-example-basic-single form-control GetManufacture1" name="ManufactureName" id="ManufactureName1" asp-for="ManufactureName">
 
                             <option value="">Manufacturer</option>
@@ -214,8 +238,8 @@
                     <div class="col-sm-3">
                         @*<input class="form-control" asp-for="MenufactureModel"/>*@
                         @*<span asp-validation-for="MenufactureModel" class="text-danger"></span>
-            <span class="UpcError"></span>*@
-                        <select class="js-example-basic-single form-control ManufactureModel" name="ManufactureModel" id="ManufactureModel" asp-for="ManufactureModel">
+                <span class="UpcError"></span>*@
+                        <select class="js-example-basic-single form-control ManufactureModel"  id="ManufactureModel" asp-for="ManufactureModel">
 
                             <option value="">Manufacturer Model</option>
 
@@ -260,13 +284,13 @@
                     @*<span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>*@
                 </div>
                 @*<div class="form-group row">
-                        <label asp-for="Feature" class="col-sm-1 text-sm-right control-label">Features</label>
-                        <div class="col-sm-8">
-                            @Html.TextAreaFor(e => Model.Feature, htmlAttributes: new { @class = "form-control", @id = "productDescription" })
+            <label asp-for="Feature" class="col-sm-1 text-sm-right control-label">Features</label>
+            <div class="col-sm-8">
+                @Html.TextAreaFor(e => Model.Feature, htmlAttributes: new { @class = "form-control", @id = "productDescription" })
 
-                        </div>
-                        <span id="productDescriptionCounter"></span>
-                    </div>*@
+            </div>
+            <span id="productDescriptionCounter"></span>
+        </div>*@
                 <div class="form-group row">
                     <label class="col-sm-1 text-sm-right control-label">Features</label>
                     <div class="col-sm-8">
@@ -278,13 +302,13 @@
 
 
                 @*@if (TempData["ProductId"] == null)
-                    {
-                        <div class="form-group row">
-                            <div class="col-sm-3">
-                                <input type="file" id="SaveImages" asp-for="UploadImages" multiple class="form-control" />
-                            </div>
-                        </div>
-                    }*@
+        {
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <input type="file" id="SaveImages" asp-for="UploadImages" multiple class="form-control" />
+                </div>
+            </div>
+        }*@
 
                 <input type="hidden" id="HfProductId" value="@Model.Sku" />
 
@@ -1058,8 +1082,47 @@
             else {
                 $('#IsExistsUPC').text("");
             }
-        });
+           
 
+        });
+        $('#Color').autocomplete({
+            autoFocus: true,
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Product/GetAlColorForAutoComplete",
+                    type: "POST",
+                    minLength: 3,
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data, ui) {
+
+                        //if (data.length > 0) {
+                        response($.map(data, function (item) {
+                            if (item != null) {
+                                return { label: item.Name, value: item.Name, id: item.ID };
+                            }
+
+                        }));
+                    }
+                })
+            },
+            select: function (event, ui) {
+
+                $('#ColorIdForMessage').val(ui.item.id);
+            },
+            response: function (event, ui) {
+                console.dir(ui.content)
+                if (ui.content.length === 0) {
+                    $("#empty-message-Color").text("No results found");
+                    $('#ColorIdForMessage').val("0");
+
+                    $('#InputSubmit').attr("disabled", true)
+                } else {
+                    $("#empty-message-Color").empty();
+                    $('#InputSubmit').attr("disabled", false)
+                }
+            }
+        });
 
     </script>
 }

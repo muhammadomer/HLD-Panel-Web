@@ -17,7 +17,14 @@ namespace Hld.WebApplication.ViewModel
         public int ID { get; set; }
         public string Sku { get; set; }
         public string ProductTitle { get; set; }
+        public string ManufactureName { get; set; }
+        public string Style { get; set; }
+        public string Feature { get; set; }
+        public string Color { get; set; }
+        public string Brand { get; set; }
+        public string Condition { get; set; }
         public List<GetChildSkuVM> list { get; set; }
+
     }
     
 }

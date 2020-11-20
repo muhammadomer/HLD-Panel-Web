@@ -1080,7 +1080,7 @@ namespace Hld.WebApplication.Helper
         public SaveParentSkuVM GetProductDetail_ProductIDByid(string ApiURL, string token, string id)
         {
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetParentSkuWithId/" + id + "");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetParentSkuWithId?id=" + id);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -2285,6 +2285,35 @@ namespace Hld.WebApplication.Helper
                 throw;
             }
             return listmodel;
+        }
+        public SaveParentSkuVM EditParentById(string ApiURL, string token, int id)
+        {
+            SaveParentSkuVM ViewModel = new SaveParentSkuVM();
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/EditParentSku?id=" + id);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewModel = JsonConvert.DeserializeObject<SaveParentSkuVM>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return ViewModel;
         }
     }
 }

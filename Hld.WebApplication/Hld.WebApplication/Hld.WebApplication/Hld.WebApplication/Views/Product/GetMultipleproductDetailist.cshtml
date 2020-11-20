@@ -127,10 +127,10 @@
             @item.Upc
         </td>*@
 
-                <td>
-
-                    <a href="/product/GetproductById?=@item.Parentproduct_id" target="_blank">Create Child SKU</a>
-                </td>
+            <td>
+                <a href="/Product/EditParentById?=@item.Parentproduct_id" style="cursor:pointer;"><img src="~/Images/icon-edit-512.png" height="20" /></a>
+                <a href="/product/GetproductById?=@item.Parentproduct_id" target="_blank">Create Child SKU</a>
+            </td>
             </tr>
             }
         </tbody>

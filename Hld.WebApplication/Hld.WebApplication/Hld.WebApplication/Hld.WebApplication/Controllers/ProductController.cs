@@ -466,12 +466,13 @@ namespace Hld.WebApplication.Controllers
         [Authorize(Policy = "Access to Add or Edit Product")]
        
         [HttpGet]
-        public IActionResult productAddMultipleSku(string ProductSKU)
+        public IActionResult productAddMultipleSku(string ProductSKU ="", SaveParentSkuVM saveParentSkuVM=null)
         {
             token = Request.Cookies["Token"];
             double currencyRate = currencyExchangeApiAccess.GetLatestCurrencyRate(ApiURL, token);
             ProductInsetUpdateViewModel model = ProductPageIndexMethod();
             SaveParentSkuVM viewModelUpdate = new SaveParentSkuVM();
+            
             viewModelUpdate.Condition = model.Condition;
             if (!string.IsNullOrEmpty(ProductSKU))
             {
@@ -484,15 +485,21 @@ namespace Hld.WebApplication.Controllers
                 {
                      viewModelUpdate = ProductApiAccess.GetProductDetail_ProductIDByid(ApiURL, token, ProductSKU);
 
-                    
                     //viewModelUpdate.CADPrice = Convert.ToDouble(viewModelUpdate.AvgCost) * currencyRate;
                     //viewModelUpdate.CurrencyRate = currencyRate;
                     TempData["ProductId"] = productID;
+
                     return View(viewModelUpdate);
+
                 }
+
+                
             }
             //model.CurrencyRate = currencyRate;
-
+            if(saveParentSkuVM != null)
+            {
+                return View(viewModelUpdate);
+            }
             return View(viewModelUpdate);
         }
         [HttpPost]
@@ -531,6 +538,15 @@ namespace Hld.WebApplication.Controllers
             //return View(ViewModel);
             //return RedirectToAction("ProductAddUpdate", ViewModel);
         }
+
+        [HttpGet]
+        public IActionResult EditParentById(int id)
+        {
+            string token = Request.Cookies["Token"];
+            SaveParentSkuVM ViewModel = new SaveParentSkuVM();
+            ViewModel = ProductApiAccess.EditParentById(ApiURL, token, id);
+            return RedirectToAction("productAddMultipleSku", "Product", ViewModel);
+        }
         [HttpGet]
         public IActionResult GetproductById(int id)
         {
@@ -544,6 +560,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             return View(ViewModel);
         }
+       
 
 
         [HttpPost]
