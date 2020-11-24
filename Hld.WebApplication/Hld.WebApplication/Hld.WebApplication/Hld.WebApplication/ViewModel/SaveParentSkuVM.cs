@@ -29,6 +29,7 @@ namespace Hld.WebApplication.ViewModel
         //public string MenufactureModel { get; set; }
         public int DeviceModel { get; set; }
         public int Style { get; set; }
+        public string StyleName { get; set; }
         public bool IsCreatedOnSC { get; set; }
         public string Feature { get; set; }
         public string Description { get; set; }

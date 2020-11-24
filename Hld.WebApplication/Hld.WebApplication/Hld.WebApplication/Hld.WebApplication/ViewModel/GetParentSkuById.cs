@@ -18,6 +18,8 @@ namespace Hld.WebApplication.ViewModel
         public string Sku { get; set; }
         public string ProductTitle { get; set; }
         public string ManufactureName { get; set; }
+        public string ManufactureModel { get; set; }
+        public string DeviceModel { get; set; }
         public string Style { get; set; }
         public string Feature { get; set; }
         public string Color { get; set; }

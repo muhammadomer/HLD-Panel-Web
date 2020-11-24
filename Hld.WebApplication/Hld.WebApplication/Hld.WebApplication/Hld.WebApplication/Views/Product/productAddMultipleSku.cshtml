@@ -98,7 +98,10 @@
     <div class="row">
         <div class="col-md-12">
             <form asp-action="productAddMultipleSku" id="AddEditForm" enctype="multipart/form-data">
-                @*<input type="hidden" id="currencyRate" value="@Model." />*@
+               
+                <input type="text" asp-for="Parentproduct_id" name="Parentproduct_id" style="display:none">
+
+
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group row">
                     <label class="col-sm-1 text-sm-right control-label">SKU</label>
@@ -222,7 +225,7 @@
                 <span class="UpcError"></span>*@
                         <select class="js-example-basic-single form-control GetManufacture1" name="ManufactureName" id="ManufactureName1" asp-for="ManufactureName">
 
-                            <option value="">Manufacturer</option>
+                            @*<option value="">Manufacturer</option>*@
 
                         </select>
 
@@ -239,9 +242,9 @@
                         @*<input class="form-control" asp-for="MenufactureModel"/>*@
                         @*<span asp-validation-for="MenufactureModel" class="text-danger"></span>
                 <span class="UpcError"></span>*@
-                        <select class="js-example-basic-single form-control ManufactureModel"  id="ManufactureModel" asp-for="ManufactureModel">
+                        <select class="js-example-basic-single form-control ManufactureModel" id="ManufactureModel"name="ManufactureModel" asp-for="ManufactureModel">
 
-                            <option value="">Manufacturer Model</option>
+                           
 
                         </select>
                     </div>
@@ -256,7 +259,7 @@
                         @*<input class="form-control" asp-for="DeviceModel" />*@
                         <select class="js-example-basic-single form-control DeviceModel" name="DeviceModel" id="DeviceModel" asp-for="DeviceModel">
 
-                            <option value="">DeviceModel Model</option>
+                            @*<option value="">DeviceModel Model</option>*@
 
                         </select>
                         <span asp-validation-for="DeviceModel" class="text-danger"></span>
@@ -272,9 +275,6 @@
                     <div class="col-sm-3">
 
                         <select class="js-example-basic-single form-control Style" name="Style" id="Style" asp-for="Style">
-
-                            <option value="">Style</option>
-
                         </select>
                         <span asp-validation-for="Style" class="text-danger"></span>
                         @*<span class="UpcError"></span>*@
@@ -417,23 +417,22 @@
 
                         var content = '';
                         $.each(data, function (index, value) {
+                            console.log("value getttttt",@Model.Style)
+                            if (value.StyleId == @Model.Style) {
 
-                            content = content + '<option value = "' + value.StyleId + '">' + value.StyleName + '</option>';
-
+                                content = content + '<option value = "' + value.StyleId + '" selected>' + value.StyleName + '</option>';
+                            } else {
+                                content = content + '<option value = "' + value.StyleId + '">' + value.StyleName + '</option>';
+                            }
 
 
                         });
 
                         $(".Style").append(content);
-                        @* $(".vendorlistgetFromPOProduct").val(@Model.Manufacturer);*@
-
-
-                    }
+                   }
         });
 
-
-
-            }
+  }
 
             StyleNameList();
             $(".Style").select2();
@@ -451,10 +450,12 @@
 
                         var content = '';
                         $.each(data, function (index, value) {
+                            if (value.ManufactureId==@Model.ManufactureName) {
+                                content = content + '<option value = "' + value.ManufactureId + '" selected>' + value.ManufactureName + '</option>';
 
-                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
-
-
+                            } else {
+                                content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
+                                }
 
                         });
 
@@ -473,7 +474,6 @@
             $(".GetManufacture1").select2();
 
 
-
             $(document).on("change", ".GetManufacture1", function () {
 
                 var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
@@ -484,39 +484,48 @@
                     url: '../product/GetManufactureIdByNameChange?ManufactureId=' + ManufactureId,
 
                     success: function (data) {
-                        console.log("rrr", data)
+                        console.log("rrr mdoel value", data)
                         $(".ManufactureModel").empty();
                         var content = '';
                         $.each(data, function (index, value) {
 
-                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureModel + '</option>';
+                             if (value.ManufactureId==@Model.ManufactureModel) {
+                                content = content + '<option value = "' + value.ManufactureId + '" selected>' + value.ManufactureModel + '</option>';
+                            }
+                            else {
+                                content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureModel + '</option>';
+                            }
+
                         });
 
                         $(".ManufactureModel").append(content);
                     }
                 });
             });
-            function ManufactureModel() {
+
+             @*function ManufactureModel() {
                 debugger;
                 $.ajax({
                     url: "/product/getallvendorforautocomplete/",
                     type: "post",
                     minlength: 3,
                     datatype: "json",
-                    data: { prefix: "" },
+                    data: { prefix:  },
                     success: function (data, ui) {
                         console.log("ddd", data)
 
                         var content = '';
                         $.each(data, function (index, value) {
-
-                            content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureName + '</option>';
-
-
+                            if (value.ManufactureId==@Model.ManufactureModel) {
+                                content = content + '<option value = "' + value.ManufactureId + '" selected>' + value.ManufactureModel + '</option>';
+                            }
+                            else {
+                                content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureModel + '</option>';
+                            }
 
                         });
 
-                        $(".manufacturemodel").append(content);
+                        $(".ManufactureModel").append(content);
 
 
 
@@ -528,19 +537,40 @@
             }
 
             ManufactureModel();
-            $(".ManufactureModel").select2();    
+            $(".ManufactureModel").select2();*@
+
+            function OnLoadManufactureId() {
+                var ManufactureId = '@Model.ManufactureName';
+                $.ajax({
+                    type: 'GET',
+                    url: '../product/GetManufactureIdByNameChange?ManufactureId=' + ManufactureId,
+                    success: function (data) {
+                        console.log("rrr mdoel value", data)
+                        $(".ManufactureModel").empty();
+                        var content = '';
+                        $.each(data, function (index, value) {
+
+                            if (value.ManufactureId ==@Model.ManufactureModel) {
+                                content = content + '<option value = "' + value.ManufactureId + '" selected>' + value.ManufactureModel + '</option>';
+                            }
+                            else {
+                                content = content + '<option value = "' + value.ManufactureId + '">' + value.ManufactureModel + '</option>';
+                            }
+
+                        });
+
+                        $(".ManufactureModel").append(content);
+                    }
+                });
+            }
+            OnLoadManufactureId();
+            $(".ManufactureModel").select2();
+
 
 
             $(document).on("change", ".ManufactureModel", function () {
                 var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
                 var ManufactureModel = $("select#ManufactureModel option").filter(":selected").val();
-               
-             
-
-             
-
-                console.log("product ManufactureModel", ManufactureModel)
-                console.log("product ManufactureId", ManufactureId)
 
                 $.ajax({
                     type: 'GET',
@@ -552,8 +582,12 @@
                         var content = '';
                         $.each(data, function (index, value) {
 
-                            content = content + '<option value = "' + value.ManufactureId + '">' + value.DeviceModel + '</option>';
-
+                            if (value.ManufactureId ==@Model.DeviceModel) {
+                                content = content + '<option value = "' + value.ManufactureId + '" selected>' + value.DeviceModel + '</option>';
+                            }
+                            else {
+                                content = content + '<option value = "' + value.ManufactureId + '">' + value.DeviceModel + '</option>';
+                            }
 
 
                         });
@@ -564,27 +598,66 @@
 
 
             });
-            function DeviceModel() {
-                debugger;
-                $.ajax({
-                    url: "/product/getallvendorforautocomplete/",
-                    type: "post",
-                    minlength: 3,
-                    datatype: "json",
-                    data: { prefix: "" },
-                    success: function (data, ui) {
-                        console.log("ddd get deivce color", data)
+
+              function OnLoadManufactureIdDevice() {
+                  var ManufactureModel = '@Model.DeviceModel';
+                  var ManufactureId = '@Model.ManufactureModel';
+                  //var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
+                  //var ManufactureModel = $("select#ManufactureModel option").filter(":selected").val();
+
+                  $.ajax({
+                      type: 'GET',
+                      url: '../product/GetManufactureDeviceIdByNameChange?ManufactureModel=' + ManufactureModel + "&ManufactureId=" + ManufactureId,
+                    success: function (data) {
+                        console.log("rrr mdoel value", data)
+                        $(".ManufactureModel").empty();
                         var content = '';
                         $.each(data, function (index, value) {
-                            content = content + '<option value = "' + value.ManufactureId + '">' + value.DeviceModel + '</option>';
+
+                            if (value.ManufactureId ==@Model.DeviceModel) {
+                                content = content + '<option value = "' + value.ManufactureId + '" selected>' + value.DeviceModel + '</option>';
+                            }
+                            else {
+                                content = content + '<option value = "' + value.ManufactureId + '">' + value.DeviceModel + '</option>';
+                            }
+
                         });
+
                         $(".DeviceModel").append(content);
                     }
                 });
-   }
-            DeviceModel();
+            }
+
+            OnLoadManufactureIdDevice()
             $(".DeviceModel").select2();
-            debugger;
+   //         function DeviceModel() {
+   //             debugger;
+   //             $.ajax({
+   //                 url: "/product/getallvendorforautocomplete/",
+   //                 type: "post",
+   //                 minlength: 3,
+   //                 datatype: "json",
+   //                 data: { prefix: "" },
+   //                 success: function (data, ui) {
+   //                     console.log("ddd get deivce color", data)
+   //                     var content = '';
+   //                     $.each(data, function (index, value) {
+   //                         content = content + '<option value = "' + value.ManufactureId + '">' + value.DeviceModel + '</option>';
+   //                     });
+   //                     $(".DeviceModel").append(content);
+   //                 }
+   //             });
+   //}
+   //         DeviceModel();
+   //         $(".DeviceModel").select2();
+
+
+
+
+
+
+
+
             function autocolor() {
                 $('.AddColor').autocomplete({
                     autoFocus: true,
@@ -997,9 +1070,11 @@
                     });
                 }
             });
+
+
         });
 
-        $(".Style").select2();
+
         function SubmitForm() {
             var files = $('#UloadImages').find('#fUpload').prop("files");
             var fdata = new FormData();
@@ -1082,7 +1157,7 @@
             else {
                 $('#IsExistsUPC').text("");
             }
-           
+
 
         });
         $('#Color').autocomplete({
@@ -1122,6 +1197,7 @@
                     $('#InputSubmit').attr("disabled", false)
                 }
             }
+
         });
 
     </script>

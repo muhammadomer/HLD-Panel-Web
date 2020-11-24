@@ -496,19 +496,25 @@ namespace Hld.WebApplication.Controllers
                 
             }
             //model.CurrencyRate = currencyRate;
+           
             if(saveParentSkuVM != null)
+
             {
-                return View(viewModelUpdate);
+                saveParentSkuVM.Condition = viewModelUpdate.Condition;
+                return View(saveParentSkuVM);
             }
             return View(viewModelUpdate);
         }
         [HttpPost]
         public IActionResult productAddMultipleSku(SaveParentSkuVM ViewModel)
         {
+
+            token = Request.Cookies["Token"];
             token = Request.Cookies["Token"];
             
             //getting condition list
             List<ConditionViewModel> ListconditionViewModels = conditionApiAccess.GetAllCondition(ApiURL, token);
+
             List<SelectListItem> _listConditionSelectListItems = new List<SelectListItem>();
             _listConditionSelectListItems.Insert(0, new SelectListItem() { Value = "0", Text = "Select Condition" });
             if (ListconditionViewModels.Count > 0)
@@ -527,13 +533,21 @@ namespace Hld.WebApplication.Controllers
                     }
                 }
             }
+            if (ViewModel.Parentproduct_id > 0)
+            {
+                ProductApiAccess.productAddMultipleSku(ApiURL, token, ViewModel);
+            }
+            else
+            {
+               
 
-            ViewModel.Condition = _listConditionSelectListItems;
-           
-            conditionApiAccess.GetAllCondition(ApiURL, token);
-            ProductApiAccess.productAddMultipleSku(ApiURL, token, ViewModel);
-            ViewBag.S3BucketURL = s3BucketURL;
-            ViewBag.S3BucketURL_large = s3BucketURL_large;
+                ViewModel.Condition = _listConditionSelectListItems;
+
+                conditionApiAccess.GetAllCondition(ApiURL, token);
+                ProductApiAccess.productAddMultipleSku(ApiURL, token, ViewModel);
+                ViewBag.S3BucketURL = s3BucketURL;
+                ViewBag.S3BucketURL_large = s3BucketURL_large;
+            }
             return RedirectToAction("GetMultipleproductDetailist", "Product",ViewModel);
             //return View(ViewModel);
             //return RedirectToAction("ProductAddUpdate", ViewModel);
