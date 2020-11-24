@@ -45,7 +45,7 @@
                    
                     @if (item.QueuedJobLink.Length >= 6)
                     {
-                        <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@item.QueuedJobLink" target="_blank" style="vertical-align: sub;cursor:pointer">@item.QueuedJobLink.Substring(item.QueuedJobLink.Length - 6)</a></span>
+                        <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@item.QueuedJobLink&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">@item.QueuedJobLink.Substring(item.QueuedJobLink.Length - 6)</a></span>
                     }
                     else
                     {

@@ -350,7 +350,7 @@
             </div>
             <div class="col-6 p-0 mt-0">
                 <div class="" style="">
-                    <label class="control-label mb-0 colorhead"><b>Manu: name ->:</b></label>
+                    <label class="control-label mb-0 colorhead"><b>Manufacture ->:</b></label>
                     <span class="">@Model.ManufactureName</span><b class="colorhead"> ->:</b> <span class="">@Model.ManufactureModel</span><b class="colorhead"> ->:</b> <span class="">@Model.DeviceModel</span>
 
                 </div>
@@ -617,202 +617,202 @@
                     if (string.IsNullOrEmpty(item.ShadowOff))
                     {
 
-                        <tr style="background: #dee2e6;">
-                            <td>
-                                <input type="checkbox" class="checkboxesShadow" id="checkbox" />
-                            </td>
+            <tr style="background: #dee2e6;">
+                <td>
+                    <input type="checkbox" class="checkboxesShadow" id="checkbox" />
+                </td>
 
-                            <td>
-                                @if (String.IsNullOrEmpty(item.CompressedImage))
-                                {
+                <td>
+                    @if (String.IsNullOrEmpty(item.CompressedImage))
+                    {
 
-                                    <div class="image-upload">
-
-
-                                        <label class="input-label">
-                                            <img class="imgupload imguploads" src="/Images/img-icon-2.jpg" id="uploader" />
-                                        </label>
-                                        <input id="file-input" type="file" />
-                                    </div>
+                        <div class="image-upload">
 
 
-                                }
-                                else
-                                {
-                                    <div class="image-upload">
-                                        @*<a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                                                <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
-                                            </a>*@
-                                        <label class="input-label">
-                                            <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                                                <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded imgupload imguploads" height="30" width="30" id="uploader" />
-                                            </a>
-                                        </label>
-                                        <input id="file-input" type="file" />
-                                    </div>
-                                }
-                                <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
-                                <input type='text' style="display:none" class='form-control AddSkuShadow' value='@item.Sku' id="SKU">
-                                <input type='text' style="display:none" class='form-control productstatus' value='@item.title'>
-                                <input type='text' style="display:none" class='form-control product_id' value='@item.Parentproduct_id'>
-                                <input type='text' style="display:none" class='form-control child_id' value='@item.Childproduct_id'>
-                                <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
-                                <input type="text" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
-                            </td>
-
-                            <td>
-                                <input type="text" class="form-control ShadowOff shadowsku" placeholder="SKU" value='@item.Sku' id="SKU" name="ShadowOff" style="border:none;" readonly />
-
-                            </td>
-
-                            <td>
+                            <label class="input-label">
+                                <img class="imgupload imguploads" src="/Images/img-icon-2.jpg" id="uploader" />
+                            </label>
+                            <input id="file-input" type="file" />
+                        </div>
 
 
+                    }
+                    else
+                    {
+                        <div class="image-upload">
+                            @*<a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                    </a>*@
+                            <label class="input-label">
+                                <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                                    <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded imgupload imguploads" height="30" width="30" id="uploader" />
+                                </a>
+                            </label>
+                            <input id="file-input" type="file" />
+                        </div>
+                    }
+                    <input type='text' style="display:none" class='form-control ColorAlias' name="ColorAlias" value=''>
+                    <input type='text' style="display:none" class='form-control AddSkuShadow' value='@item.Sku' id="SKU">
+                    <input type='text' style="display:none" class='form-control productstatus' value='@item.title'>
+                    <input type='text' style="display:none" class='form-control product_id' value='@item.Parentproduct_id'>
+                    <input type='text' style="display:none" class='form-control child_id' value='@item.Childproduct_id'>
+                    <input type='text' style="display:none" class='form-control ColorId' value='@item.ColorIds'>
+                    <input type="text" class="form-control AddColor" id="Color" name="Color" placeholder="Color" style="display:none" value='@item.Colorname' readonly />
+                </td>
 
-                                <span>@item.CompanyName ( @item.CompanyId)</span>
+                <td>
+                    <input type="text" class="form-control ShadowOff shadowsku" placeholder="SKU" value='@item.Sku' id="SKU" name="ShadowOff" style="border:none;" readonly />
 
-                            </td>
+                </td>
 
-
-                            <td>
-                                @if (String.IsNullOrEmpty(item.AmazonMerchantSKU))
-                                {
-                                    <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@item.Sku" name="AmazonMerchantSKU" />
-
-                                    <span>
-                                        <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                }
-
-                                else
-                                {
-                                    <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@item.AmazonMerchantSKU" name="AmazonMerchantSKU" />
-
-                                    <span>
-                                        <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                }
-
-                            </td>
-                            <td>
-
-                                @*<input type="text" class="form-control AmazonEnabled" value=" @item.AmazonEnabled" />*@
-
-                                @if (item.AmazonEnabled == true)
-                                {
-                                    <select asp-for="@item.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled">
-                                        <option value="" selected disabled hidden>AmazonEnabled</option>
-                                        <option value="1" selected>TRUE</option>
-                                        <option value="0">FALSE</option>
-                                    </select>
-                                    <span>
-                                        <img style="display:none;" class="AmazonEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                }
-                                else
-                                {
-                                    <select asp-for="@item.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled">
-                                        <option value="" selected disabled hidden>AmazonEnabled</option>
-                                        <option value="1">TRUE</option>
-                                        <option value="0" selected>FALSE</option>
-                                    </select>
-                                    <span>
-                                        <img style="display:none;" class="AmazonEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                }
-                            </td>
-                            <td>
-
-                                <input type="text" class="form-control ASIN" data-ColumnName="z_asin_ca" value="@item.ASIN" name="ASIN" />
-                                <span>
-                                    <img style="display:none;" class="ASINloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                </span>
-                            </td>
-
-
-                            <td>
-                                @if (String.IsNullOrEmpty(item.FulfilledBy))
-                                {
-                                    <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="Merchant" name="FulfilledBy" />
-                                    <span>
-                                        <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                }
-
-
-                                else
-                                {
-                                    <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@item.FulfilledBy" name="FulfilledBy" />
-                                    <span>
-                                        <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                    </span>
-
-                                }
-
-                            </td>
-
-                            <td>
-                                <input type="text" data-ColumnName="AmazonFBASKU" class="form-control AmazonFBASKU" value="@item.AmazonFBASKU" name="AmazonFBASKU" readonly />
-                                <span>
-                                    <img style="display:none;" class="AmazonFBASKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                </span>
-
-                            </td>
-                            <td>
-                                @if (item.WebsiteEnabled == false)
-                                {
-                                    <select asp-for="@item.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
-                                        <option value="" selected disabled hidden>WebsiteEnabled</option>
-                                        <option value="1">TRUE</option>
-                                        <option value="0" selected>FALSE</option>
-                                    </select>
-                                    <span>
-                                        <img style="display:none;" class="WebsiteEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                }
-
-                                else
-                                {
-                                    <select asp-for="@item.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
-                                        <option value="" selected disabled hidden>WebsiteEnabled</option>
-                                        <option value="1" selected>TRUE</option>
-                                        <option value="0">FALSE</option>
-                                    </select>
-                                    <span>
-                                        <img style="display:none;" class="WebsiteEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                }
-
-                            </td>
+                <td>
 
 
 
-                            <td>
+                    <span>@item.CompanyName ( @item.CompanyId)</span>
 
-                                @if (@item.IsCreatedOnSC == 1)
-                                {
-                                    <span style="color:green;font-weight:bold">Created on SC</span>
-                                }
-                                else
-                                {
-                                    <span></span>
-                                }<br />
-                                @if (item.IsRelated.Length >= 6)
-                                {
-                                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@item.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)</a></span>
-                                }
-                                else
-                                {
-                                    <span></span>
-                                }
-                                @*<span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@item.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(@item.IsRelated.Length - 6)</a></span>*@
-                            </td>
-                            @*<td>
+                </td>
 
-                                    <button type='button' class='btn btn-sm btn-success submitSave' style="display:none;" value=''>Save</button>
-                                    <button type='button' class='btn btn-sm btn-success editUpdate' value=''>Update</button>
-                                </td>*@
-                        </tr>
+
+                <td>
+                    @if (String.IsNullOrEmpty(item.AmazonMerchantSKU))
+                    {
+                        <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@item.Sku" name="AmazonMerchantSKU" />
+
+                        <span>
+                            <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+
+                    else
+                    {
+                        <input type="text" class="form-control AmazonMerchantSKU" data-ColumnName="AmazonMerchantSKU" value="@item.AmazonMerchantSKU" name="AmazonMerchantSKU" />
+
+                        <span>
+                            <img style="display:none;" class="AmazonMerchantSKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+
+                </td>
+                <td>
+
+                    @*<input type="text" class="form-control AmazonEnabled" value=" @item.AmazonEnabled" />*@
+
+                    @if (item.AmazonEnabled == true)
+                    {
+                        <select asp-for="@item.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled">
+                            <option value="" selected disabled hidden>AmazonEnabled</option>
+                            <option value="1" selected>TRUE</option>
+                            <option value="0">FALSE</option>
+                        </select>
+                        <span>
+                            <img style="display:none;" class="AmazonEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+                    else
+                    {
+                        <select asp-for="@item.AmazonEnabled" data-ColumnName="AmazonEnabled" class="form-control formselectoption AmazonEnabled" style="" id="AmazonEnabled">
+                            <option value="" selected disabled hidden>AmazonEnabled</option>
+                            <option value="1">TRUE</option>
+                            <option value="0" selected>FALSE</option>
+                        </select>
+                        <span>
+                            <img style="display:none;" class="AmazonEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+                </td>
+                <td>
+
+                    <input type="text" class="form-control ASIN" data-ColumnName="z_asin_ca" value="@item.ASIN" name="ASIN" />
+                    <span>
+                        <img style="display:none;" class="ASINloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                    </span>
+                </td>
+
+
+                <td>
+                    @if (String.IsNullOrEmpty(item.FulfilledBy))
+                    {
+                        <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="Merchant" name="FulfilledBy" />
+                        <span>
+                            <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+
+
+                    else
+                    {
+                        <input type="text" class="form-control FulfilledBy" data-ColumnName="FulfilledBy" value="@item.FulfilledBy" name="FulfilledBy" />
+                        <span>
+                            <img style="display:none;" class="FulfilledByloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+
+                    }
+
+                </td>
+
+                <td>
+                    <input type="text" data-ColumnName="AmazonFBASKU" class="form-control AmazonFBASKU" value="@item.AmazonFBASKU" name="AmazonFBASKU" readonly />
+                    <span>
+                        <img style="display:none;" class="AmazonFBASKUloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                    </span>
+
+                </td>
+                <td>
+                    @if (item.WebsiteEnabled == false)
+                    {
+                        <select asp-for="@item.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
+                            <option value="" selected disabled hidden>WebsiteEnabled</option>
+                            <option value="1">TRUE</option>
+                            <option value="0" selected>FALSE</option>
+                        </select>
+                        <span>
+                            <img style="display:none;" class="WebsiteEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+
+                    else
+                    {
+                        <select asp-for="@item.WebsiteEnabled" class="form-control formselectoption WebsiteEnabled" style="" id="WebsiteEnabled">
+                            <option value="" selected disabled hidden>WebsiteEnabled</option>
+                            <option value="1" selected>TRUE</option>
+                            <option value="0">FALSE</option>
+                        </select>
+                        <span>
+                            <img style="display:none;" class="WebsiteEnabledloader" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                        </span>
+                    }
+
+                </td>
+
+
+
+                <td>
+
+                    @if (@item.IsCreatedOnSC == 1)
+                    {
+                        <span style="color:green;font-weight:bold">Created on SC</span>
+                    }
+                    else
+                    {
+                        <span></span>
+                    }<br />
+                    @if (item.IsRelated.Length >= 6)
+                    {
+                        <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@item.IsRelated&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)</a></span>
+                    }
+                    else
+                    {
+                        <span></span>
+                    }
+                    @*<span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?=@item.IsRelated&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(@item.IsRelated.Length - 6)</a></span>*@
+                </td>
+                @*<td>
+       
+            <button type='button' class='btn btn-sm btn-success submitSave' style="display:none;" value=''>Save</button>
+            <button type='button' class='btn btn-sm btn-success editUpdate' value=''>Update</button>
+        </td>*@
+            </tr>
                     }
 
                     foreach (var itemShadow in Model.list.Where(p => p.ShadowOff.Equals(item.Sku)))
@@ -1106,10 +1106,11 @@
                                 @* commented by Mehdi*@
                                 @if (@itemShadow.IsRelated.Length >= 6)
                                 {
-                                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/MyAccount?=@itemShadow.IsRelated" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
+                                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@itemShadow.IsRelated&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
                                 }
                                 else
                                 {
+                                
                                     <span></span>
                                 }
                             </td>

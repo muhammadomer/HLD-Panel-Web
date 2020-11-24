@@ -6,7 +6,7 @@
 }
 <link href="~/select2/css/select2.min.css" rel="stylesheet" />
 <style type="text/css">
-    .form-control {
+    .dropdownselect {
         padding: 0px;
     }
 
@@ -129,25 +129,25 @@
                 <div class="form-group row">
                     <label class="col-sm-1 text-sm-right  control-label">Condition</label>
                     <div class="col-sm-3">
-                        @Html.DropDownListFor(x => x.ConditionId, new SelectList(Model.Condition, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "Condition" })
+                        @Html.DropDownListFor(x => x.ConditionId, new SelectList(Model.Condition, "Value", "Text"), htmlAttributes: new { @class = "form-control dropdownselect", @id = "Condition" })
                         @*<span asp-validation-for="ConditionId" class="text-danger"></span>*@
                     </div>
                     <span class="requiredCustomClass">*</span>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-1 text-sm-right control-label">Color</label>
+                    <!--<label class="col-sm-1 text-sm-right control-label">Color</label>
                     <div class="col-sm-3">
-                        <input asp-for="Color" type="search" id="Color" class="form-control" />
+                        <input asp-for="Color" type="search" id="Color" class="form-control" />-->
                         @*<span asp-validation-for="Color" class="text-danger"></span>*@
-                        <span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
+                        <!--<span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
 
-                        @Html.HiddenFor(e => Model.ColorId, htmlAttributes: new { @id = "ColorIdForMessage" })
+                      
                     </div>
                     <div style=" padding-left: 0px;" class="col-sm-1 text-sm-left">
                         <span class="requiredCustomClass">*</span>
                         <span style="margin-left:10px;"> <a target="_blank" asp-controller="Color" asp-action="MainView">Add Color</a></span>
-                    </div>
+                    </div>-->
                     <label asp-for="BrandId" class="col-sm-1 text-sm-right control-label"></label>
                     <div class="col-sm-3">
                         <input asp-for="Brand" type="search" id="Brand" class="form-control" name="Brand" />
