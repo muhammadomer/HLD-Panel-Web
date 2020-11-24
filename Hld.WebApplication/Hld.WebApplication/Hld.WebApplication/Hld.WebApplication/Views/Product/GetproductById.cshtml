@@ -344,18 +344,18 @@
             <div class="col-4 p-0 mt-0">
                 <div class="" style="">
                     <label class="control-label mb-0 colorhead"><b>Title:</b></label>
-                    <span class="AddTitle">@Model.ProductTitle</span>
+                    <span class="">@Model.ProductTitle</span>
 
                 </div>
             </div>
-            <div class="col-2 p-0 mt-0">
+            <div class="col-6 p-0 mt-0">
                 <div class="" style="">
                     <label class="control-label mb-0 colorhead"><b>Manu: name ->:</b></label>
-                    <span class="AddTitle">@Model.ManufactureName</span>
+                    <span class="">@Model.ManufactureName</span><b class="colorhead"> ->:</b> <span class="">@Model.ManufactureModel</span><b class="colorhead"> ->:</b> <span class="">@Model.DeviceModel</span>
 
                 </div>
             </div>
-            <div class="col-2 p-0 mt-0">
+            @*<div class="col-2 p-0 mt-0">
                 <div class="" style="">
                     <label class="control-label mb-0 colorhead"><b>Manu: modal ->:</b></label>
                     <span class="AddTitle">@Model.ManufactureModel</span>
@@ -368,7 +368,7 @@
                     <span class="AddTitle">@Model.DeviceModel</span>
 
                 </div>
-            </div>
+            </div>*@
         </div>
         <div class="row ml-1">
             @*<div class="col-2 p-0 mt-0">
@@ -1553,6 +1553,38 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="Bulk" style="margin-top: 130px;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modelwidth">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-check" style="color:green"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                </strong>
+
+
+                <button type="button" class="close closeimg" data-dismiss="modal">&times;</button>
+            </div>
+
+
+            <div class="modal-body myclassshide" style="padding-left:0!important;">
+                <p class="modal-title" style=" padding-left: 15px;">
+                    Bulk Updated Successfully!
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default closeimg" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
@@ -2368,6 +2400,19 @@
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();
+                            if (res.status != "") {
+                                $("#Bulk").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+
+                                });
+                                $(".closeimg").click(function () {
+                                    location.reload();
+                                })
+                            }
+                            else {
+                                alert("something went wrong")
+                            }
                         }
                     });
                 }
