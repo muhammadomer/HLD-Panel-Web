@@ -851,7 +851,7 @@ namespace Hld.WebApplication.Controllers
                 updateIsRelation.FileName = excelName ;
                 updateIsRelation.JobCreationTime = DateTime.Now;
                 updateIsRelation.JobType = "Relation Created";
-                updateIsRelation.Status = "Completed";
+                updateIsRelation.Status = "Submitted";
                 ProductApiAccess.UpdateRelationInBulkUpdateTable(ApiURL, token, updateIsRelation);
                 foreach (var item in viewModels)
                 {
@@ -949,7 +949,7 @@ namespace Hld.WebApplication.Controllers
                     updateJobIdForBulkUpdate.S3FileDirectoryPath = getS3FilePath;
                     updateJobIdForBulkUpdate.FileNames = excelName;
                     updateJobIdForBulkUpdate.JobType = "Bulk Update";
-                    updateJobIdForBulkUpdate.Status = "Completed";
+                    updateJobIdForBulkUpdate.Status = "Submitted";
                     ProductApiAccess.BulkUpdateJobId(ApiURL, token, updateJobIdForBulkUpdate);
                     foreach (var item in data)
                     {
@@ -957,7 +957,6 @@ namespace Hld.WebApplication.Controllers
                         updateJobIdForBulkUpdate.Sku = item.Sku;
                         updateJobIdForBulkUpdate.ID = status.ID;
                         updateJobIdForBulkUpdate.QueuedJobLink = status.QueuedJobLink;
-                        
                         ProductApiAccess.BulkUpdateJobIdForProductData(ApiURL, token, updateJobIdForBulkUpdate);
                     }
                 }
