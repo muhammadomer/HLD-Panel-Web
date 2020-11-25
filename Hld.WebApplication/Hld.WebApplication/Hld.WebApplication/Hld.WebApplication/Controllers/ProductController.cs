@@ -850,7 +850,7 @@ namespace Hld.WebApplication.Controllers
                 updateIsRelation.FileDirectory = getFileDiractory;
                 updateIsRelation.FileName = excelName ;
                 updateIsRelation.JobCreationTime = DateTime.Now;
-                updateIsRelation.JobType = "Relation Created";
+                updateIsRelation.JobType = "Relation Created for product and Shadows";
                 updateIsRelation.Status = "Submitted";
                 ProductApiAccess.UpdateRelationInBulkUpdateTable(ApiURL, token, updateIsRelation);
                 foreach (var item in viewModels)

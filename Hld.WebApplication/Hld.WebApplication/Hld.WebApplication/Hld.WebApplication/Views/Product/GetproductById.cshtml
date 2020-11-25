@@ -344,14 +344,14 @@
             <div class="col-4 p-0 mt-0">
                 <div class="" style="">
                     <label class="control-label mb-0 colorhead"><b>Title:</b></label>
-                    <span class="">@Model.ProductTitle</span>
+                    <span class="AddTitle">@Model.ProductTitle</span>
 
                 </div>
             </div>
             <div class="col-6 p-0 mt-0">
                 <div class="" style="">
-                    <label class="control-label mb-0 colorhead"><b>Manufacture ->:</b></label>
-                    <span class="">@Model.ManufactureName</span><b class="colorhead"> ->:</b> <span class="">@Model.ManufactureModel</span><b class="colorhead"> ->:</b> <span class="">@Model.DeviceModel</span>
+                    <label class="control-label mb-0 colorhead"><b>Manufacture :</b></label>
+                    <span class="">@Model.ManufactureName</span><b class="colorhead"> --></b> <span class="">@Model.ManufactureModel</span><b class="colorhead"> --></b> <span class="">@Model.DeviceModel</span>
 
                 </div>
             </div>
@@ -799,7 +799,7 @@
                     }<br />
                     @if (item.IsRelated.Length >= 6)
                     {
-                        <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@item.IsRelated&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)</a></span>
+                        <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)</a></span>
                     }
                     else
                     {
@@ -1106,7 +1106,7 @@
                                 @* commented by Mehdi*@
                                 @if (@itemShadow.IsRelated.Length >= 6)
                                 {
-                                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@itemShadow.IsRelated&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
+                                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
                                 }
                                 else
                                 {
