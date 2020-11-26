@@ -879,6 +879,12 @@
                                             FBA CA Int: <label class=@(item.ProductSKU+"InterimFBACA")>  @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "Interim FBA CA").Select(e => e.AvailableQty).FirstOrDefault()</label>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            On Order:<label><a href="https://erp.hldinc.net/Shipment/ShipmentHistoryList?SKU=D7-WLC-11-BK&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=ReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=">@item.OnOrder</a></label>
+
+                                        </td>
+                                    </tr>
                                 </table>
                                 @*<div class="row">
 
