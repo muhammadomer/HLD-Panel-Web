@@ -363,7 +363,6 @@ namespace Hld.WebApplication.Controllers
         public IActionResult SendOrderToZinc(string ASIN, string MaxPrice, string orderid, string SellerOrderID, string orderDetailID)
         {
             token = Request.Cookies["Token"];
-
             //SaveZincOrders.RootObject rootObject = _zincApiAccess.GetCustomerDetailForSendOrderToZinc(ApiURL, token,ASIN,MaxPrice,orderid,SellerOrderID,orderDetailID);
             string rootObject = _zincApiAccess.GetCustomerDetailForSendOrderToZinc(ApiURL, token, ASIN, MaxPrice, orderid, SellerOrderID, orderDetailID);
             return Json(rootObject);

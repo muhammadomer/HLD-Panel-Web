@@ -17,6 +17,7 @@ namespace Hld.WebApplication.ViewModel
         public string IsParent { get; set; }
         public string IsNotes { get; set; }
         public string ShippingPrice { get; set; }
+        public int OnOrder { get; set; }
         public decimal TotalPrice { get; set; }
         public decimal TotalTax { get; set; }
         public decimal TotalComission { get; set; }

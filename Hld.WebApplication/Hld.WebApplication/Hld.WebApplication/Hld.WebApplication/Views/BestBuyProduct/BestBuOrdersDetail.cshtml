@@ -834,7 +834,7 @@ var profitpercentagedetail = $(this).attr('data-profitpercentagedetail');
                     $.ajax({
                         type: 'Get',
                         url: URL,
-                        data: {ASIN:RadioButtonASIN,MaxPrice:RadioButtonMaxPrice,orderid:OrderId,SellerOrderID:SellerCloudOrderId,orderDetailID:OrderDetailID},
+                        data: { ASIN: RadioButtonASIN, MaxPrice: RadioButtonMaxPrice, orderid: OrderId, SellerOrderID: SellerCloudOrderId, orderDetailID: OrderDetailID},
                         dataType: 'json',
                         traditional: true,
                         success: function (data) {

@@ -22,6 +22,7 @@ namespace Hld.WebApplication.ViewModel
         public decimal UnitPrice { get; set; }
         public string ProfitLoss { get; set; }
         public int OrderDetailID { get; set; }
+        public int OnOrder { get; set; }
         public decimal Comission { get; set; }
         public decimal TaxGST { get; set; }
         public decimal TaxPST { get; set; }
