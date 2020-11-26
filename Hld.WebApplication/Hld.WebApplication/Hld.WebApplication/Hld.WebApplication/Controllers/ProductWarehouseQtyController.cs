@@ -100,6 +100,7 @@ namespace Hld.WebApplication.Controllers
                 foreach (var item in warehouseId.ToList())
                 {
                     ProductWarehouseQuantityViewModel Quantity = productWarehouseQtyApiAccess.GetProductWarehouseFormSC(SCRestURL, authenticate.access_token, sku, item);
+                   
                     ProductWarehouseQtyViewModel productWarehouse = new ProductWarehouseQtyViewModel();
                     productWarehouse.AvailableQty = Quantity.AvailableQty;
                     productWarehouse.ProductSku = Quantity.ProductID;

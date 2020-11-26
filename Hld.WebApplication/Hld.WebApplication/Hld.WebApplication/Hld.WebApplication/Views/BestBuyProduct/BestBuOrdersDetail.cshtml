@@ -401,7 +401,8 @@
 
                         <div class=" col-md-2">
 
-                            <button class="btn btnup bg-primary" data-toggle="modal" data-target="#myModal" id="btnUpdateProductImages" style="color: #fff;" type="button">Update SC Orders</button>
+                            <button class="btn btnup bg-primary" data-toggle="modal" data-target="#
+                                    " id="btnUpdateProductImages" style="color: #fff;" type="button">Update SC Orders</button>
                             <span>
                                 <img style="display:none;" class="UpdateASINButtonLoaderForOrderStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                             </span>
@@ -544,7 +545,84 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModalQTY" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <strong style="">
+                    <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Error!</span>
+                </strong>
 
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBodyQTY">
+                <div class="row">
+                    <h6 style="padding-left:17px">Order status is not suitable to send to zinc.</h6>
+
+                </div>
+                
+                <div class="lblSellerCloudOrderStatus">
+                    1: <span style="color:blue;"></span>
+                </div>
+               
+                <div class="checkSellerCloudOrderStatus">
+                    2: <span style="color:blue;"></span>
+                </div>
+                
+                <div class="paymentStatus">
+                    3: <span style="color:blue;"></span>
+                </div>
+              
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="myModalERR" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <strong style="margin-left: 17px;">
+                    <i class="fa fa-exclamation-triangle" style="color:orange"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Warning!</span>
+                </strong>
+               
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBodyERR">
+                
+               
+
+                    <h6 style="padding-left:17px">Stock is available in default warehouse, please ensure prior to sending order to Zinc</h6>
+                    <h6 style="padding-left:17px"><b>WHQ: </b><span class="WHQQTY" style="color:cadetblue"></span></h6>
+                   
+                
+
+            </div>
+            <div class="modal-footer">
+                <div class="row col-md-12 p-0">
+                    <div class="col-md-6 p-0">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="btn btn-success m-1" id="sellerstatus" target="_blank" style="float:right;color:white">Proceed!</a>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -803,9 +881,72 @@
 
             //send to Zinc (Save Order to Zinc)
 
+            function GetstatusfromSellerCloud() {
+                $('#myModalERR').modal('hide');
+                //sendToZincReferenceAferSubmit = $(this);
 
+                var sku = $(sendToZincReferenceAferSubmit).attr('data-SKU');
+
+                var RadioButtonASINChecked = $(sendToZincReferenceAferSubmit).closest('tr').find("input:radio[name='choice']:checked");
+                radioSKU = $(RadioButtonASINChecked).attr('value');
+                var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
+                RadioButtonASIN = $(RadioButtonASINChecked).attr('data-ASIN')
+                var RadioButtonMaxPrice = $(RadioButtonASINChecked).attr('data-MaxPrice')
+
+                var profitlosedetail = $(sendToZincReferenceAferSubmit).attr('data-profitlosedetail');
+                var profitpercentagedetail = $(sendToZincReferenceAferSubmit).attr('data-profitpercentagedetail');
+                var OrderDetailID = $(sendToZincReferenceAferSubmit).attr('data-OrderDetailID');
+
+                var OrderId = $(sendToZincReferenceAferSubmit).attr('data-OrderId');
+                var URL = '/Zinc/SendOrderToZinc';
+                var SellerCloudOrderId = $(sendToZincReferenceAferSubmit).attr('data-SellerCloudOrderId');
+                var Url = '/SellerCloud/GetOrderStatus/';
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { orderid: SellerCloudOrderId },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                        if (data.DropshipStatus == "None" && data.scOrderStatus == "InProcess" && data.PaymentStats == "Charged") {
+                            $.ajax({
+                                type: 'Get',
+                                url: URL,
+                                data: { ASIN: RadioButtonASIN, MaxPrice: RadioButtonMaxPrice, orderid: OrderId, SellerOrderID: SellerCloudOrderId, orderDetailID: OrderDetailID },
+                                dataType: 'json',
+                                traditional: true,
+                                success: function (data) {
+                                    JsonDataOfOrder = data;
+                                    $.get('@Url.Action("ConfirmationOfZincOrder", "Zinc")', { JsonData: JsonDataOfOrder, profitlose: profitlosedetail, percentage: profitpercentagedetail }).done(function (response) {
+
+                                        $('#modelBody').empty();
+                                        $('#modelBody').html(response);
+
+                                        var successMessage = $('#modelBody').find('.successmessage');
+                                        $(successMessage).hide()
+
+
+                                        $('#myModal').modal('show');
+                                    });
+
+                                }
+                            });
+                        }
+                        else {
+                            $('#myModalQTY').modal('show');
+                           
+                            $('#modelBodyQTY').find('.lblSellerCloudOrderStatus>span').append(data.scOrderStatus);
+                            $('#modelBodyQTY').find('.checkSellerCloudOrderStatus>span').append(data.DropshipStatus);
+                            $('#modelBodyQTY').find('.paymentStatus>span').append(data.PaymentStats);
+                        }
+                    }
+                });
+            }
+            
             function zendToZinc() {
+                debugger
 
+                //mychange
                 sendToZincReferenceAferSubmit = $(this);
 
                 var sku=$(this).attr('data-SKU');
@@ -818,47 +959,39 @@
                 if (isRadioButtonChecked == true && sku== radioSKU) {
 
                     var profitlosedetail = $(this).attr('data-profitlosedetail');
-var profitpercentagedetail = $(this).attr('data-profitpercentagedetail');
+                    var profitpercentagedetail = $(this).attr('data-profitpercentagedetail');
                     var OrderDetailID = $(this).attr('data-OrderDetailID');
 
                     var OrderId = $(this).attr('data-OrderId');
 
                     var SellerCloudOrderId = $(this).attr('data-SellerCloudOrderId');
                     var URL = '/Zinc/SendOrderToZinc';
-                 // console.log("ASIN "+RadioButtonASIN);
-                 //  console.log("Max Price "+RadioButtonMaxPrice);
-                 // console.log("OrderDetailID "+OrderDetailID);
-                 // console.log(isRadioButtonChecked);
-                 // console.log("OrderId "+OrderId);
-                 // console.log("SellerCloudOrderId " + SellerCloudOrderId);
+                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+
                     $.ajax({
                         type: 'Get',
-                        url: URL,
-                        data: { ASIN: RadioButtonASIN, MaxPrice: RadioButtonMaxPrice, orderid: OrderId, SellerOrderID: SellerCloudOrderId, orderDetailID: OrderDetailID},
+                        url: URLQTY,
+                        data: { sku: sku },
                         dataType: 'json',
                         traditional: true,
                         success: function (data) {
-                            JsonDataOfOrder = data;
-                            $.get('@Url.Action("ConfirmationOfZincOrder", "Zinc")', { JsonData: JsonDataOfOrder, profitlose: profitlosedetail, percentage: profitpercentagedetail }).done(function (response) {
+                           
+                            $.each(data, function (index, value) {
+                                if (value.WarehouseID == 5) {
+                                    if (value.AvailableQty > 0 && value.WarehouseID == 5) {
+                                        $('#myModalERR').modal('show');
+                                        $('#modelBodyERR').find('.WHQQTY').append(value.AvailableQty);
+                                      
+                                    }
+                                    else if (value.AvailableQty <= 0 && value.WarehouseID == 5) {
+                                        GetstatusfromSellerCloud();
+                                    }
+                                }
 
-                                $('#modelBody').empty();
-                                $('#modelBody').html(response);
-
-                                var successMessage = $('#modelBody').find('.successmessage');
-                                $(successMessage).hide()
-
-
-                                $('#myModal').modal('show');
                             });
-                           //  console.log("from global variable" + JsonDataOfOrder);
-                            //$('#btnUpdateProductImages').removeAttr('disabled');
-                            //$('.UpdateASINButtonLoaderForOrderStatus').css('display', 'none');
-                            //$('#modelBody').empty();
-                            //$('#modelBody').html(data);
-                            //$('#myModal').modal("show");
+
                         }
                     });
-
 
                 }
                 else {
@@ -867,6 +1000,9 @@ var profitpercentagedetail = $(this).attr('data-profitpercentagedetail');
                     $('#myModal').modal('show');
                 }
             }
+                                   //var StatusSC = $(document).on('click', '#sellerstatus', GetstatusfromSellerCloud(SellerCloudOrderId));
+
+            $(document).on('click', '#sellerstatus', GetstatusfromSellerCloud);
 
 
             $(document).on('click', '#btnSendToZinc', zendToZinc);

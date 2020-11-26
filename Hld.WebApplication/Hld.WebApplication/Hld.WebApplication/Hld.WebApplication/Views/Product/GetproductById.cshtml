@@ -39,7 +39,11 @@
         height: auto;
     }
 
-    form input, button {
+    .form-control:focus {
+        border: 1px solid #ced4da!important;
+    }
+
+        form input, button {
         padding: 5px;
     }
 
@@ -411,13 +415,13 @@
 
 
 
-            <div class="col-2 p-0 mt-0">
+            @*<div class="col-2 p-0 mt-0">
                 <div class="" style="">
                     <label class="control-label mb-0 colorhead"><b>Feature:</b></label>
                     <span class="">@Model.Feature</span>
 
                 </div>
-            </div>
+            </div>*@
         </div>
     </div>
 </div>
@@ -592,8 +596,8 @@
     <table class="SecondTableShadow table table-bordered">
         <thead style="background-color:lightgray">
             <tr>
-                <th style="width:0.1%"><input type="checkbox" class="" id="headerCheckBoxShadow" /></th>
-                <th>Image</th>
+                @*<th style="width:0.1%"><input type="checkbox" class="" id="headerCheckBoxShadow" /></th>*@
+                <th style="width:5%">Image</th>
                 <th>SKU</th>
 
                 @*<th>Shadows</th>*@
@@ -605,7 +609,7 @@
                 <th style="width:7%">Fulfilled By</th>
                 <th style="width:8%">Amz FBA SKU</th>
                 <th style="width:6%">Website Enabled</th>
-                <th style="width:8%">Status</th>
+                <th style="width:12%">Status</th>
                 @*<th>Action</th>*@
             </tr>
         </thead>
@@ -618,9 +622,9 @@
                     {
 
             <tr style="background: #dee2e6;">
-                <td>
+                @*<td>
                     <input type="checkbox" class="checkboxesShadow" id="checkbox" />
-                </td>
+                </td>*@
 
                 <td>
                     @if (String.IsNullOrEmpty(item.CompressedImage))
@@ -799,7 +803,7 @@
                     }<br />
                     @if (item.IsRelated.Length >= 6)
                     {
-                        <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)</a></span>
+                        <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@item.IsRelated.Substring(item.IsRelated.Length - 6)&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">Relation Created=@item.IsRelated.Substring(item.IsRelated.Length - 6)</a></span>
                     }
                     else
                     {
@@ -818,9 +822,9 @@
                     foreach (var itemShadow in Model.list.Where(p => p.ShadowOff.Equals(item.Sku)))
                     {
                         <tr>
-                            <td>
+                            @*<td>
                                 <input type="checkbox" class="checkboxesShadow" id="checkbox" />
-                            </td>
+                            </td>*@
                             <td style="border:none;border-color:white!important;border-right:none!important">
                             </td>
                             <td style="">
@@ -1106,7 +1110,7 @@
                                 @* commented by Mehdi*@
                                 @if (@itemShadow.IsRelated.Length >= 6)
                                 {
-                                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
+                                    <span style="text-decoration:underline;cursor:pointer"><a href="https://lp.cwa.sellercloud.com/Settings/QueuedJob.aspx?JobId=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)&MerchantID=512" target="_blank" style="vertical-align: sub;cursor:pointer">Relation Created=@itemShadow.IsRelated.Substring(itemShadow.IsRelated.Length - 6)</a></span>
                                 }
                                 else
                                 {
@@ -1602,6 +1606,7 @@
     <script>
         $(document).ready(function () {
 
+
             $(document).on("focusout", ".AmazonFBASKU", function () {
 
                 var selectedRow = $(this).parents('tr');
@@ -1618,7 +1623,7 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-               
+
                 if (data.ColoumnValue != "") {
                     $(selectedRow).find('.AmazonFBASKUloader').css('display', 'inline');
                     $.ajax({
@@ -1632,7 +1637,7 @@
                         }
                     });
                 } else { }
-       
+
 
 
             });
@@ -1652,7 +1657,7 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-                
+
                 if (data.ColoumnValue != "") {
                     $(selectedRow).find('.FulfilledByloader').css('display', 'inline');
                     $.ajax({
@@ -1671,7 +1676,7 @@
                 else {
 
                 }
-             
+
 
 
             });
@@ -1705,7 +1710,7 @@
                     });
 
                 } else { }
-              
+
 
             });
             $(document).on("focusout", ".ASIN", function () {
@@ -1738,7 +1743,7 @@
                     });
                 }
                 else { }
-              
+
 
 
             });
@@ -1826,7 +1831,7 @@
                 else {
 
                 }
-            
+
 
             });
             //
@@ -1848,7 +1853,7 @@
                 console.log("ColoumnName are", data.ColoumnName);
                 console.log("ColoumnValue are", data.ColoumnValue);
                 console.log("ShadowSKU are", data.ShadowSKU);
-                
+
                     $(selectedRow).find('.AmazonEnabledloader').css('display', 'inline');
                     $.ajax({
                         type: 'PUT',
@@ -1860,7 +1865,7 @@
                         Error: function (err) {
                         }
                     });
-               
+
             });
             $(document).on("change", ".WebsiteEnabled", function () {
 
@@ -2535,17 +2540,29 @@
     })
     }
             var ColorId = 0;
-
+            $('input[id=Color]').focus(function () {
+                $(this).next('input').focus();
+            })
+            $('input[id=Color]').change(function () {
+                var selectedRow = $(this).parents('tr');
+                $(selectedRow).next().focus();
+            });
             function skuvaldationcolor() {
                 $('input[id=Color]').change(function (e) {
+
                     var selectedRow = $(this).parents('tr');
                     $(selectedRow).val($(this).val().replace(/ +?/g, ''));
                     $(selectedRow).find('.AddSku').addClass('text-uppercase');
+                    $(selectedRow).find('.AddSku').trigger("click");
+                   
+
+
                     var remaining = 20 - $('#SKU').val().length;
                     if (e.which == 32)
                         return false;
 
                     $(this).parents('tr').find('#SKUCounter').text(remaining + "/" + 20);
+
 
                     var textBoxValue =  $(selectedRow).find('.AddSku').val().trim();
                     var selectedRow = $(selectedRow);
@@ -2555,6 +2572,7 @@
                             url: '@Url.Action("CheckProductSKUExists", "Product")',
                             data: { 'name': textBoxValue },
                             success: function (data) {
+
                                 if (data.success == true) {
 
 
@@ -2574,6 +2592,7 @@
                         $(selectedRow).find('.IsExistsSKU').text("");
                     }
                 });
+              
             }
 
             function skuvaldation() {
@@ -2617,7 +2636,14 @@
         });
             }
             function autocolor() {
+
                 $('.AddColor').autocomplete({
+                    close: function (event, ui) {
+                        //$('.AddSku').css("background", "red");
+                      
+                        console.log($(event.target).parents("tr").find(".AddSku").focus())
+                    },
+
                     autoFocus: true,
                     source: function (request, response) {
                         $.ajax({
@@ -2627,6 +2653,7 @@
                             dataType: "json",
                             data: { Prefix: request.term },
                             success: function (data, ui) {
+                                debugger;
                                 skuvaldationcolor();
                                 //if (data.length > 0) {
                                 response($.map(data, function (item) {
@@ -2672,7 +2699,7 @@
     //});
 
 
-    $('.AddColor').change(function () {
+            $('.AddColor').change(function () {
     var topsku = $(".AddSku").html();
     var title = $(".AddTitle").html();
     //var AddColor = $(".AddColor").val();
@@ -2686,11 +2713,11 @@
         $(this).closest('tr').find(".AddSku").val(topsku + "-" + ColorAlias).append(IsExistsSKU);
     $(this).closest('tr').find(".AddTitle").val(title + " [ " + AddColor + " ]");
         $(this).closest('tr').find("#Color").val(AddColor);
-
+                $(this).closest('tr').find('.AddSku').trigger("click");
 
     });
-    function addsku(){
-        $('.AddColor').change(function () {
+            function addsku() {
+                $('.AddColor').change(function () {
 
 
     //var topsku = $("#SKU").val();
@@ -2703,10 +2730,18 @@
         var ColorAlias = $(this).closest('tr').find('.ColorAlias').val();
         IsExistsSKU = $(this).closest('tr').find('.IsExistsSKU').val();
         $(this).closest('tr').find(".AddSku").val(topsku + "-" + ColorAlias).append(IsExistsSKU);
-            $(this).closest('tr').find(".AddTitle").val(title + " [ " + AddColor + " ]");
-            skuvaldationcolor();
+                    $(this).closest('tr').find(".AddTitle").val(title + " [ " + AddColor + " ]");
+                    $(this).closest('tr').find(".AddSku").trigger("focus");
+                    skuvaldationcolor();
+                    $(this).closest('tr').next('input').focus();
+                    $(this).closest('tr').find('.AddSku').trigger("click");
     });
-    }
+            }
+
+
+
+
+
     function AddMarkup() {
 
         var markup = "<tr><td><input type='checkbox' class='checkboxes' id='checkbox' /></td><td><div class='image-upload'><label class='input-label'><img class='imgupload' src='/Images/img-icon-2.jpg' id='uploader' /></label><input id='file-input' type='file' /></div><input type='text' style='display:none' class='form-control product_id' value='" +@Model.Parentproduct_id+"'><input type='text' style='display:none' class='form-control child_id' value=''><input type='text' style='display:none' class='form-control productstatus' value='" +@Model.productstatus+"'><input type='text' style='display: none' class='form-control ColorId' value=''><input type='text' style='display:none' class='form-control ColorAlias' name='ColorAlias' value=''><input type='text' style='display:none' class='form-control AddSku' value='' id='SKU'></td><td><input type='search' class='form-control AddColor' id='Color' name='Color' placeholder='Color' /><span style='color:red;padding-left:0px;' id='empty-message-Color'></span></td><td><input type='text' class='form-control AddSku' placeholder='SKU' id='SKU'/><span class='IsExistsSKU' style='padding-left:4px;padding-right:4px;'></span><span style='margin-left:60px;' id='SKUCounter'></span><input type='text' style='display:none' class='form-control AddSku' value=''></td><td><input type='text' class='form-control AddTitle' placeholder='Title' /></td><td><input type='text' class='form-control AddUpc' placeholder='UPC' /></td><td class=''></td><td><button type='button' class='btn btn-sm btn-success submit btnclass' value='' style='margin-right:4px!important;display:none'>Save</button><button type='button' class='btn btn-sm btn-success edit btnclass' style='display:none;margin-right:4px!important;' value=''>Edit</button><button type='button' class='btn btn-sm delete' data-id='' style='' value=''><img src='/Images/trash-can-1.1s-128px.png' height='25' /></button></td></tr>";

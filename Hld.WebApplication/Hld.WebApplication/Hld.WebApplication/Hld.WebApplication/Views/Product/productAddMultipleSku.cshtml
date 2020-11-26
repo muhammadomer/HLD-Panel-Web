@@ -436,7 +436,9 @@
 
             StyleNameList();
             $(".Style").select2();
-
+           
+            
+            
             function GetManufacture1() {
                 debugger;
                 $.ajax({
@@ -447,7 +449,7 @@
                     data: { Prefix: "" },
                     success: function (data, ui) {
                         console.log("ddd", data)
-
+                        $(".GetManufacture1").empty();
                         var content = '';
                         $.each(data, function (index, value) {
                             if (value.ManufactureId==@Model.ManufactureName) {
@@ -472,7 +474,7 @@
 
         GetManufacture1();
             $(".GetManufacture1").select2();
-
+            setInterval(function () { GetManufacture1() }, 3000);
 
             $(document).on("change", ".GetManufacture1", function () {
 
@@ -565,7 +567,7 @@
             }
             OnLoadManufactureId();
             $(".ManufactureModel").select2();
-
+            setInterval(function () { OnLoadManufactureId() }, 1000);
 
 
             $(document).on("change", ".ManufactureModel", function () {
@@ -629,7 +631,7 @@
             }
 
             OnLoadManufactureIdDevice()
-            $(".DeviceModel").select2();
+            $(".DeviceModel").select2().delay(2000);
    //         function DeviceModel() {
    //             debugger;
    //             $.ajax({
