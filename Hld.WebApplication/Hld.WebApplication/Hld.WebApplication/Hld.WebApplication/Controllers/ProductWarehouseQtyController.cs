@@ -168,8 +168,31 @@ namespace Hld.WebApplication.Controllers
             return  listmodel;
         }
 
+        public List<ProductWarehouseQtyViewModel> UpdateWarehouseQuantityFromSellerCloudForOrderLIstForSingleWH(string sku)
+        {
+            bool status = false;
+            List<ProductWarehouseQtyViewModel> QuantityList = new List<ProductWarehouseQtyViewModel>();
+            try
+            {
+                token = Request.Cookies["Token"];
 
-
-
+                _Selller = new GetChannelCredViewModel();
+                _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+                AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+                    ProductWarehouseQuantityViewModel Quantity = productWarehouseQtyApiAccess.GetProductWarehouseFormSC(SCRestURL, authenticate.access_token, sku, 358);
+                    ProductWarehouseQtyViewModel productWarehouse = new ProductWarehouseQtyViewModel();
+                    productWarehouse.AvailableQty = Quantity.AvailableQty;
+                    productWarehouse.ProductSku = Quantity.ProductID;
+                    productWarehouse.WarehouseID = Quantity.WarehouseID == 364 ? 1 : Quantity.WarehouseID == 365 ? 2 : Quantity.WarehouseID == 368 ? 3 : Quantity.WarehouseID == 359 ? 4 : Quantity.WarehouseID == 358 ? 5 : Quantity.WarehouseID == 367 ? 6 : Quantity.WarehouseID == 376 ? 7 : Quantity.WarehouseID == 378 ? 8 : Quantity.WarehouseID == 372 ? 9 : Quantity.WarehouseID == 373 ? 10 : Quantity.WarehouseID == 360 ? 11 : Quantity.WarehouseID == 369 ? 12 : Quantity.WarehouseID == 366 ? 13 : 13;
+                    QuantityList.Add(productWarehouse);
+                    status = productWarehouseQtyApiAccess.SaveProductWarehouseQty(ApiURL, token, QuantityList);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            List<ProductWarehouseQtyViewModel> listmodel = productApiAccess.GetWareHousesQtyList(ApiURL, token, sku);
+            return listmodel;
+        }
     }
 }
