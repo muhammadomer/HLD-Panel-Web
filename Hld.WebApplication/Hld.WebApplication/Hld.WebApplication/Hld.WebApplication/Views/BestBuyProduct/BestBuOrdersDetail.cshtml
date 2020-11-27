@@ -884,6 +884,7 @@
             function GetstatusfromSellerCloud() {
                 $('#myModalERR').modal('hide');
                 //sendToZincReferenceAferSubmit = $(this);
+                $(".loadertbl").show();
 
                 var sku = $(sendToZincReferenceAferSubmit).attr('data-SKU');
 
@@ -908,6 +909,7 @@
                     dataType: 'json',
                     traditional: true,
                     success: function (data) {
+                        $(".loadertbl").hide();
                         if (data.DropshipStatus == "None" && data.scOrderStatus == "InProcess" && data.PaymentStats == "Charged") {
                             $.ajax({
                                 type: 'Get',
@@ -945,12 +947,12 @@
             
             function zendToZinc() {
                 debugger
-
+                $('#modelBodyERR').find('.WHQQTY').empty();
                 //mychange
                 sendToZincReferenceAferSubmit = $(this);
 
                 var sku=$(this).attr('data-SKU');
-
+                $(".loadertbl").show();
                 var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
                 radioSKU=$(RadioButtonASINChecked).attr('value');
                 var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
@@ -975,10 +977,11 @@
                         dataType: 'json',
                         traditional: true,
                         success: function (data) {
-                           
+                            
                             $.each(data, function (index, value) {
                                 if (value.WarehouseID == 5) {
                                     if (value.AvailableQty > 0 && value.WarehouseID == 5) {
+                                        $(".loadertbl").hide();
                                         $('#myModalERR').modal('show');
                                         $('#modelBodyERR').find('.WHQQTY').append(value.AvailableQty);
                                       
@@ -995,6 +998,7 @@
 
                 }
                 else {
+                    $(".loadertbl").hide();
                     $('#modelBody').empty();
                     $('#modelBody').html("<div>Please Select ASIN to Send Order</div>");
                     $('#myModal').modal('show');
