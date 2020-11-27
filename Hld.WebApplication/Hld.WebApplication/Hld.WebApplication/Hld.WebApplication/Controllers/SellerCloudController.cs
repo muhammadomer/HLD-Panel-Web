@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Hld.WebApplication.Enum;
 using ImageMagick;
 using ImageMagick.Web;
+using Newtonsoft.Json.Linq;
 
 namespace Hld.WebApplication.Controllers
 {
@@ -764,6 +765,52 @@ namespace Hld.WebApplication.Controllers
             }
             return Json(new { status = false, scOrderStatus = "" });
         }
+
+        public OrderStatusViewModel GetOrdersFromSCRest(int OrderID, string Token)
+        {
+            OrderStatusViewModel orderRelationViewModel = null;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/Orders/" + OrderID);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + Token;
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                    }
+                }
+                var X = JObject.Parse(strResponse);
+                if (X != null)
+                {
+                    var RelatedOrders = X["RelatedOrders"];
+                    var count = RelatedOrders.Count();
+                    if (RelatedOrders != null && RelatedOrders.Count() > 0)
+                    {
+                        orderRelationViewModel = new OrderStatusViewModel();
+                        string relation = RelatedOrders[0].Value<string>("RelationshipType").ToString();
+                        if (relation == "1" || relation == "4")
+                        {
+                            orderRelationViewModel.OrderStatus = X["OrderStatus"].Value<string>("OrderSourceOrderId").ToString();
+                            orderRelationViewModel.ShippingStatus = X["ShippingStatus"].Value<string>("OrderSourceOrderId").ToString();
+                            orderRelationViewModel.PaymentStatus = X["PaymentStatus"].Value<string>("OrderSourceOrderId").ToString();
+
+                        }
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                throw ex;
+            }
+            return orderRelationViewModel;
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> SendTrackingToSC(string sellerCloudOrderId, string zincOrderLogDetailID, string itemQuantity, string productSku)
