@@ -879,6 +879,49 @@
                 });
             });
 
+            //updat asin max price
+            $(document).on("click", ".updateASINLinkLatestGET", function () {
+                var sku = $(this).attr('data-SKU');
+                var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
+                radioSKU = $(RadioButtonASINChecked).attr('value');
+                var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
+                RadioButtonASIN = $(RadioButtonASINChecked).attr('data-ASIN')
+                bestbuyid = $(RadioButtonASINChecked).attr('data-id')
+                var mainTr = $(this).closest('tr');
+                var zincDetailDiv = $(mainTr).find(".zincDetailDiv");
+                var zincloader = $(mainTr).find(".updateASINLinkLatest");
+                $(zincloader).css('display', 'block');
+               
+                if (isRadioButtonChecked == true && sku == radioSKU) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Zinc/GetProductOfferDataFromZincAndUpdate?orderid=' + RadioButtonASIN + '&ProductSKU=' + sku + '&bbZincID=' + bestbuyid,
+                        success: function (data) {
+                           
+                            $(zincloader).css('display', 'none');
+                            if (data!=null) {
+                                $(RadioButtonASINChecked).closest("div").find(".amazon_price").text("$" + data.itemprice / 100);
+                                var maxprice = data.itemprice * 1.25 / 100;
+                                $(RadioButtonASINChecked).closest("div").find(".max_price").text("$" + maxprice.toFixed(2));
+                                $(RadioButtonASINChecked).attr("data-MaxPrice");
+                                //$(RadioButtonASINChecked).closest("div").find(".amazon_price").text("habib");
+                                //$(RadioButtonASINChecked).closest("div").find(".max_price").text("shafique");
+                                //$(RadioButtonASINChecked).attr("data-MaxPrice");
+                            }
+                            else {
+   
+                            }
+                        }
+                    });
+
+
+
+                }
+                else {
+                    
+                    alert("Please select ASIN")
+                }
+            });
             //send to Zinc (Save Order to Zinc)
 
             function GetstatusfromSellerCloud() {

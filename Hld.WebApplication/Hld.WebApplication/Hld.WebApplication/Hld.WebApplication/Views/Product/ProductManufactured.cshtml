@@ -35,7 +35,7 @@
         padding: 30px;
     }
 </style>
-<div class="form-group row"style=" margin-left: 0px; ">
+<div class="form-group row" style=" margin-left: 0px; ">
     <h6>Create Manufacturer Product</h6><span style="margin-left:15px;"><a asp-controller="Product" target="_blank" asp-action="ProductManufacturedList">Manufacturer</a></span>
 </div>
 
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-form-label-sm  controlabel"> Manufac Model:</label>
+                            <label class="col-form-label-sm  controlabel"> M Model Series:</label>
                             <div class="col-sm-8 pl-0">
                                 <input type="text" asp-for="ManufactureModel" class="form-control form-control-sm inputstyle ManufactureModel">
 
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-form-label-sm  controlabel"> Manufac Model:</label>
+                            <label class="col-form-label-sm  controlabel"> M Model Series:</label>
                             <div class="col-sm-8 pl-0">
                                 <select class="js-example-basic-single form-control ManufactureModel" name="ManufactureModel" id="ManufactureModel" asp-for="ManufactureModel">
 
@@ -259,9 +259,11 @@
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+
     <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
     <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
     <script src="~/select2/js/select2.full.min.js"></script>
+
 
     <script src="~/lib/date-range-picker/moment.min.js"></script>
     <script src="~/lib/date-range-picker/daterangepicker.js"></script>
@@ -287,10 +289,7 @@
             });
 
             $(".btnmanufacturedsave").click(function () {
-
-
                 var ManufactureName = $(".ManufactureNamevalue").val();
-
                 console.log("ManufactureName", ManufactureName)
                 if (ManufactureName != '') {
                     $.ajax({
@@ -298,6 +297,7 @@
                         url: '../Product/ProductManufactured',
                         data: { ManufactureName: ManufactureName },
                         success: function (res) {
+
                             $(".ManufactureName").val("");
 
                             if (res = "true") {

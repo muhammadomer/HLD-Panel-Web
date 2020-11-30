@@ -629,7 +629,7 @@ namespace Hld.WebApplication.Controllers
         public ZincProductSaveViewModel GetASINDetailFromZinc(string orderid, string ProductSKU)
         {
 
-            ZincProductSaveViewModel zincProductSaveViewModel = null;
+            ZincProductSaveViewModel zincProductSaveViewModel = new ZincProductSaveViewModel();
             int? minPriceOfOffer = null;
             string offerID = "";
             try
@@ -994,13 +994,15 @@ namespace Hld.WebApplication.Controllers
         [HttpPost]
         public IActionResult GetProductOfferDataFromZincAndUpdateDatabase(string orderid, string ProductSKU, string bbZincID)
         {
+            ZincProductSaveViewModel zincProductSaveViewModel = new ZincProductSaveViewModel();
             try
             {
                 token = Request.Cookies["Token"];
                 bool status = false;
-                ZincProductSaveViewModel zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
+                zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
                 zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
                 status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+
                 return Json(new { success = true });
             }
             catch (Exception)
@@ -1012,6 +1014,28 @@ namespace Hld.WebApplication.Controllers
         }
 
 
-     
+        [HttpPost]
+        public ZincProductSaveViewModel GetProductOfferDataFromZincAndUpdate(string orderid, string ProductSKU, string bbZincID)
+        {
+            ZincProductSaveViewModel zincProductSaveViewModel = new ZincProductSaveViewModel();
+            try
+            {
+                token = Request.Cookies["Token"];
+                bool status = false;
+                 zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
+                zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
+                status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+
+                return zincProductSaveViewModel;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+            
+        }
+
+
     }
 }

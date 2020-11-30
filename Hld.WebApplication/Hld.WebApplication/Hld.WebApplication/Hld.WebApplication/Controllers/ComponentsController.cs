@@ -12,5 +12,10 @@ namespace Hld.WebApplication.Controllers
         {
             return ViewComponent("ZincASINDetail", sku);
         }
+        public IActionResult ZincASINDetailLatest(string sku)
+        {
+
+            return ViewComponent("ZincASINDetailLatest", sku);
+        }
     }
 }

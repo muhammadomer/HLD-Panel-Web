@@ -62,6 +62,7 @@
     <Folder Include="Views\ShipmentBox\" />
     <Folder Include="Views\Tag\" />
     <Folder Include="wwwroot\jqwidgets\" />
+    <Folder Include="wwwroot\NewFolder\" />
   </ItemGroup>
 
 </Project>

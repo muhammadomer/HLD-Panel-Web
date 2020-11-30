@@ -216,6 +216,27 @@
         border-bottom: #ccc 1px solid !important;
     }
 
+    .loadertbl {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loadertbl img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            /*width: 300px;
+            height: 220px;*/
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
 </style>
 
 <div class="modal fade" style="margin-top: 80px !important;" id="SendozincOrderView" role="dialog">
@@ -814,26 +835,26 @@
 
 
 
-                        <td class="text-center;display:initial;">
-                            <a asp-action="ProductAddUpdate" target="_blank" asp-controller="Product" asp-route-ProductSKU="@item.ProductSKU"> USD&nbsp;@Math.Round(Convert.ToDecimal(item.AverageCost) / ViewBag.currencyexchange, 2)</a>
-                            <br />
-                            <div style="margin-bottom:3px;">
-                                CAD&nbsp;<span style="font-weight:bold;color:darkgoldenrod">@Math.Round(Convert.ToDecimal(item.AverageCost), 2)</span>
+                            <td class="text-center;display:initial;">
+                                <a asp-action="ProductAddUpdate" target="_blank" asp-controller="Product" asp-route-ProductSKU="@item.ProductSKU"> USD&nbsp;@Math.Round(Convert.ToDecimal(item.AverageCost) / ViewBag.currencyexchange, 2)</a>
                                 <br />
-                            </div>
-                            @foreach (var i in item.approvedPrices)
-                            {
-
-                                <div style="margin-top:-8px">
-                                    @*<a style='cursor: pointer;' href='/ApprovedPrice?VendorAlias=@i.VendorAlias&Vendor=@i.VendorId&sku=@i.SKU&title=' target='_blank'>*@
-                                    <a style='cursor: pointer;' href='/ApprovedPrice?&sku=@i.SKU&title=' target='_blank'>
-                                        CAD @Math.Round(Convert.ToDecimal(i.CAD), 2)
-                                    </a>
-                                    <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
+                                <div style="margin-bottom:3px;">
+                                    CAD&nbsp;<span style="font-weight:bold;color:darkgoldenrod">@Math.Round(Convert.ToDecimal(item.AverageCost), 2)</span>
+                                    <br />
                                 </div>
+                                @foreach (var i in item.approvedPrices)
+                                {
 
-                            }
-                        </td>
+                                    <div style="margin-top:-8px">
+                                        @*<a style='cursor: pointer;' href='/ApprovedPrice?VendorAlias=@i.VendorAlias&Vendor=@i.VendorId&sku=@i.SKU&title=' target='_blank'>*@
+                                        <a style='cursor: pointer;' href='/ApprovedPrice?&sku=@i.SKU&title=' target='_blank'>
+                                            CAD @Math.Round(Convert.ToDecimal(i.CAD), 2)
+                                        </a>
+                                        <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
+                                    </div>
+
+                                }
+                            </td>
 
 
                             @*<td>@math.round(item.calculation_comissionpercentage)% <br /> $@item.calculation_comission </td>
@@ -881,7 +902,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            On Order:<label><a href="/Shipment/ShipmentHistoryList?SKU=@item.ProductSKU&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@item.OnOrder</a></label>
+                                            On Order: <label><a href="/Shipment/ShipmentHistoryList?SKU=@item.ProductSKU&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@item.OnOrder</a></label>
 
                                         </td>
                                     </tr>
@@ -949,14 +970,22 @@
                                         <div class="row">
                                             <div class="col-sm-12 p-t-b">
                                                 <span>@Zincitem.priority</span>
-                                                <input style="margin-right: 15px;" class="ZincAsinRadioButtonOrderView" data-OrderDetailID="@item.OrderDetailID" data-MaxPrice="@Zincitem.max_price" data-ASIN="@Zincitem.ASIN" type="radio" name="@item.ProductSKU" value="@Zincitem.ProductSku" data-id="@Zincitem.bb_product_zinc_id" />
+                                                <input style="margin-right: 15px;" class="ZincAsinRadioButtonOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-MaxPrice="@Zincitem.max_price" data-ASIN="@Zincitem.ASIN" type="radio" name="@item.ProductSKU" value="@Zincitem.ProductSku" data-id="@Zincitem.bb_product_zinc_id" />
                                                 <a target="_blank" href="https://www.amazon.ca/dp/@Zincitem.ASIN?th=1&psc=1">@Zincitem.ASIN</a>
 
-                                                AMZPr: @Zincitem.amazon_price<strong>,</strong>
-                                                <a target="_blank" asp-controller="Zinc" asp-action="ProductZinc" asp-route-ProductSKU="@item.ProductSKU"> MaxPr: @Zincitem.max_price</a>
+                                                AMZPr:  <span class="amazon_price">@Zincitem.amazon_price</span><strong>,</strong>
+                                                <a target="_blank" asp-controller="Zinc" asp-action="ProductZinc" asp-route-ProductSKU="@item.ProductSKU"> MaxPr:<span class="max_price">@Zincitem.max_price</span></a>
 
                                             </div>
 
+                                        </div>
+                                        <div style="padding:0px">
+                                            <a class="updateASINLinkLatestGET Updatesendtobtn" data-SKU="@item.ProductSKU">
+                                                <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                                            </a>
+                                            <span>
+                                                <img style="display:none;" class="updateASINLinkLatest" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                            </span>
                                         </div>
 
 
@@ -1101,13 +1130,92 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModalQTY" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <strong style="">
+                    <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Error!</span>
+                </strong>
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBodyQTY">
+                <div class="row">
+                    <h6 style="padding-left:17px">Order status is not suitable to send to zinc.</h6>
+
+                </div>
+
+                <div class="lblSellerCloudOrderStatus">
+                    1: <span style="color:blue;"></span>
+                </div>
+
+                <div class="checkSellerCloudOrderStatus">
+                    2: <span style="color:blue;"></span>
+                </div>
+
+                <div class="paymentStatus">
+                    3: <span style="color:blue;"></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="myModalERR" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <strong style="margin-left: 17px;">
+                    <i class="fa fa-exclamation-triangle" style="color:orange"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Warning!</span>
+                </strong>
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBodyERR">
 
 
+
+                <h6 style="padding-left:17px">Stock is available in default warehouse, please ensure prior to sending order to Zinc</h6>
+                <h6 style="padding-left:17px"><b>WHQ: </b><span class="WHQQTY" style="color:cadetblue"></span></h6>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <div class="row col-md-12 p-0">
+                    <div class="col-md-6 p-0">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="btn btn-success m-1" id="sellerstatusInOrderViewPage" target="_blank" style="float:right;color:white">Proceed!</a>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="loadertbl">
+    <img src="~/Images/giffff.gif" />
+</div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
 
-
+        $(".loadertbl").hide();
         $.fn.checkUncheckSKU_checkbox = function (status) {
             $(document).find('.selectSkucheckbox').each(function (index) {
                 $(this).attr('checked', status);
@@ -1118,7 +1226,107 @@
             $(".nav-tabs a").click(function () {
                 $(this).tab('show');
             });
-            function zendToZincOrderView() {
+
+        function GetstatusfromSellerCloud() {
+            $(".loadertbl").show();
+            $('#myModalERR').modal('hide');
+            var loader = $('.ButtonLoader');
+            var zincStatus = $('.zincStatus');
+            var PaymentStatus = $('.PaymentStatus');
+            var btnSendToZinc = $('#btnSendToZincOrderView');
+            var profitlose = $(sendToZincReferenceAferSubmit).attr('data-profitlose');
+            var profitpercentage = $(sendToZincReferenceAferSubmit).attr('data-profitpercentage');
+            var profitlose = $(sendToZincReferenceAferSubmit).attr('data-profitlose');
+            var profitpercentage = $(sendToZincReferenceAferSubmit).attr('data-profitpercentage');
+
+            var OrderId = $(sendToZincReferenceAferSubmit).attr('data-OrderId');
+
+            var SellerCloudOrderId = $(sendToZincReferenceAferSubmit).attr('data-SellerCloudOrderId');
+
+            var OrderId = $(sendToZincReferenceAferSubmit).attr('data-OrderId');
+
+            var SellerCloudOrderId = $(sendToZincReferenceAferSubmit).attr('data-SellerCloudOrderId');
+            console.log("SellerCloudOrderId1111>", SellerCloudOrderId)
+            $(loader).css('display', 'block');
+            var Url = '/SellerCloud/GetOrderStatus/';
+
+
+
+            var URL = '/BBOrderViewPage/SendOrderToZincOrderView';
+            var SKUArraryForSinglePage = [];
+            var ASINList_ = [];
+            //var sku=$(this).attr('data-SKU');
+            var RadioButtonMaxPrice = 0;
+            // var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
+            var RadioButtonASINChecked = $();
+            $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
+                var status = $(this).is(':checked');
+                if (status) {
+
+                    var productASIN = $(this).attr('data-ASIN');
+                    var OrderDetailID = $(this).attr('data-OrderDetailID');
+                    var MaxPrice = $(this).attr('data-MaxPrice');
+                    var ASINData = { "Asin": productASIN, "OrderlineId": OrderDetailID, "MaxPrice": MaxPrice };
+                    ASINList_.push(ASINData)
+
+                }
+            });
+            var ASINList = []
+            ASINList = JSON.stringify(ASINList_);
+            $(document).find(".selectSkucheckbox").each(function (index) {
+
+                var productSKU = $(this).val();
+
+                SKUArraryForSinglePage.push(productSKU)
+
+
+            });
+
+            $.ajax({
+                type: 'Get',
+                url: Url,
+                data: { orderid: SellerCloudOrderId },
+                dataType: 'json',
+                traditional: true,
+                success: function (data) {
+                    $(".loadertbl").hide();
+                    $(loader).css('display', 'none');
+                    if (data.DropshipStatus == 'None' && data.scOrderStatus == "InProcess" && data.PaymentStats == "Charged") {
+                        $.ajax({
+                            type: 'Get',
+                            url: URL,
+                            data: { ASINList: ASINList, orderid: OrderId, SellerOrderID: SellerCloudOrderId },
+                            dataType: 'json',
+                            traditional: true,
+                            success: function (data) {
+                                JsonDataOfOrder = data;
+                                $.get('@Url.Action("ConfirmationOfZincOrderView", "BBOrderViewPage")', { JsonData: JsonDataOfOrder, profitlose: profitlose, percentageprofit: profitpercentage }).done(function (response) {
+                                    $('#SendozincOrderViewBody').empty();
+                                    $('#SendozincOrderViewBody').html(response);
+
+                                    var successMessage = $('#SendozincOrderViewBody').find('.successmessage');
+                                    $(successMessage).hide()
+
+                                    $('#SendozincOrderView').modal('show');
+                                });
+
+                            }
+                        });
+                    }
+                    else {
+                        $('#myModalQTY').modal('show');
+
+                        $('#modelBodyQTY').find('.lblSellerCloudOrderStatus>span').append(data.scOrderStatus);
+                        $('#modelBodyQTY').find('.checkSellerCloudOrderStatus>span').append(data.DropshipStatus);
+                        $('#modelBodyQTY').find('.paymentStatus>span').append(data.PaymentStats);
+                    }
+                }
+            });
+
+        }
+        function zendToZincOrderView() {
+            $(".loadertbl").show();
+            $('#modelBodyERR').find('.WHQQTY').empty();
                  sendToZincReferenceAferSubmit = $(this);
                 var SKUArraryForSinglePage = [];
                 var ASINList_ = [];
@@ -1151,6 +1359,36 @@
 
 
                 if (SKUArraryForSinglePage.length == ASINList_.length) {
+                    console.log("SKKKKKKK",SKUArraryForSinglePage)
+                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+                    $.each(SKUArraryForSinglePage, function (index, value) {
+                        console.log("valueeeeee",value)
+                        $.ajax({
+                            type: 'Get',
+                            url: URLQTY,
+                            data: { sku:value},
+                            dataType: 'json',
+                            traditional: true,
+                            success: function (data) {
+                                $.each(data, function (index, value) {
+                                    if (value.WarehouseID == 5) {
+                                        if (value.AvailableQty > 0 && value.WarehouseID == 5) {
+                                            $(".loadertbl").hide();
+                                            $('#myModalERR').modal('show');
+                                            $('#modelBodyERR').find('.WHQQTY').append(value.AvailableQty);
+
+                                        }
+                                        else if (value.AvailableQty <= 0 && value.WarehouseID == 5) {
+                                            GetstatusfromSellerCloud();
+                                        }
+                                    }
+
+                                });
+
+                            }
+                        });
+                    });
+
                     $('#ErrorZinc').css("display", "none");
 
                    var profitlose = $(this).attr('data-profitlose');
@@ -1160,7 +1398,7 @@
 
                     var SellerCloudOrderId = $(this).attr('data-SellerCloudOrderId');
 
-                var URL = '/BBOrderViewPage/SendOrderToZincOrderView';
+                @*var URL = '/BBOrderViewPage/SendOrderToZincOrderView';
                     console.log(ASINList);
                 $.ajax({
                     type: 'Get',
@@ -1181,16 +1419,59 @@
                             });
 
                         }
-                    });
+                    });*@
 
 
                 }
                 else {
-                   $('#ErrorZinc').text("Select ASIN").css("color", "red", "display","block");
+                    $(".loadertbl").hide();
+                    $('#modelBody').empty();
+                    $('#modelBody').html("<div>Please Select ASIN to Send Order</div>");
+                    $('#myModal').modal('show');
                 }
             }
+        $(document).on("click", ".updateASINLinkLatestGET", function () {
+            debugger
+            $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
+                var status = $(this).is(':checked');
+                if (status) {
 
+                    var OrderId = $(this).attr('data-id');
+                    var productASIN = $(this).attr('data-ASIN');
+                    
+                    var sku = $(this).attr('data-SKU');
+                   
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/Zinc/GetProductOfferDataFromZincAndUpdate?orderid=' + productASIN + '&ProductSKU=' + sku + '&bbZincID=' + OrderId,
+                    success: function (data) {
 
+                       
+                        if (data != null) {
+                            $("div").find(".amazon_price").text(data.itemprice / 100);
+                            var maxprice = data.itemprice * 1.25 / 100;
+                            $("div").find(".max_price").text(maxprice.toFixed(2));
+                            $("div").attr("data-MaxPrice");
+                            //$(RadioButtonASINChecked).closest("div").find(".amazon_price").text("habib");
+                            //$(RadioButtonASINChecked).closest("div").find(".max_price").text("shafique");
+                            //$(RadioButtonASINChecked).attr("data-MaxPrice");
+                        }
+                        else {
+                            alert("sss")
+                        }
+                    }
+                });
+
+            });
+           
+         
+             
+
+        });
+
+        
+        $(document).on('click', '#sellerstatusInOrderViewPage', GetstatusfromSellerCloud);
             $(document).on('click', '#btnSendToZincOrderView', zendToZincOrderView);
 
 

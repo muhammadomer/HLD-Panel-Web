@@ -98,7 +98,7 @@
     <div class="row">
         <div class="col-md-12">
             <form asp-action="productAddMultipleSku" id="AddEditForm" enctype="multipart/form-data">
-               
+
                 <input type="text" asp-for="Parentproduct_id" name="Parentproduct_id" style="display:none">
 
 
@@ -139,10 +139,10 @@
                     <!--<label class="col-sm-1 text-sm-right control-label">Color</label>
                     <div class="col-sm-3">
                         <input asp-for="Color" type="search" id="Color" class="form-control" />-->
-                        @*<span asp-validation-for="Color" class="text-danger"></span>*@
-                        <!--<span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
+                    @*<span asp-validation-for="Color" class="text-danger"></span>*@
+                    <!--<span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
 
-                      
+
                     </div>
                     <div style=" padding-left: 0px;" class="col-sm-1 text-sm-left">
                         <span class="requiredCustomClass">*</span>
@@ -161,29 +161,29 @@
                     </span>
                 </div>
                 <!--<div class="form-group row">
-    <label class="col-sm-1 text-sm-right control-label">Color</label>
-    <div class="col-sm-3">
-        <input asp-for="Color" type="search" id="Color" class="form-control" />-->
+                <label class="col-sm-1 text-sm-right control-label">Color</label>
+                <div class="col-sm-3">
+                    <input asp-for="Color" type="search" id="Color" class="form-control" />-->
                 @*<span asp-validation-for="Color" class="text-danger"></span>*@
                 <!--<span style="color:red;padding-left:0px;" id="empty-message-Color"></span>
 
-        </div>
-        <div style=" padding-left: 0px;" class="col-sm-1 text-sm-left">
-            <span class="requiredCustomClass">*</span>
-            <span style="margin-left:10px;"> <a target="_blank" asp-controller="Color" asp-action="MainView">Add Color</a></span>
-        </div>
-        <label asp-for="BrandId" class="col-sm-1 text-sm-right control-label"></label>
-        <div class="col-sm-3">
-            <input asp-for="Brand" type="search" id="Brand" class="form-control" />
-            <span asp-validation-for="Brand" class="text-danger"></span>
-            <span style="color:red" id="empty-message-Brand"></span>
+                    </div>
+                    <div style=" padding-left: 0px;" class="col-sm-1 text-sm-left">
+                        <span class="requiredCustomClass">*</span>
+                        <span style="margin-left:10px;"> <a target="_blank" asp-controller="Color" asp-action="MainView">Add Color</a></span>
+                    </div>
+                    <label asp-for="BrandId" class="col-sm-1 text-sm-right control-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Brand" type="search" id="Brand" class="form-control" />
+                        <span asp-validation-for="Brand" class="text-danger"></span>
+                        <span style="color:red" id="empty-message-Brand"></span>
 
 
-        </div>
-        <span style="margin-left:10px;">
-            <a asp-controller="Brand" target="_blank" asp-action="MainView">Add Brand</a>
-        </span>
-    </div>-->
+                    </div>
+                    <span style="margin-left:10px;">
+                        <a asp-controller="Brand" target="_blank" asp-action="MainView">Add Brand</a>
+                    </span>
+                </div>-->
                 <div class="form-group row">
                     <label class="col-sm-1 text-sm-right control-label">Catagory</label>
                     <div class="col-sm-8">
@@ -221,9 +221,9 @@
                     <label class="col-sm-1 text-sm-right control-label">Manufacturer</label>
                     <div class="col-sm-3">
                         @*<input class="form-control" asp-for="Menufacture" />
-                <span asp-validation-for="Menufacture" class="text-danger"></span>
-                <span class="UpcError"></span>*@
-                        <select class="js-example-basic-single form-control GetManufacture1" name="ManufactureName" id="ManufactureName1" asp-for="ManufactureName">
+                            <span asp-validation-for="Menufacture" class="text-danger"></span>
+                            <span class="UpcError"></span>*@
+                        <select class="js-example-basic-single form-control GetManufactureName" name="ManufactureName" id="ManufactureName1" asp-for="ManufactureName">
 
                             @*<option value="">Manufacturer</option>*@
 
@@ -241,11 +241,8 @@
                     <div class="col-sm-3">
                         @*<input class="form-control" asp-for="MenufactureModel"/>*@
                         @*<span asp-validation-for="MenufactureModel" class="text-danger"></span>
-                <span class="UpcError"></span>*@
-                        <select class="js-example-basic-single form-control ManufactureModel" id="ManufactureModel"name="ManufactureModel" asp-for="ManufactureModel">
-
-                           
-
+                            <span class="UpcError"></span>*@
+                        <select class="js-example-basic-single form-control ManufactureModel" id="ManufactureModel" name="ManufactureModel" asp-for="ManufactureModel">
                         </select>
                     </div>
                     <span style="margin-left: 5px;text-decoration:underline;cursor:pointer"><a asp-controller="Product" target="_blank" asp-action="ProductManufactured" style="vertical-align: sub;cursor:pointer">Add</a></span>
@@ -284,13 +281,13 @@
                     @*<span id="IsExistsUPC" style="padding-left:20px;padding-right:4px;"></span>*@
                 </div>
                 @*<div class="form-group row">
-            <label asp-for="Feature" class="col-sm-1 text-sm-right control-label">Features</label>
-            <div class="col-sm-8">
-                @Html.TextAreaFor(e => Model.Feature, htmlAttributes: new { @class = "form-control", @id = "productDescription" })
+                        <label asp-for="Feature" class="col-sm-1 text-sm-right control-label">Features</label>
+                        <div class="col-sm-8">
+                            @Html.TextAreaFor(e => Model.Feature, htmlAttributes: new { @class = "form-control", @id = "productDescription" })
 
-            </div>
-            <span id="productDescriptionCounter"></span>
-        </div>*@
+                        </div>
+                        <span id="productDescriptionCounter"></span>
+                    </div>*@
                 <div class="form-group row">
                     <label class="col-sm-1 text-sm-right control-label">Features</label>
                     <div class="col-sm-8">
@@ -302,13 +299,13 @@
 
 
                 @*@if (TempData["ProductId"] == null)
-        {
-            <div class="form-group row">
-                <div class="col-sm-3">
-                    <input type="file" id="SaveImages" asp-for="UploadImages" multiple class="form-control" />
-                </div>
-            </div>
-        }*@
+                    {
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <input type="file" id="SaveImages" asp-for="UploadImages" multiple class="form-control" />
+                            </div>
+                        </div>
+                    }*@
 
                 <input type="hidden" id="HfProductId" value="@Model.Sku" />
 
@@ -392,6 +389,7 @@
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+
     <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
     <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
     <script src="~/select2/js/select2.full.min.js"></script>
@@ -436,10 +434,10 @@
 
             StyleNameList();
             $(".Style").select2();
+
+
            
-            
-            
-            function GetManufacture1() {
+            function GetManufacturename() {
                 debugger;
                 $.ajax({
                     url: "/Product/GetAllVendorForAutoComplete/",
@@ -449,7 +447,7 @@
                     data: { Prefix: "" },
                     success: function (data, ui) {
                         console.log("ddd", data)
-                        $(".GetManufacture1").empty();
+                        $(".GetManufactureName").empty();
                         var content = '';
                         $.each(data, function (index, value) {
                             if (value.ManufactureId==@Model.ManufactureName) {
@@ -461,8 +459,7 @@
 
                         });
 
-                        $(".GetManufacture1").append(content);
-                        @* $(".vendorlistgetFromPOProduct").val(@Model.Manufacturer);*@
+                        $(".GetManufactureName").append(content);
 
 
                     }
@@ -471,12 +468,16 @@
 
 
             }
+            $(".GetManufactureName").change(function () {
+                GetManufacturename();
+            });
+            GetManufacturename();
+         
+            $(".GetManufactureName").select2();
+           
+            //setInterval(function () { GetManufacture1() }, 3000);
 
-        GetManufacture1();
-            $(".GetManufacture1").select2();
-            setInterval(function () { GetManufacture1() }, 3000);
-
-            $(document).on("change", ".GetManufacture1", function () {
+            $(document).on("change", ".GetManufactureName", function () {
 
                 var ManufactureId = $("select#ManufactureName1 option").filter(":selected").val();
                 console.log("product ManufactureId", ManufactureId)
@@ -567,7 +568,7 @@
             }
             OnLoadManufactureId();
             $(".ManufactureModel").select2();
-            setInterval(function () { OnLoadManufactureId() }, 1000);
+
 
 
             $(document).on("change", ".ManufactureModel", function () {
@@ -631,7 +632,7 @@
             }
 
             OnLoadManufactureIdDevice()
-            $(".DeviceModel").select2().delay(2000);
+            $(".DeviceModel").select2();
    //         function DeviceModel() {
    //             debugger;
    //             $.ajax({

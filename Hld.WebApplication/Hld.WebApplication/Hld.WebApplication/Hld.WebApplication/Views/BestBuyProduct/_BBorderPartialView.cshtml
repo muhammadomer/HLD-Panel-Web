@@ -547,9 +547,21 @@
                                     </td>
 
                                     <td>
-                                        <div class="zincDetailDiv">
+                                        <div>
+                                            <div class="zincDetailDiv">
 
+                                            </div>
+                                            <div style="padding:0px">
+                                                <a class="updateASINLinkLatestGET Updatesendtobtn" data-SKU="@detail.ProductSKU">
+                                                    <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                                                </a>
+                                                <span>
+                                                    <img style="display:none;" class="updateASINLinkLatest" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                                </span>
+                                            </div>
                                         </div>
+                                        
+
                                         @*@await Component.InvokeAsync("ZincASINDetail", new { SKU = detail.ProductSKU })*@
                                     </td>
                                     <td>
