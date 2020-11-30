@@ -415,6 +415,7 @@ namespace Hld.WebApplication.Controllers
             string DateTo = DateTime.Now.ToString("yyyy-MM-dd"); ;
             string DateFrom = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"); ;
             int count = 0;
+            GetShipedAndRecQtyViewModel model = new GetShipedAndRecQtyViewModel();
             if ("0001-01-01" != viewModel.orderDateTimeFrom.ToString("yyyy-MM-dd"))
             {
 
@@ -462,8 +463,12 @@ namespace Hld.WebApplication.Controllers
                 Status += ")";
             }
 
-            count = _ApiAccess.GetShipmentHistoryCount(ApiURL, token, DateTo, DateFrom, POMasterID, viewModel.ShipmentId, viewModel.SKU, viewModel.Title, Status);
-            ViewBag.TotalCount = count;
+            model = _ApiAccess.GetShipmentHistoryCount(ApiURL, token, DateTo, DateFrom, POMasterID, viewModel.ShipmentId, viewModel.SKU, viewModel.Title, Status);
+            ViewBag.TotalCount = model.TotalCount;
+            TempData["ShipQty"] = model.ShipedQty;
+            TempData["RecQty"] = model.RecivedQty;
+            //ViewBag.ShipQty = model.ShipedQty;
+            //ViewBag.RecQty = model.RecivedQty;
             //ViewBag.S3BucketURL = s3BucketURL;
             //ViewBag.S3BucketURL_large = s3BucketURL_large;
             return View(viewModel);

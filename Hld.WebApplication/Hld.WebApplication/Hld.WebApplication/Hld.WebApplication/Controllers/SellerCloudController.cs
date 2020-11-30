@@ -771,7 +771,7 @@ namespace Hld.WebApplication.Controllers
             OrderStatusViewModel orderRelationViewModel = null;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/Orders/" + OrderID);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/Orders/6961853" + OrderID);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";

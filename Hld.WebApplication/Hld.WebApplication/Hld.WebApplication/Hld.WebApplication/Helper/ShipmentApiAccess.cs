@@ -311,9 +311,10 @@ namespace Hld.WebApplication.Helper
         }
 
 
-        public int GetShipmentHistoryCount(string ApiURL, string token, string DateTo, string DateFrom, int VendorId, string ShipmentId, string SKU, string Title, string Status)
+        public GetShipedAndRecQtyViewModel GetShipmentHistoryCount(string ApiURL, string token, string DateTo, string DateFrom, int VendorId, string ShipmentId, string SKU, string Title, string Status)
         {
             int Count = 0;
+            GetShipedAndRecQtyViewModel responses = new GetShipedAndRecQtyViewModel();
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/GetShipmentHistoryCount?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&Title=" + Title + "&VendorId=" + VendorId + "&SKU=" + SKU + "&Status=" + Status + "&ShipmentId=" + ShipmentId);
@@ -322,21 +323,22 @@ namespace Hld.WebApplication.Helper
                 request.ContentType = "application/json";
                 request.Headers["Authorization"] = "Bearer " + token;
 
-                string strResponse = "";
+                string strResponse ="";
                 using (WebResponse webResponse = request.GetResponse())
                 {
                     using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
                     {
-                        strResponse = stream.ReadToEnd();
-                        Count = Convert.ToInt32(strResponse);
+                        strResponse =stream.ReadToEnd();
                     }
+                     responses = JsonConvert.DeserializeObject<GetShipedAndRecQtyViewModel>(strResponse);
+
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
-            return Count;
+            return responses;
         }
 
         public List<ShipmentHistoryViewModel> GetShipmentHistoryList(string apiurl, string token, string DateTo, string DateFrom, int VendorId, string ShipmentId, string SKU, string Title, int limit, int offset, string Status)
