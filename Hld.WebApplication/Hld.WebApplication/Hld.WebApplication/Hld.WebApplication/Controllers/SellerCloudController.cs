@@ -766,16 +766,21 @@ namespace Hld.WebApplication.Controllers
             return Json(new { status = false, scOrderStatus = "" });
         }
 
-        public OrderStatusViewModel GetOrdersFromSCRest(int OrderID, string Token)
+        public OrderStatusViewModel GetOrdersFromSCRest(string orderid,string SCtokin)
         {
             OrderStatusViewModel orderRelationViewModel = null;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/Orders/6961853" + OrderID);
+                SCtokin = Request.Cookies["Token"];
+                _Selller = new GetChannelCredViewModel();
+                _Selller = _encDecChannel.DecryptedData(ApiURL, SCtokin, "sellercloud");
+                AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+                
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/Orders/" + orderid);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
-                request.Headers["Authorization"] = "Bearer " + Token;
+                request.Headers["Authorization"] = "Bearer " + authenticate.access_token;
                 string strResponse = "";
                 using (WebResponse webResponse = request.GetResponse())
                 {
@@ -787,19 +792,16 @@ namespace Hld.WebApplication.Controllers
                 var X = JObject.Parse(strResponse);
                 if (X != null)
                 {
-                    var RelatedOrders = X["RelatedOrders"];
+                    var RelatedOrders = X["Statuses"];
                     var count = RelatedOrders.Count();
                     if (RelatedOrders != null && RelatedOrders.Count() > 0)
                     {
                         orderRelationViewModel = new OrderStatusViewModel();
-                        string relation = RelatedOrders[0].Value<string>("RelationshipType").ToString();
-                        if (relation == "1" || relation == "4")
-                        {
-                            orderRelationViewModel.OrderStatus = X["OrderStatus"].Value<string>("OrderSourceOrderId").ToString();
-                            orderRelationViewModel.ShippingStatus = X["ShippingStatus"].Value<string>("OrderSourceOrderId").ToString();
-                            orderRelationViewModel.PaymentStatus = X["PaymentStatus"].Value<string>("OrderSourceOrderId").ToString();
+                        
+                            orderRelationViewModel.OrderStatus = X["Statuses"].Value<string>("OrderStatus").ToString();
+                            orderRelationViewModel.PaymentStatus = X["Statuses"].Value<string>("PaymentStatus").ToString();
+                            orderRelationViewModel.DropshipStatus = X["Statuses"].Value<string>("DropshipStatus").ToString();
 
-                        }
                     }
                 }
             }

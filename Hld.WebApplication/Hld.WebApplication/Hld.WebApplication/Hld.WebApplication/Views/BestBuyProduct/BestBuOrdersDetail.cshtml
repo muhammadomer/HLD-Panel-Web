@@ -944,7 +944,8 @@
                 var OrderId = $(sendToZincReferenceAferSubmit).attr('data-OrderId');
                 var URL = '/Zinc/SendOrderToZinc';
                 var SellerCloudOrderId = $(sendToZincReferenceAferSubmit).attr('data-SellerCloudOrderId');
-                var Url = '/SellerCloud/GetOrderStatus/';
+                //var Url = '/SellerCloud/GetOrderStatus/';
+                var Url = '/SellerCloud/GetOrdersFromSCRest/';
                 $.ajax({
                     type: 'Get',
                     url: Url,
@@ -1011,7 +1012,8 @@
 
                     var SellerCloudOrderId = $(this).attr('data-SellerCloudOrderId');
                     var URL = '/Zinc/SendOrderToZinc';
-                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+                   // var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIstForSingleWH';
 
                     $.ajax({
                         type: 'Get',

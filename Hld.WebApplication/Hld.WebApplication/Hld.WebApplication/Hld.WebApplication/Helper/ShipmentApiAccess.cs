@@ -331,7 +331,6 @@ namespace Hld.WebApplication.Helper
                         strResponse =stream.ReadToEnd();
                     }
                      responses = JsonConvert.DeserializeObject<GetShipedAndRecQtyViewModel>(strResponse);
-
                 }
             }
             catch (Exception ex)
