@@ -747,382 +747,389 @@
                 <tbody class="">
                     @foreach (var item in Model.BBProductDetail)
                     {
-                        <tr>
-                            <td style="">
-                                <input class="selectSkucheckbox" value="@item.ProductSKU" type="checkbox">
-                            </td>
-                            <td>
+                    <tr>
+                        <td style="">
+                            <input class="selectSkucheckbox" value="@item.ProductSKU" type="checkbox">
+                        </td>
+                        <td>
 
-                                @{
-                                    <a target="_blank" href="@ViewBag.ImageUrL_Large/@item.ImageUrl">
-                                        <img src="@ViewBag.ImagesURL/@item.ImageUrl" class="rounded" height="50" width="50" />
-                                    </a>
-                                }
+                            @{
+                                <a target="_blank" href="@ViewBag.ImageUrL_Large/@item.ImageUrl">
+                                    <img src="@ViewBag.ImagesURL/@item.ImageUrl" class="rounded" height="50" width="50" />
+                                </a>
+                            }
 
-                            </td>
-                            <td>
-                                <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.ProductSKU" target="_blank">@item.ProductSKU</a>
-                                <div class="row justify-content-xl-center">
-                                    <a style="padding-left:5px;cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.ProductSKU" target="_blank">
-                                        <img height="15px" width="20px" src="~/Images/sellercloud-gray.png" />
-                                    </a>
+                        </td>
+                        <td>
+                            <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.ProductSKU" target="_blank">@item.ProductSKU</a>
+                            <div class="row justify-content-xl-center">
+                                <a style="padding-left:5px;cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.ProductSKU" target="_blank">
+                                    <img height="15px" width="20px" src="~/Images/sellercloud-gray.png" />
+                                </a>
 
-                                    <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BestBuyPorductID" target="_blank">
-                                        <img height="15px" width="20px" src="~/Images/BestBuy-Gray.png" />
-                                    </a>
-                                    <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.BestBuyPorductID" target="_blank">
-                                        <img height="10px" width="15px" src="~/Images/openbb.png" />
-                                    </a>
+                                <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BestBuyPorductID" target="_blank">
+                                    <img height="15px" width="20px" src="~/Images/BestBuy-Gray.png" />
+                                </a>
+                                <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.BestBuyPorductID" target="_blank">
+                                    <img height="10px" width="15px" src="~/Images/openbb.png" />
+                                </a>
 
 
-                                </div>
-                                <div class="row justify-content-xl-center">
-                                    @if (item.skuTags != null)
+                            </div>
+                            <div class="row justify-content-xl-center">
+                                @if (item.skuTags != null)
+                                {
+                                    @foreach (var tag in item.skuTags)
                                     {
-                                        @foreach (var tag in item.skuTags)
-                                        {
-                                            <span class="taground" style="background-color:@tag.TagColor;">@tag.TagName</span>
-                                        }
+                                        <span class="taground" style="background-color:@tag.TagColor;">@tag.TagName</span>
                                     }
-                                </div>
-                            </td>
-                            @if (item.ProductTitle.ToLower().Contains("large"))
-                            {
-                                <td>
-                                    <span>@item.ProductTitle</span> <span style="display:inline-block;color:white;background-color:blue">Large</span>
-                                    <span class="tooltipTitle">
-                                        <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
+                                }
+                            </div>
+                        </td>
+                        @if (item.ProductTitle.ToLower().Contains("large"))
+                        {
+                            <td>
+                                <span>@item.ProductTitle</span> <span style="display:inline-block;color:white;background-color:blue">Large</span>
+                                <span class="tooltipTitle">
+                                    <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
 
-                                        <span class="topdata" id=@(Model.SellerCloudOrderID+item.ProductSKU)>
+                                    <span class="topdata" id=@(Model.SellerCloudOrderID + item.ProductSKU)>
 
-                                        </span>
                                     </span>
+                                </span>
 
-                                </td>
+                            </td>
+
+                        }
+                        else if (item.ProductTitle.ToLower().Contains("small"))
+                        {
+                            <td>
+                                <span>@item.ProductTitle</span> <span style="display:inline-block;color:white;background-color:blue">Small</span>
+
+                                <span class="tooltipTitle">
+                                    <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
+
+                                    <span class="topdata " id=@(Model.SellerCloudOrderID + item.ProductSKU)>
+
+                                    </span>
+                                </span>
+                            </td>
+
+                        }
+                        else
+                        {
+                            <td>
+                                @item.ProductTitle
+
+
+                                <span class="tooltipTitle">
+                                    <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
+
+                                    <span class="topdata " id=@(Model.SellerCloudOrderID + item.ProductSKU)>
+
+                                    </span>
+                                </span>
+                            </td>
+
+                        }
+
+
+
+                        <td class="text-center;display:initial;">
+                            <a asp-action="ProductAddUpdate" target="_blank" asp-controller="Product" asp-route-ProductSKU="@item.ProductSKU"> USD&nbsp;@Math.Round(Convert.ToDecimal(item.AverageCost) / ViewBag.currencyexchange, 2)</a>
+                            <br />
+                            <div style="margin-bottom:3px;">
+                                CAD&nbsp;<span style="font-weight:bold;color:darkgoldenrod">@Math.Round(Convert.ToDecimal(item.AverageCost), 2)</span>
+                                <br />
+                            </div>
+                            @foreach (var i in item.approvedPrices)
+                            {
+
+                                <div style="margin-top:-8px">
+                                    @*<a style='cursor: pointer;' href='/ApprovedPrice?VendorAlias=@i.VendorAlias&Vendor=@i.VendorId&sku=@i.SKU&title=' target='_blank'>*@
+                                    <a style='cursor: pointer;' href='/ApprovedPrice?&sku=@i.SKU&title=' target='_blank'>
+                                        CAD @Math.Round(Convert.ToDecimal(i.CAD), 2)
+                                    </a>
+                                    <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
+                                </div>
 
                             }
-                            else if (item.ProductTitle.ToLower().Contains("small"))
+                        </td>
+
+
+                        @*<td>@math.round(item.calculation_comissionpercentage)% <br /> $@item.calculation_comission </td>
+        <td>@math.round(item.calculation_profitlosspercentage)% <br /> $@item.calculation_profitloss </td>*@
+
+                        <td> @item.calculation_Comission<br /> @Math.Round(item.calculation_comissionPercentage)%</td>
+                        <td> @item.calculation_ProfitLoss<br />  @Math.Round(item.calculation_ProfitLossPercentage)%  </td>
+                       
+                        <td>
+                            @{
+                                var total = (item.UnitPrice) - Convert.ToDecimal((Model.ShippingPrice));
+                                    }
+                            @total
+                        </td>
+                        @* <td>@item.UnitPrice</td>*@
+                        <td>@item.TotalQuantity</td>
+                        <td>@String.Format("{0}", item.TotalQuantity * item.UnitPrice)  </td>
+
+                        <td>
+                            <table class="tableWHQty table-borderless">
+                                <tr>
+                                    @if (item.DropshipStatus)
+                                    {
+                                        <td><span style="color:blue">DSQ:</span> @item.DropshipQty</td>
+                                    }
+                                    else
+                                    {
+                                        <td><span style="color:orange">DSQ:</span> @item.DropshipQty</td>
+                                    }
+
+                                </tr>
+                                <tr>
+
+                                    <td>DS:<input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" /></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        WHQ: <label class=@(item.ProductSKU+"HLD-CA1")>
+                                            @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        FBA CA: <label class=@(item.ProductSKU+"FBACanada")> @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "FBA Canada").Select(e => e.AvailableQty).FirstOrDefault()</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        FBA CA Int: <label class=@(item.ProductSKU+"InterimFBACA")>  @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "Interim FBA CA").Select(e => e.AvailableQty).FirstOrDefault()</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        On Order: <label><a href="/Shipment/ShipmentHistoryList?SKU=@item.ProductSKU&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@item.OnOrder</a></label>
+
+                                    </td>
+                                </tr>
+                            </table>
+                            @*<div class="row">
+
+                @if (item.DropshipStatus)
+                {<label style="color:blue" class="col-sm-6">DSQ</label>
+                    <div class="col-sm-6">
+                        <label>@item.DropshipQty</label> &nbsp; <input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" />
+                    </div>
+                }
+                else
+                {
+                    <label style="color:orange" class="col-sm-6">DSQ</label>
+                    <div class="col-sm-6">
+                        <label>@item.DropshipQty</label> &nbsp; <input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" />
+                    </div>}
+            </div>
+            <div class="row">
+                <label class="col-sm-6">WHQ</label>
+                <div class="col-sm-3">
+                    <label class=@(item.ProductSKU+"HLD-CA1")>
+                        @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()
+                    </label>
+                </div>
+                <div class="col-sm-2" style="padding:0px">
+                    <a id="GetquantityFromSellerCloud" data-id="@item.ProductSKU">
+                        <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                    </a>
+                    <span>
+                        <img style="display:none;" class="ButtonLoader1" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                    </span>
+
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-6">FBA CA</label>
+                <div class="col-sm-6">
+
+                    <label class=@(item.ProductSKU+"FBACanada")>
+                        @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "FBA Canada").Select(e => e.AvailableQty).FirstOrDefault()
+                    </label>
+
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-6" style="padding-right:0px">FBA CA Int</label>
+                <div class="col-sm-6" style="padding-right:0px">
+                    <label class=@(item.ProductSKU+"InterimFBACA")>
+                        @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "Interim FBA CA").Select(e => e.AvailableQty).FirstOrDefault()
+                    </label>
+                </div>
+            </div>*@
+
+                        </td>
+                        <td>
+                            @if (item.ZincAsinDetail != null && item.ZincAsinDetail.Count() > 0)
                             {
-                                <td>
-                                    <span>@item.ProductTitle</span> <span style="display:inline-block;color:white;background-color:blue">Small</span>
 
-                                    <span class="tooltipTitle">
-                                        <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
 
-                                        <span class="topdata " id=@(Model.SellerCloudOrderID+item.ProductSKU)>
+                                @foreach (var Zincitem in item.ZincAsinDetail)
+                                {
 
+                                    <div class="row">
+                                        <div class="col-sm-12 p-t-b">
+                                            <span>@Zincitem.priority</span>
+                                            <input style="margin-right: 15px;" class="ZincAsinRadioButtonOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-MaxPrice="@Zincitem.max_price" data-ASIN="@Zincitem.ASIN" type="radio" name="@item.ProductSKU" value="@Zincitem.ProductSku" data-id="@Zincitem.bb_product_zinc_id" />
+                                            <a target="_blank" href="https://www.amazon.ca/dp/@Zincitem.ASIN?th=1&psc=1">@Zincitem.ASIN</a>
+
+                                            AMZPr:  <span class="amazon_price">@Zincitem.amazon_price</span><strong>,</strong>
+                                            <a target="_blank" asp-controller="Zinc" asp-action="ProductZinc" asp-route-ProductSKU="@item.ProductSKU"> MaxPr:<span class="max_price">@Zincitem.max_price</span></a>
+
+                                        </div>
+
+                                    </div>
+                                    <div style="padding:0px">
+                                        <a class="updateASINLinkLatestGET Updatesendtobtn" data-SKU="@item.ProductSKU">
+                                            <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                                        </a>
+                                        <span>
+                                            <img style="display:none;" class="updateASINLinkLatest" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                                         </span>
-                                    </span>
-                                </td>
+                                    </div>
 
+
+                                }
+                            }
+
+                            else
+                            {
+                                <div>
+                                    <span style="color:red">No ASIN detail found</span>
+                                </div>
+                            }
+
+                        </td>
+
+                        <td>
+                            <div>
+                                @if (item.ZincOrderStatusInternal == "Shipped" && item.IsTrackingUpdateToSC == false)
+                                {
+                                    <a href="javascript:;" data-productSku="@item.ProductSKU" data-toggle="tooltip" data-placement="top" title="It will update tracking, DropShip status as Processed & inventory adj in DropShip Canada warehouse" data-itemQuantity="@item.TotalQuantity" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-ZincOrderLogDetailID="@item.ZincOrderLogDetailID" class="sendTrackingToSC">Send Tracking To SC</a>
+                                    <span>
+                                        <img style="display:none;" class="UpdateSCTrackingLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                    </span>
+                                    <div class="pt-1 SCTrackingStatus" style="display:none;">Tracking already updated on SC.</div>
+                                }
+                                else if (item.ZincOrderStatusInternal == "Shipped" && item.IsTrackingUpdateToSC == true)
+                                {
+
+                                    <div class="pt-1 SCTrackingStatus">Tracking already updated on SC</div>
+                                }
+                                else
+                                {
+                                    <a style="display:none" href="javascript:;" data-productSku="@item.ProductSKU" data-toggle="tooltip" data-placement="top" title="It will update tracking, DropShip status as Processed & inventory adj in DropShip Canada warehouse" data-itemQuantity="@item.TotalQuantity" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-ZincOrderLogDetailID="@item.ZincOrderLogDetailID" class="sendTrackingToSC">Send Tracking To SC</a>
+                                    <div class="pt-1 SCTrackingStatus" style="display:none;">Tracking already updated on SC.</div>
+                                }
+                            </div>
+
+                            <div class="showZincOrderID">
+                                @if (item.ZincRequestID == string.Empty)
+                                {
+                                    <a target="_blank" style="display:none;" href="https://dash.zinc.io/ZACiVJJ8DF3YEXg1GgyHj/orders/">Zinc Order ID</a>
+                                }
+                                else
+                                {
+                                    <a target="_blank" href="https://dash.zinc.io/ZACiVJJ8DF3YEXg1GgyHj/orders/@item.ZincRequestID">Zinc Order ID</a>
+                                }
+
+                            </div>
+                            @* show zinc status message if status is InProgressSuccess *@
+                            @if (item.ZincOrderStatusInternal == "InProgressSuccess")
+                            {
+
+                                <div class="divZincOrderMessage" style="padding-top:3px;">
+                                    @item.ZincMessage
+                                </div>
                             }
                             else
                             {
-                                <td>
-                                    @item.ProductTitle
+                                <div class="divZincOrderMessage" style="padding-top:3px;display:none;">
 
-
-                                    <span class="tooltipTitle">
-                                        <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
-
-                                        <span class="topdata " id=@(Model.SellerCloudOrderID+item.ProductSKU)>
-
-                                        </span>
-                                    </span>
-                                </td>
-
+                                </div>
+                                <span style="display:none;color:#ef08bd;" class="processedOutSideZinc">Processed OutSide Zinc</span>
                             }
 
+                            <div>
+                                <span>Get SC Status</span>
+                                <a id="checkSellerCloudOrderStatusviewpage" data-id="@Model.SellerCloudOrderID">
+                                    <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                                </a>
+                                <span>
+                                    <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                </span>
+                            </div>
+                        </td>
 
-
-                            <td class="text-center;display:initial;">
-                                <a asp-action="ProductAddUpdate" target="_blank" asp-controller="Product" asp-route-ProductSKU="@item.ProductSKU"> USD&nbsp;@Math.Round(Convert.ToDecimal(item.AverageCost) / ViewBag.currencyexchange, 2)</a>
-                                <br />
-                                <div style="margin-bottom:3px;">
-                                    CAD&nbsp;<span style="font-weight:bold;color:darkgoldenrod">@Math.Round(Convert.ToDecimal(item.AverageCost), 2)</span>
-                                    <br />
-                                </div>
-                                @foreach (var i in item.approvedPrices)
-                                {
-
-                                    <div style="margin-top:-8px">
-                                        @*<a style='cursor: pointer;' href='/ApprovedPrice?VendorAlias=@i.VendorAlias&Vendor=@i.VendorId&sku=@i.SKU&title=' target='_blank'>*@
-                                        <a style='cursor: pointer;' href='/ApprovedPrice?&sku=@i.SKU&title=' target='_blank'>
-                                            CAD @Math.Round(Convert.ToDecimal(i.CAD), 2)
-                                        </a>
-                                        <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
-                                    </div>
-
-                                }
-                            </td>
-
-
-                            @*<td>@math.round(item.calculation_comissionpercentage)% <br /> $@item.calculation_comission </td>
-                                <td>@math.round(item.calculation_profitlosspercentage)% <br /> $@item.calculation_profitloss </td>*@
-
-                            <td> @item.calculation_Comission<br /> @Math.Round(item.calculation_comissionPercentage)%</td>
-                            <td> @item.calculation_ProfitLoss<br />  @Math.Round(item.calculation_ProfitLossPercentage)%  </td>
-                            <td>@item.UnitPrice</td>
-                            <td>@item.TotalQuantity</td>
-                            <td>@String.Format("{0}", item.TotalQuantity * item.UnitPrice)  </td>
-
-                            <td>
-                                <table class="tableWHQty table-borderless">
-                                    <tr>
-                                        @if (item.DropshipStatus)
-                                        {
-                                            <td><span style="color:blue">DSQ:</span> @item.DropshipQty</td>
-                                        }
-                                        else
-                                        {
-                                            <td><span style="color:orange">DSQ:</span> @item.DropshipQty</td>
-                                        }
-
-                                    </tr>
-                                    <tr>
-
-                                        <td>DS:<input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            WHQ: <label class=@(item.ProductSKU+"HLD-CA1")>
-                                                @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()
-                                            </label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            FBA CA: <label class=@(item.ProductSKU+"FBACanada")> @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "FBA Canada").Select(e => e.AvailableQty).FirstOrDefault()</label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            FBA CA Int: <label class=@(item.ProductSKU+"InterimFBACA")>  @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "Interim FBA CA").Select(e => e.AvailableQty).FirstOrDefault()</label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            On Order: <label><a href="/Shipment/ShipmentHistoryList?SKU=@item.ProductSKU&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@item.OnOrder</a></label>
-
-                                        </td>
-                                    </tr>
-                                </table>
-                                @*<div class="row">
-
-                                        @if (item.DropshipStatus)
-                                        {<label style="color:blue" class="col-sm-6">DSQ</label>
-                                            <div class="col-sm-6">
-                                                <label>@item.DropshipQty</label> &nbsp; <input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" />
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <label style="color:orange" class="col-sm-6">DSQ</label>
-                                            <div class="col-sm-6">
-                                                <label>@item.DropshipQty</label> &nbsp; <input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" />
-                                            </div>}
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-sm-6">WHQ</label>
-                                        <div class="col-sm-3">
-                                            <label class=@(item.ProductSKU+"HLD-CA1")>
-                                                @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()
-                                            </label>
-                                        </div>
-                                        <div class="col-sm-2" style="padding:0px">
-                                            <a id="GetquantityFromSellerCloud" data-id="@item.ProductSKU">
-                                                <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
-                                            </a>
-                                            <span>
-                                                <img style="display:none;" class="ButtonLoader1" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                            </span>
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-sm-6">FBA CA</label>
-                                        <div class="col-sm-6">
-
-                                            <label class=@(item.ProductSKU+"FBACanada")>
-                                                @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "FBA Canada").Select(e => e.AvailableQty).FirstOrDefault()
-                                            </label>
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-sm-6" style="padding-right:0px">FBA CA Int</label>
-                                        <div class="col-sm-6" style="padding-right:0px">
-                                            <label class=@(item.ProductSKU+"InterimFBACA")>
-                                                @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "Interim FBA CA").Select(e => e.AvailableQty).FirstOrDefault()
-                                            </label>
-                                        </div>
-                                    </div>*@
-
-                            </td>
-                            <td>
-                                @if (item.ZincAsinDetail != null && item.ZincAsinDetail.Count() > 0)
-                                {
-
-
-                                    @foreach (var Zincitem in item.ZincAsinDetail)
-                                    {
-
-                                        <div class="row">
-                                            <div class="col-sm-12 p-t-b">
-                                                <span>@Zincitem.priority</span>
-                                                <input style="margin-right: 15px;" class="ZincAsinRadioButtonOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-MaxPrice="@Zincitem.max_price" data-ASIN="@Zincitem.ASIN" type="radio" name="@item.ProductSKU" value="@Zincitem.ProductSku" data-id="@Zincitem.bb_product_zinc_id" />
-                                                <a target="_blank" href="https://www.amazon.ca/dp/@Zincitem.ASIN?th=1&psc=1">@Zincitem.ASIN</a>
-
-                                                AMZPr:  <span class="amazon_price">@Zincitem.amazon_price</span><strong>,</strong>
-                                                <a target="_blank" asp-controller="Zinc" asp-action="ProductZinc" asp-route-ProductSKU="@item.ProductSKU"> MaxPr:<span class="max_price">@Zincitem.max_price</span></a>
-
-                                            </div>
-
-                                        </div>
-                                        <div style="padding:0px">
-                                            <a class="updateASINLinkLatestGET Updatesendtobtn" data-SKU="@item.ProductSKU">
-                                                <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
-                                            </a>
-                                            <span>
-                                                <img style="display:none;" class="updateASINLinkLatest" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                            </span>
-                                        </div>
-
-
-                                    }
-                                }
-
-                                else
+                        <td>
+                            @if (item.ZincOrderStatusInternal == "Error" || item.ZincOrderStatusInternal == "Canceled" || item.ZincRequestID == "")
+                            {
+                                if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID == "")
                                 {
                                     <div>
-                                        <span style="color:red">No ASIN detail found</span>
-                                    </div>
-                                }
-
-                            </td>
-
-                            <td>
-                                <div>
-                                    @if (item.ZincOrderStatusInternal == "Shipped" && item.IsTrackingUpdateToSC == false)
-                                    {
-                                        <a href="javascript:;" data-productSku="@item.ProductSKU" data-toggle="tooltip" data-placement="top" title="It will update tracking, DropShip status as Processed & inventory adj in DropShip Canada warehouse" data-itemQuantity="@item.TotalQuantity" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-ZincOrderLogDetailID="@item.ZincOrderLogDetailID" class="sendTrackingToSC">Send Tracking To SC</a>
-                                        <span>
-                                            <img style="display:none;" class="UpdateSCTrackingLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                        </span>
-                                        <div class="pt-1 SCTrackingStatus" style="display:none;">Tracking already updated on SC.</div>
-                                    }
-                                    else if (item.ZincOrderStatusInternal == "Shipped" && item.IsTrackingUpdateToSC == true)
-                                    {
-
-                                        <div class="pt-1 SCTrackingStatus">Tracking already updated on SC</div>
-                                    }
-                                    else
-                                    {
-                                        <a style="display:none" href="javascript:;" data-productSku="@item.ProductSKU" data-toggle="tooltip" data-placement="top" title="It will update tracking, DropShip status as Processed & inventory adj in DropShip Canada warehouse" data-itemQuantity="@item.TotalQuantity" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-ZincOrderLogDetailID="@item.ZincOrderLogDetailID" class="sendTrackingToSC">Send Tracking To SC</a>
-                                        <div class="pt-1 SCTrackingStatus" style="display:none;">Tracking already updated on SC.</div>
-                                    }
-                                </div>
-
-                                <div class="showZincOrderID">
-                                    @if (item.ZincRequestID == string.Empty)
-                                    {
-                                        <a target="_blank" style="display:none;" href="https://dash.zinc.io/ZACiVJJ8DF3YEXg1GgyHj/orders/">Zinc Order ID</a>
-                                    }
-                                    else
-                                    {
-                                        <a target="_blank" href="https://dash.zinc.io/ZACiVJJ8DF3YEXg1GgyHj/orders/@item.ZincRequestID">Zinc Order ID</a>
-                                    }
-
-                                </div>
-                                @* show zinc status message if status is InProgressSuccess *@
-                                @if (item.ZincOrderStatusInternal == "InProgressSuccess")
-                                {
-
-                                    <div class="divZincOrderMessage" style="padding-top:3px;">
-                                        @item.ZincMessage
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="divZincOrderMessage" style="padding-top:3px;display:none;">
-
-                                    </div>
-                                    <span style="display:none;color:#ef08bd;" class="processedOutSideZinc">Processed OutSide Zinc</span>
-                                }
-
-                                <div>
-                                    <span>Get SC Status</span>
-                                    <a id="checkSellerCloudOrderStatusviewpage" data-id="@Model.SellerCloudOrderID">
-                                        <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
-                                    </a>
-                                    <span>
-                                        <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                </div>
-                            </td>
-
-                            <td>
-                                @if (item.ZincOrderStatusInternal == "Error" || item.ZincOrderStatusInternal == "Canceled" || item.ZincRequestID == "")
-                                {
-                                    if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID == "")
-                                    {
-                                        <div>
-                                            <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
-                                            <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
-                                        </div>
-                                    }
-                                    else if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID != "")
-                                    {
-                                        <div>
-                                            <a href="javascript:;" class="resendtozincbtn" style="display:inline-block;color:white" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Resend to Zinc</a>
-                                            <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
-                                        </div>
-                                    }
-                                    <div>
-                                        <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
-                                        <span>
-                                            <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                        </span>
-                                    </div>
-                                }
-                                else if (item.ZincOrderStatusInternal == "InProcess" || item.ZincOrderStatusInternal == "OrderRequestSent" || item.ZincOrderStatusInternal == "InProgressSuccess")
-                                {
-                                    <a href="javascript:;" style="display:block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
-                                    <span>
-                                        <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                    <div>
-                                        <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                        <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
                                         <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
                                     </div>
                                 }
-                                else if (item.ZincOrderStatusInternal == "" && item.ZincRequestID != "")
+                                else if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID != "")
                                 {
-                                    <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
-                                    <span>
-                                        <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                    </span>
                                     <div>
-                                        <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                        <a href="javascript:;" class="resendtozincbtn" style="display:inline-block;color:white" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Resend to Zinc</a>
                                         <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
                                     </div>
                                 }
-                                else
-                                {
+                                <div>
                                     <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
                                     <span>
                                         <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                                     </span>
-                                    <div>
-                                        <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" role="button">Send to Zinc</a>
-                                        <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
-                                    </div>
-                                }
-                                <label id="ErrorZinc"></label>
-                            </td>
+                                </div>
+                            }
+                            else if (item.ZincOrderStatusInternal == "InProcess" || item.ZincOrderStatusInternal == "OrderRequestSent" || item.ZincOrderStatusInternal == "InProgressSuccess")
+                            {
+                                <a href="javascript:;" style="display:block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                <span>
+                                    <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                </span>
+                                <div>
+                                    <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                    <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                </div>
+                            }
+                            else if (item.ZincOrderStatusInternal == "" && item.ZincRequestID != "")
+                            {
+                                <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                <span>
+                                    <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                </span>
+                                <div>
+                                    <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                    <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                </div>
+                            }
+                            else
+                            {
+                                <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                <span>
+                                    <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                </span>
+                                <div>
+                                    <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" role="button">Send to Zinc</a>
+                                    <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                </div>
+                            }
+                            <label id="ErrorZinc"></label>
+                        </td>
 
 
-                        </tr>
+                    </tr>
                     }
 
                 </tbody>

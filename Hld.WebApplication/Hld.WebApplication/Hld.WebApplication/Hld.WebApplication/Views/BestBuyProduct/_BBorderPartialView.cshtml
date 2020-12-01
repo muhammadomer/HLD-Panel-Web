@@ -365,11 +365,14 @@
                                         <div class="col-sm-6">
                                             @if (item.ProfitAndLossInPercentage > 5)
                                             {
-                                                <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@item.TotalPrice,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Comm:</strong>$@item.TotalComission,&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:blue">$@item.ProfitAndLossInDollar (@item.ProfitAndLossInPercentage%)</span></label>
+                                                var total =(@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
+
+                                            <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Comm:</strong>$@item.TotalComission,&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:blue">$@item.ProfitAndLossInDollar (@item.ProfitAndLossInPercentage%)</span></label>
                                             }
                                             else
                                             {
-                                                <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@item.TotalPrice,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Comm:</strong>$@item.TotalComission,&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:red">$@item.ProfitAndLossInDollar (@item.ProfitAndLossInPercentage%)</span></label>
+                                                var total = (@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
+                                        <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Comm:</strong>$@item.TotalComission,&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:red">$@item.ProfitAndLossInDollar (@item.ProfitAndLossInPercentage%)</span></label>
                                             }
 
                                         </div>
@@ -539,7 +542,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <label class="col-sm-6" style="padding-right:0px">OnOrder</label>
+                                            <label class="col-sm-6" style="padding-right:0px">On Order</label>
                                             <div class="col-sm-6" style="padding-right:0px">
                                                 <label><a  href="/Shipment/ShipmentHistoryList?SKU=@detail.ProductSKU&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@detail.OnOrder</a></label>
                                             </div>
