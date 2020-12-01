@@ -12,9 +12,7 @@ namespace Hld.WebApplication.ViewModel
     {
         public int ManufactureId { get;set;}
         public int ManufactureModelId { get; set; }
-        public int ParentID { get;set;}
-        [Required(ErrorMessage = "ManufactureName is required")]
-        [MaxLength(20, ErrorMessage = "Maximum 20 characters allowed")]
+        public int ParentID { get;set;}            
         public  string ManufactureName { get;set;}     
         public string ManufactureModel { get;set;}
         [Required(ErrorMessage = "DeviceModel is required")]

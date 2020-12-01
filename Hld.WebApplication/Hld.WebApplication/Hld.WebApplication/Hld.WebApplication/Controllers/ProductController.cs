@@ -1220,6 +1220,9 @@ namespace Hld.WebApplication.Controllers
 
         }
 
+        
+
+
         [HttpPost]
         public JsonResult GetAlColorForAutoComplete(string Prefix){
             token = Request.Cookies["Token"];
@@ -1840,6 +1843,25 @@ namespace Hld.WebApplication.Controllers
             }
 
         }
+
+        [HttpPost]
+        public JsonResult GetAllVendorManuForAutoComplete(string Prefix)
+        {
+            token = Request.Cookies["Token"];
+          
+            List<ProductManufacturedViewModel> model = ProductApiAccess.GetManufactureName(ApiURL, token, Prefix);
+            
+            if (model == null)
+            {
+                return Json(model);
+            }
+            else
+            {
+                return Json(model);
+            }
+
+        }
+
 
         [HttpGet]
         public List<GetManufactureModelViewModel> GetManufactureIdByNameChange(int ManufactureId)

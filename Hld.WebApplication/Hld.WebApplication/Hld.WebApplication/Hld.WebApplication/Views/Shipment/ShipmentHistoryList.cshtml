@@ -205,16 +205,16 @@
                         <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
                         <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
                     </div>
-                    <div class="col-md-3 p-0 mr-1">
+                    <div class="col-md-2 p-0 mr-1">
                         <input type="text" id="Title" name="Title" value="@Model.Title" placeholder="Title" class="form-control" style="box-shadow: none" />
                     </div>
                     <div class="col-md-1 p-0 mr-1">
                         <input type="text" id="ShipmentId" name="ShipmentId" value="@Model.ShipmentId" placeholder="ShipmentID" class="form-control" style="box-shadow: none" />
                     </div>
-                    <div class=" col-md-1 p-0 mr-1">
+                    <div class=" col-md-2 p-0 mr-1">
                         <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 QuantityStatus" multiple="multiple" style="box-shadow:none">
                             <option value="InProcess">In Process</option>
-                            <option value="Shiped">Shipped</option>
+                            <option value="Shiped">Shipped but not Received</option>
                             <option value="Received">Received</option>
                             <option value="ReceiveInProcess">Receive In Process</option>
                         </select>

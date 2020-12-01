@@ -985,6 +985,7 @@
 
                                         </div>
 
+
                                     </div>
                                     <div style="padding:0px">
                                         <a class="updateASINLinkLatestGET Updatesendtobtn" data-SKU="@item.ProductSKU">
@@ -1053,6 +1054,7 @@
                             {
                                 <div class="divZincOrderMessage" style="padding-top:3px;display:none;">
 
+
                                 </div>
                                 <span style="display:none;color:#ef08bd;" class="processedOutSideZinc">Processed OutSide Zinc</span>
                             }
@@ -1068,65 +1070,70 @@
                             </div>
                         </td>
 
-                        <td>
-                            @if (item.ZincOrderStatusInternal == "Error" || item.ZincOrderStatusInternal == "Canceled" || item.ZincRequestID == "")
-                            {
-                                if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID == "")
+            
+                            <td>
+                                @if(!Model.Street.ToLower().Contains("box"))
                                 {
-                                    <div>
-                                        <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
-                                        <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
-                                    </div>
+                                    @if (item.ZincOrderStatusInternal == "Error" || item.ZincOrderStatusInternal == "Canceled" || item.ZincRequestID == "")
+                                    {
+                                        if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID == "")
+                                        {
+                                            <div>
+                                                <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                                <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                            </div>
+                                        }
+                                        else if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID != "")
+                                        {
+                                            <div>
+                                                <a href="javascript:;" class="resendtozincbtn" style="display:inline-block;color:white" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Resend to Zinc</a>
+                                                <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                            </div>
+                                        }
+                                        <div>
+                                            <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                            <span>
+                                                <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                            </span>
+                                        </div>
+                                    }
+                                    else if (item.ZincOrderStatusInternal == "InProcess" || item.ZincOrderStatusInternal == "OrderRequestSent" || item.ZincOrderStatusInternal == "InProgressSuccess")
+                                    {
+                                        <a href="javascript:;" style="display:block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                        <span>
+                                            <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                        </span>
+                                        <div>
+                                            <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                            <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                        </div>
+                                    }
+                                    else if (item.ZincOrderStatusInternal == "" && item.ZincRequestID != "")
+                                    {
+                                        <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                        <span>
+                                            <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                        </span>
+                                        <div>
+                                            <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                            <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                        <span>
+                                            <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                        </span>
+                                        <div>
+                                            <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" role="button">Send to Zinc</a>
+                                            <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                        </div>
+                                    }
                                 }
-                                else if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID != "")
-                                {
-                                    <div>
-                                        <a href="javascript:;" class="resendtozincbtn" style="display:inline-block;color:white" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Resend to Zinc</a>
-                                        <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
-                                    </div>
-                                }
-                                <div>
-                                    <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
-                                    <span>
-                                        <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                    </span>
-                                </div>
-                            }
-                            else if (item.ZincOrderStatusInternal == "InProcess" || item.ZincOrderStatusInternal == "OrderRequestSent" || item.ZincOrderStatusInternal == "InProgressSuccess")
-                            {
-                                <a href="javascript:;" style="display:block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
-                                <span>
-                                    <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                </span>
-                                <div>
-                                    <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
-                                    <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
-                                </div>
-                            }
-                            else if (item.ZincOrderStatusInternal == "" && item.ZincRequestID != "")
-                            {
-                                <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
-                                <span>
-                                    <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                </span>
-                                <div>
-                                    <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
-                                    <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
-                                </div>
-                            }
-                            else
-                            {
-                                <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
-                                <span>
-                                    <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                                </span>
-                                <div>
-                                    <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" role="button">Send to Zinc</a>
-                                    <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
-                                </div>
-                            }
-                            <label id="ErrorZinc"></label>
-                        </td>
+                                <label id="ErrorZinc"></label>
+                            </td>
+
 
 
                     </tr>
@@ -1156,7 +1163,7 @@
 
                 </div>
 
-                <div class="lblSellerCloudOrderStatus">
+                @*<div class="lblSellerCloudOrderStatus">
                     1: <span style="color:blue;"></span>
                 </div>
 
@@ -1166,7 +1173,7 @@
 
                 <div class="paymentStatus">
                     3: <span style="color:blue;"></span>
-                </div>
+                </div>*@
 
             </div>
             <div class="modal-footer">
@@ -1255,8 +1262,8 @@
             var SellerCloudOrderId = $(sendToZincReferenceAferSubmit).attr('data-SellerCloudOrderId');
             console.log("SellerCloudOrderId1111>", SellerCloudOrderId)
             $(loader).css('display', 'block');
-            var Url = '/SellerCloud/GetOrderStatus/';
-
+            //var Url = '/SellerCloud/GetOrderStatus/';
+            var Url = '/SellerCloud/GetOrdersFromSCRest/';
 
 
             var URL = '/BBOrderViewPage/SendOrderToZincOrderView';
@@ -1298,7 +1305,7 @@
                 success: function (data) {
                     $(".loadertbl").hide();
                     $(loader).css('display', 'none');
-                    if (data.DropshipStatus == 'None' && data.scOrderStatus == "InProcess" && data.PaymentStats == "Charged") {
+                    if (data.DropshipStatus == 0 && data.OrderStatus == 2 && data.PaymentStatus == 30) {
                         $.ajax({
                             type: 'Get',
                             url: URL,
@@ -1323,9 +1330,9 @@
                     else {
                         $('#myModalQTY').modal('show');
 
-                        $('#modelBodyQTY').find('.lblSellerCloudOrderStatus>span').append(data.scOrderStatus);
-                        $('#modelBodyQTY').find('.checkSellerCloudOrderStatus>span').append(data.DropshipStatus);
-                        $('#modelBodyQTY').find('.paymentStatus>span').append(data.PaymentStats);
+                        //$('#modelBodyQTY').find('.lblSellerCloudOrderStatus>span').append(data.scOrderStatus);
+                        //$('#modelBodyQTY').find('.checkSellerCloudOrderStatus>span').append(data.DropshipStatus);
+                        //$('#modelBodyQTY').find('.paymentStatus>span').append(data.PaymentStats);
                     }
                 }
             });
@@ -1367,7 +1374,8 @@
 
                 if (SKUArraryForSinglePage.length == ASINList_.length) {
                     console.log("SKKKKKKK",SKUArraryForSinglePage)
-                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+                    //var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIstForSingleWH';
                     $.each(SKUArraryForSinglePage, function (index, value) {
                         console.log("valueeeeee",value)
                         $.ajax({
@@ -1439,6 +1447,8 @@
             }
         $(document).on("click", ".updateASINLinkLatestGET", function () {
             debugger
+            var zincloader = $("div").find(".updateASINLinkLatest");
+            $(zincloader).css('display', 'block');
             $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
                 var status = $(this).is(':checked');
                 if (status) {
@@ -1447,14 +1457,14 @@
                     var productASIN = $(this).attr('data-ASIN');
                     
                     var sku = $(this).attr('data-SKU');
-                   
+                  
                 }
                 $.ajax({
                     type: "POST",
                     url: '/Zinc/GetProductOfferDataFromZincAndUpdate?orderid=' + productASIN + '&ProductSKU=' + sku + '&bbZincID=' + OrderId,
                     success: function (data) {
 
-                       
+                        $(zincloader).css('display', 'none');
                         if (data != null) {
                             $("div").find(".amazon_price").text(data.itemprice / 100);
                             var maxprice = data.itemprice * 1.25 / 100;
@@ -1645,6 +1655,7 @@
                 var btnSendToZinc = $('#btnSendToZincOrderView');
                 $(loader).css('display', 'block');
                 var Url = '/SellerCloud/GetOrderStatus/';
+
                 $.ajax({
                     type: 'Get',
                     url: Url,

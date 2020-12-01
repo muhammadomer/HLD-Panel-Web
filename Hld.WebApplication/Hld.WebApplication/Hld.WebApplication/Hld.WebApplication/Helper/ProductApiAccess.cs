@@ -1879,6 +1879,26 @@ namespace Hld.WebApplication.Helper
             return responses;
         }
 
+        public List<ProductManufacturedViewModel> GetManufactureName(string apiurl, string token, string name)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetManufactureName/" + name + "");
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<ProductManufacturedViewModel> responses = JsonConvert.DeserializeObject<List<ProductManufacturedViewModel>>(strResponse);
+            return responses;
+        }
+
         //public bool GetManufactureIdByNameChange(string ApiURL, string token, int ManufactureId)
         //{
         //    bool status = false;

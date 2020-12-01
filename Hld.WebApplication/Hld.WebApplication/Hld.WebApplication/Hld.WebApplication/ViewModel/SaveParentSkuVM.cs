@@ -11,6 +11,7 @@ namespace Hld.WebApplication.ViewModel
     {
        
         public int Parentproduct_id { get; set; }
+        public int ManufactureId { get; set; }
         public int Childproduct_id { get; set; }
         public int productstatus { get; set; }
         public string Sku { get; set; }
@@ -23,7 +24,7 @@ namespace Hld.WebApplication.ViewModel
         public decimal ShipLt { get; set; }
         public decimal ShipHt { get; set; }
         public decimal ShipmentWeight { get; set; }
-        public int ManufactureName { get; set; }
+        public string ManufactureName { get; set; }
         public int ManufactureModel { get; set; }
         //public string Menufacture { get; set; }
         //public string MenufactureModel { get; set; }

@@ -564,7 +564,7 @@
 
                 </div>
                 
-                <div class="lblSellerCloudOrderStatus">
+                @*<div class="lblSellerCloudOrderStatus">
                     1: <span style="color:blue;"></span>
                 </div>
                
@@ -574,7 +574,7 @@
                 
                 <div class="paymentStatus">
                     3: <span style="color:blue;"></span>
-                </div>
+                </div>*@
               
             </div>
             <div class="modal-footer">
@@ -954,7 +954,7 @@
                     traditional: true,
                     success: function (data) {
                         $(".loadertbl").hide();
-                        if (data.DropshipStatus == "None" && data.scOrderStatus == "InProcess" && data.PaymentStats == "Charged") {
+                        if (data.DropshipStatus == 0 && data.OrderStatus == 2 && data.PaymentStatus == 30) {
                             $.ajax({
                                 type: 'Get',
                                 url: URL,
@@ -981,9 +981,9 @@
                         else {
                             $('#myModalQTY').modal('show');
                            
-                            $('#modelBodyQTY').find('.lblSellerCloudOrderStatus>span').append(data.scOrderStatus);
-                            $('#modelBodyQTY').find('.checkSellerCloudOrderStatus>span').append(data.DropshipStatus);
-                            $('#modelBodyQTY').find('.paymentStatus>span').append(data.PaymentStats);
+                            //$('#modelBodyQTY').find('.lblSellerCloudOrderStatus>span').append(data.scOrderStatus);
+                            //$('#modelBodyQTY').find('.checkSellerCloudOrderStatus>span').append(data.DropshipStatus);
+                            //$('#modelBodyQTY').find('.paymentStatus>span').append(data.PaymentStats);
                         }
                     }
                 });
