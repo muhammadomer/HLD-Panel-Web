@@ -865,7 +865,7 @@
                        
                         <td>
                             @{
-                                var total = (item.UnitPrice) - Convert.ToDecimal((Model.ShippingPrice));
+                                decimal total = (item.UnitPrice) -(item.ShippingFee);
                                     }
                             @total
                         </td>

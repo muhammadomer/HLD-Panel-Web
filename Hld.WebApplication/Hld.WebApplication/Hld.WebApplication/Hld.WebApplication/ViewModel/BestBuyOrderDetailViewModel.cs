@@ -39,6 +39,7 @@ namespace Hld.WebApplication.ViewModel
         public int DropshipQty { get; set; }
         public string BestBuyPorductID { get; set; }
         public string PaymentStatus { get; set; }
+        public decimal ShippingFee { get; set; }
         //calculation properties
         public decimal ApprovedUnitPriceCAD { get; set; }
         public decimal calculation_TotalAmountOfUnitPrice { get; set; }

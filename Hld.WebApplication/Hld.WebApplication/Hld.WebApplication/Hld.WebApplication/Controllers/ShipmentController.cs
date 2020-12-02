@@ -462,13 +462,22 @@ namespace Hld.WebApplication.Controllers
                 }
                 Status += ")";
             }
+            if ((string.IsNullOrEmpty(viewModel.EmptyFirstTime) || viewModel.EmptyFirstTime == "undefined"))
+            {
 
-            model = _ApiAccess.GetShipmentHistoryCount(ApiURL, token, DateTo, DateFrom, POMasterID, viewModel.ShipmentId, viewModel.SKU, viewModel.Title, Status);
-            ViewBag.TotalCount = model.TotalCount;
-            TempData["ShipQty"] = model.ShipedQty;
-            TempData["RecQty"] = model.RecivedQty;
-            //ViewBag.ShipQty = model.ShipedQty;
-            //ViewBag.RecQty = model.RecivedQty;
+            }
+            else
+            {
+                model = _ApiAccess.GetShipmentHistoryCount(ApiURL, token, DateTo, DateFrom, POMasterID, viewModel.ShipmentId, viewModel.SKU, viewModel.Title, Status);
+                ViewBag.TotalCount = model.TotalCount;
+                TempData["ShipQty"] = model.ShipedQty;
+                TempData["RecQty"] = model.RecivedQty;
+
+            }
+            //  model = _ApiAccess.GetShipmentHistoryCount(ApiURL, token, DateTo, DateFrom, POMasterID, viewModel.ShipmentId, viewModel.SKU, viewModel.Title, Status);
+            //ViewBag.TotalCount = model.TotalCount;
+            //TempData["ShipQty"] = model.ShipedQty;
+            //TempData["RecQty"] = model.RecivedQty;
             //ViewBag.S3BucketURL = s3BucketURL;
             //ViewBag.S3BucketURL_large = s3BucketURL_large;
             return View(viewModel);

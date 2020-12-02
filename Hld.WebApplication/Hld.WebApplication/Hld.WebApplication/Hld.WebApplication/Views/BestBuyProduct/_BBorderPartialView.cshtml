@@ -367,13 +367,13 @@
                                         <div class="col-sm-6">
                                             @if (item.ProfitAndLossInPercentage > 5)
                                             {
-                                                var total =(@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
+                                                decimal total =(@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
 
                                             <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Comm:</strong>$@item.TotalComission,&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:blue">$@item.ProfitAndLossInDollar (@item.ProfitAndLossInPercentage%)</span></label>
                                             }
                                             else
                                             {
-                                                var total = (@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
+                                                decimal total = (@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
                                         <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Comm:</strong>$@item.TotalComission,&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:red">$@item.ProfitAndLossInDollar (@item.ProfitAndLossInPercentage%)</span></label>
                                             }
 
@@ -467,7 +467,9 @@
                                         <div class="row">
                                             <label class="col-sm-1 offset-sm-2 text-right" style="padding-right:4px;"><strong>Total:</strong></label>
                                             <div class="col-sm-8">
-                                                @{ decimal totalAmountofUnitPrice = detail.TotalQuantity * detail.UnitPrice;
+                                                @{
+                                                    decimal currentUnitPrice = detail.UnitPrice - detail.ShippingFee;
+                                                    decimal totalAmountofUnitPrice = detail.TotalQuantity * currentUnitPrice;
                                                     decimal totalTax = detail.TaxGST + detail.TaxPST;
                                                     decimal total = Math.Round((totalTax / totalAmountofUnitPrice) * 100, 2);
                                                     //decimal comission = (detail.Comission) / (1 + total / 100);
@@ -475,7 +477,8 @@
                                                     decimal totalAverageCost = Math.Round(Convert.ToDecimal(detail.AverageCost), 2) * detail.TotalQuantity;
 
                                                 }
-                                                <label>@detail.TotalQuantity x $@detail.UnitPrice=  $@totalAmountofUnitPrice + Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)  </label>
+                                                @*<label>@detail.TotalQuantity x $@detail.UnitPrice=  $@totalAmountofUnitPrice + Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)  </label>*@
+                                                <label>@detail.TotalQuantity x $@currentUnitPrice=  $@totalAmountofUnitPrice + Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)  </label>
                                             </div>
                                         </div>
                                         <div class="row">
