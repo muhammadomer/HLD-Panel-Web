@@ -549,7 +549,8 @@
                                         <div class="row">
                                             <label class="col-sm-6" style="padding-right:0px">On Order</label>
                                             <div class="col-sm-6" style="padding-right:0px">
-                                                <label><a  href="/Shipment/ShipmentHistoryList?SKU=@detail.ProductSKU&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@detail.OnOrder</a></label>
+                                                @*<label><a  href="/Shipment/ShipmentHistoryList?SKU=@detail.ProductSKU&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@detail.OnOrder</a></label>*@
+                                                <label><a  href="/PurchaseOrder/GetPOProduct?VendorID=&SKU=@detail.ProductSKU&POID=&title=&ItemType=OpenItem&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@detail.OnOrder</a></label>
                                             </div>
                                         </div>
                                     </td>
@@ -559,14 +560,14 @@
                                             <div class="zincDetailDiv">
 
                                             </div>
-                                            <div style="padding:0px">
+                                            @*<div style="padding:0px">
                                                 <a class="updateASINLinkLatestGET Updatesendtobtn" data-SKU="@detail.ProductSKU">
                                                     <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
                                                 </a>
                                                 <span>
                                                     <img style="display:none;" class="updateASINLinkLatest" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                                                 </span>
-                                            </div>
+                                            </div>*@
                                         </div>
                                         
 

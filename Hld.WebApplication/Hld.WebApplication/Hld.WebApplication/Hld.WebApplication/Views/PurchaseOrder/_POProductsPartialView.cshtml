@@ -273,18 +273,19 @@
                             <td class="purchaseEndthamount">@item.QtyOrdered</td>
                             <td class="purchaseEndthamount">
                                 @*@if (item.QtyReceived == 0)
-                                    {
-                                    <a style="cursor:pointer" asp-action="ShipmentHistoryList" asp-controller="Shipment" asp-route-EmptyFirstTime="No" asp-route-SKU="@item.ProductID" target="_blank">@item.ShippedQty</a>
-                                    }
-                                    else
-                                    {
+        {
+        <a style="cursor:pointer" asp-action="ShipmentHistoryList" asp-controller="Shipment" asp-route-EmptyFirstTime="No" asp-route-SKU="@item.ProductID" target="_blank">@item.ShippedQty</a>
+        }
+        else
+        {
 
-                                        @item.ShippedQty
-                                    }*@
-                                <a class="btn btn-sm viewbtn" style="cursor:pointer; color:#007bff;font-size:12px; text-decoration:underline;" data-POID="@item.PurchaseID" data-SKU="@item.ProductID" data-img="@ViewBag.S3BucketURL/@item.Compress_image"
-                                   data-img-large="@ViewBag.S3BucketURL_large/@item.image_name">
-                                    @item.ShippedQty
-                                </a>
+            @item.ShippedQty
+        }*@
+                                @*<a class="btn btn-sm viewbtn" style="cursor:pointer; color:#007bff;font-size:12px; text-decoration:underline;" data-POID="@item.PurchaseID" data-SKU="@item.ProductID" data-img="@ViewBag.S3BucketURL/@item.Compress_image"
+           data-img-large="@ViewBag.S3BucketURL_large/@item.image_name">
+            @item.ShippedQty
+        </a>*@
+                                <a href="/Shipment/ShipmentHistoryList?SKU=@item.ProductID&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank" style="cursor:pointer">@item.ShippedQty</a>
                             </td>
                             <td class="purchaseEndthamount">@item.QtyReceived</td>
                             <td class="purchaseEndthamount">@item.OpenQty</td>

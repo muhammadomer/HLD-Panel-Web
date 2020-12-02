@@ -909,7 +909,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        On Order: <label><a href="/Shipment/ShipmentHistoryList?SKU=@item.ProductSKU&EmptyFirstTime=No&Title=&ShipmentId=&ItemType=Shiped%2CReceiveInProcess&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@item.OnOrder</a></label>
+                                        On Order: <label><a href="/PurchaseOrder/GetPOProduct?VendorID=&SKU=@item.ProductSKU&POID=&title=&ItemType=OpenItem&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@item.OnOrder</a></label>
 
                                     </td>
                                 </tr>
@@ -987,14 +987,15 @@
 
 
                                     </div>
-                                    <div style="padding:0px">
-                                        <a class="updateASINLinkLatestGET Updatesendtobtn" data-SKU="@item.ProductSKU">
+                                    <span style="margin-left: 8px;">
+                                        <a class="updateASINLinkLatestGET" data-SKU="@item.ProductSKU">
                                             <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
                                         </a>
                                         <span>
-                                            <img style="display:none;" class="updateASINLinkLatest" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                            <img style="display:none;" class="updateASINLinkLatest" height="20px" width="20px" src="~/Images/loadingImage.gif" />
                                         </span>
-                                    </div>
+                                        <span class="selectasin" style="color:red;display:none">select ASIN!</span>
+                                    </span>
 
 
                                 }
@@ -1447,17 +1448,32 @@
             }
         $(document).on("click", ".updateASINLinkLatestGET", function () {
             debugger
-            var zincloader = $("div").find(".updateASINLinkLatest");
-            $(zincloader).css('display', 'block');
+            var zincloader = $(this).closest("span").find(".updateASINLinkLatest");
+            var asinselect = $(this).closest("span").find(".selectasin");
+           
+
+            var amazon_price = $(this).parents("span").prev().find('.amazon_price');
+            var max_price = $(this).parents("span").prev().find('.max_price');
+            var radiocheck = $(document).find(".ZincAsinRadioButtonOrderView:checked").is(":checked");
+            if (radiocheck == false) {
+
+                $(asinselect).css('display', 'inline-block');
+                //$(zincloader).css('display', 'inline-block');
+            }
+            else {
+                $(zincloader).css('display', 'inline-block');
+                $(asinselect).css('display', 'none');
+            }
             $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
+               
                 var status = $(this).is(':checked');
+
                 if (status) {
 
                     var OrderId = $(this).attr('data-id');
                     var productASIN = $(this).attr('data-ASIN');
-                    
                     var sku = $(this).attr('data-SKU');
-                  
+
                 }
                 $.ajax({
                     type: "POST",
@@ -1466,20 +1482,23 @@
 
                         $(zincloader).css('display', 'none');
                         if (data != null) {
-                            $("div").find(".amazon_price").text(data.itemprice / 100);
+                            $(amazon_price).closest("div").find(".amazon_price").text(data.itemprice / 100);
+                          
+                            //$(amazon_price).closest("div").find(".amazon_price").text("12");
+                            //$(max_price).closest("div").find(".max_price").text("40");
                             var maxprice = data.itemprice * 1.25 / 100;
-                            $("div").find(".max_price").text(maxprice.toFixed(2));
-                            $("div").attr("data-MaxPrice");
+                            $(max_price).closest("div").find(".max_price").text(maxprice.toFixed(2));
+                            //$("div").attr("data-MaxPrice");
                             //$(RadioButtonASINChecked).closest("div").find(".amazon_price").text("habib");
                             //$(RadioButtonASINChecked).closest("div").find(".max_price").text("shafique");
                             //$(RadioButtonASINChecked).attr("data-MaxPrice");
                         }
                         else {
-                            alert("sss")
+
                         }
                     }
                 });
-
+            
             });
            
          
