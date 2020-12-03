@@ -249,15 +249,20 @@ margin-top: 9px;">
                 </div>
             </div>
         </div>
-        <div class="col col-md-2" style="padding-top:5px;">
+        <div class="col col-md-3" style="padding-top:5px;">
             @if (ViewBag.TotalCount == null)
             {
                 <span> Total Records Found : 0 </span>
+                <span id="itemPerPage"style="margin-left:20px"> Records Per Page : 0</span>
             }
-            else {
-        <span> Total Records Found : @ViewBag.TotalCount</span>
+            else
+            {
+                <span> Total Records Found : @ViewBag.TotalCount</span>
+                <span id="itemPerPage"style="margin-left:20px"> Records Per Page : 25</span>
             }
-            
+
+
+
 
 
         </div>
@@ -326,6 +331,10 @@ margin-top: 9px;">
         var selectedDateFrom = "";
         var selectedDatTo = "";
         $(document).ready(function () {
+            $('#btnSearchOrder').click(function () {
+               
+                $('#itemPerPage').show();
+            });
               function VendorlistgetInShipmentlist() {
 
                 $.ajax({

@@ -335,7 +335,9 @@
                                         }
                                         @if (@item.ZincAccountId != 0)
                                         {
-                                            <span><img src="~/Images/icon-credit (2).png" style="height: 24px;cursor: pointer;" value="" data-AccountId="@item.ZincAccountId" data-CreditCard="@item.CreditCardId" class="btnViewCreditDetail" /></span>
+                                            @*<span><img src="~/Images/icon-credit (2).png" style="height: 24px;cursor: pointer;" value="" data-AccountId="@item.ZincAccountId" data-CreditCard="@item.CreditCardId" class="btnViewCreditDetail" /></span>*@
+                                            <span class="AmzAC" data-AccountId="@item.ZincAccountId" data-CreditCard="@item.CreditCardId" style="margin-left: 10px;"></span>
+                                            <span &nbsp; class="CreditCard" data-AccountId="@item.ZincAccountId" data-CreditCard="@item.CreditCardId" style="margin-left:5px;"></span>
                                         }
                                     </div>
                                 </td>

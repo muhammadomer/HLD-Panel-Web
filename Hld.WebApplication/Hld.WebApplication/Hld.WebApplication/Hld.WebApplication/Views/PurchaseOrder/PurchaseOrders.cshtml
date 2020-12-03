@@ -463,12 +463,15 @@
             //});
             if (item != null) {
                 var res = item.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlQuantity').val(item);
                 $.each(res, function (key, value) {
                     $(".ms-options").find("input[type=checkbox]").each(function () {
 
                         if ($(this).val() == value.trim()) {
                             $(this).prop("checked", true);
-                            $('#ddlQuantity').val($(this).val());
+                            
+                           
                         }
                     });
                 });

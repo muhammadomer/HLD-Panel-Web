@@ -660,6 +660,36 @@
                 });
 
             });
+         
+            function CreditCardDetail() {
+                $(document).on("#tableOrderList tbody tr ").each(function () {
+                    var row = $(this);
+                    var AccountId = $(this).find(".AmzAC").attr("data-AccountId");
+                    var CreditCardId = $(this).find(".CreditCard").attr("data-CreditCard");
+                    if (AccountId != "undefined") {
+
+                        $.ajax({
+
+                            type: 'GET',
+                            url: '../BestBuyProduct/CreditCardDetail?CardId=' + CreditCardId + '&AccountId=' + AccountId,
+                            contentType: 'application/json',
+                            success: function (res) {
+                                var AccountName = res.AccountName;
+                                var AccountNameFirstChar = AccountName.substring(0, 5);
+                                //(AccountName.slice(0, 5));
+                                $(row).find(".AmzAC").text("Amz A/C: "+AccountNameFirstChar);
+                                $(row).find(".CreditCard").text("CC: "+res.CardName);
+
+                            }
+                        });
+                    }
+                    else {
+
+                    }
+                   
+                });
+            }
+        
 
             function GetCreditCardDetail() {
                 var Id = 0;
@@ -1130,6 +1160,7 @@
                               $('#loadOrder').html(data);
                               $(".loadertbl").hide();
                            // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                              CreditCardDetail();
                           }
                       });
                       if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined"  )
@@ -1238,9 +1269,7 @@
             $('select[multiple].active.3col.PaymentStatus').multiselect({
                 columns: 1,
                 placeholder: 'Payment Status',
-
                 maxPlaceholderOpts: 1,
-
                 selectAll: false,
                 onOptionClick: function (element, option) {
                     $('#ddlPaymentStatus').val($(element).val());
@@ -1783,9 +1812,9 @@
                     $("#NotesModalheader").empty();
 
                 })
-                  $("#myInput").keyup(function(){
-  $("#count").text(($(this).val().length)+"/1000");
- });
+                $("#myInput").keyup(function () {
+                    $("#count").text(($(this).val().length) + "/1000");
+                });
                 $(".savdata").click(function () {
                     var imageProcessing = $('.ButtonLoadernotes');
                     $(imageProcessing).css('display', 'inline');
@@ -1798,7 +1827,7 @@
                     else {
 
                         $(".list").append('<span style="color:#9292a2 ;margin-right: 10px;">' + prnDt + '</span>');
-                         $(".list").append('<span style="color:#9292a2 ;margin-right: 10px;">Developer BestBuy</span>');
+                        $(".list").append('<span style="color:#9292a2 ;margin-right: 10px;">Developer BestBuy</span>');
                         $(".list").append('<div style="margin-bottom:0px;border: 1px solid beige;padding: 5px 10px;margin-right: 10px;">' + str + '</div>');
 
 
@@ -1836,7 +1865,7 @@
                         contentType: 'application/json',
                         success: function (data) {
                             $(imageProcessing).css('display', 'none');
-                              $(".list").empty();
+                            $(".list").empty();
                             $.each(data, function (key, value) {
 
                                 var prnDt = "";
@@ -1846,7 +1875,7 @@
 
 
                                 $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + prnDt + '</span>');
-                                 $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + value.CreatedByName + '</span>');
+                                $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + value.CreatedByName + '</span>');
                                 $(".list").append('<div style="margin-bottom:0px;border: 1px solid beige;padding: 5px 10px;margin-right: 10px;">' + value.Note + '</div>');
 
                             });
@@ -1867,18 +1896,92 @@
                         $.each(data, function (key, value) {
                             var prnDt = "";
                             if (value.AuditDate != null) {
-                                 var prnDt =  new Date(value.AuditDate).toLocaleTimeString('en-us', optionsdate);
+                                var prnDt = new Date(value.AuditDate).toLocaleTimeString('en-us', optionsdate);
                             }
 
 
-                              $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + prnDt + '</span>');
-                                 $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + value.CreatedByName + '</span>');
-                                $(".list").append('<div style="margin-bottom:0px;border: 1px solid beige;padding: 5px 10px;margin-right: 10px;">' + value.Note + '</div>');
+                            $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + prnDt + '</span>');
+                            $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + value.CreatedByName + '</span>');
+                            $(".list").append('<div style="margin-bottom:0px;border: 1px solid beige;padding: 5px 10px;margin-right: 10px;">' + value.Note + '</div>');
                         });
                     }
                 });
             });
+            if (PaymentStatus != null) {
+                debugger
+                var res = PaymentStatus.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlPaymentStatus').val(PaymentStatus);
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
 
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+
+                        }
+                    });
+                });
+            }
+            if (ShippingTags != null) {
+                debugger
+                var res = ShippingTags.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlShippingTags').val(ShippingTags);
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+
+                        }
+                    });
+                });
+            }
+            if (DSStatus != null) {
+                debugger
+                var res = DSStatus.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlDSStatusValues').val(DSStatus);
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+
+                        }
+                    });
+                });
+            }
+            if (ZincStatusQuerString != null) {
+                debugger
+                var res = ZincStatusQuerString.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlZincStatusValues').val(ZincStatusQuerString);
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+
+                        }
+                    });
+                });
+            }
+            if (OrderStatus != null) {
+                debugger
+                var res = OrderStatus.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlShipingOrderStatus').val(OrderStatus);
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+
+                        }
+                    });
+                });
+            }
         });
         $(document).on('click', "#GetParentIdbtn", function (e) {
             e.preventDefault();
@@ -1940,20 +2043,21 @@
             var ProductSKU = $(this).attr('data-sku');
 
             var Url = '/SellerCloud/GetProductTitle/';
-            $.ajax({
-                type: 'POST',
-                url: Url,
-                data: { sellercloudid: sellerCloudOrderId, productsku: ProductSKU },
+              $.ajax({
+                  type: 'POST',
+                  url: Url,
+                  data: { sellercloudid: sellerCloudOrderId, productsku: ProductSKU },
 
-                traditional: true,
-                success: function (data) {
+                  traditional: true,
+                  success: function (data) {
 
-                    $("#" + sellerCloudOrderId + ProductSKU).text(data);
-                    $("#" + sellerCloudOrderId + ProductSKU).toggle('fast')
+                      $("#" + sellerCloudOrderId + ProductSKU).text(data);
+                      $("#" + sellerCloudOrderId + ProductSKU).toggle('fast')
 
 
-                }
-            })
+                  }
+              });
+            
         });
     </script>
 }
