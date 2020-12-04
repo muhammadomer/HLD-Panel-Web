@@ -154,11 +154,6 @@ namespace Hld.WebApplication.Controllers
                 model.DiscountStartDate = model.DiscountStartDate.Value != DateTime.MinValue ? model.DiscountStartDate.Value : DateTime.Now;
 
             }
-
-
-
-
-
             return View(model);
         }
 
@@ -448,6 +443,7 @@ namespace Hld.WebApplication.Controllers
                 ViewBag.TotalOrders = _viewModel.Count;
                 var totalQuantity = _viewModel.Sum(e => e.TotalQuantity);
                 ViewBag.TotalProductsInOrders = totalQuantity;
+                //TempData["OnOrder"] = _viewModel.Select(a=>a.OnOrder).ToList();
             }
             return data;
         }

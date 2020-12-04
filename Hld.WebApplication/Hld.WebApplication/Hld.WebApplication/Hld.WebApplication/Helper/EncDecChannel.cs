@@ -165,7 +165,7 @@ namespace Hld.WebApplication.Helper
         {
             
             channelsApiAccess = new ChannelsApiAccess();
-            GetChannelCredViewModel model;
+            GetChannelCredViewModel model=new GetChannelCredViewModel();
             
             if (Method.Equals("sellercloud"))
             {

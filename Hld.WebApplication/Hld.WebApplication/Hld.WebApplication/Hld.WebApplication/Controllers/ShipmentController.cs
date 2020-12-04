@@ -582,6 +582,7 @@ namespace Hld.WebApplication.Controllers
                     ShipedQty = s.ShipedQty,
                     ReceivedQty = s.ReceivedQty,
                     CreatedOn = s.CreatedOn,
+                    Tracking=s.Tracking,
 
                 }).Distinct().ToList();
             foreach (var item in list)

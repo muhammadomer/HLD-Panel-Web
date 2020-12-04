@@ -15,6 +15,7 @@ namespace Hld.WebApplication.ViewModel
         public string WarehouseGroup { get; set; }
         public string WarehouseQtyString { get; set; }
         public string LocationNotes { get; set; }
+        public decimal OnOrder { get; set; }
         public List<ProductStatusViewModel> ProductStatus { get; set; }
     }
 }
