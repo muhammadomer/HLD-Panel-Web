@@ -666,8 +666,8 @@
                     var row = $(this);
                     var AccountId = $(this).find(".AmzAC").attr("data-AccountId");
                     var CreditCardId = $(this).find(".CreditCard").attr("data-CreditCard");
-                    if (AccountId != "undefined") {
-
+                    
+                    if (typeof AccountId !== "undefined") {
                         $.ajax({
 
                             type: 'GET',
@@ -893,14 +893,13 @@
 
             });
 
-            function updateASINLINKK() {
-             
+            function updateASINLINKK(mainTr) {
 
-                    var mainTr = $(this).closest('tr');
-                    var zincDetailDiv = $(mainTr).find(".zincDetailDiv");
-                    var zincloader = $(mainTr).find(".UpdateASINButtonLoader");
+                var zincDetailDiv = $(mainTr).find(".zincDetailDiv");
+                var zincloader = $(mainTr).find(".UpdateASINButtonLoader");
+                var dataURL = $(mainTr).find(".updateASINLink").attr('data-url');
                     $(zincloader).css('display', 'block');
-                    var dataURL = $(this).attr('data-url');
+                  
                     $.get(dataURL).done(function (response) {
                         $(zincloader).css('display', 'none');
                         $(zincDetailDiv).empty();
@@ -947,12 +946,13 @@
                         success: function (data) {
                             $(asinselect).closest("div>").find(".selectasin").css('display', 'none');
                             $(zincloader).css('display', 'none');
+                            updateASINLINKK(mainTr);
                             if (data!=null) {
-                                $(RadioButtonASINChecked).closest("div").find(".amazon_price").text("$" + data.itemprice / 100);
-                                var maxprice = data.itemprice * 1.25 / 100;
-                                $(RadioButtonASINChecked).closest("div").find(".max_price").text("$" + maxprice.toFixed(2));
-                                $(RadioButtonASINChecked).attr("data-MaxPrice");
-                                updateASINLINKK();
+                                //$(RadioButtonASINChecked).closest("div").find(".amazon_price").text("$" + data.itemprice / 100);
+                                //var maxprice = data.itemprice * 1.25 / 100;
+                                //$(RadioButtonASINChecked).closest("div").find(".max_price").text("$" + maxprice.toFixed(2));
+                                //$(RadioButtonASINChecked).attr("data-MaxPrice");
+                               
                                
                                 //$(RadioButtonASINChecked).closest("div").find(".amazon_price").text("habib");
                                 //$(RadioButtonASINChecked).closest("div").find(".max_price").text("shafique");
