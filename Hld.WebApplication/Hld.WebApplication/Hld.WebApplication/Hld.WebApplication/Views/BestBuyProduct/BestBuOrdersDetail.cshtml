@@ -529,7 +529,23 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModalShow" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <h4 class="modal-title">Status</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
 
+            </div>
+            <div class="modal-body" id="myModalError">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="myModal" role="dialog" style="margin-top: 80px!important;">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
@@ -1038,12 +1054,12 @@
                 var Url = '/SellerCloud/GetOrdersFromSCRest/';
                 var SKU = [];
                 var ASINList_ = [];
-                $(sendToZincReferenceAferSubmit).closest('tr').find(".ZincAsinRadioButton").each(function (index) {
+                $(sendToZincReferenceAferSubmit).closest('.parentASIN').find(".ZincAsinRadioButton:checked").each(function (index) {
                     //var status = $(sendToZincReferenceAferSubmit).is(':checked');
-                    var status = $(sendToZincReferenceAferSubmit).parents('tr').find(".ZincAsinRadioButton").is(':checked');
+                    var status = $(this).is(':checked');
 
                     if (status) {
-                        SKU.push($(this).attr("data-sku"));
+                        //SKU.push($(this).attr("data-sku"));
                         var productASIN = $(this).attr('data-ASIN');
                         var OrderDetailID = $(sendToZincReferenceAferSubmit).attr('data-OrderDetailID');
                         var OrderId = $(this).attr('data-id');
@@ -1055,14 +1071,15 @@
                 });
                 var ASINList = []
                 ASINList = JSON.stringify(ASINList_);
-                //$(document).find(".SCOrderCheckbox").each(function (index) {
 
-                //    var productSKU = $(this).attr('data-id');
+                $(sendToZincReferenceAferSubmit).closest('.parentASIN').find(".SCOrderCheckbox").each(function (index) {
+
+                    var productSKU = $(this).attr('data-id');
 
 
-                //    SKUArraryForSinglePage.push(productSKU)
-                //});
-                //console.log("ASKUUU", SKUArraryForSinglePage);
+                    SKU.push(productSKU)
+                });
+               
 
                 //console.log("ASIN", ASINList);
                 $.ajax({
@@ -1125,12 +1142,13 @@
                 var SKUArraryForSinglePage = [];
                 var SKU = [];
                 var ASINList_ = [];
-                $(this).closest('tr').find(".ZincAsinRadioButton").each(function (index) {
+                $(this).closest('.parentASIN').find(".ZincAsinRadioButton:checked").each(function (index) {
                     //var status = $(sendToZincReferenceAferSubmit).is(':checked');
-                    var status = $(this).parents('tr').find(".ZincAsinRadioButton").is(':checked');
-
+                    //var status = $(this).parents('tr').find(".ZincAsinRadioButton").is(':checked');
+                    //var status = $(this).closest('tr').find('.ZincAsinRadioButton:checked');
+                    var status = $(this).is(':checked');
                     if (status) {
-                        SKU.push($(this).attr("data-sku"));
+                        //SKU.push($(this).attr("data-sku"));
                         var productASIN = $(this).attr('data-ASIN');
                         var OrderDetailID = $(this).attr('data-OrderDetailID');
                         var OrderId = $(this).attr('data-id');
@@ -1142,13 +1160,13 @@
                 });
                 var ASINList = []
                 ASINList = JSON.stringify(ASINList_);
-                //$(document).find(".SCOrderCheckbox").each(function (index) {
+                $(this).closest('.parentASIN').find(".SCOrderCheckbox").each(function (index) {
 
-                //    var productSKU = $(this).attr('data-id');
+                    var productSKU = $(this).attr('data-id');
 
 
-                //    SKUArraryForSinglePage.push(productSKU)
-                //});
+                    SKU.push(productSKU)
+                });
                 //console.log("ASKUUU", SKUArraryForSinglePage);
 
                 console.log("ASIN", ASINList);

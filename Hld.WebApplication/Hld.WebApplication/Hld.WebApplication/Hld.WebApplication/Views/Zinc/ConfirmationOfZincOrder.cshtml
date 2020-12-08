@@ -33,7 +33,7 @@
                         <div class="col-sm-4">
                             <p class="my-1" style="font-weight:bold">Product Detail</p>
                             <div class="col-sm-12 p-0">
-                                <div>
+                                @*<div>
                                     <span>@Model.products.Select(e => e.product_id).FirstOrDefault()</span>
                                     @if (@Model.products.Select(e => e.quantity).FirstOrDefault() > 1)
                                     {
@@ -41,6 +41,19 @@
                                     else
                                     {
                                         <span style="background-color: blue;color: white;width: 16px;display: inline-block;text-align: center;">@Model.products.Select(e => e.quantity).FirstOrDefault()</span>}
+                                </div>*@
+                                <div>
+                                    @foreach (var item in Model.products)
+                                    {
+                                        <span>@item.product_id</span>
+                                        @if (item.quantity > 1)
+                                        {
+                                            <span style="background-color: red;color: white;width: 16px;display: inline-block;text-align: center;">@item.quantity</span>}
+                                        else
+                                        {
+                                            <span style="background-color: blue;color: white;width: 16px;display: inline-block;text-align: center;">@item.quantity</span>}
+                                    }
+
                                 </div>
                                 <div>
                                     @*<span style="font-weight:bold">P&L:</span><span>@ViewBag.profitloseorderdetail</span><span>(@ViewBag.percentageorderdetail</span>%)*@
@@ -57,10 +70,10 @@
                                 </div>
 
                                 @*<div class="row col-sm-12">
-                            <label style="font-weight:bold">Ship Date:</label>
-                            <input type="date" style="margin-right: 50px;box-shadow: none !important" placeholder="Ship Date" autocomplete="off" class="form-control" name="orderDateTimeShip" id="orderDateTimeShip" />
+            <label style="font-weight:bold">Ship Date:</label>
+            <input type="date" style="margin-right: 50px;box-shadow: none !important" placeholder="Ship Date" autocomplete="off" class="form-control" name="orderDateTimeShip" id="orderDateTimeShip" />
 
-                        </div>*@
+        </div>*@
 
                                 <div class="row col-sm-12" style="margin-top:2px;">
                                     <label style="font-weight:bold">Ship Days:</label>
