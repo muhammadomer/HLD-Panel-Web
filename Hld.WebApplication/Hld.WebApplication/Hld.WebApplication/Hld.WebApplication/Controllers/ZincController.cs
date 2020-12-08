@@ -360,11 +360,11 @@ namespace Hld.WebApplication.Controllers
             return Json(new { success = status, zincOrderLogDetailID = ZincOrderLogDetailID, ZincStatus = zincStatus, ZincCode = zincCode, ZincMessage = zincMessage });
         }
 
-        public IActionResult SendOrderToZinc(string ASIN, string MaxPrice, string orderid, string SellerOrderID, string orderDetailID)
+        public IActionResult SendOrderToZinc(string ASINList, string orderid, string SellerOrderID)
         {
             token = Request.Cookies["Token"];
             //SaveZincOrders.RootObject rootObject = _zincApiAccess.GetCustomerDetailForSendOrderToZinc(ApiURL, token,ASIN,MaxPrice,orderid,SellerOrderID,orderDetailID);
-            string rootObject = _zincApiAccess.GetCustomerDetailForSendOrderToZinc(ApiURL, token, ASIN, MaxPrice, orderid, SellerOrderID, orderDetailID);
+            string rootObject = _zincApiAccess.GetCustomerDetailForSendOrderToZincForOrderView(ApiURL, token, ASINList, orderid, SellerOrderID);
             return Json(rootObject);
         }
 

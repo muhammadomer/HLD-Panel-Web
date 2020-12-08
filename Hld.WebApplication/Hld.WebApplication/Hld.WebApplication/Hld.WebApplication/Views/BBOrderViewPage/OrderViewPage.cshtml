@@ -1145,6 +1145,23 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModalShow" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <h4 class="modal-title">Status</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="myModalError">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="myModalQTY" role="dialog" style="margin-top: 80px!important;">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
@@ -1342,73 +1359,85 @@
         function zendToZincOrderView() {
             $(".loadertbl").show();
             $('#modelBodyERR').find('.WHQQTY').empty();
-                 sendToZincReferenceAferSubmit = $(this);
-                var SKUArraryForSinglePage = [];
-                var ASINList_ = [];
-                //var sku=$(this).attr('data-SKU');
-                var RadioButtonMaxPrice = 0;
-               // var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
-                var RadioButtonASINChecked = $();
-                $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
-                    var status = $(this).is(':checked');
-                    if (status) {
+            sendToZincReferenceAferSubmit = $(this);
+            var SKUArraryForSinglePage = [];
+            var ASINList_ = [];
+            //var sku=$(this).attr('data-SKU');
+            var RadioButtonMaxPrice = 0;
+            // var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
+            var RadioButtonASINChecked = $();
+            $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
+                var status = $(this).is(':checked');
+                if (status) {
 
-                        var productASIN = $(this).attr('data-ASIN');
-                        var OrderDetailID = $(this).attr('data-OrderDetailID');
-                        var MaxPrice = $(this).attr('data-MaxPrice');
-                        var ASINData = { "Asin": productASIN, "OrderlineId": OrderDetailID, "MaxPrice": MaxPrice };
-                        ASINList_.push(ASINData)
+                    var productASIN = $(this).attr('data-ASIN');
+                    var OrderDetailID = $(this).attr('data-OrderDetailID');
+                    var MaxPrice = $(this).attr('data-MaxPrice');
+                    var ASINData = { "Asin": productASIN, "OrderlineId": OrderDetailID, "MaxPrice": MaxPrice };
+                    ASINList_.push(ASINData)
 
-                    }
-                });
-                var ASINList = []
-                ASINList = JSON.stringify( ASINList_);
-                $(document).find(".selectSkucheckbox").each(function (index) {
+                }
+            });
+            var ASINList = []
+            ASINList = JSON.stringify(ASINList_);
+            $(document).find(".selectSkucheckbox").each(function (index) {
 
-                        var productSKU = $(this).val();
+                var productSKU = $(this).val();
 
-                        SKUArraryForSinglePage.push(productSKU)
-
-
-                });
+                SKUArraryForSinglePage.push(productSKU)
 
 
-                if (SKUArraryForSinglePage.length == ASINList_.length) {
-                    console.log("SKKKKKKK",SKUArraryForSinglePage)
-                    //var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
-                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIstForSingleWH';
-                    $.each(SKUArraryForSinglePage, function (index, value) {
-                        console.log("valueeeeee",value)
-                        $.ajax({
-                            type: 'Get',
-                            url: URLQTY,
-                            data: { sku:value},
-                            dataType: 'json',
-                            traditional: true,
-                            success: function (data) {
-                                $.each(data, function (index, value) {
-                                    if (value.WarehouseID == 5) {
-                                        if (value.AvailableQty > 0 && value.WarehouseID == 5) {
-                                            $(".loadertbl").hide();
-                                            $('#myModalERR').modal('show');
-                                            $('#modelBodyERR').find('.WHQQTY').append(value.AvailableQty);
+            });
+            console.log("ASKUUU", SKUArraryForSinglePage);
 
-                                        }
-                                        else if (value.AvailableQty <= 0 && value.WarehouseID == 5) {
-                                            GetstatusfromSellerCloud();
-                                        }
-                                    }
+            if (SKUArraryForSinglePage.length == ASINList_.length) {
+                var QTYCHECK = 0;
+                var AvailableQty="";
+                console.log("SKKKKKKK", SKUArraryForSinglePage)
+                
+                //var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+                var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIstForSingleWH';
+                
+                $.each(SKUArraryForSinglePage, function (index, value) {
+                    
+                    console.log("valueeeeee", value)
+                    $.ajax({
+                        type: 'Get',
+                        url: URLQTY,
+                        data: { sku: value },
+                        dataType: 'json',
+                        traditional: true,
+                        async:false,
+                        success: function (data) {
+                           
+                            $.each(data, function (index, value) {
 
-                                });
-
-                            }
-                        });
+                                if (value.WarehouseID == 5)
+                                {
+                                    if (value.AvailableQty > 0 && value.WarehouseID == 5) {
+                                        QTYCHECK = 1;  
+                                        AvailableQty = value.AvailableQty;
+                                    }                                   
+                                }
+                            });
+                            
+                        }
                     });
+                   
+                });
+                if (QTYCHECK == 1) {
+                    $(".loadertbl").hide();
+                    $('#myModalERR').modal('show');
+                    $('#modelBodyERR').find('.WHQQTY').append(AvailableQty);
+                }
+                else {
+                    GetstatusfromSellerCloud();
+                }
 
                     $('#ErrorZinc').css("display", "none");
 
-                   var profitlose = $(this).attr('data-profitlose');
-                   var profitpercentage = $(this).attr('data-profitpercentage');
+                    var profitlose = $(this).attr('data-profitlose');
+                    var profitpercentage = $(this).attr('data-profitpercentage');
 
                     var OrderId = $(this).attr('data-OrderId');
 
@@ -1439,13 +1468,15 @@
 
 
                 }
-                else {
-                    $(".loadertbl").hide();
-                    $('#modelBody').empty();
-                    $('#modelBody').html("<div>Please Select ASIN to Send Order</div>");
-                    $('#myModal').modal('show');
-                }
+              
+            
+            else {
+                $(".loadertbl").hide();
+                $('#myModalError').empty();
+                $('#myModalError').html("<div>Please Select ASIN to Send Order</div>");
+                $('#myModalShow').modal('show');
             }
+        }
         $(document).on("click", ".updateASINLinkLatestGET", function () {
             debugger
             var zincloader = $(this).closest("span").find(".updateASINLinkLatest");

@@ -210,7 +210,7 @@ namespace Hld.WebApplication.Controllers
         //,string search_marketPlace,string search_shipmentOrderStatus
         [Authorize(Policy = "Access to Orders")]
         [HttpGet]
-        public ActionResult BestBuOrdersDetail(string order_id, string sellerCloudID, string CustomerName, int? page, string ZincStatus = "", string MarketPlaces = "", string OrderStatus = "", string sku = "", string orderDateTimeFrom = "", string orderDateTimeTo = "", string DSStatus = "", string PaymentStatus = "", string ShippingTags = "")
+        public ActionResult BestBuOrdersDetail(string order_id, string sellerCloudID, string CustomerName,string EmptyFirstTime, int? page, string ZincStatus = "", string MarketPlaces = "", string OrderStatus = "", string sku = "", string orderDateTimeFrom = "", string orderDateTimeTo = "", string DSStatus = "", string PaymentStatus = "", string ShippingTags = "",string ShippingBoxContain="")
         {
 
             if (ZincStatus == null)
@@ -254,6 +254,10 @@ namespace Hld.WebApplication.Controllers
             {
                 ShippingTags = "";
             }
+            if (ShippingBoxContain == null)
+            {
+                ShippingBoxContain = "";
+            }
             BestBuyOrderSearchTotalCountViewModel SearchViewModel = new BestBuyOrderSearchTotalCountViewModel();
 
 
@@ -266,11 +270,21 @@ namespace Hld.WebApplication.Controllers
             SearchViewModel.DSStatus = DSStatus;
             SearchViewModel.PaymentStatus = PaymentStatus;
             SearchViewModel.ShippingTags = ShippingTags;
+            SearchViewModel.ShippingBoxContain = ShippingBoxContain;
 
             SearchViewModel.Sort = "desc";
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             token = Request.Cookies["Token"];
+            BestBuyOrdersViewModel viewModel = new BestBuyOrdersViewModel();
+            viewModel.searchViewModel = SearchViewModel;
+            viewModel.searchViewModel.ZincStatus = ZincStatus;
+
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+                ViewBag.TotalCount =null;
+                return View(viewModel);
+            }
             if (!string.IsNullOrEmpty(order_id) && order_id != "undefined")
             {
                 TotalCountWithBestBuyOrderViewModel model = _bBProductApiAccess.GetAllBestBuyOrdersDetailGlobalFilterTotalCount(ApiURL, token, "order_id", order_id);
@@ -290,7 +304,7 @@ namespace Hld.WebApplication.Controllers
 
             // for searching order in bestBuy Orders Page
 
-            else if (!string.IsNullOrEmpty(ZincStatus) && ZincStatus != "undefined" || (!string.IsNullOrEmpty(sku) && sku != "undefined") || (!string.IsNullOrEmpty(OrderStatus) && OrderStatus != "undefined") || (!string.IsNullOrEmpty(orderDateTimeFrom) && orderDateTimeFrom != "undefined") || (!string.IsNullOrEmpty(orderDateTimeTo) && orderDateTimeTo != "undefined") || (!string.IsNullOrEmpty(DSStatus) && DSStatus != "undefined") || (!string.IsNullOrEmpty(PaymentStatus) && PaymentStatus != "undefined") || (!string.IsNullOrEmpty(ShippingTags) && ShippingTags != "undefined"))
+            else if (!string.IsNullOrEmpty(ZincStatus) && ZincStatus != "undefined" || (!string.IsNullOrEmpty(sku) && sku != "undefined") || (!string.IsNullOrEmpty(OrderStatus) && OrderStatus != "undefined") || (!string.IsNullOrEmpty(orderDateTimeFrom) && orderDateTimeFrom != "undefined") || (!string.IsNullOrEmpty(orderDateTimeTo) && orderDateTimeTo != "undefined") || (!string.IsNullOrEmpty(DSStatus) && DSStatus != "undefined") || (!string.IsNullOrEmpty(PaymentStatus) && PaymentStatus != "undefined") || (!string.IsNullOrEmpty(ShippingTags) && ShippingTags != "undefined") || (!string.IsNullOrEmpty(ShippingBoxContain) && ShippingBoxContain != "undefined"))
             {
                 TotalCountWithBestBuyOrderViewModel model = _bBProductApiAccess.GetAllBestBuyOrdersDetailSearchingTotalCount(ApiURL, token, SearchViewModel);
                 ViewBag.TotalCount = model.count;
@@ -303,15 +317,14 @@ namespace Hld.WebApplication.Controllers
                 //  TotalCountWithBestBuyOrderViewModel model = _bBProductApiAccess.GetAllBestBuyOrdersDetailGlobalFilterTotalCount(ApiURL, token, "NoFilter", "NoValue");
                 // ViewBag.TotalCount = model.count;
                 ViewBag.TotalCount = 5000;
+                
             }
-            BestBuyOrdersViewModel viewModel = new BestBuyOrdersViewModel();
-            viewModel.searchViewModel = SearchViewModel;
-            viewModel.searchViewModel.ZincStatus = ZincStatus;
+           
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult BBorderPartialView(string order_id, string sellerCloudID, string CustomerName, int? page, string sort, string ZincStatus, string OrderStatus, string sku, string orderDateTimeFrom, string orderDateTimeTo, string DSStatus, string PaymentStatus = "", string ShippingTags = "")
+        public ActionResult BBorderPartialView(string order_id, string sellerCloudID, string CustomerName, string EmptyFirstTime, int? page, string sort, string ZincStatus, string OrderStatus, string sku, string orderDateTimeFrom, string orderDateTimeTo, string DSStatus, string PaymentStatus = "", string ShippingTags = "",string ShippingBoxContain="")
         {
             if (ZincStatus == null)
             {
@@ -347,18 +360,26 @@ namespace Hld.WebApplication.Controllers
             {
                 ShippingTags = "";
             }
+            if (ShippingBoxContain == null)
+            {
+                ShippingBoxContain = "";
+            }
 
             if (string.IsNullOrEmpty(sort))
             {
                 sort = "desc";
             }
-            IPagedList<BestBuyOrdersViewModel> data = LoadOrderData(order_id, sellerCloudID, CustomerName, page, sort, ZincStatus, OrderStatus, sku, orderDateTimeFrom, orderDateTimeTo, DSStatus, PaymentStatus, ShippingTags);
-            ViewBag.S3BucketURL = s3BucketURL;
-            ViewBag.S3BucketURL_large = s3BucketURL_large;
-            return PartialView("~/Views/BestBuyProduct/_BBorderPartialView.cshtml", data);
+
+                IPagedList<BestBuyOrdersViewModel> data = LoadOrderData(order_id, sellerCloudID, CustomerName, page, sort, ZincStatus, OrderStatus, sku, orderDateTimeFrom, orderDateTimeTo, DSStatus, PaymentStatus, ShippingTags,ShippingBoxContain);
+                ViewBag.S3BucketURL = s3BucketURL;
+                ViewBag.S3BucketURL_large = s3BucketURL_large;
+                return PartialView("~/Views/BestBuyProduct/_BBorderPartialView.cshtml", data);
+            
+
         }
 
-        private IPagedList<BestBuyOrdersViewModel> LoadOrderData(string order_id, string sellerCloudID, string CustomerName, int? page, string sort, string ZincStatus, string orderStatus, string sku, string orderDateFrom, string orderDateTo, string DSStatus, string PaymentStatus, string ShippingTags)
+
+        private IPagedList<BestBuyOrdersViewModel> LoadOrderData(string order_id, string sellerCloudID, string CustomerName, int? page, string sort, string ZincStatus, string orderStatus, string sku, string orderDateFrom, string orderDateTo, string DSStatus, string PaymentStatus, string ShippingTags,string ShippingBoxContain)
         {
             string modifiedZincStatus = "";
             if (page.HasValue)
@@ -426,6 +447,7 @@ namespace Hld.WebApplication.Controllers
                 SearchViewModel.DSStatus = DSStatus;
                 SearchViewModel.PaymentStatus = PaymentStatus;
                 SearchViewModel.ShippingTags = ShippingTags;
+                SearchViewModel.ShippingBoxContain = ShippingBoxContain;
                 SearchViewModel.Sort = "desc";
                 _viewModel = _bBProductApiAccess.GetAllBestBuyOrdersDetailSearch(ApiURL, token, SearchViewModel);
                 data = new StaticPagedList<BestBuyOrdersViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);

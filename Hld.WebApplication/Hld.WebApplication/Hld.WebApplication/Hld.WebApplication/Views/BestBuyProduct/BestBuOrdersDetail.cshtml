@@ -328,88 +328,105 @@
                         <span style="padding-left:0px;" class="Py-status-text">@Model.searchViewModel.PaymentStatus.Replace(",", ", ")</span>
                     </div>
                 }
-                <div class="card-body">
-                    @using (Html.BeginForm("BestBuOrdersDetail", "BestBuyProduct", FormMethod.Get, new { @class = "form-inline" }))
-                    {
+            <div class="card-body">
+                @using (Html.BeginForm("BestBuOrdersDetail", "BestBuyProduct", FormMethod.Get, new { @class = "form-inline" }))
+                {
 
 
-                        <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 marketPlaces" multiple="multiple">
-                            <option value="BestBuy">BestBuy</option>
-                            <option value="Amazon">Amazon</option>
-                        </select>
 
-                        <select id="SCStatus_ID" class="2col active form-control  mb-2 mr-sm-2 SCOrderStatues" multiple="multiple">
-                            <option value="1">InProcess or Completed</option>
-                            <option value="2">InProcess or Hold</option>
-                            <option value="4">ShoppingCart</option>
-                            <option value="5">InProcess</option>
-                            <option value="6">Completed</option>
-                            <option value="7">ProblemOrder</option>
-                            <option value="8">OnHold</option>
-                            <option value="9">Quote</option>
-                            <option value="10">void</option>
-                            <option value="11">Canceled</option>
+                    <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
 
-                        </select>
+                    <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 marketPlaces" multiple="multiple">
+                        <option value="BestBuy">BestBuy</option>
+                        <option value="Amazon">Amazon</option>
+                    </select>
 
-                        <select id="multiselect" class=" 3col active form-control  mb-2 mr-sm-2 PaymentStatus" multiple="multiple">
-                            <option value="Charged">Charged</option>
-                            <option value="FullRefund">Full Refund</option>
-                            <option value="PartiallyRefund">Partially Refund</option>
-                            <option value="NoPayment">No Payment</option>
-                        </select>
-                        <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 DropShipStatues" multiple="multiple">
-                            <option value="None">DS None</option>
-                            <option value="Requested">DS Requested</option>
-                        </select>
+                    <select id="SCStatus_ID" class="2col active form-control  mb-2 mr-sm-2 SCOrderStatues" multiple="multiple">
+                        <option value="1">InProcess or Completed</option>
+                        <option value="2">InProcess or Hold</option>
+                        <option value="4">ShoppingCart</option>
+                        <option value="5">InProcess</option>
+                        <option value="6">Completed</option>
+                        <option value="7">ProblemOrder</option>
+                        <option value="8">OnHold</option>
+                        <option value="9">Quote</option>
+                        <option value="10">void</option>
+                        <option value="11">Canceled</option>
 
-                        <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 zincStatues" multiple="multiple">
-                            <option value="OrderRequestSent">Order Request Sent</option>
-                            <option value="Error">Error</option>
-                            <option value="InProcess">InProcess</option>
-                            <option value="InProgressSuccess">InProgress (Success)</option>
-                            <option value="Shipped">Shipped</option>
-                            <option value="Processed_OutSideZinc">Processed OutSide Zinc</option>
-                        </select>
+                    </select>
 
-                        <select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>
+                    <select id="multiselect" class=" 3col active form-control  mb-2 mr-sm-2 PaymentStatus" multiple="multiple">
+                        <option value="Charged">Charged</option>
+                        <option value="FullRefund">Full Refund</option>
+                        <option value="PartiallyRefund">Partially Refund</option>
+                        <option value="NoPayment">No Payment</option>
+                    </select>
+                    <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 DropShipStatues" multiple="multiple">
+                        <option value="None">DS None</option>
+                        <option value="Requested">DS Requested</option>
+                    </select>
 
-                        <input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" name="sku" autocomplete="off" class="form-control" value="@Model.searchViewModel.Sku" placeholder="SKU" />
+                    <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 zincStatues" multiple="multiple">
+                        <option value="OrderRequestSent">Order Request Sent</option>
+                        <option value="Error">Error</option>
+                        <option value="InProcess">InProcess</option>
+                        <option value="InProgressSuccess">InProgress (Success)</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Processed_OutSideZinc">Processed OutSide Zinc</option>
+                    </select>
 
-                        @*<input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" placeholder="From Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateFrom" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+                    <select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>
 
-                            <input type="text" style="margin-right: 1px;box-shadow: none !important;width:88px" placeholder="To Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateTo" name="orderDateTimeTo" id="orderDateTimeTo" />*@
+                    <input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" name="sku" autocomplete="off" class="form-control" value="@Model.searchViewModel.Sku" placeholder="SKU" />
+                    
+                    <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 ShippingBoxContain" multiple="multiple">
+                        <option value="Box">Shipping Box</option>
+                      
+                    </select>
 
+                    @*<input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" placeholder="From Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateFrom" name="orderDateTimeFrom" id="orderDateTimeFrom" />
 
-                        <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;">
-                            <i class="fa fa-calendar"></i>&nbsp;
-                            <span></span> <i class="fa fa-caret-down"></i>
-                        </div>
-
-
-                        <input type="hidden" id="ddlShipingOrderStatus" name="OrderStatus">
-                        <input type="hidden" name="marketPlaceValues" id="ddlMarketPlace" />
-                        <input type="hidden" name="ZincStatus" id="ddlZincStatusValues" />
-                        <input type="hidden" name="DSStatus" id="ddlDSStatusValues" />
-                        <input type="hidden" name="PaymentStatus" id="ddlPaymentStatus" />
-                        <input type="hidden" name="ShippingTags" id="ddlShippingTags" />
-                        <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
-                        <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
-
-                        <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+            <input type="text" style="margin-right: 1px;box-shadow: none !important;width:88px" placeholder="To Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateTo" name="orderDateTimeTo" id="orderDateTimeTo" />*@
 
 
-                        <div class=" col-md-2">
+                    <div id="reportrange" style="background: #fff;
+        cursor: pointer;
+        height: 25px !important;
+        padding: 3px;
+        border-radius: 3px;
+        border: 1px solid #ccc;">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span> <i class="fa fa-caret-down"></i>
+                    </div>
 
-                            <button class="btn btnup bg-primary" data-toggle="modal" data-target="#
-                                    " id="btnUpdateProductImages" style="color: #fff;" type="button">Update SC Orders</button>
-                            <span>
-                                <img style="display:none;" class="UpdateASINButtonLoaderForOrderStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                            </span>
 
-                        </div>
-                    }
-                </div>
+                    <input type="hidden" id="ddlShipingOrderStatus" name="OrderStatus">
+                    <input type="hidden" name="marketPlaceValues" id="ddlMarketPlace" />
+                    <input type="hidden" name="ZincStatus" id="ddlZincStatusValues" />
+                    <input type="hidden" name="DSStatus" id="ddlDSStatusValues" />
+                    <input type="hidden" name="PaymentStatus" id="ddlPaymentStatus" />
+                    <input type="hidden" name="ShippingTags" id="ddlShippingTags" />
+                    <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+                    <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
+                    <input type="hidden" name="ShippingBoxContain" id="ddlShippingBoxContain" />
+
+                    <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder" style="height:25px!important">Search</button>
+
+
+                    <div class="" style="padding-left: 3px;">
+
+                        <button class="btn btnup bg-primary" data-toggle="modal" data-target="#
+                                    " id="btnUpdateProductImages" style="color: #fff;height: 27px;
+" type="button">
+                            Update SC Orders
+                        </button>
+                        <span>
+                            <img style="display:none;" class="UpdateASINButtonLoaderForOrderStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                        </span>
+
+                    </div>
+                }
+            </div>
             </div>
         </div>
     </div>
@@ -425,8 +442,19 @@
 
             </div>
         </div>
-        <div class="col col-md-2">
-            <span> Total Orders Found : @ViewBag.TotalCount</span>
+        <div class="col col-md-3">
+            @*<span> Total Orders Found : @ViewBag.TotalCount</span>*@
+            @if (ViewBag.TotalCount == null)
+            {
+               <span>Total Orders Found : 0 </span>
+                <span id="itemPerPage" style="margin-left:20px"> Records Per Page : 0</span>
+            }
+            else
+            {
+        <span> Total Orders Found : @ViewBag.TotalCount</span>
+        <span id="itemPerPage" style="margin-left:20px"> Records Per Page : @ViewBag.TotalOrders</span>
+            }
+
         </div>
 
 
@@ -517,7 +545,6 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -643,6 +670,10 @@
 
 
         $(document).ready(function () {
+            $('#btnSearchOrder').click(function () {
+
+                $('#itemPerPage').show();
+            });
             //  $(function () {
 
             $(document).on('click', '.btnViewCreditDetail', function () {
@@ -660,13 +691,13 @@
                 });
 
             });
-         
+
             function CreditCardDetail() {
                 $(document).on("#tableOrderList tbody tr ").each(function () {
                     var row = $(this);
                     var AccountId = $(this).find(".AmzAC").attr("data-AccountId");
                     var CreditCardId = $(this).find(".CreditCard").attr("data-CreditCard");
-                    
+
                     if (typeof AccountId !== "undefined") {
                         $.ajax({
 
@@ -686,10 +717,10 @@
                     else {
 
                     }
-                   
+
                 });
             }
-        
+
 
             function GetCreditCardDetail() {
                 var Id = 0;
@@ -814,7 +845,7 @@
             });
              //alert("DropShip Requested :"+searchIDForDS_Requested);
                     //alert("DropShip None :"+ searchIDForDS_None);
-
+            $("#EmptyFirstTime").val("No");
             $('#myModal').modal('hide');
 
             $("#orderDateTimeFrom").datepicker({ dateFormat: 'yy-mm-dd' });
@@ -848,7 +879,8 @@
             var sku = getUrlParameter('sku');
             var PaymentStatus = getUrlParameter('PaymentStatus');
             var ShippingTags = getUrlParameter('ShippingTags');
-
+            var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
+            var ShippingBoxContain = getUrlParameter('ShippingBoxContain');
             var pageNo = 0;
 
             $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
@@ -869,6 +901,7 @@
                     $('#ddlShippingTags').val();
                     $('#orderDateTimeFrom').val(selectedDateFrom);
                     $('#orderDateTimeTo').val(selectedDatTo);
+                    $('#ShippingBoxContain').val();
 
 
                  });
@@ -898,14 +931,14 @@
                 var zincDetailDiv = $(mainTr).find(".zincDetailDiv");
                 var zincloader = $(mainTr).find(".UpdateASINButtonLoader");
                 var dataURL = $(mainTr).find(".updateASINLink").attr('data-url');
-                    $(zincloader).css('display', 'block');
-                  
+                    //$(zincloader).css('display', 'block');
+
                     $.get(dataURL).done(function (response) {
-                        $(zincloader).css('display', 'none');
+                        //$(zincloader).css('display', 'none');
                         $(zincDetailDiv).empty();
                         $(zincDetailDiv).html(response);
                     });
-                
+
             }
             // update asin
             $(document).on("click", ".updateASINLink", function () {
@@ -924,10 +957,11 @@
 
             //updat asin max price
             $(document).on("click", ".updateASINLinkLatestGET", function () {
-               
+
                 var sku = $(this).attr('data-SKU');
-                var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
-                radioSKU = $(RadioButtonASINChecked).attr('value');
+                //var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
+                var RadioButtonASINChecked = $(this).closest('tr').find(".ZincAsinRadioButton:checked");
+                radioSKU = $(RadioButtonASINChecked).attr('data-sku');
                 var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
                 RadioButtonASIN = $(RadioButtonASINChecked).attr('data-ASIN')
                 bestbuyid = $(RadioButtonASINChecked).attr('data-id')
@@ -936,7 +970,7 @@
                 var zincloader = $(this).closest("div").find(".updateASINLinkLatest");
                 var asinselect = $(this).closest("div").find(".selectasin");
                 $(zincloader).css('display', 'block');
-               
+
                 if (isRadioButtonChecked == true && sku == radioSKU) {
 
                     $(asinselect).closest("div>").find(".selectasin").css('display', 'none');
@@ -952,14 +986,14 @@
                                 //var maxprice = data.itemprice * 1.25 / 100;
                                 //$(RadioButtonASINChecked).closest("div").find(".max_price").text("$" + maxprice.toFixed(2));
                                 //$(RadioButtonASINChecked).attr("data-MaxPrice");
-                               
-                               
+
+
                                 //$(RadioButtonASINChecked).closest("div").find(".amazon_price").text("habib");
                                 //$(RadioButtonASINChecked).closest("div").find(".max_price").text("shafique");
                                 //$(RadioButtonASINChecked).attr("data-MaxPrice");
                             }
                             else {
-                               
+
                             }
                         }
                     });
@@ -968,7 +1002,7 @@
 
                 }
                 else {
-                   
+
                     $(asinselect).closest("div").find(".selectasin").css('display','inline-block');
                     $(zincloader).css('display', 'none');
                 }
@@ -976,27 +1010,61 @@
             //send to Zinc (Save Order to Zinc)
 
             function GetstatusfromSellerCloud() {
+                $(".loadertbl").show();
+
                 $('#myModalERR').modal('hide');
                 //sendToZincReferenceAferSubmit = $(this);
-                $(".loadertbl").show();
 
                 var sku = $(sendToZincReferenceAferSubmit).attr('data-SKU');
 
-                var RadioButtonASINChecked = $(sendToZincReferenceAferSubmit).closest('tr').find("input:radio[name='choice']:checked");
-                radioSKU = $(RadioButtonASINChecked).attr('value');
-                var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
-                RadioButtonASIN = $(RadioButtonASINChecked).attr('data-ASIN')
-                var RadioButtonMaxPrice = $(RadioButtonASINChecked).attr('data-MaxPrice')
+                //var RadioButtonASINChecked = $(sendToZincReferenceAferSubmit).closest('tr').find("input:radio[name='choice']:checked");
+                //radioSKU = $(RadioButtonASINChecked).attr('value');
+                //var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
+                //RadioButtonASIN = $(RadioButtonASINChecked).attr('data-ASIN')
+                //var RadioButtonMaxPrice = $(RadioButtonASINChecked).attr('data-MaxPrice')
 
                 var profitlosedetail = $(sendToZincReferenceAferSubmit).attr('data-profitlosedetail');
                 var profitpercentagedetail = $(sendToZincReferenceAferSubmit).attr('data-profitpercentagedetail');
                 var OrderDetailID = $(sendToZincReferenceAferSubmit).attr('data-OrderDetailID');
+                var MaxPrice = $(sendToZincReferenceAferSubmit).attr('data-MaxPrice');
 
                 var OrderId = $(sendToZincReferenceAferSubmit).attr('data-OrderId');
                 var URL = '/Zinc/SendOrderToZinc';
                 var SellerCloudOrderId = $(sendToZincReferenceAferSubmit).attr('data-SellerCloudOrderId');
+                var SKUArraryForSinglePage = [];
+
+              
                 //var Url = '/SellerCloud/GetOrderStatus/';
                 var Url = '/SellerCloud/GetOrdersFromSCRest/';
+                var SKU = [];
+                var ASINList_ = [];
+                $(sendToZincReferenceAferSubmit).closest('tr').find(".ZincAsinRadioButton").each(function (index) {
+                    //var status = $(sendToZincReferenceAferSubmit).is(':checked');
+                    var status = $(sendToZincReferenceAferSubmit).parents('tr').find(".ZincAsinRadioButton").is(':checked');
+
+                    if (status) {
+                        SKU.push($(this).attr("data-sku"));
+                        var productASIN = $(this).attr('data-ASIN');
+                        var OrderDetailID = $(sendToZincReferenceAferSubmit).attr('data-OrderDetailID');
+                        var OrderId = $(this).attr('data-id');
+                        var MaxPrice = $(this).attr('data-MaxPrice');
+                        var ASINData = { "Asin": productASIN, "OrderId": OrderId, "MaxPrice": MaxPrice, "OrderlineId": OrderDetailID };
+                        ASINList_.push(ASINData)
+
+                    }
+                });
+                var ASINList = []
+                ASINList = JSON.stringify(ASINList_);
+                //$(document).find(".SCOrderCheckbox").each(function (index) {
+
+                //    var productSKU = $(this).attr('data-id');
+
+
+                //    SKUArraryForSinglePage.push(productSKU)
+                //});
+                //console.log("ASKUUU", SKUArraryForSinglePage);
+
+                //console.log("ASIN", ASINList);
                 $.ajax({
                     type: 'Get',
                     url: Url,
@@ -1009,7 +1077,7 @@
                             $.ajax({
                                 type: 'Get',
                                 url: URL,
-                                data: { ASIN: RadioButtonASIN, MaxPrice: RadioButtonMaxPrice, orderid: OrderId, SellerOrderID: SellerCloudOrderId, orderDetailID: OrderDetailID },
+                                data: { ASINList: ASINList,orderid: OrderId, SellerOrderID: SellerCloudOrderId },
                                 dataType: 'json',
                                 traditional: true,
                                 success: function (data) {
@@ -1031,7 +1099,7 @@
                         }
                         else {
                             $('#myModalQTY').modal('show');
-                           
+
                             //$('#modelBodyQTY').find('.lblSellerCloudOrderStatus>span').append(data.scOrderStatus);
                             //$('#modelBodyQTY').find('.checkSellerCloudOrderStatus>span').append(data.DropshipStatus);
                             //$('#modelBodyQTY').find('.paymentStatus>span').append(data.PaymentStats);
@@ -1039,73 +1107,144 @@
                     }
                 });
             }
-            
+
             function zendToZinc() {
                 debugger
+                $(".loadertbl").show();
                 $('#modelBodyERR').find('.WHQQTY').empty();
                 //mychange
                 sendToZincReferenceAferSubmit = $(this);
 
-                var sku=$(this).attr('data-SKU');
-                $(".loadertbl").show();
-                var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
-                radioSKU=$(RadioButtonASINChecked).attr('value');
-                var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
-                  RadioButtonASIN = $(RadioButtonASINChecked).attr('data-ASIN')
-                var RadioButtonMaxPrice = $(RadioButtonASINChecked).attr('data-MaxPrice')
-                if (isRadioButtonChecked == true && sku== radioSKU) {
+                //var sku=$(this).attr('data-SKU');
 
-                    var profitlosedetail = $(this).attr('data-profitlosedetail');
-                    var profitpercentagedetail = $(this).attr('data-profitpercentagedetail');
-                    var OrderDetailID = $(this).attr('data-OrderDetailID');
+                //var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
+                //radioSKU=$(RadioButtonASINChecked).attr('value');
+                ////var isRadioButtonChecked = $(RadioButtonASINChecked).is(':checked');
+                //  RadioButtonASIN = $(RadioButtonASINChecked).attr('data-ASIN')
+                //var RadioButtonMaxPrice = $(RadioButtonASINChecked).attr('data-MaxPrice')
+                var SKUArraryForSinglePage = [];
+                var SKU = [];
+                var ASINList_ = [];
+                $(this).closest('tr').find(".ZincAsinRadioButton").each(function (index) {
+                    //var status = $(sendToZincReferenceAferSubmit).is(':checked');
+                    var status = $(this).parents('tr').find(".ZincAsinRadioButton").is(':checked');
+
+                    if (status) {
+                        SKU.push($(this).attr("data-sku"));
+                        var productASIN = $(this).attr('data-ASIN');
+                        var OrderDetailID = $(this).attr('data-OrderDetailID');
+                        var OrderId = $(this).attr('data-id');
+                        var MaxPrice = $(this).attr('data-MaxPrice');
+                        var ASINData = { "Asin": productASIN, "OrderId": OrderId, "MaxPrice": MaxPrice, "OrderlineId": OrderDetailID  };
+                        ASINList_.push(ASINData)
+
+                    }
+                });
+                var ASINList = []
+                ASINList = JSON.stringify(ASINList_);
+                //$(document).find(".SCOrderCheckbox").each(function (index) {
+
+                //    var productSKU = $(this).attr('data-id');
+
+
+                //    SKUArraryForSinglePage.push(productSKU)
+                //});
+                //console.log("ASKUUU", SKUArraryForSinglePage);
+
+                console.log("ASIN", ASINList);
+                if (SKU.length == ASINList_.length) {
+                    var QTYCHECK = 0;
+                    var AvailableQty = "";
+                    console.log("SKKKKKKK", SKU)
+
+                    //var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIstForSingleWH';
+
+                    $.each(SKU, function (index, value) {
+
+                        console.log("valueeeeee", value)
+                        $.ajax({
+                            type: 'Get',
+                            url: URLQTY,
+                            data: { sku: value },
+                            dataType: 'json',
+                            traditional: true,
+                            async: false,
+                            success: function (data) {
+
+                                $.each(data, function (index, value) {
+
+                                    if (value.WarehouseID == 5) {
+                                        if (value.AvailableQty > 0 && value.WarehouseID == 5) {
+                                            QTYCHECK = 1;
+                                            AvailableQty = value.AvailableQty;
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+
+                    });
+                    if (QTYCHECK == 1) {
+                        $(".loadertbl").hide();
+                        $('#myModalERR').modal('show');
+                        $('#modelBodyERR').find('.WHQQTY').append(AvailableQty);
+                    }
+                    else {
+                        GetstatusfromSellerCloud();
+                    }
+
+                    $('#ErrorZinc').css("display", "none");
+
+                    var profitlose = $(this).attr('data-profitlose');
+                    var profitpercentage = $(this).attr('data-profitpercentage');
 
                     var OrderId = $(this).attr('data-OrderId');
 
                     var SellerCloudOrderId = $(this).attr('data-SellerCloudOrderId');
-                    var URL = '/Zinc/SendOrderToZinc';
-                   // var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
-                    var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIstForSingleWH';
 
+                    @*var URL = '/BBOrderViewPage/SendOrderToZincOrderView';
+                    console.log(ASINList);
                     $.ajax({
                         type: 'Get',
-                        url: URLQTY,
-                        data: { sku: sku },
+                        url: URL,
+                        data: { ASINList: ASINList, orderid: OrderId, SellerOrderID: SellerCloudOrderId },
                         dataType: 'json',
                         traditional: true,
                         success: function (data) {
-                            
-                            $.each(data, function (index, value) {
-                                if (value.WarehouseID == 5) {
-                                    if (value.AvailableQty > 0 && value.WarehouseID == 5) {
-                                        $(".loadertbl").hide();
-                                        $('#myModalERR').modal('show');
-                                        $('#modelBodyERR').find('.WHQQTY').append(value.AvailableQty);
-                                      
-                                    }
-                                    else if (value.AvailableQty <= 0 && value.WarehouseID == 5) {
-                                        GetstatusfromSellerCloud();
-                                    }
-                                }
+                            JsonDataOfOrder = data;
+                            $.get('@Url.Action("ConfirmationOfZincOrderView", "BBOrderViewPage")', { JsonData: JsonDataOfOrder, profitlose: profitlose, percentageprofit: profitpercentage }).done(function (response) {
+                                $('#SendozincOrderViewBody').empty();
+                                $('#SendozincOrderViewBody').html(response);
 
+                                var successMessage = $('#SendozincOrderViewBody').find('.successmessage');
+                                $(successMessage).hide()
+
+                                $('#SendozincOrderView').modal('show');
                             });
 
                         }
-                    });
+                    });*@
+
 
                 }
+
+
                 else {
                     $(".loadertbl").hide();
-                    $('#modelBody').empty();
-                    $('#modelBody').html("<div>Please Select ASIN to Send Order</div>");
-                    $('#myModal').modal('show');
+                    $('#myModalError').empty();
+                    $('#myModalError').html("<div>Please Select ASIN to Send Order</div>");
+                    $('#myModalShow').modal('show');
                 }
             }
-                                   //var StatusSC = $(document).on('click', '#sellerstatus', GetstatusfromSellerCloud(SellerCloudOrderId));
+
 
             $(document).on('click', '#sellerstatus', GetstatusfromSellerCloud);
 
 
             $(document).on('click', '#btnSendToZinc', zendToZinc);
+
 
 
             //update seller Cloud orders
@@ -1136,58 +1275,59 @@
 
 
             //pagination
-              $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
-                  format: '[< nncnn >]',
-                  perpage: 25, // show 10 elements per page
-                  lapping: 0, // don't overlap pages for the moment
-                  page: 1, // start at page, can also be "null" or negative
-                    stepwidth: 0, // =0 means blockwise next/prev steps
-                  onSelect: function (page) {
+            if (EmptyFirstTime) {
 
-                      pageNo = page;
+
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                    format: '[< nncnn >]',
+                    perpage: 25, // show 10 elements per page
+                    lapping: 0, // don't overlap pages for the moment
+                    page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                    onSelect: function (page) {
+
+                        pageNo = page;
                         // add code which gets executed when user selects a page
                         var url = '/BestBuyProduct/BBorderPartialView?page=' + page + ''
-                      var completURL = url + '&order_id=' + order_id + '&sellerCloudID=' + sellerCloudID + '&CustomerName=' + CustomerName + '&ZincStatus=' + ZincStatusQuerString + '&OrderStatus=' + OrderStatus + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&sku=' + sku + '&DSStatus=' + DSStatus + '&PaymentStatus=' + PaymentStatus + '&ShippingTags=' + ShippingTags;
-                      $(".loadertbl").show();
+                        var completURL = url + '&order_id=' + order_id + '&sellerCloudID=' + sellerCloudID + '&CustomerName=' + CustomerName + '&ZincStatus=' + ZincStatusQuerString + '&OrderStatus=' + OrderStatus + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&sku=' + sku + '&DSStatus=' + DSStatus + '&PaymentStatus=' + PaymentStatus + '&ShippingTags=' + ShippingTags + '&EmptyFirstTime=' + EmptyFirstTime + '&ShippingBoxContain=' + ShippingBoxContain;
+                        $(".loadertbl").show();
 
-                      $.ajax({
-                          url: completURL,
-                          data: {  },
-                          type: 'POST',
-                          traditional: true,
-                          success: function (data) {
-                              $('#loadOrder').empty();
-                              $('#loadOrder').html(data);
-                              $(".loadertbl").hide();
-                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
-                              CreditCardDetail();
-                          }
-                      });
-                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined"  )
-                      {
-                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
-                              start = moment(OrderDateTimeFrom);
-                              end = moment(OrderDateTimeTo);
+                        $.ajax({
+                            url: completURL,
+                            data: {},
+                            type: 'POST',
+                            traditional: true,
+                            success: function (data) {
+                                $('#loadOrder').empty();
+                                $('#loadOrder').html(data);
+                                $(".loadertbl").hide();
+                                // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                                CreditCardDetail();
+                            }
+                        });
+                        if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                            if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                                start = moment(OrderDateTimeFrom);
+                                end = moment(OrderDateTimeTo);
 
-                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
-                          }
-                          else
-                          {
-                              $('#reportrange span').html("No Date Selected");
-                          }
+                                cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                            }
+                            else {
+                                $('#reportrange span').html("No Date Selected");
+                            }
 
-                      }
-                      else {
-                          $('#reportrange span').html("No Date Selected");
-                      }
+                        }
+                        else {
+                            $('#reportrange span').html("No Date Selected");
+                        }
 
 
-                      //$.get(completURL).done(function (response) {
-                      //      $('#loadOrder').empty();
-                      //      $('#loadOrder').html(response);
+                        //$.get(completURL).done(function (response) {
+                        //      $('#loadOrder').empty();
+                        //      $('#loadOrder').html(response);
 
-                      //      $('#tableOrderList').stickyTableHeaders({ fixedOffset: 65 });
-                      //  });
+                        //      $('#tableOrderList').stickyTableHeaders({ fixedOffset: 65 });
+                        //  });
                     },
                     onFormat: function (type) {
                         switch (type) {
@@ -1206,11 +1346,39 @@
                             case 'last': // ]
                                 return '<a href="#">Last</a>';
                         }
-                  }
+                    }
 
 
                 });
-
+            }
+            else {
+                   $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                    format: '[< nncnn >]',
+                    perpage: 25, // show 10 elements per page
+                    lapping: 0, // don't overlap pages for the moment
+                    page: 1, // start at page, can also be "null" or negative
+                       stepwidth: 0, // =0 means blockwise next/prev steps
+                       onFormat: function (type) {
+                           switch (type) {
+                               case 'block': // n and c
+                                   if (this.page === this.value) {
+                                       return '<span>' + this.value + '</span>';
+                                   } else {
+                                       return '<a href="#">' + this.value + '</a>';
+                                   }
+                               case 'next': // >
+                                   return '<a href="#">&gt;</a>';
+                               case 'prev': // <
+                                   return '<a href="#">&lt;</a>';
+                               case 'first': // [
+                                   return '<a href="#">First</a>';
+                               case 'last': // ]
+                                   return '<a href="#">Last</a>';
+                           }
+                       }
+                   });
+                $(".loadertbl").hide();
+            }
 
             $('select[multiple].active.3col.marketPlaces').multiselect({
                 columns: 1,
@@ -1273,6 +1441,16 @@
                 selectAll: false,
                 onOptionClick: function (element, option) {
                     $('#ddlPaymentStatus').val($(element).val());
+                    $(element).val();
+                },
+            });
+            $('select[multiple].active.2col.ShippingBoxContain').multiselect({
+                columns: 1,
+                placeholder: 'Shipping Box ',
+                maxPlaceholderOpts: 1,
+                selectAll: false,
+                onOptionClick: function (element, option) {
+                    $('#ddlShippingBoxContain').val($(element).val());
                     $(element).val();
                 },
             });
@@ -1922,6 +2100,21 @@
                     });
                 });
             }
+            if (ShippingBoxContain != null) {
+                debugger
+                var res = ShippingBoxContain.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlShippingBoxContain').val(ShippingBoxContain);
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+
+                        }
+                    });
+                });
+            }
             if (ShippingTags != null) {
                 debugger
                 var res = ShippingTags.split(",");
@@ -2057,7 +2250,7 @@
 
                   }
               });
-            
+
         });
     </script>
 }

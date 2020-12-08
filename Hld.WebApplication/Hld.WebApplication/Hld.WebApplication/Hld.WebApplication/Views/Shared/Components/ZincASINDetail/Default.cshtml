@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-sm-12 p-t-b">
                     <span>@item.priority</span>
-                    <input style="margin-right:15px" id="ZincAsinRadioButton" data-MaxPrice="@item.max_price" data-ASIN="@item.ASIN" type="radio" name="choice" value="@item.ProductSku" data-id="@item.bb_product_zinc_id" />
+                    <input style="margin-right:15px" id="ZincAsinRadioButton"class="ZincAsinRadioButton" data-MaxPrice="@item.max_price" data-ASIN="@item.ASIN" type="radio"  name="@item.bb_product_zinc_id" data-sku="@item.ProductSku"@*name="choice"*@ value="@item.ProductSku" data-id="@item.bb_product_zinc_id" />
                     <a target="_blank" href="https://www.amazon.ca/dp/@item.ASIN?th=1&psc=1">@item.ASIN</a>
                     @if (item.prime)
                     {

@@ -13,6 +13,7 @@ namespace Hld.WebApplication.ViewModel
         public String SellerCloudOrderID { get; set; }
         public string ShipmentAddress { get; set; }
         public int TotalQuantity { get; set; }
+        public string EmptyFirstTime { get; set; }
         public string ParentOrderID { get; set; }
         public string IsParent { get; set; }
         public string IsNotes { get; set; }
