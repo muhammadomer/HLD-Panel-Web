@@ -210,7 +210,7 @@ namespace Hld.WebApplication.Controllers
         //,string search_marketPlace,string search_shipmentOrderStatus
         [Authorize(Policy = "Access to Orders")]
         [HttpGet]
-        public ActionResult BestBuOrdersDetail(string order_id, string sellerCloudID, string CustomerName,string EmptyFirstTime, int? page, string ZincStatus = "", string MarketPlaces = "", string OrderStatus = "", string sku = "", string orderDateTimeFrom = "", string orderDateTimeTo = "", string DSStatus = "", string PaymentStatus = "", string ShippingTags = "",string ShippingBoxContain="")
+        public ActionResult BestBuOrdersDetail(string order_id, string sellerCloudID, string CustomerName,string EmptyFirstTime, int? page, int ShippingBoxContain, string ZincStatus = "", string MarketPlaces = "", string OrderStatus = "", string sku = "", string orderDateTimeFrom = "", string orderDateTimeTo = "", string DSStatus = "", string PaymentStatus = "", string ShippingTags = "")
         {
 
             if (ZincStatus == null)
@@ -254,10 +254,11 @@ namespace Hld.WebApplication.Controllers
             {
                 ShippingTags = "";
             }
-            if (ShippingBoxContain == null)
-            {
-                ShippingBoxContain = "";
+
+            if (ShippingBoxContain==0) {
+            
             }
+            
             BestBuyOrderSearchTotalCountViewModel SearchViewModel = new BestBuyOrderSearchTotalCountViewModel();
 
 
@@ -304,7 +305,7 @@ namespace Hld.WebApplication.Controllers
 
             // for searching order in bestBuy Orders Page
 
-            else if (!string.IsNullOrEmpty(ZincStatus) && ZincStatus != "undefined" || (!string.IsNullOrEmpty(sku) && sku != "undefined") || (!string.IsNullOrEmpty(OrderStatus) && OrderStatus != "undefined") || (!string.IsNullOrEmpty(orderDateTimeFrom) && orderDateTimeFrom != "undefined") || (!string.IsNullOrEmpty(orderDateTimeTo) && orderDateTimeTo != "undefined") || (!string.IsNullOrEmpty(DSStatus) && DSStatus != "undefined") || (!string.IsNullOrEmpty(PaymentStatus) && PaymentStatus != "undefined") || (!string.IsNullOrEmpty(ShippingTags) && ShippingTags != "undefined") || (!string.IsNullOrEmpty(ShippingBoxContain) && ShippingBoxContain != "undefined"))
+            else if (!string.IsNullOrEmpty(ZincStatus) && ZincStatus != "undefined" || (!string.IsNullOrEmpty(sku) && sku != "undefined") || (!string.IsNullOrEmpty(OrderStatus) && OrderStatus != "undefined") || (!string.IsNullOrEmpty(orderDateTimeFrom) && orderDateTimeFrom != "undefined") || (!string.IsNullOrEmpty(orderDateTimeTo) && orderDateTimeTo != "undefined") || (!string.IsNullOrEmpty(DSStatus) && DSStatus != "undefined") || (!string.IsNullOrEmpty(PaymentStatus) && PaymentStatus != "undefined") || (!string.IsNullOrEmpty(ShippingTags) && ShippingTags != "undefined") || ShippingBoxContain !=0 )
             {
                 TotalCountWithBestBuyOrderViewModel model = _bBProductApiAccess.GetAllBestBuyOrdersDetailSearchingTotalCount(ApiURL, token, SearchViewModel);
                 ViewBag.TotalCount = model.count;
@@ -324,7 +325,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult BBorderPartialView(string order_id, string sellerCloudID, string CustomerName, string EmptyFirstTime, int? page, string sort, string ZincStatus, string OrderStatus, string sku, string orderDateTimeFrom, string orderDateTimeTo, string DSStatus, string PaymentStatus = "", string ShippingTags = "",string ShippingBoxContain="")
+        public ActionResult BBorderPartialView(string order_id, string sellerCloudID, string CustomerName, string EmptyFirstTime, int? page,int ShippingBoxContain, string sort, string ZincStatus, string OrderStatus, string sku, string orderDateTimeFrom, string orderDateTimeTo, string DSStatus, string PaymentStatus = "", string ShippingTags = "")
         {
             if (ZincStatus == null)
             {
@@ -360,17 +361,17 @@ namespace Hld.WebApplication.Controllers
             {
                 ShippingTags = "";
             }
-            if (ShippingBoxContain == null)
-            {
-                ShippingBoxContain = "";
-            }
 
+            if (ShippingBoxContain == 0)
+            {
+                
+            }
             if (string.IsNullOrEmpty(sort))
             {
                 sort = "desc";
             }
 
-                IPagedList<BestBuyOrdersViewModel> data = LoadOrderData(order_id, sellerCloudID, CustomerName, page, sort, ZincStatus, OrderStatus, sku, orderDateTimeFrom, orderDateTimeTo, DSStatus, PaymentStatus, ShippingTags,ShippingBoxContain);
+                IPagedList<BestBuyOrdersViewModel> data = LoadOrderData(order_id, sellerCloudID, CustomerName, page, ShippingBoxContain, sort, ZincStatus, OrderStatus, sku, orderDateTimeFrom, orderDateTimeTo, DSStatus, PaymentStatus, ShippingTags);
                 ViewBag.S3BucketURL = s3BucketURL;
                 ViewBag.S3BucketURL_large = s3BucketURL_large;
                 return PartialView("~/Views/BestBuyProduct/_BBorderPartialView.cshtml", data);
@@ -379,7 +380,7 @@ namespace Hld.WebApplication.Controllers
         }
 
 
-        private IPagedList<BestBuyOrdersViewModel> LoadOrderData(string order_id, string sellerCloudID, string CustomerName, int? page, string sort, string ZincStatus, string orderStatus, string sku, string orderDateFrom, string orderDateTo, string DSStatus, string PaymentStatus, string ShippingTags,string ShippingBoxContain)
+        private IPagedList<BestBuyOrdersViewModel> LoadOrderData(string order_id, string sellerCloudID, string CustomerName, int? page, int ShippingBoxContain, string sort, string ZincStatus, string orderStatus, string sku, string orderDateFrom, string orderDateTo, string DSStatus, string PaymentStatus, string ShippingTags)
         {
             string modifiedZincStatus = "";
             if (page.HasValue)
@@ -431,7 +432,7 @@ namespace Hld.WebApplication.Controllers
                 var totalQuantity = _viewModel.Sum(e => e.TotalQuantity);
                 ViewBag.TotalProductsInOrders = totalQuantity;
             }
-            else if (!string.IsNullOrEmpty(ZincStatus) && ZincStatus != "undefined" || (!string.IsNullOrEmpty(sku) && sku != "undefined") || (!string.IsNullOrEmpty(orderStatus) && orderStatus != "undefined") || (!string.IsNullOrEmpty(orderDateFrom) && orderDateFrom != "undefined") || (!string.IsNullOrEmpty(orderDateTo) && orderDateTo != "undefined") || (!string.IsNullOrEmpty(DSStatus) && DSStatus != "undefined") || (!string.IsNullOrEmpty(PaymentStatus) && PaymentStatus != "undefined") || (!string.IsNullOrEmpty(ShippingTags) && ShippingTags != "undefined"))
+            else if (!string.IsNullOrEmpty(ZincStatus) && ZincStatus != "undefined" || (!string.IsNullOrEmpty(sku) && sku != "undefined") || (!string.IsNullOrEmpty(orderStatus) && orderStatus != "undefined") || (!string.IsNullOrEmpty(orderDateFrom) && orderDateFrom != "undefined") || (!string.IsNullOrEmpty(orderDateTo) && orderDateTo != "undefined") || (!string.IsNullOrEmpty(DSStatus) && DSStatus != "undefined") || (!string.IsNullOrEmpty(PaymentStatus) && PaymentStatus != "undefined") || (!string.IsNullOrEmpty(ShippingTags) && ShippingTags != "undefined")|| ShippingBoxContain != 0)
             {
                 modifiedZincStatus = getString(ZincStatus);
                 BestBuyOrderSearchTotalCountViewModel SearchViewModel = new BestBuyOrderSearchTotalCountViewModel();
