@@ -221,7 +221,11 @@ vertical-align: middle !important
                         {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a> }
 
                     else
-                    {<a style="cursor:pointer" href="@item.TrakingURL.Replace("{TrackingNumber}", item.TrakingNumber)" target="_blank"> @item.CourierCode @item.TrakingNumber</a>}
+                    {
+                            <a style="cursor:pointer" href="@item.TrakingURL.Replace("{TrackingNumber}", item.TrakingNumber)" target="_blank"> @item.CourierCode @item.TrakingNumber</a>
+                            
+                            }
+                      
                         @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
                         {
 

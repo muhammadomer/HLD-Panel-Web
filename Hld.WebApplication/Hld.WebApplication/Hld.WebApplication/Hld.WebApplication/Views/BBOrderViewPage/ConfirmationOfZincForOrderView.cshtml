@@ -59,10 +59,10 @@
                             </div>
 
                             @*<div class="row col-sm-12">
-                                <label style="font-weight:bold">Ship Date:</label>
-                                <input type="date" style="margin-right: 5px;box-shadow: none !important" placeholder="Ship Date" autocomplete="off" class="form-control" name="orderDateTimeShip" id="orderDateTimeShip" />
+                            <label style="font-weight:bold">Ship Date:</label>
+                            <input type="date" style="margin-right: 5px;box-shadow: none !important" placeholder="Ship Date" autocomplete="off" class="form-control" name="orderDateTimeShip" id="orderDateTimeShip" />
 
-                            </div>*@
+                        </div>*@
                             <div class="row col-sm-12">
                                 <label style="font-weight:bold">Ship Days:</label>
                                 <select class="form-control p-0" style="width:120px;" id="DeliveryDays">
@@ -88,7 +88,7 @@
                     <div class="col-sm-4">
                         <div class="col-sm-12 pl-0">
                             <p class="my-1" style="font-weight:bold">Account Detail</p>
-                            @Html.DropDownListFor(model => model.ZincAccountsId, new SelectList(Model.ZincAccounts, "ZincAccountsId", "UserNameShort"), new { @class = "form-control p-0" })
+                            @Html.DropDownListFor(model => model.ZincAccountsId, new SelectList(Model.ZincAccounts, "ZincAccountsId", "UserNameShort"), new { @class = "form-control p-0", @id = "ZincAccountsId" })
                         </div>
 
                         <div class="col-sm-12 pl-0">
@@ -99,10 +99,29 @@
 
                 </div>
             </div>
-            <div class="col-sm-12 findParent">
-                <div class="col-sm-4 pl-0 mt-2">
-                    <button type="button" data-scOrderID="@Model.client_notes.our_internal_order_id" id="btnSendBestBuyOrderToZincOrderView" data-id="@Model.products.Select(e=>e.product_id).FirstOrDefault()-@Model.client_notes.our_internal_order_id" class="btn btn-primary">Submit</button>
+            <div class="form-group row col-md-12 mt-2">
+                <div class="col-sm-4">
+
                 </div>
+               
+                <div class="col-sm-4"style="margin-left: 10px;">
+                    <span class="" style="font-weight:bold">Account Detail</span>
+                    <input type="text" class="accountdetail form-control" value=""readonly>
+                </div>
+              
+                <div class="col-sm-3">
+                    <div style="margin-top: 18px;
+        margin-left: 10px;
+">
+                        
+                        <button type="button" data-scOrderID="@Model.client_notes.our_internal_order_id" id="btnSendBestBuyOrderToZincOrderView" data-id="@Model.products.Select(e=>e.product_id).FirstOrDefault()-@Model.client_notes.our_internal_order_id" class="btn btn-primary">Submit</button>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="col-sm-12 findParent">
+              
+               
                 <div class="col-sm-8">
                     <div class="alert alert-success  successmessage">
                         <a href="#" class="close" aria-label="close">&times;</a>
@@ -115,3 +134,31 @@
     </div>
 </div>
 
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            
+                $(document).on('change','#ZincAccountsId',function() {
+                    var name = $('#ZincAccountsId option:selected').val();
+                    console.log(name);
+                    alert("gee")
+                });
+            
+        });
+
+    </script>
+}

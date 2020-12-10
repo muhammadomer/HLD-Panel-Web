@@ -31,6 +31,7 @@ namespace Hld.WebApplication.Controllers
         int POMasterID = 0;
         string s3BucketURL = "";
         string s3BucketURL_large = "";
+       
         ShipmentApiAccess _ApiAccess = null;
         private readonly Microsoft.Extensions.Logging.ILogger logger;
         UploadFilesToS3ForJobsAPIAccess ApiAccess = null;
@@ -472,6 +473,9 @@ namespace Hld.WebApplication.Controllers
                 ViewBag.TotalCount = model.TotalCount;
                 TempData["ShipQty"] = model.ShipedQty;
                 TempData["RecQty"] = model.RecivedQty;
+                ViewBag.showlist = ViewBag.showlist;
+
+
 
             }
             //  model = _ApiAccess.GetShipmentHistoryCount(ApiURL, token, DateTo, DateFrom, POMasterID, viewModel.ShipmentId, viewModel.SKU, viewModel.Title, Status);
@@ -582,7 +586,9 @@ namespace Hld.WebApplication.Controllers
                     ShipedQty = s.ShipedQty,
                     ReceivedQty = s.ReceivedQty,
                     CreatedOn = s.CreatedOn,
-                    Tracking=s.Tracking,
+                    TrakingNumber=s.TrakingNumber,
+                    TrakingURL=s.TrakingURL,
+                    CourierCode=s.CourierCode,
 
                 }).Distinct().ToList();
             foreach (var item in list)
@@ -603,6 +609,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
+            ViewBag.showlist = list.Count;
             return PartialView("~/Views/Shipment/ShipmentHistoryPartialView.cshtml", data);
         }
 

@@ -452,7 +452,7 @@
             else
             {
         <span> Total Orders Found : @ViewBag.TotalCount</span>
-        <span id="itemPerPage" style="margin-left:20px"> Records Per Page : @ViewBag.TotalOrders</span>
+        <span id="itemPerPage" style="margin-left:20px"> Records Per Page : <span class="itemPerPage"></span></span>
             }
 
         </div>
@@ -686,6 +686,8 @@
 
 
         $(document).ready(function () {
+
+          
             $('#btnSearchOrder').click(function () {
 
                 $('#itemPerPage').show();
@@ -1025,7 +1027,25 @@
             });
             //send to Zinc (Save Order to Zinc)
 
+            function myfunzinc() {
+                if (localStorage.getItem('SaveAcountZinc')) {
+                    $('.Zincaccountdetail').val(localStorage.getItem('SaveAcounttextzinc'));
+                    //$('#ZincAccountsId ').val(localStorage.getItem('SaveAcount'));
+
+                }
+
+                $(function () {
+                    $(document).on('change', '#ZincAccountsId', function () {
+                        localStorage.setItem('SaveAcountZinc', this.value);
+                        var name = $('#ZincAccountsId option:selected').text();
+                        localStorage.setItem('SaveAcounttextzinc', name);
+                    });
+                });
+
+            }
             function GetstatusfromSellerCloud() {
+               
+
                 $(".loadertbl").show();
 
                 $('#myModalERR').modal('hide');
@@ -1109,6 +1129,7 @@
 
 
                                         $('#myModal').modal('show');
+                                        myfunzinc();
                                     });
 
                                 }
@@ -1126,6 +1147,30 @@
             }
 
             function zendToZinc() {
+                //if (localStorage.getItem('SaveAcount')) {
+                //    $('#ZincAccountsId').val(localStorage.getItem('SaveAcount'));
+                //}
+
+                //$(document).on('click','#btnSendToZinc', function () {
+                //    $('#ZincAccountsId option:selected').val();
+                //});
+
+
+                //$(function () {
+                //    $(document).on('change','#ZincAccountsId').change(function () {
+                //        localStorage.setItem('SaveAcount', this.value);
+
+
+                //    });
+                //});
+                //$(function () {
+                //    $(document).on('change','#ZincAccountsId').change(function () {
+                //        var name = $('#ZincAccountsId option:selected').val();
+                //        console.log(name);
+                //        alert("")
+                //    });
+                //});
+
                 debugger
                 $(".loadertbl").show();
                 $('#modelBodyERR').find('.WHQQTY').empty();
@@ -1211,6 +1256,7 @@
                     }
                     else {
                         GetstatusfromSellerCloud();
+                        myfunzinc();
                     }
 
                     $('#ErrorZinc').css("display", "none");
@@ -1262,7 +1308,8 @@
 
 
             $(document).on('click', '#btnSendToZinc', zendToZinc);
-
+            //change
+           
 
 
             //update seller Cloud orders
@@ -1319,6 +1366,8 @@
                                 $('#loadOrder').empty();
                                 $('#loadOrder').html(data);
                                 $(".loadertbl").hide();
+                                var itemcount = $(".mycountclass").find("tr").length;
+                                $(".itemPerPage").text(itemcount);
                                 // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
                                 CreditCardDetail();
                             }
@@ -1961,6 +2010,7 @@
                     }
                 });
             });
+
             //  $.each(TagText, function (key, value) {
 
             $(document).on('click', '.ms-options-wrap', function () {

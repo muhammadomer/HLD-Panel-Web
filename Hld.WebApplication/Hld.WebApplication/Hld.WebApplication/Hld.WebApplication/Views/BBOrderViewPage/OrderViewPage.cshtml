@@ -1259,7 +1259,27 @@
                 $(this).tab('show');
             });
 
+        function myfun() {
+             if (localStorage.getItem('SaveAcount')) {
+                 $('.accountdetail').val(localStorage.getItem('SaveAcounttext'));
+                 //$('#ZincAccountsId ').val(localStorage.getItem('SaveAcount'));
+
+                }
+
+            $(function () {
+                    $(document).on('change','#ZincAccountsId',function () {
+                        localStorage.setItem('SaveAcount', this.value);
+                        var name = $('#ZincAccountsId option:selected').text();
+                        localStorage.setItem('SaveAcounttext',name);
+
+
+                    });
+                });
+           
+        }
+
         function GetstatusfromSellerCloud() {
+            debugger
             $(".loadertbl").show();
             $('#myModalERR').modal('hide');
             var loader = $('.ButtonLoader');
@@ -1321,6 +1341,8 @@
                 dataType: 'json',
                 traditional: true,
                 success: function (data) {
+                    debugger
+                    console.log("fata get",data);
                     $(".loadertbl").hide();
                     $(loader).css('display', 'none');
                     if (data.DropshipStatus == 0 && data.OrderStatus == 2 && data.PaymentStatus == 30) {
@@ -1331,15 +1353,22 @@
                             dataType: 'json',
                             traditional: true,
                             success: function (data) {
+                                debugger;
                                 JsonDataOfOrder = data;
+                                console.log("JsonDataOfOrderJsonDataOfOrder>",JsonDataOfOrder);
+                                console.log("JsonDataOfOrderJsonDataOfOrder111111>",data);
+                                
                                 $.get('@Url.Action("ConfirmationOfZincOrderView", "BBOrderViewPage")', { JsonData: JsonDataOfOrder, profitlose: profitlose, percentageprofit: profitpercentage }).done(function (response) {
                                     $('#SendozincOrderViewBody').empty();
                                     $('#SendozincOrderViewBody').html(response);
-
+                                    
+                                  
                                     var successMessage = $('#SendozincOrderViewBody').find('.successmessage');
                                     $(successMessage).hide()
 
                                     $('#SendozincOrderView').modal('show');
+                                    //$('#SendozincOrderViewBody').find(".accountdetail").append();
+                                    myfun();
                                 });
 
                             }
@@ -1432,6 +1461,7 @@
                 }
                 else {
                     GetstatusfromSellerCloud();
+                    myfun();
                 }
 
                     $('#ErrorZinc').css("display", "none");
@@ -1477,6 +1507,7 @@
                 $('#myModalShow').modal('show');
             }
         }
+
         $(document).on("click", ".updateASINLinkLatestGET", function () {
             debugger
             var zincloader = $(this).closest("span").find(".updateASINLinkLatest");
@@ -1538,7 +1569,7 @@
         });
 
         
-        $(document).on('click', '#sellerstatusInOrderViewPage', GetstatusfromSellerCloud);
+          $(document).on('click', '#sellerstatusInOrderViewPage', GetstatusfromSellerCloud);
             $(document).on('click', '#btnSendToZincOrderView', zendToZincOrderView);
 
 

@@ -18,7 +18,9 @@ namespace Hld.WebApplication.ViewModel
         public int ReceivedQty { get; set; }
         public string Type { get; set; }
         public int Status { get; set; }
-        public string Tracking { get; set; }
+        public string TrakingNumber { get; set; }
+        public string TrakingURL { get; set; }
+        public string CourierCode { get; set; }
         public int POId { get; set; }
         //public DateTime CreatedOn { get; set; }
         public DateTime ReceivedDate { get; set; }

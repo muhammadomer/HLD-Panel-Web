@@ -230,7 +230,19 @@ vertical-align: middle !important
                             <a href="../Shipment/Shipmentindex?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
                         }
                     </td>
-                    <td>@item.Tracking</td>
+                    <td>
+                       
+                                        @if (string.IsNullOrEmpty(item.TrakingURL))
+                                        {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a> }
+
+                                    else
+                                    {
+                                        <a style="cursor:pointer" href="@item.TrakingURL.Replace("{TrackingNumber}", item.TrakingNumber)" target="_blank"> @item.CourierCode @item.TrakingNumber</a>
+
+                                    }
+
+
+                                    </td>
                     <td>
                         @foreach (var innerItem in item.POs)
                         {

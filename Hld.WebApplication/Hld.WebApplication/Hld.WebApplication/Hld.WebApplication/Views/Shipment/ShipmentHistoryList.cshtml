@@ -258,7 +258,7 @@ margin-top: 9px;">
             else
             {
                 <span> Total Records Found : @ViewBag.TotalCount</span>
-                <span id="itemPerPage"style="margin-left:20px"> Records Per Page : 25</span>
+                <span  style="margin-left:20px"> Records Per Page : <span class="itemPerPage"></span></span>
             }
 
 
@@ -331,8 +331,13 @@ margin-top: 9px;">
         var selectedDateFrom = "";
         var selectedDatTo = "";
         $(document).ready(function () {
+            debugger
+              @*= <span>'@ViewBag.showlist'</span>;*@
+            var total = $(".itemPerPage").append(parseInt('@ViewBag.showlist'));
+            var total1 = $(".itemPerPage").append('@ViewBag.showlist');
+
             $('#btnSearchOrder').click(function () {
-               
+
                 $('#itemPerPage').show();
             });
               function VendorlistgetInShipmentlist() {
@@ -514,6 +519,7 @@ margin-top: 9px;">
                     });
                 });
             }
+
             $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
 
                   format: '[< nncnn >]',
@@ -537,18 +543,24 @@ margin-top: 9px;">
                           success: function (data) {
 
                               $('#loadOrder').empty();
+
                               $('#loadOrder').html(data);
+
                               $(function () {
                                   $(".table").tablesorter();
+
                               })
                               $(".loadertbl").hide();
                               $(".loader").hide();
+                              var itemcount = $(".table").find("tr").length-2;
+                              $(".itemPerPage").text(itemcount);
                            // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
                           },
                           error: function (data) {
                               debugger;
                           }
                       });
+
                       if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
                           if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
                               start = moment(OrderDateTimeFrom);
@@ -584,6 +596,8 @@ margin-top: 9px;">
                     }
              });
             $(".table").tablesorter();
+               var total = $(parseInt('@ViewBag.showlist'));
+               var total1 = $('@ViewBag.showlist');
         });
     </script>
 }

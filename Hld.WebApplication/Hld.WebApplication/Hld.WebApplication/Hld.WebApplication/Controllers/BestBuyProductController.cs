@@ -374,6 +374,7 @@ namespace Hld.WebApplication.Controllers
                 IPagedList<BestBuyOrdersViewModel> data = LoadOrderData(order_id, sellerCloudID, CustomerName, page, ShippingBoxContain, sort, ZincStatus, OrderStatus, sku, orderDateTimeFrom, orderDateTimeTo, DSStatus, PaymentStatus, ShippingTags);
                 ViewBag.S3BucketURL = s3BucketURL;
                 ViewBag.S3BucketURL_large = s3BucketURL_large;
+                 
                 return PartialView("~/Views/BestBuyProduct/_BBorderPartialView.cshtml", data);
             
 
