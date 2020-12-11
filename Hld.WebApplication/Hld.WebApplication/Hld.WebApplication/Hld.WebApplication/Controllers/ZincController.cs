@@ -1001,6 +1001,8 @@ namespace Hld.WebApplication.Controllers
                 bool status = false;
                 zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
                 zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
+                zincProductSaveViewModel.ASIN = orderid;
+                zincProductSaveViewModel.Product_sku = ProductSKU;
                 status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
 
                 return Json(new { success = true });
@@ -1024,6 +1026,8 @@ namespace Hld.WebApplication.Controllers
                 bool status = false;
                  zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
                 zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
+                zincProductSaveViewModel.ASIN = orderid;
+                zincProductSaveViewModel.Product_sku = ProductSKU;
                 status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
 
                 return zincProductSaveViewModel;
