@@ -124,10 +124,10 @@
                         </span>
                     </span>
                 </th>
-                <th>
+                <th style="width:14%">
                     Status
                 </th>
-                <th>
+                <th style="width:6%">
                     Active
                     <span class="tooltip">
                         <i class=" fa fa-info" style="cursor:pointer;margin-left:5px!important;width:0.3em!important" data-id=""></i>
@@ -171,8 +171,8 @@
             {
             <tr>
                 <td>
-                    <input type="text" value="@item.Product_sku" data-sku="@item.Product_sku"style="display:none"class="skuvalue"/>
-                    <input type="text"  value="@item.ASIN" data-asin="@item.ASIN"style="display:none"class="asinvalue"/>
+                    <input type="text" value="@item.Product_sku" data-sku="@item.Product_sku" style="display:none" class="skuvalue" />
+                    <input type="text" value="@item.ASIN" data-asin="@item.ASIN" style="display:none" class="asinvalue" />
                     <p>
                         <label><input type="radio" name="radiobutton" value="radiobutton" class="radiobuttoncheckd"></label>
                     </p>
@@ -215,7 +215,18 @@
                     @*@Html.DisplayFor(modelItem => item.ASIN)*@
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.primeAvailable)
+                    @*@Html.DisplayFor(modelItem => item.primeAvailable);*@
+
+
+                    @if (item.primeAvailable == "Available")
+                    {
+
+            <img src="/Images/Prime-small.png" />
+                                <span>Available</span> }
+                                                else
+                                                {
+                                <img src="/Images/Prime-Gray-small.png" />
+                                                    <span style="font-weight:bold;color:red">Not Available</span>}
                 </td>
                 <td>
                     @if (item.ValidStatus == 0)

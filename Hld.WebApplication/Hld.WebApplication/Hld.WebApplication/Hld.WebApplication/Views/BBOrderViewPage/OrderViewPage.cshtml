@@ -718,13 +718,13 @@
                         </th>
 
                         <th width="4%">Image</th>
-                        <th width="10%">SKU</th>
+                        <th width="9%">SKU</th>
                         <th width="13%">Item</th>
                         <th width="8%" class="text-center">ACost/Item</th>
                         <th width="3%">Fees</th>
                         <th width="3%">Profit</th>
                         <th width="4%">Sale<br />Price/pc</th>
-                        <th width="2%">Qty</th>
+                        <th width="1%">Qty</th>
                         <th width="2%">SubTotal</th>
                         <th width="7%">
                             WHQ
@@ -739,7 +739,7 @@
 
                             </div>
                         </th>
-                        <th width="25%">ZincASIN</th>
+                        <th width="27%">ZincASIN</th>
                         <th width="10%">SC Order Status</th>
                         <th width="12%">Action</th>
                     </tr>
@@ -979,7 +979,14 @@
                                             <span>@Zincitem.priority</span>
                                             <input style="margin-right: 15px;" class="ZincAsinRadioButtonOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-MaxPrice="@Zincitem.max_price" data-ASIN="@Zincitem.ASIN" type="radio" name="@item.ProductSKU" value="@Zincitem.ProductSku" data-id="@Zincitem.bb_product_zinc_id" />
                                             <a target="_blank" href="https://www.amazon.ca/dp/@Zincitem.ASIN?th=1&psc=1">@Zincitem.ASIN</a>
+                                            @if (Zincitem.prime)
+                                            {
 
+                                        <img src="/Images/Prime-small.png" /> @*<span>Available</span>*@ }
+                                                                else
+                                                                {
+                                        <img src="/Images/Prime-Gray-small.png" />
+                                                                    <span style="font-weight:bold;color:red">Not Available</span>}
                                             AMZPr:  <span class="amazon_price">@Zincitem.amazon_price</span><strong>,</strong>
                                             <a target="_blank" asp-controller="Zinc" asp-action="ProductZinc" asp-route-ProductSKU="@item.ProductSKU"> MaxPr:<span class="max_price">@Zincitem.max_price</span></a>
 
@@ -1543,7 +1550,7 @@
                     success: function (data) {
 
                         $(zincloader).css('display', 'none');
-                        if (data != null) {
+                        if (data.itemprice != 0) {
                             $(amazon_price).closest("div").find(".amazon_price").text(data.itemprice / 100);
                           
                             //$(amazon_price).closest("div").find(".amazon_price").text("12");

@@ -771,33 +771,7 @@
 
               }
 
-            function GetUpdateFromZinc(asin, id, element) {
-                $(element).attr("disabled", true);
-                var productSku = $('#HfProductId').val().trim();
-                var loader = $('.addLoader-' + id);
-                $(loader).css('display','inline');
-                $.ajax({
-
-                    type: "POST",
-                    url: '/Zinc/GetProductOfferDataFromZincAndUpdateDatabase?orderid=' + asin + '&ProductSKU=' + $('#HfProductId').val() +'&bbZincID='+id,
-                    success: function (data) {
-                        if (data.success == true) {
-                            $(loader).css('display', 'none');
-                            $(element).removeAttr("disabled");
-                            $.get('/Zinc/Index', { sku: productSku }).done(function (response) {
-                                $('#showPartialViewList').empty();
-                                $('#showPartialViewList').html(response);
-                            });
-
-                        }
-                        else {
-                            $(element).removeAttr("disabled");
-                            $(loader).css('display','none')
-                            $('.addText-' + id).text('No Response');
-                        }
-                    }
-                });
-            }
+            function GetUpdateFromZinc(asin, id, element) {                $(element).attr("disabled", true);                var productSku = $('#HfProductId').val().trim();                var loader = $('.addLoader-' + id);                $(loader).css('display', 'inline');                $.ajax({                    type: "POST",                    //url: '/Zinc/GetProductOfferDataFromZincAndUpdateDatabase?orderid=' + asin + '&ProductSKU=' + $('#HfProductId').val() +'&bbZincID='+id,                    url: '/Zinc/GetProductOfferDataFromZincAndUpdate?orderid=' + asin + '&ProductSKU=' + $('#HfProductId').val() + '&bbZincID=' + id,                    success: function (data) {                        if (data != null) {                            $(loader).css('display', 'none');                            $(element).removeAttr("disabled");                            $.get('/Zinc/Index', { sku: productSku }).done(function (response) {                                $('#showPartialViewList').empty();                                $('#showPartialViewList').html(response);                            });                        }                        else {                            $(element).removeAttr("disabled");                            $(loader).css('display', 'none')                            $('.addText-' + id).text('No Response');                        }                    }                });            }
 
             function PopupForm(url) {
                 $.get(url).done(function (response) {

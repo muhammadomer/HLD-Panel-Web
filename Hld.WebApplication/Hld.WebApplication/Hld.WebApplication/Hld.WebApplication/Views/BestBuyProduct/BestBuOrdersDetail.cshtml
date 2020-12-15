@@ -28,7 +28,9 @@
         background-color: blue;
         color: white;
     }
-
+    .ms-options-wrap:nth-of-type(7) .ms-options {
+        width: 180px !important;
+    }
     .activeButton {
         display: none;
     }
@@ -381,7 +383,7 @@
                     
                     <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 ShippingBoxContain" multiple="multiple">
                         <option value=1>Shipping Box</option>
-                      
+                        <option value=2>Show only PO Box Orders</option>
                     </select>
 
                     @*<input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" placeholder="From Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateFrom" name="orderDateTimeFrom" id="orderDateTimeFrom" />

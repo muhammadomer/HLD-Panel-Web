@@ -76,10 +76,10 @@ namespace Hld.WebApplication.Helper
                 listmodel = JsonConvert.DeserializeObject<List<TagViewModel>>(strResponse);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             return listmodel;
         }
