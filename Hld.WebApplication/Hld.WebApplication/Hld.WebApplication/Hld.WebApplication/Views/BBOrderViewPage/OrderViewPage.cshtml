@@ -867,7 +867,7 @@
                             @*@{
                                 decimal total = (item.UnitPrice) - (item.ShippingFee);
                             }*@
-                            @Model.TotalPrice
+                            @item.UnitPrice
                         </td>
                         @* <td>@item.UnitPrice</td>*@
                         <td>@item.TotalQuantity</td>
@@ -1550,7 +1550,9 @@
                     success: function (data) {
 
                         $(zincloader).css('display', 'none');
+                        window.location.reload();
                         if (data.itemprice != 0) {
+
                             $(amazon_price).closest("div").find(".amazon_price").text(data.itemprice / 100);
                           
                             //$(amazon_price).closest("div").find(".amazon_price").text("12");
