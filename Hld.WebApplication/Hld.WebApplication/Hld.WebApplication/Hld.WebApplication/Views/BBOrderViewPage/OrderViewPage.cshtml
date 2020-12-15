@@ -864,10 +864,10 @@
                         <td> @item.calculation_ProfitLoss<br />  @Math.Round(item.calculation_ProfitLossPercentage)%  </td>
                        
                         <td>
-                            @{
-                                decimal total = (item.UnitPrice) -(item.ShippingFee);
-                                    }
-                            @total
+                            @*@{
+                                decimal total = (item.UnitPrice) - (item.ShippingFee);
+                            }*@
+                            @Model.TotalPrice
                         </td>
                         @* <td>@item.UnitPrice</td>*@
                         <td>@item.TotalQuantity</td>
