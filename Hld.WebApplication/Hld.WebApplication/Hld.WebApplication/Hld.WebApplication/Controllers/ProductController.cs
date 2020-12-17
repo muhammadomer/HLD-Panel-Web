@@ -2047,6 +2047,16 @@ namespace Hld.WebApplication.Controllers
                listviewmodel = ProductApiAccess.GetDataListForBulkUpdate(ApiURL, token, ParentID);
                return View(listviewmodel);
         }
-        
+        [HttpPut]
+        public bool BBQtyupdate(string SKU,bool BBQtyUpdate)
+        {
+            string token = Request.Cookies["Token"];
+
+            ProductApiAccess.BBQtyupdate(ApiURL, token, SKU, BBQtyUpdate);
+           
+            return true;
+
+
+        }
     }
 }

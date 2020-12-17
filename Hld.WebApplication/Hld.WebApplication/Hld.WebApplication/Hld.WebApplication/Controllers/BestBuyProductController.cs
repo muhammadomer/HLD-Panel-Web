@@ -580,13 +580,12 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetExplainAmount(string sellercloudId, string productSku)
+        public GetExplainAmountViewModel GetExplainAmount(string sellercloudId, string productSku)
         {
             token = Request.Cookies["Token"];
-            List<GetExplainAmountViewModel> model = new List<GetExplainAmountViewModel>();
-            model = sellerCloudApiAccess.GetExplainAmount(ApiURL, token, sellercloudId, productSku);
-            
-            return View(model);
+            GetExplainAmountViewModel model = new GetExplainAmountViewModel();
+            model = sellerCloudApiAccess.GetExplainAmount(ApiURL, token, sellercloudId, productSku);           
+            return model;
         }
 
     }

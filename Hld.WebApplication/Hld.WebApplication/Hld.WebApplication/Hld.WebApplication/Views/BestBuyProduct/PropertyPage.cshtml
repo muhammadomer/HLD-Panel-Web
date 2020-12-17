@@ -79,7 +79,7 @@
 
 
 
-<hr style="border:1px solid black;margin-right:10px;" />
+<hr style="border:1px solid black;" />
 <div class="mainWrapper">
     <div class="row">
         <!--Start Left Menue-->
@@ -171,9 +171,9 @@
                                     </a>
                                     <input type="hidden" asp-for="ShopSKU_OfferSKU" />
                                     @*<a style="padding-left:2px;cursor:pointer" asp-controller="BestBuyProduct" asp-action="InsertProductToBBProduct" asp-route-SKU="@Model.Product_Sku" >
-                                        Update
-                                    </a>*@
-                                    
+                    Update
+                </a>*@
+
                                 </div>
                                 <label class="control-label col-sm-2    ">MSRP:</label>
                                 <div class="col-sm-3">
@@ -189,13 +189,21 @@
                                 <div class="col-sm-3">
                                     <input asp-for="UnitDiscountPrice_SellingPrice" class="form-control" />
                                 </div>
+
                             </div>
                             <div class="form-group row" style="padding-bottom: 0px;">
                                 <label class="control-label col-sm-3   ">Offer End Date:</label>
                                 <div class="col-sm-4">
                                     <input name="DiscountEndDate" type="text" id="DiscountEndDate" value="@Model.DiscountEndDate" class="form-control" />
                                 </div>
+                                <label class="control-label col-sm-5">Do Not Send Qty Update: <span style="vertical-align:text-top"><input type="checkbox" asp-for="@Model.BBQtyUpdate" class="selectedcheckbox" data-sku="@Model.Product_Sku"style="" /></span><span>
+    <img style="display:none;" class="BBupdate" height="20px" width="20px" src="~/Images/loadingImage.gif" /></span></label>
+                                
                             </div>
+                            <!--<div class="col-sm-12"style="padding:0">
+                                <label class="control-label col-sm-7 p-0">Do Not Send Qty Update:<span> <input type="checkbox" class="selectedcheckbox" data-sku="@Model.Product_Sku"--> @*data-qty="@Model.BBQtyUpdate"*@  <!--style="margin-left: 15px;"/></span></label>
+
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -309,6 +317,32 @@
             <script type="text/javascript">
 
                 $(document).ready(function () {
+                    
+                    $(document).on("change", ".selectedcheckbox", function () {
+                        if ($(this).attr('type') === 'checkbox') {
+                            QtyUpdate = $(this).is(':checked') ? true : false;
+                            var sku = $(this).attr('data-sku');
+
+                        } else {
+                            QtyUpdate = $(this).val();
+                        }
+                        console.log(QtyUpdate);
+                        console.log(sku);
+                        $(".BBupdate").css('display','inline-block')
+                        $.ajax({
+                            type: 'Put',
+                            url: '../product/BBQtyupdate',
+                            data: { SKU: sku, BBQtyUpdate: QtyUpdate },
+                            success: function (res) {
+                                console.log("get responce",res)
+                                $(".BBupdate").css('display', 'none')
+                               
+                            }
+
+                        });
+                    });
+
+
                     $("#DiscountStartDate").datepicker({ dateFormat: 'yy-mm-dd' });
                     $("#DiscountEndDate").datepicker({ dateFormat: 'yy-mm-dd' });
                     function ShowImages() {

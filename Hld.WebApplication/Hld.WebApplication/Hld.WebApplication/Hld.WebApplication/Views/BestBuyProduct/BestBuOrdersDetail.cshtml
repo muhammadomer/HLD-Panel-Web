@@ -688,7 +688,40 @@
 
 
         $(document).ready(function () {
+            $(document).on('click', '.GetSalesQtytooltipdata', function () {
+                var row = $(this).closest("tr");
+                
+                // $("#" + sellerCloudOrderId + ProductSKU).text(data).empty();
+                var sellerCloudOrderIds = $(this).attr('data-id');
+                var ProductSKUs = $(this).attr('data-sku');
+               
+                var Url = '/BestBuyProduct/GetExplainAmount/';
+                $.ajax({
+                    type: 'GET',
+                    url: Url,
+                    data: { sellercloudId: sellerCloudOrderIds, productSku: ProductSKUs },
 
+                    traditional: true,
+                    success: function (data) {
+                        
+                        $(row).find(".QtySold").text(data.quantity);
+                        var unitprice = (data.quantity) * (data.unitprice);
+                        $(row).find(".SalesPrice").text("$" + unitprice.toFixed(2));
+                        var Subtotal = (unitprice) + (data.ShippingFee);
+                        $(row).find(".Subtotal").text("$" + Subtotal.toFixed(2));
+                        $(row).find(".CustomerShipping").text("$"+data.ShippingFee.toFixed(2)); 
+                        var avgcost = (data.quantity) * (data.avg_cost);
+                        $(row).find(".AvgCost").text("$" + avgcost.toFixed(2));
+                        $(row).find(".SellingFees").text("$"+data.total_commission.toFixed());
+                        $(row).find(".ShipOutCost").text("0.00");
+                        $(row).find(".NetMargin").text("50%");
+                        $(row).find(".SalesQtytooltipdata").toggle('fast');
+                      
+
+
+                    }
+                });
+            });
           
             $('#btnSearchOrder').click(function () {
 
@@ -2321,6 +2354,8 @@
                   }
               });
 
-        });
+          });
+
+     
     </script>
 }

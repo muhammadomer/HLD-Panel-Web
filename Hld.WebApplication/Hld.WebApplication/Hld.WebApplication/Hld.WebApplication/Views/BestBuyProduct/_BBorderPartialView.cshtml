@@ -231,6 +231,51 @@
         #tableOrderList {
             margin-bottom: 0px !important;
         }
+    .SalesQtytooltip {
+        display: inline-block;
+        position: relative;
+        text-align: left;
+        cursor: not-allowed;
+    }
+
+        .SalesQtytooltip .SalesQtytooltipdata {
+            min-width: 300px;
+            height: 205px;
+            max-width: 700px;
+            top: -2px;
+            max-height: 400px;
+            left: 30%;
+            transform: translate(-30%,-100%);
+            padding: 4px 20px;
+            color: black;
+            background-color: white;
+            font-weight: normal;
+            font-size: 14px;
+            border: 1px solid gray;
+            border-radius: 8px;
+            position: absolute;
+            z-index: 99999999;
+            box-sizing: border-box;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.5);
+            display: none;
+        }
+
+        .SalesQtytooltip .SalesQtytooltipdata::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 34%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #615A5A transparent transparent transparent;
+        }
+    .saleqtydivstyleclass {
+       display: flex; 
+       justify-content: space-between;
+      
+       color:dimgray;
+    }
 </style>
 <div class="container-fluid">
     <div class="row">
@@ -378,12 +423,12 @@
                                             {
                                                 decimal total = (@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
 
-                                                <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Comm:</strong>$@item.TotalComission,&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:blue">$@item.ProfitAndLossInDollar (@item.ProfitAndLossInPercentage%)</span></label>
+                                                <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Fees:</strong>$@Math.Round(@item.TotalComission),&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:blue">$@item.ProfitAndLossInDollar (@Math.Round(@item.ProfitAndLossInPercentage)%)</span></label>
                                             }
                                             else
                                             {
                                                 decimal total = (@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
-                                                <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Comm:</strong>$@item.TotalComission,&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:red">$@item.ProfitAndLossInDollar (@item.ProfitAndLossInPercentage%)</span></label>
+                                        <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Fees:</strong>$@Math.Round(@item.TotalComission),&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:red">$@item.ProfitAndLossInDollar (@Math.Round(@item.ProfitAndLossInPercentage)%)</span></label>
                                             }
 
                                         </div>
@@ -394,7 +439,7 @@
 
                             <tr class="parentASIN">
                                 <td>
-                                    <table class="mycountclass">
+                                    <table class="mycountclass"style="width: 100%;">
                                         <tbody>
                                             @foreach (var detail in item.BBProductDetail)
                                             {
@@ -479,8 +524,25 @@
                                                                 <label>2-5-A-4</label>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
+                                                        @*<div class="row">
                                                             <label class="col-sm-1 offset-sm-2 text-right" style="padding-right:4px;"><strong>Total:</strong></label>
+                                                            <div class="col-sm-8">
+                                                                @{
+                                                                    decimal currentUnitPrice = detail.UnitPrice;
+                                                                    decimal totalAmountofUnitPrice = detail.TotalQuantity * currentUnitPrice;
+                                                                    decimal totalTax = detail.TaxGST + detail.TaxPST;
+                                                                    decimal total = Math.Round((totalTax / totalAmountofUnitPrice) * 100, 2);
+                                                                 
+                                                                    decimal comission = (detail.Comission);
+                                                                    decimal totalAverageCost = Math.Round(Convert.ToDecimal(detail.AverageCost), 2) * detail.TotalQuantity;
+
+                                                                }
+                                                                
+                                                                <label>@detail.TotalQuantity x $@currentUnitPrice=  $@totalAmountofUnitPrice + Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)  </label>
+                                                            </div>
+                                                        </div>*@
+                                                        <div class="row">
+                                                            <label class="col-sm-1 offset-sm-2 text-right" style="padding-right:4px;"><strong>Sales: </strong></label>
                                                             <div class="col-sm-8">
                                                                 @{
                                                                     decimal currentUnitPrice = detail.UnitPrice;
@@ -492,17 +554,33 @@
                                                                     decimal totalAverageCost = Math.Round(Convert.ToDecimal(detail.AverageCost), 2) * detail.TotalQuantity;
 
                                                                 }
-                                                                @*<label>@detail.TotalQuantity x $@detail.UnitPrice=  $@totalAmountofUnitPrice + Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)  </label>*@
-                                                                <label>@detail.TotalQuantity x $@currentUnitPrice=  $@totalAmountofUnitPrice + Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)  </label>
+                                                              
+                                                                <label>
+                                                                    Qty @detail.TotalQuantity x $@currentUnitPrice=  $@totalAmountofUnitPrice @*+ Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)*@ <strong>Shipping:</strong>$@item.ShippingPrice,&nbsp; <strong>P&L:</strong>@Math.Round((totalAmountofUnitPrice - 0 - totalAverageCost - comission), 2)  (@(Math.Round(((Math.Round((totalAmountofUnitPrice - 0 - totalAverageCost - comission), 2) / totalAmountofUnitPrice)) * 100))%)&nbsp; <span class="SalesQtytooltip">
+                                                                                                                                                                                                                                                                                                                                                        <span class="GetSalesQtytooltipdata" style="cursor:pointer;color:cornflowerblue" data-id="@item.SellerCloudOrderID" data-SKU="@detail.ProductSKU">Explain Amount</span>
+
+                                                                        <span class="SalesQtytooltipdata"id=@(item.SellerCloudOrderID+detail.ProductSKU)>
+                                                                            <div class="saleqtydivstyleclass"><span>Explain Amount: (Currency CA$)</span></div>
+                                                                            <div class="saleqtydivstyleclass"><span><i class="fas fa-caret-right" style="margin-right:3px;color:dimgray"></i>Qty Sold:</span><span class="QtySold"></span></div>
+                                                                            <div class="saleqtydivstyleclass"><span>Sales Price:</span><span class="SalesPrice"></span></div>
+                                                                            <div class="saleqtydivstyleclass"style="border-bottom: 1px solid gainsboro;"><span><span class="fas fa-caret-right" style="margin-right:3px;color:dimgray"></span>Customer Shipping:</span><span class="CustomerShipping"></span></div>
+                                                                            <div class="saleqtydivstyleclass"><span>Subtotal:</span><span class="Subtotal"></span></div>
+                                                                            <div class="saleqtydivstyleclass"><span>Avg Cost:</span><span class="AvgCost"></span></div>
+                                                                            <div class="saleqtydivstyleclass"><span>Selling Fees:</span><span class="SellingFees"></span></div>
+                                                                            <div class="saleqtydivstyleclass" style="border-bottom: 1px solid gainsboro;"><span><i class="fas fa-caret-right" style="margin-right: 3px;color:dimgray"></i>Ship Out Cost:</span><span class="ShipOutCost"></span></div>
+                                                                            <div class="saleqtydivstyleclass"><span>Net Margin:</span><span class="NetMargin"></span></div>
+                                                                        </span>
+                                                                    </span>
+                                                                </label>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
+                                                        @*<div class="row">
                                                             <label class="col-sm-1 offset-sm-2 text-right" style="padding-right:4px;"><strong>P&L:</strong></label>
                                                             <div class="col-sm-8 removePadding">
                                                                 <label style="padding-left:18px">Comission: $@Math.Round(comission, 2) (@Math.Round(((comission / totalAmountofUnitPrice) * 100), 2)%) , P&L: $@Math.Round((totalAmountofUnitPrice - 0 - totalAverageCost - comission), 2)  (@(Math.Round(((Math.Round((totalAmountofUnitPrice - 0 - totalAverageCost - comission), 2) / totalAmountofUnitPrice)) * 100, 2))%)</label>
                                                             </div>
 
-                                                        </div>
+                                                        </div>*@
                                                         <div class="row">
                                                             <label class="col-sm-3 offset-sm-1 text-right" style="position: relative;left: 11px;"><strong><a asp-action="ProductAddUpdate" target="_blank" asp-controller="Product" asp-route-ProductSKU="@detail.ProductSKU"> Avg Cost:</a> </strong></label>
                                                             <div class="col-sm-8 removePadding">

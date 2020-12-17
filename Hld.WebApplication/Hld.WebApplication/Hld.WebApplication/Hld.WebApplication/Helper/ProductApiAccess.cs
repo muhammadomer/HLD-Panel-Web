@@ -2335,6 +2335,34 @@ namespace Hld.WebApplication.Helper
             }
             return ViewModel;
         }
+        public bool BBQtyupdate(string ApiURL, string token, string SKU,bool BBQtyUpdate)
+        {
+            bool status = false;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/BBupdateProductStatus/" + SKU + "/" + BBQtyUpdate);
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return status;
+        }
     }
 }
 

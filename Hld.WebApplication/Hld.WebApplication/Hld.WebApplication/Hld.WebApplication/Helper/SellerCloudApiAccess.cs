@@ -370,12 +370,12 @@ namespace Hld.WebApplication.Helper
             return status;
         }
 
-        public List<GetExplainAmountViewModel> GetExplainAmount(string ApiURL, string token, string sellercloudId, string productSku)
+        public GetExplainAmountViewModel GetExplainAmount(string ApiURL, string token, string sellercloudId, string productSku)
         {
-            List<GetExplainAmountViewModel> model = new List<GetExplainAmountViewModel>();
+            GetExplainAmountViewModel model = new GetExplainAmountViewModel();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyProduct/GetExplainAmount");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyProduct/GetExplainAmount/"+ sellercloudId + "/" + productSku);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -388,7 +388,7 @@ namespace Hld.WebApplication.Helper
                 {
                     strResponse = sr.ReadToEnd();
                 }
-                model = JsonConvert.DeserializeObject<List<GetExplainAmountViewModel>>(strResponse);
+                model = JsonConvert.DeserializeObject<GetExplainAmountViewModel>(strResponse);
                 return model;
             }
             catch (Exception ex)
@@ -396,6 +396,7 @@ namespace Hld.WebApplication.Helper
 
                 throw ex;
             }
+            return model;
         }
 
     }

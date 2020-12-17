@@ -966,7 +966,7 @@
             </div>*@
 
                         </td>
-                        <td>
+                        <td class="orderviewpage" data-url="@Url.Action("ZincASINDetail","Components",new {sku=item.ProductSKU.Trim()})">
                             @if (item.ZincAsinDetail != null && item.ZincAsinDetail.Count() > 0)
                             {
 
@@ -982,11 +982,11 @@
                                             @if (Zincitem.prime)
                                             {
 
-                                        <img src="/Images/Prime-small.png" /> @*<span>Available</span>*@ }
-                                                                else
-                                                                {
-                                        <img src="/Images/Prime-Gray-small.png" />
-                                                                    <span style="font-weight:bold;color:red">Not Available</span>}
+                                                <img src="/Images/Prime-small.png" /> @*<span>Available</span>*@ }
+                                            else
+                                            {
+                                                <img src="/Images/Prime-Gray-small.png" />
+                                                <span style="font-weight:bold;color:red">Not Available</span>}
                                             AMZPr:  <span class="amazon_price">@Zincitem.amazon_price</span><strong>,</strong>
                                             <a target="_blank" asp-controller="Zinc" asp-action="ProductZinc" asp-route-ProductSKU="@item.ProductSKU"> MaxPr:<span class="max_price">@Zincitem.max_price</span></a>
 
@@ -994,6 +994,7 @@
 
 
                                     </div>
+
                                     <span style="margin-left: 8px;">
                                         <a class="updateASINLinkLatestGET" data-SKU="@item.ProductSKU">
                                             <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
@@ -1003,7 +1004,6 @@
                                         </span>
                                         <span class="selectasin" style="color:red;display:none">select ASIN!</span>
                                     </span>
-
 
                                 }
                             }
@@ -1515,7 +1515,23 @@
             }
         }
 
+        //function updateASINLINKK(parents) {
+
+        //    var zincDetailDiv = $(parents).find(".orderviewpage");     
+                
+        //    var dataURL = $(parents).find(".orderviewpage").attr('data-url');
+        //    $.get(dataURL).done(function (response) {
+              
+        //        $(zincDetailDiv).empty();
+              
+        //        $(zincDetailDiv).html(response);
+                
+        //    });
+
+        //}
+
         $(document).on("click", ".updateASINLinkLatestGET", function () {
+            var parents = $(this).parents("tr");
             debugger
             var zincloader = $(this).closest("span").find(".updateASINLinkLatest");
             var asinselect = $(this).closest("span").find(".selectasin");
@@ -1550,15 +1566,19 @@
                     success: function (data) {
 
                         $(zincloader).css('display', 'none');
+
+                        //updateASINLINKK(parents);
                         window.location.reload();
                         if (data.itemprice != 0) {
-
+                            
                             $(amazon_price).closest("div").find(".amazon_price").text(data.itemprice / 100);
                           
                             //$(amazon_price).closest("div").find(".amazon_price").text("12");
                             //$(max_price).closest("div").find(".max_price").text("40");
+
                             var maxprice = data.itemprice * 1.25 / 100;
                             $(max_price).closest("div").find(".max_price").text(maxprice.toFixed(2));
+
                             //$("div").attr("data-MaxPrice");
                             //$(RadioButtonASINChecked).closest("div").find(".amazon_price").text("habib");
                             //$(RadioButtonASINChecked).closest("div").find(".max_price").text("shafique");

@@ -25,6 +25,7 @@ namespace Hld.WebApplication.ViewModel
         public int ProductId { get; set; }
         public string BBCategory { get; set; }
         public bool dropship_status { get; set; }
+        public bool BBQtyUpdate { get; set; }
         public int dropship_Qty { get; set; }
         public string DropshipComments { get; set; }
     }
