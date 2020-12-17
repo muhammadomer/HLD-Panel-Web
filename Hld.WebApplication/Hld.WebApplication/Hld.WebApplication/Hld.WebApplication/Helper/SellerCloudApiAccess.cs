@@ -370,5 +370,33 @@ namespace Hld.WebApplication.Helper
             return status;
         }
 
+        public List<GetExplainAmountViewModel> GetExplainAmount(string ApiURL, string token, string sellercloudId, string productSku)
+        {
+            List<GetExplainAmountViewModel> model = new List<GetExplainAmountViewModel>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyProduct/GetExplainAmount");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                model = JsonConvert.DeserializeObject<List<GetExplainAmountViewModel>>(strResponse);
+                return model;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
     }
 }
