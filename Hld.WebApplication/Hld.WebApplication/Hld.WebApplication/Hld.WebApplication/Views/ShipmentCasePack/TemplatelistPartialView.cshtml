@@ -170,7 +170,8 @@
                         @Html.DisplayFor(modelItem => item.Length)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Weight)
+                        @Math.Round(@item.Weight,2)
+                        @*@Html.DisplayFor(modelItem => item.Weight)*@
                     </td>
                     <td>
                         @if (@item.Counter == 0)

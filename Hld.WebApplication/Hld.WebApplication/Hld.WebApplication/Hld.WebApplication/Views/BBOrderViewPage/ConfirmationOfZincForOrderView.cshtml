@@ -99,20 +99,18 @@
 
                 </div>
             </div>
-            <div class="form-group row col-md-12 mt-2">
+            <div class="form-group row col-md-12 mt-2 p-0">
                 <div class="col-sm-4">
 
                 </div>
                
-                <div class="col-sm-4"style="margin-left: 10px;">
-                    <span class="" style="font-weight:bold">Account Detail</span>
-                    <input type="text" class="accountdetail form-control" value=""readonly>
+                <div class="col-sm-4">
+                    <span style="font-weight:bold;margin-left:15px">Previous Account Detail</span>
+                    <input type="text" class="accountdetail form-control" value=""readonly style="margin-left: 15px">
                 </div>
               
-                <div class="col-sm-3">
-                    <div style="margin-top: 18px;
-        margin-left: 10px;
-">
+                <div class="col-sm-4">
+                    <div style="margin-top: 18px;float:right">
                         
                         <button type="button" data-scOrderID="@Model.client_notes.our_internal_order_id" id="btnSendBestBuyOrderToZincOrderView" data-id="@Model.products.Select(e=>e.product_id).FirstOrDefault()-@Model.client_notes.our_internal_order_id" class="btn btn-primary">Submit</button>
                     </div>
@@ -120,11 +118,10 @@
                 </div>
             </div>
             <div class="col-sm-12 findParent">
-              
-               
+
                 <div class="col-sm-8">
                     <div class="alert alert-success  successmessage">
-                        <a href="#" class="close" aria-label="close">&times;</a>
+                        @*<a href="#" class="close" aria-label="close">&times;</a>*@
                         <strong>Success!</strong><span class="successAppend">Your order request has been sent to Zinc,Please close the window.</span>
                     </div>
                 </div>

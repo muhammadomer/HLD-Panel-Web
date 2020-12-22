@@ -559,9 +559,9 @@
             </div>
             <div class="modal-body" id="modelBody">
             </div>
-            <div class="modal-footer">
+            @*<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+            </div>*@
         </div>
     </div>
 </div>
@@ -712,9 +712,12 @@
                         $(row).find(".CustomerShipping").text("$"+data.ShippingFee.toFixed(2)); 
                         var avgcost = (data.quantity) * (data.avg_cost);
                         $(row).find(".AvgCost").text("$" + avgcost.toFixed(2));
-                        $(row).find(".SellingFees").text("$"+data.total_commission.toFixed());
-                        $(row).find(".ShipOutCost").text("0.00");
-                        $(row).find(".NetMargin").text("50%");
+                        $(row).find(".SellingFees").text("$" + data.total_commission.toFixed());
+                        var ShipOutCost = "0.00";
+                        $(row).find(".ShipOutCost").text(ShipOutCost);
+                        var netmargin = (Subtotal) - (avgcost) - (data.total_commission.toFixed()) - (ShipOutCost);
+                        var netmarginpercentage = (netmargin) / (Subtotal) * 100;
+                        $(row).find(".NetMargin").text(Math.floor(netmarginpercentage) + "%");
                         $(row).find(".SalesQtytooltipdata").toggle('fast');
                       
 
@@ -722,7 +725,26 @@
                     }
                 });
             });
-          
+
+            $(document).on('click', '.showavrgcost', function () {
+                $(this).toggleClass('fa-caret-right fa-caret-down');
+                var row = $(this).closest("tr");
+                if ($(this).hasClass('fa-caret-down')) {
+                    $(row).find(".Avgcostshow").slideToggle("slow");
+                    $(row).find(".SalesQtytooltipdata").animate({ height: "240" }, 'slow');
+                } else {
+                    $(row).find(".Avgcostshow").slideToggle("slow");
+                    //$(row).find(".SalesQtytooltipdata").css("height", "205px");
+                    $(row).find(".SalesQtytooltipdata").animate({ height: "205" }, 'slow');
+                   
+                }
+               
+               
+               
+               
+               
+
+            });
             $('#btnSearchOrder').click(function () {
 
                 $('#itemPerPage').show();
@@ -1164,6 +1186,7 @@
 
 
                                         $('#myModal').modal('show');
+                                       
                                         myfunzinc();
                                     });
 
@@ -1649,6 +1672,9 @@
                                 $(zincReteriveOrder).attr("data-zincrequestid", data.zincrequestid);
                                 $(zincReteriveOrder).css('display', 'block');
                                 $(orderStatus).text('Order Request Sent').css({ 'color': 'blue', 'display': 'inline' });
+                                setTimeout(function () {
+                                    $('.close').trigger('click');
+                                }, 5000);
                                 if ($(processedOutSideZinc).length) {
                                     $(processedOutSideZinc).css('display', 'none');
                                 }

@@ -79,8 +79,37 @@ namespace Hld.WebApplication.Helper
             }
             return listmodel;
         }
-        
-       
+
+        public ZincAccountsViewModel ZincAccountDetailEdit(string ApiURL, string token, int id)
+        {
+            ZincAccountsViewModel ViewModel = new ZincAccountsViewModel();
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincAccount/ZincAccountDetailEdit?id=" + id);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewModel = JsonConvert.DeserializeObject<ZincAccountsViewModel>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return ViewModel;
+        }
+
         public int IsActiveZinc(string ApiURL, string token, ZincAccountsViewModel ViewModel)
         {
             int status = 0;

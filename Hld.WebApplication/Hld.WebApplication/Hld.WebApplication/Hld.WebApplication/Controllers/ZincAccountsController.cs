@@ -23,31 +23,48 @@ namespace Hld.WebApplication.Controllers
             ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
         }
 
-        public IActionResult Index()
+        public IActionResult Index(ZincAccountsViewModel editmodel)
         {
-            return View();
+            
+            ZincAccountsViewModel ViewModel = new ZincAccountsViewModel();
+            if (editmodel != null)
+            {
+                ViewModel = editmodel;
+            }
+            return View(ViewModel);
         }
         [HttpPost]
-        public IActionResult Index(ZincAccountsViewModel viewmodel)
+        public IActionResult IndexSave(ZincAccountsViewModel viewmodel)
         {
+            
             if (ModelState.IsValid)
             {
 
                 try
                 {
+                    
+                  
                     viewmodel.UserNameShort = viewmodel.UserName;
+                    viewmodel.AmzAccountNameShort = viewmodel.AmzAccountName;
                     viewmodel.PasswordShort = viewmodel.Password.Trim().Substring(viewmodel.Password.Length - 4);
                     viewmodel.KeyShort = viewmodel.Key.Trim().Substring(viewmodel.Key.Length - 2);
 
                     viewmodel.Password = encDecChannel.EncryptStringToBytes_Aes(viewmodel.Password.Trim());
                     viewmodel.Key = encDecChannel.EncryptStringToBytes_Aes(viewmodel.Key.Trim());
                     viewmodel.UserName = encDecChannel.EncryptStringToBytes_Aes(viewmodel.UserName.Trim());
+                    viewmodel.AmzAccountName = encDecChannel.EncryptStringToBytes_Aes(viewmodel.AmzAccountName.Trim());
 
 
                     string token = Request.Cookies["Token"];
 
-                    _zincaccountApiAccess.SaveZincAccount(ApiURL, token, viewmodel);
-
+                    if (viewmodel.ZincAccountsId > 0) {
+                        _zincaccountApiAccess.SaveZincAccount(ApiURL, token, viewmodel);
+                    }
+                   
+                    else
+                    {
+                        _zincaccountApiAccess.SaveZincAccount(ApiURL, token, viewmodel);
+                    }
                     return RedirectToAction("ZincAccountDetail", "ZincAccounts");
                 }
                 catch (Exception ex)
@@ -68,6 +85,19 @@ namespace Hld.WebApplication.Controllers
             return View(listmodel);
         }
 
+        [HttpGet]
+        public IActionResult ZincAccountDetailEdit(int id)
+        {
+            string token = Request.Cookies["Token"];
+            ZincAccountsViewModel ViewModel = new ZincAccountsViewModel();
+            ViewModel = _zincaccountApiAccess.ZincAccountDetailEdit(ApiURL, token, id);
+          
+            ViewModel.Password = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.Password.Trim());
+            ViewModel.Key = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.Key.Trim());
+            ViewModel.UserName = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.UserName.Trim());
+            ViewModel.AmzAccountName = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.AmzAccountName.Trim());
+            return RedirectToAction("Index", "ZincAccounts", ViewModel);
+        }
         public int IsActive(int id, bool IsActive)
         {
             string token = Request.Cookies["Token"];

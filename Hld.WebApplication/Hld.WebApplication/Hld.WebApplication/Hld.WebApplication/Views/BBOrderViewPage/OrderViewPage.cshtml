@@ -250,9 +250,9 @@
             </div>
             <div class="modal-body" id="SendozincOrderViewBody">
             </div>
-            <div class="modal-footer">
+            @*<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+            </div>*@
         </div>
 
     </div>
@@ -1374,6 +1374,8 @@
                                     $(successMessage).hide()
 
                                     $('#SendozincOrderView').modal('show');
+                                   
+                                
                                     //$('#SendozincOrderViewBody').find(".accountdetail").append();
                                     myfun();
                                 });
@@ -1643,6 +1645,9 @@
                                 $(zincReteriveOrder).attr("data-zincrequestid", data.zincrequestid);
                                 $(zincReteriveOrder).css('display', 'block');
                                 $(orderStatus).text('Order Request Sent').css({ 'color': 'blue', 'display': 'inline' });
+                                setTimeout(function () {
+                                    $('.close').trigger('click');
+                                }, 5000);
                                 if ($(processedOutSideZinc).length) {
                                     $(processedOutSideZinc).css('display', 'none');
                                 }
