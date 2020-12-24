@@ -99,8 +99,9 @@
 
                         <div class="col-sm-4">
                             <div class="col-sm-12 pl-0">
-                                <p class="my-1" style="font-weight:bold">Account Detail</p>
-                                @Html.DropDownListFor(model => model.ZincAccountsId, new SelectList(Model.ZincAccounts, "ZincAccountsId", "UserNameShort"), new { @class = "form-control p-0", @style = "width:150px", @id = "ZincAccountsId" })
+                                <p class="my-1" style="font-weight:bold">Amz Account Name</p>
+                                @*@Html.DropDownListFor(model => model.ZincAccountsId, new SelectList(Model.ZincAccounts, "ZincAccountsId", "UserNameShort"), new { @class = "form-control p-0", @style = "width:150px", @id = "ZincAccountsId" })*@
+                                @Html.DropDownListFor(model => model.ZincAccountsId, new SelectList(Model.ZincAccounts, "ZincAccountsId", "AmzAccountNameShort"), new { @class = "form-control p-0", @style = "width:150px", @id = "ZincAccountsId" })
                             </div>
 
                             <div class="col-sm-12 pl-0">
@@ -118,7 +119,7 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <span class="" style="font-weight:bold;margin-left:13px">Previous Account Detail</span>
+                        <span class="" style="font-weight:bold;margin-left:13px">Account used last time</span>
                         <input type="text" class="Zincaccountdetail form-control" value="" readonly style="margin-left: 13px">
                     </div>
 
@@ -130,6 +131,9 @@
                         </div>
 
                     </div>
+                </div>
+                <div class="showmessage"style="display:none">
+                    <p style="padding-left:17px;color:green">Order Request Has Been Send To Zinc Successfully!</p>
                 </div>
                 <div class="col-sm-12 findParent">
                    

@@ -91,11 +91,27 @@ namespace Hld.WebApplication.Controllers
             string token = Request.Cookies["Token"];
             ZincAccountsViewModel ViewModel = new ZincAccountsViewModel();
             ViewModel = _zincaccountApiAccess.ZincAccountDetailEdit(ApiURL, token, id);
-          
-            ViewModel.Password = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.Password.Trim());
-            ViewModel.Key = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.Key.Trim());
-            ViewModel.UserName = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.UserName.Trim());
-            ViewModel.AmzAccountName = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.AmzAccountName.Trim());
+
+            if (!string.IsNullOrEmpty(ViewModel.Password))
+            {
+                ViewModel.Password = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.Password.Trim());
+            }
+
+            if (!string.IsNullOrEmpty(ViewModel.Key))
+            {
+                ViewModel.Key = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.Key.Trim());
+            }
+
+            if (!string.IsNullOrEmpty(ViewModel.UserName))
+            {
+                ViewModel.UserName = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.UserName.Trim());
+            }
+            if (!string.IsNullOrEmpty(ViewModel.AmzAccountName))
+            {
+                ViewModel.AmzAccountName = encDecChannel.DecryptStringFromBytes_Aes(ViewModel.AmzAccountName.Trim());
+            }
+
+            
             return RedirectToAction("Index", "ZincAccounts", ViewModel);
         }
         public int IsActive(int id, bool IsActive)

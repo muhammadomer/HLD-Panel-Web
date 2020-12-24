@@ -1637,6 +1637,10 @@
                     //contentType: 'application/json',
                     success: function (data) {
                         if (data.requestid != "") {
+                            $('#SendozincOrderViewBody').find('.showmessage').css('display', 'inline');
+                               setTimeout(function () {
+                                $('.close').trigger('click');
+                            }, 4000);
                             var gettingHref = $(mainAnchor).attr('href');
                             $(mainAnchor).attr('href', gettingHref + data.requestid)
 
@@ -1645,9 +1649,7 @@
                                 $(zincReteriveOrder).attr("data-zincrequestid", data.zincrequestid);
                                 $(zincReteriveOrder).css('display', 'block');
                                 $(orderStatus).text('Order Request Sent').css({ 'color': 'blue', 'display': 'inline' });
-                                setTimeout(function () {
-                                    $('.close').trigger('click');
-                                }, 5000);
+                                
                                 if ($(processedOutSideZinc).length) {
                                     $(processedOutSideZinc).css('display', 'none');
                                 }

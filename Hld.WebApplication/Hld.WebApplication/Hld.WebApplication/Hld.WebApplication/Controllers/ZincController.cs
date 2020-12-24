@@ -202,7 +202,7 @@ namespace Hld.WebApplication.Controllers
                 }
             }
             return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID });
-            //return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234" });
+           // return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234" });
         }
 
         [HttpGet]
@@ -651,7 +651,8 @@ namespace Hld.WebApplication.Controllers
                 }
 
                 ZincProductOfferViewModel.RootObject model = JsonConvert.DeserializeObject<ZincProductOfferViewModel.RootObject>(response);
-                if ((model.status != "processing" || model.status != "failed") && model.offers != null && model.offers.Count > 0)
+                 model.offers = model.offers.Where(s => s.condition.ToLower().Trim().Equals("new")&& s.price>0 && s.prime_badge.Equals(true)).ToList();
+                if ((model.status != "processing" || model.status != "failed") && model.offers != null && model.offers.Count > 0 )
                 {
                     // getting all those offers which have fulfilled true
                     var offerids = model.offers.Where(e => e.marketplace_fulfilled.Equals(true)).Select(

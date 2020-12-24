@@ -119,10 +119,10 @@
                 <th style="width: 150px;">
                     SKU
                 </th>
-                <th style="width:30%"> 
+                <th style="width:30%">
                     Title
                 </th>
-                
+
                 <th>
                     Qty Per Box
                 </th>
@@ -138,48 +138,57 @@
                 <th>
                     Weight kg
                 </th>
+                <th>Case Pack Volume</th>
                 <th>Action</th>
+
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        <input style='display:none' class='form-control CasePackId' value="@item.CasePackId">
-                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                            <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
-                        </a>
-                    </td>
-                    <td>@item.UserAlias</td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SKU)
-                    </td>
-                    <td>@item.Title</td>
-                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QtyPerBox)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Width)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Height)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Length)
-                    </td>
-                    <td>
-                        @Math.Round(@item.Weight,2)
-                        @*@Html.DisplayFor(modelItem => item.Weight)*@
-                    </td>
-                    <td>
-                        @if (@item.Counter == 0)
-                        {
-                            <a style="cursor:pointer" title="Delete" class=" btnDelete"><img src="~/Images/trash-can-1.1s-128px.png" height="25" /></a>
-                        }
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <input style='display:none' class='form-control CasePackId' value="@item.CasePackId">
+                    <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                    </a>
+                </td>
+                <td>@item.UserAlias</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SKU)
+                </td>
+                <td>@item.Title</td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.QtyPerBox)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Width)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Height)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Length)
+                </td>
+                <td>
+                    @item.Weight
+                    @*@Html.DisplayFor(modelItem => item.Weight)*@
+                </td>
+                <td>
+                    @{ 
+                        var caskpackvolum = (@item.Width) * (item.Height) * (item.Length) / 1000000;
+
+                    }
+                    @Math.Round(caskpackvolum,2)
+                </td>
+                <td>
+                    @if (@item.Counter == 0)
+                    {
+                        <a style="cursor:pointer" title="Delete" class=" btnDelete"><img src="~/Images/trash-can-1.1s-128px.png" height="25" /></a>
+                    }
+                </td>
+            </tr>
             }
         </tbody>
     </table>
