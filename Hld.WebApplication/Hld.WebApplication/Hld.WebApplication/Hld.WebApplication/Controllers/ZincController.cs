@@ -201,8 +201,8 @@ namespace Hld.WebApplication.Controllers
                     _zincOrderLogAndDetailApiAccess.UpdateAccounts(ApiURL, token, Convert.ToInt32(zincOrderLogViewModel.SellerCloudOrderId), ZincAccountId, CreditCardId);
                 }
             }
-            return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID });
-           // return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234" });
+            return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message= "Order Request Has Been Send To Zinc Successfully!" });
+           // return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234",message= "Order Request Has Been Send To Zinc Successfully!" });
         }
 
         [HttpGet]

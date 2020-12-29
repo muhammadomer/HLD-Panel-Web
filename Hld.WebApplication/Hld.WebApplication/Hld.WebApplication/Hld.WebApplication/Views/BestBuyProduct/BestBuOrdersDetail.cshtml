@@ -1631,7 +1631,7 @@
             //send best buy order to ZINC
             $(document).on('click', '#btnSendBestBuyOrderToZinc', function () {
 
-
+                $('.close').trigger('click');
                 var dataID = $(this).attr('data-id');
                 var scOrderID = $(this).attr('data-scOrderID');
                 var orderDateTimeShip = $('#orderDateTimeShip').val();
@@ -1664,10 +1664,11 @@
                     //contentType: 'application/json',
                     success: function (data) {
                         if (data.requestid != "") {
-                            $('#modelBody').find('.showmessage').css('display', 'inline');
-                            setTimeout(function () {
-                                $('.close').trigger('click');
-                            }, 4000);
+                            $.notify(data.message, { globalPosition: 'right middle', className: 'success' });
+                            //$('#modelBody').find('.showmessage').css('display', 'inline');
+                            //setTimeout(function () {
+                            //    $('.close').trigger('click');
+                            //}, 1000);
                             var gettingHref = $(mainAnchor).attr('href');
                             $(mainAnchor).attr('href', gettingHref + data.requestid)
 

@@ -1607,6 +1607,7 @@
             $(document).on('click', '#btnSendBestBuyOrderToZincOrderView', function () {
                 debugger;
 
+                $('.close').trigger('click');
                 var dataID = $(this).attr('data-id');
                 var scOrderID = $(this).attr('data-scOrderID');
                   var orderDateTimeShip = $('#orderDateTimeShip').val();
@@ -1627,6 +1628,7 @@
                 var CreditCardId = $('#CreditCardDetailId').val();
                 var ZincAccountId = $('#ZincAccountsId').val();
                 var DeliveryDays = $('#DeliveryDays').val();
+                
                 debugger;
                 var Url = '/Zinc/SubmitOrderToZinc/';
                 $.ajax({
@@ -1636,11 +1638,11 @@
                     traditional: true,
                     //contentType: 'application/json',
                     success: function (data) {
+                        
                         if (data.requestid != "") {
-                            $('#SendozincOrderViewBody').find('.showmessage').css('display', 'inline');
-                               setTimeout(function () {
-                                $('.close').trigger('click');
-                            }, 4000);
+                           
+                            //$('#SendozincOrderViewBody').find('.showmessage').css('display', 'inline');                              
+                            $.notify(data.message, { globalPosition: 'right middle', className: 'success' });
                             var gettingHref = $(mainAnchor).attr('href');
                             $(mainAnchor).attr('href', gettingHref + data.requestid)
 

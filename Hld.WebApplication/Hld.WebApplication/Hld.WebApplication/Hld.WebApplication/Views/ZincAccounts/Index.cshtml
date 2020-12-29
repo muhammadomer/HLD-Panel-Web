@@ -3,8 +3,12 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
-}
 
+}
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
 <style>
     .controlabel {
         width: 105px;
@@ -48,6 +52,13 @@
     .active {
         font-weight: 600;
     }
+
+    .inputtext {
+        box-shadow: none !important;
+        width: 75% !important;
+        height: 30px !important;
+    }
+   
 </style>
 <div class="sidebar">
     <ul class="sidebar-links">
@@ -101,11 +112,11 @@
                 </div>
                 <div class="form-group row">
                     <label asp-for="UserName" class="col-form-label-sm controlabel">User Name:</label>
-                   
+
                     <div class="col-sm-4">
 
                         @if (Model.ZincAccountsId > 0)
-                        {<input type="text" asp-for="UserName" class="form-control form-control-sm" id="" placeholder=""readonly>
+                        {<input type="text" asp-for="UserName" class="form-control form-control-sm" id="" placeholder="" readonly>
                             <span asp-validation-for="UserName" class="text-danger"></span>
                         }
                         else
@@ -117,28 +128,79 @@
                     </div>
 
                 </div>
+                @*<div class="form-group row">
+
+            <label asp-for="Key" class="col-form-label-sm controlabel">Key:</label>
+            <div class="input-group">
+                <div class="col-sm-4">
+                    <input type="password" name="Key" value="@Model.Key" class="form-control form-control-sm inputtext" id="KeyShow" placeholder="">
+                    <span class="input-group-append">
+                        <span class="input-group-text">
+                            <span id="view-password"><i class="fa fa-eye" aria-hidden="true"></i></span>
+
+                        </span>
+                    </span>
+
+                    <span asp-validation-for="Key" class="text-danger"></span>
+                </div>
+            </div>
+        </div>*@
                 <div class="form-group row">
-                    <label asp-for="Key" class="col-form-label-sm controlabel">Key:</label>
+                    <div class="">
+                        <label asp-for="Key" class="col-form-label-sm controlabel">Key:</label>
+                    </div>
+
                     <div class="col-sm-4">
-                        <input type="text" asp-for="Key" class="form-control form-control-sm" id="" placeholder="">
-                        <span asp-validation-for="Key" class="text-danger"></span>
+                        <div class="input-group">
+                            <input type="password" name="Key" value="@Model.Key" class="form-control form-control-sm inputtext" id="KeyShow" placeholder="">
+                            <span class="input-group-append" style="height: 30px !important;cursor:pointer!important">
+                                <span class="input-group-text">
+
+                                    <span id="KeyShoweyes"><i class="fa fa-eye" aria-hidden="true" id="showskey"></i></span>
+                                    @*<i class="fa fa-eye" aria-hidden="true"></i>*@
+                                </span>
+                            </span>
+
+                            <span asp-validation-for="Password" class="text-danger" style="color:red"></span>
+                        </div>
                     </div>
 
                 </div>
-                <div class="form-group row">
+                @*<div class="form-group row">
 
                     <label asp-for="Password" class="col-form-label-sm controlabel">Password:</label>
                     <div class="col-sm-4">
                         <input type="text" asp-for="Password" class="form-control form-control-sm" id="" placeholder="">
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
-                </div>
+                </div>*@
+                <div class="form-group row">
+                    <div class="">
+                        <label asp-for="Key" class="col-form-label-sm controlabel">Password:</label>
+                    </div>
 
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <input type="password" name="Password" value="@Model.Password" class="form-control form-control-sm inputtext" id="PasswordShow" placeholder="">
+                            <span class="input-group-append" style="height: 30px !important;cursor:pointer!important">
+                                <span class="input-group-text">
+
+                                    <span id="PasswordShoweyes"><i class="fa fa-eye" aria-hidden="true" id="showspas"></i></span>
+                                    @*<i class="fa fa-eye" aria-hidden="true"></i>*@
+                                </span>
+                            </span>
+
+                            <span asp-validation-for="Password" class="text-danger" style="color:red"></span>
+                        </div>
+                    </div>
+
+                </div>
 
                 <div class="form-group row">
 
                     <div class="offset-md-1" style="padding-left:24px">
                         <input type="submit" value="Submit" class="btn btn-primary" />
+                        
                     </div>
                     <div class="margin-top: 5px;">
                         <a asp-controller="ZincAccounts" asp-action="ZincAccountDetail" target="_blank" class="" style="font-size:15px;
@@ -158,3 +220,46 @@
     </div>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+    <script>
+
+        $('#KeyShoweyes').click(function () {
+            $KeyShow = $('#KeyShow');
+
+            if ($KeyShow.prop('type') == 'password') {
+                $KeyShow.prop('type', 'text');
+              
+                
+            } else {
+                $KeyShow.prop('type', 'password');
+              
+            }
+            $('#showskey', this).toggleClass('fa fa-eye');
+            $('#showskey', this).toggleClass('fa fa-eye-slash');
+        });
+        $('#PasswordShoweyes').click(function () {
+            $KeyShow = $('#PasswordShow');
+
+            if ($KeyShow.prop('type') == 'password') {
+                $KeyShow.prop('type', 'text');
+
+            } else {
+                $KeyShow.prop('type', 'password');
+
+            }
+            $('#showspas', this).toggleClass('fa fa-eye');
+            $('#showspas',this).toggleClass('fa fa-eye-slash');
+         
+
+        });
+
+    </script>
+}
