@@ -1188,6 +1188,17 @@
                                         $('#myModal').modal('show');
                                        
                                         myfunzinc();
+                                        var lastval = localStorage.getItem('SaveAcounttextzinc')
+
+                                        if (lastval == "am_b1") {
+
+                                            $('#ZincAccountsId option[value=10]').attr('selected', 'selected');
+                                            localStorage.setItem('SaveAcounttextzinc', "am_b3")
+                                        }
+                                        else {
+                                            $('#ZincAccountsId option[value=9]').attr('selected', 'selected');
+                                            localStorage.setItem('SaveAcounttextzinc', "am_b1")
+                                        }
                                     });
 
                                 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.S3;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PagedList.Core;
 
 namespace Hld.WebApplication.Controllers
@@ -31,7 +34,7 @@ namespace Hld.WebApplication.Controllers
         int POMasterID = 0;
         string s3BucketURL = "";
         string s3BucketURL_large = "";
-       
+
         ShipmentApiAccess _ApiAccess = null;
         private readonly Microsoft.Extensions.Logging.ILogger logger;
         UploadFilesToS3ForJobsAPIAccess ApiAccess = null;
@@ -488,7 +491,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult ShipmentHistoryListPartialView(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string SKU, string Title, int VendorId,string EmptyFirstTime, string ShipmentId, string ItemType = "")
+        public IActionResult ShipmentHistoryListPartialView(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string SKU, string Title, int VendorId, string EmptyFirstTime, string ShipmentId, string ItemType = "")
         {
             token = Request.Cookies["Token"];
             IPagedList<ShipmentHistoryViewModel> data = null;
@@ -586,9 +589,9 @@ namespace Hld.WebApplication.Controllers
                     ShipedQty = s.ShipedQty,
                     ReceivedQty = s.ReceivedQty,
                     CreatedOn = s.CreatedOn,
-                    TrakingNumber=s.TrakingNumber,
-                    TrakingURL=s.TrakingURL,
-                    CourierCode=s.CourierCode,
+                    TrakingNumber = s.TrakingNumber,
+                    TrakingURL = s.TrakingURL,
+                    CourierCode = s.CourierCode,
 
                 }).Distinct().ToList();
             foreach (var item in list)
@@ -640,5 +643,98 @@ namespace Hld.WebApplication.Controllers
             bool status = _ApiAccess.UpdateShipmentCourierInfo(ApiURL, token, viewModel);
             return RedirectToAction("Create", "Shipment");
         }
+       
+        [HttpGet]
+        public ActionResult AddDate(string id)
+        {
+            Expected_Delivery_Shipped_POViewModel ViewModel = new Expected_Delivery_Shipped_POViewModel();
+            ViewModel.ShipmentId = id;
+            
+            try
+            {
+                if (ViewModel.ExpectedDelivery!=null)
+                {
+                    string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
+                    string token = Request.Cookies["Token"];
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/GetById?id=" + id);
+                    request.Method = "GET";
+                    request.Accept = "application/json;";
+                    request.ContentType = "application/json";
+                    request.Headers["Authorization"] = "Bearer " + token;
+
+                    var response = (HttpWebResponse)request.GetResponse();
+                    string strResponse = "";
+                    using (var sr = new StreamReader(response.GetResponseStream()))
+                    {
+                        strResponse = sr.ReadToEnd();
+                    }
+                    ViewModel = JsonConvert.DeserializeObject<Expected_Delivery_Shipped_POViewModel>(strResponse);
+                    return PartialView("~/Views/Shipment/ShowDate.cshtml", ViewModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+           
+            return PartialView("~/Views/Shipment/ShowDate.cshtml", ViewModel);
+        }
+        [HttpPost]
+        public ActionResult AddDate(Expected_Delivery_Shipped_POViewModel ViewModel)
+        {
+            if (ViewModel.ShipmentId == "")
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
+                string token = Request.Cookies["Token"];
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Brand/save");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                return Json(new { success = true, message = "save successfully" });
+            }
+            else
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
+                string token = Request.Cookies["Token"];
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/UpdateExpectedDelivery");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+
+                var Status = strResponse;
+                return Json(new { success = true, message = "Update successfully" });
+            }
+        }
     }
+
 }

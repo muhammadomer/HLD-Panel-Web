@@ -32,6 +32,7 @@ namespace Hld.WebApplication.ViewModel
         public int TotalOpenQty { get; set; }
         public DateTime ReceivedDate { get; set; }
         public DateTime ShippedDate { get; set; }
+        public DateTime ExpectedDelivery { get; set; }
         public decimal GrossWt { get; set; }
         public decimal CBM { get; set; }
         public List<ShipmentViewProducListViewModel> List { get; set; }

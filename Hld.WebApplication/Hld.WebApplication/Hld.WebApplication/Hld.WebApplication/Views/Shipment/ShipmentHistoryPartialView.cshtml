@@ -174,6 +174,7 @@ vertical-align: middle !important
                 <th>
                     Shipped On
                 </th>
+                <th>Expected Delivery</th>
                 <th>
                     Received On
                 </th>
@@ -188,8 +189,12 @@ vertical-align: middle !important
                 <th></th>
                 <th></th>
                 <th></th>
+                @*<th></th>*@
                 <th>@TempData["ShipQty"]</th>
                 <th>@TempData["RecQty"]</th>
+                <th></th>
+               
+              
                 <th></th>
                 <th></th>
                 <th></th>
@@ -199,103 +204,111 @@ vertical-align: middle !important
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+            <tr>
 
 
-                    <td>
-                        <input type="checkbox" class="checkboxtbl" />
-                    </td>
-                    <td>
-                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
-                            <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
-                        </a>
-                    </td>
-                    <td>
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-                        {
-                            <a style="cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.SKU" target="_blank">@item.SKU</a>
-                        }
-                        else
-                        {@item.SKU}
-                    </td>
-                    <td>@item.Title</td>
-                    <td>
-                        @if (item.Type == "casepack")
-                        {
-                            <a href="../ShipmentCasePack/viewShipment?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
-                        }
-                        else
-                        {
+                <td>
+                    <input type="checkbox" class="checkboxtbl" />
+                </td>
+                <td>
+                    <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageName">
+                        <img src="@ViewBag.S3BucketURL/@item.CompressedImage" class="rounded" height="50" width="50" />
+                    </a>
+                </td>
+                <td>
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    {
+                        <a style="cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.SKU" target="_blank">@item.SKU</a>
+                    }
+                    else
+                    {@item.SKU}
+                </td>
+                <td>@item.Title</td>
+                <td>
+                    @if (item.Type == "casepack")
+                    {
+                        <a href="../ShipmentCasePack/viewShipment?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
+                    }
+                    else
+                    {
 
-                            <a href="../Shipment/Shipmentindex?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
-                        }
-                    </td>
-                    <td>
-                       
-                                        @if (string.IsNullOrEmpty(item.TrakingURL))
-                                        {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a> }
+                        <a href="../Shipment/Shipmentindex?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
+                    }
+                </td>
+                <td>
 
-                                    else
-                                    {
-                                        <a style="cursor:pointer" href="@item.TrakingURL.Replace("{TrackingNumber}", item.TrakingNumber)" target="_blank"> @item.CourierCode @item.TrakingNumber</a>
+                    @if (string.IsNullOrEmpty(item.TrakingURL))
+                    {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a> }
 
-                                    }
+                else
+                {
+                    <a style="cursor:pointer" href="@item.TrakingURL.Replace("{TrackingNumber}", item.TrakingNumber)" target="_blank"> @item.CourierCode @item.TrakingNumber</a>
+
+                }
 
 
-                                    </td>
-                    <td>
-                        @foreach (var innerItem in item.POs)
-                        {
-                            <span>
-                                <a style="cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@innerItem.POId" target="_blank">@innerItem.POId</a>
-                         &nbsp;-&nbsp; @innerItem.ShipedQty</span>
-                        }
-                    </td>
-                    <td>@item.Vendor</td>
-                    <td>@item.ShipedQty</td>
-                    <td>@item.ReceivedQty</td>
-                    <td>
-                        @if (item.CreatedOn != DateTime.MinValue)
-                        {
-                            @string.Format("{0: MMM d, yyyy}", @item.CreatedOn)
-                        }
-                    </td>
-                    <td>
-                        @if (item.ShippedDate != DateTime.MinValue)
-                        {
-                            @string.Format("{0: MMM d, yyyy}", @item.ShippedDate)
-                        }
-                    </td>
-                    <td>
-                        @if (item.ReceivedDate != DateTime.MinValue)
-                        {
-                            @string.Format("{0: MMM d, yyyy}", @item.ReceivedDate)
-                        }
-                    </td>
-                    <td>
+                </td>
+                <td>
+                    @foreach (var innerItem in item.POs)
+                    {
+                        <span>
+                            <a style="cursor:pointer" asp-action="PurchaseOrdersItems" asp-controller="PurchaseOrder" asp-route-POId="@innerItem.POId" target="_blank">@innerItem.POId</a>
+                            &nbsp;-&nbsp; @innerItem.ShipedQty
+                        </span>
+                    }
+                </td>
+                <td>@item.Vendor</td>
+                <td>@item.ShipedQty</td>
 
-                        @if (item.Status == 1)
-                        {
-                            <span>Open</span>
-                        }
-                        @if (item.Status == 2)
-                        {
-                            <span>In Process</span>
-                        }
-                        @if (item.Status == 3)
-                        {
-                            <span>Shipped</span>
-                        }
-                        @if (item.Status == 4)
-                        {
-                            <span>Receiving in process</span>
-                        }
-                        @if (item.Status == 5)
-                        {
-                            <span>Received</span>
-                        }
-                    </td>
-                </tr>
+                <td>@item.ReceivedQty</td>
+                <td>
+                    @if (item.CreatedOn != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", @item.CreatedOn)
+                    }
+                </td>
+                <td>
+                    @if (item.ShippedDate != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", @item.ShippedDate)
+                    }
+                </td>
+                <td>
+                    @if (item.ExpectedDelivery != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", @item.ExpectedDelivery)
+                    }
+                </td>
+                <td>
+                    @if (item.ReceivedDate != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", @item.ReceivedDate)
+                    }
+                </td>
+                <td>
+
+                    @if (item.Status == 1)
+                    {
+                        <span>Open</span>
+                    }
+                    @if (item.Status == 2)
+                    {
+                        <span>In Process</span>
+                    }
+                    @if (item.Status == 3)
+                    {
+                        <span>Shipped</span>
+                    }
+                    @if (item.Status == 4)
+                    {
+                        <span>Receiving in process</span>
+                    }
+                    @if (item.Status == 5)
+                    {
+                        <span>Received</span>
+                    }
+                </td>
+            </tr>
             }
 
 

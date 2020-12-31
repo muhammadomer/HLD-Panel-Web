@@ -15,11 +15,12 @@ namespace Hld.WebApplication.ViewModels
         public int NoOfBoxes { get; set; }
         public int NoOfSKUs { get; set; }
         public int NoOfPOs { get; set; }
-
+        public DateTime ExpectedDelivery { get; set; }
         public int TotalShipedQty { get; set; }
         public string Notes { get; set; }
         public int Status { get; set; }
         public DateTime CreatedOn { get; set; }
+        
         public int ShipmentAutoID { get; set; }
         public string TrakingNumber { get; set; }
         public string TrakingURL { get; set; }

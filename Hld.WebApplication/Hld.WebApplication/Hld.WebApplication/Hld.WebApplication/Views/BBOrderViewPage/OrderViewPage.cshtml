@@ -1253,6 +1253,28 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        debugger;
+        //(function () {
+        //    var previous;
+           
+        //         $(document).on('focus', '#ZincAccountsId', function (){
+        //        // Store the current value on focus, before it changes
+        //        previous = this.value;
+        //    }).change(function () {
+        //        // Do soomething with the previous value after the change
+        //        //document.getElementById("log").innerHTML = "<b>Previous: </b>" + previous;
+        //        $('#ZincAccountsId').append(previous);
+        //        previous = this.value;
+
+        //    });
+        //})();
+
+        
+            $(document).on('change', '#ZincAccountsId', function () {
+
+                var name = $('#ZincAccountsId option:selected').text();
+                alert(name);
+            });
 
         $(".loadertbl").hide();
         $.fn.checkUncheckSKU_checkbox = function (status) {
@@ -1378,6 +1400,18 @@
                                 
                                     //$('#SendozincOrderViewBody').find(".accountdetail").append();
                                     myfun();
+                                    var last = localStorage.getItem('SaveAcounttext')
+                                  
+
+                                    if (last == "am_b1") {
+
+                                        $('#ZincAccountsId option[value=10]').attr('selected', 'selected');
+                                        localStorage.setItem('SaveAcounttext', "am_b3")
+                                    }
+                                    else {
+                                        $('#ZincAccountsId option[value=9]').attr('selected', 'selected');
+                                        localStorage.setItem('SaveAcounttext',"am_b1")
+                                    }
                                 });
 
                             }

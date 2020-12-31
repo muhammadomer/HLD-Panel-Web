@@ -26,6 +26,7 @@ namespace Hld.WebApplication.ViewModel
         public DateTime ReceivedDate { get; set; }
         public DateTime ShippedDate { get; set; }
         public DateTime CreatedOn { get; set; }
+        public DateTime ExpectedDelivery { get; set; }
         public List<POIDs> POs { get; set; }
     }
 

@@ -94,7 +94,7 @@
     <h6>HLD Control Panel</h6>
     @*<img class="logo" src="~/Images/logo.png" />*@
     <p class="signintext">Sign-In Your Account</p>
-    <form asp-action="Authenticate" class="form-horizontal">
+    <form asp-action="Authenticate" class="form-horizontal" id="my-form">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group row">
             <div class="col-sm-12 inputdiv">
@@ -104,7 +104,7 @@
                             <span class="fa fa-user"></span>
                         </span>
                     </div>
-                    <input asp-for="Email" placeholder="Enter email" class="form-control inputtext" />
+                    <input asp-for="Email" placeholder="Enter email" class="form-control inputtext" id="loginEmail" />
                     <br />
                     <span asp-validation-for="Email" class="text-danger" style="color:red"></span>
                 </div>
@@ -130,7 +130,7 @@
         </div>
         <p>
             <input type="checkbox" style="margin-right: 5px;
-    vertical-align: middle;" />Keep me signed in
+    vertical-align: middle;" id="rememberMe" />Keep me signed in
         </p>
         <div class="form-group col-sm-">
             <input type="submit" value="Sign In" class="btnclass" />
@@ -147,15 +147,60 @@
 }
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script>
-        $('#view-password').click(function () {
-            $password = $('#input-password');
-            if ($password.prop('type') == 'password') {
-                $password.prop('type', 'text');
-            } else {
-                $password.prop('type', 'password');
+        $(document).ready(function () {
+
+         
+
+            $('#view-password').click(function () {
+                $password = $('#input-password');
+                if ($password.prop('type') == 'password') {
+                    $password.prop('type', 'text');
+                } else {
+                    $password.prop('type', 'password');
+                }
+                $('i', this).toggleClass('fa-eye-slash');
+
+            });
+            $(".btnclass").click(function () {
+                $(this).val(function (i, text) {
+                    return text === "Sign In" ? "Signing In..." : "Sign In";
+                })
+            });
+
+            if (localStorage.getItem('remembercheck')) {
+
+                var email = localStorage.getItem('Email');
+                var passwrd = localStorage.getItem('Password');
+                $("#loginEmail").val(email);
+                $("#input-password").val(passwrd);
+
+                $("#rememberMe").prop('checked', true);
+                //$(".btnclass").trigger('click');
             }
-            $('i', this).toggleClass('fa-eye-slash');
-        });
+
+            $('#my-form').on('submit', function () {
+
+            });
+            $('#rememberMe').click(function () {
+                if (!$("#rememberMe").is(":checked")) {
+                    localStorage.clear();
+                } else {
+                    localStorage.setItem("Email", $("#loginEmail").val());
+                    localStorage.setItem("Password", $("#input-password").val());
+                    localStorage.setItem("remembercheck", $("#rememberMe").val());
+
+                }
+
+
+            });
+        })
+
+
+
     </script>
 }

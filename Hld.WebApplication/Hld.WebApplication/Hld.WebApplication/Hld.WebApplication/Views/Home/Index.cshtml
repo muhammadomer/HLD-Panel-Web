@@ -3,12 +3,80 @@
     Layout = "_Layout";
 }
 
- <div style="margin:100px;"></div>
+<div style="margin:100px;"></div>
 <div class="d-flex justify-content-center align-items-center" id="main">
     <h1 class="mr-3 pr-3 align-top border-right inline-block align-content-center">Login with HLD.</h1>
     <div class="inline-block align-middle">
         <h2 class="font-weight-normal lead" id="desc">
-            <a asp-action="Authenticate" asp-controller="Authentication">Login</a>
+            <a asp-action="Authenticate" asp-controller="Authentication" id="loginpage">Login</a>
         </h2>
     </div>
 </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+        //    $('#view-password').click(function () {
+        //        $password = $('#input-password');
+        //        if ($password.prop('type') == 'password') {
+        //            $password.prop('type', 'text');
+        //        } else {
+        //            $password.prop('type', 'password');
+        //        }
+        //        $('i', this).toggleClass('fa-eye-slash');
+
+        //    });
+        //    $(".btnclass").click(function () {
+        //        $(this).val(function (i, text) {
+        //            return text === "Sign In" ? "Signing In..." : "Sign In";
+        //        })
+        //    });
+
+
+        //    $("#loginpage").click(function () {
+        //    if (localStorage.getItem('remembercheck')) {
+
+        //        var email = localStorage.getItem('Email');
+        //        var passwrd = localStorage.getItem('Password');
+        //        $("#loginEmail").val(email);
+        //        $("#input-password").val(passwrd);
+
+        //        $("#rememberMe").prop('checked', true);
+        //        //location.href = '../HLDHistory/DashBoard?Email=' + email + 'Password=' + passwrd;
+
+        //        location.href = '../Authentication/save?Email=' + email + '&Password=' + passwrd;
+               
+        //    }
+        //    else {
+        //        location.href = '../Authentication/save';
+        //    }
+        //    });
+
+
+
+        //    $('#my-form').on('submit', function () {
+
+        //    });
+        //    $('#rememberMe').click(function () {
+        //        if (!$("#rememberMe").is(":checked")) {
+        //            localStorage.clear();
+        //        } else {
+        //            localStorage.setItem("Email", $("#loginEmail").val());
+        //            localStorage.setItem("Password", $("#input-password").val());
+        //            localStorage.setItem("remembercheck", $("#rememberMe").val());
+
+        //        }
+
+
+        //    });
+        })
+
+
+
+    </script>
+}

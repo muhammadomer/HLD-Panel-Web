@@ -109,6 +109,10 @@
         border-left: #ccc 1px solid !important;
         border-right: #ccc 1px solid !important;
     }
+    .ExpectedDevlivery{
+        min-width:108px!important;
+        max-width:110px!important;
+    }
 </style>
 
 <div class="container-fluid">
@@ -129,6 +133,7 @@ vertical-align: middle !important
                     Created On
                 </th>
                 <th>Shipped On</th>
+                <th class="ExpectedDevlivery">Expected Delivery</th>
                 <th>Received On</th>
                 <th style="max-width:150px;min-width:150px">
                     Vendor
@@ -161,120 +166,131 @@ vertical-align: middle !important
 
             @foreach (var item in Model)
             {
-                <tr>
-                    @{
-                        decimal CNYAmount = (Convert.ToDecimal(7.07) * @item.AmountReceived);
+            <tr>
+                @{
+                    decimal CNYAmount = (Convert.ToDecimal(7.07) * @item.AmountReceived);
+                }
+                <td style="width:38px!important;text-align:center;vertical-align:middle!important;">
+                    <input type="checkbox" class="checkboxSelect" />
+                    <input type="text" style="display:none" value="@item.ShipmentId" class="ShipmentIdForTracking" />
+                    <input type="text" style="display:none" value="@item.ExpectedDelivery" class="ExpectedDelivery" />
+
+                </td>
+                <td>
+                    @if (item.Type == "casepack")
+                    {
+                        <a style="cursor:pointer" href="../ShipmentCasePack/viewShipment?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
+                        <label>&nbsp; CasePack</label>
                     }
-                    <td style="width:38px!important;text-align:center;vertical-align:middle!important;">
-                        <input type="checkbox" class="checkboxSelect" />
-                        <input type="text" style="display:none" value="@item.ShipmentId" class="ShipmentIdForTracking" />
-
-                    </td>
-                    <td>
-                        @if (item.Type == "casepack")
-                        {
-                            <a style="cursor:pointer" href="../ShipmentCasePack/viewShipment?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
-                            <label>&nbsp; CasePack</label>
-                        }
-                        else
-                        {
-                            <a style="cursor:pointer" href="../Shipment/Shipmentindex?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
-                            <label>&nbsp; Mix SKUs</label>
-                        }
-                        <br /> @item.ShipmentName
-                    </td>
-                    <td class="tbldata">
-                        @string.Format("{0: MMM d, yyyy}", item.CreatedOn)
-                    </td>
-                    <td class="tbldata">
-                        @if (item.ShippedDate != DateTime.MinValue)
-                        {
-                            @string.Format("{0: MMM d, yyyy}", item.ShippedDate)
-                        }
-                    </td>
-
-                    <td class="tbldata">
-                        @if (item.ReceivedDate != DateTime.MinValue)
-                        {
-                            @string.Format("{0: MMM d, yyyy}", item.ReceivedDate)
-                        }
-                    </td>
-
-                    <td>
-                        @item.Vendor (@item.VendorId)
-                    </td>
-                    @*<td>
-                            @item.ShipmentName
-                        </td>*@
-
-                    <td class="tablecenteRow">@item.NoOfBoxes</td>
-                    <td class="tablecenteRow">@Math.Round(@item.GrossWt, 0)</td>
-                    <td class="tablecenteRow">@item.NoOfSKUs</td>
-                    <td class="tablecenteRow">@item.NoOfPOs</td>
-                    <td class="tablecenteRow">@item.TotalShipedQty</td>
-                    <td class="tablecenteRow">@item.QtyReceived</td>
-                    <td style="text-align:right;">
-                        USD @string.Format("{0:N2}", @item.AmountReceived) <br /> CNY @string.Format("{0:N2}", @item.RecivedAmountCNY)
-                    </td>
-                    <td>
-                        @if (string.IsNullOrEmpty(item.TrakingURL))
-                        {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a> }
-
                     else
                     {
-                            <a style="cursor:pointer" href="@item.TrakingURL.Replace("{TrackingNumber}", item.TrakingNumber)" target="_blank"> @item.CourierCode @item.TrakingNumber</a>
-                            
-                            }
-                      
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-                        {
+                        <a style="cursor:pointer" href="../Shipment/Shipmentindex?ShipmentId=@item.ShipmentId" target="_blank">@item.ShipmentId</a>
+                        <label>&nbsp; Mix SKUs</label>
+                    }
+                    <br /> @item.ShipmentName
+                </td>
+                <td class="tbldata">
+                    @string.Format("{0: MMM d, yyyy}", item.CreatedOn)
+                </td>
+                <td class="tbldata">
+                    @if (item.ShippedDate != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", item.ShippedDate)
+                    }
+                </td>
+                <td class="tbldata">
+                    @if (item.ExpectedDelivery != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", item.ExpectedDelivery)
+                    }
+                    <a href="#" data-target="#myModaldate" data-id="@item.ExpectedDelivery" data-toggle="modal" onclick="PopupForm('@Url.Action("AddDate","Shipment",new {id=item.ShipmentId } )')">
+                        <img src="~/Images/date-icon.png" />
 
-                            @*<span class="getshipmentId" data-shipmentId="@item.ShipmentId">Edit</span>*@
-                        }
-                      
-                    </td>
-                    <td>
+                    </a>
+                </td>
 
-                        @if (item.Status == 1)
-                        {
-                            <span>Open</span>
-                        }
-                        @if (item.Status == 2)
-                        {
-                            <span>In Process</span>
-                        }
-                        @if (item.Status == 3)
-                        {
-                            <span>Shipped</span>
-                        }
-                        @if (item.Status == 4)
-                        {
-                            <span>Receiving in process</span>
-                        }
-                        @if (item.Status == 5)
-                        {
-                            <span>Received</span>
-                        }
-                    </td>
-                    <td style="min-width: 198px;width: 190px;">
+                <td class="tbldata">
+                    @if (item.ReceivedDate != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", item.ReceivedDate)
+                    }
+                </td>
 
-                        @if (item.Status < 3)
+                <td>
+                    @item.Vendor (@item.VendorId)
+                </td>
+                @*<td>
+            @item.ShipmentName
+        </td>*@
+
+                <td class="tablecenteRow">@item.NoOfBoxes</td>
+                <td class="tablecenteRow">@Math.Round(@item.GrossWt, 0)</td>
+                <td class="tablecenteRow">@item.NoOfSKUs</td>
+                <td class="tablecenteRow">@item.NoOfPOs</td>
+                <td class="tablecenteRow">@item.TotalShipedQty</td>
+                <td class="tablecenteRow">@item.QtyReceived</td>
+                <td style="text-align:right;">
+                    USD @string.Format("{0:N2}", @item.AmountReceived) <br /> CNY @string.Format("{0:N2}", @item.RecivedAmountCNY)
+                </td>
+                <td>
+                    @if (string.IsNullOrEmpty(item.TrakingURL))
+                    {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@item.TrakingNumber'&brand='@item.CourierCode'" target="_blank"> @item.CourierCode @item.TrakingNumber</a> }
+
+                else
+                {
+                    <a style="cursor:pointer" href="@item.TrakingURL.Replace("{TrackingNumber}", item.TrakingNumber)" target="_blank"> @item.CourierCode @item.TrakingNumber</a>
+
+                }
+
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    {
+
+                        @*<span class="getshipmentId" data-shipmentId="@item.ShipmentId">Edit</span>*@
+                    }
+
+                </td>
+                <td>
+
+                    @if (item.Status == 1)
+                    {
+                        <span>Open</span>
+                    }
+                    @if (item.Status == 2)
+                    {
+                        <span>In Process</span>
+                    }
+                    @if (item.Status == 3)
+                    {
+                        <span>Shipped</span>
+                    }
+                    @if (item.Status == 4)
+                    {
+                        <span>Receiving in process</span>
+                    }
+                    @if (item.Status == 5)
+                    {
+                        <span>Received</span>
+                    }
+                </td>
+                <td style="min-width: 198px;width: 190px;">
+
+                    @if (item.Status < 3)
+                    {
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Create & Edit Shipment")).Succeeded)
                         {
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Create & Edit Shipment")).Succeeded)
+                            if (item.Type == "casepack")
                             {
-                                if (item.Type == "casepack")
-                                {
-                                    <a href="../ShipmentCasePack/Index?ShipmentId=@item.ShipmentId" target="_blank" class="btn btn-success ml-2 btn-style" style="color:white;">Work On Shipment</a>
+                                <a href="../ShipmentCasePack/Index?ShipmentId=@item.ShipmentId" target="_blank" class="btn btn-success ml-2 btn-style" style="color:white;">Work On Shipment</a>
 
-                                    <a notes="@item.Notes" style="cursor:pointer;" shipmentname="@item.ShipmentName" shipingId="@item.ShipmentAutoID" title="Edit Shipment" class="edit"><img src="~/Images/icon-edit-512.png" height="20" /></a>
-                                }
-                                else
-                                {
-                                    <a href="../ShipmentBox/Create?ShipmentId=@item.ShipmentId" target="_blank" class="btn btn-success ml-2 btn-style" style="color:white;">Work On Shipment</a>
-
-                                    <a notes="@item.Notes" style="cursor:pointer;" shipmentname="@item.ShipmentName" shipingId="@item.ShipmentAutoID" title="Edit Shipment" class="edit"><img src="~/Images/icon-edit-512.png" height="20" /></a>
-                                }
+                                <a notes="@item.Notes" style="cursor:pointer;" shipmentname="@item.ShipmentName" shipingId="@item.ShipmentAutoID" title="Edit Shipment" class="edit"><img src="~/Images/icon-edit-512.png" height="20" /></a>
                             }
+                            else
+                            {
+                                <a href="../ShipmentBox/Create?ShipmentId=@item.ShipmentId" target="_blank" class="btn btn-success ml-2 btn-style" style="color:white;">Work On Shipment</a>
+
+                                <a notes="@item.Notes" style="cursor:pointer;" shipmentname="@item.ShipmentName" shipingId="@item.ShipmentAutoID" title="Edit Shipment" class="edit"><img src="~/Images/icon-edit-512.png" height="20" /></a>
+                            }
+                        }
                     }
                     else
                     {
@@ -289,30 +305,30 @@ vertical-align: middle !important
                         }
                     }
 
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Receive Shipment")).Succeeded)
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Receive Shipment")).Succeeded)
+                    {
+                        if (item.Status > 2 && item.Status < 5)
                         {
-                            if (item.Status > 2 && item.Status < 5)
+                            if (item.Type == "casepack")
                             {
-                                if (item.Type == "casepack")
-                                {
-                                    <a href="../ShipmentCasePack/viewShipment?ShipmentId=@item.ShipmentId" target="_blank" class="btn btn-success ml-2 btn-style" style="color:white;">Receive</a>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-success ml-2 btn-style" asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcodeDumy" asp-route-ShipmentId="@item.ShipmentId" target="_blank">Receive</a>
-                                }
+                                <a href="../ShipmentCasePack/viewShipment?ShipmentId=@item.ShipmentId" target="_blank" class="btn btn-success ml-2 btn-style" style="color:white;">Receive</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success ml-2 btn-style" asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcodeDumy" asp-route-ShipmentId="@item.ShipmentId" target="_blank">Receive</a>
                             }
                         }
+                    }
 
-                        @if (item.Status == 3 && (await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
-                        {
-                            <button shipingId="@item.ShipmentId" class="btn btn-success ml-2 btn-style btnMarkAsUnShipped">Unship</button>
-                        }
-                        @*<a asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcodeDumy" asp-route-ShipmentId="@item.ShipmentId" title="Receive shipment" style="cursor:pointer;" target="_blank"><img src="~/Images/receivestroller-1.1s-128px.png" style="height: 24px;" value="" class="btnViewCreditDetail" /></a>*@
-                        @*<a asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcodeDumy" asp-route-ShipmentId="@item.ShipmentId" title="Receive shipment" style="cursor:pointer;" target="_blank">Receive</a>*@
-                    </td>
+                    @if (item.Status == 3 && (await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                    {
+                        <button shipingId="@item.ShipmentId" class="btn btn-success ml-2 btn-style btnMarkAsUnShipped">Unship</button>
+                    }
+                    @*<a asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcodeDumy" asp-route-ShipmentId="@item.ShipmentId" title="Receive shipment" style="cursor:pointer;" target="_blank"><img src="~/Images/receivestroller-1.1s-128px.png" style="height: 24px;" value="" class="btnViewCreditDetail" /></a>*@
+                    @*<a asp-controller="ShipmentProduct" asp-action="ShipementProductByBarcodeDumy" asp-route-ShipmentId="@item.ShipmentId" title="Receive shipment" style="cursor:pointer;" target="_blank">Receive</a>*@
+                </td>
 
-                </tr>
+            </tr>
             }
 
 

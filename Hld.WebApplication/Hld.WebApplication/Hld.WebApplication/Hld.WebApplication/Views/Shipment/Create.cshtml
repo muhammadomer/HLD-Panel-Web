@@ -461,6 +461,25 @@ margin-top: 9px;">
         </div>
     </div>
 </div>
+<div class="modal fade" style="margin-top: 80px!important;" id="myModaldate" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Expected Delivery Date</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBodyDelivery">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <div class="container-fluid" style="margin-left:10px">
     <div class="pagination">
 
@@ -487,7 +506,50 @@ margin-top: 9px;">
         function datechange() {
             $("#idCreatedAt").attr("type", "date");
         }
-      
+        function PopupForm(url) {
+            $.get(url).done(function (response) {
+                //var dt = $(response).find(".getdatevalue").val().split('/');
+
+                //var date = dt[2] + "-" + dt[1] + "-" + dt[0];
+              
+               
+                $('#modelBodyDelivery').html(response);
+             //$(response).find("#datePicker").val(date);
+                var now = new Date();
+                var day = ("0" + now.getDate()).slice(-2);
+                var month = ("0" + (now.getMonth() + 1)).slice(-2);
+                var today = now.getFullYear() + "-" + (month) + "-" + (day);
+                $('#datePicker').val(today);
+            });
+        }
+           function SubmitForm() {
+            var url = '@Url.Action("AddDate", "Shipment",new {id=0 })';
+            var data = $('#form1').serialize();
+ 
+            $.validator.unobtrusive.parse($('#form1'));
+            if ($('#form1').valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.success == true) {
+                          
+                            @*$.get('@Url.Action("Create","Shipment")').done(function (response) {
+
+                                $('#loadOrder').empty();
+                                $('#loadOrder').html(response);
+                            });*@
+                            $('#myModaldate').modal('toggle');
+                            $.notify(data.message, { globalPosition: 'right middle', className: 'success' });
+                            location.reload();
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
         $(".EditTrackingDetail").select2();
         $(document).ready(function () {
 
@@ -549,13 +611,14 @@ margin-top: 9px;">
 
             //});
             debugger;
-            //function getDate() {
-            //    var today = createdate();
+            function getDate() {
+                //var today = createdate();
+                var today = new Date();
 
-            //    document.getElementById("idCreatedAt").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+                document.getElementById("idCreatedAt").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 
 
-            //}
+            }
             $(document).on('click', '.BtnGoOrder', function () {
                 var action = $('#ActionMenu').val();
                 debugger;
@@ -596,7 +659,7 @@ margin-top: 9px;">
                                 $("#idCreatedAt").val(createdate);
                                 getDate();
                                 $('#EditTrackingNumber').modal('show');
-                                
+
                             },
                             Error: function (err) {
                                 //$.notify('some error occured!', { className: 'error mydelte' });
@@ -613,7 +676,7 @@ margin-top: 9px;">
                     }
                 }
 
-           
+
 
             });
 
@@ -794,7 +857,7 @@ margin-top: 9px;">
             //    //$.notify('Createed successfully', { globalPosition: 'bottom right', className: 'success myclass' });
 
             //});
-            
+
             $(".btnvalidation").click(function () {
                 debugger
                 var shipmentname = $('#inputName2').val();
@@ -870,7 +933,7 @@ margin-top: 9px;">
                     },
                     "Cancel": function () {
                         $(this).dialog("close");
-                       
+
                     }
 
                 });
@@ -924,12 +987,12 @@ margin-top: 9px;">
             $("#idShipmentName").val($(this).attr("shipmentname"));
 
             $('#myModalEdit').modal('show');
-          
+
             $(this).find('input[type="text"]').focus();
         });
         function showModal() {
             $('#myModal').modal('show');
-            
+
             $(this).find('input[type="text"]').focus();
         }
 

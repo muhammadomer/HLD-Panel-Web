@@ -230,17 +230,24 @@
     <script src="~/lib/date-range-picker/moment.min.js"></script>
     <script src="~/lib/date-range-picker/daterangepicker.js"></script>
     <script>
-
+       
         $('#KeyShoweyes').click(function () {
+           
+          
             $KeyShow = $('#KeyShow');
-
+           
             if ($KeyShow.prop('type') == 'password') {
                 $KeyShow.prop('type', 'text');
-              
+                var Show = $('#KeyShow').val();
+               
+                var astrictextkey = (Show.replace(Show.substring(5, 15), "*************"));
                 
-            } else {
-                $KeyShow.prop('type', 'password');
+                $('#KeyShow').val(astrictextkey)
               
+            } else {
+                $KeyShow.prop('type','password');              
+                
+                
             }
             $('#showskey', this).toggleClass('fa fa-eye');
             $('#showskey', this).toggleClass('fa fa-eye-slash');
@@ -250,7 +257,9 @@
 
             if ($KeyShow.prop('type') == 'password') {
                 $KeyShow.prop('type', 'text');
-
+                var Showpassowrd = $('#PasswordShow').val();
+                var astricShowpassowrd = (Showpassowrd.replace(Showpassowrd.substring(5, 15), "*************"));
+                $('#PasswordShow').val(astricShowpassowrd)
             } else {
                 $KeyShow.prop('type', 'password');
 

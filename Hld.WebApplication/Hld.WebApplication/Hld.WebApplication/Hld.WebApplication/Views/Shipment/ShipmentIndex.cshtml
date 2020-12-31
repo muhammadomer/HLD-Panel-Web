@@ -91,7 +91,7 @@
 
     .searchFormFixed {
         position: fixed;
-        top: 205px;
+        top: 216px;
         width: 100%;
         z-index: 500;
         padding-bottom: 0px;
@@ -105,7 +105,7 @@
 
     .fixedclassforpagination {
         position: fixed;
-        top: 254px;
+        top: 268px;
         padding-bottom: 0px;
         z-index: 400;
         background: white;
@@ -376,6 +376,14 @@
                         @if (@Model.Item.ShippedDate != DateTime.MinValue)
                         {
                             @string.Format("{0: MMM d, yyyy}", @Model.Item.ShippedDate)
+                        }
+                    </label>
+                    <br />
+                    <label class="control-label colorhead mb-0"><b>Expected Delivery:</b></label>
+                    <label class="control-label mb-0" id="">
+                        @if (@Model.Item.ExpectedDelivery != DateTime.MinValue)
+                        {
+                            @string.Format("{0: MMM d, yyyy}", @Model.Item.ExpectedDelivery)
                         }
                     </label>
                     <br />

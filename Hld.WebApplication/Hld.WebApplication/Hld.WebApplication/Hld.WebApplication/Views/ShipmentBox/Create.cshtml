@@ -701,17 +701,17 @@
                 link.download = fileName;
                 link.click();
             };
-            function datetimeboxall() {
-                var d = new Date();
-                var month = d.getMonth() + 1;
-                var day = d.getDate();
+            //function datetimeboxall() {
+            //    var d = new Date();
+            //    var month = d.getMonth() + 1;
+            //    var day = d.getDate();
 
-                var output = d.getFullYear() + '-' +
-                    (('' + month).length < 2 ? '0' : '') + month + '-' +
-                    (('' + day).length < 2 ? '0' : '') + day;
+            //    var output = d.getFullYear() + '-' +
+            //        (('' + month).length < 2 ? '0' : '') + month + '-' +
+            //        (('' + day).length < 2 ? '0' : '') + day;
 
-                $('.currentdateboxall').text(output);
-            }
+            //    $('.currentdateboxall').text(output);
+            //}
             //$(".print").click(function () {
             $(document).on("click", ".print", function () {
 
@@ -735,18 +735,18 @@
             });
 
 
-            function datetimebox() {
-                var d = new Date();
+            //function datetimebox() {
+            //    var d = new Date();
 
-                var month = d.getMonth() + 1;
-                var day = d.getDate();
+            //    var month = d.getMonth() + 1;
+            //    var day = d.getDate();
 
-                var output = d.getFullYear() + '-' +
-                    (('' + month).length < 2 ? '0' : '') + month + '-' +
-                    (('' + day).length < 2 ? '0' : '') + day;
+            //    var output = d.getFullYear() + '-' +
+            //        (('' + month).length < 2 ? '0' : '') + month + '-' +
+            //        (('' + day).length < 2 ? '0' : '') + day;
 
-                $('#currentdatebox').text(output);
-            }
+            //    $('#currentdatebox').text(output);
+            //}
 
             $(".myTable2").tablesorter();
 

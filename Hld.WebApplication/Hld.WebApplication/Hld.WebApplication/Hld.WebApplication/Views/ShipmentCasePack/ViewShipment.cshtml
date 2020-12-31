@@ -292,6 +292,14 @@ line-height: 1!important;
                     }
                 </label>
                 <br />
+                <label class="control-label colorhead mb-0"><b>Expected Delivery:</b></label>
+                <label class="control-label mb-0" id="">
+                    @if (@Model.Item.ExpectedDelivery != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", @Model.Item.ExpectedDelivery)
+                    }
+                </label>
+                <br />
                 <label class="control-label colorhead mb-0"><b>Recieved On:</b></label>
                 <label class="control-label mb-0" id="">
                     @if (@Model.Item.ReceivedDate != DateTime.MinValue)
