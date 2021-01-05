@@ -1,5 +1,6 @@
 ﻿using Hld.WebApplication.ViewModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,6 +63,54 @@ namespace Hld.WebApplication.Helper
             List<BestBuyTrackingUpdate> responses = JsonConvert.DeserializeObject<List<BestBuyTrackingUpdate>>(strResponse);
             return responses;
         }
+       
+        public int GetCount(string ApiURL, string token, string StartDate, string EndDate, string scOrderID, string bbOrderID = "", string TrakingNumber = "", string BBStatus = "")
+        {
+            int Count = 0;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/GetCounter?scOrderID=" + scOrderID + "&bbOrderID=" + bbOrderID + "&TrakingNumber=" + TrakingNumber + "&BBStatus=" + BBStatus + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                        Count = (int)JObject.Parse(strResponse)["counter"];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Count;
+        }
+        public List<BestBuyTrackingUpdate> BuyTrackingUpdateLogList(string apiurl, string token, string DateTo, string DateFrom, int limit, int offset, string scOrderID, string bbOrderID = "", string TrakingNumber = "", string BBStatus = "")
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest
+                .Create(apiurl + "/api/Shipment/GetShipmentHistoryList?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&scOrderID=" + scOrderID + "&bbOrderID=" + bbOrderID + "&TrakingNumber=" + TrakingNumber + "&limit=" + limit + "&offset=" + offset + "&BBStatus=" + BBStatus);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<BestBuyTrackingUpdate> responses = JsonConvert.DeserializeObject<List<BestBuyTrackingUpdate>>(strResponse);
+            return responses;
+        }
+
     }
 
 

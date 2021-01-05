@@ -10,8 +10,12 @@ namespace Hld.WebApplication.ViewModel
         public string scOrderID { get; set; }
         public string bbOrderID { get; set; }
         public DateTime shipDate { get; set; }
+        public DateTime orderDateTimeFrom { get; set; }
+        public DateTime orderDateTimeTo { get; set; }
         public string shippingServiceCode { get; set; }
         public string trackingNumber { get; set; }
+        public string EmptyFirstTime { get; set; }
         public string BBStatus { get; set; }
+        public double TotalCount { get; set; }
     }
 }

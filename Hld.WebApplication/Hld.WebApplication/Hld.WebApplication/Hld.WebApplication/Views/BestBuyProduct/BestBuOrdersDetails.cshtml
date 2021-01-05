@@ -1,0 +1,75 @@
+﻿@model Hld.WebApplication.ViewModel.BestBuyOrdersViewModel
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@{
+    ViewData["Title"] = "BestBuOrdersDetail";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+@{
+    ViewData["Title"] = "BestBuOrdersDetails";
+}
+<style>
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+
+    }
+    .btnsendtozincorview {
+        display: inline-block;
+        margin-left: 30px;
+        color: white;
+        background: #808080C7;
+        padding: 1px 3px;
+        border-radius: 2px;
+        margin-top: 3px;
+        text-decoration: none;
+    }
+        .btnsendtozincorview:hover {
+            text-decoration: none;
+            color: white;
+        }
+</style>
+<h6>Order List</h6>
+<div class="container-fluid p-0">
+    <table class="table">
+        <thead  style="background-color:darkgray;">
+            <tr>
+                <th>Image</th>
+                <th>SKU</th>
+                <th>QTY</th>
+                <th>Orders</th>
+                <th>ASIN</th>
+                <th>Send To Zinc</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>d7-332453</td>
+                <td>22</td>
+                <td>1255</td>
+                <td>AS43CFVD</td>
+                <td>
+                    <div>
+                        <a href="" class="btnsendtozincorview" role="button">Send to Zinc</a>
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>d7-332453G</td>
+                <td>22</td>
+                <td>12</td>
+                <td>AS43CFDVD</td>
+                <td>
+                    <div>
+                        <a href="" class="btnsendtozincorview" role="button">Send to Zinc</a>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+     
+    </table>
+</div>

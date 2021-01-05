@@ -253,7 +253,7 @@ line-height: 1!important;
 
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-3">
                 <label class="control-label mb-0 colorhead"><b>Shipment Status:</b></label>
                 @if (Model.Item.Status == 1)
                 {
@@ -307,6 +307,22 @@ line-height: 1!important;
                         @string.Format("{0: MMM d, yyyy}", @Model.Item.ReceivedDate)
                     }
                 </label>
+                <br />
+                <label class="control-label colorhead mb-0"><b>TrakingNumber:</b></label>
+                <label class="control-label mb-0" id="">
+                </label>
+                @if (string.IsNullOrEmpty(@Model.Item.TrakingURL))
+                {<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@Model.Item.TrakingNumber'&brand='@Model.Item.CourierCode'" target="_blank"> @Model.Item.CourierCode  @Model.Item.TrakingNumber</a> }
+
+            else
+            {<a style="cursor:pointer" href="@Model.Item.TrakingURL.Replace("{TrackingNumber}", @Model.Item.TrakingNumber)" target="_blank"> @Model.Item.CourierCode @Model.Item.TrakingNumber</a>}
+                @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
+                {
+
+                    @*<span class="getshipmentId" data-shipmentId="@item.ShipmentId">Edit</span>*@
+                }
+
+                <!--<a style="cursor:pointer" href="https://www.dhl.com/en/express/tracking.html?AWB='@Model.Item.TrakingNumber'&brand='@Model.Item.CourierCode'" target="_blank">--> @*@Model.Item.CourierCode*@ <!--@Model.Item.TrakingNumber</a>-->
                 <div class="" style="">
                 </div>
             </div>

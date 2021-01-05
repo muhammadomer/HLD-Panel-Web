@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using PagedList;
 
 namespace Hld.WebApplication.Controllers
 {
@@ -36,7 +37,7 @@ namespace Hld.WebApplication.Controllers
             return View();
         }
         public IActionResult GetTracking()
-        {
+       {
             var querystring = Request.QueryString;
             string dynamicQueryGeneration = "";
             List<BestBuyTrackingUpdate> listModel = null;
@@ -268,6 +269,74 @@ namespace Hld.WebApplication.Controllers
             //{
             //}
             return listModel;
+        }
+
+        public IActionResult BestBuyTracking(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string scOrderID = "", string bbOrderID = "", string trackingNumber = "", string BBStatus = "", string EmptyFirstTime = "")
+        {
+           
+            token = Request.Cookies["Token"];
+            BestBuyTrackingUpdate trackingUpdate = new BestBuyTrackingUpdate();
+            string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+
+            if ("0001-01-01" != orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+                PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+            }
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+
+            }
+            else
+            {
+
+                var count = _bestBuyTrackingUpdateLogApiAccess.GetCount(ApiURL, token, CurrentDate, PreviousDate, scOrderID, bbOrderID, trackingNumber, BBStatus);
+                ViewBag.TotalCount = count;
+               
+            }
+                return View(trackingUpdate);
+            
+           
+            
+        }
+        [HttpPost]
+        public IActionResult BuyTrackingUpdateLogList(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string scOrderID = "", string bbOrderID = "", string trackingNumber = "", string BBStatus = "", string EmptyFirstTime = "")
+        {
+
+            string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+
+            if ("0001-01-01" != orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+                CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+                PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+            }
+            token = Request.Cookies["Token"];
+            
+            if (page.HasValue)
+            {
+                ViewBag.pageNumber = page;
+            }
+            IPagedList<BestBuyTrackingUpdate> data = null;
+            int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
+            int pageSize = 25;
+            int endLimit = 0;
+            int startlimit = pageSize;
+            if (page.HasValue)
+            {
+                endLimit = (pageNumber - 1) * pageSize;
+            }          
+            List<BestBuyTrackingUpdate> _viewModel = null;
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+                _viewModel = _bestBuyTrackingUpdateLogApiAccess.BuyTrackingUpdateLogList(ApiURL, token, CurrentDate, PreviousDate, 0, 0, bbOrderID, scOrderID, trackingNumber, BBStatus);
+                data = new StaticPagedList<BestBuyTrackingUpdate>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+                return PartialView("~/Views/BestBuyTrackingUpdateLog/BestBuyTrackingUpdateParitalView.cshtml", data);
+            }
+            _viewModel = _bestBuyTrackingUpdateLogApiAccess.BuyTrackingUpdateLogList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, bbOrderID, scOrderID, trackingNumber, BBStatus); ;
+            return PartialView("~/Views/BestBuyTrackingUpdateLog/BestBuyTrackingUpdateParitalView.cshtml", data);
         }
     }
 }

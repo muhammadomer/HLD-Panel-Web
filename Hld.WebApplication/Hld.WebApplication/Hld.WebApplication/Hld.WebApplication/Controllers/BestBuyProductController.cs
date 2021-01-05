@@ -588,7 +588,9 @@ namespace Hld.WebApplication.Controllers
             return model;
         }
 
+        public IActionResult BestBuOrdersDetails()
+        {
+            return View();
+        }
     }
-
-
 }
