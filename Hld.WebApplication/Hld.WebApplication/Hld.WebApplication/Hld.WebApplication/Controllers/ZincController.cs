@@ -177,16 +177,13 @@ namespace Hld.WebApplication.Controllers
 
             SellerCloudOrderID = ZincOrder.client_notes.our_internal_order_id;
             RequestID = SubmitOrderToZincForSave(ZincOrder);
-
-
-
             if (RequestID != string.Empty)
             {
                 bool status = false;
                 int getres = 0;
 
                 //these 4 commented lines for rest job
-               // DropshipStatusViewModel dsmodel = new DropshipStatusViewModel();
+                // DropshipStatusViewModel dsmodel = new DropshipStatusViewModel();
                 UpdateSCDropshipStatusViewModel updateSCViewModel = new UpdateSCDropshipStatusViewModel();
                 updateSCViewModel.StatusName = "Requested";
                 updateSCViewModel.SCOrderID = ZincOrder.client_notes.our_internal_order_id;
@@ -196,9 +193,9 @@ namespace Hld.WebApplication.Controllers
                 //getres = _sellerCloudApiAccess.UpdateDropshipStatus(ApiURL, authenticate.access_token, dsmodel);
 
                 status = await UpdateDropShipStatusInZinc(ZincOrder.client_notes.our_internal_order_id, "Requested");
-               
-
                 status = _sellerCloudApiAccess.UpdateSellerCloudOrderDropShipStatus(ApiURL, token, updateSCViewModel);
+
+
 
                 if (status)
                 {
@@ -215,8 +212,8 @@ namespace Hld.WebApplication.Controllers
                     _zincOrderLogAndDetailApiAccess.UpdateAccounts(ApiURL, token, Convert.ToInt32(zincOrderLogViewModel.SellerCloudOrderId), ZincAccountId, CreditCardId);
                 }
             }
-            return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message= "Order Request Has Been Send To Zinc Successfully!" });
-           // return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234",message= "Order Request Has Been Send To Zinc Successfully!" });
+                return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message= "Order Request Has Been Send To Zinc Successfully!" });
+                //return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234",message= "Order Request Has Been Send To Zinc Successfully!" });
         }
 
         [HttpGet]

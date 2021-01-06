@@ -5,10 +5,7 @@
     @using Microsoft.AspNetCore.Authorization
     @inject IAuthorizationService AuthorizationService
     <style type="text/css">
-        .maincontainer {
-            background-color: #2A2B2B03;
-            min-width: 1290px
-        }
+       
 
         .table-bordered thead th, .table-bordered thead td {
             padding: 0px;
@@ -38,7 +35,7 @@
 
         .table thead tr th {
             position: sticky;
-            top: 50px;
+            top: 168px;
             padding: 5px;
             z-index: 2;
             background-color: lightgray;
@@ -54,9 +51,10 @@
             border-right: #ccc 1px solid !important;
         }
     </style>
-    <div class="container-fluid mt-3 maincontainer">
-       
-        <table class="table tablesorter" style="margin-top:170px;width:98%!important">
+    <div class="container-fluid">      
+        <table class="table tablesorter mytable" style="margin-top:174px;width:98%!important">
+
+
             <thead style="background-color:lightgray;">
                 <tr>
                     <th>Sc Order Id</th>

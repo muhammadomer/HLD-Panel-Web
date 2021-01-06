@@ -136,7 +136,7 @@
             transform: translate(-50%,-50%);
         }
 
-    .searchFormFixed {
+   .searchFormFixed {
         position: fixed;
         top: 50px;
         width: 100%;
@@ -202,7 +202,7 @@
                 @*<div class="col-md-1 p-0 mr-1">
                     <input type="text" id="ShipmentId" name="BBStatus" value="@Model.BBStatus" placeholder="BBStatus" class="form-control" style="box-shadow: none" />
                 </div>*@
-                <div class="col-md-2 p-0" style="margin-right: 15px;">
+                <div class="col-md-3 p-0" style="margin-right: 15px;">
                     <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width:100%; box-shadow:none">
                         <i class="fa fa-calendar"></i>&nbsp;
                         <span></span> <i class="fa fa-caret-down"></i>
@@ -399,12 +399,15 @@ margin-top: 9px;">
                               })
                               $(".loadertbl").hide();
                               $(".loader").hide();
-                              //var itemcount = $(".table").find("tr").length-2;
-                              //$(".itemPerPage").text(itemcount);
+                              var itemcount = $(".mytable").find("tr").length-1;
+                              $(".itemPerPage").text(itemcount);
                            // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
                           },
                           error: function (data) {
                               debugger;
+                              $('#loadOrdertracking').empty();
+
+                              $('#loadOrdertracking').html(data);
                           }
                       });
 
@@ -476,8 +479,8 @@ margin-top: 9px;">
                               })
                               $(".loadertbl").hide();
                               $(".loader").hide();
-                              //var itemcount = $(".table").find("tr").length-2;
-                              //$(".itemPerPage").text(itemcount);
+                              var itemcount = $(".mytable").find("tr").length;
+                              $(".itemPerPage").text(itemcount);
                            // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
                           },
                           error: function (data) {

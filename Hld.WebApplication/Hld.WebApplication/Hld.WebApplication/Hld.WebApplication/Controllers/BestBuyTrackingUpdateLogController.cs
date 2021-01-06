@@ -277,15 +277,18 @@ namespace Hld.WebApplication.Controllers
            
             token = Request.Cookies["Token"];
             BestBuyTrackingUpdate trackingUpdate = new BestBuyTrackingUpdate();
-            string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
-            string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
 
-            if ("0001-01-01" != orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            if ("0001-01-01"== orderDateTimeFrom.ToString("yyyy-MM-dd"))
             {
 
-                CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
-                PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+                CurrentDate ="";
+                PreviousDate ="";
             }
+
+
+
             if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
             {
 
@@ -302,13 +305,15 @@ namespace Hld.WebApplication.Controllers
         public IActionResult BuyTrackingUpdateLogList(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string scOrderID = "", string bbOrderID = "", string trackingNumber = "", string BBStatus = "", string EmptyFirstTime = "")
         {
 
-            string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
-            string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
-
-            if ("0001-01-01" != orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            //string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            //string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
             {
-                CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
-                PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+
+                CurrentDate = "";
+                PreviousDate = "";
             }
             token = Request.Cookies["Token"];
             
@@ -336,6 +341,8 @@ namespace Hld.WebApplication.Controllers
             _viewModel = _bestBuyTrackingUpdateLogApiAccess.BuyTrackingUpdateLogList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, scOrderID, bbOrderID, trackingNumber, BBStatus);
             data = new StaticPagedList<BestBuyTrackingUpdate>(_viewModel, pageNumber, pageSize, _viewModel.Count);
             return PartialView("~/Views/BestBuyTrackingUpdateLog/BestBuyTrackingUpdateParitalView.cshtml", data);
+
+               
         }
     }
 }
