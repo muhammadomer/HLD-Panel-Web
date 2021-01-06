@@ -32,7 +32,7 @@ namespace Hld.WebApplication.Controllers
         string tracking_obtained = "";
         string s3BucketURL = "";
         string s3BucketURL_large = "";
-
+        string SCRestURL = "";
         ServiceReference1.AuthHeader authHeader = null;
         BBProductApiAccess _bBProductApiAccess = null;
         ProductApiAccess _productApiAccess = null;
@@ -46,7 +46,7 @@ namespace Hld.WebApplication.Controllers
         GetChannelCredViewModel _Selller = null;
         GetChannelCredViewModel _Zinc = null;
         GetChannelCredViewModel ZincDays = null;
-
+        OrderNotesAPiAccess _OrderApiAccess = null;
         public ZincController(IConfiguration configuration, IHostingEnvironment environment)
         {
             _environment = environment;
@@ -107,6 +107,11 @@ namespace Hld.WebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitOrderToZinc(string ZincOrderdata, string orderDateTimeShip, int CreditCardId, int ZincAccountId, int DeliveryDays)
         {
+            //string token = Request.Cookies["Token"];
+            //_Selller = new GetChannelCredViewModel();
+            //_Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+            //AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+
             CreditCardApiAccess creditCardApiAccess = new CreditCardApiAccess();
             
             SaveZincOrders.RootObject ZincOrder = new SaveZincOrders.RootObject();
@@ -178,12 +183,21 @@ namespace Hld.WebApplication.Controllers
             if (RequestID != string.Empty)
             {
                 bool status = false;
+                int getres = 0;
+
+                //these 4 commented lines for rest job
+               // DropshipStatusViewModel dsmodel = new DropshipStatusViewModel();
                 UpdateSCDropshipStatusViewModel updateSCViewModel = new UpdateSCDropshipStatusViewModel();
                 updateSCViewModel.StatusName = "Requested";
                 updateSCViewModel.SCOrderID = ZincOrder.client_notes.our_internal_order_id;
                 updateSCViewModel.LogDate = DatetimeExtension.ConvertToEST(DateTime.Now);
+                //dsmodel.Orders.Add(ZincOrder.client_notes.our_internal_order_id) ;
+                //dsmodel.DropshipStatus = 2;
+                //getres = _sellerCloudApiAccess.UpdateDropshipStatus(ApiURL, authenticate.access_token, dsmodel);
 
                 status = await UpdateDropShipStatusInZinc(ZincOrder.client_notes.our_internal_order_id, "Requested");
+               
+
                 status = _sellerCloudApiAccess.UpdateSellerCloudOrderDropShipStatus(ApiURL, token, updateSCViewModel);
 
                 if (status)

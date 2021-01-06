@@ -271,6 +271,7 @@ namespace Hld.WebApplication.Controllers
             return listModel;
         }
 
+
         public IActionResult BestBuyTracking(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string scOrderID = "", string bbOrderID = "", string trackingNumber = "", string BBStatus = "", string EmptyFirstTime = "")
         {
            
@@ -291,15 +292,11 @@ namespace Hld.WebApplication.Controllers
             }
             else
             {
-
                 var count = _bestBuyTrackingUpdateLogApiAccess.GetCount(ApiURL, token, CurrentDate, PreviousDate, scOrderID, bbOrderID, trackingNumber, BBStatus);
                 ViewBag.TotalCount = count;
                
             }
                 return View(trackingUpdate);
-            
-           
-            
         }
         [HttpPost]
         public IActionResult BuyTrackingUpdateLogList(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string scOrderID = "", string bbOrderID = "", string trackingNumber = "", string BBStatus = "", string EmptyFirstTime = "")
@@ -319,7 +316,7 @@ namespace Hld.WebApplication.Controllers
             {
                 ViewBag.pageNumber = page;
             }
-            IPagedList<BestBuyTrackingUpdate> data = null;
+            IPagedList<BestBuyTrackingUpdate> data = null; 
             int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
             int pageSize = 25;
             int endLimit = 0;
@@ -328,14 +325,16 @@ namespace Hld.WebApplication.Controllers
             {
                 endLimit = (pageNumber - 1) * pageSize;
             }          
-            List<BestBuyTrackingUpdate> _viewModel = null;
+            List<BestBuyTrackingUpdate> _viewModel = new List<BestBuyTrackingUpdate>();
             if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
             {
-                _viewModel = _bestBuyTrackingUpdateLogApiAccess.BuyTrackingUpdateLogList(ApiURL, token, CurrentDate, PreviousDate, 0, 0, bbOrderID, scOrderID, trackingNumber, BBStatus);
+                _viewModel = _bestBuyTrackingUpdateLogApiAccess.BuyTrackingUpdateLogList(ApiURL, token, CurrentDate, PreviousDate, 0, 0,scOrderID, bbOrderID, trackingNumber, BBStatus);
                 data = new StaticPagedList<BestBuyTrackingUpdate>(_viewModel, pageNumber, pageSize, _viewModel.Count);
                 return PartialView("~/Views/BestBuyTrackingUpdateLog/BestBuyTrackingUpdateParitalView.cshtml", data);
             }
-            _viewModel = _bestBuyTrackingUpdateLogApiAccess.BuyTrackingUpdateLogList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, bbOrderID, scOrderID, trackingNumber, BBStatus); ;
+
+            _viewModel = _bestBuyTrackingUpdateLogApiAccess.BuyTrackingUpdateLogList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, scOrderID, bbOrderID, trackingNumber, BBStatus);
+            data = new StaticPagedList<BestBuyTrackingUpdate>(_viewModel, pageNumber, pageSize, _viewModel.Count);
             return PartialView("~/Views/BestBuyTrackingUpdateLog/BestBuyTrackingUpdateParitalView.cshtml", data);
         }
     }

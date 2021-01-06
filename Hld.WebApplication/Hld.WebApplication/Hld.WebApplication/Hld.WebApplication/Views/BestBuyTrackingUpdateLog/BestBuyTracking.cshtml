@@ -191,17 +191,17 @@
                 <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
 
                 <div class="col-md-2 p-0 mr-1">
-                    <input type="text" id="Title" name="scOrderID" value="@Model.scOrderID" placeholder="ScOrderID" class="form-control" style="box-shadow: none" />
+                    <input type="text" id="Title" name="scOrderID" value="@Model.scOrderID" placeholder="SC_OrderID" class="form-control" style="box-shadow: none" />
                 </div>
                 <div class="col-md-2 p-0 mr-1">
-                    <input type="text" id="Title" name="bbOrderID" value="@Model.bbOrderID" placeholder="BbOrderID" class="form-control" style="box-shadow: none" />
+                    <input type="text" id="Title" name="bbOrderID" value="@Model.bbOrderID" placeholder="BB_OrderID" class="form-control" style="box-shadow: none" />
                 </div>
                 <div class="col-md-2 p-0 mr-1">
-                    <input type="text" id="ShipmentId" name="trackingNumber" value="@Model.trackingNumber" placeholder="TrackingNumber" class="form-control" style="box-shadow: none" />
+                    <input type="text" id="ShipmentId" name="trackingNumber" value="@Model.trackingNumber" placeholder="Tracking Number" class="form-control" style="box-shadow: none" />
                 </div>
-                <div class="col-md-1 p-0 mr-1">
+                @*<div class="col-md-1 p-0 mr-1">
                     <input type="text" id="ShipmentId" name="BBStatus" value="@Model.BBStatus" placeholder="BBStatus" class="form-control" style="box-shadow: none" />
-                </div>
+                </div>*@
                 <div class="col-md-2 p-0" style="margin-right: 15px;">
                     <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width:100%; box-shadow:none">
                         <i class="fa fa-calendar"></i>&nbsp;
@@ -292,9 +292,9 @@ margin-top: 9px;">
             $('.Statusbtn').click(function () {
                 $('#btnSearchStatus').click();
             });
-           
+
             $("#EmptyFirstTime").val("No");
-          
+
             $(".loader").hide();
             $("#dialog-box").dialog({
                 autoOpen: false,
@@ -362,12 +362,89 @@ margin-top: 9px;">
             var bbOrderID = getUrlParameter('bbOrderID');
             var trackingNumber = getUrlParameter('trackingNumber');
             var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
-            var OrderDateTimeTo = getUrlParameter('orderDateTimeTo'); 
+            var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
             var BBStatus = getUrlParameter('BBStatus');
             var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
-         
 
-            $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+            if (EmptyFirstTime) {
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+
+                  format: '[< nncnn >]',
+                  perpage: 25, // show 10 elements per page
+                  lapping: 0, // don't overlap pages for the moment
+                  page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                  onSelect: function (page) {
+                      debugger;
+                      pageNo = page;
+                      // add code which gets executed when user selects a page
+                      var url = '/BestBuyTrackingUpdateLog/BuyTrackingUpdateLogList?page=' + page + '&scOrderID=' + scOrderID + '&bbOrderID=' + bbOrderID + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&trackingNumber=' + trackingNumber + '&BBStatus=' + BBStatus + '&EmptyFirstTime=' + EmptyFirstTime;
+                      var completURL = url  ;
+                      $(".loadertbl").show();
+                      $(".loader").show();
+                      $.ajax({
+                          url: completURL,
+                          data: {  },
+                          type: 'POST',
+                          traditional: true,
+                          success: function (data) {
+
+                              $('#loadOrdertracking').empty();
+
+                              $('#loadOrdertracking').html(data);
+
+                              $(function () {
+                                  $(".table").tablesorter();
+
+                              })
+                              $(".loadertbl").hide();
+                              $(".loader").hide();
+                              //var itemcount = $(".table").find("tr").length-2;
+                              //$(".itemPerPage").text(itemcount);
+                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                          },
+                          error: function (data) {
+                              debugger;
+                          }
+                      });
+
+                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                              start = moment(OrderDateTimeFrom);
+                              end = moment(OrderDateTimeTo);
+                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                          }
+                          else {
+                              $('#reportrange span').html("No Date Selected");
+                          }
+
+                      }
+                      else {
+                          $('#reportrange span').html("No Date Selected");
+                      }
+                  },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+             });
+
+            } else {
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
 
                   format: '[< nncnn >]',
                   perpage: 25, // show 10 elements per page
@@ -441,9 +518,12 @@ margin-top: 9px;">
                                 return '<a href="#">Last</a>';
                         }
                     }
-             });
+                });
+                $(".loader").hide();
+            }
+
             $(".table").tablesorter();
-         
+
         });
     </script>
 }

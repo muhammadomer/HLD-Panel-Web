@@ -69,7 +69,7 @@ namespace Hld.WebApplication.Helper
             int Count = 0;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/GetCounter?scOrderID=" + scOrderID + "&bbOrderID=" + bbOrderID + "&TrakingNumber=" + TrakingNumber + "&BBStatus=" + BBStatus + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyTrackingUpdateLog/GetCounter?scOrderID=" + scOrderID + "&bbOrderID=" + bbOrderID + "&TrakingNumber=" + TrakingNumber + "&BBStatus=" + BBStatus + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -94,7 +94,7 @@ namespace Hld.WebApplication.Helper
         public List<BestBuyTrackingUpdate> BuyTrackingUpdateLogList(string apiurl, string token, string DateTo, string DateFrom, int limit, int offset, string scOrderID, string bbOrderID = "", string TrakingNumber = "", string BBStatus = "")
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest
-                .Create(apiurl + "/api/Shipment/GetShipmentHistoryList?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&scOrderID=" + scOrderID + "&bbOrderID=" + bbOrderID + "&TrakingNumber=" + TrakingNumber + "&limit=" + limit + "&offset=" + offset + "&BBStatus=" + BBStatus);
+                .Create(apiurl + "/api/BestBuyTrackingUpdateLog/getLogs?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&scOrderID=" + scOrderID + "&bbOrderID=" + bbOrderID + "&TrakingNumber=" + TrakingNumber + "&limit=" + limit + "&offset=" + offset + "&BBStatus=" + BBStatus);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";

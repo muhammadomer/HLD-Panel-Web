@@ -1,4 +1,4 @@
-﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.BestBuyTrackingUpdate>
+﻿@model PagedList.IPagedList<Hld.WebApplication.ViewModel.BestBuyTrackingUpdate>
     @using Hld.WebApplication.Helper
   
     @inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
@@ -56,17 +56,17 @@
     </style>
     <div class="container-fluid mt-3 maincontainer">
        
-        <table class="table tablesorter">
+        <table class="table tablesorter" style="margin-top:170px;width:98%!important">
             <thead style="background-color:lightgray;">
                 <tr>
-                    <th>scOrderID</th>
-                    <th>bbOrderID</th>
+                    <th>Sc Order Id</th>
+                    <th>BB Order Id</th>
                     <th>
-                      trackingNumber
+                      Tracking Number
                     </th>
-                    <th>
+                    @*<th>
                         BBStatus
-                    </th>
+                    </th>*@
                     <th>
                         Shiping Service Code
                     </th>
@@ -78,7 +78,7 @@
             </thead>
             <tbody>
               
-                @*@foreach (var item in Model)
+                @foreach (var item in Model)
                 {
                 <tr>
                     <td>
@@ -90,18 +90,21 @@
                     <td>
                         @item.trackingNumber
                     </td>
-                    <td>
+                    @*<td>
                         @item.BBStatus
-                    </td>
+                    </td>*@
                     <td>
                         @item.shippingServiceCode
                     </td>
                     <td>
-                        @item.shipDate
+                        @if (@item.shipDate != DateTime.MinValue)
+                        {
+                    @string.Format("{0: MMM d, yyyy}", @item.shipDate)}
+                        
                     </td>
 
                 </tr>
-                }*@
+                }
             </tbody>
         </table>
        
