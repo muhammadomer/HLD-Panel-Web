@@ -1,6 +1,7 @@
 ﻿using DataAccess.ViewModels;
 using Hld.WebApplication.ViewModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -180,7 +181,39 @@ namespace Hld.WebApplication.Helper
             }
             return listmodel;
         }
+        public int UpdateZincPorxyStatus(string ApiURL, string token,int statusCode,string Email)
+        {
+            int status = 0;
+            try
+            {
 
+
+                
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincProxy/UpdateZincPorxyStatus?statusCode="+statusCode+ "&Email=" +Email);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                        //status = (int)JObject.Parse(strResponse)["counter"];
+                    }
+
+                }
+                //strResponse = JsonConvert.DeserializeObject<strResponse>(strResponse);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            
+            return status;
+        }
         public bool SaveZincEmail(string ApiURL, string token, SaveZincProxyEmailViewModel ViewModel)
         {
             bool status = false;

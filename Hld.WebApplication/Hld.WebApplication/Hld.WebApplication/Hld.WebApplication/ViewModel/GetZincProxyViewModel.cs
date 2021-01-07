@@ -16,7 +16,9 @@ namespace Hld.WebApplication.ViewModel
         public bool IsDefault { get; set; }
         public bool Isactive { get; set; }
         public int idZincProxy { get; set; }
+        public int Status { get; set; }
         public DateTime LatUpdated { get; set; }
+
         
     }
 }

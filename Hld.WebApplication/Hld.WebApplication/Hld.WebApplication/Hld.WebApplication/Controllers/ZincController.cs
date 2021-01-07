@@ -212,8 +212,8 @@ namespace Hld.WebApplication.Controllers
                     _zincOrderLogAndDetailApiAccess.UpdateAccounts(ApiURL, token, Convert.ToInt32(zincOrderLogViewModel.SellerCloudOrderId), ZincAccountId, CreditCardId);
                 }
             }
-                return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message= "Order Request Has Been Send To Zinc Successfully!" });
-                //return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234",message= "Order Request Has Been Send To Zinc Successfully!" });
+            return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message = "Order Request Has Been Send To Zinc Successfully!" });
+            //return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234",message= "Order Request Has Been Send To Zinc Successfully!" });
         }
 
         [HttpGet]
@@ -662,7 +662,11 @@ namespace Hld.WebApplication.Controllers
                 }
 
                 ZincProductOfferViewModel.RootObject model = JsonConvert.DeserializeObject<ZincProductOfferViewModel.RootObject>(response);
-                 model.offers = model.offers.Where(s => s.condition.ToLower().Trim().Equals("new")&& s.price>0 && s.prime_badge.Equals(true)).ToList();
+                if (model.offers != null)
+                {
+                    model.offers = model.offers.Where(s => s.condition.ToLower().Trim().Equals("new") && s.price > 0 && s.prime_badge.Equals(true)).ToList();
+                }
+                
                 if ((model.status != "processing" || model.status != "failed") && model.offers != null && model.offers.Count > 0 )
                 {
                     // getting all those offers which have fulfilled true

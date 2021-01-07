@@ -10,6 +10,7 @@ namespace Hld.WebApplication.ViewModel
         public string retailer { get; set; }
         public string email { get; set; }
         public string proxy_url { get; set; }
+
     }
 
     public class ZincProxyGetViewModal

@@ -218,7 +218,13 @@
             position: absolute;
             z-index: 99;
         }*/
-
+    .zincorderclass {
+        background-color: green;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        border-radius: 3px;
+    }
 
 </style>
 
@@ -666,6 +672,27 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<div class="modal fade" style="" id="OrderRequestSendozincOrderlist" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <h4 class="modal-title">Zinc Status</h4>
+                <button type="button" class="close OrderRequestSendozinccloselist" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <h6 class="zincorderclass">
+                    Your Order Request Has Been Send To Zinc Successfully!
+                </h6>
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>*@
+        </div>
     </div>
 </div>
 
@@ -1643,7 +1670,8 @@
             $(document).on('click', '#btnSendBestBuyOrderToZinc', function () {
 
                 $('.close').trigger('click');
-                $(".btnsendtozincorview").prop('disabled',true).css("cursor","not-allowed");
+                $(".loadertbl").show();
+                //$(".btnsendtozincorview").prop('disabled',true).css("cursor","not-allowed");
                 var dataID = $(this).attr('data-id');
                 var scOrderID = $(this).attr('data-scOrderID');
                 var orderDateTimeShip = $('#orderDateTimeShip').val();
@@ -1676,12 +1704,16 @@
                     //contentType: 'application/json',
                     success: function (data) {
                         if (data.requestid != "") {
-                            $(".btnsendtozincorview").prop('disabled', false).css("cursor", "pointer");
-                            $.notify(data.message, { globalPosition: 'right middle', className: 'success' });
+                            //$(".btnsendtozincorview").prop('disabled', false).css("cursor", "pointer");
+
+                            //$.notify(data.message, { globalPosition: 'right middle', className: 'success' });
                             //$('#modelBody').find('.showmessage').css('display', 'inline');
-                            //setTimeout(function () {
-                            //    $('.close').trigger('click');
-                            //}, 1000);
+                            $(".loadertbl").hide();
+                            $('#OrderRequestSendozincOrderlist').modal('show');
+                            setTimeout(function () {
+                                $('.OrderRequestSendozinccloselist').trigger('click');
+                            }, 1000);
+                           
                             var gettingHref = $(mainAnchor).attr('href');
                             $(mainAnchor).attr('href', gettingHref + data.requestid)
 

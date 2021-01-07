@@ -99,9 +99,9 @@
 
     </div>
 </div>
-<div class="container">
+<div class="container-fluid p-0">
     <div class="form-row mb-2 ml-0">
-        <div class="col-md-2">
+        <div class="col-md-2 p-0">
             <h6>Zinc Proxy Detail</h6>
         </div>
         <div class="col-md-8">
@@ -112,14 +112,14 @@
         </div>
     </div>
 
-    <table class="table ">
+    <table class="table">
         <thead style="background-color:lightgrey">
             <tr>
                 <th>
                     Proxy User
 
                 </th>
-                <th>email</th>
+                <th>Email</th>
                 <th>
                     Proxy IP
 
@@ -136,7 +136,7 @@
                 <th>Active</th>
                 <th>Default</th>
                 <th>Configure Proxy</th>
-                <th>Get Proxy Configuration</th>
+                <th>Get Configuration</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -199,10 +199,20 @@
                         <button style="cursor:pointer; color:dodgerblue;" class="btn ConfigureAPI">Configure Proxy</button>
                     </td>
                     <td>
-                        <button style="cursor:pointer; color:dodgerblue;" class="btn GetResponse">Get Configuration Detail</button>
+                        <button style="cursor:pointer; color:dodgerblue;" class="btn GetResponse">Get Detail</button>
                     </td>
                     <td>
-
+                        @{
+                            if (item.Status == 1)
+                            {
+                                                <span>Configured</span>
+                            }
+                            else
+                            {
+                                <span></span>
+                            }
+                        }
+                        @*@item.Status*@
                     </td>
                     <td>
                         @if (!item.IsDefault)
@@ -457,8 +467,9 @@
                 console.log("My Value", ProxyEmail);
                 $.ajax({
                     type: 'POST',
-                    url: '../ZincProxy/GetResponse',
-                    data: {},
+                    //url: '../ZincProxy/GetResponse',
+                    url: '../ZincProxy/GetResponse?email=' + ProxyEmail,
+                    //data: {},
                     success: function (res) {
                         debugger;
                         var date = new Date(res.created_at);

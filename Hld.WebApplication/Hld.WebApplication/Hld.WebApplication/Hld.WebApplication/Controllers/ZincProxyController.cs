@@ -99,6 +99,7 @@ namespace Hld.WebApplication.Controllers
         {
             ProxeyResponseViewModel item = new ProxeyResponseViewModel();
             int statusCode = 0;
+            string Email = "";
             ZincProxySendViewModal proxySendViewModal = new ZincProxySendViewModal();
             string token = Request.Cookies["Token"];
             var ProxyDetail = _zincApiAccess.ZincProxyForZinc(ApiURL, token, email);
@@ -136,6 +137,11 @@ namespace Hld.WebApplication.Controllers
                 item = JsonConvert.DeserializeObject<ProxeyResponseViewModel>(response);
                 item.auth_password = item.auth_password.Trim().Substring(item.auth_password.Length - 4);
                 statusCode = 1;
+                Email = email;
+                
+                _zincApiAccess.UpdateZincPorxyStatus(ApiURL, token, statusCode , Email);
+                
+
             }
             catch (Exception)
             {
