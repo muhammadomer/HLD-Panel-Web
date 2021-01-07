@@ -154,12 +154,12 @@ namespace Hld.WebApplication.Helper
             return status;
         }
 
-        public GetZincProxyViewModel ZincProxyForZinc(string ApiURL, string token)
+        public GetZincProxyViewModel ZincProxyForZinc(string ApiURL, string token,string email)
         {
             GetZincProxyViewModel listmodel = new GetZincProxyViewModel();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincProxy/GetForZinc");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincProxy/GetForZinc?email=" + email);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";

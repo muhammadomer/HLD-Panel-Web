@@ -95,13 +95,13 @@ namespace Hld.WebApplication.Controllers
             return 0;
         }
 
-        public ProxeyResponseViewModel CheckProxy()
+        public ProxeyResponseViewModel CheckProxy(string email)
         {
             ProxeyResponseViewModel item = new ProxeyResponseViewModel();
             int statusCode = 0;
             ZincProxySendViewModal proxySendViewModal = new ZincProxySendViewModal();
             string token = Request.Cookies["Token"];
-            var ProxyDetail = _zincApiAccess.ZincProxyForZinc(ApiURL, token);
+            var ProxyDetail = _zincApiAccess.ZincProxyForZinc(ApiURL, token, email);
             //proxySendViewModal.email = "am_b1@homelivingdream.com";
             proxySendViewModal.email = ProxyDetail.ProxyEmail;
             proxySendViewModal.retailer = "amazon_ca";
@@ -144,13 +144,13 @@ namespace Hld.WebApplication.Controllers
             return item;
         }
 
-        public async Task<ProxeyResponseViewModel> GetResponse()
+        public async Task<ProxeyResponseViewModel> GetResponse(string email)
         {
             ProxeyResponseViewModel item = new ProxeyResponseViewModel();
 
             string token = Request.Cookies["Token"];
 
-            var ProxyDetail = _zincApiAccess.ZincProxyForZinc(ApiURL, token);
+            var ProxyDetail = _zincApiAccess.ZincProxyForZinc(ApiURL, token, email);
 
             GetChannelCredViewModel _Zinc = new GetChannelCredViewModel();
             _Zinc = encDecChannel.DecryptedData(ApiURL, token, "Zinc");

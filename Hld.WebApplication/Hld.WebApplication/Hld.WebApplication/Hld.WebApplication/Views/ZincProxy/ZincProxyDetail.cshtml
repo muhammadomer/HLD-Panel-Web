@@ -107,8 +107,8 @@
         <div class="col-md-8">
 
             <button href="" style="cursor:pointer; color:dodgerblue;" class="btn "><a class="" asp-action="Index" asp-controller="ZincProxy">Back</a></button>
-            <button style="cursor:pointer; color:dodgerblue;" class="btn ConfigureAPI">Configure Proxy</button>
-            <button style="cursor:pointer; color:dodgerblue;" class="btn GetResponse">Get Configuration Detail</button>
+            @*<button style="cursor:pointer; color:dodgerblue;" class="btn ConfigureAPI">Configure Proxy</button>
+            <button style="cursor:pointer; color:dodgerblue;" class="btn GetResponse">Get Configuration Detail</button>*@
         </div>
     </div>
 
@@ -135,6 +135,9 @@
                 <th>Last Updated On</th>
                 <th>Active</th>
                 <th>Default</th>
+                <th>Configure Proxy</th>
+                <th>Get Proxy Configuration</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -145,6 +148,8 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ProxyUser)
                         <input style='display:none' class='form-control idZincProxy' value="@item.idZincProxy">
+                        <input type="text" class="getProxyEmail" style="display:none" name="ProxyEmail" value="@item.ProxyEmail" />
+                       @* <input type="text" class="getProxyEmail" style="display:none" name="ProxyEmail" value="@item.ProxyEmail" />*@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ProxyEmail)
@@ -188,6 +193,15 @@
                             <input type="checkbox" class="custom-control-input" checked="@item.IsDefault" id="@item.IsDefault" style="display: inline-block!important">
                             <label class="custom-control-label" for="@item.IsDefault"></label>
                         </span>
+
+                    </td>
+                    <td>
+                        <button style="cursor:pointer; color:dodgerblue;" class="btn ConfigureAPI">Configure Proxy</button>
+                    </td>
+                    <td>
+                        <button style="cursor:pointer; color:dodgerblue;" class="btn GetResponse">Get Configuration Detail</button>
+                    </td>
+                    <td>
 
                     </td>
                     <td>
@@ -385,15 +399,17 @@
             });
 
             $(document).on("click", ".ConfigureAPI", function () {
-
+                var selectedRow = $(this);
+                var ProxyEmail = $(selectedRow).parents('tr').find('.getProxyEmail').val();
+                console.log("My Value",ProxyEmail);
                 $("#dialog-boxConfig").dialog({
                     buttons: {
                         "Confirm": function () {
                             $(".loader").show();
                             $.ajax({
                                 type: 'POST',
-                                url: '../ZincProxy/CheckProxy',
-                                data: {},
+                                url: '../ZincProxy/CheckProxy?email=' + ProxyEmail,
+                               // data: {},
                                 success: function (res) {
                                     $(".loader").hide();
                                     $("#dialog-boxConfig").dialog("close");
@@ -436,6 +452,9 @@
 
             $(document).on("click", ".GetResponse", function () {
                 $(".loader").show();
+                var selectedRow = $(this);
+                var ProxyEmail = $(selectedRow).parents('tr').find('.getProxyEmail').val();
+                console.log("My Value", ProxyEmail);
                 $.ajax({
                     type: 'POST',
                     url: '../ZincProxy/GetResponse',
