@@ -18,6 +18,7 @@ namespace Hld.WebApplication.ViewModel
         public int handlingday_min { get; set; }
         public int handlingday_max { get; set; }
         public bool item_prime_badge { get; set; }
+        public bool item_fba_badge { get; set; }
         public int delivery_days_max { get; set; }
         public int delivery_days_min { get; set; }
         public string item_condition { get; set; }

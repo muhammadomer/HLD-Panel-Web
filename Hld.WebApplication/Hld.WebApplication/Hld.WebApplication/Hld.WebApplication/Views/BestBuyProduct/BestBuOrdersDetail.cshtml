@@ -715,6 +715,11 @@
 
 
         $(document).ready(function () {
+            $(document).on('click', 'html', function (event) {
+                $(".SalesQtytooltipdata").hide();
+               
+            });
+           
             $(document).on('click', '.GetSalesQtytooltipdata', function () {
                 var row = $(this).closest("tr");
                 

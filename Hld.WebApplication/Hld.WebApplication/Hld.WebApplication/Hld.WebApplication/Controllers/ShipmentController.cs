@@ -592,6 +592,7 @@ namespace Hld.WebApplication.Controllers
                     TrakingNumber = s.TrakingNumber,
                     TrakingURL = s.TrakingURL,
                     CourierCode = s.CourierCode,
+                    ExpectedDelivery = s.ExpectedDelivery,
 
                 }).Distinct().ToList();
             foreach (var item in list)

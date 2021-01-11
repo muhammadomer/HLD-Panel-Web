@@ -239,11 +239,22 @@
             if ($KeyShow.prop('type') == 'password') {
                 $KeyShow.prop('type', 'text');
 
-                var Show = $('#KeyShow').val();
+                //var Show = $('#KeyShow').val();
                
-                var astrictextkey = (Show.replace(Show.substring(5, 15), "*************"));
+                //var astrictextkey = (Show.replace(Show.substring(5, 15), "*************"));
                 
-                $('#KeyShow').val(astrictextkey)
+                //$('#KeyShow').val(astrictextkey)
+
+                var mainkey = $('#KeyShow').val();
+                key = mainkey.slice(-4),
+                    countNum = '';
+
+                for (var i = (mainkey.length) - 4; i > 0; i--) {
+                    countNum += '*';
+                }
+
+                $('#KeyShow').val(countNum + key)
+                
               
             } else {
                 $KeyShow.prop('type','password');              
@@ -258,9 +269,19 @@
 
             if ($KeyShow.prop('type') == 'password') {
                 $KeyShow.prop('type', 'text');
+
+                //var Showpassowrd = $('#PasswordShow').val();
+                //var astricShowpassowrd = (Showpassowrd.replace(Showpassowrd.substring(5, 15), "*************"));
+                //$('#PasswordShow').val(astricShowpassowrd)
                 var Showpassowrd = $('#PasswordShow').val();
-                var astricShowpassowrd = (Showpassowrd.replace(Showpassowrd.substring(5, 15), "*************"));
-                $('#PasswordShow').val(astricShowpassowrd)
+                passwprd = Showpassowrd.slice(-4),
+                    countNum = '';
+
+                for (var i = (Showpassowrd.length) - 4; i > 0; i--) {
+                    countNum += '*';
+                }
+                $('#PasswordShow').val(countNum + passwprd)
+
             } else {
                 $KeyShow.prop('type', 'password');
 
