@@ -1345,7 +1345,7 @@ setInterval('location.reload()', 5000);
                         $(this).find('.selectRow').attr('disabled', false);
                         $(this).find('.selectVendor').prop('checked', false);
                         if ($(this).find('.selectRow').is(':checked')) {
-                            $(this).find('.selectVendor[value=' + selectedVendor + ']').prop('checked', true);
+                            $(this).find('.selectVendor[value="' + selectedVendor + '"]').prop('checked', true);
                         }
                     }
                 });

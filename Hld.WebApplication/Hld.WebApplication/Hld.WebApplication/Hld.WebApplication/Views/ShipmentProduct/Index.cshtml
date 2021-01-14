@@ -91,6 +91,11 @@
         border-right: #ccc 1px solid !important;
         border-bottom: #ccc 1px solid !important;
     }
+    .btnclass {
+        padding-top: 0px !important;
+        height: 23px !important;
+        box-shadow: none !important;
+    }
 </style>
 
 <div class="container-fluid">
@@ -240,6 +245,8 @@
 
                             <input type='text' class='form-control sku' placeholder='Scan SKU or type/paste then press Enter Key' value='@item.SKU' readonly type='search'>
                             <p class="producttitle">@item.Title</p>
+                            <span><button type='button' class="btn btn-sm btn-primary btnsubmittogetskutitleimg" style="display:none;float:right">Submit</button></span>
+
                         </td>
                         <td><select class='form-control PO' disabled style='padding:0px;'><option value='0'>@item.POId&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.OpenQty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.BalanceQty</option> </select></td>
                         <td>
@@ -290,7 +297,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script>
+<script>
     $(document).ready(function () {
 
         $("#srearchBox").click(function () {
@@ -396,7 +403,8 @@
                 $(row).find('.shipedqty').prop('readonly', false);
                 //$(row).find('select').attr('disabled', false);
                 $(row).find('.editproduct').hide();
-                $(row).find('.addproduct').show();
+            $(row).find('.addproduct').show();
+            $(row).find('.btnsubmittogetskutitleimg').hide();
             });
 
         function AddMarkup() {
@@ -405,7 +413,8 @@
                 "<td><input type='checkbox' class='checkbx' name='record'><input type='text'class='form-control productId'  style='display:none' value='0'></td>" +
                 "<td><div class='productimage'></div></td>" +
                 "<td><input type='text'class='form-control sku' placeholder='Scan SKU or type/paste then press Enter Key'  value=''>" +
-                "<p class='producttitle'></p></td>" +
+                "<p class='producttitle'></p>" +
+            "<span><button type='button' class='btn btn-sm btn-primary btnsubmittogetskutitleimg btnclass' style='display:none;float:right'> Submit</button></span > " +"</td>" +
                 "<td><select class='form-control PO' style='padding:0px;'><option value=''>select</option> </select></td>" +
                 "<td><input type='text'class='form-control shipedqty' value=''>" +
                 "<label class='qtyerr' style='color: red; display: none'></label></td>" +
@@ -506,7 +515,53 @@
                        $(this).val(skuValue);
                 }
             });
+        //change
 
+        $(document).on('click','.btnsubmittogetskutitleimg', function (event) {
+                //var item = $(this).parents('tr');
+                var selectedrow = $(this).parents('tr');
+                //var item = $(this);
+                var item = $(selectedrow).find('.sku');
+                console.log("my item", item)
+                var skuValue = item.val().trim();
+                    if (item.val() == "")
+                        return;
+                    $.ajax({
+                        type: 'GET',
+                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + skuValue,
+                        contentType: 'application/json',
+                        success: function (res) {
+                            $(item).parents('tr').find('.PO').empty();
+                            var content = '';
+                            $.each(res, function (index, value) {
+                                content = content + '<option value = "' + value.POId + '">' + value.POId + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.OpenQty + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.BalanceQty + '</option>';
+                            });
+                            debugger;
+                            $(item).parents('tr').find('.PO').append(content);
+                            console.log("Response", res);
+                            $(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        url: "/Product/GetProductDetailsForAPBySku",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: skuValue },
+                        success: function (data, ui) {
+                            console.log("SKUProfile", data);
+                            $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
+                                '<img src="@ViewBag.S3BucketURL/' + data.Compress_image + '" class="rounded" height="50" width="50" /></a>');
+                            $(item).parents('tr').find(".producttitle").text(data.Title);
+                            debugger;
+                        }
+                    });
+                       $(item).val(skuValue);
+                
+            });
+
+        
         function skuChange(event, ui) {
             var item = $(this);
             var values = item.val();
@@ -542,13 +597,60 @@
                     }
                 });
         }
+
+        $(document).on("change", ".sku", function () {
+
+            var selectedrow = $(this).parents('tr');
+
+            $('.btnsubmittogetskutitleimg').hide();
+            $(selectedrow).find('.btnsubmittogetskutitleimg').show();
+        });
             var count = 0;
+
 
         $(".add-row").click(function () {
 
                 count++;
                 if (count < 2) {
                     AddMarkup()
+                    $('.sku').blur(function () {
+                        if ($(this).val()) {
+                            //$(this).addClass("error");
+                            var selectedrow = $(this).parents('tr');
+                            $('.btnsubmittogetskutitleimg').hide();
+                            $(selectedrow).find('.btnsubmittogetskutitleimg').show();
+
+                        } else {
+                            $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
+                            //$(this).removeClass("error");
+                        }
+                    });
+                    $('.sku').keyup(function () {
+                        if ($(this).val()) {
+                            var selectedrow = $(this).parents('tr');
+                            //$(this).addClass("error");
+                            $('.btnsubmittogetskutitleimg').hide();
+                            $(selectedrow).find('.btnsubmittogetskutitleimg').show();
+
+
+                        } else {
+                            $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
+                            //$(this).removeClass("error");
+                        }
+                    });
+                    $('.sku').keypress(function () {
+                        if ($(this).val()) {
+                            var selectedrow = $(this).parents('tr');
+                            //$(this).addClass("error");
+                            $('.btnsubmittogetskutitleimg').hide();
+                            $(selectedrow).find('.btnsubmittogetskutitleimg').show();
+
+
+                        } else {
+                            $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
+                            //$(this).removeClass("error");
+                        }
+                    });
                 }
                 var tbody_tr_last = $('table>tbody>tr:last');
                 var A = tbody_tr_last.find(".sku").val();
@@ -737,7 +839,7 @@
         $("#dialog-box").dialog("open");
     });
 
-    </script>
+</script>
 
 }
 
