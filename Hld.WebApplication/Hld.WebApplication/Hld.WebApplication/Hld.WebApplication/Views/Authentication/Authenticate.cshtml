@@ -94,6 +94,7 @@
     <h6>HLD Control Panel</h6>
     @*<img class="logo" src="~/Images/logo.png" />*@
     <p class="signintext">Sign-In Your Account</p>
+    @*@Model.Checkboxstatus*@
     <form asp-action="Authenticate" class="form-horizontal" id="my-form">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group row">
@@ -129,7 +130,8 @@
             </div>
         </div>
         <p>
-            <input type="checkbox" style="margin-right: 5px;
+            @*<input type="checkbox" asp-for="Checkboxstatus" class="selectedcheckbox" data-email="Email" style="margin-right: 5px;vertical-align: middle*@<!--"/>-->
+            <input type="checkbox" asp-for="Checkboxstatus" name="Checkboxstatus" class="selectedcheckbox" style="margin-right: 5px;
     vertical-align: middle;" id="rememberMe" />Keep me signed in
         </p>
         <div class="form-group col-sm-">
@@ -145,6 +147,7 @@
         User Name or Password is incorrent
     </div>
 }
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -154,8 +157,58 @@
     <script>
         $(document).ready(function () {
 
-         
+            $(document).on("change", ".selectedcheckbox", function () {
+                if ($(this).attr('type') === 'checkbox') {
+                    checkboxstatus = $(this).is(':checked') ? true : false;                    
+                    var email = $("#loginEmail").val();
+                    var password=$("#input-password").val();
+                }
+                else {
+                    checkboxstatus = $(this).val();
+                    email = $(this).val();
+                    password = $(this).val();
+                }
+                //console.log(Checkboxstatus);
+                console.log(email);
+                console.log(password);
+               
+                $.ajax({
+                    type:'Put',
+                    url:'/Authentication/SaveCheckboxstatus',
+                    data: { Email: email,Checkboxstatus: checkboxstatus},
+                    //success:function(res) {
+                    //    console.log("get responce", res)
+                       
+                    //}
 
+                });
+            });
+            $(document).on("change", "#loginEmail", function () {
+                if ($(".selectedcheckbox").attr('type') === 'checkbox') {
+                    checkboxstatus = $(".selectedcheckbox").is(':checked') ? true : false;
+                    var email = $("#loginEmail").val();
+                    var password = $("#input-password").val();
+                }
+                else {
+                    checkboxstatus = $(this).val();
+                    email = $(this).val();
+                    password = $(this).val();
+                }
+                //console.log(Checkboxstatus);
+                console.log(email);
+                console.log(password);
+
+                $.ajax({
+                    type: 'Put',
+                    url: '/Authentication/SaveCheckboxstatus',
+                    data: { Email: email, Checkboxstatus: checkboxstatus },
+                    //success:function(res) {
+                    //    console.log("get responce", res)
+
+                    //}
+
+                });
+            });
             $('#view-password').click(function () {
                 $password = $('#input-password');
                 if ($password.prop('type') == 'password') {
@@ -198,9 +251,18 @@
 
 
             });
+            $('#loginEmail').change(function () {
+                if (!$("#rememberMe").is(":checked")) {
+                    localStorage.clear();
+                } else {
+                    localStorage.setItem("Email", $("#loginEmail").val());
+                    localStorage.setItem("Password", $("#input-password").val());
+                    localStorage.setItem("remembercheck", $("#rememberMe").val());
+
+                }
+
+
+            });
         })
-
-
-
     </script>
 }

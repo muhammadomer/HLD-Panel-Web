@@ -558,10 +558,53 @@
                         }
                     });
                        $(item).val(skuValue);
-                
+
+            });
+        $(document).on('mouseleave','.sku', function (event) {
+                //var item = $(this).parents('tr');
+                var selectedrow = $(this).parents('tr');
+                var item = $(this);
+                //var item = $(selectedrow).find('.sku');
+                console.log("my item", item)
+                var skuValue = item.val().trim();
+                    if (item.val() == "")
+                        return;
+                    $.ajax({
+                        type: 'GET',
+                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + skuValue,
+                        contentType: 'application/json',
+                        success: function (res) {
+                            $(item).parents('tr').find('.PO').empty();
+                            var content = '';
+                            $.each(res, function (index, value) {
+                                content = content + '<option value = "' + value.POId + '">' + value.POId + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.OpenQty + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.BalanceQty + '</option>';
+                            });
+                            debugger;
+                            $(item).parents('tr').find('.PO').append(content);
+                            console.log("Response", res);
+                            $(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        url: "/Product/GetProductDetailsForAPBySku",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: skuValue },
+                        success: function (data, ui) {
+                            console.log("SKUProfile", data);
+                            $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
+                                '<img src="@ViewBag.S3BucketURL/' + data.Compress_image + '" class="rounded" height="50" width="50" /></a>');
+                            $(item).parents('tr').find(".producttitle").text(data.Title);
+                            debugger;
+                        }
+                    });
+                       $(this).val(skuValue);
+
             });
 
-        
+
         function skuChange(event, ui) {
             var item = $(this);
             var values = item.val();

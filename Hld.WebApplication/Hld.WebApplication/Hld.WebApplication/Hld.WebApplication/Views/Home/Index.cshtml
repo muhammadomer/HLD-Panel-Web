@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
 }
@@ -34,8 +35,8 @@
     <h1 class="mr-3 pr-3 align-top border-right inline-block align-content-center">Login with HLD.</h1>
     <div class="inline-block align-middle">
         <h2 class="font-weight-normal lead" id="desc">
-            <a asp-action="Authenticate" asp-controller="Authentication" id="loginpage" style="cursor:pointer">Login</a>
-           
+            <a @*asp-action="Authenticate" asp-controller="Authentication"*@ id="loginpage" style="cursor:pointer!important;color:cornflowerblue">Login</a>
+
         </h2>
     </div>
 </div>
@@ -47,73 +48,75 @@
     <script>
         $(document).ready(function () {
             $(".loadertbl").hide();
-           
+          
+            $("#loginpage").click(function () {
 
-            //$("#loginpage").click(function () {
-            //    //$(".ButtonLoader1").show();
-            //    $(".loadertbl").show();
-            //    if (localStorage.getItem('remembercheck')) {
-            //        var email = localStorage.getItem('Email');
-            //        var passwrd = localStorage.getItem('Password');
-            //        $("#loginEmail").val(email);
-            //        $("#input-password").val(passwrd);
+                $(".loadertbl").show();
 
-            //        $("#rememberMe").prop('checked', true);
-            //        //location.href = '../hldhistory/dashboard?email=' + email + 'password=' + passwrd;
-                    
-            //        $.ajax({
-            //            type: "POST",
-            //            url: '../authentication/save?Email=' + email + '&Password=' + encodeURIComponent(passwrd),
+                $.ajax({
+                    type: 'get',
+                    url: '../authentication/getcheckboxstatus',
+                    data: {},
+                    success: function (res) {
+                        $(".loadertbl").hide();
+                        $.each(res, function (index, value) {
+                            var email = localStorage.getItem('Email');
+                            if (email && value.Checkboxstatus == true) {
+                                $.ajax({
+                                    async: false,
+                                    type: "POST",
+                                    url: '../Authentications/save?Email=' + email + '',
+                                    contentType: "application/json; charset=utf-8",
+                                    datatype: "JSON",
+                                    success: function (response) {
+                                       
+                                        console.log("get responce", response);
+                                        if (response == "Vendor") {
+                                            window.event.returnValue = false;
+                                            document.location.href = "/PurchaseOrder/PurchaseOrders";
+                                        }
+                                        if (response == "Receiver") {
+                                            window.event.returnValue = false;
+                                            document.location.href = "/Shipment/Create";
+                                        }
+                                        if (response == "Admin") {
+                                            window.event.returnValue = false;
+                                            document.location.href = "/HLDHistory/DashBoard";
+                                        }
+                                        $(".loadertbl").hide();
+                                        
 
-            //            //dataType: "html",
-            //            datatype: "JSON",
-            //            success: function (response) {
-            //                console.log("get responce", response);
-            //                //$(".ButtonLoader1").hide();
-            //                $(".loadertbl").hide();
-            //                //location.href = '../HLDHistory/DashBoard';
-                            
-            //                //location.href ='.../HLDHistory/DashBoard';
-            //                ////var w = window.open('about:blank');
-            //                ////var w = window.open('.../HLDHistory/DashBoard');
-            //                //var w = window.open('https://localhost:44386/HLDHistory/DashBoard');
-            //                //w.document.open();
-            //                //w.document.write(response);
-            //                //w.document.close();
-            //            },
-            //            failure: function (response) {
-            //                alert(response.responseText);
-            //            },
-            //            error: function (response) {
-            //                alert(response.responseText);
-            //            }
-            //        });
+                                    },
 
-            //        //location.href = '../authentication/save?email=' + email + '&password=' + passwrd;
+                                });
+                            }
+                           
+                            else {
+                                //location.href = '../Authentication/save';
+                            }
+                        });
+                    }
+                });
+            });
 
-            //    }
-            //    else {
-            //        location.href = '../authentication/save';
-            //    }
+
+
+
+            //$('#my-form').on('submit', function () {
+
             //});
+            //$('#rememberMe').click(function () {
+            //    if (!$("#rememberMe").is(":checked")) {
+            //        localStorage.clear();
+            //    } else {
+            //        localStorage.setItem("Email", $("#loginEmail").val());
+            //        localStorage.setItem("Password", $("#input-password").val());
+            //        localStorage.setItem("remembercheck", $("#rememberMe").val());
+
+            //    }
 
 
-
-            $('#my-form').on('submit', function () {
-
-            });
-            $('#rememberMe').click(function () {
-                if (!$("#rememberMe").is(":checked")) {
-                    localStorage.clear();
-                } else {
-                    localStorage.setItem("Email", $("#loginEmail").val());
-                    localStorage.setItem("Password", $("#input-password").val());
-                    localStorage.setItem("remembercheck", $("#rememberMe").val());
-
-                }
-
-
-            });
+            //});
         });
     </script>
 }

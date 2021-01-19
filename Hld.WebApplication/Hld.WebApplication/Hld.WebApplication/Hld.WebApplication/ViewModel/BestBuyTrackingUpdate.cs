@@ -15,7 +15,8 @@ namespace Hld.WebApplication.ViewModel
         public string shippingServiceCode { get; set; }
         public string trackingNumber { get; set; }
         public string EmptyFirstTime { get; set; }
-      //  public string BBStatus { get; set; }
+        public string BBStatus { get; set; }
+        public int inBestbuy { get; set; }
         public double TotalCount { get; set; }
     }
 }

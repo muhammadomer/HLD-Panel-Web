@@ -60,18 +60,18 @@
                     <th>SC Order ID</th>
                     <th>BB Order ID</th>
                     <th>
-                      Tracking Number
+                        Tracking Number
                     </th>
-                    @*<th>
-                        BBStatus
-                    </th>*@
+
                     <th>
                         Shiping Service Code
                     </th>
                     <th>
                         Ship Date
                     </th>
-
+                    <th>
+            BBStatus
+        </th>
                 </tr>
             </thead>
             <tbody>
@@ -99,10 +99,22 @@
                     <td>
                         @if (@item.shipDate != DateTime.MinValue)
                         {
-                    @string.Format("{0: MMM d, yyyy}", @item.shipDate)}
+                    @string.Format("{0: MMM d, yyyy HH:mm:ss}", @item.shipDate)}
                         
                     </td>
+                    <td>
+                        @{ 
+                            if (item.inBestbuy == 1)
+                            {
+                                                <span>Update</span>
+                            }
+                            else
+                            {<span>Pending</span>
 
+                            }
+                        }
+
+                    </td>
                 </tr>
                 }
             </tbody>

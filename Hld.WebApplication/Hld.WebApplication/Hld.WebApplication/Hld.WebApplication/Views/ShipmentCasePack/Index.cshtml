@@ -870,9 +870,9 @@ keyboard: false
             //my code
 
             $(document).on('click', '.btnsubmittogetskutitle', function (event) {
-               
+
                var selectedrow = $(this).parents('tr');
-             
+
                     //var item = $(this);
                     var item = $(selectedrow).find('.sku');
                     console.log("my item", item)
@@ -959,11 +959,104 @@ keyboard: false
                         }
                     });
                     $(item).val(skuValue);
-                
-          
+
+
 
                 });
+            $(document).on('mouseleave','.sku', function (event) {
+               
+               var selectedrow = $(this).parents('tr');
 
+                    var item = $(this);
+                    //var item = $(selectedrow).find('.sku');
+                    console.log("my item", item)
+                var skuValue = item.val().trim();
+                    console.log("my skuValue", skuValue)
+                    if (skuValue == "")
+                        return;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '../ShipmentCasePack/GetTemplate?SKU=' + skuValue,
+                        contentType: 'application/json',
+                        success: function (res) {
+                            var casepackId = res.CasePackId;
+                            var qtyperbox = res.QtyPerBox;
+                            var width = res.Width;
+                            var height = res.Height;
+                            var length = res.Length;
+                            var weight = res.Weight;
+                            //var totalweigth = weight * boxes;
+                            if (width > 0) {
+                                 $(selectedrow).find('.submit').prop('disabled', false);
+                                $(item).parents('tr').find('.widthinch').val((width * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.heightinch').val((height * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.lengthinch').val((length * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.weightlbs').val((weight * 2.20462).toFixed(2));
+                                //$(item).parents('tr').find('.po').val((totalweigth * 2.20462).toFixed(2));
+                                $(item).parents('tr').find('.widthcm').val((width).toFixed(2));
+                                $(item).parents('tr').find('.heightcm').val((height).toFixed(2));
+                                $(item).parents('tr').find('.lengthcm').val((length).toFixed(2));
+                                $(item).parents('tr').find('.weightkg').val((weight).toFixed(2));
+
+                                $(item).parents('tr').find('.qtybox').val((qtyperbox));
+                                $(item).parents('tr').find('.casepack').val((casepackId));
+                            }
+                            else {
+
+                                $(selectedrow).find('.submit').prop('disabled', true);
+                                $("#myModalerror").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+
+                                });
+                                //$.notify('Please Add CasePack for This SKU', { globalPosition: 'bottom right', className: 'success myclass' });
+
+                            }
+
+                            //$(item).parents('tr').find('.po').append(content);
+                            //console.log("Response", res);
+                            //$(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + skuValue,
+                        contentType: 'application/json',
+                        success: function (res) {
+                            $(item).parents('tr').find('.po').empty();
+                            var content = '';
+                            $.each(res, function (index, value) {
+                                content = content + '<option value = "' + value.POId + '">' + value.POId + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.OpenQty + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.BalanceQty + '</option>';
+                            });
+                            debugger;
+                            $(item).parents('tr').find('.po').append(content);
+                            //console.log("Response", res);
+                            //$(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        url: "/Product/GetProductDetailsForAPBySku",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: skuValue },
+                        success: function (data, ui) {
+                            console.log("SKUProfile", data);
+                            $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
+                                '<img src="@ViewBag.S3BucketURL/' + data.Compress_image + '" class="rounded" height="50" width="50" /></a>');
+                            $(item).parents('tr').find(".producttitle").text(data.Title);
+                            debugger;
+                        }
+                    });
+                    $(this).val(skuValue);
+
+
+
+                });
             //
             //$(document).on("focus", ".widthinch", function () {
             //    $(this).closest('tr').find(".widthcm").focus();
@@ -1034,9 +1127,9 @@ keyboard: false
 
 
             $(document).on("change", ".sku", function () {
-                
+
                     var selectedrow = $(this).parents('tr');
-                   
+
                     $('.btnsubmittogetskutitle').hide();
                     $(selectedrow).find('.btnsubmittogetskutitle').show();
             });
@@ -1052,7 +1145,7 @@ keyboard: false
                 if (count < 2) {
                     AddMarkup();
                     $('.sku').focus();
-                   
+
                     //keypressfunction();
                     $('.sku').blur(function () {
                         if ($(this).val()) {
@@ -1060,7 +1153,7 @@ keyboard: false
                             var selectedrow = $(this).parents('tr');
                             $('.btnsubmittogetskutitle').hide();
                             $(selectedrow).find('.btnsubmittogetskutitle').show();
-                           
+
                         } else {
                             $(selectedrow).find('.btnsubmittogetskutitle').hide();
                             //$(this).removeClass("error");
@@ -1072,14 +1165,14 @@ keyboard: false
                             //$(this).addClass("error");
                             $('.btnsubmittogetskutitle').hide();
                             $(selectedrow).find('.btnsubmittogetskutitle').show();
-                            
-                            
+
+
                         } else {
                             $(selectedrow).find('.btnsubmittogetskutitle').hide();
                             //$(this).removeClass("error");
                         }
                     });
-               
+
 
                 }
                 debugger
@@ -1136,10 +1229,10 @@ keyboard: false
             });
 
             $(document).on("click", ".submit", function () {
-                
+
                 var selectedRow = $(this).parents('tr');
                 $(selectedRow).parents('tr').next().find(".sku").focus();
-                
+
                 var data =
                 {
                     SKU: $(selectedRow).find('.sku').val(),
@@ -1172,7 +1265,7 @@ keyboard: false
                                 $(selectedRow).find('select').attr('disabled', true);
                                 $(selectedRow).find('.edit').show();
                                 $(selectedRow).find('.submit').hide();
-                               
+
                                 //$(selectedRow).find('.btnsubmittogetskutitle').show();
                                 if (editable == false) {
                                     AddMarkup();

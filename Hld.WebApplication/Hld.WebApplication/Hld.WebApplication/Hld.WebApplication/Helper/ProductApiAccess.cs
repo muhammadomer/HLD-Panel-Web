@@ -1,4 +1,5 @@
 ﻿using DataAccess.ViewModels;
+using Hld.WebApplication.Models;
 using Hld.WebApplication.ViewModel;
 using Hld.WebApplication.Views.Product;
 using Newtonsoft.Json;
@@ -2362,6 +2363,64 @@ namespace Hld.WebApplication.Helper
 
             }
             return status;
+        }
+
+        public bool SaveCheckboxstatus(string ApiURL, string Email, bool Checkboxstatus)
+        {
+            bool status = false;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Configuration/" + Email + "/"+Checkboxstatus);
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                //request.Headers["Authorization"] = "Bearer " + token;
+
+
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return status;
+        }
+
+        public List<Login> GetCheckboxstatus(string ApiURL)
+        {
+            List<Login> listmodel = new List<Login>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Configuration/GetCheckboxstatus");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                //request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                listmodel = JsonConvert.DeserializeObject<List<Login>>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return listmodel;
         }
     }
 }
