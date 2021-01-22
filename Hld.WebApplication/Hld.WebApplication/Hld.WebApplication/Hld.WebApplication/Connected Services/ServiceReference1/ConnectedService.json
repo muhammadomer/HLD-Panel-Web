@@ -1,6 +1,6 @@
 ﻿{
   "ProviderId": "Microsoft.VisualStudio.ConnectedService.Wcf",
-  "Version": "15.0.31022.994",
+  "Version": "15.0.40203.910",
   "ExtendedData": {
     "Uri": "http://lp.ws.sellercloud.com/scservice.asmx?WSDL",
     "Namespace": "ServiceReference1",

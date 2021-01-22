@@ -606,9 +606,6 @@ namespace Hld.WebApplication.Controllers
                 //item.ReceivedQty = _viewModel.Where(s => s.SKU == item.SKU && s.POId == item.POId).Sum(s => s.ReceivedQty);
                 item.POs = POs;
             }
-
-
-
             data = new StaticPagedList<ShipmentHistoryViewModel>(list, pageNumber, pageSize, list.Count);
             ViewBag.POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
             ViewBag.S3BucketURL = s3BucketURL;

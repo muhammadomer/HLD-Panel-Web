@@ -920,7 +920,7 @@ namespace Hld.WebApplication.Controllers
                     ServiceReference1.SCServiceSoapClient sCServiceSoap =
                                            new ServiceReference1.SCServiceSoapClient(ServiceReference1.SCServiceSoapClient.EndpointConfiguration.SCServiceSoap12);
 
-                    var request = await sCServiceSoap.UpdateOrderDropShipStatusAsync(authHeader, null, orderid, DropShipStatusType.Requested);
+                    var request = await sCServiceSoap.UpdateOrderDropShipStatusAsync(authHeader, null, orderid, DropShipStatusType2.Requested);
                     bool response = request.UpdateOrderDropShipStatusResult;
                     status = response;
                 }
@@ -929,7 +929,7 @@ namespace Hld.WebApplication.Controllers
                     ServiceReference1.SCServiceSoapClient sCServiceSoap =
                                            new ServiceReference1.SCServiceSoapClient(ServiceReference1.SCServiceSoapClient.EndpointConfiguration.SCServiceSoap12);
 
-                    var request = await sCServiceSoap.UpdateOrderDropShipStatusAsync(authHeader, null, orderid, DropShipStatusType.None);
+                    var request = await sCServiceSoap.UpdateOrderDropShipStatusAsync(authHeader, null, orderid, DropShipStatusType2.None);
                     bool response = request.UpdateOrderDropShipStatusResult;
                     status = response;
                 }
