@@ -432,5 +432,123 @@ namespace Hld.WebApplication.Helper
             }
             return Status;
         }
+
+     
+        public bool SaveBBtrackingCodes(string ApiURL, string token, BBtrackingCodesViewModel ViewModel)
+        {
+            bool status = false;
+            try
+            {
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/BBtrackingCodes");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return status;
+        }
+
+        public List<BBtrackingCodesViewModel> BBtrackingCodesList(string ApiURL, string token)
+        {
+            List<BBtrackingCodesViewModel> listmodel = new List<BBtrackingCodesViewModel>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/GetBBtrackingCodesList/");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                listmodel = JsonConvert.DeserializeObject<List<BBtrackingCodesViewModel>>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return listmodel;
+        }
+        public BBtrackingCodesViewModel EditBBtrackingCodesById(string ApiURL, string token, int id)
+        {
+            BBtrackingCodesViewModel ViewModel = new BBtrackingCodesViewModel();
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/" + id);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewModel = JsonConvert.DeserializeObject<BBtrackingCodesViewModel>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return ViewModel;
+        }
+        public int GetTrackingNumberCount(string ApiURL, string token)
+        {
+            int Count = 0;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/GetTrackingNumberCount");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                var response = (HttpWebResponse)request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                Count = JsonConvert.DeserializeObject<int>(strResponse);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Count;
+        }
     }
 }

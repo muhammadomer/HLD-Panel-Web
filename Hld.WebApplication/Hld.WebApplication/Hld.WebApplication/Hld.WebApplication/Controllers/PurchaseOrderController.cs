@@ -398,7 +398,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPOProduct(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, int POID = 0, int VendorID = 0, string Vendor = "", string SKU = "", string title = "", string ItemType = "")
+        public IActionResult GetPOProduct(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, int POID = 0, int VendorID = 0, string Vendor = "", string SKU = "", string title = "", string EmptyFirstTime="", string ItemType = "")
         {
             string OpenItem = "";
             string ReceivedItem = "";
@@ -463,8 +463,14 @@ namespace Hld.WebApplication.Controllers
                 POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
 
             }
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
 
+            }
+            else
+            {
 
+            
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             // var list = _ApiAccess.GetPOProductsList(ApiURL, token, ID, 10, 0, POID, SKU, title, OpenItem, ReceivedItem, OrderdItem);
@@ -481,6 +487,7 @@ namespace Hld.WebApplication.Controllers
             TempData["count"] = getSummaryand.count;
             TempData["shiQty"] = getSummaryand.shiQty;
             TempData["shipedamount"] = getSummaryand.shipedamount;
+            }
             return View(viewModel);
         }
         [HttpPost]
@@ -559,7 +566,8 @@ namespace Hld.WebApplication.Controllers
             }
 
             List<PurchaseOrderItemsViewModel> _viewModel = null;
-            ViewBag.S3BucketURL = s3BucketURL;
+            
+                ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
             ViewBag.recQty = Convert.ToInt32(TempData["recQty"]);
             ViewBag.ordQty = Convert.ToInt32(TempData["ordQty"]);
@@ -571,6 +579,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.count = Convert.ToInt32(TempData["count"]);
             ViewBag.shiQty = Convert.ToInt32(TempData["shiQty"]);
             ViewBag.shipedamount = Convert.ToDecimal(TempData["shipedamount"]);
+          
             _viewModel = _ApiAccess.GetPOProductsList(ApiURL, token, CurrentDate, PreviousDate, POMasterID, startlimit, endLimit, POID, SKU, title, OpenItem, ReceivedItem, OrderdItem, NotShipped, ShippedButNotReceived);
             data = new StaticPagedList<PurchaseOrderItemsViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
             return PartialView("~/Views/PurchaseOrder/_POProductsPartialView.cshtml", data);

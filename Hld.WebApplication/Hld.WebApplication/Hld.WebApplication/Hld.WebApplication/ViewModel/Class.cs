@@ -52,6 +52,7 @@ namespace Hld.WebApplication.ViewModel
         public int ID { get; set; }
         public int idPurchaseOrdersItems { get; set; }
         public int? PurchaseID { get; set; }
+        public string EmptyFirstTime { get; set; }
         public int? VendorID { get; set; }
         public string ProductID { get; set; }
         public string ProductTitle { get; set; }

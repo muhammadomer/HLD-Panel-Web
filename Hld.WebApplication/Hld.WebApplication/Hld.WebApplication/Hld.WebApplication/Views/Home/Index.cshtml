@@ -49,55 +49,55 @@
         $(document).ready(function () {
             $(".loadertbl").hide();
           
-            $("#loginpage").click(function () {
+            //$("#loginpage").click(function () {
 
-                $(".loadertbl").show();
+            //    $(".loadertbl").show();
 
-                $.ajax({
-                    type: 'get',
-                    url: '../authentication/getcheckboxstatus',
-                    data: {},
-                    success: function (res) {
-                        $(".loadertbl").hide();
-                        $.each(res, function (index, value) {
-                            var email = localStorage.getItem('Email');
-                            if (email && value.Checkboxstatus == true) {
-                                $.ajax({
-                                    async: false,
-                                    type: "POST",
-                                    url: '../Authentications/save?Email=' + email + '',
-                                    contentType: "application/json; charset=utf-8",
-                                    datatype: "JSON",
-                                    success: function (response) {
+            //    $.ajax({
+            //        type: 'get',
+            //        url: '../authentication/getcheckboxstatus',
+            //        data: {},
+            //        success: function (res) {
+            //            $(".loadertbl").hide();
+            //            $.each(res, function (index, value) {
+            //                var email = localStorage.getItem('Email');
+            //                if (email && value.Checkboxstatus == true) {
+            //                    $.ajax({
+            //                        async: false,
+            //                        type: "POST",
+            //                        url: '../Authentications/save?Email=' + email + '',
+            //                        contentType: "application/json; charset=utf-8",
+            //                        datatype: "JSON",
+            //                        success: function (response) {
                                        
-                                        console.log("get responce", response);
-                                        if (response == "Vendor") {
-                                            window.event.returnValue = false;
-                                            document.location.href = "/PurchaseOrder/PurchaseOrders";
-                                        }
-                                        if (response == "Receiver") {
-                                            window.event.returnValue = false;
-                                            document.location.href = "/Shipment/Create";
-                                        }
-                                        if (response == "Admin") {
-                                            window.event.returnValue = false;
-                                            document.location.href = "/HLDHistory/DashBoard";
-                                        }
-                                        $(".loadertbl").hide();
+            //                            console.log("get responce", response);
+            //                            if (response == "Vendor") {
+            //                                window.event.returnValue = false;
+            //                                document.location.href = "/PurchaseOrder/PurchaseOrders";
+            //                            }
+            //                            if (response == "Receiver") {
+            //                                window.event.returnValue = false;
+            //                                document.location.href = "/Shipment/Create";
+            //                            }
+            //                            if (response == "Admin") {
+            //                                window.event.returnValue = false;
+            //                                document.location.href = "/HLDHistory/DashBoard";
+            //                            }
+            //                            $(".loadertbl").hide();
                                         
 
-                                    },
+            //                        },
 
-                                });
-                            }
+            //                    });
+            //                }
                            
-                            else {
-                                location.href = '../Authentication/save';
-                            }
-                        });
-                    }
-                });
-            });
+            //                else {
+            //                    location.href = '../Authentication/save';
+            //                }
+            //            });
+            //        }
+            //    });
+            //});
 
 
 
@@ -117,6 +117,8 @@
 
 
             //});
+            //location.href = '../Authentication/save';
+
         });
     </script>
 }

@@ -72,7 +72,7 @@ namespace Hld.WebApplication.Helper
         public  TotalCountWithBestBuyOrderViewModel  GetAllBestBuyOrdersDetailGlobalFilterTotalCount(string apiurl, string token, string FilterName, string FilterValue)
         {
            
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/BBProduct/OrdersListGlobalFilterTotalCount/" + FilterName + "/" + FilterValue );
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/BBProduct/OrdersListGlobalFilterTotalCount/" + FilterName + "/" + FilterValue);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";

@@ -33,20 +33,20 @@ namespace Hld.WebApplication.Controllers
                signInManager = signinMgr;
             ProductApiAccess = new ProductApiAccess();
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
        
         [HttpGet]
-        [Route("Authentication/save")]
+        //[Route("Authentication/save")]
         public IActionResult Authenticate()
         {
             return View();
         }
        
         [HttpPost]
-        [Route("Authentication/save")]
+        //[Route("Authentication/save")]
         public async System.Threading.Tasks.Task<IActionResult> Authenticate(Login login)
         {
             try

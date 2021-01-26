@@ -89,7 +89,31 @@
         display: flex;
         margin: 0 auto;
     }
+    .loadertbl {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: 1;
+        background-color: rgb(249,249,249);
+    }
+
+        .loadertbl img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            /*width: 300px;
+            height: 220px;*/
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
 </style>
+<div class="loadertbl">
+    <img src="~/Images/giffff.gif" />
+</div>
 <div class="container mainlogin">
     <h6>HLD Control Panel</h6>
     @*<img class="logo" src="~/Images/logo.png" />*@
@@ -157,11 +181,13 @@
     <script>
         $(document).ready(function () {
 
+            $(".loadertbl").hide();
+
             $(document).on("change", ".selectedcheckbox", function () {
                 if ($(this).attr('type') === 'checkbox') {
-                    checkboxstatus = $(this).is(':checked') ? true : false;                    
+                    checkboxstatus = $(this).is(':checked') ? true : false;
                     var email = $("#loginEmail").val();
-                    var password=$("#input-password").val();
+                    var password = $("#input-password").val();
                 }
                 else {
                     checkboxstatus = $(this).val();
@@ -171,14 +197,14 @@
                 //console.log(Checkboxstatus);
                 console.log(email);
                 console.log(password);
-               
+
                 $.ajax({
-                    type:'Put',
-                    url:'/Authentication/SaveCheckboxstatus',
-                    data: { Email: email,Checkboxstatus: checkboxstatus},
+                    type: 'Put',
+                    url: '/Authentication/SaveCheckboxstatus',
+                    data: { Email: email, Checkboxstatus: checkboxstatus },
                     //success:function(res) {
                     //    console.log("get responce", res)
-                       
+
                     //}
 
                 });
@@ -234,6 +260,7 @@
 
                 $("#rememberMe").prop('checked', true);
                 //$(".btnclass").trigger('click');
+               // loginfunction();
             }
 
             $('#my-form').on('submit', function () {
@@ -263,6 +290,65 @@
 
 
             });
-        })
+            function loginfunction() {
+                               
+                    $(".loadertbl").show();
+
+                    $.ajax({
+                        type: 'get',
+                        url: '../authentication/getcheckboxstatus',
+                        data: {},
+                        success: function (res) {
+                            $(".loadertbl").show();
+                            $.each(res, function (index, value) {
+                                var email = localStorage.getItem('Email');
+                                if (email && value.Checkboxstatus == true) {
+                                    $.ajax({
+                                        async: false,
+                                        type: "POST",
+                                        url: '../Authentications/save?Email=' + email + '',
+                                        contentType: "application/json; charset=utf-8",
+                                        datatype: "JSON",
+                                        success: function (response) {
+                                            $(".loadertbl").show();
+                                            console.log("get responce", response);
+                                            if (response == "Vendor") {
+                                                window.event.returnValue = false;
+                                                document.location.href = "/PurchaseOrder/PurchaseOrders";
+                                                $(".loadertbl").hide();
+                                            }
+                                            if (response == "Receiver") {
+                                                window.event.returnValue = false;
+                                                document.location.href = "/Shipment/Create";
+                                                $(".loadertbl").hide();
+                                            }
+                                            if (response == "Admin") {
+                                                window.event.returnValue = false;
+                                                document.location.href = "/HLDHistory/DashBoard";
+                                                $(".loadertbl").hide();
+                                            }
+                                           
+                                            $(".loadertbl").hide();
+
+                                        },
+
+                                    });
+                                    $(".loadertbl").show();
+                                }
+
+                                else {
+                                    location.href = '/Authentication/Authenticate';
+                                    $(".loadertbl").hide();
+                                }
+                            });
+                        }
+                    });
+                
+            }
+           // 
+            if ($("#rememberMe").is(":checked") && $("#loginEmail").val().length > 1 && $("#input-password").val().length > 1) {
+                loginfunction();
+            }
+        });
     </script>
 }

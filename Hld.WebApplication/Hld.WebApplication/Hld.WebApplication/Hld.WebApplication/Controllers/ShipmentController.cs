@@ -11,10 +11,12 @@ using Hld.WebApplication.Helper;
 using Hld.WebApplication.ViewModel;
 using Hld.WebApplication.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PagedList.Core;
 
 namespace Hld.WebApplication.Controllers
@@ -733,6 +735,115 @@ namespace Hld.WebApplication.Controllers
                 return Json(new { success = true, message = "Update successfully" });
             }
         }
+        [HttpGet]
+        public ActionResult SaveBBtrackingCodes()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SaveBBtrackingCodes(BBtrackingCodesViewModel ViewModel)
+        {
+            if (ViewModel.TrackingNumberCode!=null)
+            {
+                try
+                {
+                    string token = Request.Cookies["Token"];
+                    if (ViewModel.IdBBtrackingCodes > 0)
+                    {
+                        _ApiAccess.SaveBBtrackingCodes(ApiURL, token, ViewModel);
+                    }
+                    else
+                    {
+                        _ApiAccess.SaveBBtrackingCodes(ApiURL, token, ViewModel);
+
+                    }
+                    return RedirectToAction("BBtrackingCodesList", "Shipment");
+
+                }
+
+                catch
+                {
+                    return View();
+                }
+            }
+            else
+                return View(ViewModel);
+        }
+
+        public IActionResult BBtrackingCodesList()
+        {
+            string token = Request.Cookies["Token"];
+            List<BBtrackingCodesViewModel> listmodel = new List<BBtrackingCodesViewModel>();
+            listmodel = _ApiAccess.BBtrackingCodesList(ApiURL, token);
+            return View(listmodel);
+        }
+        //public IActionResult BBtrackingCodesList(int page = 0)
+        //{
+        //    IPagedList<BBtrackingCodesViewModel> data = null;
+        //    string token = Request.Cookies["Token"];
+        //    int pageNumber = page;
+        //    int offset = 0;
+        //    int pageSize = 25;
+
+
+        //    offset = (pageNumber - 1) * 25;
+
+        //    List<BBtrackingCodesViewModel> listmodel = new List<BBtrackingCodesViewModel>();
+        //    data = new StaticPagedList<BBtrackingCodesViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
+        //    listmodel = _ApiAccess.BBtrackingCodesList(ApiURL, token, offset);
+        //    return View(listmodel);
+        //}
+        //public IActionResult GetTrackingNumberCount()
+        //{
+        //    string token = Request.Cookies["Token"];
+        //    int listmodel = 0;
+        //    listmodel = _ApiAccess.GetTrackingNumberCount(ApiURL, token);
+        //    ViewBag.Records = listmodel;
+        //    return View();
+        //}
+
+
+        public ActionResult Edit(int id)
+        {
+
+            string token = Request.Cookies["Token"];
+            BBtrackingCodesViewModel ViewModel = new BBtrackingCodesViewModel();
+            ViewModel = _ApiAccess.EditBBtrackingCodesById(ApiURL, token, id);
+
+            return View("SaveBBtrackingCodes", ViewModel);
+
+        }
+        [HttpPost]
+        public JsonResult CheckTrackingNumberExists(string name)
+        {
+            bool status = false;
+            try
+            {
+
+                string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
+                string token = Request.Cookies["Token"];
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/CheckTrackingNumberExists/" + name + "");
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = Convert.ToBoolean(JObject.Parse(strResponse)["status"].ToString());
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Json(new { success = status });
+        }
+
     }
 
 }

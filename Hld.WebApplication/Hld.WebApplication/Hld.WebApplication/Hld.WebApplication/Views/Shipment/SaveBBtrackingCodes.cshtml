@@ -1,0 +1,136 @@
+﻿@model Hld.WebApplication.ViewModel.BBtrackingCodesViewModel
+
+@{
+    ViewData["Title"] = "SaveBBtrackingCodes";
+}
+
+<style>
+    .controlabel {
+        width: 125px;
+    }
+
+    .boxshaow {
+        box-shadow: none !important
+    }
+</style>
+<div class="">
+    <h6>Save BBtracking Codes</h6>
+    <hr />
+   
+    <form asp-action="SaveBBtrackingCodes">
+        <div class="container-fluid">
+            <div class="row col-md-12">
+                @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+                <input asp-for="IdBBtrackingCodes" class="form-control" style="display:none" />
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label asp-for="CarrierName" class="control-label col-md-3 controlabel offset-1 p-0" style="padding-right:0 !important;">Carrier Name:</label>
+                        <input asp-for="CarrierName" class="form-control col-md-6 boxshaow CarrierName" placeholder="Carrier Name" />
+                        <span asp-validation-for="CarrierName" class="text-danger offset-4"></span>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="CarrierCode" class="control-label col-md-3 controlabel offset-1 p-0">Carrier Code:</label>
+                        <input asp-for="CarrierCode" id="productsku" class="form-control col-md-6 boxshaow CarrierCode" placeholder="Carrier Code" />
+                        <span asp-validation-for="CarrierCode" class="text-danger offset-4"></span>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="TrackingNumberCode" class="control-label col-md-3 controlabel offset-1 p-0">Tracking Number:</label>
+                        <input asp-for="TrackingNumberCode" class="form-control col-md-6 boxshaow TrackingNumberCode" placeholder="Tracking Number" /> <span id="IsExists"></span>
+                        <span asp-validation-for="TrackingNumberCode" class="text-danger offset-4"></span>
+
+                    </div>
+                   
+                    <div class="form-group row">
+
+                        <label asp-for="CarrierUrl" class="control-label col-md-3 controlabel offset-1 p-0"> Carrier URL:</label>
+                        <input asp-for="CarrierUrl" class="form-control col-md-6 boxshaow CarrierUrl" placeholder="Courier URL" />
+                        <span asp-validation-for="CarrierUrl" class="text-danger offset-4"></span>
+
+                    </div>
+                    <div class="form-group row">
+                        <input type="submit" value="Save" class="btn btn-primary offset-4 btnsave" /> <a asp-action="BBtrackingCodesList" style="margin-top: 2px;margin-left: 6px;" target="_blank">View List</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+
+                        <div class="col-sm-12 pl-0">
+                            <h5>Note:</h5>
+                            <span style="font-family:Arial;font-size:12px">
+                                Please replace your Tracking number In URL with below variable <span style="background-color:yellow;padding:2px">{TrackingNumber}</span>
+
+                                <br /><br />
+                                <span style="font-weight:bold">For Example :</span>
+                                <br />
+
+                                <span style="font-family:Arial;font-size:12px">
+
+                                    https://www.fedex.com/apps/fedextrack/?tracknumbers=<span style="background-color: yellow;
+        padding: 2px
+">{TrackingNumber}</span>&language=en&cntry_code=ca
+                                </span>
+                            </span>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            </div>
+    </form>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".table").tablesorter();
+        })
+        $(function () {
+            $('.CarrierName,.CarrierCode,.TrackingNumberCode,.CarrierUrl').bind('input', function () {
+                $(this).val(function (_, v) {
+                    return v.replace(/\s+/g, '');
+                });
+            });
+        });
+        $(document).ready(function () {
+
+
+        });
+          $('body').on('keyup', '.TrackingNumberCode', function () {
+            var textBoxValue = $(this).val().trim();
+            if (textBoxValue.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckTrackingNumberExists", "Shipment")',
+                    data: { 'name': textBoxValue },
+                    success: function (data) {
+                        if (data.success == true) {
+                            $('#IsExists').text("Already Exists").css({ "color": "red", "padding-left": "5px" });
+                            $('.btnsave').attr("disabled", true)
+                        }
+                        else {
+                            $('#IsExists').text("Available").css({ "color": "green", "padding-left": "5px" });
+                            $('.btnsave').attr("disabled", false)
+                        }
+                    }
+                });
+            }
+            else {
+                $('#IsExists').text("");
+            }
+        });
+    </script>
+}

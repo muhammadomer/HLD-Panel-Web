@@ -386,7 +386,7 @@
                     <select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>
 
                     <input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" name="sku" autocomplete="off" class="form-control" value="@Model.searchViewModel.Sku" placeholder="SKU" />
-                    
+
                     <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 ShippingBoxContain" multiple="multiple">
                         <option value=1>Do not show PO Box Orders</option>
                         <option value=2>Show only PO Box Orders</option>
@@ -417,6 +417,7 @@
                     <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
                     <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
                     <input type="hidden" name="ShippingBoxContain" id="ddlShippingBoxContain" />
+                    <input type="hidden" name="BBOrderStatus" id="ddlBBOrderStatus" />
 
                     <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder" style="height:25px!important">Search</button>
 
@@ -433,6 +434,7 @@
                         </span>
 
                     </div>
+                   
                 }
             </div>
             </div>
@@ -712,13 +714,19 @@
         var minValue = "";
         var selectedDateFrom = "";
         var selectedDatTo = "";
-
+      
 
         $(document).ready(function () {
-            $(document).on('click', 'html', function (event) {
-                $(".SalesQtytooltipdata").hide();
-               
+            $(document).on('click', function (e) {
+                var container = $(".SalesQtytooltipdata");
+                if (!$(e.target).closest(container).length) {
+                    container.hide();
+                }
             });
+            //$(document).on('click', 'html', function (event) {
+            //    $(".SalesQtytooltipdata").hide();
+               
+            //});
            
             $(document).on('click', '.GetSalesQtytooltipdata', function () {
                 var row = $(this).closest("tr");
@@ -988,6 +996,7 @@
             var ShippingTags = getUrlParameter('ShippingTags');
             var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
             var ShippingBoxContain = getUrlParameter('ShippingBoxContain');
+           
             var pageNo = 0;
 
             $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
@@ -1009,6 +1018,7 @@
                     $('#orderDateTimeFrom').val(selectedDateFrom);
                     $('#orderDateTimeTo').val(selectedDatTo);
                     $('#ShippingBoxContain').val();
+                    $('#ddlBBOrderStatus').val();
 
 
                  });
@@ -1561,7 +1571,7 @@
                 },
 
             });
-
+           
             $('select[multiple].active.2col.SCOrderStatues').multiselect({
                 columns: 1,
                 placeholder: 'SC Order Status',
@@ -2137,10 +2147,10 @@
                     if ($(this).text() == 'Tag') {
                         $(this).parent().parent().find("input[type=checkbox]").each(function () {
 
-                    if ($(this).val() == TagText) {
-                        $(this).prop("checked", true);
-                    }
-                });
+                            if ($(this).val() == TagText) {
+                                $(this).prop("checked", true);
+                            }
+                        });
                     }
                 });
             });
@@ -2283,6 +2293,10 @@
                     });
                 });
             }
+
+            
+
+
             if (ShippingBoxContain != null) {
                 debugger
                 var res = ShippingBoxContain.split(",");

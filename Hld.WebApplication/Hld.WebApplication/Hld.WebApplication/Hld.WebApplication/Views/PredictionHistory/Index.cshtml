@@ -386,7 +386,7 @@
                     </div>
                 }
                 <div class="col-md-2 p-0 mr-1">
-                    <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
+                    <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none"/>
                     <input type="text" id="Sorted" name="Sorted" value="@Model.Sorted" class="form-control" style="box-shadow:none;display:none" />
                     <input type="text" id="SortedType" name="SortedType" value="@Model.SortedType" class="form-control" style="box-shadow:none;display:none" />
                 </div>
@@ -571,6 +571,16 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script>
+        //function removeSpacesSku(string) {
+        //    return string.split(' ').join('');
+        //}
+        $(function () {
+            $('#SKU').bind('input', function () {
+                $(this).val(function (_, v) {
+                    return v.replace(/\s+/g, '');
+                });
+            });
+        });
          $('#ActionMenu').select2();
         var selectedDateFrom = "";
         var selectedDatTo = "";
@@ -580,7 +590,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         var currency = "";
         var sort = "";
         $(document).ready(function () {
-
+           
            
             var previoussku = "";
             $(document).on('click', '.copyText', function () {

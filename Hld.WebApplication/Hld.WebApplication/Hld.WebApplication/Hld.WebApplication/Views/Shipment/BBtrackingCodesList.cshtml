@@ -1,0 +1,90 @@
+﻿@*@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.BBtrackingCodesViewModel>
+@using Hld.WebApplication.Helper*@
+@model IEnumerable<Hld.WebApplication.ViewModel.BBtrackingCodesViewModel>
+
+@{
+    ViewData["Title"] = "BBtrackingCodesList";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .credittable thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .credittable tbody td {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row form-group">
+        <h6 style="padding-left: 15px;">BB Tracking Codes Detail</h6>
+        <span style="padding-left: 15px;">
+            <a class="" asp-action="SaveBBtrackingCodes" asp-controller="Shipment">Back</a>
+        </span>
+    </div>
+
+    <table class="table table-bordered credittable">
+        <thead style="background-color:lightgrey!important">
+
+            <tr>
+                <th>
+                    Carrier Name
+                </th>
+                <th>
+                    Carrier Code
+                </th>
+
+
+                <th>
+                    Tracking Number Code
+                </th>
+                <th>
+                    Carrier Url
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CarrierName</td>
+                    <td>
+                        @item.CarrierCode
+
+                    </td>
+
+                    <td>@item.TrackingNumberCode</td>
+
+                    <td>@item.CarrierUrl</td>
+
+
+                    <td>  @Html.ActionLink("Edit", "Edit", new { id = item.IdBBtrackingCodes }) </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script src="~/js/ckeditor/ckeditor.js"></script>
+
+    <script type="text/javascript">
+
+    </script>
+}

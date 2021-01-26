@@ -367,7 +367,7 @@
                                 {
                                     <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="BestBuyProduct" asp-action="BestBuOrdersDetail">BestBuy Orders</a></li>
 
-                                    <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="BestBuyTrackingUpdateLog" asp-action="Index">BB Order Tracking Log</a></li>
+                                    @*<li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="BestBuyTrackingUpdateLog" asp-action="Index">BB Order Tracking Log</a></li>*@
                                     <li class="dropdown-item nav-item" href="#">  <a class="nav-link " asp-controller="BestBuyTrackingUpdateLog" asp-action="BestBuyTracking">BB Order Tracking Logs</a></li>
                                 }
                                 <li class="dropdown-item dropdown">
@@ -615,13 +615,23 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+            $(".btnclick").click(function () {
+                
+                    //localStorage.clear();
+               
+                localStorage.removeItem('remembercheck');
+
+            });
+
             $(window).scrollTop(0);
             if (localStorage.getItem('saveData')) {
                 $('#globalSearch').val(localStorage.getItem('saveData'));
             }
             $('#btnSearch').click(function () {
-
+              
                 var FilterName = $('#globalSearch option:selected').val();
+               
                 var FilterValue = $('#txtGloabalValue').val().trim();
                 var FilterLength = $('#txtGloabalValue').val().trim().length;
 
@@ -633,7 +643,7 @@
 
                     }
                     if (FilterName == "sellerCloudID" || FilterName == "order_id" || FilterName == "CustomerName") {
-
+                       
                         var target = '/BestBuyProduct/BestBuOrdersDetail?' + FilterName + '=' + FilterValue + '&EmptyFirstTime'
                         +'='+'data';
 

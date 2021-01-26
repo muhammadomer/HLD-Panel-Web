@@ -69,8 +69,8 @@
     }
     .fixedclassforpagination {
         position: fixed;
-        top: 204px;
-        width: 400px;
+        top: 220px;
+       /* width: 400px;*/
         z-index: 500;
         background: white;
     }
@@ -184,9 +184,10 @@
                                     </select>
                                 </div>
                             }
-                            <div class="col-md-2 p-0 mr-1">
-                                <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.ProductID" class="form-control" style="box-shadow:none" />
-                            </div>
+                        <div class="col-md-2 p-0 mr-1">
+                            <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.ProductID" class="form-control" style="box-shadow:none" />
+                            <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
+                        </div>
                             <div class="col-md-1 p-0 mr-1">
                                 <input type="number" id="POID" name="POID" value="@Model.PurchaseID" placeholder="PO #" class="form-control" style="box-shadow: none" />
                             </div>
@@ -228,7 +229,7 @@
 </div>
 
     <div class="row col col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: 8px;">
-        <div class="col col-md-6">
+        <div class="col col-md-2">
             <div class="row">
                 <div class="pagination col-md-3">
 
@@ -237,7 +238,19 @@
             </div>
         </div>
         <div class="col col-md-6">
-            <span> Total Items Found : @ViewBag.TotalCount</span>
+            @*<span> Total Items Found : @ViewBag.TotalCount</span>*@
+            @if (ViewBag.TotalCount == null)
+            {
+                <span style="vertical-align: sub"> Total Records Found : 0 </span>
+                <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : 0</span>
+            }
+            else
+            {
+                <span style="vertical-align: sub"> Total Records Found : @ViewBag.TotalCount</span>
+                <span style="margin-left: 20px;
+        vertical-align: sub
+"> Records Per Page : <span class="itemPerPage"></span></span>
+            }
         </div>
 
 
@@ -270,7 +283,10 @@
         var selectedDateFrom = "";
         var selectedDatTo = "";
         $(document).ready(function () {
-              
+            $('#btnSearchOrder').click(function () {
+
+                $('#itemPerPage').show();
+            });
             function vendorlistgetFromPOProduct() {
                 debugger;
                         $.ajax({
@@ -284,19 +300,19 @@
                                 $.each(data, function (index, value) {
 
                                     content = content + '<option value = "' + value.UserName + '">' + value.UserAlias + '</option>';
-                                  
-                                   
+
+
 
                                 });
 
                                 $(".vendorlistgetFromPOProduct").append(content);
                                 $(".vendorlistgetFromPOProduct").val(@Model.VendorID);
 
-                                
+
                             }
                 })
 
-           
+
 
             }
 
@@ -424,6 +440,7 @@
                     }
                 }
             };
+            $("#EmptyFirstTime").val("No");
             var item = getUrlParameter('ItemType');
             var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
             var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
@@ -432,9 +449,11 @@
             //var Vendor = $("#VendorIdForMessage").val();
             var Vendor = getUrlParameter('VendorID');
             var Title = $("#title").val();
+            var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
 
               //pagination
-              $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+            if (EmptyFirstTime) {
+                 $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
                   format: '[< nncnn >]',
                   perpage: 25, // show 10 elements per page
                   lapping: 0, // don't overlap pages for the moment
@@ -447,7 +466,7 @@
 
                       pageNo = page;
                       // add code which gets executed when user selects a page
-                      var url = '/PurchaseOrder/GetPOProductList?page=' + page + '&SKU=' + SKU + '&Vendor=' + Vendor + '&title=' + Title + '&ItemType=' + item + '&POID=' + POID + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo;
+                      var url = '/PurchaseOrder/GetPOProductList?page=' + page + '&SKU=' + SKU + '&Vendor=' + Vendor + '&title=' + Title + '&ItemType=' + item + '&POID=' + POID + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&EmptyFirstTime=' + EmptyFirstTime;
                       var completURL = url  ;
                       $(".loadertbl").show();
                        $(".loader").show();
@@ -461,6 +480,8 @@
                               $('#loadOrder').html(data);
                               $(".loader").hide();
                               $(".loadertbl").hide();
+                              var itemcount = $(".mytable").find("tr").length-3;
+                              $(".itemPerPage").text(itemcount);
                               $(function () {
                                   $("table").tablesorter();
                               })
@@ -514,6 +535,40 @@
 
 
                 });
+            }
+
+            else {
+                 $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                format: '[< nncnn >]',
+                    perpage: 25, // show 10 elements per page
+                        lapping: 0, // don't overlap pages for the moment
+                        page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                     onSelect: function (page) {
+                         pageNo = page;
+                    },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+                 });
+                $(".loader").hide();
+            }
+
 
             $('#SKU').autocomplete({
                 autoFocus: true,

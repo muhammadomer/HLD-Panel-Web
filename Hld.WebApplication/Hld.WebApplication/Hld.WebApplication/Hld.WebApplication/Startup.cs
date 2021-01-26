@@ -101,7 +101,8 @@ namespace Hld.WebApplication
 
             });
 
-            services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Authentication /save");
+            //services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Authentication /save");
+            services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Authentication/Authenticate");
 
           
 
@@ -132,7 +133,8 @@ namespace Hld.WebApplication
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    //template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Authentication}/{action=Authenticate}/{id?}");
             });
         }
     }
