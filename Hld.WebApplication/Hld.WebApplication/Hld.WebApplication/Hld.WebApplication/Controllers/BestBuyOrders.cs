@@ -137,7 +137,7 @@ namespace Hld.WebApplication.Controllers
             }
             else if (!string.IsNullOrEmpty(sellerCloudID) && sellerCloudID != "undefined")
             {
-                TotalCountWithBestBuyOrderViewModel model = _bBProductApiAccess.GetAllBestBuyOrdersDetailGlobalFilterTotalCount(ApiURL, token, "sellerCloudID", sellerCloudID);
+                TotalCountWithBestBuyOrderViewModel model = _bBProductApiAccess.GetAllBestBuyOrdersDetailGlobalFilterTotalCount(ApiURL, token, "SCOrders.seller_cloud_order_id", sellerCloudID);
                 ViewBag.TotalCount = model.count;
             }
             else if (!string.IsNullOrEmpty(CustomerName) && CustomerName != "undefined")
@@ -308,9 +308,9 @@ namespace Hld.WebApplication.Controllers
             }
             else if (!string.IsNullOrEmpty(sellerCloudID) && sellerCloudID != "undefined")
             {
-                _viewModel = _bBProductApiAccess.GetAllBestBuyOrdersDetailGlobalFilter(ApiURL, token, "sellerCloudID", sellerCloudID, startlimit, endLimit, sort);
+                _viewModel = _bBProductApiAccess.GetAllBestBuyOrdersDetailGlobalFilter(ApiURL, token, "SCOrders.seller_cloud_order_id", sellerCloudID, startlimit, endLimit, sort);
                 data = new StaticPagedList<BestBuyOrdersViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
-                TotalCountWithBestBuyOrderViewModel model = _bBProductApiAccess.GetAllBestBuyOrdersDetailGlobalFilterTotalCount(ApiURL, token, "sellerCloudID", sellerCloudID);
+                TotalCountWithBestBuyOrderViewModel model = _bBProductApiAccess.GetAllBestBuyOrdersDetailGlobalFilterTotalCount(ApiURL, token, "SCOrders.seller_cloud_order_id", sellerCloudID);
 
                 ViewBag.TotalOrders = _viewModel.Count;
                 var totalQuantity = _viewModel.Sum(e => e.TotalQuantity);
@@ -343,6 +343,7 @@ namespace Hld.WebApplication.Controllers
                 SearchViewModel.ShippingTags = ShippingTags;
                 SearchViewModel.BBOrderStatus = BBOrderStatus;
                 SearchViewModel.ShippingBoxContain = ShippingBoxContain;
+                SearchViewModel.WHQStatus = WHQStatus;
                 SearchViewModel.Sort = "desc";
                 _viewModel = _bBProductApiAccess.GetAllBestBuyOrdersDetailSearch(ApiURL, token, SearchViewModel);
                 data = new StaticPagedList<BestBuyOrdersViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
