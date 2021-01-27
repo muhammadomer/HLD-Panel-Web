@@ -120,7 +120,7 @@
     .tagspan {
         font-weight: bold;
         padding-right: 5px;
-        padding-left: 30px;
+        
     }
 
     .ms-options-wrap button:focus {
@@ -134,13 +134,28 @@
     .ms-options-wrap:nth-of-type(4) .ms-options {
         width: 109px !important;
     }
-
+   
     .ms-options-wrap:nth-of-type(5) .ms-options {
         width: 160px !important;
     }
+  
+    .ms-options-wrap:nth-of-type(6) .ms-options {
+        width: 100px;
+        min-width:100px!important;
+    }
+    .ms-options-wrap:nth-of-type(1) .ms-options {
+        width: 267px !important;
+        min-width: 267px !important;
+    }
+   /* .ms-options-wrap:nth-of-type(8) .ms-options {
+        width: 267px !important;
+        min-width:267px!important;
+    }*/
     .ms-options-wrap:nth-of-type(9) .ms-options {
         width: 190px !important;
     }
+   
+    
     .tbladd {
         top: 51px;
         position: fixed;
@@ -243,7 +258,7 @@
                 <div class="card-header">Search Orders </div>*@
             @if (Model.searchViewModel.ShippingTags != "")
             {
-                <div class="row">
+                <div class="row ml-0 col-12">
                     <span class="tagspan">Tag :</span>
                     @switch (Model.searchViewModel.ShippingTags)
                     {
@@ -259,17 +274,17 @@
             }
             @if (Model.searchViewModel.ZincStatus != "")
             {
-                <div class="row">
-                    <span style="        font-weight: bold;
+                <div class="row ml-0 col-12">
+                    <span style="font-weight: bold;
         padding-right: 5px;
         position: relative;
-        padding-left: 30px;" class="">Zinc Status :</span>
+        " class="">Zinc Status :</span>
                     <span style="padding-left:0px;" class="Zn-status-text">@Model.searchViewModel.ZincStatus.Replace(",", ", ")</span>
                 </div>
             }
             @if (Model.searchViewModel.DSStatus != "")
             {
-                <div class="row">
+                <div class="row ml-0 col-12">
                     <span class="tagspan">DS Status :</span>
                     <span style="padding-left:0px;" class="DS-status-text">@Model.searchViewModel.DSStatus.Replace(",", ", ")</span>
                 </div>
@@ -278,7 +293,7 @@
 
             @if (Model.searchViewModel.OrderStatus != "")
             {
-                <div class="row">
+                <div class="row ml-0 col-12">
                     <span class="tagspan">SC Status :</span>
 
 
@@ -334,7 +349,7 @@
             }
             @if (Model.searchViewModel.PaymentStatus != "")
             {
-                <div class="row">
+                <div class="row ml-0 col-12">
                     <span class="tagspan">Payment Status :</span>
                     <span style="padding-left:0px;" class="Py-status-text">@Model.searchViewModel.PaymentStatus.Replace(",", ", ")</span>
                 </div>
@@ -342,14 +357,14 @@
 
             @if (Model.searchViewModel.BBOrderStatus != "")
             {
-                <div class="row">
+                <div class="row ml-0 col-12">
                     <span class="tagspan">BBOrder Status :</span>
                     <span style="padding-left:0px;" class="bb-status-text">@Model.searchViewModel.BBOrderStatus.Replace(",", ", ")</span>
                 </div>
             }
             @if (Model.searchViewModel.WHQStatus != 0)
             {
-                <div class="row">
+                <div class="row ml-0 col-12">
                     <span class="tagspan">WHQ Status :</span>
                     <span style="padding-left:0px;" class="whq-status-text">@Model.searchViewModel.WHQStatus</span>
                 </div>
@@ -378,6 +393,7 @@
                         <option value="9">Quote</option>
                         <option value="10">void</option>
                         <option value="11">Canceled</option>
+                        <option value="12">Uncreated On SC</option>
 
                     </select>
 
@@ -458,12 +474,14 @@
                     </div>
                 </div>
                 <div class="row mt-2 ml-0 col-12">
-                    <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 mt-2 WHQStatus" multiple="multiple">
-                        <option value="1">WHQ < 0</option>
-                        <option value="2">WHQ > 0</option>
-
-                    </select>
-                    <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 mt-2 BBOrderStatus" multiple="multiple">
+                    <div>
+                        <select id="multiselect" class="2col active form-control mb-2 mr-sm-2 mt-2 WHQStatus" multiple="multiple">
+                            <option value="1">Do Not Show if WHQ > 0</option>
+                            <option value="2">Do Not Show if WHQ < 0 but OnOrder > 10</option>
+                        </select>
+                    </div>
+                    
+                    <select id="multiselect" class="3col active form-control mb-2 mr-sm-2 mt-2 BBOrderStatus" multiple="multiple">
                         <option value="RECEIVED">Received</option>
                         <option value="SHIPPING">Shipping</option>
                         <option value="WAITING_ACCEPTANCE">Waiting_Acceptance</option>
@@ -472,6 +490,7 @@
                         <option value="CANCELD">Canceled</option>
 
                     </select>
+
                 </div>
 
             }
@@ -1621,7 +1640,7 @@
 
             });
 
-            $('select[multiple].active.3col.WHQStatus').multiselect({
+            $('select[multiple].active.2col.WHQStatus').multiselect({
                 columns: 1,
                 placeholder: 'WHQ Status',
 
@@ -2189,7 +2208,7 @@
 
             //  $.each(TagText, function (key, value) {
 
-            $(document).on('click', '.ms-options-wrap', function () {
+            $(document).on('click','.ms-options-wrap', function () {
                 var TagText = $(".tags-status-text").attr("value");
 
 
