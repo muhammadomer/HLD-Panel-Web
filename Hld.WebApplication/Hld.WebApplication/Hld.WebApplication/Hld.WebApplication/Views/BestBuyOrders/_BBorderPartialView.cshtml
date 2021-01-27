@@ -408,7 +408,7 @@
 </span>
                                         &nbsp;<span>   <i class="getToolTip fa fa-info" style="cursor:pointer" data-id="@item.SellerCloudOrderID" height="18px" width="18px" alt=""></i> </span>
                                         <span class="showToolTipData"></span>
-                                        <a asp-action="BBOrderViewPage" target="_blank" asp-controller="BestBuyOrders" asp-route-SCorderid="@item.SellerCloudOrderID">Order View Page</a>
+                                        <a asp-action="BBOrderViewPage" target="_blank" asp-controller="BestBuyOrders" asp-route-SCorderid="@item.OrderNumber">Order View Page</a>
                                         @if (item.IsNotes == "1")
                                                     {
                                             <span><img src="~/Images/orange-2.png" style="height: 22px;cursor: pointer;" value="@item.SellerCloudOrderID" class="btnViewNotes" /></span>
