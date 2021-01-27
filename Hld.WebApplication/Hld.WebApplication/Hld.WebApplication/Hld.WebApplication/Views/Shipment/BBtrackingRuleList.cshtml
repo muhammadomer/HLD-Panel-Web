@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewData["Title"] = "BBtrackingRuleList";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+<style>
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            /*width: 300px;
+            height: 220px;*/
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+</style>
+
+<div class="container-fluid" style="margin-left:16px;">
+
+    <div class="row form-group"style="margin-bottom:0!important;">
+        <h6 style="padding-left: 13px;">BB Tracking Codes Detail</h6>
+        <span style="padding-left: 15px;">
+            <a class="" asp-action="SaveBBtrackingCodes" asp-controller="Shipment">Back</a>
+        </span>
+    </div>
+
+    <div class="row col col-12" id="fixActionMenu"style="padding-left: 8px;">
+        <div class="col col-md-2">
+            <div class="row">
+                <div class="pagination col-md-6 col">
+
+                </div>
+
+            </div>
+        </div>
+        <div class="col col-md-2">
+            <span style="vertical-align:sub">Records Per Page: @ViewBag.Records</span>
+        </div>
+
+
+    </div>
+</div><div class="loader">
+    <img src="~/Images/giffff.gif" />
+</div>
+<div class="container-fluid">
+    <div id="loadOrder">
+
+    </div>
+</div>
+<div class="container-fluid" style=" margin-left:8px;">
+    <div class="pagination">
+
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            
+          //pagination
+    $(".pagination").paging(parseInt('@ViewBag.Records'), {
+    format: '[< nncnn >]',
+    perpage: 25, // show 10 elements per page
+    lapping: 0, // don't overlap pages for the moment
+    page: 1, // start at page, can also be "null" or negative
+    stepwidth: 0, // =0 means blockwise next/prev steps
+    onSelect: function (page) {
+
+    pageNo = page;
+    // add code which gets executed when user selects a page
+        var completURL = '/Shipment/BBtrackingRulesList?page=' + page + '';
+        $(".loadertbl").show();
+        $(".loader").show();
+        $.ajax({
+            url: completURL,
+            data: {},
+            type: 'POST',
+            traditional: true,
+            success: function (data) {
+                $('#loadOrder').empty();
+                $('#loadOrder').html(data);
+                $(".loader").hide();
+                $(".loadertbl").hide();
+
+            }
+        });
+
+    },
+        onFormat: function (type) {
+            switch (type) {
+                case 'block': // n and c
+                    if (this.page === this.value) {
+                        return '<span>' + this.value + '</span>';
+                    } else {
+                        return '<a href="#">' + this.value + '</a>';
+                    }
+                case 'next': // >
+                    return '<a href="#">&gt;</a>';
+                case 'prev': // <
+                    return '<a href="#">&lt;</a>';
+                case 'first': // [
+                    return '<a href="#">First</a>';
+                case 'last': // ]
+                    return '<a href="#">Last</a>';
+            }
+        }
+
+
+    });
+
+    });
+    </script>
+}
+

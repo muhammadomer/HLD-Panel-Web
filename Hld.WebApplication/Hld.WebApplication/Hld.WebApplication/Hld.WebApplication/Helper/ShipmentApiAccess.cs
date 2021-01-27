@@ -550,5 +550,33 @@ namespace Hld.WebApplication.Helper
             }
             return Count;
         }
+        public List<BBtrackingCodesViewModel> BBtrackingRulesList(string ApiURL, string token,int offset)
+        {
+            List<BBtrackingCodesViewModel> listmodel = new List<BBtrackingCodesViewModel>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Shipment/GetBBtrackingRulesList/"+ offset);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                listmodel = JsonConvert.DeserializeObject<List<BBtrackingCodesViewModel>>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return listmodel;
+        }
     }
 }

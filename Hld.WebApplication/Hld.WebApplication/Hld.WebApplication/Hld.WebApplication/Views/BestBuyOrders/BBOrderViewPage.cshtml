@@ -395,7 +395,34 @@
                     <label class="list-group-item mt-3" style="font-weight:bold;padding-left: 5px;">
                         <span class="">BestBuy Status</span>
                     </label>
-                    <label class="list-group-item">@Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</label>
+                    <label class="list-group-item">
+
+                      
+                        @{
+                            string order_state = @Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault();
+                        }
+                        @{
+                            if (order_state == "Shipping" || order_state == "SHIPPING")
+                            {
+                            <span style="color:green"> @Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                            }
+                            if (order_state == "WAITING_ACCEPTANCE")
+                            {
+                                <span style="color:red">@Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                            }
+                            if (order_state == "WAITING_DEBIT_PAYMENT")
+                            {
+                                <span style="color:orange">@Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                            }
+
+                            else
+                            {
+                                <span>@Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                            }
+                        }
+
+
+                    </label>
 
                     @*</div>*@
                 </div>

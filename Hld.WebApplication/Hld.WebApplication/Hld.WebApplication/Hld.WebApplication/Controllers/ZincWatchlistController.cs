@@ -75,7 +75,6 @@ namespace Hld.WebApplication.Controllers
 
             List<ZincWatchListSummaryViewModal> listmodel = new List<ZincWatchListSummaryViewModal>();
             listmodel = _ApiAccess.GetWatchListSummary(ApiURL, token, offset);
-
             data = new StaticPagedList<ZincWatchListSummaryViewModal>(listmodel, pageNumber, pageSize, listmodel.Count);
             return PartialView("~/Views/ZincWatchlist/GetWatchListSummary.cshtml", data);
         }

@@ -1,11 +1,11 @@
-﻿@*@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.BBtrackingCodesViewModel>
-@using Hld.WebApplication.Helper*@
-@model IEnumerable<Hld.WebApplication.ViewModel.BBtrackingCodesViewModel>
-
-@{
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.BBtrackingCodesViewModel>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BBtrackingCodesViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@*@{
     ViewData["Title"] = "BBtrackingCodesList";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
-}
+}*@
 
 <style>
     .credittable thead th {
@@ -14,19 +14,18 @@
     }
 
     .credittable tbody td {
-        text-align: center;
+        text-align: left;
         vertical-align: middle !important;
+    }
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
     }
 </style>
 <div class="container-fluid">
-    <div class="row form-group">
-        <h6 style="padding-left: 15px;">BB Tracking Codes Detail</h6>
-        <span style="padding-left: 15px;">
-            <a class="" asp-action="SaveBBtrackingCodes" asp-controller="Shipment">Back</a>
-        </span>
-    </div>
-
-    <table class="table table-bordered credittable">
+   
+    <table class="table credittable">
         <thead style="background-color:lightgrey!important">
 
             <tr>

@@ -74,7 +74,6 @@ namespace Hld.WebApplication.Controllers
             string token = Request.Cookies["Token"];
             WarehouseAddressViewModel ViewModel = new WarehouseAddressViewModel();
             ViewModel = _warehouseApiAccess.EidtWHAddressByid(ApiURL, token, id);
-
             return View("Create", ViewModel);
 
         }

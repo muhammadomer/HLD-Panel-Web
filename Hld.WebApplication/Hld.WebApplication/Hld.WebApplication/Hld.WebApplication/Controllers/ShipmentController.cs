@@ -757,7 +757,8 @@ namespace Hld.WebApplication.Controllers
                         _ApiAccess.SaveBBtrackingCodes(ApiURL, token, ViewModel);
 
                     }
-                    return RedirectToAction("BBtrackingCodesList", "Shipment");
+                    //return RedirectToAction("BBtrackingCodesList", "Shipment");
+                    return RedirectToAction("BBtrackingRuleList", "Shipment");
 
                 }
 
@@ -777,30 +778,31 @@ namespace Hld.WebApplication.Controllers
             listmodel = _ApiAccess.BBtrackingCodesList(ApiURL, token);
             return View(listmodel);
         }
-        //public IActionResult BBtrackingCodesList(int page = 0)
-        //{
-        //    IPagedList<BBtrackingCodesViewModel> data = null;
-        //    string token = Request.Cookies["Token"];
-        //    int pageNumber = page;
-        //    int offset = 0;
-        //    int pageSize = 25;
+        public IActionResult BBtrackingRulesList(int page = 0)
+        {
+            IPagedList<BBtrackingCodesViewModel> data = null;
+            string token = Request.Cookies["Token"];
+            int pageNumber = page;
+            int offset = 0;
+            int pageSize = 25;
 
 
-        //    offset = (pageNumber - 1) * 25;
+            offset = (pageNumber - 1) * 25;
 
-        //    List<BBtrackingCodesViewModel> listmodel = new List<BBtrackingCodesViewModel>();
-        //    data = new StaticPagedList<BBtrackingCodesViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
-        //    listmodel = _ApiAccess.BBtrackingCodesList(ApiURL, token, offset);
-        //    return View(listmodel);
-        //}
-        //public IActionResult GetTrackingNumberCount()
-        //{
-        //    string token = Request.Cookies["Token"];
-        //    int listmodel = 0;
-        //    listmodel = _ApiAccess.GetTrackingNumberCount(ApiURL, token);
-        //    ViewBag.Records = listmodel;
-        //    return View();
-        //}
+            List<BBtrackingCodesViewModel> listmodel = new List<BBtrackingCodesViewModel>();           
+            listmodel = _ApiAccess.BBtrackingRulesList(ApiURL, token, offset);
+            data = new StaticPagedList<BBtrackingCodesViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
+            return PartialView("~/Views/Shipment/BBtrackingCodesList.cshtml", data);
+            //return View(listmodel);
+        }
+        public IActionResult BBtrackingRuleList()
+        {
+            string token = Request.Cookies["Token"];
+            int listmodel = 0;
+            listmodel = _ApiAccess.GetTrackingNumberCount(ApiURL, token);
+            ViewBag.Records = listmodel;
+            return View();
+        }
 
 
         public ActionResult Edit(int id)
