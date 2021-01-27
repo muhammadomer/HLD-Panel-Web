@@ -1,0 +1,2381 @@
+﻿@model BestBuyOrdersViewPageModel
+
+@{
+    ViewData["Title"] = "BBOrderViewPage";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+
+
+
+
+<style type="text/css">
+
+    .maincontainer {
+        background-color: #2A2B2B03;
+        min-width: 1330px;
+        /*box-shadow: 3px 0px 6px;*/
+    }
+
+    .tableWHQty tr > td {
+        padding: 0px;
+    }
+
+    .maincontainer1 {
+        min-width: 1200px;
+    }
+
+    .Error {
+        color: red;
+    }
+
+    .avrg {
+        color: red;
+    }
+
+    .Canceled {
+        color: mediumvioletred;
+    }
+
+    .InProcess {
+        color: orange;
+    }
+
+    .Shipped {
+        cursor: pointer;
+        color: green;
+        font-weight: bold
+    }
+
+    .InProgressSuccess {
+        color: green;
+    }
+
+    .OrderRequestSent {
+        color: blue;
+    }
+
+    .Processed_OutSideZinc {
+        color: #ef08bd;
+    }
+
+    .tblOrderMainHead thead > tr > th {
+        vertical-align: top;
+        padding-left: 0px;
+    }
+
+    .tblOrderMainHead tbody > tr > td {
+        padding: 0px;
+    }
+
+    .list-group-item {
+        border: none;
+    }
+
+    .taground {
+        color: white;
+        font-size: 10px;
+        padding: 1px;
+        border: none;
+        border-radius: 3px;
+        margin-right: 5px;
+    }
+
+    .ms-options-wrap > .ms-options {
+        position: static !important;
+        min-height: 100px !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden !important;
+    }
+
+    .btnsendtozincorview {
+        display: inline-block;
+        margin-left: 30px;
+        color: white;
+        background: #808080C7;
+        padding: 1px 3px;
+        border-radius: 2px;
+        margin-top: 3px;
+        text-decoration: none;
+    }
+
+        .btnsendtozincorview:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+    .resendtozincbtn {
+        margin-left: 20px;
+        color: white;
+        background: #808080C7;
+        padding: 3px;
+        border-radius: 2px;
+        margin-top: 2px;
+        margin-right: 2px;
+        text-decoration: none;
+    }
+
+        .resendtozincbtn:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+    .tooltipParentchild {
+        display: inline-block;
+        position: relative;
+        text-align: left;
+        cursor: not-allowed;
+    }
+
+        .tooltipParentchild .top {
+            min-width: 200px;
+            height: 60px;
+            max-width: 400px;
+            top: -5px;
+            max-height: 400px;
+            left: 80%;
+            transform: translate(-30%,-100%);
+            padding: 4px 20px;
+            color: black;
+            background-color: white;
+            font-weight: normal;
+            font-size: 14px;
+            border: 1px solid gray;
+            border-radius: 8px;
+            position: absolute;
+            z-index: 99999999;
+            box-sizing: border-box;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.5);
+            display: none;
+        }
+
+            .tooltipParentchild .top::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 34%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #615A5A transparent transparent transparent;
+            }
+
+    .tooltipTitle {
+        display: inline-block;
+        position: relative;
+        text-align: left;
+        cursor: not-allowed;
+    }
+
+        .tooltipTitle .topdata {
+            min-width: 490px;
+            height: 60px;
+            max-width: 700px;
+            top: -5px;
+            max-height: 400px;
+            left: -360%;
+            transform: translate(-30%,-100%);
+            padding: 4px 20px;
+            color: black;
+            background-color: white;
+            font-weight: normal;
+            font-size: 14px;
+            border: 1px solid gray;
+            border-radius: 8px;
+            position: absolute;
+            z-index: 99999999;
+            box-sizing: border-box;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.5);
+            display: none;
+        }
+
+            .tooltipTitle .topdata::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 34%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #615A5A transparent transparent transparent;
+            }
+
+    .rowsclass {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .p-t-b {
+        padding-top: 2px;
+        padding-bottom: 5px;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+        border-bottom: #ccc 1px solid !important;
+    }
+
+    .loadertbl {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loadertbl img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            /*width: 300px;
+            height: 220px;*/
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+</style>
+
+<div class="modal fade" style="margin-top: 80px !important;" id="SendozincOrderView" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <h4 class="modal-title">Status</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="SendozincOrderViewBody">
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>*@
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" style="margin-top: 80px!important;" id="AlertModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Status</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="AlertModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="modal fade" id="NotesModel" role="dialog" style="margin-top: 80px!important;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" id="NotesModalheader" style="display: inline-flex!important;justify-content: flex-start!important;">
+
+                </div>
+                <div class="modal-body ">
+                    <div class="list" style="margin-bottom: 30px;overflow-y:auto;height:270px">
+
+                    </div>
+                    <form class="form-inline" id="notesmodelform">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link closed" style="color: grey;
+    text-decoration: none;clear: both;">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container pt-3 pb-3 mt-4 mb-4 maincontainer">
+    <div class="row">
+        <div class="col ml-auto">
+            <div style="float: right; display: flex;margin-bottom: 5px;" class="ml-auto">
+                <span>
+                    <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                </span>
+                <select class="js-example-basic-single" id="ActionMenu" name="state">
+
+                    <option value="">-----</option>
+
+
+                    <option value="DS_Requested_To_None">DS Requested To None</option>
+
+
+                </select>
+                <button class=" btn-success" id="ApplyActionMenu">Go</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 ">
+            <div class="" style="height:100%;">
+                <div class="list-group border" style="line-height: 2px;">
+                    <label class="list-group-item" style="font-weight:bold;padding-left: 5px;">
+                        <span class="">SC Status</span>
+                    </label>
+                    @{
+                        string SCStatus = Model.BBProductDetail.Select(e => e.SCOrderStatus).FirstOrDefault();
+                    }
+                    @if (SCStatus == "InProcess")
+                    {
+
+                        <label class="@Model.SellerCloudOrderID list-group-item"><span style="color:blue;"> @Model.BBProductDetail.Select(e => e.SCOrderStatus).FirstOrDefault()</span></label>
+                    }
+                    else if (SCStatus == "Completed")
+                    {
+                        <label class="@Model.SellerCloudOrderID list-group-item"><span style="color:white;background-color:green;"> @Model.BBProductDetail.Select(e => e.SCOrderStatus).FirstOrDefault()</span></label>
+                    }
+                    else if (SCStatus == "Canceled")
+                    {
+                        <label class="@Model.SellerCloudOrderID list-group-item"><span style="color:white;background-color:orange"> @Model.BBProductDetail.Select(e => e.SCOrderStatus).FirstOrDefault()</span></label>
+                    }
+                    else if (SCStatus == "OnHold")
+                    {
+                        <label class="@Model.SellerCloudOrderID list-group-item"><span style="color:red"> @Model.BBProductDetail.Select(e => e.SCOrderStatus).FirstOrDefault()</span></label>
+                    }
+                    else
+                    {
+                        <label class="@Model.SellerCloudOrderID list-group-item"><span> @Model.BBProductDetail.Select(e => e.SCOrderStatus).FirstOrDefault()</span></label>
+                    }
+                    @{
+                        string Drp = Model.BBProductDetail.Select(e => e.ZincStatus).FirstOrDefault();
+                    }
+                    @if (Drp == "Requested")
+                    {
+                        <label class="list-group-item zincStatus" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="color:orange;">DropShip: @*<span style="color:orange;">*@ @Model.BBProductDetail.Select(e => e.ZincStatus).FirstOrDefault()@*</span>*@</label>
+                    }
+                    else if (Drp == "None")
+                    {
+                        <label class="list-group-item zincStatus" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="color:blue;">DropShip: @*<span style="color:blue;">*@ @Model.BBProductDetail.Select(e => e.ZincStatus).FirstOrDefault()@*</span>*@</label>
+                    }
+                    else
+                    {
+                        <label class="list-group-item zincStatus" data-SellerCloudOrderId="@Model.SellerCloudOrderID">DropShip: <span style=""> @Model.BBProductDetail.Select(e => e.ZincStatus).FirstOrDefault()</span></label>
+                    }
+
+
+
+                    @if (Model.PaymentStatus == "FullRefund")
+                    {
+                        <label class="list-group-item PaymentStatus"><span style="color:white;background-color:red">  @Model.PaymentStatus  </span>  </label>
+                    }
+                    else if (Model.PaymentStatus == "Charged")
+                    {
+                        <label style=" " class="list-group-item PaymentStatus"><span style="color:blue">@Model.PaymentStatus</span>  </label>
+                    }
+                    else if (Model.PaymentStatus == "PartiallyRefund")
+                    {
+                        <label style=" " class="list-group-item PaymentStatus"><span style="color:red; font-weight:bold ">@Model.PaymentStatus</span>  </label>
+                    }
+                    else
+                    {
+                        <label style="" class="list-group-item PaymentStatus"><span>@Model.PaymentStatus</span>      </label>
+                    }
+
+                    @*<div class="list-group">*@
+                    <label class="list-group-item mt-3" style="font-weight:bold;padding-left: 5px;">
+                        <span class=" ">Zinc Status</span>
+                    </label>
+
+                    @{string ZincInternalStatus = Model.BBProductDetail.Select(e => e.ZincOrderStatusInternal).FirstOrDefault(); }
+                    <label class="list-group-item @ZincInternalStatus ShowZincOrderLatestStatus"> @string.Format("{0}", ZincInternalStatus == string.Empty ? "N/A" : ZincInternalStatus) </label>
+                    <label class="list-group-item mt-3" style="font-weight:bold;padding-left: 5px;">
+                        <span class="">BestBuy Status</span>
+                    </label>
+                    <label class="list-group-item">@Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</label>
+
+                    @*</div>*@
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="col-10">
+            <div class="row">
+                <div class="col-6 border ">
+                    <div style="padding-top:10px;">
+                        <label class="col-3 p-0">Company:</label>
+                        <label>
+                            HLD Canada
+
+                            <img src="~/Images/canadaflag.png" style="height:10px;width:20px" />
+                        </label>
+                        @if (Model.IsNotes == "1")
+                        {
+                            <span><img src="~/Images/orange-2.png" style="height: 22px;cursor: pointer;" value="@Model.SellerCloudOrderID" class="btnViewNotes" /></span>
+                        }
+                        else
+                        {
+
+                            <span><img src="~/Images/empty-2.png" style="height: 22px;cursor: pointer;" value="@Model.SellerCloudOrderID" class="btnViewNotes" /></span>
+                        }
+                    </div>
+                    <div>
+                        <label class="col-3 p-0">SC Order#:</label>
+                        @*<label>@Model.SellerCloudOrderID</label>*@
+                        <a target="_blank" href="https://lp.cwa.sellercloud.com/Orders/Orders_Details.aspx?ID=@Model.SellerCloudOrderID"> @Model.SellerCloudOrderID</a>
+                        @if (Model.IsParent == "1")
+                        {
+
+                            <div class="tooltipParentchild">
+                                @*<span style="color:red">Parent</span>*@
+                                <a id="GetParentIdbtn" data-id="@Model.SellerCloudOrderID" asp-route-SCorderid="" style="margin-left:5px;color:red;font-weight: 600;">Parent</a>
+                                <div class="top">
+                                    <div class="row rowsclass" id="appendivchildparent">
+                                        <div>
+                                            <p style="margin-bottom: 5px">Parent Order:</p>
+                                            <label id="lblparent">
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <p style="margin-bottom: 5px">Child Order:</p>
+                                            <label id="lblchild">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.ParentOrderID != "0")
+                        {
+                            <span style="color:red">Child of</span> <a target="_blank" href="https://lp.cwa.sellercloud.com/Orders/Orders_Details.aspx?ID=@Model.SellerCloudOrderID"> @Model.ParentOrderID</a>
+                        }
+
+                    </div>
+                    <div>
+                        <label class="col-3 p-0">Channel Order:</label>
+                        @*<label>@Model.OrderNumber</label>*@
+                        <a href="https://marketplace.bestbuy.ca/mmp/shop/order/@Model.OrderNumber" target="_blank">@Model.OrderNumber</a>
+                    </div>
+                    <div>
+                        <label class="col-3 p-0">Date:</label>
+                        <label>@Model.OrderDate.Value</label>
+                    </div>
+                    <div>
+                        <label class="col-3 p-0">Channel:</label>
+                        <label>BestBuy</label>
+                    </div>
+
+                    <div>
+                        <label class="col-3 p-0">Currency:</label>
+                        <label>CAD $</label>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class=" border " style="height: 100%;">
+                        @*<p>Logs</p>*@
+                        <h6 style="margin-left:15px; margin-top:5px;"><b>Credit Card Detail</b></h6>
+                        <label style="margin-left:15px; margin-top:5px;"><span style="font-weight:bold">Account Name:</span>&nbsp<span id="accountname">@Model.ZincAccountName</span></label><br />
+                        <label style="margin-left:15px;"><span style="font-weight:bold">Credit Card Name:</span>&nbsp<span id="creditcardname">@Model.CreditCardName</span></label><br />
+                    </div>
+
+                </div>
+            </div>
+            <div class="row mt-3 mb-1">
+                <div class="col-3 p-0">
+                    <div class="card " style="margin-right: 5px;min-height: 144px;">
+                        <div class="card-header text-center p-1">
+                            <span> Ship To</span>
+                        </div>
+                        <div class="card-body pt-0" style="min-height:110px;">
+                            <div class="row ">
+                                <label class="m-0">@Model.CustomerName</label>
+                            </div><div class="row">
+                                @if (Model.Street.ToLower().Contains("box"))
+                                {
+                                    <span style="color:white;background-color:red;"> @Model.Street</span>
+                                }
+                                else
+                                {
+                                    <span class="m-0"> @Model.Street</span>
+                                }
+
+                            </div><div class="row">
+                                <label class="m-0">@Model.State</label>
+                            </div><div class="row">
+                                <label class="m-0">@Model.Country</label>
+                            </div>
+                            @if (Model.tracking_number != null && Model.tracking_number != "")
+                            {
+                                <div class="row">
+                                    <label class="m-0">@Model.tracking_number</label>
+                                </div>
+
+                            }
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 p-0">
+                    <div class="card " style="height: 100%;">
+                        <div class="card-header text-center p-1">
+                            <span>Shipping Tags </span>
+                        </div>
+                        <div class="card-body text-center">
+                            <a class="nav-link " asp-controller="Tag" asp-action="Create" target="_blank">Add New Tags</a>
+                            <a class="nav-link " href="javascript:;" id="addasintags" style=""> Assign Tags </a>
+                            <a class="nav-link " href="#" id="Removetags" style=""> Remove Tags </a>
+
+                            <div class="container">
+                                <div class="modal fade" id="myModal" style="margin-top: 80px!important;">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title text-info text-center">Assign Tags</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <select class="selectbox" id="ddlselected" multiple="multiple">
+                                                    <option value="" selected disabled>--Please select your tags--</option>
+
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="alert alert-success  successmessageModel" style="display:none">
+                                                    <a href="#" class="close" aria-label="close">&times;</a>
+                                                    <strong>Success!</strong><span class="successAppendModel"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="alert alert-danger  dangermessageModel " style="display:none">
+                                                    <a href="#" class="close" aria-label="close">&times;</a>
+                                                    <strong>Alert!</strong><span class="failureAppendModel"> Some Error Occured.</span>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container">
+                                <div class="modal fade" id="RemoveModalOpen" style="margin-top: 80px!important;">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title text-info text-center">Remove Tags</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <select class="selectbox" id="selectedRemove" multiple="multiple">
+                                                    <option value="" selected disabled>--Please select your tags--</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="alert alert-success  successmessageModelRM" style="display:none">
+                                                    <a href="#" class="close" aria-label="close">&times;</a>
+                                                    <strong>Success!</strong><span class="successAppendModelRM"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="alert alert-danger  dangermessageModelRM " style="display:none">
+                                                    <a href="#" class="close" aria-label="close">&times;</a>
+                                                    <strong>Alert!</strong><span class="failureAppendModelRM"> Some Error Occured.</span>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" id="btnRemove">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border " style="height: 100%;">
+                        <ul class="nav nav-tabs nav-justified">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#PL">P & L</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#menu1">Menu 2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#menu2">Menu 3</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#menu2">Menu 4</a>
+                            </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div id="PL" class="container tab-pane active">
+                                <div class="row " style="padding-top:10px;">
+
+                                    <div class="col-4">
+                                        <label class="font-weight-bold col-7">Qty:</label>
+                                        <label>
+                                            @Model.TotalQuantity
+                                        </label>
+                                    </div>
+                                    <div class="col-8">
+                                        <label class="font-weight-bold col-3">Comm:</label>
+                                        <label>$@Model.TotalComission</label>
+
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top:10px;">
+
+                                    <div class="col-4 ">
+                                        <label class="font-weight-bold  col-7">Sales:</label>
+
+                                        <label>
+                                            $@Model.TotalPrice
+                                        </label>
+                                    </div>
+
+                                    <div class="col-8 ">
+                                        <label class="font-weight-bold col-3" style="display: inline;padding-right: 8px;">Avg Cost:</label>
+
+                                        @{
+
+                                            decimal value = Model.TotalAverageCost * ViewBag.currencyexchange;
+                                        }
+
+
+                                        USD&nbsp;<span style="color:red">$@Math.Round(@Model.TotalAverageCost / @ViewBag.currencyexchange)</span>
+                                        &nbsp;CAD&nbsp;<span style="font-weight:bold;color:darkgoldenrod">$@Math.Round(Model.TotalAverageCost, 2)</span>
+
+                                    </div>
+
+                                </div>
+                                <div class="row" style="padding-top:10px;">
+
+
+                                    <div class="col-4 ">
+                                        <label class="font-weight-bold col-7">Shipping:</label>
+                                        <label>$@Model.ShippingPrice</label>
+
+                                    </div>
+
+                                    <div class="col-8 ">
+                                        <label class="font-weight-bold col-3">P&L:</label>
+                                        @if (Model.ProfitAndLossInPercentage > 5)
+                                        {
+                                            <label style="color:blue">$@Model.ProfitAndLossInDollar (@Model.ProfitAndLossInPercentage%)</label>
+                                        }
+                                        else
+                                        {
+                                            <label style="color:red">$@Model.ProfitAndLossInDollar (@Model.ProfitAndLossInPercentage%)</label>
+                                        }
+
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div id="menu1" class="container tab-pane fade">
+
+                                <h3>Menu 1</h3>
+                                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            </div>
+                            <div id="menu2" class="container tab-pane fade">
+                                <br>
+                                <h3>Menu 2</h3>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                            </div><div id="menu2" class="container tab-pane fade">
+                                <br>
+                                <h3>Menu 2</h3>
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <table class="table  tblOrderMainHead">
+                <thead class="" style="background-color:lightgray">
+                    <tr>
+                        <th width="0.5%">
+
+                            <input type="checkbox" id="headerCheckBox" />
+                        </th>
+
+                        <th width="4%">Image</th>
+                        <th width="9%">SKU</th>
+                        <th width="13%">Item</th>
+                        <th width="8%" class="text-center">ACost/Item</th>
+                        <th width="3%">Fees</th>
+                        <th width="3%">Profit</th>
+                        <th width="4%">Sale<br />Price/pc</th>
+                        <th width="1%">Qty</th>
+                        <th width="2%">SubTotal</th>
+                        <th width="7%">
+                            WHQ
+
+                            <div class="col-sm-2" style="padding:0px;display: inline;">
+                                <a id="GetquantityFromSellerCloud">
+                                    <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                                </a>
+                                <span>
+                                    <img style="display:none; position:absolute" class="ButtonLoader1" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                </span>
+
+                            </div>
+                        </th>
+                        <th width="27%">ZincASIN</th>
+                        <th width="10%">SC Order Status</th>
+                        <th width="12%">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @foreach (var item in Model.BBProductDetail)
+                    {
+                        <tr>
+                            <td style="">
+                                <input class="selectSkucheckbox" value="@item.ProductSKU" type="checkbox">
+                            </td>
+                            <td>
+
+                                @{
+                                    <a target="_blank" href="@ViewBag.ImageUrL_Large/@item.ImageUrl">
+                                        <img src="@ViewBag.ImagesURL/@item.ImageUrl" class="rounded" height="50" width="50" />
+                                    </a>
+                                }
+
+                            </td>
+                            <td>
+                                <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.ProductSKU" target="_blank">@item.ProductSKU</a>
+                                <div class="row justify-content-xl-center">
+                                    <a style="padding-left:5px;cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.ProductSKU" target="_blank">
+                                        <img height="15px" width="20px" src="~/Images/sellercloud-gray.png" />
+                                    </a>
+
+                                    <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BestBuyPorductID" target="_blank">
+                                        <img height="15px" width="20px" src="~/Images/BestBuy-Gray.png" />
+                                    </a>
+                                    <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.BestBuyPorductID" target="_blank">
+                                        <img height="10px" width="15px" src="~/Images/openbb.png" />
+                                    </a>
+
+
+                                </div>
+                                <div class="row justify-content-xl-center">
+                                    @if (item.skuTags != null)
+                                    {
+                                        @foreach (var tag in item.skuTags)
+                                        {
+                                            <span class="taground" style="background-color:@tag.TagColor;">@tag.TagName</span>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            @if (item.ProductTitle.ToLower().Contains("large"))
+                            {
+                                <td>
+                                    <span>@item.ProductTitle</span> <span style="display:inline-block;color:white;background-color:blue">Large</span>
+                                    <span class="tooltipTitle">
+                                        <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
+
+                                        <span class="topdata" id=@(Model.SellerCloudOrderID + item.ProductSKU)>
+
+                                        </span>
+                                    </span>
+
+                                </td>
+
+                            }
+                            else if (item.ProductTitle.ToLower().Contains("small"))
+                            {
+                                <td>
+                                    <span>@item.ProductTitle</span> <span style="display:inline-block;color:white;background-color:blue">Small</span>
+
+                                    <span class="tooltipTitle">
+                                        <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
+
+                                        <span class="topdata " id=@(Model.SellerCloudOrderID + item.ProductSKU)>
+
+                                        </span>
+                                    </span>
+                                </td>
+
+                            }
+                            else
+                            {
+                                <td>
+                                    @item.ProductTitle
+
+
+                                    <span class="tooltipTitle">
+                                        <i class=" Getproductid fa fa-info" style="cursor:pointer" data-id="@Model.SellerCloudOrderID" data-SKU="@item.ProductSKU" height="18px" width="18px" alt=""></i>
+
+                                        <span class="topdata " id=@(Model.SellerCloudOrderID + item.ProductSKU)>
+
+                                        </span>
+                                    </span>
+                                </td>
+
+                            }
+
+
+
+                            <td class="text-center;display:initial;">
+                                <a asp-action="ProductAddUpdate" target="_blank" asp-controller="Product" asp-route-ProductSKU="@item.ProductSKU"> USD&nbsp;@Math.Round(Convert.ToDecimal(item.AverageCost) / ViewBag.currencyexchange, 2)</a>
+                                <br />
+                                <div style="margin-bottom:3px;">
+                                    CAD&nbsp;<span style="font-weight:bold;color:darkgoldenrod">@Math.Round(Convert.ToDecimal(item.AverageCost), 2)</span>
+                                    <br />
+                                </div>
+                                @foreach (var i in item.approvedPrices)
+                                {
+
+                                    <div style="margin-top:-8px">
+                                        @*<a style='cursor: pointer;' href='/ApprovedPrice?VendorAlias=@i.VendorAlias&Vendor=@i.VendorId&sku=@i.SKU&title=' target='_blank'>*@
+                                        <a style='cursor: pointer;' href='/ApprovedPrice?&sku=@i.SKU&title=' target='_blank'>
+                                            CAD @Math.Round(Convert.ToDecimal(i.CAD), 2)
+                                        </a>
+                                        <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
+                                    </div>
+
+                                }
+                            </td>
+
+
+                            @*<td>@math.round(item.calculation_comissionpercentage)% <br /> $@item.calculation_comission </td>
+                                <td>@math.round(item.calculation_profitlosspercentage)% <br /> $@item.calculation_profitloss </td>*@
+
+                            <td> @item.calculation_Comission<br /> @Math.Round(item.calculation_comissionPercentage)%</td>
+                            <td> @item.calculation_ProfitLoss<br />  @Math.Round(item.calculation_ProfitLossPercentage)%  </td>
+
+                            <td>
+                                @*@{
+                                        decimal total = (item.UnitPrice) - (item.ShippingFee);
+                                    }*@
+                                @item.UnitPrice
+                            </td>
+                            @* <td>@item.UnitPrice</td>*@
+                            <td>@item.TotalQuantity</td>
+                            <td>@String.Format("{0}", item.TotalQuantity * item.UnitPrice)  </td>
+
+                            <td>
+                                <table class="tableWHQty table-borderless">
+                                    <tr>
+                                        @if (item.DropshipStatus)
+                                        {
+                                            <td><span style="color:blue">DSQ:</span> @item.DropshipQty</td>
+                                        }
+                                        else
+                                        {
+                                            <td><span style="color:orange">DSQ:</span> @item.DropshipQty</td>
+                                        }
+
+                                    </tr>
+                                    <tr>
+
+                                        <td>DS:<input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            WHQ: <label class=@(item.ProductSKU+"HLD-CA1")>
+                                                @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            FBA CA: <label class=@(item.ProductSKU+"FBACanada")> @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "FBA Canada").Select(e => e.AvailableQty).FirstOrDefault()</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            FBA CA Int: <label class=@(item.ProductSKU+"InterimFBACA")>  @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "Interim FBA CA").Select(e => e.AvailableQty).FirstOrDefault()</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            On Order: <label><a href="/PurchaseOrder/GetPOProduct?VendorID=&SKU=@item.ProductSKU&POID=&title=&ItemType=OpenItem&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@item.OnOrder</a></label>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                                @*<div class="row">
+
+                                        @if (item.DropshipStatus)
+                                        {<label style="color:blue" class="col-sm-6">DSQ</label>
+                                            <div class="col-sm-6">
+                                                <label>@item.DropshipQty</label> &nbsp; <input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <label style="color:orange" class="col-sm-6">DSQ</label>
+                                            <div class="col-sm-6">
+                                                <label>@item.DropshipQty</label> &nbsp; <input type="checkbox" disabled="disabled" asp-for="@item.DropshipStatus" />
+                                            </div>}
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-6">WHQ</label>
+                                        <div class="col-sm-3">
+                                            <label class=@(item.ProductSKU+"HLD-CA1")>
+                                                @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-2" style="padding:0px">
+                                            <a id="GetquantityFromSellerCloud" data-id="@item.ProductSKU">
+                                                <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                                            </a>
+                                            <span>
+                                                <img style="display:none;" class="ButtonLoader1" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-6">FBA CA</label>
+                                        <div class="col-sm-6">
+
+                                            <label class=@(item.ProductSKU+"FBACanada")>
+                                                @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "FBA Canada").Select(e => e.AvailableQty).FirstOrDefault()
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-6" style="padding-right:0px">FBA CA Int</label>
+                                        <div class="col-sm-6" style="padding-right:0px">
+                                            <label class=@(item.ProductSKU+"InterimFBACA")>
+                                                @item.ProductrWarehouseQtyViewModel.Where(e => e.WarehouseName == "Interim FBA CA").Select(e => e.AvailableQty).FirstOrDefault()
+                                            </label>
+                                        </div>
+                                    </div>*@
+
+                            </td>
+                            <td class="orderviewpage" data-url="@Url.Action("ZincASINDetail","Components",new {sku=item.ProductSKU.Trim()})">
+                                @if (item.ZincAsinDetail != null && item.ZincAsinDetail.Count() > 0)
+                                {
+
+
+                                    @foreach (var Zincitem in item.ZincAsinDetail)
+                                    {
+
+                                        <div class="row">
+                                            <div class="col-sm-12 p-t-b">
+                                                <span>@Zincitem.priority</span>
+                                                <input style="margin-right: 15px;" class="ZincAsinRadioButtonOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-MaxPrice="@Zincitem.max_price" data-ASIN="@Zincitem.ASIN" type="radio" name="@item.ProductSKU" value="@Zincitem.ProductSku" data-id="@Zincitem.bb_product_zinc_id" />
+                                                <a target="_blank" href="https://www.amazon.ca/dp/@Zincitem.ASIN?th=1&psc=1">@Zincitem.ASIN</a>
+                                                @if (Zincitem.prime)
+                                                {
+
+                                                    <img src="/Images/Prime-small.png" /> @*<span>Available</span>*@ }
+                                                else
+                                                {
+                                                    <img src="/Images/Prime-Gray-small.png" />
+                                                    <span style="font-weight:bold;color:red">Not Available</span>}
+                                                AMZPr:  <span class="amazon_price">@Zincitem.amazon_price</span><strong>,</strong>
+                                                <a target="_blank" asp-controller="Zinc" asp-action="ProductZinc" asp-route-ProductSKU="@item.ProductSKU"> MaxPr:<span class="max_price">@Zincitem.max_price</span></a>
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <span style="margin-left: 8px;">
+                                            <a class="updateASINLinkLatestGET" data-SKU="@item.ProductSKU">
+                                                <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                                            </a>
+                                            <span>
+                                                <img style="display:none;" class="updateASINLinkLatest" height="20px" width="20px" src="~/Images/loadingImage.gif" />
+                                            </span>
+                                            <span class="selectasin" style="color:red;display:none">select ASIN!</span>
+                                        </span>
+
+                                    }
+                                }
+
+                                else
+                                {
+                                    <div>
+                                        <span style="color:red">No ASIN detail found</span>
+                                    </div>
+                                }
+
+                            </td>
+
+                            <td>
+                                <div>
+                                    @if (item.ZincOrderStatusInternal == "Shipped" && item.IsTrackingUpdateToSC == false)
+                                    {
+                                        <a href="javascript:;" data-productSku="@item.ProductSKU" data-toggle="tooltip" data-placement="top" title="It will update tracking, DropShip status as Processed & inventory adj in DropShip Canada warehouse" data-itemQuantity="@item.TotalQuantity" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-ZincOrderLogDetailID="@item.ZincOrderLogDetailID" class="sendTrackingToSC">Send Tracking To SC</a>
+                                        <span>
+                                            <img style="display:none;" class="UpdateSCTrackingLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                        </span>
+                                        <div class="pt-1 SCTrackingStatus" style="display:none;">Tracking already updated on SC.</div>
+                                    }
+                                    else if (item.ZincOrderStatusInternal == "Shipped" && item.IsTrackingUpdateToSC == true)
+                                    {
+
+                                        <div class="pt-1 SCTrackingStatus">Tracking already updated on SC</div>
+                                    }
+                                    else
+                                    {
+                                        <a style="display:none" href="javascript:;" data-productSku="@item.ProductSKU" data-toggle="tooltip" data-placement="top" title="It will update tracking, DropShip status as Processed & inventory adj in DropShip Canada warehouse" data-itemQuantity="@item.TotalQuantity" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-ZincOrderLogDetailID="@item.ZincOrderLogDetailID" class="sendTrackingToSC">Send Tracking To SC</a>
+                                        <div class="pt-1 SCTrackingStatus" style="display:none;">Tracking already updated on SC.</div>
+                                    }
+                                </div>
+
+                                <div class="showZincOrderID">
+                                    @if (item.ZincRequestID == string.Empty)
+                                    {
+                                        <a target="_blank" style="display:none;" href="https://dash.zinc.io/ZACiVJJ8DF3YEXg1GgyHj/orders/">Zinc Order ID</a>
+                                    }
+                                    else
+                                    {
+                                        <a target="_blank" href="https://dash.zinc.io/ZACiVJJ8DF3YEXg1GgyHj/orders/@item.ZincRequestID">Zinc Order ID</a>
+                                    }
+
+                                </div>
+                                @* show zinc status message if status is InProgressSuccess *@
+                                @if (item.ZincOrderStatusInternal == "InProgressSuccess")
+                                {
+
+                                    <div class="divZincOrderMessage" style="padding-top:3px;">
+                                        @item.ZincMessage
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="divZincOrderMessage" style="padding-top:3px;display:none;">
+
+
+                                    </div>
+                                    <span style="display:none;color:#ef08bd;" class="processedOutSideZinc">Processed OutSide Zinc</span>
+                                }
+
+                                <div>
+                                    <span>Get SC Status</span>
+                                    <a id="checkSellerCloudOrderStatusviewpage" data-id="@Model.SellerCloudOrderID">
+                                        <img class="" style="cursor:pointer" src="~/Images/RefresSCOrders.png" height="18px" width="18px" alt="">
+                                    </a>
+                                    <span>
+                                        <img style="display:none;" class="ButtonLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                    </span>
+                                </div>
+                            </td>
+
+
+                            <td>
+                                @if (!Model.Street.ToLower().Contains("box"))
+                                {
+                                    @if (item.ZincOrderStatusInternal == "Error" || item.ZincOrderStatusInternal == "Canceled" || item.ZincRequestID == "")
+                                    {
+                                        if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID == "")
+                                        {
+                                            <div>
+                                                <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                                <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                            </div>
+                                        }
+                                        else if (item.ZincStatus == "None" && item.SCOrderStatus == "InProcess" && item.ZincRequestID != "")
+                                        {
+                                            <div>
+                                                <a href="javascript:;" class="resendtozincbtn" style="display:inline-block;color:white" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Resend to Zinc</a>
+                                                <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                            </div>
+                                        }
+                                        <div>
+                                            <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                            <span>
+                                                <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                            </span>
+                                        </div>
+                                    }
+                                    else if (item.ZincOrderStatusInternal == "InProcess" || item.ZincOrderStatusInternal == "OrderRequestSent" || item.ZincOrderStatusInternal == "InProgressSuccess")
+                                    {
+                                        <a href="javascript:;" style="display:block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                        <span>
+                                            <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                        </span>
+                                        <div>
+                                            <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                            <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                        </div>
+                                    }
+                                    else if (item.ZincOrderStatusInternal == "" && item.ZincRequestID != "")
+                                    {
+                                        <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                        <span>
+                                            <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                        </span>
+                                        <div>
+                                            <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" data-profitlose="@Model.ProfitAndLossInDollar" data-profitpercentage="@Model.ProfitAndLossInPercentage" role="button">Send to Zinc</a>
+                                            <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@Model.SellerCloudOrderID" style="" data-ZincOrderLogID="@item.ZincOrderLogID" data-ZincRequestID="@item.ZincRequestID">Get Zinc Update</a>
+                                        <span>
+                                            <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                        </span>
+                                        <div>
+                                            <a href="javascript:;" class="btnsendtozincorview" style="display:inline-block;display:none" id="btnSendToZincOrderView" data-SKU="@item.ProductSKU" data-OrderDetailID="@item.OrderDetailID" data-OrderId="@Model.OrderNumber" data-SellerCloudOrderId="@Model.SellerCloudOrderID" role="button">Send to Zinc</a>
+                                            <img style="display:none;cursor:pointer;" id="imgLockZincOrder" height="15px" width="15px" src="~/Images/lock.png" />
+                                        </div>
+                                    }
+                                }
+                                <label id="ErrorZinc"></label>
+                            </td>
+
+
+
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModalShow" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <h4 class="modal-title">Status</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="myModalError">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModalQTY" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <strong style="">
+                    <i class="fa fa-exclamation-triangle" style="color:red"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Error!</span>
+                </strong>
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBodyQTY">
+                <div class="row">
+                    <h6 style="padding-left:17px">Order status is not suitable to send to zinc.</h6>
+
+                </div>
+
+                @*<div class="lblSellerCloudOrderStatus">
+                        1: <span style="color:blue;"></span>
+                    </div>
+
+                    <div class="checkSellerCloudOrderStatus">
+                        2: <span style="color:blue;"></span>
+                    </div>
+
+                    <div class="paymentStatus">
+                        3: <span style="color:blue;"></span>
+                    </div>*@
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="myModalERR" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:88%!important">
+            <div class="modal-header">
+                <strong style="margin-left: 17px;">
+                    <i class="fa fa-exclamation-triangle" style="color:orange"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Warning!</span>
+                </strong>
+
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBodyERR">
+
+
+
+                <h6 style="padding-left:17px">Stock is available in default warehouse, please ensure prior to sending order to Zinc</h6>
+                <h6 style="padding-left:17px"><b>WHQ: </b><span class="WHQQTY" style="color:cadetblue"></span></h6>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <div class="row col-md-12 p-0">
+                    <div class="col-md-6 p-0">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="btn btn-success m-1" id="sellerstatusInOrderViewPage" target="_blank" style="float:right;color:white">Proceed!</a>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="loadertbl">
+    <img src="~/Images/giffff.gif" />
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".loadertbl").hide();
+        $.fn.checkUncheckSKU_checkbox = function (status) {
+            $(document).find('.selectSkucheckbox').each(function (index) {
+                $(this).attr('checked', status);
+            });
+        }
+
+
+            $(".nav-tabs a").click(function () {
+                $(this).tab('show');
+            });
+
+        function myfun() {
+             if (localStorage.getItem('SaveAcount')) {
+                 $('.accountdetail').val(localStorage.getItem('SaveAcounttext'));
+                 //$('#ZincAccountsId ').val(localStorage.getItem('SaveAcount'));
+
+                }
+
+            $(function () {
+                    $(document).on('change','#ZincAccountsId',function () {
+                        localStorage.setItem('SaveAcount', this.value);
+                        var name = $('#ZincAccountsId option:selected').text();
+                        localStorage.setItem('SaveAcounttext',name);
+
+
+                    });
+                });
+
+        }
+
+        function GetstatusfromSellerCloud() {
+            debugger
+            $(".loadertbl").show();
+            $('#myModalERR').modal('hide');
+            var loader = $('.ButtonLoader');
+            var zincStatus = $('.zincStatus');
+            var PaymentStatus = $('.PaymentStatus');
+            var btnSendToZinc = $('#btnSendToZincOrderView');
+            var profitlose = $(sendToZincReferenceAferSubmit).attr('data-profitlose');
+            var profitpercentage = $(sendToZincReferenceAferSubmit).attr('data-profitpercentage');
+            var profitlose = $(sendToZincReferenceAferSubmit).attr('data-profitlose');
+            var profitpercentage = $(sendToZincReferenceAferSubmit).attr('data-profitpercentage');
+
+            var OrderId = $(sendToZincReferenceAferSubmit).attr('data-OrderId');
+
+            var SellerCloudOrderId = $(sendToZincReferenceAferSubmit).attr('data-SellerCloudOrderId');
+
+            var OrderId = $(sendToZincReferenceAferSubmit).attr('data-OrderId');
+
+            var SellerCloudOrderId = $(sendToZincReferenceAferSubmit).attr('data-SellerCloudOrderId');
+            console.log("SellerCloudOrderId1111>", SellerCloudOrderId)
+            $(loader).css('display', 'block');
+            //var Url = '/SellerCloud/GetOrderStatus/';
+            var Url = '/SellerCloud/GetOrdersFromSCRest/';
+
+
+            var URL = '/BBOrderViewPage/SendOrderToZincOrderView';
+            var SKUArraryForSinglePage = [];
+            var ASINList_ = [];
+            //var sku=$(this).attr('data-SKU');
+            var RadioButtonMaxPrice = 0;
+            // var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
+            var RadioButtonASINChecked = $();
+            $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
+                var status = $(this).is(':checked');
+                if (status) {
+
+                    var productASIN = $(this).attr('data-ASIN');
+                    var OrderDetailID = $(this).attr('data-OrderDetailID');
+                    var MaxPrice = $(this).attr('data-MaxPrice');
+                    var ASINData = { "Asin": productASIN, "OrderlineId": OrderDetailID, "MaxPrice": MaxPrice };
+                    ASINList_.push(ASINData)
+
+                }
+            });
+            var ASINList = []
+            ASINList = JSON.stringify(ASINList_);
+            $(document).find(".selectSkucheckbox").each(function (index) {
+
+                var productSKU = $(this).val();
+
+                SKUArraryForSinglePage.push(productSKU)
+
+
+            });
+
+            $.ajax({
+                type: 'Get',
+                url: Url,
+                data: { orderid: SellerCloudOrderId },
+                dataType: 'json',
+                traditional: true,
+                success: function (data) {
+                    debugger
+                    console.log("fata get",data);
+                    $(".loadertbl").hide();
+                    $(loader).css('display', 'none');
+                    if (data.DropshipStatus == 0 && data.OrderStatus == 2 && data.PaymentStatus == 30) {
+                        $.ajax({
+                            type: 'Get',
+                            url: URL,
+                            data: { ASINList: ASINList, orderid: OrderId, SellerOrderID: SellerCloudOrderId },
+                            dataType: 'json',
+                            traditional: true,
+                            success: function (data) {
+                                debugger;
+                                JsonDataOfOrder = data;
+                                console.log("JsonDataOfOrderJsonDataOfOrder>",JsonDataOfOrder);
+                                console.log("JsonDataOfOrderJsonDataOfOrder111111>",data);
+
+                                $.get('@Url.Action("ConfirmationOfZincOrderView", "BBOrderViewPage")', { JsonData: JsonDataOfOrder, profitlose: profitlose, percentageprofit: profitpercentage }).done(function (response) {
+                                    $('#SendozincOrderViewBody').empty();
+                                    $('#SendozincOrderViewBody').html(response);
+
+
+                                    var successMessage = $('#SendozincOrderViewBody').find('.successmessage');
+                                    $(successMessage).hide()
+
+                                    $('#SendozincOrderView').modal('show');
+
+
+                                    //$('#SendozincOrderViewBody').find(".accountdetail").append();
+                                    myfun();
+                                    var last = localStorage.getItem('SaveAcounttext')
+
+
+                                    if (last == "am_b1") {
+
+                                        $('#ZincAccountsId option[value=10]').attr('selected', 'selected');
+                                        localStorage.setItem('SaveAcounttext', "am_b3")
+                                    }
+                                    else {
+                                        $('#ZincAccountsId option[value=9]').attr('selected', 'selected');
+                                        localStorage.setItem('SaveAcounttext',"am_b1")
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                    else {
+                        $('#myModalQTY').modal('show');
+
+                        //$('#modelBodyQTY').find('.lblSellerCloudOrderStatus>span').append(data.scOrderStatus);
+                        //$('#modelBodyQTY').find('.checkSellerCloudOrderStatus>span').append(data.DropshipStatus);
+                        //$('#modelBodyQTY').find('.paymentStatus>span').append(data.PaymentStats);
+                    }
+                }
+            });
+
+        }
+        function zendToZincOrderView() {
+            $(".loadertbl").show();
+            $('#modelBodyERR').find('.WHQQTY').empty();
+            sendToZincReferenceAferSubmit = $(this);
+            var SKUArraryForSinglePage = [];
+            var ASINList_ = [];
+            //var sku=$(this).attr('data-SKU');
+            var RadioButtonMaxPrice = 0;
+            // var RadioButtonASINChecked = $(this).closest('tr').find("input:radio[name='choice']:checked");
+            var RadioButtonASINChecked = $();
+            $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
+                var status = $(this).is(':checked');
+                if (status) {
+
+                    var productASIN = $(this).attr('data-ASIN');
+                    var OrderDetailID = $(this).attr('data-OrderDetailID');
+                    var MaxPrice = $(this).attr('data-MaxPrice');
+                    var ASINData = { "Asin": productASIN, "OrderlineId": OrderDetailID, "MaxPrice": MaxPrice };
+                    ASINList_.push(ASINData)
+
+                }
+            });
+            var ASINList = []
+            ASINList = JSON.stringify(ASINList_);
+            $(document).find(".selectSkucheckbox").each(function (index) {
+
+                var productSKU = $(this).val();
+
+                SKUArraryForSinglePage.push(productSKU)
+
+
+            });
+            console.log("ASKUUU", SKUArraryForSinglePage);
+
+            if (SKUArraryForSinglePage.length == ASINList_.length) {
+                var QTYCHECK = 0;
+                var AvailableQty="";
+                console.log("SKKKKKKK", SKUArraryForSinglePage)
+
+                //var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst';
+                var URLQTY = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIstForSingleWH';
+
+                $.each(SKUArraryForSinglePage, function (index, value) {
+
+                    console.log("valueeeeee", value)
+                    $.ajax({
+                        type: 'Get',
+                        url: URLQTY,
+                        data: { sku: value },
+                        dataType: 'json',
+                        traditional: true,
+                        async:false,
+                        success: function (data) {
+
+                            $.each(data, function (index, value) {
+
+                                if (value.WarehouseID == 5)
+                                {
+                                    if (value.AvailableQty > 0 && value.WarehouseID == 5) {
+                                        QTYCHECK = 1;
+                                        AvailableQty = value.AvailableQty;
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+
+                });
+                if (QTYCHECK == 1) {
+                    $(".loadertbl").hide();
+                    $('#myModalERR').modal('show');
+                    $('#modelBodyERR').find('.WHQQTY').append(AvailableQty);
+                }
+                else {
+                    GetstatusfromSellerCloud();
+                    myfun();
+                }
+
+                    $('#ErrorZinc').css("display", "none");
+
+                    var profitlose = $(this).attr('data-profitlose');
+                    var profitpercentage = $(this).attr('data-profitpercentage');
+
+                    var OrderId = $(this).attr('data-OrderId');
+
+                    var SellerCloudOrderId = $(this).attr('data-SellerCloudOrderId');
+
+                @*var URL = '/BBOrderViewPage/SendOrderToZincOrderView';
+                    console.log(ASINList);
+                $.ajax({
+                    type: 'Get',
+                    url: URL,
+                    data: { ASINList: ASINList,orderid: OrderId, SellerOrderID: SellerCloudOrderId},
+                        dataType: 'json',
+                        traditional: true,
+                        success: function (data) {
+                            JsonDataOfOrder = data;
+                            $.get('@Url.Action("ConfirmationOfZincOrderView", "BBOrderViewPage")', { JsonData: JsonDataOfOrder,profitlose: profitlose, percentageprofit: profitpercentage }).done(function (response) {
+                                $('#SendozincOrderViewBody').empty();
+                                $('#SendozincOrderViewBody').html(response);
+
+                                var successMessage = $('#SendozincOrderViewBody').find('.successmessage');
+                                $(successMessage).hide()
+
+                                $('#SendozincOrderView').modal('show');
+                            });
+
+                        }
+                    });*@
+
+
+                }
+
+
+            else {
+                $(".loadertbl").hide();
+                $('#myModalError').empty();
+                $('#myModalError').html("<div>Please Select ASIN to Send Order</div>");
+                $('#myModalShow').modal('show');
+            }
+        }
+
+        //function updateASINLINKK(parents) {
+
+        //    var zincDetailDiv = $(parents).find(".orderviewpage");
+
+        //    var dataURL = $(parents).find(".orderviewpage").attr('data-url');
+        //    $.get(dataURL).done(function (response) {
+
+        //        $(zincDetailDiv).empty();
+
+        //        $(zincDetailDiv).html(response);
+
+        //    });
+
+        //}
+
+        $(document).on("click", ".updateASINLinkLatestGET", function () {
+            var parents = $(this).parents("tr");
+            debugger
+            var zincloader = $(this).closest("span").find(".updateASINLinkLatest");
+            var asinselect = $(this).closest("span").find(".selectasin");
+
+
+            var amazon_price = $(this).parents("span").prev().find('.amazon_price');
+            var max_price = $(this).parents("span").prev().find('.max_price');
+            var radiocheck = $(document).find(".ZincAsinRadioButtonOrderView:checked").is(":checked");
+            if (radiocheck == false) {
+
+                $(asinselect).css('display', 'inline-block');
+                //$(zincloader).css('display', 'inline-block');
+            }
+            else {
+                $(zincloader).css('display', 'inline-block');
+                $(asinselect).css('display', 'none');
+            }
+            $(document).find(".ZincAsinRadioButtonOrderView:checked").each(function (index) {
+
+                var status = $(this).is(':checked');
+
+                if (status) {
+
+                    var OrderId = $(this).attr('data-id');
+                    var productASIN = $(this).attr('data-ASIN');
+                    var sku = $(this).attr('data-SKU');
+
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/Zinc/GetProductOfferDataFromZincAndUpdate?orderid=' + productASIN + '&ProductSKU=' + sku + '&bbZincID=' + OrderId,
+                    success: function (data) {
+
+                        $(zincloader).css('display', 'none');
+
+                        //updateASINLINKK(parents);
+                        window.location.reload();
+                        if (data.itemprice != 0) {
+
+                            $(amazon_price).closest("div").find(".amazon_price").text(data.itemprice / 100);
+
+                            //$(amazon_price).closest("div").find(".amazon_price").text("12");
+                            //$(max_price).closest("div").find(".max_price").text("40");
+
+                            var maxprice = data.itemprice * 1.25 / 100;
+                            $(max_price).closest("div").find(".max_price").text(maxprice.toFixed(2));
+
+                            //$("div").attr("data-MaxPrice");
+                            //$(RadioButtonASINChecked).closest("div").find(".amazon_price").text("habib");
+                            //$(RadioButtonASINChecked).closest("div").find(".max_price").text("shafique");
+                            //$(RadioButtonASINChecked).attr("data-MaxPrice");
+                        }
+                        else {
+
+                        }
+                    }
+                });
+
+            });
+
+
+
+
+        });
+
+
+          $(document).on('click', '#sellerstatusInOrderViewPage', GetstatusfromSellerCloud);
+            $(document).on('click', '#btnSendToZincOrderView', zendToZincOrderView);
+
+
+            $(document).on('click', '#btnSendBestBuyOrderToZincOrderView', function () {
+                debugger;
+
+                $('.close').trigger('click');
+                $(".btnsendtozincorview").prop('disabled', true).css("cursor", "not-allowed");
+                var dataID = $(this).attr('data-id');
+                var scOrderID = $(this).attr('data-scOrderID');
+                  var orderDateTimeShip = $('#orderDateTimeShip').val();
+                var disableButton = $(this);
+                $(disableButton).attr('disabled', true);
+                var rootDivOfButton = $(disableButton).parents('.findParent');
+
+                $(sendToZincReferenceAferSubmit).css('display', 'none');
+
+                var mainTR = $(sendToZincReferenceAferSubmit).closest('tr');
+                var mainAnchor = $(mainTR).find(".showZincOrderID a");
+                var zincReteriveOrder = $(mainTR).find('#ZincOrderReterive');
+                var orderStatus = $('.ShowZincOrderLatestStatus');
+                var processedOutSideZinc = $(mainTR).find('.processedOutSideZinc');
+                var lockZincOrder = $(sendToZincReferenceAferSubmit).closest('div').find('#imgLockZincOrder');
+                $(rootDivOfButton).find('.successmessage').show();
+                // console.log(JsonDataOfOrder);
+                var CreditCardId = $('#CreditCardDetailId').val();
+                var ZincAccountId = $('#ZincAccountsId').val();
+                var DeliveryDays = $('#DeliveryDays').val();
+
+                debugger;
+                var Url = '/Zinc/SubmitOrderToZinc/';
+                $.ajax({
+                      url: Url,
+                    data: { ZincOrderdata: JsonDataOfOrder, orderDateTimeShip: orderDateTimeShip, CreditCardId: CreditCardId, ZincAccountId: ZincAccountId, DeliveryDays: DeliveryDays},
+                    type: 'POST',
+                    traditional: true,
+                    //contentType: 'application/json',
+                    success: function (data) {
+
+                        if (data.requestid != "") {
+                            $(".btnsendtozincorview").prop('disabled', false).css("cursor", "pointer");
+                            //$('#SendozincOrderViewBody').find('.showmessage').css('display', 'inline');
+                            $.notify(data.message, { globalPosition: 'right middle', className: 'success' });
+                            var gettingHref = $(mainAnchor).attr('href');
+                            $(mainAnchor).attr('href', gettingHref + data.requestid)
+
+                            if ($(zincReteriveOrder).length) {
+                                $(zincReteriveOrder).attr("data-zincorderlogid", data.zincorderlogid);
+                                $(zincReteriveOrder).attr("data-zincrequestid", data.zincrequestid);
+                                $(zincReteriveOrder).css('display', 'block');
+                                $(orderStatus).text('Order Request Sent').css({ 'color': 'blue', 'display': 'inline' });
+
+                                if ($(processedOutSideZinc).length) {
+                                    $(processedOutSideZinc).css('display', 'none');
+                                }
+                            }
+
+                            $(mainAnchor).css('display', 'inline');
+                        }
+                    }
+                });
+
+                //commented code for display lock icone
+
+                //$(lockZincOrder).css('display', 'inline');
+                //    $(lockZincOrder).attr('data-status', false);
+
+            });
+
+            $(document).on('click', '#ZincOrderReterive', function () {
+
+                var zincOrderReterive = $(this);
+                $(zincOrderReterive).attr('disabled', true);
+                var loader = $(this).closest('td').find('.ZincOrderReteriveLoader');
+                $(loader).css('display', 'inline');
+                var ZincOrderLogID = $(this).attr('data-ZincOrderLogID');
+                var SellerCloudID = $(this).attr('data-SellerCloudOrderId');
+                var ZincRequestID = $(this).attr('data-ZincRequestID');
+                var mainTR = $(zincOrderReterive).closest('tr');
+
+                var Url = '/Zinc/ReteriveOrderStatusFromZinc/';
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { zincOrderLogID: ZincOrderLogID, zincRequestID: ZincRequestID, sellerCloudID: SellerCloudID },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+
+                        $(loader).css('display', 'none');
+                        if (data.success) {
+                            var showZincOrderStatus =$('.ShowZincOrderLatestStatus');
+                            var showZincOrderMessage = $(mainTR).find('.divZincOrderMessage');
+                            var sendTrackingToSC = $(mainTR).find('.sendTrackingToSC');
+
+
+
+                            $(showZincOrderStatus).attr('data-ZincOrderLogDetailID', data.zincOrderLogDetailID);
+                            if (data.ZincStatus == "Error") {
+                                $(showZincOrderStatus).text(data.ZincStatus);
+                                $(showZincOrderStatus).attr('data-ZincOrderLogDetailID', data.zincOrderLogDetailID);
+                                $(showZincOrderStatus).attr('data-ZincOrderLogStatus', data.ZincStatus);
+                                $(showZincOrderStatus).css('color', 'red');
+                                $(showZincOrderStatus).css('display', 'inline');
+                                $(zincOrderReterive).css('display', 'none');
+                                $(mainTR).find('#btnSendToZinc').css('display', 'inline');
+                                $(mainTR).find('#btnProcessedOutSideZinc').css('display', 'inline');
+                            }
+                            if (data.ZincStatus == "Canceled") {
+                                $(showZincOrderStatus).text('Cancelled on Amz/Zinc');
+                                $(showZincOrderStatus).attr('data-ZincOrderLogDetailID', data.zincOrderLogDetailID);
+                                $(showZincOrderStatus).attr('data-ZincOrderLogStatus', data.ZincStatus);
+                                $(showZincOrderStatus).css('color', 'mediumvioletred');
+                                $(showZincOrderStatus).css('display', 'inline');
+                                $(zincOrderReterive).css('display', 'none');
+                                //$(mainTR).find('#btnSendToZinc').css('display', 'inline');
+                                $(mainTR).find('#btnProcessedOutSideZinc').css('display', 'inline');
+                                //$('a#checkSellerCloudOrderStatus').trigger('click');
+                            }
+                            if (data.ZincStatus == "InProcess") {
+                                $(showZincOrderStatus).text(data.ZincStatus);
+                                $(showZincOrderStatus).attr('data-ZincOrderLogDetailID', data.zincOrderLogDetailID);
+                                $(showZincOrderStatus).attr('data-ZincOrderLogStatus', data.ZincStatus);
+                                $(showZincOrderStatus).css('color', 'orange');
+                                $(showZincOrderStatus).css('display', 'inline');
+                                $(zincOrderReterive).css('display', 'inline');
+                            }
+                            if (data.ZincStatus == "InProgressSuccess") {
+                                $(showZincOrderStatus).text('InProgress (Success)');
+                                $(showZincOrderMessage).text(data.ZincMessage);
+                                $(showZincOrderMessage).css('display', 'block');
+                                $(showZincOrderStatus).attr('data-ZincOrderLogDetailID', data.zincOrderLogDetailID);
+                                $(showZincOrderStatus).attr('data-ZincOrderLogStatus', data.ZincStatus);
+                                $(showZincOrderStatus).css('color', 'green');
+                                $(showZincOrderStatus).css('display', 'inline');
+                                $(zincOrderReterive).css('display', 'inline');
+                            }
+                            if (data.ZincStatus == "Shipped") {
+
+                                $(sendTrackingToSC).css('display', 'block');
+                                $(sendTrackingToSC).attr("data-ZincOrderLogDetailID", data.zincOrderLogDetailID);
+                                $(showZincOrderStatus).text(data.ZincStatus);
+                                $(showZincOrderMessage).css('display', 'none');
+                                $(showZincOrderStatus).attr('data-ZincOrderLogDetailID', data.zincOrderLogDetailID);
+                                $(showZincOrderStatus).attr('data-ZincOrderLogStatus', data.ZincStatus);
+                                $(showZincOrderStatus).css('color', 'green');
+                                $(showZincOrderStatus).css({ 'display': 'inline', 'cursor': 'pointer', 'font-weight': 'bold' });
+                                $(zincOrderReterive).css('display', 'none');
+                            }
+
+
+
+                            $(zincOrderReterive).removeAttr('disabled');
+
+                        }
+                    }
+                });
+
+
+
+
+                //'span.showToolTipData'
+            });
+
+
+            $('body').on('click', 'a#checkSellerCloudOrderStatusviewpage', function () {
+
+                var sellerCloudOrderId = $(this).attr('data-id');
+                var loader = $('.ButtonLoader');
+                var zincStatus = $('.zincStatus');
+                var PaymentStatus = $('.PaymentStatus');
+                var btnSendToZinc = $('#btnSendToZincOrderView');
+                $(loader).css('display', 'block');
+                var Url = '/SellerCloud/GetOrderStatus/';
+
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { orderid: sellerCloudOrderId },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                        if (data.status) {
+                            $(loader).css('display', 'none');
+                            if (data.DropshipStatus != 'None') {
+                                $(btnSendToZincOrderView).css('display', 'none');
+                            }
+                            if (data.scOrderStatus == "InProcess") {
+                                $("." + sellerCloudOrderId).children('span').css('color', 'blue').text(data.scOrderStatus);
+                            }
+                            else if (data.scOrderStatus == "Completed") {
+                                $("." + sellerCloudOrderId).children('span').css({ "color": "white", "background-color": "green" }).text(data.scOrderStatus);
+                            }
+                            else if (data.scOrderStatus == "Canceled") {
+                                $("." + sellerCloudOrderId).children('span').css({ "color": "white", "background-color": "orange" }).text(data.scOrderStatus);
+                            }
+                            else if (data.scOrderStatus == "OnHold") {
+                                $("." + sellerCloudOrderId).children('span').css('color', 'red').text(data.scOrderStatus);
+                            }
+                            else {
+                                $("." + sellerCloudOrderId).children('span').text(data.scOrderStatus);
+                            }
+
+                            if (data.DropshipStatus == "None") {
+
+                                $(".zincStatus").css('color', 'blue').text("DropShip:"+  data.DropshipStatus);
+                            }
+                            else if (data.DropshipStatus == "Requested") {
+                                $(".zincStatus").css('color', 'orange').text("DropShip:" +  data.DropshipStatus);
+                            }
+                            else {
+                                $(".zincStatus").text("DropShip:" + data.DropshipStatus);
+                            }
+                            // $(".zincStatus").text("DS "+data.DropshipStatus);
+                            //$('.zincStatus').text("DropShip: " + data.DropshipStatus);
+                            if (data.PaymentStats == "Charged") {
+                                $('.PaymentStatus').children('span').css('color', 'blue').text(data.PaymentStats);
+                            }
+                            else if (data.PaymentStats == "FullRefund") {
+                                $('.PaymentStatus').children('span').css({ 'color': 'white', 'background-color': 'red' }).text(data.PaymentStats);
+                            }
+                            else {
+                                $('.PaymentStatus').children('span').text(data.PaymentStats);
+                            }
+
+                        }
+                        else {
+                            $(loader).css('display', 'none');
+                        }
+                    }
+                })
+            });
+
+            // update tracking information after seller cloud order is fully shipped
+
+            $(document).on('click', 'a.sendTrackingToSC', function () {
+                debugger;
+                var sendTrackingToSC = $(this);
+                var mainTR = $(sendTrackingToSC).closest('tr');
+                var loader = $(sendTrackingToSC).next('span').find('img');
+                $(loader).css('display', 'inline');
+                var _sellerCloudOrderId = $(sendTrackingToSC).attr('data-SellerCloudOrderId');
+                var _zincOrderLogDetailID = $(sendTrackingToSC).attr('data-ZincOrderLogDetailID');
+                var _itemQuantity = $(sendTrackingToSC).attr('data-itemQuantity');
+                var _productSku = $(sendTrackingToSC).attr('data-productSku');
+                var SCTrackingStatus = $(mainTR).find('.SCTrackingStatus');
+                var sendTrackingToSC = $(mainTR).find('.sendTrackingToSC');
+
+                var Url = '/SellerCloud/SendTrackingToSC/';
+                $.ajax({
+                    url: Url,
+                    data: { sellerCloudOrderId: _sellerCloudOrderId, zincOrderLogDetailID: _zincOrderLogDetailID, itemQuantity: _itemQuantity, productSku: _productSku },
+                    type: 'Get',
+                    traditional: true,
+                    success: function (data) {
+                        if (data.success) {
+                            $(loader).css('display', 'none');
+                            $(SCTrackingStatus).css('display', 'block');
+                            $(sendTrackingToSC).css('display', 'none');
+                        }
+                    }
+                });
+
+            });
+            //$('#addasintags').click(function (e) {
+            //    //e.preventDefault();
+            //    if ($(".selectSkucheckbox").is(":checked")) {
+            //        $('#myModal').modal({
+            //            //backdrop: 'static',
+            //            //keyboard: false
+            //        });
+            //    }
+            //    else {
+            //        alert("please select Product!")
+            //    }
+            //});
+
+
+
+
+
+            $(document).on('click', '#addasintags', function () {
+                if ($(".selectSkucheckbox").is(":checked")) {
+                    $('#myModal').modal({
+                        //backdrop: 'static',
+                        //keyboard: false
+                    });
+
+                    var Url = '/Tag/TagListForAssign/';
+                    $("#ddlselected").empty();
+                    $.ajax({
+                        type: 'Get',
+                        url: Url,
+                        /*data: { orderid: sellerCloudOrderId },*/
+                        dataType: 'json',
+                        traditional: true,
+                        success: function (data) {
+
+                            $.each(data, function (key, value) {
+
+                                // $("#ddlselected").append($("<option></option>").val(value.TagId).html(value.TagName).css({ 'background-color': value.TagColor, 'color': 'white' }).addClass("taground"));
+                                $("#ddlselected").append($("<option></option>").val(value.TagId).html(value.TagName));
+                            })
+
+                            $('#ddlselected').multiselect({
+                                includeSelectAllOption: true
+                            });
+                        }
+                    })
+                }
+                else {
+                    alert("please select Product!")
+                }
+
+            });
+            $(document).on('change', '#headerCheckBox', function () {
+
+                var result = $(this).is(':checked');
+                $.fn.checkUncheckSKU_checkbox(result)
+                //$(document).find('.checkboxSkuForUpdating').each(function (index) {
+                //        $(this).attr('checked', result);
+                //    });
+            });
+
+            $("#btnSave").click(function () {
+                var SKUArraryForSinglePage = [];
+                var Tagid = [];
+               // var productsku = $('.tblOrderMainHead .selectSkucheckbox:checked').val().trim();
+
+                if ($(document).find('#headerCheckBox').is(':checked')) {
+                    $(document).find('.selectSkucheckbox').each(function (index) {
+                        var status = $(this).is(':checked');
+                        if (status) {
+                            var productSKU = $(this).val();
+                            SKUArraryForSinglePage.push(productSKU)
+                        }
+                    });
+                }
+                else {
+                    $(document).find('.selectSkucheckbox').each(function (index) {
+                        var status = $(this).is(':checked');
+                        if (status) {
+                            var productSKU = $(this).val();
+                            SKUArraryForSinglePage.push(productSKU)
+                        }
+                    });
+                }
+                var selected = $("#ddlselected option:selected");
+
+                selected.each(function () {
+                    Tagid.push($(this).val());
+                });
+                if (typeof selected !== 'undefined' && selected.length > 0) {
+                    var Url = '/Tag/AssignTagsToProduct/';
+                    $.ajax({
+                        type: 'Get',
+                        url: Url,
+                        data: { sku: SKUArraryForSinglePage, Tagids: Tagid },
+                        dataType: 'json',
+                        traditional: true,
+                        success: function (data) {
+                            if (data == true) {
+
+                                $('.successAppendModel').empty();
+                                $('.successAppendModel').append('<span class="pl-1">  Updated Successfully ');
+
+                                $('.successmessageModel').css("display", "block");
+                            }
+                            else {
+
+                                $('.failureAppendModel').empty();
+                                $('.failureAppendModel').append('<span class="pl-1"> Something Went Wrong');
+                                $('.dangermessageModel').css("display", "block");
+
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    $('.failureAppendModel').empty();
+                    $('.failureAppendModel').append('<span class="pl-1"> Please Select Tag');
+                    $('.dangermessageModel').css("display", "block");
+                }
+
+
+
+
+        });
+
+        $('#Removetags').click(function () {
+            //e.preventDefault();
+
+            if ($(".selectSkucheckbox:checked").length > 1) {
+                alert("please select only one option");
+            }
+            else if ($(".selectSkucheckbox").is(":checked")) {
+
+                    $('#RemoveModalOpen').modal({
+                        //backdrop: 'static',
+                        //keyboard: false
+                    });
+                var productSKU = "";
+                    $(document).find('.selectSkucheckbox').each(function (index) {
+                        var status = $(this).is(':checked');
+                        if (status) {
+                            productSKU = $(this).val();
+
+                        }
+                    });
+
+                var Url = '/Tag/GetTagforsku/';
+
+                $("#selectedRemove").empty();
+
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { sku: productSKU },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+
+                        $.each(data, function (key, value) {
+
+                            // $("#ddlselected").append($("<option></option>").val(value.TagId).html(value.TagName).css({ 'background-color': value.TagColor, 'color': 'white' }).addClass("taground"));
+                            $("#selectedRemove").append($("<option></option>").val(value.TagId).html(value.TagName));
+                        })
+
+                        $('#selectedRemove').multiselect({
+                            includeSelectAllOption: true
+                        });
+                    }
+                });
+
+
+            }else
+            {
+                alert("please select Product!")
+            }
+        });
+
+
+        $("#btnRemove").click(function () {
+            var productSKU = "";
+            var Tagid = [];
+            // var productsku = $('.tblOrderMainHead .selectSkucheckbox:checked').val().trim();
+
+            if ($(document).find('#headerCheckBox').is(':checked')) {
+                $(document).find('.selectSkucheckbox').each(function (index) {
+                    var status = $(this).is(':checked');
+                    if (status) {
+                         productSKU = $(this).val();
+
+                    }
+                });
+            }
+            else {
+                $(document).find('.selectSkucheckbox').each(function (index) {
+                    var status = $(this).is(':checked');
+                    if (status) {
+                         productSKU = $(this).val();
+
+                    }
+                });
+            }
+            var selected = $("#selectedRemove option:selected");
+
+            selected.each(function () {
+                Tagid.push($(this).val());
+            });
+            if (typeof selected !== 'undefined' && selected.length > 0) {
+                var Url = '/Tag/RemoveTagsToProduct/';
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { sku: productSKU , Tagids: Tagid },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                        if (data == true) {
+
+                            $('.successAppendModelRM').empty();
+                            $('.successAppendModelRM').append('<span class="pl-1">  Removed Successfully ');
+
+                            $('.successmessageModelRM').css("display", "block");
+                        }
+                        else {
+
+                            $('.failureAppendModelRM').empty();
+                            $('.failureAppendModelRM').append('<span class="pl-1"> Something Went Wrong');
+                            $('.dangermessageModelRM').css("display", "block");
+
+                        }
+
+                    }
+                });
+            }
+            else {
+                $('.failureAppendModelRM').empty();
+                $('.failureAppendModelRM').append('<span class="pl-1"> Please Select Tag');
+                $('.dangermessageModelRM').css("display", "block");
+            }
+
+
+
+
+        });
+
+         $('#ApplyActionMenu').click(function (event) {
+             var actionMenu = $('#ActionMenu option:selected').val();
+             if (typeof actionMenu !== 'undefined' && actionMenu !== '' ) {
+             var imageProcessing = $(this).closest('div').find('.ButtonLoader');
+                $(imageProcessing).css('display', 'inline');
+                event.preventDefault();
+                var searchIDForDS_Requested = [];
+                var searchIDForDS_None = [];
+
+             var SellerCloudOrderId = $(document).find('.zincStatus').attr('data-SellerCloudOrderId');
+                var zincStatus = $(document).find('.zincStatus').text().trim();
+                if (zincStatus.indexOf("Requested") >= 0) {
+                    searchIDForDS_Requested.push(SellerCloudOrderId);
+                }
+                else {
+                    searchIDForDS_None.push($(document).attr(SellerCloudOrderId));
+                }
+
+
+                  if (typeof searchIDForDS_None !== 'undefined' && searchIDForDS_None.length > 0) {
+                        $(imageProcessing).css('display', 'none');
+                        $('#AlertModalBody').html("Please Select only DS Requested Orders.These below orders are in DS None status <br>" + searchIDForDS_None);
+                        $('#AlertModal').modal('show');
+                    }
+                    else {
+                        if (typeof searchIDForDS_Requested !== 'undefined' && searchIDForDS_Requested.length > 0) {
+                            $.ajax({
+                                type: 'Get',
+                                url: '@Url.Action("ActionMenu", "SellerCloud")',
+                                data: { actionMenuName: actionMenu, sellerCloudIds: searchIDForDS_Requested },
+                                dataType: 'json',
+                                traditional: true,
+                                success: function (data) {
+                                    $(imageProcessing).css('display', 'none');
+                                    if (data.DSStatus) {
+                                        $.notify(data.message, { globalPosition: 'right middle', className: 'success' });
+                                    }
+                                    setTimeout(function () {
+                                        window.location.reload();
+                                    }, 5000);
+                                }
+                            });
+                        }
+                    }
+             }
+             else {
+
+             }
+
+        });
+
+
+    });
+
+    $(document).on('click', ".btnViewNotes", function (e) {
+                var sellerCloudOrderId = $(this).attr('value');
+                var optionsdate = { day: 'numeric', year: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+
+                $("#NotesModel").modal({ backdrop: 'static', keyboard: false }, 'show');
+                $("#notesmodelform").append('<div style="display:flex"><textarea type="text" class="form-control" maxlength="1000" id="myInput" name="Fielddata" row="3" style="width: 700px;margin-right:2px"></textarea><div style="display: flex;flex-direction: column;align-items: center;justify-content: space-between;"> <span id="count" style="vertical-align: top;"></span> <input type="button" name="" value="Save" class="btn btn-sm btn-success savdata" /></div></div>');
+                $("#NotesModalheader").append(' <h4 class="modal-title">Notes</h4><a id="getSellerCloudOrderNotes"><img title="Get notes from sellercloud"class="" style="cursor:pointer;margin-top: 10px;margin-left: 5px;" src="/Images/RefresSCOrders.png" height="18px" width="18px" alt=""></a><span><img style="display:none;margin-top: 7px;" class="ButtonLoadernotes" height="25px" width="25px" src="/Images/loadingImage.gif" /></span>');
+                $(".closed").click(function () {
+                    $("#NotesModel").modal('hide');
+                    $("#notesmodelform").empty();
+                    $("#NotesModalheader").empty();
+
+                })
+                  $("#myInput").keyup(function(){
+  $("#count").text(($(this).val().length)+"/1000");
+ });
+                $(".savdata").click(function () {
+                    var imageProcessing = $('.ButtonLoadernotes');
+                    $(imageProcessing).css('display', 'inline');
+                    var str = $("#myInput").val();
+                    var options = { day: 'numeric', year: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                    var prnDt = new Date().toLocaleTimeString('en-us', options);
+                    if (str == "") {
+                        alert("please insert notes detail")
+                    }
+                    else {
+
+                        $(".list").append('<span style="color:#9292a2 ;margin-right: 10px;">' + prnDt + '</span>');
+                         $(".list").append('<span style="color:#9292a2 ;margin-right: 10px;">Developer BestBuy</span>');
+                        $(".list").append('<div style="margin-bottom:0px;border: 1px solid beige;padding: 5px 10px;margin-right: 10px;">' + str + '</div>');
+
+
+
+                        var Urlcreate = '/OrderNotes/CreateSCOrderNotes/';
+                        $.ajax({
+                            url: Urlcreate,
+                            data: { orderID: sellerCloudOrderId, Notes: str },
+                            type: 'POST',
+                            traditional: true,
+                            dataType: 'json',
+
+                            success: function (data) {
+                                $(imageProcessing).css('display', 'none');
+                            }
+
+
+                        });
+
+                    }
+                    $("#myInput").val('');
+                });
+                $(".list").empty();
+
+                var UrlLive = '/OrderNotes/GetOrderNotesFromSC/';
+
+                $("#getSellerCloudOrderNotes").click(function () {
+                    var imageProcessing = $('.ButtonLoadernotes');
+                    $(imageProcessing).css('display', 'inline');
+                    $.ajax({
+                        url: UrlLive,
+                        data: { orderID: sellerCloudOrderId },
+                        type: 'Get',
+                        traditional: true,
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $(imageProcessing).css('display', 'none');
+                              $(".list").empty();
+                            $.each(data, function (key, value) {
+
+                                var prnDt = "";
+                                if (value.AuditDate != null) {
+                                    var prnDt = new Date(value.AuditDate).toLocaleTimeString('en-us', optionsdate);
+                                }
+
+
+                                $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + prnDt + '</span>');
+                                 $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + value.CreatedByName + '</span>');
+                                $(".list").append('<div style="margin-bottom:0px;border: 1px solid beige;padding: 5px 10px;margin-right: 10px;">' + value.Note + '</div>');
+
+                            });
+                        }
+
+                    });
+
+                });
+
+                var Url = '/OrderNotes/GetSCOrderNotes/';
+                $.ajax({
+                    url: Url,
+                    data: { orderID: sellerCloudOrderId },
+                    type: 'Get',
+                    traditional: true,
+                    contentType: 'application/json',
+                    success: function (data) {
+                        $.each(data, function (key, value) {
+                            var prnDt = "";
+                            if (value.AuditDate != null) {
+                                 var prnDt =  new Date(value.AuditDate).toLocaleTimeString('en-us', optionsdate);
+                            }
+
+
+                              $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + prnDt + '</span>');
+                                 $(".list").append('<span style="color:#9292a2;margin-right: 10px;">' + value.CreatedByName + '</span>');
+                                $(".list").append('<div style="margin-bottom:0px;border: 1px solid beige;padding: 5px 10px;margin-right: 10px;">' + value.Note + '</div>');
+                        });
+                    }
+
+
+
+                });
+
+
+
+            });
+
+    $(document).on('click', "#GetParentIdbtn", function (e) {
+            e.preventDefault();
+            $("#lblparent").empty();
+            $("#lblchild").empty();
+            var sellerCloudOrderId = $(this).attr('data-id');
+         $(".top").toggle("fast");
+                $.get({
+                    type: 'Get',
+                    url: '@Url.Content("/RelatedOrder/GetChildOrderByParent/")',
+                    data: { OrderId: sellerCloudOrderId },
+                    dataType: 'json',
+                    success: function (data) {
+                        $.each(data, function (key, value) {
+                            $("#lblparent").html("<a target='_blank' href='@Url.Action("OrderViewPage", "BBOrderViewPage")?SCorderid=" + sellerCloudOrderId + " '>" + sellerCloudOrderId + "</a> <a href='https://lp.cwa.sellercloud.com/Orders/Orders_Details.aspx?ID=" + sellerCloudOrderId + "' target='_blank'><img src='/Images/sellercloud-gray.png' /></a>");
+                            $("#lblchild").html("<a target='_blank' href='@Url.Action("OrderViewPage", "BBOrderViewPage")?SCorderid=" + value.OrderId + " '>" + value.OrderId + "</a> <a href='https://lp.cwa.sellercloud.com/Orders/Orders_Details.aspx?ID=" + value.OrderId + "' target='_blank'><img src='/Images/sellercloud-gray.png' /></a>");
+                            // $("#lblchild").text(value.OrderId);
+                           //$(".top").toggle();
+                        });
+                    },
+                    error: function (data) { }
+            });
+    });
+
+
+
+      $(document).on('click', '.Getproductid', function () {
+           // $("#" + sellerCloudOrderId + ProductSKU).text(data).empty();
+            var sellerCloudOrderId = $(this).attr('data-id');
+            var ProductSKU = $(this).attr('data-sku');
+
+            var Url = '/SellerCloud/GetProductTitle/';
+            $.ajax({
+                type: 'POST',
+                url: Url,
+                data: { sellercloudid: sellerCloudOrderId, productsku: ProductSKU },
+
+                traditional: true,
+                success: function (data) {
+
+                    $("#" + sellerCloudOrderId + ProductSKU).text(data);
+                    $("#" + sellerCloudOrderId + ProductSKU).toggle('fast')
+
+
+                }
+            })
+      });
+
+
+     $(document).on('click', "#GetquantityFromSellerCloud", function (e) {
+         var ProductSkuForInvent = [];
+            var loader = $(this).next().find('.ButtonLoader1');
+               loader.css('display', 'inline');
+
+
+        $(document).find('.selectSkucheckbox').each(function (index) {
+
+                            var productSKU = $(this).val();
+                            ProductSkuForInvent.push(productSKU)
+
+                    });
+        if (typeof ProductSkuForInvent !== 'undefined' && ProductSkuForInvent.length > 0) {
+          var Url = '/ProductWarehouseQty/UpdateWarehouseQuantityFromSellerCloudForOrderLIst/';
+
+            $.each(ProductSkuForInvent, function (key, value) {
+                $.ajax({
+                    type: 'Get',
+                    url: Url,
+                    data: { sku: value },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                         loader.css('display', 'none');
+                        $.each(data, function (key1, value1) {
+                            $("#" + value1.ProductSku.replace(/\s/g, '')+ value1.WarehouseName.replace(/\s/g, '') ).text(value1.AvailableQty);
+                        });
+                    }
+                });
+
+            })
+
+         }
+
+    })
+</script>
+
+
+
+
