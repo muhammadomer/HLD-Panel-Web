@@ -202,14 +202,18 @@ namespace Hld.WebApplication.Controllers
                     ZincOrderLogViewModel zincOrderLogViewModel = new ZincOrderLogViewModel();
                     zincOrderLogViewModel.SellerCloudOrderId = Convert.ToString(SellerCloudOrderID);
                     zincOrderLogViewModel.RequestIDOfZincOrder = RequestID;
-                    zincOrderLogViewModel.OrderDatetime = DatetimeExtension.ConvertToEST(DateTime.Now); ;
+                    zincOrderLogViewModel.OrderDatetime = DatetimeExtension.ConvertToEST(DateTime.Now);
+                    zincOrderLogViewModel.ZincAccountId = ZincAccountId;
+                    zincOrderLogViewModel.CreditCardId = CreditCardId;
+                    zincOrderLogViewModel.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
+
                     _zincOrderLogID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLog(ApiURL, token, zincOrderLogViewModel);
 
-                    ZincOrderLogDetailViewModel model = new ZincOrderLogDetailViewModel();
-                    model.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
-                    model.ZincOrderLogID = _zincOrderLogID;
-                    int ZincOrderLogDetailID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLogDetail(ApiURL, token, model);
-                    _zincOrderLogAndDetailApiAccess.UpdateAccounts(ApiURL, token, Convert.ToInt32(zincOrderLogViewModel.SellerCloudOrderId), ZincAccountId, CreditCardId);
+                    //ZincOrderLogDetailViewModel model = new ZincOrderLogDetailViewModel();
+                    //model.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
+                    //model.ZincOrderLogID = _zincOrderLogID;
+                    //int ZincOrderLogDetailID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLogDetail(ApiURL, token, model);
+                    //_zincOrderLogAndDetailApiAccess.UpdateAccounts(ApiURL, token, Convert.ToInt32(zincOrderLogViewModel.SellerCloudOrderId), ZincAccountId, CreditCardId);
                 }
             }
             return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message = "Order Request Has Been Send To Zinc Successfully!" });

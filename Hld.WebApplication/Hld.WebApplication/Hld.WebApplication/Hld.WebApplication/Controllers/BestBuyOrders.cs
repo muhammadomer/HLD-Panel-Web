@@ -343,6 +343,7 @@ namespace Hld.WebApplication.Controllers
                 SearchViewModel.ShippingTags = ShippingTags;
                 SearchViewModel.BBOrderStatus = BBOrderStatus;
                 SearchViewModel.ShippingBoxContain = ShippingBoxContain;
+                SearchViewModel.WHQStatus = WHQStatus;
                 SearchViewModel.Sort = "desc";
                 _viewModel = _bBProductApiAccess.GetAllBestBuyOrdersDetailSearch(ApiURL, token, SearchViewModel);
                 data = new StaticPagedList<BestBuyOrdersViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
