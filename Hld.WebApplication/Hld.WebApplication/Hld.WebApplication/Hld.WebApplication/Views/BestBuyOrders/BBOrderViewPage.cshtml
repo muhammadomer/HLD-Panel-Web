@@ -406,16 +406,20 @@
                             {
                             <span style="color:green"> @Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
                             }
-                            if (order_state == "WAITING_ACCEPTANCE")
+                            else if (order_state == "WAITING_ACCEPTANCE")
                             {
                                 <span style="color:red">@Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
                             }
-                            if (order_state == "WAITING_DEBIT_PAYMENT")
+                            else if (order_state == "WAITING_DEBIT_PAYMENT"|| order_state == "WAITING_DEBIT_PAYMEN")
                             {
                                 <span style="color:orange">@Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                                }
+                                else 
+                                {
+                                 <span> @Model.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault() </span>
+                                  
+                                    }
                             }
-
-                        }
 
 
                     </label>

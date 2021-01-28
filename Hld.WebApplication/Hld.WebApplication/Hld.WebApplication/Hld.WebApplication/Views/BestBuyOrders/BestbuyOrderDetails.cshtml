@@ -247,10 +247,10 @@
     <div class="loadertbl">
         <img src="~/Images/giffff.gif" />
     </div>
-    <div class="mb-1 row" id="searchForm">
-        <div class=" row col-12 ml-0">
-            <div class=" row col-12 ml-0">
-                <h6>Search Orders </h6>
+    <div class="mb-1 row col-12" id="searchForm">
+        <div class="row"style="padding-left: 20px;">
+            <div class="row col-12">
+                <h6 style="color:cadetblue">Search Orders </h6>
             </div>
             
             @*<div class="card">
@@ -258,7 +258,7 @@
                 <div class="card-header">Search Orders </div>*@
             @if (Model.searchViewModel.ShippingTags != "")
             {
-                <div class="row ml-0 col-12">
+                <div class="row col-12">
                     <span class="tagspan">Tag :</span>
                     @switch (Model.searchViewModel.ShippingTags)
                     {
@@ -274,7 +274,7 @@
             }
             @if (Model.searchViewModel.ZincStatus != "")
             {
-                <div class="row ml-0 col-12">
+                <div class="row col-12">
                     <span style="font-weight: bold;
         padding-right: 5px;
         position: relative;
@@ -284,7 +284,7 @@
             }
             @if (Model.searchViewModel.DSStatus != "")
             {
-                <div class="row ml-0 col-12">
+                <div class="row col-12">
                     <span class="tagspan">DS Status :</span>
                     <span style="padding-left:0px;" class="DS-status-text">@Model.searchViewModel.DSStatus.Replace(",", ", ")</span>
                 </div>
@@ -293,7 +293,7 @@
 
             @if (Model.searchViewModel.OrderStatus != "")
             {
-                <div class="row ml-0 col-12">
+                <div class="row col-12">
                     <span class="tagspan">SC Status :</span>
 
 
@@ -349,7 +349,7 @@
             }
             @if (Model.searchViewModel.PaymentStatus != "")
             {
-                <div class="row ml-0 col-12">
+                <div class="row">
                     <span class="tagspan">Payment Status :</span>
                     <span style="padding-left:0px;" class="Py-status-text">@Model.searchViewModel.PaymentStatus.Replace(",", ", ")</span>
                 </div>
@@ -357,123 +357,131 @@
 
             @if (Model.searchViewModel.BBOrderStatus != "")
             {
-                <div class="row ml-0 col-12">
+                <div class="row col-12">
                     <span class="tagspan">BBOrder Status :</span>
                     <span style="padding-left:0px;" class="bb-status-text">@Model.searchViewModel.BBOrderStatus.Replace(",", ", ")</span>
                 </div>
             }
             @if (Model.searchViewModel.WHQStatus != 0)
             {
-                <div class="row ml-0 col-12">
-                    <span class="tagspan">WHQ Status :</span>
-                    <span style="padding-left:0px;" class="whq-status-text">@Model.searchViewModel.WHQStatus</span>
-                </div>
+        <div class="row col-12">
+            <span class="tagspan">WHQ Status :</span>
+            @if (Model.searchViewModel.WHQStatus == 1)
+            {
+        @*<span style="padding-left:0px;" class="whq-status-text">@Model.searchViewModel.WHQStatus</span>*@
+        <span style="padding-left:0px;" class="whq-status-text">Do Not Show if WHQ > 0</span>
             }
-            @*<div class="card-body">*@
+            else
+            {
+        <span style="padding-left:0px;" class="whq-status-text">Do Not Show if WHQ < 0 but OnOrder > 10</span>
+            }
+
+        </div>
+            }
+           
             @using (Html.BeginForm("BestbuyOrderDetails", "BestBuyOrders", FormMethod.Get, new { @class = "form-inline" }))
             {
 
 
-                <div class="row ml-0 col-12">
-                    <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
+        <div class="row ml-0">
+            <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
 
-                    <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 marketPlaces" multiple="multiple">
-                        <option value="BestBuy">BestBuy</option>
-                        <option value="Amazon">Amazon</option>
-                    </select>
+            <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 marketPlaces" multiple="multiple">
+                <option value="BestBuy">BestBuy</option>
+                <option value="Amazon">Amazon</option>
+            </select>
 
-                    <select id="SCStatus_ID" class="2col active form-control  mb-2 mr-sm-2 SCOrderStatues" multiple="multiple">
-                        <option value="1">InProcess or Completed</option>
-                        <option value="2">InProcess or Hold</option>
-                        <option value="4">ShoppingCart</option>
-                        <option value="5">InProcess</option>
-                        <option value="6">Completed</option>
-                        <option value="7">ProblemOrder</option>
-                        <option value="8">OnHold</option>
-                        <option value="9">Quote</option>
-                        <option value="10">void</option>
-                        <option value="11">Canceled</option>
-                        <option value="12">Uncreated On SC</option>
+            <select id="SCStatus_ID" class="2col active form-control  mb-2 mr-sm-2 SCOrderStatues" multiple="multiple">
+                <option value="1">InProcess or Completed</option>
+                <option value="2">InProcess or Hold</option>
+                <option value="4">ShoppingCart</option>
+                <option value="5">InProcess</option>
+                <option value="6">Completed</option>
+                <option value="7">ProblemOrder</option>
+                <option value="8">OnHold</option>
+                <option value="9">Quote</option>
+                <option value="10">void</option>
+                <option value="11">Canceled</option>
+                <option value="12">Uncreated On SC</option>
 
-                    </select>
+            </select>
 
-                    <select id="multiselect" class=" 3col active form-control  mb-2 mr-sm-2 PaymentStatus" multiple="multiple">
-                        <option value="Charged">Charged</option>
-                        <option value="FullRefund">Full Refund</option>
-                        <option value="PartiallyRefund">Partially Refund</option>
-                        <option value="NoPayment">No Payment</option>
-                    </select>
-                    <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 DropShipStatues" multiple="multiple">
-                        <option value="None">DS None</option>
-                        <option value="Requested">DS Requested</option>
-                    </select>
+            <select id="multiselect" class=" 3col active form-control  mb-2 mr-sm-2 PaymentStatus" multiple="multiple">
+                <option value="Charged">Charged</option>
+                <option value="FullRefund">Full Refund</option>
+                <option value="PartiallyRefund">Partially Refund</option>
+                <option value="NoPayment">No Payment</option>
+            </select>
+            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 DropShipStatues" multiple="multiple">
+                <option value="None">DS None</option>
+                <option value="Requested">DS Requested</option>
+            </select>
 
-                    <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 zincStatues" multiple="multiple">
-                        <option value="OrderRequestSent">Order Request Sent</option>
-                        <option value="Error">Error</option>
-                        <option value="InProcess">InProcess</option>
-                        <option value="InProgressSuccess">InProgress (Success)</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Processed_OutSideZinc">Processed OutSide Zinc</option>
-                    </select>
+            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 zincStatues" multiple="multiple">
+                <option value="OrderRequestSent">Order Request Sent</option>
+                <option value="Error">Error</option>
+                <option value="InProcess">InProcess</option>
+                <option value="InProgressSuccess">InProgress (Success)</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Processed_OutSideZinc">Processed OutSide Zinc</option>
+            </select>
 
-                    <select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>
+            <select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>
 
-                    <input type="text" style="margin-right: 5px;
+            <input type="text" style="margin-right: 5px;
         box-shadow: none !important;
         height: 27px !important;
-        ;
+        
         width: 88px" name="sku" autocomplete="off" class="form-control" value="@Model.searchViewModel.Sku" placeholder="SKU" />
 
-                    <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 ShippingBoxContain" multiple="multiple">
-                        <option value=1>Do not show PO Box Orders</option>
-                        <option value=2>Show only PO Box Orders</option>
-                    </select>
+            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 ShippingBoxContain" multiple="multiple">
+                <option value=1>Do not show PO Box Orders</option>
+                <option value=2>Show only PO Box Orders</option>
+            </select>
 
-                    @*<input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" placeholder="From Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateFrom" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+            @*<input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" placeholder="From Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateFrom" name="orderDateTimeFrom" id="orderDateTimeFrom" />
 
-                        <input type="text" style="margin-right: 1px;box-shadow: none !important;width:88px" placeholder="To Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateTo" name="orderDateTimeTo" id="orderDateTimeTo" />*@
+        <input type="text" style="margin-right: 1px;box-shadow: none !important;width:88px" placeholder="To Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateTo" name="orderDateTimeTo" id="orderDateTimeTo" />*@
 
 
-                    <div id="reportrange" style="background: #fff;
+            <div id="reportrange" style="background: #fff;
         cursor: pointer;
         height: 27px !important;
         padding: 3px;
         border-radius: 3px;
         border: 1px solid #ccc;">
-                        <i class="fa fa-calendar"></i>&nbsp;
-                        <span></span> <i class="fa fa-caret-down"></i>
-                    </div>
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span> <i class="fa fa-caret-down"></i>
+            </div>
 
 
-                    <input type="hidden" id="ddlShipingOrderStatus" name="OrderStatus">
-                    <input type="hidden" name="marketPlaceValues" id="ddlMarketPlace" />
-                    <input type="hidden" name="ZincStatus" id="ddlZincStatusValues" />
-                    <input type="hidden" name="DSStatus" id="ddlDSStatusValues" />
-                    <input type="hidden" name="PaymentStatus" id="ddlPaymentStatus" />
-                    <input type="hidden" name="ShippingTags" id="ddlShippingTags" />
-                    <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
-                    <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
-                    <input type="hidden" name="ShippingBoxContain" id="ddlShippingBoxContain" />
-                    <input type="hidden" name="BBOrderStatus" id="ddlBBOrderStatus" />
-                    <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
+            <input type="hidden" id="ddlShipingOrderStatus" name="OrderStatus">
+            <input type="hidden" name="marketPlaceValues" id="ddlMarketPlace" />
+            <input type="hidden" name="ZincStatus" id="ddlZincStatusValues" />
+            <input type="hidden" name="DSStatus" id="ddlDSStatusValues" />
+            <input type="hidden" name="PaymentStatus" id="ddlPaymentStatus" />
+            <input type="hidden" name="ShippingTags" id="ddlShippingTags" />
+            <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+            <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
+            <input type="hidden" name="ShippingBoxContain" id="ddlShippingBoxContain" />
+            <input type="hidden" name="BBOrderStatus" id="ddlBBOrderStatus" />
+            <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
+            <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder" style="height:27px!important">Search</button>
 
-                    <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder" style="height:27px!important">Search</button>
 
+            <div class="" style="padding-left: 3px;">
 
-                    <div class="" style="padding-left: 3px;">
-
-                        <button class="btn btnup bg-primary" data-toggle="modal" data-target="#
+                <button class="btn btnup bg-primary" data-toggle="modal" data-target="#
                                     " id="btnUpdateProductImages" style="color: #fff;height:28px!important" type="button">
-                            Update SC Orders
-                        </button>
-                        <span>
-                            <img style="display:none;" class="UpdateASINButtonLoaderForOrderStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                        </span>
+                    Update SC Orders
+                </button>
+                <span>
+                    <img style="display:none;" class="UpdateASINButtonLoaderForOrderStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                </span>
 
-                    </div>
-                </div>
-                <div class="row mt-2 ml-0 col-12">
+            </div>
+        </div>
+                <div class="row mt-2 col-12">
                     <div>
                         <select id="multiselect" class="2col active form-control mb-2 mr-sm-2 mt-2 WHQStatus" multiple="multiple">
                             <option value="1">Do Not Show if WHQ > 0</option>
@@ -494,7 +502,7 @@
                 </div>
 
             }
-            @*</div>*@
+            
         </div>
     </div>
 </div>
@@ -503,7 +511,7 @@
 
     <div class="row col col-12" id="fixActionMenu">
         <div class="col col-md-2">
-            <div class="row ml-0">
+            <div class="row">
                 <div class="pagination col-md-6 col">
 
                 </div>
@@ -565,7 +573,7 @@
 
     </div>
 </div>
-<div class="container-fluid" style="margin-left: 15px;">
+<div class="container-fluid" style="">
     <div class="pagination">
 
     </div>
