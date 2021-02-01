@@ -248,261 +248,239 @@
         <img src="~/Images/giffff.gif" />
     </div>
     <div class="mb-1 row col-12" id="searchForm">
-        <div class="row"style="padding-left: 20px;">
-            <div class="row col-12">
-                <h6 style="color:cadetblue">Search Orders </h6>
-            </div>
-            
+        <div class="row" style="padding-left: 20px;">
+
+
             @*<div class="card">
 
-                <div class="card-header">Search Orders </div>*@
+        <div class="card-header">Search Orders </div>*@
             @if (Model.searchViewModel.ShippingTags != "")
             {
-                <div class="row col-12">
-                    <span class="tagspan">Tag :</span>
-                    @switch (Model.searchViewModel.ShippingTags)
-                    {
-                        case "1":
-                            <span style="padding-left:0px;" value="@Model.searchViewModel.ShippingTags" class="tags-status-text">DS</span>
-                            break;
-                        case "2":
-                            <span style="padding-left:0px;" value="@Model.searchViewModel.ShippingTags" class="tags-status-text">WH</span>
-                            break;
-                    }
+        <div class="row col-12">
+            <span class="tagspan">Tag :</span>
+            @switch (Model.searchViewModel.ShippingTags)
+            {
+                case "1":
+        <span style="padding-left:0px;" value="@Model.searchViewModel.ShippingTags" class="tags-status-text">DS</span> break;
+                            case "2":
+        <span style="padding-left:0px;" value="@Model.searchViewModel.ShippingTags" class="tags-status-text">WH</span>break;
+                        }
 
-                </div>
-            }
+        </div>            }
             @if (Model.searchViewModel.ZincStatus != "")
             {
-                <div class="row col-12">
-                    <span style="font-weight: bold;
+        <div class="row col-12">
+            <span style="font-weight: bold;
         padding-right: 5px;
         position: relative;
         " class="">Zinc Status :</span>
-                    <span style="padding-left:0px;" class="Zn-status-text">@Model.searchViewModel.ZincStatus.Replace(",", ", ")</span>
-                </div>
-            }
+            <span style="padding-left:0px;" class="Zn-status-text">@Model.searchViewModel.ZincStatus.Replace(",", ", ")</span>
+        </div>            }
             @if (Model.searchViewModel.DSStatus != "")
             {
-                <div class="row col-12">
-                    <span class="tagspan">DS Status :</span>
-                    <span style="padding-left:0px;" class="DS-status-text">@Model.searchViewModel.DSStatus.Replace(",", ", ")</span>
-                </div>
-            }
+        <div class="row col-12">
+            <span class="tagspan">DS Status :</span>
+            <span style="padding-left:0px;" class="DS-status-text">@Model.searchViewModel.DSStatus.Replace(",", ", ")</span>
+        </div>            }
 
 
             @if (Model.searchViewModel.OrderStatus != "")
             {
-                <div class="row col-12">
-                    <span class="tagspan">SC Status :</span>
+        <div class="row col-12">
+            <span class="tagspan">SC Status :</span>
 
 
-                    @foreach (var item in Model.searchViewModel.OrderStatus.Split(","))
-                    {
+            @foreach (var item in Model.searchViewModel.OrderStatus.Split(","))
+            {
 
-                        @switch (item)
-                        {
-                            case "1":
-                                <label style="padding-left:0px;" value="@item" class="SC-status-text">InProcess or Completed </label>
+        @switch (item)
+        {
+            case "1":
+        <label style="padding-left:0px;" value="@item" class="SC-status-text">InProcess or Completed </label> break;
+    case "2":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">InProcess or Hold </span> break;
 
-                                break;
-                            case "2":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">InProcess or Hold </span>
-                                break;
+    case "4":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">ShoppingCart </span> break;
+    case "5":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">InProcess </span> break;
+    case "6":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">Completed </span> break;
+    case "7":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">ProblemOrder </span> break;
+    case "8":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">OnHold </span> break;
+    case "9":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">Quote </span> break;
+    case "10":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">void </span> break;
+    case "11":
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">Canceled </span> break;
+    case "12":
 
-                            case "4":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">ShoppingCart </span>
-                                break;
-                            case "5":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">InProcess </span>
-                                break;
-                            case "6":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">Completed </span>
-                                break;
-                            case "7":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">ProblemOrder </span>
-                                break;
-                            case "8":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">OnHold </span>
-                                break;
-                            case "9":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">Quote </span>
-                                break;
-                            case "10":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">void </span>
-                                break;
-                            case "11":
-                                <span style="padding-left:0px;" value="@item" class="SC-status-text">Canceled </span>
-                                break;
+        <span style="padding-left:0px;" value="@item" class="SC-status-text">Uncreated On SC</span>break;
 
 
 
-                        }
-                        <span>,&nbsp; </span>
-
-                    }
+                            }
+                            <span>,&nbsp; </span>}
 
 
 
 
-                </div>
-            }
+        </div>            }
             @if (Model.searchViewModel.PaymentStatus != "")
             {
-                <div class="row">
-                    <span class="tagspan">Payment Status :</span>
-                    <span style="padding-left:0px;" class="Py-status-text">@Model.searchViewModel.PaymentStatus.Replace(",", ", ")</span>
-                </div>
-            }
+        <div class="row">
+            <span class="tagspan">Payment Status :</span>
+            <span style="padding-left:0px;" class="Py-status-text">@Model.searchViewModel.PaymentStatus.Replace(",", ", ")</span>
+        </div>            }
 
             @if (Model.searchViewModel.BBOrderStatus != "")
             {
-                <div class="row col-12">
-                    <span class="tagspan">BBOrder Status :</span>
-                    <span style="padding-left:0px;" class="bb-status-text">@Model.searchViewModel.BBOrderStatus.Replace(",", ", ")</span>
-                </div>
-            }
+        <div class="row col-12">
+            <span class="tagspan">BBOrder Status :</span>
+            <span style="padding-left:0px;" class="bb-status-text">@Model.searchViewModel.BBOrderStatus.Replace(",", ", ")</span>
+        </div>            }
             @if (Model.searchViewModel.WHQStatus != 0)
             {
         <div class="row col-12">
             <span class="tagspan">WHQ Status :</span>
+
             @if (Model.searchViewModel.WHQStatus == 1)
             {
-        @*<span style="padding-left:0px;" class="whq-status-text">@Model.searchViewModel.WHQStatus</span>*@
-        <span style="padding-left:0px;" class="whq-status-text">Do Not Show if WHQ > 0</span>
-            }
-            else
-            {
-        <span style="padding-left:0px;" class="whq-status-text">Do Not Show if WHQ < 0 but OnOrder > 10</span>
-            }
 
-        </div>
-            }
-           
+        <span style="padding-left:0px;" class="whq-status-text">Do Not Show if WHQ > 0</span> }
+                        else
+                        {
+        <span style="padding-left:0px;" class="whq-status-text">Do Not Show if WHQ < 0 but OnOrder > 10</span>}
+
+        </div>            }
+
             @using (Html.BeginForm("BestbuyOrderDetails", "BestBuyOrders", FormMethod.Get, new { @class = "form-inline" }))
             {
 
+        <div class="row col-12">
+            <h6 style="color:cadetblue">Search Orders </h6>
+        </div>
+                        <div class="row ml-0">
+                            <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
 
-        <div class="row ml-0">
-            <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
+                            <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 marketPlaces" multiple="multiple">
+                                <option value="BestBuy">BestBuy</option>
+                                <option value="Amazon">Amazon</option>
+                            </select>
 
-            <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 marketPlaces" multiple="multiple">
-                <option value="BestBuy">BestBuy</option>
-                <option value="Amazon">Amazon</option>
-            </select>
+                            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 SCOrderStatues" multiple="multiple">
+                                <option value="1">InProcess or Completed</option>
+                                <option value="2">InProcess or Hold</option>
+                                <option value="4">ShoppingCart</option>
+                                <option value="5">InProcess</option>
+                                <option value="6">Completed</option>
+                                <option value="7">ProblemOrder</option>
+                                <option value="8">OnHold</option>
+                                <option value="9">Quote</option>
+                                <option value="10">void</option>
+                                <option value="11">Canceled</option>
+                                <option value="12">Uncreated On SC</option>
 
-            <select id="SCStatus_ID" class="2col active form-control  mb-2 mr-sm-2 SCOrderStatues" multiple="multiple">
-                <option value="1">InProcess or Completed</option>
-                <option value="2">InProcess or Hold</option>
-                <option value="4">ShoppingCart</option>
-                <option value="5">InProcess</option>
-                <option value="6">Completed</option>
-                <option value="7">ProblemOrder</option>
-                <option value="8">OnHold</option>
-                <option value="9">Quote</option>
-                <option value="10">void</option>
-                <option value="11">Canceled</option>
-                <option value="12">Uncreated On SC</option>
+                            </select>
 
-            </select>
+                            <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 PaymentStatus" multiple="multiple">
+                                <option value="Charged">Charged</option>
+                                <option value="FullRefund">Full Refund</option>
+                                <option value="PartiallyRefund">Partially Refund</option>
+                                <option value="NoPayment">No Payment</option>
+                            </select>
+                            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 DropShipStatues" multiple="multiple">
+                                <option value="None">DS None</option>
+                                <option value="Requested">DS Requested</option>
+                            </select>
 
-            <select id="multiselect" class=" 3col active form-control  mb-2 mr-sm-2 PaymentStatus" multiple="multiple">
-                <option value="Charged">Charged</option>
-                <option value="FullRefund">Full Refund</option>
-                <option value="PartiallyRefund">Partially Refund</option>
-                <option value="NoPayment">No Payment</option>
-            </select>
-            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 DropShipStatues" multiple="multiple">
-                <option value="None">DS None</option>
-                <option value="Requested">DS Requested</option>
-            </select>
+                            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 zincStatues" multiple="multiple">
+                                <option value="OrderRequestSent">Order Request Sent</option>
+                                <option value="Error">Error</option>
+                                <option value="InProcess">InProcess</option>
+                                <option value="InProgressSuccess">InProgress (Success)</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Processed_OutSideZinc">Processed OutSide Zinc</option>
+                            </select>
 
-            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 zincStatues" multiple="multiple">
-                <option value="OrderRequestSent">Order Request Sent</option>
-                <option value="Error">Error</option>
-                <option value="InProcess">InProcess</option>
-                <option value="InProgressSuccess">InProgress (Success)</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Processed_OutSideZinc">Processed OutSide Zinc</option>
-            </select>
+                            <select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>
 
-            <select id="TagFilter" class="2col active form-control  mb-2 mr-sm-2 TagStatues" multiple="multiple"></select>
-
-            <input type="text" style="margin-right: 5px;
+                            <input type="text" style="margin-right: 5px;
         box-shadow: none !important;
         height: 27px !important;
-        
+
         width: 88px" name="sku" autocomplete="off" class="form-control" value="@Model.searchViewModel.Sku" placeholder="SKU" />
 
-            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 ShippingBoxContain" multiple="multiple">
-                <option value=1>Do not show PO Box Orders</option>
-                <option value=2>Show only PO Box Orders</option>
-            </select>
+                            <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 ShippingBoxContain" multiple="multiple">
+                                <option value=1>Do not show PO Box Orders</option>
+                                <option value=2>Show only PO Box Orders</option>
+                            </select>
 
-            @*<input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" placeholder="From Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateFrom" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+                            @*<input type="text" style="margin-right: 5px;box-shadow: none !important;width:88px" placeholder="From Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateFrom" name="orderDateTimeFrom" id="orderDateTimeFrom" />
 
-        <input type="text" style="margin-right: 1px;box-shadow: none !important;width:88px" placeholder="To Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateTo" name="orderDateTimeTo" id="orderDateTimeTo" />*@
+                        <input type="text" style="margin-right: 1px;box-shadow: none !important;width:88px" placeholder="To Date" autocomplete="off" class="col-sm-1 form-control" value="@Model.searchViewModel.DateTo" name="orderDateTimeTo" id="orderDateTimeTo" />*@
 
 
-            <div id="reportrange" style="background: #fff;
+                            <div id="reportrange" style="background: #fff;
         cursor: pointer;
         height: 27px !important;
         padding: 3px;
         border-radius: 3px;
         border: 1px solid #ccc;">
-                <i class="fa fa-calendar"></i>&nbsp;
-                <span></span> <i class="fa fa-caret-down"></i>
-            </div>
+                                <i class="fa fa-calendar"></i>&nbsp;
+                                <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
 
 
-            <input type="hidden" id="ddlShipingOrderStatus" name="OrderStatus">
-            <input type="hidden" name="marketPlaceValues" id="ddlMarketPlace" />
-            <input type="hidden" name="ZincStatus" id="ddlZincStatusValues" />
-            <input type="hidden" name="DSStatus" id="ddlDSStatusValues" />
-            <input type="hidden" name="PaymentStatus" id="ddlPaymentStatus" />
-            <input type="hidden" name="ShippingTags" id="ddlShippingTags" />
-            <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
-            <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
-            <input type="hidden" name="ShippingBoxContain" id="ddlShippingBoxContain" />
-            <input type="hidden" name="BBOrderStatus" id="ddlBBOrderStatus" />
-            <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
-            <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder" style="height:27px!important">Search</button>
+                            <input type="hidden" id="ddlShipingOrderStatus" name="OrderStatus">
+                            <input type="hidden" name="marketPlaceValues" id="ddlMarketPlace" />
+                            <input type="hidden" name="ZincStatus" id="ddlZincStatusValues" />
+                            <input type="hidden" name="DSStatus" id="ddlDSStatusValues" />
+                            <input type="hidden" name="PaymentStatus" id="ddlPaymentStatus" />
+                            <input type="hidden" name="ShippingTags" id="ddlShippingTags" />
+                            <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+                            <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
+                            <input type="hidden" name="ShippingBoxContain" id="ddlShippingBoxContain" />
+                            <input type="hidden" name="BBOrderStatus" id="ddlBBOrderStatus" />
+                            <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
+                            <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder" style="height:27px!important">Search</button>
 
 
-            <div class="" style="padding-left: 3px;">
+                            <div class="" style="padding-left: 3px;">
 
-                <button class="btn btnup bg-primary" data-toggle="modal" data-target="#
+                                <button class="btn btnup bg-primary" data-toggle="modal" data-target="#
                                     " id="btnUpdateProductImages" style="color: #fff;height:28px!important" type="button">
-                    Update SC Orders
-                </button>
-                <span>
-                    <img style="display:none;" class="UpdateASINButtonLoaderForOrderStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
-                </span>
+                                    Update SC Orders
+                                </button>
+                                <span>
+                                    <img style="display:none;" class="UpdateASINButtonLoaderForOrderStatus" height="25px" width="25px" src="~/Images/loadingImage.gif" />
+                                </span>
 
-            </div>
-        </div>
-                <div class="row mt-2 col-12">
-                    <div>
-                        <select id="multiselect" class="2col active form-control mb-2 mr-sm-2 mt-2 WHQStatus" multiple="multiple">
-                            <option value="1">Do Not Show if WHQ > 0</option>
-                            <option value="2">Do Not Show if WHQ < 0 but OnOrder > 10</option>
-                        </select>
-                    </div>
-                    
-                    <select id="multiselect" class="3col active form-control mb-2 mr-sm-2 mt-2 BBOrderStatus" multiple="multiple">
-                        <option value="RECEIVED">Received</option>
-                        <option value="SHIPPING">Shipping</option>
-                        <option value="WAITING_ACCEPTANCE">Waiting_Acceptance</option>
-                        <option value="WAITING_DEBIT_PAYMENT">Waiting_Debit_Payment</option>
-                        <option value="CLOSED">Closed</option>
-                        <option value="CANCELD">Canceled</option>
+                            </div>
+                        </div>
+                                        <div class="row mt-2 col-12">
+                                            <div>
+                                                <select id="multiselect" class="2col active form-control mb-2 mr-sm-2 mt-2 WHQStatus" multiple="multiple">
+                                                    <option value="1" class="WHQStatus">Do Not Show if WHQ > 0</option>
+                                                    <option value="2" class="WHQStatus">Do Not Show if WHQ < 0 but OnOrder > 10</option>
+                                                </select>
+                                            </div>
 
-                    </select>
+                                            <select id="multiselect" class="3col active form-control mb-2 mr-sm-2 mt-2 BBOrderStatus" multiple="multiple">
+                                                <option value="RECEIVED">Received</option>
+                                                <option value="SHIPPING">Shipping</option>
+                                                <option value="WAITING_ACCEPTANCE">Waiting_Acceptance</option>
+                                                <option value="WAITING_DEBIT_PAYMENT">Waiting_Debit_Payment</option>
+                                                <option value="CLOSED">Closed</option>
+                                                <option value="CANCELD">Canceled</option>
 
-                </div>
+                                            </select>
 
-            }
-            
+                                        </div>            }
+
         </div>
     </div>
 </div>
@@ -762,6 +740,13 @@
 
 
         $(document).ready(function () {
+
+            $(document).on('click', function (e) {
+                var container = $(".SalesQtytooltipdata");
+                if (!$(e.target).closest(container).length) {
+                    container.hide();
+                }
+            });
             $(document).on('click', '.GetSalesQtytooltipdata', function () {
                 var row = $(this).closest("tr");
 
@@ -2172,12 +2157,14 @@
             var Pyment = PyText.split(",");
             var bbstatus = bbText.split(",");
             var whqstatus = whqText.split(",");
+            
            // var SC = SCText.split(",");
             $.each(whqstatus, function (key, value) {
                 $(".ms-options").find("input[type=checkbox]").each(function () {
-
-                    if ($(this).val() == value.trim()) {
-                        $(this).prop("checked", true);
+                    if ($(this).parents("select").hasClass("WHQStatus")) {
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+                        }
                     }
                 });
             });
@@ -2239,7 +2226,7 @@
             });
             if (SCText.length > 0) {
                 $.each(SCText, function (key, value) {
-                    $(".ms-options").find("input[type=checkbox]").each(function () {
+                    $(".SCOrderStatues").next().children(".ms-options").find("input[type=checkbox]").each(function () {
 
                         if ($(this).val() == value.trim()) {
                             $(this).prop("checked", true);
@@ -2356,6 +2343,45 @@
                     }
                 });
             });
+            if (OrderStatus != null) {
+                debugger
+                var Order = OrderStatus.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlShipingOrderStatus').val(OrderStatus);
+                $.each(Order, function (key, value) {
+                    var setval = 22;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 22) {
+                        $(".SCOrderStatues").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".SCOrderStatues").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }
+
+                    //$(".ms-options").find("input[type=checkbox]").each(function () {
+
+                    //    if ($(this).val() == value.trim()) {
+                    //        $(this).prop("checked", true);
+
+                    //    }
+                    //});
+                });
+            }
+
             if (PaymentStatus != null) {
                 debugger
                 var res = PaymentStatus.split(",");
@@ -2377,13 +2403,36 @@
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlShippingBoxContain').val(ShippingBoxContain);
                 $.each(res, function (key, value) {
-                    $(".ms-options").find("input[type=checkbox]").each(function () {
 
-                        if ($(this).val() == value.trim()) {
-                            $(this).prop("checked", true);
+                    var setval = 21;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 21) {
+                        $(".ShippingBoxContain").next().children(".ms-options").find("input[type=checkbox]").each(function () {
 
-                        }
-                    });
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".ShippingBoxContain").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }      
+                    //$(".ms-options").find("input[type=checkbox]").each(function () {
+
+                    //    if ($(this).val() == value.trim()) {
+                    //        $(this).prop("checked", true);
+
+                    //    }
+                    //});
                 });
             }
             if (ShippingTags != null) {
@@ -2418,21 +2467,37 @@
             }
             if (WHQStatus != null) {
                 debugger
-                var res = WHQStatus.split(",");
+                var WHQ = WHQStatus.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlWHQStatus').val(WHQStatus);
-                $.each(res, function (key, value) {
-                    $(".ms-options").find("input[type=checkbox]").each(function () {
+                $.each(WHQ, function (key, value) {
+                    var setval = 20;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 20) {
+                        $(".WHQStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                           
+                            if($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
 
-                        if ($(this).val() == value.trim()) {
-                            $(this).prop("checked", true);
+                        $(".WHQStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
 
-                        }
-                    });
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });                     
+                    }                                           
                 });
             }
+
             if (DSStatus != null) {
-                debugger
+               
                 var res = DSStatus.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlDSStatusValues').val(DSStatus);
@@ -2461,21 +2526,7 @@
                     });
                 });
             }
-            if (OrderStatus != null) {
-                debugger
-                var res = OrderStatus.split(",");
-                //$('#ddlQuantity').val($(this).item);
-                $('#ddlShipingOrderStatus').val(OrderStatus);
-                $.each(res, function (key, value) {
-                    $(".ms-options").find("input[type=checkbox]").each(function () {
-
-                        if ($(this).val() == value.trim()) {
-                            $(this).prop("checked", true);
-
-                        }
-                    });
-                });
-            }
+         
         });
         $(document).on('click', "#GetParentIdbtn", function (e) {
             e.preventDefault();

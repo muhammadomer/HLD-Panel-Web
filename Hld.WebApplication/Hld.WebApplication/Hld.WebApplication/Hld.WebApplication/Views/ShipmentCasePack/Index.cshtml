@@ -774,7 +774,6 @@ margin-left: 13px;">Case Pack Shipment Details</b>
 
 
             $(document).on('keypress', '.sku', function (event) {
-                console.log("MEHDI")
 
                 var selectedrow = $(this).parents('tr');
                 $('.btnsubmittogetskutitle').hide();
@@ -868,6 +867,100 @@ keyboard: false
 
 
             //my code
+            //$(document).on('paste','.sku', function () {
+            $(document).on("paste", ".sku", function () {
+                var $this = this;
+                setTimeout(function () {
+                    var selectedrow = $($this).parents('tr');
+                    $('.btnsubmittogetskutitle').hide();
+                    $(selectedrow).find('.btnsubmittogetskutitle').show();
+
+                    var item = $($this);
+                    var skuValue = item.val().trim();
+                    if (skuValue == "")
+                        return;
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '../ShipmentCasePack/GetTemplate?SKU=' + skuValue,
+                        contentType: 'application/json',
+                        success: function (res) {
+                            var casepackId = res.CasePackId;
+                            var qtyperbox = res.QtyPerBox;
+                            var width = res.Width;
+                            var height = res.Height;
+                            var length = res.Length;
+                            var weight = res.Weight;
+                            //var totalweigth = weight * boxes;
+                            if (width > 0) {
+                                $(selectedrow).find('.submit').prop('disabled', false);
+                                $(item).parents('tr').find('.widthinch').val((width * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.heightinch').val((height * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.lengthinch').val((length * 0.393701).toFixed(2));
+                                $(item).parents('tr').find('.weightlbs').val((weight * 2.20462).toFixed(2));
+                                //$(item).parents('tr').find('.po').val((totalweigth * 2.20462).toFixed(2));
+                                $(item).parents('tr').find('.widthcm').val((width).toFixed(2));
+                                $(item).parents('tr').find('.heightcm').val((height).toFixed(2));
+                                $(item).parents('tr').find('.lengthcm').val((length).toFixed(2));
+                                $(item).parents('tr').find('.weightkg').val((weight).toFixed(2));
+
+                                $(item).parents('tr').find('.qtybox').val((qtyperbox));
+                                $(item).parents('tr').find('.casepack').val((casepackId));
+                            }
+                            else {
+
+                                $(selectedrow).find('.submit').prop('disabled', true);
+                                $("#myModalerror").modal({
+                                    backdrop: 'static',
+                                    keyboard: false
+
+                                });
+                                //$.notify('Please Add CasePack for This SKU', { globalPosition: 'bottom right', className: 'success myclass' });
+
+                            }
+
+                            //$(item).parents('tr').find('.po').append(content);
+                            //console.log("Response", res);
+                            //$(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '../PurchaseOrder/GetPOIdBySku?Prefix=' + skuValue,
+                        contentType: 'application/json',
+                        success: function (res) {
+                            $(item).parents('tr').find('.po').empty();
+                            var content = '';
+                            $.each(res, function (index, value) {
+                                content = content + '<option value = "' + value.POId + '">' + value.POId + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.OpenQty + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + value.BalanceQty + '</option>';
+                            });
+                            debugger;
+                            $(item).parents('tr').find('.po').append(content);
+                            //console.log("Response", res);
+                            //$(item).parents('tr').find(".shipedqty").focus();
+
+                        }
+                    });
+
+                    $.ajax({
+                        url: "/Product/GetProductDetailsForAPBySku",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: skuValue },
+                        success: function (data, ui) {
+                            console.log("SKUProfile", data);
+                            $(item).parents('tr').find(".productimage").html('<a target="_blank" href="@ViewBag.S3BucketURL_large/' + data.image_name + '">' +
+                                '<img src="@ViewBag.S3BucketURL/' + data.Compress_image + '" class="rounded" height="50" width="50" /></a>');
+                            $(item).parents('tr').find(".producttitle").text(data.Title);
+                            debugger;
+                        }
+                    });
+                    $($this).val(skuValue);
+                },100)
+
+            });
 
             $(document).on('click', '.btnsubmittogetskutitle', function (event) {
 
@@ -963,14 +1056,14 @@ keyboard: false
 
 
                 });
-            @*$(document).on('mouseleave','.sku', function (event) {
-               
-               var selectedrow = $(this).parents('tr');
+            @*$(this).bind("paste", function (event) {
+                setTimeout(function () {
+                    var selectedrow = $(this).parents('tr');
 
                     var item = $(this);
                     //var item = $(selectedrow).find('.sku');
                     console.log("my item", item)
-                var skuValue = item.val().trim();
+                    var skuValue = item.val().trim();
                     console.log("my skuValue", skuValue)
                     if (skuValue == "")
                         return;
@@ -988,7 +1081,7 @@ keyboard: false
                             var weight = res.Weight;
                             //var totalweigth = weight * boxes;
                             if (width > 0) {
-                                 $(selectedrow).find('.submit').prop('disabled', false);
+                                $(selectedrow).find('.submit').prop('disabled', false);
                                 $(item).parents('tr').find('.widthinch').val((width * 0.393701).toFixed(2));
                                 $(item).parents('tr').find('.heightinch').val((height * 0.393701).toFixed(2));
                                 $(item).parents('tr').find('.lengthinch').val((length * 0.393701).toFixed(2));
@@ -1052,6 +1145,7 @@ keyboard: false
                             debugger;
                         }
                     });
+                },1000);
                     $(this).val(skuValue);
 
 
@@ -1079,7 +1173,7 @@ keyboard: false
                                     debugger;
                                     $("#dialog-box").dialog("close");
                                     selectedRow.parents('tr').remove();
-                                    setTimeout(function () { SumShipedQty(); }, 1000);
+                                    //setTimeout(function () { SumShipedQty(); }, 1000);
                                     $.notify('Delete Successfully', { globalPosition: 'bottom right', className: 'danger myclasscancel' });
                                     debugger;
                                 },
@@ -1177,7 +1271,7 @@ keyboard: false
                 }
                 debugger
                 var tbody_tr_last = $('table>tbody>tr:last');
-                var sku = tbody_tr_last.find(".sku").val().trim();
+                var sku = tbody_tr_last.find(".sku").val();
                 var qtybox = tbody_tr_last.find(".qtybox").val();
                 var po = tbody_tr_last.find(".po").val();
                 var boxes = tbody_tr_last.find(".boxes").val();

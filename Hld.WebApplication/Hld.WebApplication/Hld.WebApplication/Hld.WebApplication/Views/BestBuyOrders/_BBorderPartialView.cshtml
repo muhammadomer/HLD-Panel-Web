@@ -280,8 +280,6 @@
 <div class="container-fluid">
     <div class="row">
 
-
-
         <div class="col col-sm-12 ">
             <div class="scrollable-area">
                 <h6>BestBuy Orders</h6>
@@ -386,15 +384,18 @@
         {
             <span style="color:green">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
         }
-        if (order_state == "WAITING_ACCEPTANCE")
+        else if (order_state == "WAITING_ACCEPTANCE")
         {
             <span style="color:red">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
         }
-        if (order_state == "WAITING_DEBIT_PAYMENT")
+        else if (order_state == "WAITING_DEBIT_PAYMENT" || order_state == "WAITING_DEBIT_PAYMEN")
         {
             <span style="color:orange">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
-        }       
-
+        }
+        else
+        {
+            <span>@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+        }
     }
 
 
@@ -572,19 +573,19 @@
                                                         <div class="row">
                                                             <label class="col-sm-1 offset-sm-2 text-right" style="padding-right:4px;"><strong>Sales: </strong></label>
                                                             <div class="col-sm-8">
-                                                                @{
+                                                                @*@{
                                                                     decimal currentUnitPrice = detail.UnitPrice;
                                                                     decimal totalAmountofUnitPrice = detail.TotalQuantity * currentUnitPrice;
                                                                     decimal totalTax = detail.TaxGST + detail.TaxPST;
                                                                     decimal total = Math.Round((totalTax / totalAmountofUnitPrice) * 100, 2);
-                                                                    //decimal comission = (detail.Comission) / (1 + total / 100);
+                                                                  
                                                                     decimal comission = (detail.Comission);
                                                                     decimal totalAverageCost = Math.Round(Convert.ToDecimal(detail.AverageCost), 2) * detail.TotalQuantity;
 
-                                                                }
+                                                                }*@
                                                               
                                                                 <label>
-                                                                    Qty @detail.TotalQuantity x $@currentUnitPrice=  $@totalAmountofUnitPrice @*+ Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)*@ <strong>Shipping:</strong>$@item.ShippingPrice,&nbsp; <strong>P&L:</strong>@Math.Round((totalAmountofUnitPrice - 0 - totalAverageCost - comission), 2)  (@(Math.Round(((Math.Round((totalAmountofUnitPrice - 0 - totalAverageCost - comission), 2) / totalAmountofUnitPrice)) * 100))%)&nbsp; <span class="SalesQtytooltip">
+                                                                    &nbsp; <span class="SalesQtytooltip">
                                                                                                                                                                                                                                                                                                                                                         <span class="GetSalesQtytooltipdata" style="cursor:pointer;color:cornflowerblue" data-id="@item.SellerCloudOrderID" data-SKU="@detail.ProductSKU">Explain Amount</span>
 
                                                                                                                                                                                                                                                                                                                                                         <span class="SalesQtytooltipdata" id=@(item.SellerCloudOrderID+detail.ProductSKU)>
@@ -610,12 +611,13 @@
                                                             </div>
 
                                                         </div>*@
-                                                        <div class="row">
+                                                        @*//change*@
+                                                        @*<div class="row">
                                                             <label class="col-sm-3 offset-sm-1 text-right" style="position: relative;left: 11px;"><strong><a asp-action="ProductAddUpdate" target="_blank" asp-controller="Product" asp-route-ProductSKU="@detail.ProductSKU"> Avg Cost:</a> </strong></label>
                                                             <div class="col-sm-8 removePadding">
                                                                 <label>@detail.TotalQuantity * @detail.AverageCost = <span style="color:red"> CA$@totalAverageCost</span></label>
                                                             </div>
-                                                        </div>
+                                                        </div>*@
                                                     </td>
                                                     <td>
                                                         <div class="row">
@@ -709,7 +711,7 @@
                                                                 }
 
                                                                 <div>
-                                                                    <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@item.SellerCloudOrderID" style="" data-ZincOrderLogID="@detail.ZincOrderLogID" data-ZincRequestID="@detail.ZincRequestID">Get Zinc Update</a>
+                                                                    <a href="javascript:;" style="display:block;cursor:pointer;display:none;text-align:center" id="ZincOrderReterive" data-SellerCloudOrderId="@item.SellerCloudOrderID" style="" data-ZincOrderLogID="@detail.ZincOrderLogID" data-ZincRequestID="@detail.ZincRequestID">Get Zinc Update</a>
                                                                     <span>
                                                                         <img style="        display: none;
 " class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
@@ -718,7 +720,7 @@
                                                             }
                                                             else if (detail.ZincOrderStatusInternal == "InProcess" || detail.ZincOrderStatusInternal == "OrderRequestSent" || detail.ZincOrderStatusInternal == "InProgressSuccess")
                                                             {
-                                                                <a href="javascript:;" style="display:block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@item.SellerCloudOrderID" style="" data-ZincOrderLogID="@detail.ZincOrderLogID" data-ZincRequestID="@detail.ZincRequestID">Get Zinc Update</a>
+                                                                <a href="javascript:;" style="display:block;cursor:pointer;text-align:center" id="ZincOrderReterive" data-SellerCloudOrderId="@item.SellerCloudOrderID" style="" data-ZincOrderLogID="@detail.ZincOrderLogID" data-ZincRequestID="@detail.ZincRequestID">Get Zinc Update</a>
                                                                 <span>
                                                                     <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                                                                 </span>
@@ -729,7 +731,7 @@
                                                             }
                                                             else if (detail.ZincOrderStatusInternal == "" && detail.ZincRequestID != "")
                                                             {
-                                                                <a href="javascript:;" style="display:block;cursor:pointer" id="ZincOrderReterive" data-SellerCloudOrderId="@item.SellerCloudOrderID" style="" data-ZincOrderLogID="@detail.ZincOrderLogID" data-ZincRequestID="@detail.ZincRequestID">Get Zinc Update</a>
+                                                                <a href="javascript:;" style="display:block;cursor:pointer;text-align:center" id="ZincOrderReterive" data-SellerCloudOrderId="@item.SellerCloudOrderID" style="" data-ZincOrderLogID="@detail.ZincOrderLogID" data-ZincRequestID="@detail.ZincRequestID">Get Zinc Update</a>
                                                                 <span>
                                                                     <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                                                                 </span>
@@ -740,7 +742,7 @@
                                                             }
                                                             else
                                                             {
-                                                                <a href="javascript:;" style="display:block;cursor:pointer;display:none" id="ZincOrderReterive" data-SellerCloudOrderId="@item.SellerCloudOrderID" style="" data-ZincOrderLogID="@detail.ZincOrderLogID" data-ZincRequestID="@detail.ZincRequestID">Get Zinc Update</a>
+                                                                <a href="javascript:;" style="display:block;cursor:pointer;display:none;text-align:center" id="ZincOrderReterive" data-SellerCloudOrderId="@item.SellerCloudOrderID" style="" data-ZincOrderLogID="@detail.ZincOrderLogID" data-ZincRequestID="@detail.ZincRequestID">Get Zinc Update</a>
                                                                 <span>
                                                                     <img style="display:none;" class="ZincOrderReteriveLoader" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                                                                 </span>

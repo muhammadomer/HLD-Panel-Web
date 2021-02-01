@@ -560,10 +560,12 @@
                        $(item).val(skuValue);
 
             });
-        @*$(document).on('mouseleave','.sku', function (event) {
+        $(document).on("paste", ".sku", function () {
                 //var item = $(this).parents('tr');
-                var selectedrow = $(this).parents('tr');
-                var item = $(this);
+            var $this = this;
+            setTimeout(function () {
+                var selectedrow = $($this).parents('tr');
+                var item = $($this);
                 //var item = $(selectedrow).find('.sku');
                 console.log("my item", item)
                 var skuValue = item.val().trim();
@@ -600,9 +602,10 @@
                             debugger;
                         }
                     });
-                       $(this).val(skuValue);
+                $($this).val(skuValue);
+            },100)
 
-            });*@
+            });
 
 
         function skuChange(event, ui) {
