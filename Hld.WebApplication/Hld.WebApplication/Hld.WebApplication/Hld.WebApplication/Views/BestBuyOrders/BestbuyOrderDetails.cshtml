@@ -331,10 +331,13 @@
         </div>            }
             @if (Model.searchViewModel.PaymentStatus != "")
             {
-        <div class="row">
-            <span class="tagspan">Payment Status :</span>
-            <span style="padding-left:0px;" class="Py-status-text">@Model.searchViewModel.PaymentStatus.Replace(",", ", ")</span>
-        </div>            }
+
+                <div class="row col-12">
+                    <span class="tagspan">Payment Status :</span>
+                    <span style="padding-left:0px;" class="Py-status-text">@Model.searchViewModel.PaymentStatus.Replace(",", ", ")</span>
+                </div>
+            }
+
 
             @if (Model.searchViewModel.BBOrderStatus != "")
             {

@@ -52,8 +52,8 @@ namespace Hld.WebApplication.Controllers
             if (ZincStatus != "")
             {
 
-                orderDateTimeTo = DateTime.Now.ToString("yyyy-MM-dd");
-                orderDateTimeFrom = Convert.ToDateTime(orderDateTimeTo).AddDays(-30).ToString("yyyy-MM-dd");
+                //orderDateTimeTo = DateTime.Now.ToString("yyyy-MM-dd");
+                //orderDateTimeFrom = Convert.ToDateTime(orderDateTimeTo).AddDays(-30).ToString("yyyy-MM-dd");
 
             }
             if (orderDateTimeFrom == null)
@@ -122,7 +122,7 @@ namespace Hld.WebApplication.Controllers
             token = Request.Cookies["Token"];
             BestBuyOrdersViewModel viewModel = new BestBuyOrdersViewModel();
             viewModel.searchViewModel = SearchViewModel;
-            viewModel.searchViewModel.ZincStatus = ZincStatus;
+           
 
             if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
             {
@@ -218,8 +218,9 @@ namespace Hld.WebApplication.Controllers
             }
             if (ZincStatus != "" && ZincStatus != "undefined")
             {
-                orderDateTimeTo = DateTime.Now.ToString("yyyy-MM-dd");
-                orderDateTimeFrom = Convert.ToDateTime(orderDateTimeTo).AddDays(-30).ToString("yyyy-MM-dd");
+                //orderDateTimeTo = DateTime.Now.ToString("yyyy-MM-dd");
+                //orderDateTimeFrom = Convert.ToDateTime(orderDateTimeTo).AddDays(-30).ToString("yyyy-MM-dd");
+
 
             }
             if (orderDateTimeFrom == null)

@@ -450,13 +450,13 @@
                                         <div class="col-sm-6">
                                             @if (item.ProfitAndLossInPercentage > 5)
                                             {
-                                                decimal total = (@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
+                                                decimal total = (@item.TotalPrice);
 
                                                 <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Fees:</strong>$@Math.Round(@item.TotalComission),&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:blue">$@item.ProfitAndLossInDollar (@Math.Round(@item.ProfitAndLossInPercentage)%)</span></label>
                                             }
                                             else
                                             {
-                                                decimal total = (@item.TotalPrice) - Convert.ToDecimal((@item.ShippingPrice));
+                                                decimal total = (@item.TotalPrice);
                                         <label><strong>Qty:</strong>@item.TotalQuantity,&nbsp;<strong>Total:</strong>$@total,&nbsp;<strong>Shipping:</strong>$@item.ShippingPrice,&nbsp;<strong>Fees:</strong>$@Math.Round(@item.TotalComission),&nbsp;<strong>Avg Cost:</strong>$@item.TotalAverageCost,&nbsp;<strong>P&L:</strong><span style="color:red">$@item.ProfitAndLossInDollar (@Math.Round(@item.ProfitAndLossInPercentage)%)</span></label>
                                             }
 
@@ -573,7 +573,7 @@
                                                         <div class="row">
                                                             <label class="col-sm-1 offset-sm-2 text-right" style="padding-right:4px;"><strong>Sales: </strong></label>
                                                             <div class="col-sm-8">
-                                                                @*@{
+                                                                @{
                                                                     decimal currentUnitPrice = detail.UnitPrice;
                                                                     decimal totalAmountofUnitPrice = detail.TotalQuantity * currentUnitPrice;
                                                                     decimal totalTax = detail.TaxGST + detail.TaxPST;
@@ -582,10 +582,12 @@
                                                                     decimal comission = (detail.Comission);
                                                                     decimal totalAverageCost = Math.Round(Convert.ToDecimal(detail.AverageCost), 2) * detail.TotalQuantity;
 
-                                                                }*@
+                                                                }
                                                               
                                                                 <label>
-                                                                    &nbsp; <span class="SalesQtytooltip">
+                                                              <span class="SalesQtytooltip">
+
+                                                                    Qty @detail.TotalQuantity x $@currentUnitPrice=  $@totalAmountofUnitPrice @*+ Tax $@totalTax (@total)% = $@Math.Round((totalTax + totalAmountofUnitPrice), 2)*@ <strong>Shipping:</strong>$@detail.ShippingFee,&nbsp; <strong>P&L:</strong>@Math.Round(detail.calculation_ProfitLoss, 2)  (@Math.Round(detail.calculation_ProfitLossPercentage)%)
                                                                                                                                                                                                                                                                                                                                                         <span class="GetSalesQtytooltipdata" style="cursor:pointer;color:cornflowerblue" data-id="@item.SellerCloudOrderID" data-SKU="@detail.ProductSKU">Explain Amount</span>
 
                                                                                                                                                                                                                                                                                                                                                         <span class="SalesQtytooltipdata" id=@(item.SellerCloudOrderID+detail.ProductSKU)>
@@ -604,20 +606,13 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        @*<div class="row">
-                                                            <label class="col-sm-1 offset-sm-2 text-right" style="padding-right:4px;"><strong>P&L:</strong></label>
-                                                            <div class="col-sm-8 removePadding">
-                                                                <label style="padding-left:18px">Comission: $@Math.Round(comission, 2) (@Math.Round(((comission / totalAmountofUnitPrice) * 100), 2)%) , P&L: $@Math.Round((totalAmountofUnitPrice - 0 - totalAverageCost - comission), 2)  (@(Math.Round(((Math.Round((totalAmountofUnitPrice - 0 - totalAverageCost - comission), 2) / totalAmountofUnitPrice)) * 100, 2))%)</label>
-                                                            </div>
-
-                                                        </div>*@
-                                                        @*//change*@
-                                                        @*<div class="row">
+                                                
+                                                        <div class="row">
                                                             <label class="col-sm-3 offset-sm-1 text-right" style="position: relative;left: 11px;"><strong><a asp-action="ProductAddUpdate" target="_blank" asp-controller="Product" asp-route-ProductSKU="@detail.ProductSKU"> Avg Cost:</a> </strong></label>
                                                             <div class="col-sm-8 removePadding">
                                                                 <label>@detail.TotalQuantity * @detail.AverageCost = <span style="color:red"> CA$@totalAverageCost</span></label>
                                                             </div>
-                                                        </div>*@
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <div class="row">
