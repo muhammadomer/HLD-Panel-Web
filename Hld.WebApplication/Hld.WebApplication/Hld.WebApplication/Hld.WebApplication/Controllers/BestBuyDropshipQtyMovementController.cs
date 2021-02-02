@@ -12,6 +12,7 @@ using System.Collections.Specialized;
 using System.Web;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using PagedList;
 
 namespace Hld.WebApplication.Controllers
 {
@@ -294,5 +295,77 @@ on BestBuyProducts.shop_sku_offer_sku=`bestBuyE2`.`BestBuyDropsShipQtyMovement`.
             return listModel;
         }
 
+        public IActionResult BestBuyDropshipQtyMovement(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string product_sku = "", string ds_status = "", string BBProductID = "", string EmptyFirstTime = "")
+        {
+
+            token = Request.Cookies["Token"];
+            BestBuyQTYLogsDetailViewModel BestBuyDropshipQty = new BestBuyQTYLogsDetailViewModel();
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = "";
+                PreviousDate = "";
+            }
+
+
+
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+
+            }
+            else
+            {
+                var count = _dropshipQtyMovementApiAccess.GetCount(ApiURL, token, CurrentDate, PreviousDate, product_sku, ds_status, BBProductID);
+                ViewBag.TotalCount = count;
+
+            }
+            return View(BestBuyDropshipQty);
+        }
+        [HttpPost]
+        public IActionResult BestBuyDropshipQtyMovementList(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string product_sku = "", string ds_status = "", string BBProductID = "", string EmptyFirstTime = "")
+        {
+
+            //string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            //string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = "";
+                PreviousDate = "";
+            }
+            token = Request.Cookies["Token"];
+
+            if (page.HasValue)
+            {
+                ViewBag.pageNumber = page;
+            }
+            IPagedList<BestBuyQTYLogsDetailViewModel> data = null;
+            int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
+            int pageSize = 25;
+            int endLimit = 0;
+            int startlimit = pageSize;
+            if (page.HasValue)
+            {
+                endLimit = (pageNumber - 1) * pageSize;
+            }
+            List<BestBuyQTYLogsDetailViewModel> _viewModel = new List<BestBuyQTYLogsDetailViewModel>();
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+                _viewModel = _dropshipQtyMovementApiAccess.BestBuyDropshipQtyMovementList(ApiURL, token, CurrentDate, PreviousDate, 0, 0, product_sku, ds_status, BBProductID);
+                data = new StaticPagedList<BestBuyQTYLogsDetailViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+                return PartialView("~/Views/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovementParitalView.cshtml", data);
+            }
+
+            _viewModel = _dropshipQtyMovementApiAccess.BestBuyDropshipQtyMovementList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, product_sku, ds_status, BBProductID);
+            data = new StaticPagedList<BestBuyQTYLogsDetailViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+            return PartialView("~/Views/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovementParitalView.cshtml", data);
+            
+
+        }
     }
 }

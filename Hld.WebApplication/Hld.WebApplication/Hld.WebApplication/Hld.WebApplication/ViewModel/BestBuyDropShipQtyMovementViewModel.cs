@@ -31,12 +31,15 @@ namespace Hld.WebApplication.ViewModel
         public int ds_qty { get; set; }
         public string OrderQuantity { get; set; }
         public DateTime order_date { get; set; }
+        public DateTime orderDateTimeFrom { get; set; }
+        public DateTime orderDateTimeTo { get; set; }
         public string update_status { get; set; }
         public int IsDropshipStatusUpdate_id { get; set; }
         public int bb_import_id { get; set; }
         public string ds_status { get; set; }
         public string comments { get; set; }
         public string BBProductID { get; set; }
+        public string EmptyFirstTime { get; set; }
     
     }
 }

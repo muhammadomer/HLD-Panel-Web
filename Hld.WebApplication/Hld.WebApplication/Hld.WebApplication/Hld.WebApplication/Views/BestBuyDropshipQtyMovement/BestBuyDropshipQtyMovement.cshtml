@@ -1,0 +1,565 @@
+﻿@model Hld.WebApplication.ViewModel.BestBuyQTYLogsDetailViewModel
+
+@{
+    ViewData["Title"] = "BestBuyDropshipQtyMovement";
+}
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+
+<link href="~/css/date-range-picker/daterangepicker.css" rel="stylesheet" />
+<style>
+    .pagination > a {
+        padding: 5px;
+    }
+
+    .ms-options-wrap.ms-active > .ms-options {
+        max-width: 400px !important;
+        min-height: 92px !important;
+    }
+
+    .ms-options-wrap > button:focus, .ms-options-wrap > button {
+        border-radius: 4px;
+        height: 25px;
+        outline: none !important;
+    }
+
+    ms-options-wrap > button:focus, .ms-options-wrap > button {
+        padding: 1px 0px 1px 2px !important;
+    }
+
+    .ms-options-wrap > .ms-options > ul label {
+        width: 101% !important;
+    }
+
+    #myModalEdit, #myModal, #myModalMarkShiped {
+        margin: 20px;
+        margin-top: 88px;
+    }
+
+    .table {
+        margin-top: 60px;
+    }
+
+        .table thead tr th {
+            width: 88px;
+            vertical-align: middle !important;
+        }
+
+        /*.table td {
+            vertical-align: middle !important;
+            text-align: start !important;
+        }*/
+
+        .table thead tr th {
+            position: sticky;
+            top: 50px;
+            padding: 5px;
+            /*width: 26px;*/
+            z-index: 2;
+            background-color: lightgray;
+        }
+
+    .myclass {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: green;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .myclasscancel {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: black;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    /*.table th:last-child, .table th:first-child {
+        background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);*/
+        /*background-color: lightgray !important;*/
+        /*background: none !important;*/
+        /*background-image: none !important;
+    }*/
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    .btnstyle {
+        padding: 4px;
+        box-shadow: none;
+    }
+
+    .hidedialogbox {
+        font-family: Arial;
+        position: absolute;
+        top: 1000px;
+        width: 1000px;
+        height: auto;
+    }
+
+    .mydlete {
+        position: fixed;
+        top: 17%;
+        left: 90%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 30px;
+    }
+
+    .loader {
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        opacity: .9;
+        background-color: rgb(249,249,249);
+    }
+
+        .loader img {
+            top: 50%;
+            position: absolute;
+            left: 50%;
+            margin: 0;
+            margin-right: -50%;
+            transform: translate(-50%,-50%);
+        }
+
+    .searchFormFixed {
+        position: fixed;
+        top: 50px;
+        width: 100%;
+        z-index: 500;
+        padding-bottom: 0px;
+        background: white;
+    }
+
+    .fixedclassforpagination {
+        position: fixed;
+        top: 133px;
+        padding-bottom: 0px;
+        z-index: 400;
+        background: white;
+    }
+
+    .select2 {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 27px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .select2-container .select2-selection--single {
+        box-sizing: border-box;
+        cursor: pointer;
+        display: block;
+        height: 27px !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+</style>
+
+<div class="loader">
+    <img src="~/Images/giffff.gif" />
+</div>
+
+
+<div class="container-fluid searchFormFixed">
+   
+    <div class="row form-group" style="margin-top: 10px;">
+        <h6 style="padding-left: 32px;">BestBuy Qty Update Log</h6>
+       
+    </div>
+    <div class="mb-1 searchFormcard" id="searchForm">
+        <div class="col-sm-12">
+            @using (Html.BeginForm("BestBuyDropshipQtyMovement", "BestBuyDropshipQtyMovement", FormMethod.Get))
+            {
+                <div class="row" style="margin-left:2px;margin-top:15px;">
+                    <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
+
+                    <div class="col-md-2 p-0 mr-1">
+                        <input type="text" id="product_sku" name="product_sku" value="@Model.product_sku" autocomplete="off" placeholder="SKU" class="form-control" style="box-shadow: none" />
+                    </div>
+                    <div class="col-md-2 p-0 mr-1">
+                        <input type="text" id="BBProductID" name="BBProductID" value="@Model.BBProductID" placeholder="BB_ProductID" class="form-control" style="box-shadow: none" />
+                    </div>
+                    <div class="col-md-2 p-0 mr-1">
+                        <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 Dropship" multiple="multiple">
+                            <option value=1>DropShip</option>
+                            <option value=2>DropShip None</option>
+
+                        </select>
+                        <input type="hidden" name="ds_status" id="Dropship" />
+                        @*<input type="text" id="ds_status" name="ds_status" value="@Model.ds_status" placeholder="DS Status" class="form-control" style="box-shadow: none" />*@
+                    </div>
+                   
+                    <div class="col-md-3 p-0" style="margin-right: 15px;">
+                        <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width:100%; box-shadow:none">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                        <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+                        <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
+                    </div>
+                    <div class="col-md-1 p-0">
+                        <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="container-fluid  ">
+    <div class="row col col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: -5px;
+margin-top: 9px;">
+        <div class="col col-md-2">
+            <div class="row">
+                <div class="pagination col-md-6 col">
+
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-4" style="padding-top:5px;">
+            @if (ViewBag.TotalCount == null)
+            {
+                <span> Total Records Found : 0 </span>
+                <span id="itemPerPage" style="margin-left:20px"> Records Per Page : 0</span>
+            }
+            else
+            {
+                <span> Total Records Found : @ViewBag.TotalCount</span>
+                <span style="margin-left:20px"> Records Per Page : <span class="itemPerPage"></span></span>
+            }
+
+
+
+
+
+        </div>
+
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="loadOrdertracking">
+
+    </div>
+</div>
+<div class="container-fluid" style="margin-left:10px">
+    <div class="pagination">
+
+    </div>
+    <div class="hidedialogbox">
+        <div id="dialog-box">
+            @*<h6 style="color:red">Do you want to unship this shipment!</h6>*@
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
+    <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
+
+    <script src="~/lib/date-range-picker/moment.min.js"></script>
+    <script src="~/lib/date-range-picker/daterangepicker.js"></script>
+
+    <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
+    <script>
+        $(function () {
+            $('#product_sku,#BBProductID,#ds_status').bind('input', function () {
+                $(this).val(function (_, v) {
+                    return v.replace(/\s+/g, '');
+                });
+            });
+        });
+        var selectedDateFrom = "";
+        var selectedDatTo = "";
+        $(document).ready(function () {
+
+            $('#btnSearchOrder').click(function () {
+
+                $('#itemPerPage').show();
+            });
+
+
+            $('.Statusbtn').click(function () {
+                $('#btnSearchStatus').click();
+            });
+
+            $("#EmptyFirstTime").val("No");
+
+            $(".loader").hide();
+            $("#dialog-box").dialog({
+                autoOpen: false,
+                //title: 'Are u want to delete this reocord!',
+                modal: true,
+            });
+            var start = moment().subtract(7, 'days');
+            var end = moment();
+
+            function cb(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+            $("#orderDateTimeFrom").datepicker({ dateFormat: 'yy-mm-dd' });
+            $("#orderDateTimeTo").datepicker({ dateFormat: 'yy-mm-dd' });
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                selectedDateFrom = picker.startDate.format('YYYY-MM-DD');
+                selectedDatTo = picker.endDate.format('YYYY-MM-DD');
+                $("#orderDateTimeTo").val(selectedDatTo);
+                $("#orderDateTimeFrom").val(selectedDateFrom);
+                console.log($("#orderDateTimeTo").val());
+                console.log(selectedDatTo);
+            });
+
+            //var Items = getUrlParameter('CustomerName');
+            $('select[multiple].active.3col.QuantityStatus').multiselect({
+                columns: 1,
+                placeholder: 'Status',
+                maxPlaceholderOpts: 1,
+
+                selectAll: false,
+                onOptionClick: function (element, option) {
+                    $('#ddlQuantity').val($(element).val());
+                    $(element).val();
+                },
+            });
+            $('select[multiple].active.2col.Dropship').multiselect({
+                columns: 1,
+                placeholder: 'Dropship Status',
+                maxPlaceholderOpts: 1,
+                selectAll: false,
+                onOptionClick: function (element, option) {
+                    $('#Dropship').val($(element).val());
+                    $(element).val();
+                },
+            });
+           
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            };
+            var product_sku = getUrlParameter('product_sku');           
+            var ds_status = getUrlParameter('ds_status');        
+            var BBProductID = getUrlParameter('BBProductID');
+            var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
+            var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
+            var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
+            if (ds_status != null) {
+                debugger;
+                var res = ds_status.split(",");
+                $.each(res, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+
+                        if ($(this).val() == value.trim()) {
+                            $(this).prop("checked", true);
+                            $('#Dropship').val($(this).val());
+                        }
+                    });
+                });
+            }
+
+            if (EmptyFirstTime) {
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+
+                  format: '[< nncnn >]',
+                  perpage: 25, // show 10 elements per page
+                  lapping: 0, // don't overlap pages for the moment
+                  page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                  onSelect: function (page) {
+                      debugger;
+                      pageNo = page;
+                      // add code which gets executed when user selects a page
+                      var url = '/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovementList?page=' + page + '&product_sku=' + product_sku + '&ds_status=' + ds_status + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&BBProductID=' + BBProductID  + '&EmptyFirstTime=' + EmptyFirstTime;
+                      var completURL = url  ;
+                      $(".loadertbl").show();
+                      $(".loader").show();
+                      $.ajax({
+                          url: completURL,
+                          data: {  },
+                          type: 'POST',
+                          traditional: true,
+                          success: function (data) {
+
+                              $('#loadOrdertracking').empty();
+
+                              $('#loadOrdertracking').html(data);
+
+                              $(function () {
+                                  $(".table").tablesorter();
+
+                              })
+                              $(".loadertbl").hide();
+                              $(".loader").hide();
+                              var itemcount = $(".mytable").find("tr").length-1;
+                              $(".itemPerPage").text(itemcount);
+                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                          },
+                          error: function (data) {
+                              debugger;
+                              $('#loadOrdertracking').empty();
+
+                              $('#loadOrdertracking').html(data);
+                          }
+                      });
+
+                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                              start = moment(OrderDateTimeFrom);
+                              end = moment(OrderDateTimeTo);
+                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                          }
+                          else {
+                              $('#reportrange span').html("No Date Selected");
+                          }
+
+                      }
+                      else {
+                          $('#reportrange span').html("No Date Selected");
+                      }
+                  },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+             });
+
+            } else {
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+
+                  format: '[< nncnn >]',
+                  perpage: 25, // show 10 elements per page
+                  lapping: 0, // don't overlap pages for the moment
+                  page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                  onSelect: function (page) {
+                      debugger;
+                      pageNo = page;
+                      // add code which gets executed when user selects a page
+                      var url = '/BestBuyTrackingUpdateLog/BuyTrackingUpdateLogList?page=' + page + "&scOrderID=" + scOrderID + "&bbOrderID=" + bbOrderID + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&trackingNumber=' + trackingNumber + '&BBStatus=' + BBStatus + '&EmptyFirstTime=' + EmptyFirstTime;
+                      var completURL = url  ;
+                      $(".loadertbl").show();
+                      $(".loader").show();
+                      $.ajax({
+                          url: completURL,
+                          data: {  },
+                          type: 'POST',
+                          traditional: true,
+                          success: function (data) {
+
+                              $('#loadOrdertracking').empty();
+
+                              $('#loadOrdertracking').html(data);
+
+                              $(function () {
+                                  $(".table").tablesorter();
+
+                              })
+                              $(".loadertbl").hide();
+                              $(".loader").hide();
+                              var itemcount = $(".mytable").find("tr").length;
+                              $(".itemPerPage").text(itemcount);
+                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                          },
+                          error: function (data) {
+                              debugger;
+                          }
+                      });
+
+                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                              start = moment(OrderDateTimeFrom);
+                              end = moment(OrderDateTimeTo);
+                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                          }
+                          else {
+                              $('#reportrange span').html("No Date Selected");
+                          }
+
+                      }
+                      else {
+                          $('#reportrange span').html("No Date Selected");
+                      }
+                  },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+                });
+                $(".loader").hide();
+            }
+           
+            $(".table").tablesorter();
+
+        });
+    </script>
+}

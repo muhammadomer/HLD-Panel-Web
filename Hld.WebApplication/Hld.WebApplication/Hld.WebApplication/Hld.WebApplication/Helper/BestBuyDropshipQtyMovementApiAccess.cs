@@ -82,5 +82,53 @@ namespace Hld.WebApplication.Helper
             List<BestBuyQTYLogsDetailViewModel> responses = JsonConvert.DeserializeObject<List<BestBuyQTYLogsDetailViewModel>>(strResponse);
             return responses;
         }
+        public int GetCount(string ApiURL, string token, string StartDate, string EndDate, string product_sku, string ds_status = "", string BBProductID = "")
+        {
+            int Count = 0;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyDropshipQtyMovement/GetCounter?product_sku=" + product_sku + "&ds_status=" + ds_status + "&BBProductID=" + BBProductID + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                        Count = (int)JObject.Parse(strResponse)["counter"];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Count;
+        }
+
+        public List<BestBuyQTYLogsDetailViewModel> BestBuyDropshipQtyMovementList(string apiurl, string token, string DateTo, string DateFrom, int limit, int offset, string product_sku, string ds_status = "", string BBProductID = "")
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest
+                .Create(apiurl + "/api/BestBuyDropshipQtyMovement/DropshipQtyList?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&product_sku=" + product_sku + "&ds_status=" + ds_status + "&BBProductID=" + BBProductID + "&limit=" + limit + "&offset=" + offset);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<BestBuyQTYLogsDetailViewModel> responses = JsonConvert.DeserializeObject<List<BestBuyQTYLogsDetailViewModel>>(strResponse);
+            return responses;
+        }
+
     }
 }

@@ -336,7 +336,8 @@
                                 {
                                     <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="Product" asp-action="IndexMainView">BestBuy Inventory</a></li>
                                 }
-                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="BestBuyDropshipQtyMovement" asp-action="AllDropshipQtyMovementList">BestBuy Qty Update Log</a></li>
+                                @*<li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="BestBuyDropshipQtyMovement" asp-action="AllDropshipQtyMovementList">BestBuy Qty Update Log</a></li>*@
+                                <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="BestBuyDropshipQtyMovement" asp-action="BestBuyDropshipQtyMovement">BestBuy Qty Update Log</a></li>
                                 <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="asindetail" asp-action="ASINDetailList">ASIN List</a></li>
                                 <li class="dropdown-item" href="#"> <a class="nav-link " asp-controller="BestBuyProduct" asp-action="SummaryCount" target="_blank">Best Buy Price Log</a></li>
                                 @*<li class="dropdown-item dropdown">
@@ -644,8 +645,9 @@
                     }
                     if (FilterName == "sellerCloudID" || FilterName == "order_id" || FilterName == "CustomerName") {
 
-                        //var target = '/BestBuyProduct/BestBuOrdersDetail?' + FilterName + '=' + FilterValue + '&EmptyFirstTime'
+                   
                         var target = '/BestBuyOrders/BestbuyOrderDetails?' + FilterName + '=' + FilterValue + '&EmptyFirstTime'+'='+'data';
+
 
                         window.location.href = target;
                     }

@@ -148,7 +148,8 @@
                                         <a style="display:inline" class="nav-link" target="_blank" asp-action="ShowEnableDisableLog" asp-controller="DropshipEnableDisableLog" asp-route-ProductSku="@Model.Product_Sku">DS Log</a>
                                     </span>
                                     <span class="">
-                                        <a href="/BestBuyDropshipQtyMovement/AllDropshipQtyMovementList" style="display:inline" class="nav-link" target="_blank">BB Qty Update Log</a>
+                                        @*<a href="/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovement?Product_Sku=@Model.Product_Sku" style="display:inline" class="nav-link" target="_blank">BB Qty Update Log</a>*@
+                                        <a href="/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovement?EmptyFirstTime=No&product_sku=@Model.Product_Sku&BBProductID=&ds_status=&orderDateTimeFrom=&orderDateTimeTo=" style="display:inline" class="nav-link" target="_blank">BB Qty Update Log</a>
                                     </span>
                                 </div>
                             </div>
