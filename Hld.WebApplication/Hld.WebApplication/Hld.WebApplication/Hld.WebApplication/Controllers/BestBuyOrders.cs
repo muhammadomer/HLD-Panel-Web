@@ -103,7 +103,7 @@ namespace Hld.WebApplication.Controllers
             BestBuyOrderSearchTotalCountViewModel SearchViewModel = new BestBuyOrderSearchTotalCountViewModel();
 
 
-            string _ZincStatus = getString(ZincStatus);
+            string _ZincStatus =ZincStatus;
             SearchViewModel.ZincStatus = _ZincStatus;
             SearchViewModel.OrderStatus = OrderStatus;
             SearchViewModel.Sku = sku;
@@ -328,7 +328,7 @@ namespace Hld.WebApplication.Controllers
             }
             else if (!string.IsNullOrEmpty(ZincStatus) && ZincStatus != "undefined" || (!string.IsNullOrEmpty(sku) && sku != "undefined") || (!string.IsNullOrEmpty(orderStatus) && orderStatus != "undefined") || (!string.IsNullOrEmpty(orderDateFrom) && orderDateFrom != "undefined") || (!string.IsNullOrEmpty(orderDateTo) && orderDateTo != "undefined") || (!string.IsNullOrEmpty(DSStatus) && DSStatus != "undefined") || (!string.IsNullOrEmpty(PaymentStatus) && PaymentStatus != "undefined") || (!string.IsNullOrEmpty(ShippingTags) && ShippingTags != "undefined") || ShippingBoxContain != 0|| WHQStatus!=0 || (!string.IsNullOrEmpty(BBOrderStatus) && BBOrderStatus != "undefined"))
             {
-                modifiedZincStatus = getString(ZincStatus);
+                modifiedZincStatus = ZincStatus;
                 BestBuyOrderSearchTotalCountViewModel SearchViewModel = new BestBuyOrderSearchTotalCountViewModel();
                 SearchViewModel.ZincStatus = modifiedZincStatus;
 
