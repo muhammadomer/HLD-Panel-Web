@@ -770,6 +770,15 @@ namespace Hld.WebApplication.Controllers
             return status;
         }
 
+        public bool UpdatePODescription(string ProductPONotes, string PO)
+        {
 
+            bool status = false;
+            token = Request.Cookies["Token"];
+
+
+            status = _ApiAccess.UpdatePODescription(ApiURL, token, ProductPONotes, PO);
+            return status;
+        }
     }
 }

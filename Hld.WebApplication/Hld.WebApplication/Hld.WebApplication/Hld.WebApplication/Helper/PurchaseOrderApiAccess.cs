@@ -622,6 +622,28 @@ namespace Hld.WebApplication.Helper
             return Convert.ToBoolean(strResponse);
         }
 
+        public bool UpdatePODescription(string ApiURL, string token, string ProductPONotes, string PO)
+        {
+
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PurchaseOrder/UpdatePODescription?ProductPONotes=" + ProductPONotes + "&PO=" + PO);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+
+
+            return Convert.ToBoolean(strResponse);
+        }
 
     }
 }

@@ -430,26 +430,47 @@
                         <div class="border" style="height: 235px!important;min-height:235px!important">
                             <h6 class="mt-2 ml-2" style="font-size:14px;font-family:Arial;font-weight:bold">Ship To</h6>
                             <hr />
-                            <address style="float: left;
-    text-align: start;
-    padding-left: 17px;">
-                                <label class="mb-0">
-                                    Home Living Dream
-                                </label><br />
-                                <label class="mb-0">
-                                    4090 Ridgeway Drive, Unit 22-23
-                                </label><br />
-                                <label class="mb-0">
-                                    Mississauga ON L5L 5X5
-                                </label><br />
-                                <label class="mb-0">
-                                    Canada
-                                </label><br />
-                                <label class="mb-0">
-                                    Phone: 514-996-1278
-                                </label><br />
-                                <label class="mb-0">PO Description: @Model.Notes</label>
-                            </address>
+                            <div class="col-12">
+                                <address style="">
+                                    <label class="mb-0">
+                                        Home Living Dream
+                                    </label><br />
+                                    <label class="mb-0">
+                                        4090 Ridgeway Drive, Unit 22-23
+                                    </label><br />
+                                    <label class="mb-0">
+                                        Mississauga ON L5L 5X5
+                                    </label><br />
+                                    <label class="mb-0">
+                                        Canada
+                                    </label><br />
+                                    <label class="mb-0">
+                                        Phone: 514-996-1278
+                                    </label><br />
+                                    <div class="col-12">
+                                        <label class="row">
+                                            <span style="margin-top:4px">PO Description:</span><span><input type="text" class="form-control ProducPOClasss" value="@Model.Notes" style="display:none;box-shadow:none" data-POIDs="@Model.POId" /></span><span class="purchasePO" style="margin-top: 4px; ">@Model.Notes </span><span style="margin-top: 3px;">
+                                                <span class=" btnEditProducPO" aria-hidden="true" style="color: green;
+        margin-left: 2px;
+        font-family: arial;
+        font-size:10px;
+        cursor:pointer;
+    ">  Edit</span>
+                                            </span><span class="btnProducPOClasss" style="display:none;margin-left:3px">
+                                                <span><button type="button" class="btn btn-warning btnsavePODescrption" style="box-shadow: none !important">Save</button></span><span style="margin-left:4px;">
+                                                    <button type="button" class="btn btn-dark btncancelPO" style="color: black !important;
+        border-color: #a3a7ab !important;
+        background-color: #52555870!important;box-shadow:none!important
+    ">
+                                                        Cancel
+                                                    </button>
+                                                </span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </address>
+                            </div>
+
                         </div>
 
                     </div>
@@ -889,9 +910,42 @@
 
 
                 <div class="modal-body myclasstitle" style="padding-left:0!important;">
-                   
-                    
-                    
+
+
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModalTitlePO" style="margin-top: 130px;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content modelwidth">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-check" style="        color: green;
+        font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
+">PO Description Update Succesfully!</span>
+                    </strong>
+
+
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <div class="modal-body myclasstitlePO" style="padding-left:0!important;">
+
+
+
                 </div>
 
 
@@ -913,6 +967,55 @@
 
     <script>
         $(document).ready(function () {
+
+            //po
+
+            $(".ProducPOClasss").hide();
+            $(".btnProducPOClasss").hide();
+       
+            $(".btnEditProducPO").click(function () {
+                $(this).hide();
+                $(".btnProducPOClasss").show();
+                $(".ProducPOClasss").show();  
+                $(".purchasePO").hide();                
+            })
+            $(".btncancelPO").click(function () {
+                $(".btnProducPOClasss").hide();
+                $(".ProducPOClasss").hide();
+                $(".purchasePO").show();   
+                $(".btnEditProducPO").show();   
+                
+            })
+            $(".btnsavePODescrption").click(function () {
+                $(".btnEditProducPO").show();  
+                $(".ProducPOClasss").hide();
+                $(".purchasePO").show();   
+                $(".btnProducPOClasss").hide();
+                var ProductPONotes = $(".ProducPOClasss").val();
+                var PO = $(".ProducPOClasss").attr("data-POIDs");
+                console.log(ProductPONotes);
+                console.log(PO);
+                $.ajax({
+                    type: 'GET',
+                    url: '../PurchaseOrder/UpdatePODescription',
+                    data: {
+                        ProductPONotes: ProductPONotes,
+                        PO: PO
+                    },
+                    success: function (data) {
+                        $(".myclasstitlePO").empty();
+                        $(".purchasePO").text(ProductPONotes);                       
+                        $(".myclasstitlePO").append("<p style='margin-left: 20px;'>" + ProductPONotes + "</p>");
+                        $("#myModalTitlePO").modal({ backdrop: 'static', keyboard: false });
+                    },
+                    Error: function (err) {
+
+                    }
+                });
+
+            })
+
+            //
             $(".producttitleclasss").hide();
             $(".btndivlcass").hide();
 

@@ -245,7 +245,7 @@
 
                             <input type='text' class='form-control sku' placeholder='Scan SKU or type/paste then press Enter Key' value='@item.SKU' readonly type='search'>
                             <p class="producttitle">@item.Title</p>
-                            <span><button type='button' class="btn btn-sm btn-primary btnsubmittogetskutitleimg" style="display:none;float:right">Submit</button></span>
+                            @*<span><button type='button' class="btn btn-sm btn-primary btnsubmittogetskutitleimg" style="display:none;float:right">Submit</button></span>*@
 
                         </td>
                         <td><select class='form-control PO' disabled style='padding:0px;'><option value='0'>@item.POId&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.OpenQty&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.BalanceQty</option> </select></td>
@@ -404,7 +404,7 @@
                 //$(row).find('select').attr('disabled', false);
                 $(row).find('.editproduct').hide();
             $(row).find('.addproduct').show();
-            $(row).find('.btnsubmittogetskutitleimg').hide();
+            //$(row).find('.btnsubmittogetskutitleimg').hide();
             });
 
         function AddMarkup() {
@@ -413,8 +413,7 @@
                 "<td><input type='checkbox' class='checkbx' name='record'><input type='text'class='form-control productId'  style='display:none' value='0'></td>" +
                 "<td><div class='productimage'></div></td>" +
                 "<td><input type='text'class='form-control sku' placeholder='Scan SKU or type/paste then press Enter Key'  value=''>" +
-                "<p class='producttitle'></p>" +
-            "<span><button type='button' class='btn btn-sm btn-primary btnsubmittogetskutitleimg btnclass' style='display:none;float:right'> Submit</button></span > " +"</td>" +
+                "<p class='producttitle'></p>" + "</td>" +
                 "<td><select class='form-control PO' style='padding:0px;'><option value=''>select</option> </select></td>" +
                 "<td><input type='text'class='form-control shipedqty' value=''>" +
                 "<label class='qtyerr' style='color: red; display: none'></label></td>" +
@@ -517,10 +516,10 @@
             });
         //change
 
-        $(document).on('click','.btnsubmittogetskutitleimg', function (event) {
-                //var item = $(this).parents('tr');
+        @*$(document).on('click','.btnsubmittogetskutitleimg', function (event) {
+               
                 var selectedrow = $(this).parents('tr');
-                //var item = $(this);
+              
                 var item = $(selectedrow).find('.sku');
                 console.log("my item", item)
                 var skuValue = item.val().trim();
@@ -559,7 +558,7 @@
                     });
                        $(item).val(skuValue);
 
-            });
+            });*@
         $(document).on("paste", ".sku", function () {
                 //var item = $(this).parents('tr');
             var $this = this;
@@ -644,13 +643,13 @@
                 });
         }
 
-        $(document).on("change", ".sku", function () {
+        //$(document).on("change", ".sku", function () {
 
-            var selectedrow = $(this).parents('tr');
+        //    var selectedrow = $(this).parents('tr');
 
-            $('.btnsubmittogetskutitleimg').hide();
-            $(selectedrow).find('.btnsubmittogetskutitleimg').show();
-        });
+        //    $('.btnsubmittogetskutitleimg').hide();
+        //    $(selectedrow).find('.btnsubmittogetskutitleimg').show();
+        //});
             var count = 0;
 
 
@@ -659,31 +658,31 @@
                 count++;
                 if (count < 2) {
                     AddMarkup()
-                    $('.sku').blur(function () {
-                        if ($(this).val()) {
-                            //$(this).addClass("error");
-                            var selectedrow = $(this).parents('tr');
-                            $('.btnsubmittogetskutitleimg').hide();
-                            $(selectedrow).find('.btnsubmittogetskutitleimg').show();
+                    //$('.sku').blur(function () {
+                    //    if ($(this).val()) {
+                    //        //$(this).addClass("error");
+                    //        var selectedrow = $(this).parents('tr');
+                    //        $('.btnsubmittogetskutitleimg').hide();
+                    //        $(selectedrow).find('.btnsubmittogetskutitleimg').show();
 
-                        } else {
-                            $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
-                            //$(this).removeClass("error");
-                        }
-                    });
-                    $('.sku').keyup(function () {
-                        if ($(this).val()) {
-                            var selectedrow = $(this).parents('tr');
-                            //$(this).addClass("error");
-                            $('.btnsubmittogetskutitleimg').hide();
-                            $(selectedrow).find('.btnsubmittogetskutitleimg').show();
+                    //    } else {
+                    //        $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
+                    //        //$(this).removeClass("error");
+                    //    }
+                    //});
+                    //$('.sku').keyup(function () {
+                    //    if ($(this).val()) {
+                    //        var selectedrow = $(this).parents('tr');
+                    //        //$(this).addClass("error");
+                    //        $('.btnsubmittogetskutitleimg').hide();
+                    //        $(selectedrow).find('.btnsubmittogetskutitleimg').show();
 
 
-                        } else {
-                            $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
-                            //$(this).removeClass("error");
-                        }
-                    });
+                    //    } else {
+                    //        $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
+                    //        //$(this).removeClass("error");
+                    //    }
+                    //});
                     $('.sku').keypress(function () {
                         if ($(this).val()) {
                             var selectedrow = $(this).parents('tr');

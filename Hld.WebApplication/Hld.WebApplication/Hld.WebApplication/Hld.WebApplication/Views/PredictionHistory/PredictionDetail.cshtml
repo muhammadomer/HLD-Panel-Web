@@ -471,7 +471,7 @@
                         </a>
                         @if (vendorValue == "0")
                         {
-                            <a style='margin-left:5px; cursor: pointer;' href='/ApprovedPrice?&sku=@item.SKU' target='_blank'>
+                            <a style='margin-left:5px; cursor: pointer;'href="/ApprovedPrice/Index?&sku=@item.SKU" target='_blank'>
                                 <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
                             </a>
                         }
@@ -575,7 +575,7 @@
                         {
                             <input type="radio" value="@inner.VendorAlias" data-VendorId="@inner.VendorId" data-Currency="@inner.Currency" data-ApprovedUnitPrice="@inner.ApprovedUnitPrice" class="selectVendor" disabled name="@item.SKU" />
                             <span>@inner.VendorAlias</span>
-                            <span><a style='cursor: pointer;' href='/ApprovedPrice?&sku=@item.SKU&title=' target='_blank'> @inner.ApprovedUnitPrice  </a> @inner.Currency</span><br />
+                            <span><a style='cursor: pointer;' href='/ApprovedPrice/Index?&sku=@item.SKU&title=' target='_blank'> @inner.ApprovedUnitPrice  </a> @inner.Currency</span><br />
                         }
                     }
                 </td>

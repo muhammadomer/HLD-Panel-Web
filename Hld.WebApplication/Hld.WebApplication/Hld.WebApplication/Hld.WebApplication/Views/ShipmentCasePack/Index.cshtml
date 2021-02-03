@@ -445,7 +445,7 @@ margin-left: 13px;">Case Pack Shipment Details</b>
                         <input style='display:none' class='form-control idShipmentProducts' value='@item.idShipmentProducts'>
                         <input style='display:none' class='form-control casepack' value='@item.CasePackId'>
                         <p style="margin-bottom:0!important;">@item.Title</p>
-                        <span><button type='button' class="btn btn-sm btn-primary btnsubmittogetskutitle"style="display:none;float:right">Submit</button></span>
+                        @*<span><button type='button' class="btn btn-sm btn-primary btnsubmittogetskutitle"style="display:none;float:right">Submit</button></span>*@
                         
                     </td>
                     <td style=''><input type='text' readonly class='form-control qtybox' value="@item.QtyPerBox"></td>
@@ -776,8 +776,8 @@ margin-left: 13px;">Case Pack Shipment Details</b>
             $(document).on('keypress', '.sku', function (event) {
 
                 var selectedrow = $(this).parents('tr');
-                $('.btnsubmittogetskutitle').hide();
-                $(selectedrow).find('.btnsubmittogetskutitle').show();
+                //$('.btnsubmittogetskutitle').hide();
+                //$(selectedrow).find('.btnsubmittogetskutitle').show();
                 if (event.keyCode == 13) {
                     var item = $(this);
                     var skuValue = item.val().trim();
@@ -872,8 +872,8 @@ keyboard: false
                 var $this = this;
                 setTimeout(function () {
                     var selectedrow = $($this).parents('tr');
-                    $('.btnsubmittogetskutitle').hide();
-                    $(selectedrow).find('.btnsubmittogetskutitle').show();
+                    //$('.btnsubmittogetskutitle').hide();
+                    //$(selectedrow).find('.btnsubmittogetskutitle').show();
 
                     var item = $($this);
                     var skuValue = item.val().trim();
@@ -962,7 +962,7 @@ keyboard: false
 
             });
 
-            $(document).on('click', '.btnsubmittogetskutitle', function (event) {
+            @*$(document).on('click', '.btnsubmittogetskutitle', function (event) {
 
                var selectedrow = $(this).parents('tr');
 
@@ -1055,7 +1055,7 @@ keyboard: false
 
 
 
-                });
+                });*@
             @*$(this).bind("paste", function (event) {
                 setTimeout(function () {
                     var selectedrow = $(this).parents('tr');
@@ -1200,8 +1200,7 @@ keyboard: false
                     "<td style=''><input type='search' style='width:300px;' placeholder='Scan SKU or type/paste then press Enter Key' class='form-control sku'>" +
                     "<input style='display:none' class='form-control idShipmentProducts' value=''>" +
                     "<input type='search' style='display:none' class='form-control casepack'>" +
-                    "<p class='producttitle'></p>" +
-                    "<span><button type='button' class='btn btn-sm btn-primary btnsubmittogetskutitle btnclass' style='display:none;float:right'> Submit</button></span > "+"</td > " +
+                    "<p class='producttitle'></p>" +"</td > " +
                     "<td style=''><input type='text' class='form-control qtybox'></td>" +
                     "<td style=''><select type='text' style='width:200px;' class='form-control p-0 po'></select></td>" +
                     "<td style=''><input type='text' class='form-control boxes '></td>" +
@@ -1220,13 +1219,13 @@ keyboard: false
 
 
 
-            $(document).on("change", ".sku", function () {
+            //$(document).on("change", ".sku", function () {
 
-                    var selectedrow = $(this).parents('tr');
+            //        var selectedrow = $(this).parents('tr');
 
-                    $('.btnsubmittogetskutitle').hide();
-                    $(selectedrow).find('.btnsubmittogetskutitle').show();
-            });
+            //        $('.btnsubmittogetskutitle').hide();
+            //        $(selectedrow).find('.btnsubmittogetskutitle').show();
+            //});
 
 
 
@@ -1241,32 +1240,7 @@ keyboard: false
                     $('.sku').focus();
 
                     //keypressfunction();
-                    $('.sku').blur(function () {
-                        if ($(this).val()) {
-                            //$(this).addClass("error");
-                            var selectedrow = $(this).parents('tr');
-                            $('.btnsubmittogetskutitle').hide();
-                            $(selectedrow).find('.btnsubmittogetskutitle').show();
-
-                        } else {
-                            $(selectedrow).find('.btnsubmittogetskutitle').hide();
-                            //$(this).removeClass("error");
-                        }
-                    });
-                    $('.sku').keyup(function () {
-                        if ($(this).val()) {
-                            var selectedrow = $(this).parents('tr');
-                            //$(this).addClass("error");
-                            $('.btnsubmittogetskutitle').hide();
-                            $(selectedrow).find('.btnsubmittogetskutitle').show();
-
-
-                        } else {
-                            $(selectedrow).find('.btnsubmittogetskutitle').hide();
-                            //$(this).removeClass("error");
-                        }
-                    });
-
+                  
 
                 }
                 debugger
