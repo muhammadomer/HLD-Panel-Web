@@ -514,8 +514,8 @@ margin-top: 9px;">
                 //var dt = $(response).find(".getdatevalue").val().split('/');
 
                 //var date = dt[2] + "-" + dt[1] + "-" + dt[0];
-              
-               
+
+
                 $('#modelBodyDelivery').html(response);
              //$(response).find("#datePicker").val(date);
                 var now = new Date();
@@ -528,7 +528,7 @@ margin-top: 9px;">
            function SubmitForm() {
             var url = '@Url.Action("AddDate", "Shipment",new {id=0 })';
             var data = $('#form1').serialize();
- 
+
             $.validator.unobtrusive.parse($('#form1'));
             if ($('#form1').valid()) {
                 $.ajax({
@@ -537,7 +537,7 @@ margin-top: 9px;">
                     data: data,
                     success: function (data) {
                         if (data.success == true) {
-                          
+
                             @*$.get('@Url.Action("Create","Shipment")').done(function (response) {
 
                                 $('#loadOrder').empty();
@@ -866,6 +866,7 @@ margin-top: 9px;">
                 var shipmentname = $('#inputName2').val();
                 //var notesname = $('#IdmyInput').val();
                 var notesname = $.trim($("#IdmyInput").val());
+                
                 console.log(notesname);
                 var viewModel = {
                     ShipmentName: shipmentname,
@@ -889,10 +890,20 @@ margin-top: 9px;">
                     $(".btnvalidation").prop('disabled', true);
                     $.ajax({
                         type: 'POST',
-                        url: '../Shipment/Create',
+                        //url: '../Shipment/Create',
+                        url: '../Shipment/CreateShipmentForGetShipmentId',
                         data: { viewModel },
                         success: function (res) {
-                            location.href = '../Shipment/Create';
+                            if (res.Type =="casepack") {
+                                var url= '../ShipmentCasePack/Index?ShipmentId=' + res.ShipmentId;
+                                window.open(url, '_blank');                               
+                                $('#myModal').modal('hide');
+                            }
+                            if (res.Type == "mixed") {
+                                var url = '../ShipmentBox/Create?ShipmentId=' + res.ShipmentId;
+                                window.open(url, '_blank');
+                                $('#myModal').modal('hide');
+                            }
                             $('#myModalEdit').modal('hide');
                             $.notify('Createed successfully', { globalPosition: 'bottom right', className: 'success myclass' });
                         },

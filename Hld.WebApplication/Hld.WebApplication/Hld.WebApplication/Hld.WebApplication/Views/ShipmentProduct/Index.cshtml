@@ -427,7 +427,7 @@
             $(document).on('click', '.addproduct', function () {
                 var row = $(this).parents('tr');
                 var addsku = $(this);
-                AddMarkup();
+                //AddMarkup();
                 $(addsku).parents('tr').next().find(".sku").focus();
                 var data =
                 {
@@ -650,52 +650,13 @@
         //    $('.btnsubmittogetskutitleimg').hide();
         //    $(selectedrow).find('.btnsubmittogetskutitleimg').show();
         //});
-            var count = 0;
-
-
+        var count = 0;
         $(".add-row").click(function () {
 
                 count++;
                 if (count < 2) {
-                    AddMarkup()
-                    //$('.sku').blur(function () {
-                    //    if ($(this).val()) {
-                    //        //$(this).addClass("error");
-                    //        var selectedrow = $(this).parents('tr');
-                    //        $('.btnsubmittogetskutitleimg').hide();
-                    //        $(selectedrow).find('.btnsubmittogetskutitleimg').show();
-
-                    //    } else {
-                    //        $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
-                    //        //$(this).removeClass("error");
-                    //    }
-                    //});
-                    //$('.sku').keyup(function () {
-                    //    if ($(this).val()) {
-                    //        var selectedrow = $(this).parents('tr');
-                    //        //$(this).addClass("error");
-                    //        $('.btnsubmittogetskutitleimg').hide();
-                    //        $(selectedrow).find('.btnsubmittogetskutitleimg').show();
-
-
-                    //    } else {
-                    //        $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
-                    //        //$(this).removeClass("error");
-                    //    }
-                    //});
-                    $('.sku').keypress(function () {
-                        if ($(this).val()) {
-                            var selectedrow = $(this).parents('tr');
-                            //$(this).addClass("error");
-                            $('.btnsubmittogetskutitleimg').hide();
-                            $(selectedrow).find('.btnsubmittogetskutitleimg').show();
-
-
-                        } else {
-                            $(selectedrow).find('.btnsubmittogetskutitleimg').hide();
-                            //$(this).removeClass("error");
-                        }
-                    });
+                    AddMarkup();
+                  
                 }
                 var tbody_tr_last = $('table>tbody>tr:last');
                 var A = tbody_tr_last.find(".sku").val();
@@ -830,18 +791,7 @@
             });
             $("#dialog-box").dialog("open");
         });
-          function SumShipedQty() {
-            var Total = 0;
-            $('.table tbody tr').each(function () {
-
-                var number = parseInt($(this).find('.shipedqty').val());
-                if (number>0)
-                    Total = Total + number;
-                debugger;
-            });
-            debugger;
-            $("#totalshipedqty").text(Total);
-        }
+        
         SumShipedQty();
     });
     $(document).on("click", ".btnDelete", function () {
@@ -883,7 +833,18 @@
         })
         $("#dialog-box").dialog("open");
     });
+    function SumShipedQty() {
+        var Total = 0;
+        $('.table tbody tr').each(function () {
 
+            var number = parseInt($(this).find('.shipedqty').val());
+            if (number > 0)
+                Total = Total + number;
+            debugger;
+        });
+        debugger;
+        $("#totalshipedqty").text(Total);
+    }
 </script>
 
 }

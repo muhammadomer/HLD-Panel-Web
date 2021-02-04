@@ -194,8 +194,23 @@ namespace Hld.WebApplication.Controllers
             return PartialView("~/Views/Shipment/ShipmentPartialView.cshtml", data);
         }
 
+        //[HttpPost]
+        //public IActionResult Create(ShipmentViewModel viewModel)
+        //{
+        //    string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+        //    string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+        //    ViewBag.POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
+        //    token = Request.Cookies["Token"];
+        //    viewModel.CreatedOn = DateTime.Now;
+        //    viewModel.VendorId = Convert.ToInt32(Request.Cookies["POMasterID"]);
+        //    string status = _ApiAccess.Create(ApiURL, token, viewModel);
+        //    var count = _ApiAccess.GetCounter(ApiURL, token, CurrentDate, PreviousDate, viewModel.VendorId);
+            
+        //    ViewBag.TotalCount = count;
+        //    return View(viewModel);
+        //}
         [HttpPost]
-        public IActionResult Create(ShipmentViewModel viewModel)
+        public ShipmentViewModel CreateShipmentForGetShipmentId(ShipmentViewModel viewModel)
         {
             string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
             string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
@@ -203,11 +218,16 @@ namespace Hld.WebApplication.Controllers
             token = Request.Cookies["Token"];
             viewModel.CreatedOn = DateTime.Now;
             viewModel.VendorId = Convert.ToInt32(Request.Cookies["POMasterID"]);
-            bool status = _ApiAccess.Create(ApiURL, token, viewModel);
-            var count = _ApiAccess.GetCounter(ApiURL, token, CurrentDate, PreviousDate, viewModel.VendorId);
-            ViewBag.TotalCount = count;
-            return View(viewModel);
+            string shipmentid = _ApiAccess.Create(ApiURL, token, viewModel);
+
+            //var count = _ApiAccess.GetCounter(ApiURL, token, CurrentDate, PreviousDate, viewModel.VendorId);
+            viewModel.ShipmentId = shipmentid;
+            //ViewBag.TotalCount = count;
+            return viewModel;
         }
+
+
+
         [HttpPost]
         public IActionResult Edit(ShipmentViewModel viewModel)
         {

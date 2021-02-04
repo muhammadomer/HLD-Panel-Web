@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Hld.WebApplication.Helper;
 using Hld.WebApplication.ViewModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Newtonsoft.Json;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class TestController : Controller
     {
         public static IHostingEnvironment _environment;

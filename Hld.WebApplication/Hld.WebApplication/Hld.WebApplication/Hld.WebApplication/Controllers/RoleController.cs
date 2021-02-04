@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Amazon.Auth.AccessControlPolicy;
+using Hld.WebApplication.Helper;
 using Hld.WebApplication.Models;
 using Hld.WebApplication.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     [Authorize(Policy = "Access to Admin Tab")]
     public class RoleController : Controller
     {

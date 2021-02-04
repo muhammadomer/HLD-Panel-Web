@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class TagController : Controller
     {
 

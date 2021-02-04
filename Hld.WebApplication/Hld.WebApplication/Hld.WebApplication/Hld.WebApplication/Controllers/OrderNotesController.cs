@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class OrderNotesController : Controller
     {
         private readonly IConfiguration _configuration;

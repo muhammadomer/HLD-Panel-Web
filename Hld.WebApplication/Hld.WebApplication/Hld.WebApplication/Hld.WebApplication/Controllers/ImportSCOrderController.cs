@@ -13,6 +13,7 @@ using ServiceReference1;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class ImportSCOrderController : Controller
     {
         private readonly IConfiguration _configuration;

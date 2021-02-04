@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class QuotationController : Controller
     {
         private IHostingEnvironment _hostingEnvironment;

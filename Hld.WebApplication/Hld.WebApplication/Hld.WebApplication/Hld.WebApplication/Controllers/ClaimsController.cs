@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Hld.WebApplication.Helper;
 using Hld.WebApplication.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class ClaimsController : Controller
     {
         private UserManager<AppUser> userManager;

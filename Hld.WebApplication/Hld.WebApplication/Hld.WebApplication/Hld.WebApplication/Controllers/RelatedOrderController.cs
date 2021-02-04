@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Hld.WebApplication.Helper;
 using Hld.WebApplication.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ using Newtonsoft.Json;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class RelatedOrderController : Controller
     {
         private IConfiguration _configuration;

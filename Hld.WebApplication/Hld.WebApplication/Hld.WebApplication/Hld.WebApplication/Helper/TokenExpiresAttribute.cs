@@ -18,8 +18,8 @@ namespace Hld.WebApplication.Helper
             {
                 context.Result =
                                new RedirectToRouteResult(
-                                   new RouteValueDictionary{{ "controller", "Home" },
-                                          { "action", "Index" }});
+                                   new RouteValueDictionary{{ "controller", "Authentication" },
+                                          { "action", "Authenticate" }});
 
             }
             base.OnActionExecuting(context);

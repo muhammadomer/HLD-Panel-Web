@@ -11,6 +11,7 @@ using PagedList.Core;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class BestBuyOrders : Controller
     {
         private readonly IConfiguration _configuration;
@@ -336,6 +337,8 @@ namespace Hld.WebApplication.Controllers
                 SearchViewModel.EndIndex = endLimit;
 
                 SearchViewModel.OrderStatus = orderStatus;
+                
+
                 SearchViewModel.Sku = sku;
                 SearchViewModel.DateFrom = orderDateFrom;
                 SearchViewModel.DateTo = orderDateTo;

@@ -428,8 +428,13 @@
                     </div>
                     <div class="col-6">
                         <div class="border" style="height: 235px!important;min-height:235px!important">
-                            <h6 class="mt-2 ml-2" style="font-size:14px;font-family:Arial;font-weight:bold">Ship To</h6>
-                            <hr />
+                            <h6 class="" style="        padding: 2px;
+        font-size: 14px;
+        font-family: Arial;
+        font-weight: bold;
+        border-bottom: 1px solid #dee2e6 !important;
+">Ship To</h6>
+                            @*<hr />*@
                             <div class="col-12">
                                 <address style="">
                                     <label class="mb-0">
@@ -447,16 +452,16 @@
                                     <label class="mb-0">
                                         Phone: 514-996-1278
                                     </label><br />
-                                    <div class="col-12">
-                                        <label class="row">
-                                            <span style="margin-top:4px">PO Description:</span><span><input type="text" class="form-control ProducPOClasss" value="@Model.Notes" style="display:none;box-shadow:none" data-POIDs="@Model.POId" /></span><span class="purchasePO" style="margin-top: 4px; ">@Model.Notes </span><span style="margin-top: 3px;">
+                                    <div class="col-12 p-0">
+                                        <label class="">
+                                            <span style="margin-top:4px">PO Description:</span><span><textarea type="text" maxlength="200" class="form-control ProducPOClasss"rows="3" cols="70" value="@Model.Notes" style="padding:3px!important;display:none;box-shadow:none;margin-bottom:2px" data-POIDs="@Model.POId">@Model.Notes</textarea></span><span class="purchasePO" style="margin-top: 4px; ">@Model.Notes </span><span style="margin-top: 3px;">
                                                 <span class=" btnEditProducPO" aria-hidden="true" style="color: green;
         margin-left: 2px;
         font-family: arial;
         font-size:10px;
         cursor:pointer;
     ">  Edit</span>
-                                            </span><span class="btnProducPOClasss" style="display:none;margin-left:3px">
+                                            </span><span class="btnProducPOClasss" style="display:none;margin-left:3px;float:right">
                                                 <span><button type="button" class="btn btn-warning btnsavePODescrption" style="box-shadow: none !important">Save</button></span><span style="margin-left:4px;">
                                                     <button type="button" class="btn btn-dark btncancelPO" style="color: black !important;
         border-color: #a3a7ab !important;
@@ -934,7 +939,7 @@
                     <strong>
                         <i class="fa fa-check" style="        color: green;
         font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
-">PO Description Update Succesfully!</span>
+">PO description Update Successfully!</span>
                     </strong>
 
 
@@ -942,11 +947,11 @@
                 </div>
 
 
-                <div class="modal-body myclasstitlePO" style="padding-left:0!important;">
+                @*<div class="modal-body myclasstitlePO" style="padding-left:0!important;">
 
 
 
-                </div>
+                </div>*@
 
 
                 <div class="modal-footer">
@@ -1003,9 +1008,9 @@
                         PO: PO
                     },
                     success: function (data) {
-                        $(".myclasstitlePO").empty();
+                        //$(".myclasstitlePO").empty();
                         $(".purchasePO").text(ProductPONotes);                       
-                        $(".myclasstitlePO").append("<p style='margin-left: 20px;'>" + ProductPONotes + "</p>");
+                        //$(".myclasstitlePO").append("<p style='margin-left: 20px;'>" + ProductPONotes + "</p>");
                         $("#myModalTitlePO").modal({ backdrop: 'static', keyboard: false });
                     },
                     Error: function (err) {

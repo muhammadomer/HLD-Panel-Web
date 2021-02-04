@@ -180,7 +180,7 @@
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function () {
-
+           
             $(".loadertbl").hide();
 
             $(document).on("change", ".selectedcheckbox", function () {
@@ -290,6 +290,7 @@
 
 
             });
+            var status = "";
             function loginfunction() {
                                
                     $(".loadertbl").show();
@@ -337,7 +338,7 @@
                                 }
 
                                 else {
-                                    location.href = '/Authentication/Authenticate';
+                                   
                                     $(".loadertbl").hide();
                                 }
                             });
@@ -345,10 +346,18 @@
                     });
                 
             }
-           // 
+          
+          
             if ($("#rememberMe").is(":checked") && $("#loginEmail").val().length > 1 && $("#input-password").val().length > 1) {
                 loginfunction();
+
             }
+            else {
+              
+                $(".loadertbl").hide();
+            }
+           
+           
         });
     </script>
 }

@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Hld.WebApplication.Models;
+using Hld.WebApplication.Helper;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class HomeController : Controller
     {
         ////public IActionResult Index()

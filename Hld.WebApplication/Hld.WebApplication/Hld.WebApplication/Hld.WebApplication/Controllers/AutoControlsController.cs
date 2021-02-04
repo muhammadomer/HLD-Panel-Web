@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class AutoControlsController : Controller
     {
         private readonly IConfiguration _configuration;

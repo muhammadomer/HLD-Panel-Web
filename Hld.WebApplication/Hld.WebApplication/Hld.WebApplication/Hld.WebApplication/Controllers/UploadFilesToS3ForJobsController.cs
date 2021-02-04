@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     [Authorize(Policy = "Access to BulkUpdate Tab")]
 
     public class UploadFilesToS3ForJobsController : Controller

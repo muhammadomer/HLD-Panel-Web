@@ -14,6 +14,7 @@ using PagedList.Core;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class BestBuyUpdateLogs : Controller
     {
 

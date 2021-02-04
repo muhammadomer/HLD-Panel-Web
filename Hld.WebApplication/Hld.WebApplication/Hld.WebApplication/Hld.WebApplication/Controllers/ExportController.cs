@@ -13,6 +13,7 @@ using OfficeOpenXml;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class ExportController : Controller
     {
             private readonly IConfiguration _configuration;

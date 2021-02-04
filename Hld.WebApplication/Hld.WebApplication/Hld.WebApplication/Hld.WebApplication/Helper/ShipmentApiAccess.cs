@@ -14,9 +14,9 @@ namespace Hld.WebApplication.Helper
 {
     public class ShipmentApiAccess
     {
-        public bool Create(string ApiURL, string token, ShipmentViewModel ViewModel)
+        public string Create(string ApiURL, string token, ShipmentViewModel ViewModel)
         {
-            bool Status = false;
+            string Status = "";
             try
             {
                 var data = JsonConvert.SerializeObject(ViewModel);
@@ -38,7 +38,7 @@ namespace Hld.WebApplication.Helper
                 {
                     strResponse = sr.ReadToEnd();
                     string array = JObject.Parse(strResponse)["status"].ToString();
-                    Status = Convert.ToBoolean(array);
+                    Status = (array);
                 }
             }
             catch (Exception ex)

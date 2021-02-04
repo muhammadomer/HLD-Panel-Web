@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     public class BulkUpdateController : Controller
     {
         private IHostingEnvironment _hostingEnvironment;

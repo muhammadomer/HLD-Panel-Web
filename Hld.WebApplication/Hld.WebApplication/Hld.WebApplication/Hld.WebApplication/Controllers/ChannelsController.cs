@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Hld.WebApplication.Controllers
 {
+    [TokenExpires]
     [Authorize(Policy = "Access to Setting Tab")]
     public class ChannelsController : Controller
     {
