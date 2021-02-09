@@ -44,7 +44,54 @@ namespace Hld.WebApplication.Controllers
         {
             return View();
         }
-       
+        [HttpGet]
+        public async System.Threading.Tasks.Task<IActionResult> AuthenticateAlreadyLoginAsync()
+        {
+            var ischecked = GetCheckboxstatus();
+            if(ischecked.Count> 0)
+            {
+                if (ischecked.FirstOrDefault().Checkboxstatus)
+                {
+                    Login login = new Login();
+
+                    login.Email = ischecked.FirstOrDefault().Email;
+
+                    string role = await Authenticated(login);
+
+                    if (role == "Vendor")
+                    {
+
+                        return RedirectToAction("PurchaseOrders", "PurchaseOrder");
+                    }
+                    if (role == "Receiver")
+                    {
+
+                        return RedirectToAction("Create", "Shipment");
+                    }
+                    if (role == "Admin")
+                    {
+
+                        return RedirectToAction("DashBoard", "HLDHistory");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Authenticate", "Authentication");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Authenticate", "Authentication");
+                }
+            }
+           
+            else
+            {
+                return RedirectToAction("Authenticate", "Authentication");
+            }
+           
+        }
+
+
         [HttpPost]
         //[Route("Authentication/save")]
         public async System.Threading.Tasks.Task<IActionResult> Authenticate(Login login)
@@ -223,9 +270,11 @@ namespace Hld.WebApplication.Controllers
         {
             foreach (var cookie in Request.Cookies.Keys)
             {
+                
                 if (cookie == "Token" || cookie == "POMasterID" || cookie == "UserName" || cookie== "UserAlias")
                 {
                     Response.Cookies.Delete(cookie);
+                    
                 }
                 
             }

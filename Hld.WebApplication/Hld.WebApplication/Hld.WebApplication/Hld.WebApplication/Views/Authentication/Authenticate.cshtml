@@ -187,16 +187,16 @@
                 if ($(this).attr('type') === 'checkbox') {
                     checkboxstatus = $(this).is(':checked') ? true : false;
                     var email = $("#loginEmail").val();
-                    var password = $("#input-password").val();
+                    //var password = $("#input-password").val();
                 }
                 else {
                     checkboxstatus = $(this).val();
                     email = $(this).val();
-                    password = $(this).val();
+                    //password = $(this).val();
                 }
                 //console.log(Checkboxstatus);
                 console.log(email);
-                console.log(password);
+                //console.log(password);
 
                 $.ajax({
                     type: 'Put',
@@ -213,7 +213,7 @@
                 if ($(".selectedcheckbox").attr('type') === 'checkbox') {
                     checkboxstatus = $(".selectedcheckbox").is(':checked') ? true : false;
                     var email = $("#loginEmail").val();
-                    var password = $("#input-password").val();
+                    //var password = $("#input-password").val();
                 }
                 else {
                     checkboxstatus = $(this).val();
@@ -222,7 +222,7 @@
                 }
                 //console.log(Checkboxstatus);
                 console.log(email);
-                console.log(password);
+                
 
                 $.ajax({
                     type: 'Put',
@@ -254,9 +254,9 @@
             if (localStorage.getItem('remembercheck')) {
 
                 var email = localStorage.getItem('Email');
-                var passwrd = localStorage.getItem('Password');
+                //var passwrd = localStorage.getItem('Password');
                 $("#loginEmail").val(email);
-                $("#input-password").val(passwrd);
+                //$("#input-password").val(passwrd);
 
                 $("#rememberMe").prop('checked', true);
                 //$(".btnclass").trigger('click');
@@ -271,7 +271,7 @@
                     localStorage.clear();
                 } else {
                     localStorage.setItem("Email", $("#loginEmail").val());
-                    localStorage.setItem("Password", $("#input-password").val());
+                    //localStorage.setItem("Password", $("#input-password").val());
                     localStorage.setItem("remembercheck", $("#rememberMe").val());
 
                 }
@@ -283,77 +283,82 @@
                     localStorage.clear();
                 } else {
                     localStorage.setItem("Email", $("#loginEmail").val());
-                    localStorage.setItem("Password", $("#input-password").val());
+                    //localStorage.setItem("Password", $("#input-password").val());
                     localStorage.setItem("remembercheck", $("#rememberMe").val());
 
                 }
 
 
             });
-            var status = "";
+          
             function loginfunction() {
-                               
+                debugger;       
                     $(".loadertbl").show();
 
-                    $.ajax({
-                        type: 'get',
-                        url: '../authentication/getcheckboxstatus',
-                        data: {},
-                        success: function (res) {
-                            $(".loadertbl").show();
-                            $.each(res, function (index, value) {
-                                var email = localStorage.getItem('Email');
-                                if (email && value.Checkboxstatus == true) {
-                                    $.ajax({
-                                        async: false,
-                                        type: "POST",
-                                        url: '../Authentications/save?Email=' + email + '',
-                                        contentType: "application/json; charset=utf-8",
-                                        datatype: "JSON",
-                                        success: function (response) {
-                                            $(".loadertbl").show();
-                                            console.log("get responce", response);
-                                            if (response == "Vendor") {
-                                                window.event.returnValue = false;
-                                                document.location.href = "/PurchaseOrder/PurchaseOrders";
-                                                $(".loadertbl").hide();
-                                            }
-                                            if (response == "Receiver") {
-                                                window.event.returnValue = false;
-                                                document.location.href = "/Shipment/Create";
-                                                $(".loadertbl").hide();
-                                            }
-                                            if (response == "Admin") {
-                                                window.event.returnValue = false;
-                                                document.location.href = "/HLDHistory/DashBoard";
-                                                $(".loadertbl").hide();
-                                            }
-                                           
-                                            $(".loadertbl").hide();
+                $.ajax({
+                    type: 'get',
+                    url: '../authentication/getcheckboxstatus',
+                    data: {},
+                    success: function (res) {
+                        var checkboxes = res[0].Checkboxstatus;
+                        debugger; 
+                        if (res) {
+                         $(".loadertbl").show();                            
+                         var email = localStorage.getItem('Email');
+                            if (email && checkboxes == true) {
+                             $.ajax({
+                                 type: "POST",
+                                 url: '../Authentications/save?Email=' + email + '',
+                                 contentType: "application/json; charset=utf-8",
+                                 datatype: "JSON",
+                                 success: function (response) {
+                                     $(".loadertbl").show();
+                                     console.log("get responce", response);
+                                     if (response == "Vendor") {
+                                         window.event.returnValue = false;
+                                         document.location.href = "/PurchaseOrder/PurchaseOrders";
+                                         $(".loadertbl").hide();
+                                     }
+                                     if (response == "Receiver") {
+                                         window.event.returnValue = false;
+                                         document.location.href = "/Shipment/Create";
+                                         $(".loadertbl").hide();
+                                     }
+                                     if (response == "Admin") {
+                                         window.event.returnValue = false;
+                                         document.location.href = "/HLDHistory/DashBoard";
+                                         $(".loadertbl").hide();
+                                     }
 
-                                        },
+                                     $(".loadertbl").hide();
 
-                                    });
-                                    $(".loadertbl").show();
+                                 },
+
+                             });
+                                    
                                 }
 
-                                else {
-                                   
-                                    $(".loadertbl").hide();
+                         else {
+                             
+                             $(".loadertbl").hide();
+                             
                                 }
-                            });
+                           
                         }
+                        else {
+                           
+                            $(".loadertbl").hide();
+                        }
+                    }
                     });
                 
             }
           
           
-            if ($("#rememberMe").is(":checked") && $("#loginEmail").val().length > 1 && $("#input-password").val().length > 1) {
+            if ($("#rememberMe").is(":checked") && $("#loginEmail").val().length > 1) {
                 loginfunction();
-
             }
-            else {
-              
+            else {             
                 $(".loadertbl").hide();
             }
            

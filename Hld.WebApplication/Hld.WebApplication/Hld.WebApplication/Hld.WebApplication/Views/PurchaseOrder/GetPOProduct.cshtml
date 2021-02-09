@@ -15,9 +15,11 @@
     .pagination > a {
         padding: 5px;
     }
+
     .ui-autocomplete {
         z-index: 2000;
     }
+
     .ms-options-wrap.ms-active > .ms-options {
         max-width: 400px !important;
         min-height: 92px !important;
@@ -36,7 +38,8 @@
     .ms-options-wrap > .ms-options > ul label {
         width: 101% !important;
     }
-        .loader {
+
+    .loader {
         position: fixed;
         left: 0px;
         top: 0px;
@@ -45,7 +48,6 @@
         z-index: 9999;
         opacity: .9;
         background-color: rgb(249,249,249);
-     
     }
 
         .loader img {
@@ -58,22 +60,24 @@
             margin-right: -50%;
             transform: translate(-50%,-50%);
         }
+
     .searchFormcard {
         position: fixed;
         background: white;
-        
         width: 97%;
         padding: 58px 0px;
         top: 10px;
         z-index: 500;
     }
+
     .fixedclassforpagination {
         position: fixed;
         top: 205px;
-       width: 668px;
+        width: 668px;
         z-index: 500;
         background: white;
     }
+
     .select2-container {
         box-sizing: border-box;
         display: inline-block;
@@ -168,12 +172,12 @@
                             {
                                 @*<div class="col-md-1 p-0 mr-1">*@
 
-                                    @*<input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />*@
-                                    @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
-                                    @*<span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>*@
+                                @*<input asp-for="Vendor" type="search" id="Vendor" placeholder="Vendor" class="form-control" />*@
+                                @*<span asp-validation-for="VendorAlias" class="text-danger"></span>*@
+                                @*<span style="color:red;padding-left:0px;" id="empty-message-Vendor"></span>*@
 
-                                    @*@Html.HiddenFor(e => Model.VendorID, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })
-                                </div>*@
+                                @*@Html.HiddenFor(e => Model.VendorID, htmlAttributes: new { @id = "VendorIdForMessage", @name = "VendorID" })
+                        </div>*@
 
                                 <div style="margin-right:6px;">
                                     <select class="js-example-basic-single form-control vendorlistgetFromPOProduct" name="VendorID" id="vendor">
@@ -184,15 +188,15 @@
                                     </select>
                                 </div>
                             }
-                        <div class="col-md-2 p-0 mr-1">
-                            <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.ProductID" class="form-control" style="box-shadow:none" />
-                            <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
-                        </div>
+                            <div class="col-md-2 p-0 mr-1">
+                                <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.ProductID" class="form-control" style="box-shadow:none" />
+                                <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
+                            </div>
                             <div class="col-md-1 p-0 mr-1">
                                 <input type="number" id="POID" name="POID" value="@Model.PurchaseID" placeholder="PO #" class="form-control" style="box-shadow: none" />
                             </div>
 
-                            <div class=" col-md-3 p-0 mr-1">
+                            <div class=" col-md-2 p-0 mr-1">
                                 <input type="text" id="title" name="title" placeholder="Title" value="@Model.ProductTitle" class="form-control" style="box-shadow:none" />
                             </div>
                             <div class=" col-md-2 p-0 mr-1">
@@ -205,8 +209,8 @@
                                 </select>
                                 <input type="hidden" name="ItemType" id="ddlQuantity" />
                             </div>
-                            <div class="col-md-1 p-0" style="margin-right: 15px;">
-                                <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width: 132px;box-shadow:none">
+                            <div class="col-md-2 p-0" style="margin-right: 15px;">
+                                <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width: 240px;box-shadow:none">
                                     <i class="fa fa-calendar"></i>&nbsp;
                                     <span></span> <i class="fa fa-caret-down"></i>
                                 </div>
@@ -215,6 +219,7 @@
                             </div>
                             <div class="ml-3">
                                 <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                               
                             </div>
                         </div>
                         <div class="form-group">
@@ -223,39 +228,41 @@
                     </div>
 
                 }
+               
             </div>
+            
         </div>
     </div>
 </div>
 
-    <div class="row col col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: 8px;">
-        <div class="col col-md-4">
-            <div class="row">
-                <div class="pagination col-md-3">
-
-                </div>
+<div class="row col col-12 fixedclassforpagination" id="fixActionMenu" style="margin-left: 8px;">
+    <div class="col col-md-4">
+        <div class="row">
+            <div class="pagination col-md-3">
 
             </div>
+
         </div>
-        <div class="col col-md-6">
-            @*<span> Total Items Found : @ViewBag.TotalCount</span>*@
-            @if (ViewBag.TotalCount == null)
-            {
-                <span style="vertical-align: sub"> Total Records Found : 0 </span>
-                <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : 0</span>
-            }
-            else
-            {
-                <span style="vertical-align: sub"> Total Records Found : @ViewBag.TotalCount</span>
-                <span style="margin-left: 20px;
+    </div>
+    <div class="col col-md-6">
+        @*<span> Total Items Found : @ViewBag.TotalCount</span>*@
+        @if (ViewBag.TotalCount == null)
+        {
+            <span style="vertical-align: sub"> Total Records Found : 0 </span>
+            <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : 0</span>
+        }
+        else
+        {
+            <span style="vertical-align: sub"> Total Records Found : @ViewBag.TotalCount</span>
+            <span style="margin-left: 20px;
         vertical-align: sub
 "> Records Per Page : <span class="itemPerPage"></span></span>
-            }
-        </div>
-
-
-
+        }
     </div>
+
+
+
+</div>
 
 <div class="container-fluid">
     <div id="loadOrder">
@@ -388,6 +395,10 @@
             $('#reportrange').daterangepicker({
                 startDate: start,
                 endDate: end,
+                autoUpdateInput: true,
+                locale: {
+                    cancelLabel: 'Clear'
+                },
                 ranges: {
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -398,7 +409,7 @@
                 }
             }, cb);
             cb(start, end);
-
+            $('#reportrange').find('span').html('');
             $("#orderDateTimeFrom").datepicker({ dateFormat: 'yy-mm-dd' });
 
 
@@ -413,7 +424,10 @@
                 console.log($("#orderDateTimeTo").val());
                 console.log(selectedDatTo);
             });
-           
+            $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
+                $('#reportrange').find('span').html('');
+                
+            });
             //var Items = getUrlParameter('CustomerName');
             $('select[multiple].active.3col.QuantityStatus').multiselect({
                 columns: 1,
@@ -450,7 +464,7 @@
             var Vendor = getUrlParameter('VendorID');
             var Title = $("#title").val();
             var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
-
+           
               //pagination
             if (EmptyFirstTime) {
                  $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {

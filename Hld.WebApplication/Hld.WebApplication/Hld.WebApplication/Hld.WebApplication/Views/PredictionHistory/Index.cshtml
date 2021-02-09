@@ -528,7 +528,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             <!-- Modal Header -->
             <div class="modal-header">
                 <strong>
-                    <i class="fa fa-exclamation-triangle" style=" color: red;font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;">Excluded!</span>
+                    @*<i class="fa fa-exclamation-triangle" style=" color: red;font-size: 20px;vertical-align:bottom!important"></i>*@<span style="vertical-align: text-top;margin-left: 4px;">Excluded!</span>
                 </strong>
 
                 <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
@@ -558,7 +558,70 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModalDiscontinued" style="margin-top: 130px;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content modelwidth">
 
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-check" style=" color: green;
+font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Discontinued!</span>
+                </strong>
+
+
+                <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
+            </div>
+
+
+            <div class="modal-body myclassDiscontinued" style="padding-left:0!important;">
+
+
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default closeModel" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModalContinued" style="margin-top: 130px;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content modelwidth">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+
+                <strong>
+                    <i class="fa fa-check" style=" color: green;
+font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Continued!</span>
+                </strong>
+
+
+                <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
+            </div>
+
+
+            <div class="modal-body myclassContinued" style="padding-left:0!important;">
+
+
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default closeModel" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
@@ -1114,20 +1177,16 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();
-                            $.notify('Product disabled successfully', { globalPosition: 'bottom right', className: 'danger myclasspo' });
-                            //$('#btnGoOrder').click()
-                            //$('#btnGoOrder').click(1000);
-
-
-
-                            //$('#btnGoOrder').delay(3500, function () {
-                            // window.location = toLoad;
-                            //});
-                            //$("#btnSearchOrder").click();
+                            
+                            $(".myclassDiscontinued").append("<p style='margin-left: 20px;'>Product Discontinued Successfully!</p>");
+                            $("#myModalDiscontinued").modal({ backdrop: 'static', keyboard: false });
+                            $('.closeModel').on('click', function () {
+                                location.reload();
+                            });
                         }
 
                     });
-                    setInterval('location.reload()', 5000);
+                    //setInterval('location.reload()', 5000);
                 }
                 if (action == "Continued") {
 
@@ -1148,20 +1207,17 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();
-                            $.notify('Product disabled successfully', { globalPosition: 'bottom right', className: 'danger myclasspo' });
-                            //$('#btnGoOrder').click()
-                            //$('#btnGoOrder').click(1000);
-
-
-
-                            //$('#btnGoOrder').delay(3500, function () {
-                            // window.location = toLoad;
-                            //});
-                            //$("#btnSearchOrder").click();
+                            //$.notify('Product disabled successfully', { globalPosition: 'bottom right', className: 'danger myclasspo' });
+                            $(".myclassContinued").append("<p style='margin-left: 20px;'>Product Continued Successfully!</p>");
+                            $("#myModalContinued").modal({ backdrop: 'static', keyboard: false });
+                            $('.closeModel').on('click', function () {
+                                location.reload();
+                            });
+                            
                         }
 
                     });
-                    setInterval('location.reload()', 5000);
+                    //setInterval('location.reload()', 5000);
                 }
 
                 if (action == "SetAsKit") {

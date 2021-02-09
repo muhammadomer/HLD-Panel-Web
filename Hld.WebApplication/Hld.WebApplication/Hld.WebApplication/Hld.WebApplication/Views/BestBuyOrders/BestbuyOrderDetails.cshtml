@@ -432,7 +432,7 @@
         height: 27px !important;
         padding: 3px;
         border-radius: 3px;
-        border: 1px solid #ccc;">
+        border: 1px solid #ccc;width:220px;min-width:240px">
                                 <i class="fa fa-calendar"></i>&nbsp;
                                 <span></span> <i class="fa fa-caret-down"></i>
                             </div>
@@ -876,6 +876,10 @@
             $('#reportrange').daterangepicker({
                 startDate: start,
                 endDate: end,
+                autoUpdateInput: true,
+                locale: {
+                    cancelLabel: 'Clear'
+                },
                 ranges: {
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -1025,21 +1029,29 @@
             $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
 
                  selectedDateFrom = picker.startDate.format('YYYY-MM-DD');
-                 selectedDatTo = picker.endDate.format('YYYY-MM-DD');
+                selectedDatTo = picker.endDate.format('YYYY-MM-DD');
+                $('#orderDateTimeFrom').val(selectedDateFrom);
+                    $('#orderDateTimeTo').val(selectedDatTo);
 
             });
+            $('#reportrange').find('span').html('');
+            $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
+                $('#reportrange').find('span').html('');
+                $('#orderDateTimeFrom').val('');
+                $('#orderDateTimeTo').val('');
+            });
+          
 
-            //search BetBuy Orders
-
-                $('#btnSearchOrder').click(function () {
+            $('#btnSearchOrder').click(function () {
+                debugger;
                     $('#ddlShipingOrderStatus').val();
                     $('#ddlMarketPlace').val();
                     $('#ddlZincStatusValues').val();
                     $('#ddlDSStatusValues').val();
                     $('#PaymentStatus').val();
                     $('#ddlShippingTags').val();
-                    $('#orderDateTimeFrom').val(selectedDateFrom);
-                    $('#orderDateTimeTo').val(selectedDatTo);
+                    //$('#orderDateTimeFrom').val(selectedDateFrom);
+                    //$('#orderDateTimeTo').val(selectedDatTo);
                     $('#ShippingBoxContain').val();
                     $('#ddlBBOrderStatus').val();
                     $('#ddlWHQStatus').val();
@@ -1306,7 +1318,7 @@
                 //    });
                 //});
 
-                debugger
+                
                 $(".loadertbl").show();
                 $('#modelBodyERR').find('.WHQQTY').empty();
                 //mychange
@@ -1508,6 +1520,7 @@
                             }
                         });
                         if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                            debugger
                             if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
                                 start = moment(OrderDateTimeFrom);
                                 end = moment(OrderDateTimeTo);
@@ -1695,7 +1708,7 @@
             // update tracking information after seller cloud order is fully shipped
 
             $(document).on('click', 'a.sendTrackingToSC', function () {
-                debugger;
+               
                 var sendTrackingToSC = $(this);
                 var mainTR = $(sendTrackingToSC).closest('tr');
                 var loader = $(sendTrackingToSC).next('span').find('img');
@@ -1756,7 +1769,7 @@
                 var lockZincOrder = $(sendToZincReferenceAferSubmit).closest('div').find('#imgLockZincOrder');
                 $(rootDivOfButton).find('.successmessage').show();
                 // console.log(JsonDataOfOrder);
-                debugger;
+                
                 var CreditCardId = $('#CreditCardDetailId').val();
                 var ZincAccountId = $('#ZincAccountsId').val();
                 var DeliveryDays = $('#DeliveryDays').val();
@@ -1990,7 +2003,7 @@
                                 $(zincOrderReterive).css('display', 'inline');
                             }
                             if (data.ZincStatus == "Shipped") {
-                                debugger;
+                               
                                 $(sendTrackingToSC).css('display', 'block');
                                 $(sendTrackingToSC).attr("data-ZincOrderLogDetailID", data.zincOrderLogDetailID);
                                 $(showZincOrderStatus).text(data.ZincStatus);
@@ -2032,7 +2045,7 @@
             });
 
           $(document).on('click','a.close',function () {
-                debugger;
+                
                 $(this).parent().hide();
                 $('#myModal').modal('hide');
             });
@@ -2346,8 +2359,34 @@
                     }
                 });
             });
+
+            //test date
+
+            if (OrderDateTimeFrom) {
+               
+
+                $('#orderDateTimeFrom').val(OrderDateTimeFrom);
+                    //$('#reportrange span').html(OrderDateTimeFrom);
+                    //$('#reportrange span').val(OrderDateTimeFrom);
+                    
+                
+               
+                
+            }
+            if (OrderDateTimeTo) {
+              
+               
+                    //$('#reportrange span').text(OrderDateTimeTo);
+                    //$('#reportrange span').html(OrderDateTimeTo);
+                $('#orderDateTimeTo').val(OrderDateTimeTo);
+
+                
+              
+            }
+            ///
+
             if (OrderStatus != null) {
-                debugger
+                
                 var Order = OrderStatus.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlShipingOrderStatus').val(OrderStatus);
@@ -2386,7 +2425,7 @@
             }
 
             if (PaymentStatus != null) {
-                debugger
+              
                 var res = PaymentStatus.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlPaymentStatus').val(PaymentStatus);
@@ -2401,7 +2440,7 @@
                 });
             }
             if (ShippingBoxContain != null) {
-                debugger
+                
                 var res = ShippingBoxContain.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlShippingBoxContain').val(ShippingBoxContain);
@@ -2439,7 +2478,7 @@
                 });
             }
             if (ShippingTags != null) {
-                debugger
+                
                 var res = ShippingTags.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlShippingTags').val(ShippingTags);
@@ -2454,7 +2493,7 @@
                 });
             }
             if (BBOrderStatus != null) {
-                debugger
+                
                 var res = BBOrderStatus.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlBBOrderStatus').val(BBOrderStatus);
@@ -2469,7 +2508,7 @@
                 });
             }
             if (WHQStatus != null) {
-                debugger
+                
                 var WHQ = WHQStatus.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlWHQStatus').val(WHQStatus);
@@ -2515,7 +2554,7 @@
                 });
             }
             if (ZincStatusQuerString != null) {
-                debugger
+                
                 var res = ZincStatusQuerString.split(",");
                 //$('#ddlQuantity').val($(this).item);
                 $('#ddlZincStatusValues').val(ZincStatusQuerString);
@@ -2575,7 +2614,7 @@
                         success: function (data) {
                                loader.css('display', 'none');
                             $.each(data, function (key1, value1) {
-                                debugger;
+                            
                                 $("." + SKu.replace(/\s/g, '')+value1.WarehouseName.replace(/\s/g, '') ).text(value1.AvailableQty);
                             });
                         }

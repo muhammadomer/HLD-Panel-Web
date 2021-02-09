@@ -618,8 +618,24 @@
         $(document).ready(function () {
 
             $(".btnclick").click(function () {
-                
-                    //localStorage.clear();
+                var email = localStorage.getItem('Email');
+                debugger;
+               
+                    function deletecheckstatus() {
+                        debugger;
+                        var email = localStorage.getItem('Email');
+                        $.ajax({
+                            type: 'Put',
+                            url: '/Authentication/SaveCheckboxstatus',
+                            data: { Email: email, Checkboxstatus: false },
+
+                        });
+                    }
+               
+             
+                  if (email) {  
+                      deletecheckstatus();
+                  }
                
                 localStorage.removeItem('remembercheck');
 

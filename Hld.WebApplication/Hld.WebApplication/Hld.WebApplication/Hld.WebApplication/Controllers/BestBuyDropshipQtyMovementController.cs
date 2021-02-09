@@ -295,11 +295,12 @@ on BestBuyProducts.shop_sku_offer_sku=`bestBuyE2`.`BestBuyDropsShipQtyMovement`.
             return listModel;
         }
 
-        public IActionResult BestBuyDropshipQtyMovement(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string product_sku = "", string ds_status = "", string BBProductID = "", string EmptyFirstTime = "")
+        public IActionResult BestBuyDropshipQtyMovement(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string product_sku = "", string ds_status = "", string BBProductID = "",string update_status="", string EmptyFirstTime = "")
         {
 
             token = Request.Cookies["Token"];
             BestBuyQTYLogsDetailViewModel BestBuyDropshipQty = new BestBuyQTYLogsDetailViewModel();
+
             string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
             string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
 
@@ -318,14 +319,17 @@ on BestBuyProducts.shop_sku_offer_sku=`bestBuyE2`.`BestBuyDropsShipQtyMovement`.
             }
             else
             {
-                var count = _dropshipQtyMovementApiAccess.GetCount(ApiURL, token, CurrentDate, PreviousDate, product_sku, ds_status, BBProductID);
+                var count = _dropshipQtyMovementApiAccess.GetCount(ApiURL, token, CurrentDate, PreviousDate, product_sku, ds_status, BBProductID,update_status);
                 ViewBag.TotalCount = count;
-
+                BestBuyDropshipQty.product_sku = product_sku;
+                BestBuyDropshipQty.BBProductID = BBProductID;
+               
+                //return View(BestBuyDropshipQty);
             }
             return View(BestBuyDropshipQty);
         }
         [HttpPost]
-        public IActionResult BestBuyDropshipQtyMovementList(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string product_sku = "", string ds_status = "", string BBProductID = "", string EmptyFirstTime = "")
+        public IActionResult BestBuyDropshipQtyMovementList(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string product_sku = "", string ds_status = "", string BBProductID = "", string EmptyFirstTime = "",string update_status="")
         {
 
             //string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
@@ -356,12 +360,12 @@ on BestBuyProducts.shop_sku_offer_sku=`bestBuyE2`.`BestBuyDropsShipQtyMovement`.
             List<BestBuyQTYLogsDetailViewModel> _viewModel = new List<BestBuyQTYLogsDetailViewModel>();
             if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
             {
-                _viewModel = _dropshipQtyMovementApiAccess.BestBuyDropshipQtyMovementList(ApiURL, token, CurrentDate, PreviousDate, 0, 0, product_sku, ds_status, BBProductID);
+                _viewModel = _dropshipQtyMovementApiAccess.BestBuyDropshipQtyMovementList(ApiURL, token, CurrentDate, PreviousDate, 0, 0, product_sku, ds_status, BBProductID,update_status);
                 data = new StaticPagedList<BestBuyQTYLogsDetailViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
                 return PartialView("~/Views/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovementParitalView.cshtml", data);
             }
 
-            _viewModel = _dropshipQtyMovementApiAccess.BestBuyDropshipQtyMovementList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, product_sku, ds_status, BBProductID);
+            _viewModel = _dropshipQtyMovementApiAccess.BestBuyDropshipQtyMovementList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, product_sku, ds_status, BBProductID,update_status);
             data = new StaticPagedList<BestBuyQTYLogsDetailViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
             return PartialView("~/Views/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovementParitalView.cshtml", data);
             

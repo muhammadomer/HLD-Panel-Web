@@ -64,16 +64,20 @@
                 <th>SKU</th>
                 <th>BB Product ID</th>
                 <th>
-                   DS Qty
+                    DS Qty
                 </th>
 
                 <th>
                     DS Status
                 </th>
                 <th>
-                    Update Date& Time 
+                    Updated On BB
                 </th>
                 <th>
+                    Created On
+                </th>
+                <th>
+                    @*Updated On BB*@
                     Status
                 </th>
             </tr>
@@ -82,52 +86,58 @@
 
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.product_sku" target="_blank">@item.product_sku</a>
-                        
-                    </td>
-                    <td>
-                       
-                        <a href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BBProductID" target="_blank">@item.BBProductID</a>
-                    </td>
-                    <td>
-                        @item.ds_qty
-                    </td>
-                    
-                    <td>
-                        
-                        @{
-                            if (item.ds_status == "1")
-                            {
-                                                <span>DropShip</span>
-                            }
-                            else
-                            {<span>DropShip None</span>
+            <tr>
+                <td>
+                    <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.product_sku" target="_blank">@item.product_sku</a>
 
-                            }
-                        }
-                    </td>
-                    <td>
-                        @if (@item.order_date != DateTime.MinValue)
+                </td>
+                <td>
+
+                    <a href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BBProductID" target="_blank">@item.BBProductID</a>
+                </td>
+                <td>
+                    @item.ds_qty
+                </td>
+
+                <td>
+
+                    @{
+                        if (item.ds_status == "1")
                         {
-                            @string.Format("{0: MMM d, yyyy HH:mm:ss}", @item.order_date)}
-
-                    </td>
-                    <td>
-                        @{
-                            if (item.update_status == "1")
-                            {
-                                <span>Update</span>
-                            }
-                            else
-                            {<span>Pending</span>
-
-                            }
+                            <span>DropShip</span>
                         }
+                        else
+                        {<span>DropShip None</span>
 
-                    </td>
-                </tr>
+                        }
+                    }
+                </td>
+                <td>
+                    @if (@item.order_date != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy HH:mm:ss}", @item.order_date)}
+
+                </td>
+                <td>
+                    @if (@item.UpdatedOnBB != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy HH:mm:ss}", @item.UpdatedOnBB)}
+
+                </td>
+                <td>
+                    @{
+                        if (item.update_status == "1")
+                        {
+                            <span>Updated</span>
+                        }
+                        else
+                        {<span>Pending</span>
+
+                        }
+                    }
+
+                </td>
+            </tr>
             }
         </tbody>
     </table>

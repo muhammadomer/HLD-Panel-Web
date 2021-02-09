@@ -186,40 +186,44 @@
         <div class="col-sm-12">
             @using (Html.BeginForm("BestBuyDropshipQtyMovement", "BestBuyDropshipQtyMovement", FormMethod.Get))
             {
-                <div class="row" style="margin-left:2px;margin-top:15px;">
-                    <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
+            <div class="row" style="margin-left:2px;margin-top:15px;">
+                <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
 
-                    <div class="col-md-2 p-0 mr-1">
-                        <input type="text" id="product_sku" name="product_sku" value="@Model.product_sku" autocomplete="off" placeholder="SKU" class="form-control" style="box-shadow: none" />
-                    </div>
-                    <div class="col-md-2 p-0 mr-1">
-                        <input type="text" id="BBProductID" name="BBProductID" value="@Model.BBProductID" placeholder="BB_ProductID" class="form-control" style="box-shadow: none" />
-                    </div>
-                    <div class="col-md-2 p-0 mr-1">
-                        <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 Dropship" multiple="multiple">
-                            <option value=1>DropShip</option>
-                            <option value=2>DropShip None</option>
-
-                        </select>
-                        <input type="hidden" name="ds_status" id="Dropship" />
-                        @*<input type="text" id="ds_status" name="ds_status" value="@Model.ds_status" placeholder="DS Status" class="form-control" style="box-shadow: none" />*@
-                    </div>
-                   
-                    <div class="col-md-3 p-0" style="margin-right: 15px;">
-                        <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width:100%; box-shadow:none">
-                            <i class="fa fa-calendar"></i>&nbsp;
-                            <span></span> <i class="fa fa-caret-down"></i>
-                        </div>
-                        <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
-                        <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
-                    </div>
-                    <div class="col-md-1 p-0">
-                        <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
-                    </div>
+                <div class="col-md-2 p-0 mr-1">
+                    <input type="text" id="product_sku" name="product_sku" value="@Model.product_sku" autocomplete="off" placeholder="SKU" class="form-control" style="box-shadow:none" />
                 </div>
-                <div class="form-group">
-
+                <div class="col-md-1 p-0 mr-1">
+                    <input type="text" id="BBProductID" name="BBProductID" value="@Model.BBProductID" placeholder="BB_ProductID" class="form-control" style="box-shadow: none" />
                 </div>
+                <div class="col-md-2 p-0 mr-1">
+                    <select id="multiselect" class="2col active form-control  mb-2 mr-sm-2 Dropship" multiple="multiple">
+                        <option value=1>DropShip</option>
+                        <option value=2>DropShip None</option>
+
+                    </select>
+                    <input type="hidden" name="ds_status" id="Dropship" />
+                </div>
+                <div class="col-md-2 p-0 mr-1">
+                    <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 UpdateStatus" multiple="multiple">
+                        <option value=1>Updated</option>
+                        <option value=2>Pending</option>
+
+                    </select>
+                    <input type="hidden" name="update_status" id="UpdateStatus" />
+                </div>
+                <div class="col-md-3 p-0" style="margin-right: 5px;">
+                    <div id="reportrange" style="background: #fff; cursor: pointer; border: 1px solid #ccc;padding: 3px;border-radius: 4px;width:100%; box-shadow:none">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span> <i class="fa fa-caret-down"></i>
+                    </div>
+                    <input type="hidden" name="orderDateTimeFrom" id="orderDateTimeFrom" />
+                    <input type="hidden" name="orderDateTimeTo" id="orderDateTimeTo" />
+                </div>
+                <div class="col-md-1 p-0">
+                    <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                </div>
+            </div>
+             
             }
         </div>
     </div>
@@ -343,17 +347,27 @@ margin-top: 9px;">
             });
 
             //var Items = getUrlParameter('CustomerName');
-            $('select[multiple].active.3col.QuantityStatus').multiselect({
+            $('select[multiple].active.3col.UpdateStatus').multiselect({
                 columns: 1,
-                placeholder: 'Status',
+                placeholder: 'Update Status',
                 maxPlaceholderOpts: 1,
 
                 selectAll: false,
                 onOptionClick: function (element, option) {
-                    $('#ddlQuantity').val($(element).val());
+                    $('#UpdateStatus').val($(element).val());
                     $(element).val();
                 },
             });
+            //$('select[multiple].active.2col.Dropship').multiselect({
+            //    columns: 1,
+            //    placeholder: 'Dropship Status',
+            //    maxPlaceholderOpts: 1,
+            //    selectAll: false,
+            //    onOptionClick: function (element, option) {
+            //        $('#Dropship').val($(element).val());
+            //        $(element).val();
+            //    },
+            //});
             $('select[multiple].active.2col.Dropship').multiselect({
                 columns: 1,
                 placeholder: 'Dropship Status',
@@ -364,7 +378,6 @@ margin-top: 9px;">
                     $(element).val();
                 },
             });
-           
             var getUrlParameter = function getUrlParameter(sParam) {
                 var sPageURL = window.location.search.substring(1),
                     sURLVariables = sPageURL.split('&'),
@@ -379,8 +392,9 @@ margin-top: 9px;">
                     }
                 }
             };
-            var product_sku = getUrlParameter('product_sku');           
-            var ds_status = getUrlParameter('ds_status');        
+            var product_sku = getUrlParameter('product_sku');
+            var ds_status = getUrlParameter('ds_status');
+            var update_status = getUrlParameter('update_status');
             var BBProductID = getUrlParameter('BBProductID');
             var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
             var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
@@ -389,13 +403,73 @@ margin-top: 9px;">
                 debugger;
                 var res = ds_status.split(",");
                 $.each(res, function (key, value) {
-                    $(".ms-options").find("input[type=checkbox]").each(function () {
+                    var setval = 25;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 25) {
+                        $(".Dropship").next().children(".ms-options").find("input[type=checkbox]").each(function () {
 
-                        if ($(this).val() == value.trim()) {
-                            $(this).prop("checked", true);
-                            $('#Dropship').val($(this).val());
-                        }
-                    });
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".Dropship").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }    
+
+                    //$(".ms-options").find("input[type=checkbox]").each(function () {
+
+                    //    if ($(this).val() == value.trim()) {
+                    //        $(this).prop("checked", true);
+                    //        $('#Dropship').val($(this).val());
+                    //    }
+                    //});
+                });
+            }
+            if (update_status != null) {
+                debugger;
+                var res = update_status.split(",");
+                $.each(res, function (key, value) {
+
+                    var setval = 21;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 21) {
+                        $(".UpdateStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".UpdateStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }     
+
+                    //$(".ms-options").find("input[type=checkbox]").each(function () {
+
+                    //    if ($(this).val() == value.trim()) {
+                    //        $(this).prop("checked", true);
+                    //        $('#UpdateStatus').val($(this).val());
+                    //    }
+                    //});
                 });
             }
 
@@ -411,7 +485,7 @@ margin-top: 9px;">
                       debugger;
                       pageNo = page;
                       // add code which gets executed when user selects a page
-                      var url = '/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovementList?page=' + page + '&product_sku=' + product_sku + '&ds_status=' + ds_status + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&BBProductID=' + BBProductID  + '&EmptyFirstTime=' + EmptyFirstTime;
+                      var url = '/BestBuyDropshipQtyMovement/BestBuyDropshipQtyMovementList?page=' + page + '&product_sku=' + product_sku + '&ds_status=' + ds_status + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&BBProductID=' + BBProductID + '&update_status=' + update_status + '&EmptyFirstTime=' + EmptyFirstTime;
                       var completURL = url  ;
                       $(".loadertbl").show();
                       $(".loader").show();
@@ -479,63 +553,17 @@ margin-top: 9px;">
                     }
              });
 
-            } else {
-                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
-
-                  format: '[< nncnn >]',
-                  perpage: 25, // show 10 elements per page
-                  lapping: 0, // don't overlap pages for the moment
-                  page: 1, // start at page, can also be "null" or negative
+            }
+               else {
+                 $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                format: '[< nncnn >]',
+                    perpage: 25, // show 10 elements per page
+                        lapping: 0, // don't overlap pages for the moment
+                        page: 1, // start at page, can also be "null" or negative
                     stepwidth: 0, // =0 means blockwise next/prev steps
-                  onSelect: function (page) {
-                      debugger;
-                      pageNo = page;
-                      // add code which gets executed when user selects a page
-                      var url = '/BestBuyTrackingUpdateLog/BuyTrackingUpdateLogList?page=' + page + "&scOrderID=" + scOrderID + "&bbOrderID=" + bbOrderID + '&OrderDateTimeFrom=' + OrderDateTimeFrom + '&orderDateTimeTo=' + OrderDateTimeTo + '&trackingNumber=' + trackingNumber + '&BBStatus=' + BBStatus + '&EmptyFirstTime=' + EmptyFirstTime;
-                      var completURL = url  ;
-                      $(".loadertbl").show();
-                      $(".loader").show();
-                      $.ajax({
-                          url: completURL,
-                          data: {  },
-                          type: 'POST',
-                          traditional: true,
-                          success: function (data) {
-
-                              $('#loadOrdertracking').empty();
-
-                              $('#loadOrdertracking').html(data);
-
-                              $(function () {
-                                  $(".table").tablesorter();
-
-                              })
-                              $(".loadertbl").hide();
-                              $(".loader").hide();
-                              var itemcount = $(".mytable").find("tr").length;
-                              $(".itemPerPage").text(itemcount);
-                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
-                          },
-                          error: function (data) {
-                              debugger;
-                          }
-                      });
-
-                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
-                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
-                              start = moment(OrderDateTimeFrom);
-                              end = moment(OrderDateTimeTo);
-                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
-                          }
-                          else {
-                              $('#reportrange span').html("No Date Selected");
-                          }
-
-                      }
-                      else {
-                          $('#reportrange span').html("No Date Selected");
-                      }
-                  },
+                     onSelect: function (page) {
+                         pageNo = page;
+                    },
                     onFormat: function (type) {
                         switch (type) {
                             case 'block': // n and c
@@ -554,10 +582,11 @@ margin-top: 9px;">
                                 return '<a href="#">Last</a>';
                         }
                     }
-                });
+                 });
                 $(".loader").hide();
             }
-           
+
+
             $(".table").tablesorter();
 
         });

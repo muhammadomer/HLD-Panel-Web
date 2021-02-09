@@ -82,12 +82,12 @@ namespace Hld.WebApplication.Helper
             List<BestBuyQTYLogsDetailViewModel> responses = JsonConvert.DeserializeObject<List<BestBuyQTYLogsDetailViewModel>>(strResponse);
             return responses;
         }
-        public int GetCount(string ApiURL, string token, string StartDate, string EndDate, string product_sku, string ds_status = "", string BBProductID = "")
+        public int GetCount(string ApiURL, string token, string StartDate, string EndDate, string product_sku, string ds_status = "", string BBProductID = "",string update_status= "")
         {
             int Count = 0;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyDropshipQtyMovement/GetCounter?product_sku=" + product_sku + "&ds_status=" + ds_status + "&BBProductID=" + BBProductID + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/BestBuyDropshipQtyMovement/GetCounter?product_sku=" + product_sku + "&ds_status=" + ds_status + "&BBProductID=" + BBProductID + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate+ "&update_status="+update_status);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -110,10 +110,10 @@ namespace Hld.WebApplication.Helper
             return Count;
         }
 
-        public List<BestBuyQTYLogsDetailViewModel> BestBuyDropshipQtyMovementList(string apiurl, string token, string DateTo, string DateFrom, int limit, int offset, string product_sku, string ds_status = "", string BBProductID = "")
+        public List<BestBuyQTYLogsDetailViewModel> BestBuyDropshipQtyMovementList(string apiurl, string token, string DateTo, string DateFrom, int limit, int offset, string product_sku, string ds_status = "", string BBProductID = "",string update_status="")
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest
-                .Create(apiurl + "/api/BestBuyDropshipQtyMovement/DropshipQtyList?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&product_sku=" + product_sku + "&ds_status=" + ds_status + "&BBProductID=" + BBProductID + "&limit=" + limit + "&offset=" + offset);
+                .Create(apiurl + "/api/BestBuyDropshipQtyMovement/DropshipQtyList?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&product_sku=" + product_sku + "&ds_status=" + ds_status + "&BBProductID=" + BBProductID + "&limit=" + limit + "&offset=" + offset+"&update_status="+update_status);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
