@@ -282,16 +282,16 @@ namespace Hld.WebApplication.Controllers
             return RedirectToAction("Authenticate", "Authentication");
 
         }
-        [HttpPut]
-        public bool SaveCheckboxstatus(string Email, bool Checkboxstatus)
-        {
+        //[HttpPut]
+        //public bool SaveCheckboxstatus(string Email, bool Checkboxstatus)
+        //{
 
-            string token = Request.Cookies["Token"];
-            string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
-            ProductApiAccess.SaveCheckboxstatus(ApiURL,Email, Checkboxstatus);
+        //    string token = Request.Cookies["Token"];
+        //    string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
+        //    ProductApiAccess.SaveCheckboxstatus(ApiURL,Email, Checkboxstatus);
             
-            return true;
-        }
+        //    return true;
+        //}
         [HttpGet]
         public List<Login> GetCheckboxstatus()
         {
