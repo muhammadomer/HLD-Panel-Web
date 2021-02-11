@@ -39,7 +39,6 @@ namespace Hld.WebApplication.Controllers
         ZincApiAccess _zincApiAccess = null;
         public static IHostingEnvironment _environment;
         ZincOrderLogAndDetailApiAccess _zincOrderLogAndDetailApiAccess = null;
-
         SellerCloudApiAccess _sellerCloudApiAccess = null;
         EncDecChannel _encDecChannel = null;
 
@@ -62,9 +61,9 @@ namespace Hld.WebApplication.Controllers
             request_succeeded = _configuration.GetValue<string>("WebhooksUrl:request_succeeded");
             request_failed = _configuration.GetValue<string>("WebhooksUrl:request_failed");
             tracking_obtained = _configuration.GetValue<string>("WebhooksUrl:tracking_obtained");
-
+            _OrderApiAccess = new OrderNotesAPiAccess();
             _encDecChannel = new EncDecChannel();
-
+            SCRestURL = _configuration.GetValue<string>("WebApiURL:SCRestURL");
         }
 
 
@@ -107,117 +106,114 @@ namespace Hld.WebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitOrderToZinc(string ZincOrderdata, string orderDateTimeShip, int CreditCardId, int ZincAccountId, int DeliveryDays)
         {
-            //string token = Request.Cookies["Token"];
-            //_Selller = new GetChannelCredViewModel();
-            //_Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
-            //AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
-
-            CreditCardApiAccess creditCardApiAccess = new CreditCardApiAccess();
-            
-            SaveZincOrders.RootObject ZincOrder = new SaveZincOrders.RootObject();
-            ZincOrder = JsonConvert.DeserializeObject<SaveZincOrders.RootObject>(ZincOrderdata);
-            //if (!string.IsNullOrEmpty(orderDateTimeShip))
-            //{
-            //    ZincOrder.shipping.max_days = Convert.ToInt32(((Convert.ToDateTime(orderDateTimeShip) - DateTime.Now).TotalDays) + 1);
-            //}
-
-            if (DeliveryDays > 0)
+            try
             {
-                ZincOrder.shipping.max_days = DeliveryDays;
-            }
-
-            int _zincOrderLogID = 0;
-            int SellerCloudOrderID = 0;
-            string RequestID = "";
-            token = Request.Cookies["Token"];
-
-            var CreditCardDetail = creditCardApiAccess.GetCreditCardDetailById(ApiURL, token, CreditCardId);
-            var AccountDetail = creditCardApiAccess.GetAccountDetailById(ApiURL, token, ZincAccountId);
-          
-
-
-            _Zinc = new GetChannelCredViewModel();
-            //_Zinc = _encDecChannel.DecryptedData(ApiURL, token, "AmzZinc");
-            //DecryptStringFromBytes_Aes
-            ZincOrder.retailer_credentials = new SaveZincOrders.RetailerCredentials();
-          
-
-            ZincOrder.retailer_credentials.email = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.UserName);
-            ZincOrder.retailer_credentials.password = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.Password);
-            ZincOrder.retailer_credentials.totp_2fa_key = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.Key);
-            ZincOrder.payment_method = new SaveZincOrders.PaymentMethod();
-            ZincOrder.payment_method.use_gift = false;
-        
-            ZincOrder.payment_method.name_on_card = CreditCardDetail.first_name + " " + CreditCardDetail.last_name;
-            ZincOrder.payment_method.number = _encDecChannel.DecryptStringFromBytes_Aes(CreditCardDetail.number);
-            ZincOrder.payment_method.security_code = _encDecChannel.DecryptStringFromBytes_Aes(CreditCardDetail.security_code);
-            ZincOrder.payment_method.expiration_month = Convert.ToInt32(CreditCardDetail.expiration_month);
-            ZincOrder.payment_method.expiration_year = Convert.ToInt32(CreditCardDetail.expiration_year);
-
-            ZincOrder.billing_address = new SaveZincOrders.BillingAddress();
-
-            ZincOrder.billing_address.address_line1 = CreditCardDetail.address_line1;
-            ZincOrder.billing_address.address_line2 = CreditCardDetail.address_line2;
-            ZincOrder.billing_address.city = CreditCardDetail.city;
-            ZincOrder.billing_address.country = CreditCardDetail.country;
-            ZincOrder.billing_address.first_name = CreditCardDetail.first_name;
-            ZincOrder.billing_address.last_name = CreditCardDetail.last_name;
-            ZincOrder.billing_address.phone_number = CreditCardDetail.PhoneNo;
-            ZincOrder.billing_address.state = CreditCardDetail.state;
-            ZincOrder.billing_address.zip_code = CreditCardDetail.zip_code;
-            ZincOrder.webhooks = new Webhooks();
-            ZincOrder.webhooks.request_succeeded = request_succeeded;
-            ZincOrder.webhooks.request_failed = request_failed;
-
-            ZincOrder.webhooks.tracking_obtained = tracking_obtained;
-            //  ZincOrder.webhooks = _webhooks;
-            token = Request.Cookies["Token"];
-
-            ///////Commented By me
-
-            SellerCloudOrderID = ZincOrder.client_notes.our_internal_order_id;
-            RequestID = SubmitOrderToZincForSave(ZincOrder);
-            if (RequestID != string.Empty)
-            {
-                bool status = false;
-                int getres = 0;
-
-                //these 4 commented lines for rest job
-                // DropshipStatusViewModel dsmodel = new DropshipStatusViewModel();
-                UpdateSCDropshipStatusViewModel updateSCViewModel = new UpdateSCDropshipStatusViewModel();
-                updateSCViewModel.StatusName = "Requested";
-                updateSCViewModel.SCOrderID = ZincOrder.client_notes.our_internal_order_id;
-                updateSCViewModel.LogDate = DatetimeExtension.ConvertToEST(DateTime.Now);
-                //dsmodel.Orders.Add(ZincOrder.client_notes.our_internal_order_id) ;
-                //dsmodel.DropshipStatus = 2;
-                //getres = _sellerCloudApiAccess.UpdateDropshipStatus(ApiURL, authenticate.access_token, dsmodel);
-
-                status = await UpdateDropShipStatusInZinc(ZincOrder.client_notes.our_internal_order_id, "Requested");
-                status = _sellerCloudApiAccess.UpdateSellerCloudOrderDropShipStatus(ApiURL, token, updateSCViewModel);
-
-
-
-                if (status)
+                token = Request.Cookies["Token"];
+                CreditCardApiAccess creditCardApiAccess = new CreditCardApiAccess();
+                SaveZincOrders.RootObject ZincOrder = new SaveZincOrders.RootObject();
+                ZincOrder = JsonConvert.DeserializeObject<SaveZincOrders.RootObject>(ZincOrderdata);
+                _Selller = new GetChannelCredViewModel();
+                _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+                AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+                if (DeliveryDays > 0)
                 {
-                    ZincOrderLogViewModel zincOrderLogViewModel = new ZincOrderLogViewModel();
-                    zincOrderLogViewModel.SellerCloudOrderId = Convert.ToString(SellerCloudOrderID);
-                    zincOrderLogViewModel.RequestIDOfZincOrder = RequestID;
-                    zincOrderLogViewModel.OrderDatetime = DatetimeExtension.ConvertToEST(DateTime.Now);
-                    zincOrderLogViewModel.ZincAccountId = ZincAccountId;
-                    zincOrderLogViewModel.CreditCardId = CreditCardId;
-                    zincOrderLogViewModel.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
-
-                    _zincOrderLogID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLog(ApiURL, token, zincOrderLogViewModel);
-
-                    //ZincOrderLogDetailViewModel model = new ZincOrderLogDetailViewModel();
-                    //model.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
-                    //model.ZincOrderLogID = _zincOrderLogID;
-                    //int ZincOrderLogDetailID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLogDetail(ApiURL, token, model);
-                    //_zincOrderLogAndDetailApiAccess.UpdateAccounts(ApiURL, token, Convert.ToInt32(zincOrderLogViewModel.SellerCloudOrderId), ZincAccountId, CreditCardId);
+                    ZincOrder.shipping.max_days = DeliveryDays;
                 }
+
+                int _zincOrderLogID = 0;
+                int SellerCloudOrderID = 0;
+                string RequestID = "";
+               
+                var CreditCardDetail = creditCardApiAccess.GetCreditCardDetailById(ApiURL, token, CreditCardId);
+                var AccountDetail = creditCardApiAccess.GetAccountDetailById(ApiURL, token, ZincAccountId);
+                _Zinc = new GetChannelCredViewModel();
+                ZincOrder.retailer_credentials = new SaveZincOrders.RetailerCredentials();
+                ZincOrder.retailer_credentials.email = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.UserName);
+                ZincOrder.retailer_credentials.password = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.Password);
+                ZincOrder.retailer_credentials.totp_2fa_key = _encDecChannel.DecryptStringFromBytes_Aes(AccountDetail.Key);
+                ZincOrder.payment_method = new SaveZincOrders.PaymentMethod();
+                ZincOrder.payment_method.use_gift = false;
+                ZincOrder.payment_method.name_on_card = CreditCardDetail.first_name + " " + CreditCardDetail.last_name;
+                ZincOrder.payment_method.number = _encDecChannel.DecryptStringFromBytes_Aes(CreditCardDetail.number);
+                ZincOrder.payment_method.security_code = _encDecChannel.DecryptStringFromBytes_Aes(CreditCardDetail.security_code);
+                ZincOrder.payment_method.expiration_month = Convert.ToInt32(CreditCardDetail.expiration_month);
+                ZincOrder.payment_method.expiration_year = Convert.ToInt32(CreditCardDetail.expiration_year);
+                ZincOrder.billing_address = new SaveZincOrders.BillingAddress();
+                ZincOrder.billing_address.address_line1 = CreditCardDetail.address_line1;
+                ZincOrder.billing_address.address_line2 = CreditCardDetail.address_line2;
+                ZincOrder.billing_address.city = CreditCardDetail.city;
+                ZincOrder.billing_address.country = CreditCardDetail.country;
+                ZincOrder.billing_address.first_name = CreditCardDetail.first_name;
+                ZincOrder.billing_address.last_name = CreditCardDetail.last_name;
+                ZincOrder.billing_address.phone_number = CreditCardDetail.PhoneNo;
+                ZincOrder.billing_address.state = CreditCardDetail.state;
+                ZincOrder.billing_address.zip_code = CreditCardDetail.zip_code;
+                ZincOrder.webhooks = new Webhooks();
+                ZincOrder.webhooks.request_succeeded = request_succeeded;
+                ZincOrder.webhooks.request_failed = request_failed;
+                ZincOrder.webhooks.tracking_obtained = tracking_obtained;
+                //  ZincOrder.webhooks = _webhooks;
+                token = Request.Cookies["Token"];
+                //Commented By me
+                SellerCloudOrderID = ZincOrder.client_notes.our_internal_order_id;
+                   RequestID = SubmitOrderToZincForSave(ZincOrder);
+                
+                if (RequestID != string.Empty)
+                {
+                    bool status = false;
+                    CreateNotesViewModel createNotesView = new CreateNotesViewModel();
+                    UpdateSCDropshipStatusViewModel updateSCViewModel = new UpdateSCDropshipStatusViewModel();
+                    List<CreateOrderNotesViewModel> data = new List<CreateOrderNotesViewModel>();
+                    updateSCViewModel.StatusName = "Requested";
+                    updateSCViewModel.SCOrderID = ZincOrder.client_notes.our_internal_order_id;
+                    updateSCViewModel.LogDate = DatetimeExtension.ConvertToEST(DateTime.Now);
+                    createNotesView.Message = "RequestId: " + RequestID;
+                    createNotesView.Category = "0";
+                    _OrderApiAccess.CreateOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID, createNotesView);
+                    List<CreateOrderNotesViewModel> getNotes = _OrderApiAccess.GetOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID);
+                    if (getNotes.Count > 0)
+                    {
+                        data = (List<CreateOrderNotesViewModel>)getNotes.Select(p => p).Where(p => p.NoteID != 0).ToList();
+                        if (data.Count > 0)
+                        {
+                            status = _OrderApiAccess.saveOrderNotes(ApiURL, token, data);
+                            if (status == true)
+                            {
+                                _OrderApiAccess.SetOrderHavingNotes(ApiURL, token, Convert.ToInt32(updateSCViewModel.SCOrderID));
+                            }
+                        }
+
+
+                    }
+                    status = await UpdateDropShipStatusInZinc(ZincOrder.client_notes.our_internal_order_id, "Requested");
+                    status = _sellerCloudApiAccess.UpdateSellerCloudOrderDropShipStatus(ApiURL, token, updateSCViewModel);
+                    if (status)
+                    {
+                        ZincOrderLogViewModel zincOrderLogViewModel = new ZincOrderLogViewModel();
+                        zincOrderLogViewModel.SellerCloudOrderId = Convert.ToString(SellerCloudOrderID);
+                        zincOrderLogViewModel.RequestIDOfZincOrder = RequestID;
+                        zincOrderLogViewModel.OrderDatetime = DatetimeExtension.ConvertToEST(DateTime.Now);
+                        zincOrderLogViewModel.ZincAccountId = ZincAccountId;
+                        zincOrderLogViewModel.CreditCardId = CreditCardId;
+                        zincOrderLogViewModel.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
+
+                        _zincOrderLogID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLog(ApiURL, token, zincOrderLogViewModel);
+
+                        //ZincOrderLogDetailViewModel model = new ZincOrderLogDetailViewModel();
+                        //model.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
+                        //model.ZincOrderLogID = _zincOrderLogID;
+                        //int ZincOrderLogDetailID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLogDetail(ApiURL, token, model);
+                        //_zincOrderLogAndDetailApiAccess.UpdateAccounts(ApiURL, token, Convert.ToInt32(zincOrderLogViewModel.SellerCloudOrderId), ZincAccountId, CreditCardId);
+                    }
+                }
+                return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message = "Order Request Has Been Send To Zinc Successfully!" });
+                //return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234",message= "Order Request Has Been Send To Zinc Successfully!" });
             }
-            return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message = "Order Request Has Been Send To Zinc Successfully!" });
-            //return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234",message= "Order Request Has Been Send To Zinc Successfully!" });
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         [HttpGet]

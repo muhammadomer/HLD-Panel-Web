@@ -48,32 +48,38 @@ namespace Hld.WebApplication.Controllers
         [HttpPost]
         public bool CreateSCOrderNotes(string orderID,string Notes)
         {
-           bool status = false;
-            token = Request.Cookies["Token"];
-
-            _Selller = new GetChannelCredViewModel();
-            _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
-            AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
-            CreateNotesViewModel createNotesView = new CreateNotesViewModel();
-            createNotesView.Message = Notes;
-            createNotesView.Category = "0";
-            _OrderApiAccess.CreateOrderNotesFormSC(SCRestURL, authenticate.access_token, Convert.ToInt32(orderID), createNotesView);
-            List<CreateOrderNotesViewModel> getNotes = _OrderApiAccess.GetOrderNotesFormSC(SCRestURL, authenticate.access_token, Convert.ToInt32(orderID));
-            if (getNotes.Count > 0)
+            bool status = false;
+            try
             {
-                List<CreateOrderNotesViewModel> data = (List<CreateOrderNotesViewModel>)getNotes.Select(p => p).Where(p => p.NoteID != 0).ToList();
-                if (data.Count > 0)
+               
+                token = Request.Cookies["Token"];
+
+                _Selller = new GetChannelCredViewModel();
+                _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+                AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
+                CreateNotesViewModel createNotesView = new CreateNotesViewModel();
+                createNotesView.Message = Notes;
+                createNotesView.Category = "0";
+                _OrderApiAccess.CreateOrderNotesFormSC(SCRestURL, authenticate.access_token, Convert.ToInt32(orderID), createNotesView);
+                List<CreateOrderNotesViewModel> getNotes = _OrderApiAccess.GetOrderNotesFormSC(SCRestURL, authenticate.access_token, Convert.ToInt32(orderID));
+                if (getNotes.Count > 0)
                 {
-                    status = _OrderApiAccess.saveOrderNotes(ApiURL, token, data);
-                    if (status == true)
+                    List<CreateOrderNotesViewModel> data = (List<CreateOrderNotesViewModel>)getNotes.Select(p => p).Where(p => p.NoteID != 0).ToList();
+                    if (data.Count > 0)
                     {
-                        _OrderApiAccess.SetOrderHavingNotes(ApiURL, token, Convert.ToInt32(orderID));
+                        status = _OrderApiAccess.saveOrderNotes(ApiURL, token, data);
+                        if (status == true)
+                        {
+                            _OrderApiAccess.SetOrderHavingNotes(ApiURL, token, Convert.ToInt32(orderID));
+                        }
                     }
                 }
-
-
             }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
             return status;
         }
 

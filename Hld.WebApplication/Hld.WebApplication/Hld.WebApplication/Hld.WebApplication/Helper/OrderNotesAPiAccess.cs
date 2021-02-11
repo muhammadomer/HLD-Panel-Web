@@ -139,10 +139,10 @@ namespace Hld.WebApplication.Helper
                
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             return listmodel;
         }
@@ -212,10 +212,10 @@ namespace Hld.WebApplication.Helper
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             return listmodel;
         }
