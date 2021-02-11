@@ -54,7 +54,7 @@
     </div>
     <div class="col-sm-6" style="padding:0">
         
-        <span><a href="/PurchaseOrder/GetPOProduct?VendorID=&SKU=@ViewBag.ProductSku&POID=&title=&ItemType=OpenItem&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@Math.Round(Convert.ToDecimal(@Model.Select(e => e.OnOrder).FirstOrDefault()))</a></span>
+        <span><a href="/PurchaseOrder/GetPOProduct?VendorID=&SKU=@ViewBag.ProductSku&EmptyFirstTime=No&POID=&title=&ItemType=OpenItem&orderDateTimeFrom=&orderDateTimeTo=" target="_blank">@Math.Round(Convert.ToDecimal(@Model.Select(e => e.OnOrder).FirstOrDefault()))</a></span>
     </div>
 </div>
 <div class="row">

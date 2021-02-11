@@ -263,7 +263,82 @@ namespace Hld.WebApplication.Controllers
             status = _ApiAccess.UpdatePriceMax(ApiURL, token, ASIN, MaxPrice);
             return status;
         }
+        public IActionResult ZincOrdersLog(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string SC_Order_ID = "", string Amazon_AcName = "", string Zinc_Status = "", string EmptyFirstTime = "")
+        {
+
+            token = Request.Cookies["Token"];
+            ZincOrdersLogViewModel ZincOrdersLog = new ZincOrdersLogViewModel();
+
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = "";
+                PreviousDate = "";
+            }
 
 
+
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+
+            }
+            else
+            {
+                var count = _ApiAccess.GetZincCount(ApiURL, token, CurrentDate, PreviousDate, SC_Order_ID, Amazon_AcName, Zinc_Status);
+                ViewBag.TotalCount = count;
+                ZincOrdersLog.SC_Order_ID = SC_Order_ID;
+                ZincOrdersLog.Amazon_AcName = Amazon_AcName;
+                ZincOrdersLog.Zinc_Status = Zinc_Status;
+
+                //return View(BestBuyDropshipQty);
+            }
+            return View(ZincOrdersLog);
+        }
+        [HttpPost]
+        public IActionResult ZincOrdersLogList(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string SC_Order_ID = "", string Amazon_AcName = "", string Zinc_Status = "", string EmptyFirstTime = "")
+        {
+
+            //string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            //string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = "";
+                PreviousDate = "";
+            }
+            token = Request.Cookies["Token"];
+
+            if (page.HasValue)
+            {
+                ViewBag.pageNumber = page;
+            }
+            IPagedList<ZincOrdersLogViewModel> data = null;
+            int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
+            int pageSize = 25;
+            int endLimit = 0;
+            int startlimit = pageSize;
+            if (page.HasValue)
+            {
+                endLimit = (pageNumber - 1) * pageSize;
+            }
+            List<ZincOrdersLogViewModel> _viewModel = new List<ZincOrdersLogViewModel>();
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+                _viewModel = _ApiAccess.ZincOrdersLogList(ApiURL, token, CurrentDate, PreviousDate, 0, 0, SC_Order_ID, Amazon_AcName, Zinc_Status);
+                data = new StaticPagedList<ZincOrdersLogViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+                return PartialView("~/Views/ZincWatchlist/ZincOrdersLogPartialView.cshtml", data);
+            }
+
+            _viewModel = _ApiAccess.ZincOrdersLogList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, SC_Order_ID, Amazon_AcName, Zinc_Status);
+            data = new StaticPagedList<ZincOrdersLogViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+            return PartialView("~/Views/ZincWatchlist/ZincOrdersLogPartialView.cshtml", data);
+
+
+        }
     }
 }

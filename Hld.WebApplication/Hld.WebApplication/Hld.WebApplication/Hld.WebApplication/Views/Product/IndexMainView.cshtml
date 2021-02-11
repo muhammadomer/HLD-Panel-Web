@@ -375,8 +375,10 @@
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.widgets.min.js"></script>
     <script type="text/javascript">
-
+   
         $(document).ready(function () {
+
+
             $('select[multiple].DSTagselect').multiselect({
                 columns: 1,
                 placeholder: 'DS Tags',
@@ -409,7 +411,7 @@ $('.successmessage').hide();
 
 
             function getasinamazoneprice() {
-               
+
                 $(".table tbody tr ").each(function () {
                     var sku = $(this).find('#productSkuForUpdating').val()
                     var Url = '/Product/GetSkuAmazonePrice?sku=' + sku;
@@ -421,7 +423,7 @@ $('.successmessage').hide();
                         dataType: 'json',
                         traditional: true,
                         success: function (data) {
-                            
+
                             $(row).find(".getasinprice").empty();
                             $.each(data, function (key, value) {
                                 $(row).find(".getasinprice").append($("<span><a target='_blank' href='https://www.amazon.ca/dp/" + value.Asin + "?th=1&psc=1'>" + value.Asin + "</a></span> <span>" + value.amzonprice/100 + "</span><br/>"));
@@ -534,15 +536,15 @@ $('.successmessage').hide();
 
                 console.log("Continued Data", TypeSearch);
             }
-           
+
             if (TypeSearch == "Discontinued") {
                 console.log("Discontinued Data", TypeSearch);
             }
-           
+
 
 
             if (DSTagItem != null) {
-               
+
                 var res = DSTagItem.split(",");
                 $.each(res, function (key, value) {
                     $(".ms-options").find("input[type=checkbox]").each(function () {
@@ -598,7 +600,7 @@ $('.successmessage').hide();
 
 
             $(document).on('click', '#btnEnableDisableSKU', function () {
-                
+
                 var SKUArraryForSinglePage = [];
                 if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
                     var status = $('#checkAllPages').is(':checked');
@@ -673,7 +675,7 @@ $('.successmessage').hide();
 
 
                 if ($('#actionMenu option:selected').val() == "EnableProduct") {
-                  
+
                     var data = [];
                     $(".tableProductListSelected tbody tr ").each(function () {
                         if ($(this).find('.checkboxSkForEnableDisable').is(':checked')) {
@@ -692,17 +694,17 @@ $('.successmessage').hide();
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();
-                            
+
                             $.notify('Product enabled  successfully', { globalPosition: 'bottom right', className: 'success myclass' });
                             //$("#btnSearchOrder").click();
-                           
+
                         }
                     });
-                    setInterval('location.reload()', 6000); 
+                    setInterval('location.reload()', 6000);
 
                 }
                 if ($('#actionMenu option:selected').val() == "DisableProduct") {
-                  
+
                     var data = [];
                     $(".tableProductListSelected tbody tr ").each(function () {
                         if ($(this).find('.checkboxSkForEnableDisable').is(':checked')) {
@@ -721,16 +723,16 @@ $('.successmessage').hide();
                         success: function (res) {
                             $(".loader").hide();
                             $.notify('Product disabled  successfully', { globalPosition: 'bottom right', className: 'danger myclass1' });
-                           
+
                             //$("#btnSearchOrder").click();
                         }
                     });
-                    setInterval('location.reload()', 6000); 
+                    setInterval('location.reload()', 6000);
                     console.log(data);
                 }
 
                 if ($('#actionMenu option:selected').val() == "StatusFromZinc") {
-                  
+
                     var data = [];
                     $(".tableProductListSelected tbody tr ").each(function () {
                         if ($(this).find('.checkboxSkForEnableDisable').is(':checked')) {
@@ -754,15 +756,15 @@ $('.successmessage').hide();
 $('.successmessage').show();
                            // $.notify("<span>Status from Zinc Updated  successfully</span><a href='../ZincWatchlist/MainViewLogs/jobID="+res+"'target=_blank'>"+res+"</a>", {
                              //   globalPosition: 'bottom right', autoHideDelay: null, autoHide: false, clickToHide: true, arrowShow: true, arrowSize: 5, className: 'danger myclass1'},);
-                           
+
                             //$("#btnSearchOrder").click();
                         }
                     });
-                   // setInterval('location.reload()', 6000); 
+                   // setInterval('location.reload()', 6000);
                     console.log(data);
                 }
             });
-        
+
 
             $('#checkAllPages').change(function () {
                 var status = $(this).is(':checked');
@@ -781,7 +783,7 @@ $('.successmessage').show();
                     stepwidth: 0, // =0 means blockwise next/prev steps
                     onSelect: function (page) {
                         pageNo = page;
-                        
+
                         // add code which gets executed when user selects a page
                         var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch;
                         $(".loader").show();
@@ -859,33 +861,6 @@ $('.successmessage').show();
         });
         });
 
-        function SubmitForm() {
-            var url = '@Url.Action("Update_DS_EnableDisable_SKU", "Product")';
-            var data = $('#form1').serialize();
-            $.validator.unobtrusive.parse($('#form1'));
-            if ($('#form1').valid()) {
-                $(document).find('.ButtonLoader').children('span').css('display', 'inline');
-                $(document).find('#SaveDS_Enable_disable_SKU').attr('disabled', 'disabled');
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: data,
-                    success: function (data) {
-                        $(document).find('.ButtonLoader').children('span').css('display', 'none');
-                        $(document).find('#SkuStatusMessage').append([
-                            $('<label/>').text("Sku are Update " + data.SkuUpdate).css({ 'margin-left': '10px', 'color': 'green', 'font-weight': 'bold', 'margin-right': '7px' }),
-                            $('<label/>').text("Sku contain's Error " + data.SkuError).css({ 'color': 'red', 'font-weight': 'bold', 'margin-right': '7px' }),
-                            $('<br/>'),
-                            $('<label/>').text("Note : Please search again to see affected SKUs").css('margin-left', '10px')
-                        ]);
-                        checkUncheckSKU_checkbox(false);
-                        $(document).find('#headerCheckBox').attr('checked', false);
-                    }
-                });
-
-            }
-            return false;
-        }
 
 
         $(document).on('click', '#addasintags', function () {
@@ -1116,5 +1091,6 @@ $('.successmessage').show();
         //        $("#tableProductList thead").removeClass("tblproductlist")
         //    }
         //});
+
     </script>
 }

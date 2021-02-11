@@ -1,6 +1,7 @@
 ﻿using DataAccess.ViewModels;
 using Hld.WebApplication.ViewModel;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -495,6 +496,53 @@ namespace Hld.WebApplication.Helper
                 throw;
             }
             return ViewModel;
+        }
+        public int GetZincCount(string ApiURL, string token, string StartDate, string EndDate, string SC_Order_ID = "", string Amazon_AcName = "", string Zinc_Status = "")
+        {
+            int Count = 0;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList/GetZincCount?SC_Order_ID=" + SC_Order_ID + "&Amazon_AcName=" + Amazon_AcName + "&Zinc_Status=" + Zinc_Status + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                        Count = (int)JObject.Parse(strResponse)["counter"];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Count;
+        }
+
+        public List<ZincOrdersLogViewModel> ZincOrdersLogList(string apiurl, string token, string DateTo, string DateFrom, int limit, int offset, string SC_Order_ID = "", string Amazon_AcName = "", string Zinc_Status = "")
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest
+                .Create(apiurl + "/api/ZincWatchList/ZincOrdersLogList?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&SC_Order_ID=" + SC_Order_ID + "&Amazon_AcName=" + Amazon_AcName + "&Zinc_Status=" + Zinc_Status + "&limit=" + limit + "&offset=" + offset);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<ZincOrdersLogViewModel> responses = JsonConvert.DeserializeObject<List<ZincOrdersLogViewModel>>(strResponse);
+            return responses;
         }
     }
 }

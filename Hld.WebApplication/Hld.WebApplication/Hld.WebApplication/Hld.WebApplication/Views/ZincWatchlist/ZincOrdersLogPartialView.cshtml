@@ -1,0 +1,174 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.ZincOrdersLogViewModel>
+@using Hld.WebApplication.Helper
+@*@model IEnumerable<Hld.WebApplication.ViewModel.BestBuyOrdersViewModel>*@
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+<style type="text/css">
+
+
+    .table-bordered thead th, .table-bordered thead td {
+        padding: 0px;
+        border-bottom-width: 2px;
+    }
+
+    .table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .table thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #DEE2E6;
+        text-align: center;
+    }
+
+    .table th, .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #DEE2E6;
+        vertical-align: middle !important;
+    }
+
+    .table tbody tr:hover {
+        background-color: #F5F5F5;
+    }
+
+    .table td {
+        text-align: left;
+    }
+
+    .table thead tr th {
+        position: sticky;
+        top: 168px;
+        padding: 5px;
+        text-align: left;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+</style>
+<div class="container-fluid">
+    <table class="table tablesorter mytable" style="margin-top:174px;width:98%!important">
+
+
+        <thead style="background-color:lightgray;">
+            <tr>
+                <th>
+                    Amz Account Name
+                </th>
+                <th>SC Order ID </th>
+                <th>BB Order ID</th>
+                <th>
+                    Zinc Order ID
+                </th>
+                <th>
+                    Order Date &Time
+                </th>
+                <th>
+                    Order Message
+                </th>
+                <th>
+                    Zinc Status
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @item.Amazon_AcName
+                </td>
+                <td>
+
+                    <a target="_blank" href="https://lp.cwa.sellercloud.com/Orders/Orders_Details.aspx?ID=@item.SC_Order_ID">@item.SC_Order_ID</a>
+                </td>
+
+                <td>
+
+                    <a target="_blank" href="/BestBuyOrders/BestbuyOrderDetails?order_id=@item.BB_Order_ID&EmptyFirstTime=data">@item.BB_Order_ID</a>
+                </td>
+                <td>
+
+                    @if (@item.Zinc_Order_ID == string.Empty)
+                    {
+                        <a target="_blank" style="display:none;" href="https://dash.zinc.io/ZACiVJJ8DF3YEXg1GgyHj/orders/">@item.Zinc_Order_ID</a>
+                    }
+                    else
+                    {
+                        <a target="_blank" href="https://dash.zinc.io/ZACiVJJ8DF3YEXg1GgyHj/orders/@item.Zinc_Order_ID">@item.Zinc_Order_ID</a>
+                    }
+                </td>
+
+                <td>
+                    @if (@item.order_datetime != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy HH:mm:ss}", @item.order_datetime)}
+
+                </td>
+                <td>
+                    @item.order_message
+
+
+                </td>
+                <td>
+
+                    @if (item.Zinc_Status == "Error")
+                    {
+
+                        <span style="cursor:pointer;padding:0px;color:red">Processed_OutSideZinc</span>
+                    }
+                    else if (@item.Zinc_Status == "InProgressSuccess")
+                    {
+                        <span style="color:green">InProgress (Success)</span>
+
+                    }
+                    else if (@item.Zinc_Status == "Shipped")
+                    {
+                        <span style="color:green">Shipped</span>
+
+                    }
+                    else if (@item.Zinc_Status == "InProcess")
+                    {
+                        <span style="color:orange">@item.Zinc_Status</span>
+
+                    }
+                    else if (@item.Zinc_Status == "OrderRequestSent")
+                    {
+                        <span style="color:blue">Order Request Sent</span>
+
+                    }
+                    else if (@item.Zinc_Status == "Processed_OutSideZinc")
+                    {
+                        <span style="color:#ef08bd">Processed OutSide Zinc</span>
+
+                    }
+                    else if (@item.Zinc_Status == "Canceled")
+                    {
+                        <span style="color: mediumvioletred">@item.Zinc_Status</span>
+
+                    }
+                    else
+                    {
+                        <span></span>
+
+                    }
+
+
+
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

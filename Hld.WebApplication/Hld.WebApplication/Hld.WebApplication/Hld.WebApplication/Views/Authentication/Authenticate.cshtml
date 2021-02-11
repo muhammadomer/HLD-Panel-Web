@@ -300,15 +300,19 @@
                     url: '../authentication/getcheckboxstatus',
                     data: {},
                     success: function (res) {
+                        debugger;
                         var checkboxes = res[0].Checkboxstatus;
+                        var Email = res[0].Email;
                         debugger; 
                         if (res) {
-                         $(".loadertbl").show();                            
-                         var email = localStorage.getItem('Email');
-                            if (email && checkboxes == true) {
+                            $(".loadertbl").show();
+                            debugger;
+                            var localemail = localStorage.getItem('Email');
+                            var localCheckboxvalue = localStorage.getItem('remembercheck');
+                            if (localemail == Email && localCheckboxvalue==checkboxes) {
                              $.ajax({
                                  type: "POST",
-                                 url: '../Authentications/save?Email=' + email + '',
+                                 url: '../Authentications/save?Email=' + localemail + '',
                                  contentType: "application/json; charset=utf-8",
                                  datatype: "JSON",
                                  success: function (response) {

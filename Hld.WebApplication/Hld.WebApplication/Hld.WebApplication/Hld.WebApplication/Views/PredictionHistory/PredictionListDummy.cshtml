@@ -541,7 +541,7 @@
                                 <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
                             </a>
 
-                            <a style="cursor:pointer" href="/PurchaseOrder/GetPOProduct?&sku=@item.SKU" title="Product in PO's" target="_blank">
+                            <a style="cursor:pointer" href="/PurchaseOrder/GetPOProduct?VendorID=&SKU=@item.SKU&EmptyFirstTime=No&POID=&title=&ItemType=OpenItem&orderDateTimeFrom=&orderDateTimeTo=" title="Product in PO's" target="_blank">
                                 <img src="~/Images/right-1.png" height='20' />
                             </a>
                         </div>
@@ -994,7 +994,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                                     var skuimg="<div>" +
                             "<a style='cursor:pointer' href='https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id="+res.SKU+"'target='_blank'><img height='15px' width='20px' src='/Images/sellercloud-gray.png'/>"+"</a>"+"<a style='margin-left:5px; cursor: pointer;' href='/ApprovedPrice/Index?&sku="+res.SKU+"' target='_blank'><img src='/Images/ok-1.1s-128px.png' class='rounded' height='25'></a>"
 
-                                    + "<a style='cursor:pointer' href='/PurchaseOrder/GetPOProduct?&sku=" + res.SKU + "'target='_blank'><img src='/Images/right-1.png' height='20'/></a>" + "</div>";
+                                        + "<a style='cursor:pointer' href='/PurchaseOrder/GetPOProduct?&sku=" + res.SKU + "&EmptyFirstTime=No&POID=&title=&ItemType=OpenItem&orderDateTimeFrom=&orderDateTimeTo='target='_blank'><img src='/Images/right-1.png' height='20'/></a>" + "</div>";
                                 var image = '<a target="_blank" href="@ViewBag.S3BucketURL_large/' + res.LargImage + '">' + '<img src="@ViewBag.S3BucketURL/' + res.SmallImage + '" class="rounded" height="50" width="50" /></a>';
                                 var inputs = "<input type='text' style='display: none'class='form-control  SKU' value='" + res.SKU + "'><input type='text' style='display: none'class='form-control ApprovedUnitPrice SKU' value='" + res.ApprovedUnitPrice + "'><input type='text' style='display:none' class='form-control ReservdQty' value='" + res.ReservedQty + "'><input type='text' style='display:none' class='form-control Id' value='0'> <input type='text' style='display:none' class='form-control OnOrder' value='" + res.OnOrder + "'><input type='text' style='display:none' class='form-control Velocity' value='" + res.Velocity + "'><input type='text' style='display:none' class='form-control SKU' value='" + res.SKU + "'><input type='text' style='display:none' class='form-control ApprovedUnitPrice' value='" + res.ApprovedUnitPrice + "'><input type='text' style = 'display:none' class='form-control PhysicalQty' value = '" + res.PhysicalQty + "' >";
                                 var caspacktd = '<span>' + (dfdcp).toFixed(2) + ' * ' + res.CasePackQty + ' = ' + (CP).toFixed(0) + '</span><br /><span style="color:forestgreen">' + dfdcp2 + ' * ' + res.CasePackQty + ' = ' + CP2.toFixed(0) + '</span><br />'

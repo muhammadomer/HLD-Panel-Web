@@ -140,7 +140,7 @@
                     @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Product Link in PO")).Succeeded)
                     {
                         <a style="padding-left:18px;cursor:pointer" asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.SKU" target="_blank">@item.SKU</a>
-                        <a style='margin-left:5px; cursor: pointer;' href='/PurchaseOrder/GetPOProduct?SKU=@item.SKU' target='_blank'>
+                        <a style='margin-left:5px; cursor: pointer;' href="/PurchaseOrder/GetPOProduct?VendorID=&SKU=MTV-01-RD&EmptyFirstTime=No&POID=&title=&ItemType=&orderDateTimeFrom=&orderDateTimeTo=" target='_blank'>
                             <img src='~/Images/ok-1.1s-128px.png' class='rounded' height='25'>
                         </a>
                         }
