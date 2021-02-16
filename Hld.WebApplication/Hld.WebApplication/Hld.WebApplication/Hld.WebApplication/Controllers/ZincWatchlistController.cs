@@ -58,14 +58,12 @@ namespace Hld.WebApplication.Controllers
         {
             token = Request.Cookies["Token"];
             bool status = _ApiAccess.AddASINToWatchList(ApiURL, token, saveWatchlistViewModel);
-
             return status;
         }
         public bool AddToWatchlist(SaveWatchlistViewModel saveWatchlistViewModel)
         {
             token = Request.Cookies["Token"];
             bool status = _ApiAccess.AddASINToWatchListNew(ApiURL, token, saveWatchlistViewModel);
-
             return status;
         }
 
@@ -344,6 +342,84 @@ namespace Hld.WebApplication.Controllers
             _viewModel = _ApiAccess.ZincOrdersLogList(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, SC_Order_ID, Amazon_AcName, Zinc_Status);
             data = new StaticPagedList<ZincOrdersLogViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
             return PartialView("~/Views/ZincWatchlist/ZincOrdersLogPartialView.cshtml", data);
+
+
+        }
+
+        public IActionResult ZincWatchlistLogForJob(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string ASIN = "", string ProductSKU = "", string available = "", string jobID = "", string EmptyFirstTime = "")
+        {
+
+            token = Request.Cookies["Token"];
+            ZincWatchlistLogsForJobViewModel ZincWatchlistLogsForJob = new ZincWatchlistLogsForJobViewModel();
+
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = "";
+                PreviousDate = "";
+            }
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+
+            }
+            else
+            {
+
+                var count = _ApiAccess.GetWatchListLogsCountForJob(ApiURL, token, CurrentDate, PreviousDate, ASIN, ProductSKU, available, jobID);
+                ViewBag.TotalCount = count;
+                ZincWatchlistLogsForJob.ASIN = ASIN;
+                ZincWatchlistLogsForJob.ProductSKU = ProductSKU;
+            }
+            return View(ZincWatchlistLogsForJob);
+        }
+
+        [HttpPost]
+        public IActionResult ZincWatchlistLogForJobList(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string ASIN = "", string ProductSKU = "", string available = "", string jobID = "", string EmptyFirstTime = "")
+        {
+
+            //string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            //string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = "";
+                PreviousDate = "";
+            }
+            token = Request.Cookies["Token"];
+
+            if (page.HasValue)
+            {
+                ViewBag.pageNumber = page;
+            }
+            IPagedList<ZincWatchlistLogsForJobViewModel> data = null;
+            int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
+            int pageSize = 25;
+            int endLimit = 0;
+            int startlimit = pageSize;
+            if (page.HasValue)
+            {
+                endLimit = (pageNumber - 1) * pageSize;
+            }
+            List<ZincWatchlistLogsForJobViewModel> _viewModel = new List<ZincWatchlistLogsForJobViewModel>();
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+                _viewModel = _ApiAccess.GetWatchListLogsForJob(ApiURL, token, CurrentDate, PreviousDate, 0, 0, ASIN, ProductSKU, available,jobID);
+                ViewBag.Compress_image_URL = s3BucketURL;
+                ViewBag.image_name_URL = s3BucketURL_large;
+                data = new StaticPagedList<ZincWatchlistLogsForJobViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+                return PartialView("~/Views/ZincWatchlist/ZinWatchlistLogsForJobPartialView.cshtml", data);
+            }
+
+            _viewModel = _ApiAccess.GetWatchListLogsForJob(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, ASIN, ProductSKU, available, jobID);
+            ViewBag.Compress_image_URL = s3BucketURL;
+            ViewBag.image_name_URL = s3BucketURL_large;
+            data = new StaticPagedList<ZincWatchlistLogsForJobViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+            return PartialView("~/Views/ZincWatchlist/ZinWatchlistLogsForJobPartialView.cshtml", data);
 
 
         }

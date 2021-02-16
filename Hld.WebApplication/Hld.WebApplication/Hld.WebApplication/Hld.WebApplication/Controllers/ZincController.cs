@@ -1106,5 +1106,15 @@ namespace Hld.WebApplication.Controllers
             }
             return status;
         }
+
+        [HttpGet]
+        public GetResponceFromZincViewModel GetZincResponce(string ASIN, string productSKU)
+        {
+            token = Request.Cookies["Token"];
+            GetResponceFromZincViewModel model = new GetResponceFromZincViewModel();
+            model = _zincApiAccess.GetZincResponce(ApiURL, token, ASIN, productSKU);
+            return model;
+        }
+
     }
 }

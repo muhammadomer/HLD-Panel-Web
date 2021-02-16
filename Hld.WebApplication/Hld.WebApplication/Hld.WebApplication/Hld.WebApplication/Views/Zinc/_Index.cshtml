@@ -37,7 +37,7 @@
             position: absolute;
             z-index: 71;
             bottom: 64%;
-            left: 23%;
+            left: 26%;
             margin-bottom: 13px;
             margin-left: -167px;
             opacity: 0;
@@ -78,7 +78,7 @@
             position: absolute;
             z-index: 71;
             bottom: 64%;
-            left: 4%;
+            left: 7%;
             margin-bottom: 12px;
             margin-left: -37px;
             opacity: 0;
@@ -101,10 +101,10 @@
             opacity: 1;
         }
 </style>
-<div class=""style="width:1060px">
+<div class="container-fluid">
 
 
-    <table id="table" class="table table-bordered table-hover table-AsinList">
+    <table id="table" class="table table-bordered table-hover table-AsinList"style="margin-bottom:0px!important">
         <thead>
             <tr>
                 <th>
@@ -187,30 +187,36 @@
                     <a href="https://www.amazon.ca/dp/@item.ASIN" target="_blank">@item.ASIN</a>
                     @if (item.ValidStatus == 1)
                     {
-                        <span>
+                        <br />
+                        <span style="margin-right:3px">
                             <a href="#" data-target="#myModalAzin" data-toggle="modal" onclick="PopupFormwatchlist('@Url.Action("AddWatchlist","ZincWatchlist",new {Asin=item.ASIN,ProductSKU=item.Product_sku })')"><img src="~/Images/green.png" style="height:18px" /></a>
                         </span>
                     }
                     else if (item.ValidStatus == 0 && Convert.ToDecimal(item.Frequency) > 0)
-                    {
-                        <span>
+                    { <br />
+                        <span style="margin-right:3px">
                             <a href="#" data-target="#myModalAzin" data-toggle="modal" onclick="PopupFormwatchlist('@Url.Action("AddWatchlist","ZincWatchlist",new {Asin=item.ASIN,ProductSKU=item.Product_sku })')"><img src="~/Images/orange.png" style="height: 18px" /></a>
                         </span>
                     }
                     else
-                    {
-                        <span>
+                    { <br />
+                        <span style="margin-right:3px">
                             <a href="#" data-target="#myModalAzin" data-toggle="modal" onclick="PopupFormwatchlist('@Url.Action("AddWatchlist","ZincWatchlist",new {Asin=item.ASIN,ProductSKU=item.Product_sku })')"><img src="~/Images/gray.png" style="height:18px" /></a>
                         </span>
                     }
 
-                    <span>
-                        @*<a href="#" onclick="location.href = '@Url.Action("MainViewLogs","ZincWatchlist",new {perameter="ASIN",value=item.ASIN }) '"> <img src="~/Images/icons8-log-50.png" style="height:18px" /></a>*@
+                    <span style="margin-right:3px">
 
-                        <a href="@Url.Action("MainViewLogs", "ZincWatchlist", new {ASIN=item.ASIN,jobID=" " ,available=" "})"
+
+                        <a href="/ZincWatchlist/ZincWatchlistLogForJob?EmptyFirstTime=No&ASIN=@item.ASIN&ProductSKU=&orderDateTimeFrom=&orderDateTimeTo="
                            target="_blank">
                             <img src="~/Images/icons8-log-50.png" style="height:18px" />
                         </a>
+                    </span>
+                    <span class="GetResponceOfASINSKU" data-id-Asin="@item.ASIN" data-id-SKU="@item.Product_sku"> <img src="~/Images/download.png" style="height:18px" /></span>
+                    
+                    <span style="margin-left:2px">
+                        <img style="display:none;" class="ButtonLoaderForZinc" height="25px" width="25px" src="~/Images/loadingImage.gif" />
                     </span>
                     @*@Html.DisplayFor(modelItem => item.ASIN)*@
                 </td>

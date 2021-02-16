@@ -580,5 +580,54 @@ namespace Hld.WebApplication.Helper
             List<ZincOrdersLogViewModel> responses = JsonConvert.DeserializeObject<List<ZincOrdersLogViewModel>>(strResponse);
             return responses;
         }
+
+        public int GetWatchListLogsCountForJob(string ApiURL, string token, string StartDate, string EndDate, string ASIN, string ProductSKU, string available, string jobID)
+        {
+            int Count = 0;
+            try
+            {
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList/GetlogsCountForJob?ASIN=" + ASIN  +"&SKU=" + ProductSKU + "&available=" + available + "&jobID=" + jobID+ "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                        Count = (int)JObject.Parse(strResponse)["counter"];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Count;
+        }
+
+        public List<ZincWatchlistLogsForJobViewModel> GetWatchListLogsForJob(string apiurl, string token, string DateTo, string DateFrom, int limit, int offset, string ASIN, string SKU, string available, string jobID)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest
+                .Create(apiurl + "/api/ZincWatchList/ZincOrdersLogListForJob?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&ASIN=" + ASIN + "&SKU=" + SKU + "&available=" + available + "&jobID=" + jobID + "&limit=" + limit + "&offset=" + offset);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<ZincWatchlistLogsForJobViewModel> responses = JsonConvert.DeserializeObject<List<ZincWatchlistLogsForJobViewModel>>(strResponse);
+            return responses;
+        }
     }
 }

@@ -824,6 +824,34 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+        public GetResponceFromZincViewModel GetZincResponce(string ApiURL, string token, string ASIN, string productSKU)
+        {
+            GetResponceFromZincViewModel model = new GetResponceFromZincViewModel();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Zinc/GetZincResponce/" + ASIN + "/" + productSKU);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                model = JsonConvert.DeserializeObject<GetResponceFromZincViewModel>(strResponse);
+                return model;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+         
+        }
 
     }
 }
