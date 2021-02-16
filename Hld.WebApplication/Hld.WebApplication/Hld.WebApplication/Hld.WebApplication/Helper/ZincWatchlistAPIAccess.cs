@@ -49,6 +49,42 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
+        public bool AddASINToWatchListNew(string ApiURL, string token, SaveWatchlistViewModel ViewModel)
+        {
+            bool status = false;
+            try
+            {
+
+
+                var data = JsonConvert.SerializeObject(ViewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return status;
+        }
 
         public SaveWatchlistViewModel GetWatchList(string ApiURL, string token, string ASIN)
         {

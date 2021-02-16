@@ -1021,6 +1021,39 @@ namespace Hld.WebApplication.Helper
             }
             return ID;
         }
+        public int GetStatusFromZincNew(string ApiURL, string token, List<GetStatusFromZincViewModel> viewModel)
+        {
+            //  string status = "";
+            int ID = 0;
+            try
+            {
+                var data = JsonConvert.SerializeObject(viewModel);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetStausFromZincNew/");
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+
+                ID = Convert.ToInt32(strResponse);
+                //  status = JsonConvert.DeserializeObject<string>(strResponse);
+            }
+            catch (Exception ex)
+            {
+            }
+            return ID;
+        }
 
         public List<ProductWarehouseQtyViewModel> GetWareHousesQtyList(string ApiURL, string token, string SKU)
         {

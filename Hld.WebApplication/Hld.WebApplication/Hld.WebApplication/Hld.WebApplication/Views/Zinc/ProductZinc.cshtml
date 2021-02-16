@@ -741,7 +741,8 @@
             function SubmitFormWatchlistASIN() {
 
 
-                var url = '@Url.Action("Watchlist", "ZincWatchlist")';
+                var url = '@Url.Action("AddToWatchlist", "ZincWatchlist")';
+               // var url = '@Url.Action("Watchlist", "ZincWatchlist")';
                 var data = $('#watchlistform').serialize();
                 $.validator.unobtrusive.parse($('#watchlistform'));
                 if ($('#watchlistform').valid()) {

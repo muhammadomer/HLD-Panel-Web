@@ -61,6 +61,13 @@ namespace Hld.WebApplication.Controllers
 
             return status;
         }
+        public bool AddToWatchlist(SaveWatchlistViewModel saveWatchlistViewModel)
+        {
+            token = Request.Cookies["Token"];
+            bool status = _ApiAccess.AddASINToWatchListNew(ApiURL, token, saveWatchlistViewModel);
+
+            return status;
+        }
 
         public IActionResult GetWatchListSummary(int page = 0)
         {

@@ -938,12 +938,29 @@ namespace Hld.WebApplication.Controllers
         public async Task<IActionResult> ActionMenu(string actionMenuName, List<string> sellerCloudIds)
         {
             token = Request.Cookies["Token"];
+            _Selller = new GetChannelCredViewModel();
+            _Selller = _encDecChannel.DecryptedData(ApiURL, token, "sellercloud");
+            AuthenticateSCRestViewModel authenticate = _OrderApiAccess.AuthenticateSCForIMportOrder(_Selller, SCRestURL);
             bool status = false;
             if (actionMenuName.Trim() == "DS_Requested_To_None")
             {
                 foreach (var item in sellerCloudIds)
                 {
-                    await UpdateDropShipStatusForActionMenu(Convert.ToInt32(item));
+                    
+                    var getOrderId = new UpdateScOrderToDs()
+                    {
+                        Orders = new List<int>
+                        {
+                           Convert.ToInt32(item)
+                            //updateSCViewModel.SCOrderID
+
+                        },
+                        DropshipStatus = "DS_Requested_To_None"
+                    };
+
+
+                    status = UpdateDropShipStatus(SCRestURL, authenticate.access_token, getOrderId);
+                   // await UpdateDropShipStatusForActionMenu(Convert.ToInt32(item));
                     status = sellerCloudApiAccess.UpdateSellerCloudOrderDropShipStatus(ApiURL, token, new UpdateSCDropshipStatusViewModel()
                     {
                         IsTrackingUpdate = false,
@@ -1218,6 +1235,42 @@ namespace Hld.WebApplication.Controllers
             saveWatchlistViewModel.sellercloudid = sellercloudid;
             saveWatchlistViewModel.producktsku = productsku;
             string status = sellerCloudApiAccess.GetProductTitle(ApiURL, token, saveWatchlistViewModel);
+            return status;
+        }
+        public bool UpdateDropShipStatus(string ApiURL, string token, UpdateScOrderToDs scOrderToDs)
+        {
+            bool status;
+            try
+            {
+
+
+                var data = JsonConvert.SerializeObject(scOrderToDs);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/Orders/DropshipStatus");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
             return status;
         }
 

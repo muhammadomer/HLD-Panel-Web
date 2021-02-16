@@ -156,8 +156,8 @@ namespace Hld.WebApplication.Controllers
                 token = Request.Cookies["Token"];
                 //Commented By me
                 SellerCloudOrderID = ZincOrder.client_notes.our_internal_order_id;
-                   RequestID = SubmitOrderToZincForSave(ZincOrder);
-                
+                //   RequestID = SubmitOrderToZincForSave(ZincOrder);
+                RequestID = "123";
                 if (RequestID != string.Empty)
                 {
                     bool status = false;
@@ -169,23 +169,36 @@ namespace Hld.WebApplication.Controllers
                     updateSCViewModel.LogDate = DatetimeExtension.ConvertToEST(DateTime.Now);
                     createNotesView.Message = "RequestId: " + RequestID;
                     createNotesView.Category = "0";
-                    _OrderApiAccess.CreateOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID, createNotesView);
-                    List<CreateOrderNotesViewModel> getNotes = _OrderApiAccess.GetOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID);
-                    if (getNotes.Count > 0)
+                    //   _OrderApiAccess.CreateOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID, createNotesView);
+                    //List<CreateOrderNotesViewModel> getNotes = _OrderApiAccess.GetOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID);
+                    //if (getNotes.Count > 0)
+                    //{
+                    //    data = (List<CreateOrderNotesViewModel>)getNotes.Select(p => p).Where(p => p.NoteID != 0).ToList();
+                    //    if (data.Count > 0)
+                    //    {
+                    //        status = _OrderApiAccess.saveOrderNotes(ApiURL, token, data);
+                    //        if (status == true)
+                    //        {
+                    //            _OrderApiAccess.SetOrderHavingNotes(ApiURL, token, Convert.ToInt32(updateSCViewModel.SCOrderID));
+                    //        }
+                    //    }
+
+
+                    //}
+                    // UpdateScOrderToDs updateSc = new UpdateScOrderToDs();
+                    var getOrderId = new UpdateScOrderToDs()
                     {
-                        data = (List<CreateOrderNotesViewModel>)getNotes.Select(p => p).Where(p => p.NoteID != 0).ToList();
-                        if (data.Count > 0)
+                        Orders = new List<int>
                         {
-                            status = _OrderApiAccess.saveOrderNotes(ApiURL, token, data);
-                            if (status == true)
-                            {
-                                _OrderApiAccess.SetOrderHavingNotes(ApiURL, token, Convert.ToInt32(updateSCViewModel.SCOrderID));
-                            }
-                        }
+                            updateSCViewModel.SCOrderID
 
+                        },
+                        DropshipStatus ="Requested"
+                    };
+                    
 
-                    }
-                    status = await UpdateDropShipStatusInZinc(ZincOrder.client_notes.our_internal_order_id, "Requested");
+                    //  status = await UpdateDropShipStatusInZinc(ZincOrder.client_notes.our_internal_order_id, "Requested");
+                    status = UpdateDropShipStatus(SCRestURL, authenticate.access_token, getOrderId);
                     status = _sellerCloudApiAccess.UpdateSellerCloudOrderDropShipStatus(ApiURL, token, updateSCViewModel);
                     if (status)
                     {
@@ -1057,6 +1070,41 @@ namespace Hld.WebApplication.Controllers
             
         }
 
+        public bool UpdateDropShipStatus(string ApiURL, string token, UpdateScOrderToDs scOrderToDs)
+        {
+            bool status;
+            try
+            {
+                
 
+                var data = JsonConvert.SerializeObject(scOrderToDs);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/Orders/DropshipStatus");
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return status;
+        }
     }
 }

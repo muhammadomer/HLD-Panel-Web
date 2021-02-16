@@ -1770,8 +1770,15 @@ namespace Hld.WebApplication.Controllers
 
             var ID = ProductApiAccess.GetStatusFromZinc(ApiURL, token, data);
             return ID;
+        }
 
+        [HttpPost]
+        public int GetStausFromZincNew(List<GetStatusFromZincViewModel> data)
+        {
+            string token = Request.Cookies["Token"];
 
+            var ID = ProductApiAccess.GetStatusFromZincNew(ApiURL, token, data);
+            return ID;
         }
 
         [HttpGet]
