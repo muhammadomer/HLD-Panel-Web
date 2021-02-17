@@ -1,0 +1,137 @@
+﻿@model PagedList.Core.IPagedList<Hld.WebApplication.ViewModel.ZincWatclistViewModel>
+@using Hld.WebApplication.Helper
+
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+<style type="text/css">
+
+
+    .table-bordered thead th, .table-bordered thead td {
+        padding: 0px;
+        border-bottom-width: 2px;
+    }
+
+    .table.tablesorter tbody tr:hover td {
+        background: #f1f1f1;
+        cursor: pointer;
+    }
+
+    .table thead th {
+        vertical-align: middle !important;
+        border-bottom: 2px solid #DEE2E6;
+        text-align: center;
+    }
+
+    .table th, .table td {
+        padding: 0.40rem;
+        vertical-align: top;
+        border-top: 1px solid #DEE2E6;
+        vertical-align: middle !important;
+    }
+
+    .table tbody tr:hover {
+        background-color: #F5F5F5;
+    }
+
+    .table td {
+        text-align: left;
+    }
+
+    .table thead tr th {
+        position: sticky;
+        top: 168px;
+        padding: 5px;
+        text-align: left;
+        z-index: 2;
+        background-color: lightgray;
+    }
+
+
+    .tablesorter-default .tablesorter-header {
+        outline: none !important;
+    }
+
+    .table {
+        border-left: #ccc 1px solid !important;
+        border-right: #ccc 1px solid !important;
+    }
+</style>
+<div class="container-fluid">
+    <table class="table tablesorter mytable" style="margin-top:174px;width:98%!important">
+
+
+        <thead style="background-color:lightgray;">
+            <tr>
+                <th>Image</th>
+                <th>SKU</th>
+                <th>ASIN</th>
+                <th>
+                    Active InActive
+                </th>
+                <th>
+                    Schedule Enabled Disabled
+                </th>
+                <th>                 
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a target="_blank" href="@ViewBag.image_name_URL/@item.image_name">
+                            <img src="@ViewBag.Compress_image_URL/@item.Compress_image" class="rounded" height="50" width="50" />
+                        </a>
+                    </td>
+                    <td>
+
+                        @item.ProductSKU
+                    </td>
+                    <td>
+                        @item.ASIN
+                    </td>
+
+                    <td>
+
+                        @{
+                            if (item.Active_Inactive == "1")
+                            {
+                                                <span>Active</span>
+                            }
+                            else
+                            {<span>Inactive</span>
+
+                            }
+                        }
+                    </td>
+                   
+                    <td>
+                        @{
+                            if (item.NextUpdateDate == null)
+                            {
+                                <span>Disabled</span>
+                            }
+                            else
+                            {
+
+                                <span>Enabled</span>
+                            }
+                        }
+
+                    </td>
+                    <td>
+                        
+                           
+                            <a href="/ZincWatchlist/logHistory?ProductSKU=@item.ProductSKU&ASIN=@item.ASIN" target="_blank"style="cursor:pointer!important">Log History</a>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

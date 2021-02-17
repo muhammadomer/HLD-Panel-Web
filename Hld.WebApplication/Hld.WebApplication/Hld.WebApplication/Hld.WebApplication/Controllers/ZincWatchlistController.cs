@@ -423,5 +423,107 @@ namespace Hld.WebApplication.Controllers
 
 
         }
+        //COUNT FUNCTION
+        public IActionResult ZincWatchList(DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string ProductSKU = "", string ASIN = "", string Active_Inactive = "", string Enabled_Disabled = "", string EmptyFirstTime = "")
+        {
+
+            token = Request.Cookies["Token"];
+            ZincWatclistViewModel ZincWatchlist = new ZincWatclistViewModel();
+
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = "";
+                PreviousDate = "";
+            }
+
+
+
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+
+            }
+            else
+            {
+                var count = _ApiAccess.GetZincWatchlistCount(ApiURL, token, CurrentDate, PreviousDate, ProductSKU, ASIN, Active_Inactive, Enabled_Disabled);
+                ViewBag.TotalCount = count;
+                ZincWatchlist.ProductSKU = ProductSKU;
+                ZincWatchlist.ASIN = ASIN;
+
+            }
+            return View(ZincWatchlist);
+        }
+
+        //LIST FUNCTION
+        [HttpPost]
+        public IActionResult ZincWatchListDetail(int? page, DateTime orderDateTimeFrom, DateTime orderDateTimeTo, string ProductSKU = "", string ASIN = "", string Active_Inactive = "", string Enabled_Disabled = "", string EmptyFirstTime = "", string update_status = "")
+        {
+
+            //string CurrentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            //string PreviousDate = DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd");
+            string CurrentDate = orderDateTimeTo.ToString("yyyy-MM-dd");
+            string PreviousDate = orderDateTimeFrom.ToString("yyyy-MM-dd");
+            if ("0001-01-01" == orderDateTimeFrom.ToString("yyyy-MM-dd"))
+            {
+
+                CurrentDate = "";
+                PreviousDate = "";
+            }
+            token = Request.Cookies["Token"];
+
+            if (page.HasValue)
+            {
+                ViewBag.pageNumber = page;
+            }
+            IPagedList<ZincWatclistViewModel> data = null;
+            int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
+            int pageSize = 25;
+            int endLimit = 0;
+            int startlimit = pageSize;
+            if (page.HasValue)
+            {
+                endLimit = (pageNumber - 1) * pageSize;
+            }
+            List<ZincWatclistViewModel> _viewModel = new List<ZincWatclistViewModel>();
+            if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+            {
+                _viewModel = _ApiAccess.ZincWatchListDetail(ApiURL, token, CurrentDate, PreviousDate, 0, 0, ProductSKU, ASIN, Active_Inactive, Enabled_Disabled);
+                ViewBag.Compress_image_URL = s3BucketURL;
+                ViewBag.image_name_URL = s3BucketURL_large;
+                data = new StaticPagedList<ZincWatclistViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+                return PartialView("~/Views/ZincWatchlist/ZincWatclistPartialView.cshtml", data);
+            }
+
+            _viewModel = _ApiAccess.ZincWatchListDetail(ApiURL, token, CurrentDate, PreviousDate, startlimit, endLimit, ProductSKU, ASIN, Active_Inactive, Enabled_Disabled);
+            ViewBag.Compress_image_URL = s3BucketURL;
+            ViewBag.image_name_URL = s3BucketURL_large;
+            data = new StaticPagedList<ZincWatclistViewModel>(_viewModel, pageNumber, pageSize, _viewModel.Count);
+            return PartialView("~/Views/ZincWatchlist/ZincWatclistPartialView.cshtml", data);
+
+
+        }
+        [HttpGet]
+        public IActionResult logHistory(string ProductSKU, string ASIN)
+        {
+            token = Request.Cookies["Token"];
+            List<ZincWatclistLogHistoryViewModel> model = new List<ZincWatclistLogHistoryViewModel>();
+            model = _ApiAccess.logHistory(ApiURL, token, ProductSKU, ASIN);
+            ViewBag.ASIN = model.FirstOrDefault().ASIN;
+            ViewBag.ProductSKU = model.FirstOrDefault().ProductSKU;
+            ViewBag.ValidStatus = model.FirstOrDefault().ValidStatus;
+            ViewBag.NextUpdateDate = model.FirstOrDefault().NextUpdateDate;
+
+            ViewBag.image_name = model.FirstOrDefault().image_name;
+            ViewBag.Compress_image = model.FirstOrDefault().Compress_image;
+            
+            ViewBag.Compress_image_URL = s3BucketURL;
+            ViewBag.image_name_URL = s3BucketURL_large;
+
+            return View(model);
+        }
+
     }
 }

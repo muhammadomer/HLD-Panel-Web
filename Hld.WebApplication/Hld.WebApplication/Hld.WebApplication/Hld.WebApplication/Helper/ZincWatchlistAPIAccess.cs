@@ -629,5 +629,81 @@ namespace Hld.WebApplication.Helper
             List<ZincWatchlistLogsForJobViewModel> responses = JsonConvert.DeserializeObject<List<ZincWatchlistLogsForJobViewModel>>(strResponse);
             return responses;
         }
+        public int GetZincWatchlistCount(string ApiURL, string token, string StartDate, string EndDate, string ProductSKU = "", string ASIN = "", string Active_Inactive = "", string Enabled_Disabled = "")
+        {
+            int Count = 0;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList/GetZincWatchlistCount?ProductSKU=" + ProductSKU + "&ASIN=" + ASIN + "&Active_Inactive=" + Active_Inactive + "&CurrentDate=" + StartDate + "&PreviousDate=" + EndDate + "&Enabled_Disabled=" + Enabled_Disabled);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                        Count = (int)JObject.Parse(strResponse)["counter"];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Count;
+        }
+
+        public List<ZincWatclistViewModel> ZincWatchListDetail(string apiurl, string token, string DateTo, string DateFrom, int limit, int offset, string ProductSKU = "", string ASIN = "", string Active_Inactive = "", string Enabled_Disabled = "")
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest
+                .Create(apiurl + "/api/ZincWatchList/ZincWatchListDetail?DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&ProductSKU=" + ProductSKU + "&ASIN=" + ASIN + "&Active_Inactive=" + Active_Inactive + "&limit=" + limit + "&offset=" + offset + "&Enabled_Disabled=" + Enabled_Disabled);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<ZincWatclistViewModel> responses = JsonConvert.DeserializeObject<List<ZincWatclistViewModel>>(strResponse);
+            return responses;
+        }
+        public List<ZincWatclistLogHistoryViewModel> logHistory(string ApiURL, string token, string ProductSKU, string ASIN)
+        {
+            List<ZincWatclistLogHistoryViewModel> model = new List<ZincWatclistLogHistoryViewModel>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList/logHistory?ProductSKU=" + ProductSKU + "&ASIN=" + ASIN);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                    }
+                }
+                List<ZincWatclistLogHistoryViewModel> responses = JsonConvert.DeserializeObject<List<ZincWatclistLogHistoryViewModel>>(strResponse);
+                return responses;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+          
+        }
     }
 }

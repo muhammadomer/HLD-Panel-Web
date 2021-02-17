@@ -396,7 +396,7 @@ namespace Hld.WebApplication.Helper
 
                 throw ex;
             }
-            return model;
+          
         }
 
     }
