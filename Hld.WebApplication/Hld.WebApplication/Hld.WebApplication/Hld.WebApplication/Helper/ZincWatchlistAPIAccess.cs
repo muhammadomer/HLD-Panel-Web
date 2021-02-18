@@ -676,9 +676,9 @@ namespace Hld.WebApplication.Helper
             List<ZincWatclistViewModel> responses = JsonConvert.DeserializeObject<List<ZincWatclistViewModel>>(strResponse);
             return responses;
         }
-        public List<ZincWatclistLogHistoryViewModel> logHistory(string ApiURL, string token, string ProductSKU, string ASIN)
+        public ZincWatclistLogsViewModel logHistory(string ApiURL, string token, string ProductSKU, string ASIN)
         {
-            List<ZincWatclistLogHistoryViewModel> model = new List<ZincWatclistLogHistoryViewModel>();
+            //List<ZincWatclistLogHistoryViewModel> model = new List<ZincWatclistLogHistoryViewModel>();
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/ZincWatchList/logHistory?ProductSKU=" + ProductSKU + "&ASIN=" + ASIN);
@@ -695,7 +695,7 @@ namespace Hld.WebApplication.Helper
                         strResponse = stream.ReadToEnd();
                     }
                 }
-                List<ZincWatclistLogHistoryViewModel> responses = JsonConvert.DeserializeObject<List<ZincWatclistLogHistoryViewModel>>(strResponse);
+                ZincWatclistLogsViewModel responses = JsonConvert.DeserializeObject<ZincWatclistLogsViewModel>(strResponse);
                 return responses;
             }
             catch (Exception ex)

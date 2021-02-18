@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hld.WebApplication.ViewModel.ZincWatclistLogHistoryViewModel>
+﻿@model Hld.WebApplication.ViewModel.ZincWatclistLogsViewModel
 
 @{
     ViewData["Title"] = "logHistory";
@@ -152,36 +152,72 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Schedule)
             {
-                <tr>
-                    <td>
-                        @item.JobID
-                    </td>
-                    <td>
-                        @if (item.NextUpdateDate != DateTime.MinValue)
-                        {
-                            @string.Format("{0: MMM d, yyyy}", @item.NextUpdateDate)
-                        }
-                       
-                    </td>
-                    <td>
-                        @item.RunTime
-                    </td>
-                    <td>
-                        @item.ZincResponse
-                    </td>
-                    <td>
-                        @item.UpdateOnHLD
-                    </td>
-                    <td>
-                        @item.Remarks
-                    </td>
+                if (item.JobID == 0)
+                {
+                    <tr style="display:none">
+                        <td>
+                            @item.JobID
+                        </td>
+                        <td>
+                            @if (item.NextUpdateDate != DateTime.MinValue)
+                            {
+                                @string.Format("{0: MMM d, yyyy}", @item.NextUpdateDate)
+                            }
+
+                        </td>
+                        <td>
+                            @item.RunTime
+                        </td>
+                        <td>
+                            @item.ZincResponse
+                        </td>
+                        <td>
+                            @item.UpdateOnHLD
+                        </td>
+                        <td>
+                            @item.Remarks
+                        </td>
 
 
 
 
-                </tr>
+                    </tr>
+
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            @item.JobID
+                        </td>
+                        <td>
+                            @if (item.NextUpdateDate != DateTime.MinValue)
+                            {
+                                @string.Format("{0: MMM d, yyyy}", @item.NextUpdateDate)
+                            }
+
+                        </td>
+                        <td>
+                            @item.RunTime
+                        </td>
+                        <td>
+                            @item.ZincResponse
+                        </td>
+                        <td>
+                            @item.UpdateOnHLD
+                        </td>
+                        <td>
+                            @item.Remarks
+                        </td>
+
+
+
+
+                    </tr>
+
+                }
             }
         </tbody>
     </table>

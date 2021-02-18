@@ -88,11 +88,12 @@
                         </a>
                     </td>
                     <td>
-
-                        @item.ProductSKU
+                        <a href="/BestBuyProduct/PropertyPage?ProductSKU=@item.ProductSKU" class="skuspan" target="_blank">@item.ProductSKU</a>
+                        @*@item.ProductSKU*@
                     </td>
                     <td>
-                        @item.ASIN
+                        <a target="_blank" href="https://www.amazon.ca/dp/@item.ASIN?th=1&psc=1">@item.ASIN</a>
+                        @*@item.ASIN*@
                     </td>
 
                     <td>

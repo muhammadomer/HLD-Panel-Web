@@ -652,8 +652,8 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     success: function (data) {
                         $(document).find('.ButtonLoader').children('span').css('display', 'none');
                         $(document).find('#SkuStatusMessage').append([
-                            $('<label/>').text("Sku are Update " + data.SkuUpdate).css({ 'margin-left': '10px', 'color': 'green', 'font-weight': 'bold', 'margin-right': '7px' }),
-                            $('<label/>').text("Sku contain's Error " + data.SkuError).css({ 'color': 'red', 'font-weight': 'bold', 'margin-right': '7px' }),
+                            $('<label/>').text("SKU's updated" + data.SkuUpdate).css({ 'margin-left': '10px', 'color': 'green', 'font-weight': 'bold', 'margin-right': '7px' }),
+                            $('<label/>').text("SKU's with error " + data.SkuError).css({ 'color': 'red', 'font-weight': 'bold', 'margin-right': '7px' }),
                             $('<br/>'),
                             $('<label/>').text("Note : Please search again to see affected SKUs").css('margin-left', '10px')
                         ]);

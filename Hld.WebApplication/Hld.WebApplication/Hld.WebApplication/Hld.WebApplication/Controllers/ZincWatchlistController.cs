@@ -509,19 +509,17 @@ namespace Hld.WebApplication.Controllers
         public IActionResult logHistory(string ProductSKU, string ASIN)
         {
             token = Request.Cookies["Token"];
-            List<ZincWatclistLogHistoryViewModel> model = new List<ZincWatclistLogHistoryViewModel>();
-            model = _ApiAccess.logHistory(ApiURL, token, ProductSKU, ASIN);
-            ViewBag.ASIN = model.FirstOrDefault().ASIN;
-            ViewBag.ProductSKU = model.FirstOrDefault().ProductSKU;
-            ViewBag.ValidStatus = model.FirstOrDefault().ValidStatus;
-            ViewBag.NextUpdateDate = model.FirstOrDefault().NextUpdateDate;
-
-            ViewBag.image_name = model.FirstOrDefault().image_name;
-            ViewBag.Compress_image = model.FirstOrDefault().Compress_image;
-            
+            List<ZincWatclistLogHistoryViewModel> modelist = new List<ZincWatclistLogHistoryViewModel>();
+            ZincWatclistLogsViewModel model = new ZincWatclistLogsViewModel();
+            model = _ApiAccess.logHistory(ApiURL, token, ProductSKU, ASIN);          
+            ViewBag.ASIN = model.ASIN;
+            ViewBag.ProductSKU = model.ProductSKU;
+            ViewBag.ValidStatus = model.ValidStatus;
+            ViewBag.NextUpdateDate = model.NextUpdateDate;
+            ViewBag.image_name = model.image_name;
+            ViewBag.Compress_image = model.Compress_image;           
             ViewBag.Compress_image_URL = s3BucketURL;
             ViewBag.image_name_URL = s3BucketURL_large;
-
             return View(model);
         }
 
