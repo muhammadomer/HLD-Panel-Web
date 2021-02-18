@@ -156,8 +156,8 @@ namespace Hld.WebApplication.Controllers
                 token = Request.Cookies["Token"];
                 //Commented By me
                 SellerCloudOrderID = ZincOrder.client_notes.our_internal_order_id;
-                //   RequestID = SubmitOrderToZincForSave(ZincOrder);
-                RequestID = "123";
+                RequestID = SubmitOrderToZincForSave(ZincOrder);
+                
                 if (RequestID != string.Empty)
                 {
                     bool status = false;
@@ -169,22 +169,22 @@ namespace Hld.WebApplication.Controllers
                     updateSCViewModel.LogDate = DatetimeExtension.ConvertToEST(DateTime.Now);
                     createNotesView.Message = "RequestId: " + RequestID;
                     createNotesView.Category = "0";
-                    //   _OrderApiAccess.CreateOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID, createNotesView);
-                    //List<CreateOrderNotesViewModel> getNotes = _OrderApiAccess.GetOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID);
-                    //if (getNotes.Count > 0)
-                    //{
-                    //    data = (List<CreateOrderNotesViewModel>)getNotes.Select(p => p).Where(p => p.NoteID != 0).ToList();
-                    //    if (data.Count > 0)
-                    //    {
-                    //        status = _OrderApiAccess.saveOrderNotes(ApiURL, token, data);
-                    //        if (status == true)
-                    //        {
-                    //            _OrderApiAccess.SetOrderHavingNotes(ApiURL, token, Convert.ToInt32(updateSCViewModel.SCOrderID));
-                    //        }
-                    //    }
+                    _OrderApiAccess.CreateOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID, createNotesView);
+                    List<CreateOrderNotesViewModel> getNotes = _OrderApiAccess.GetOrderNotesFormSC(SCRestURL, authenticate.access_token, updateSCViewModel.SCOrderID);
+                    if (getNotes.Count > 0)
+                    {
+                        data = (List<CreateOrderNotesViewModel>)getNotes.Select(p => p).Where(p => p.NoteID != 0).ToList();
+                        if (data.Count > 0)
+                        {
+                            status = _OrderApiAccess.saveOrderNotes(ApiURL, token, data);
+                            if (status == true)
+                            {
+                                _OrderApiAccess.SetOrderHavingNotes(ApiURL, token, Convert.ToInt32(updateSCViewModel.SCOrderID));
+                            }
+                        }
 
 
-                    //}
+                    }
                     // UpdateScOrderToDs updateSc = new UpdateScOrderToDs();
                     var getOrderId = new UpdateScOrderToDs()
                     {
@@ -210,13 +210,14 @@ namespace Hld.WebApplication.Controllers
                         zincOrderLogViewModel.CreditCardId = CreditCardId;
                         zincOrderLogViewModel.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
 
-                        _zincOrderLogID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLog(ApiURL, token, zincOrderLogViewModel);
-
-                        //ZincOrderLogDetailViewModel model = new ZincOrderLogDetailViewModel();
-                        //model.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
-                        //model.ZincOrderLogID = _zincOrderLogID;
-                        //int ZincOrderLogDetailID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLogDetail(ApiURL, token, model);
+                      //  _zincOrderLogID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLog(ApiURL, token, zincOrderLogViewModel);
+                        //save order logs
+                        ZincOrderLogDetailViewModel model = new ZincOrderLogDetailViewModel();
+                        model.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
+                        model.ZincOrderLogID = updateSCViewModel.SCOrderID;
+                        int ZincOrderLogDetailID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLogDetail(ApiURL, token, model);
                         //_zincOrderLogAndDetailApiAccess.UpdateAccounts(ApiURL, token, Convert.ToInt32(zincOrderLogViewModel.SellerCloudOrderId), ZincAccountId, CreditCardId);
+                        //--------
                     }
                 }
                 return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message = "Order Request Has Been Send To Zinc Successfully!" });

@@ -955,7 +955,7 @@ namespace Hld.WebApplication.Controllers
                             //updateSCViewModel.SCOrderID
 
                         },
-                        DropshipStatus = "DS_Requested_To_None"
+                        DropshipStatus = "None"
                     };
 
 
@@ -1242,8 +1242,6 @@ namespace Hld.WebApplication.Controllers
             bool status;
             try
             {
-
-
                 var data = JsonConvert.SerializeObject(scOrderToDs);
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/Orders/DropshipStatus");
