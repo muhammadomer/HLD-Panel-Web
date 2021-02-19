@@ -71,7 +71,7 @@
         </div>
         <div class="row ml-0 mt-1" style="line-height:1!important">
             <div class="col-2">
-                <label class="control-label colorhead mb-0"><b>Image:</b></label>
+               
                 <a target="_blank" href="@ViewBag.image_name_URL/@ViewBag.image_name">
                     <img src="@ViewBag.Compress_image_URL/@ViewBag.Compress_image" class="rounded" height="60" width="60" />
                 </a>
@@ -154,30 +154,45 @@
         <tbody>
             @foreach (var item in Model.Schedule)
             {
-                if (item.JobID == 0)
-                {
-                    <tr style="display:none">
+                
+                    <tr >
                         <td>
+                            @if (item.JobID != 0)
+                            {
                             @item.JobID
+                            }
                         </td>
                         <td>
+                           
                             @if (item.NextUpdateDate != DateTime.MinValue)
                             {
-                                @string.Format("{0: MMM d, yyyy}", @item.NextUpdateDate)
+                                @string.Format("{0: MMM d, yyyy}", item.NextUpdateDate)
                             }
 
                         </td>
                         <td>
-                            @item.RunTime
+                            @if (item.JobID != 0)
+                            {
+                                @item.RunTime
+                            }
                         </td>
                         <td>
-                            @item.ZincResponse
+                            @if (item.JobID != 0)
+                            {
+                                @item.ZincResponse
+                            }
                         </td>
                         <td>
-                            @item.UpdateOnHLD
+                            @if (item.JobID != 0)
+                            {
+                                @item.UpdateOnHLD
+                            }
                         </td>
                         <td>
-                            @item.Remarks
+                            @if (item.JobID != 0)
+                            {
+                                @item.Remarks
+                            }
                         </td>
 
 
@@ -185,39 +200,7 @@
 
                     </tr>
 
-                }
-                else
-                {
-                    <tr>
-                        <td>
-                            @item.JobID
-                        </td>
-                        <td>
-                            @if (item.NextUpdateDate != DateTime.MinValue)
-                            {
-                                @string.Format("{0: MMM d, yyyy}", @item.NextUpdateDate)
-                            }
-
-                        </td>
-                        <td>
-                            @item.RunTime
-                        </td>
-                        <td>
-                            @item.ZincResponse
-                        </td>
-                        <td>
-                            @item.UpdateOnHLD
-                        </td>
-                        <td>
-                            @item.Remarks
-                        </td>
-
-
-
-
-                    </tr>
-
-                }
+             
             }
         </tbody>
     </table>

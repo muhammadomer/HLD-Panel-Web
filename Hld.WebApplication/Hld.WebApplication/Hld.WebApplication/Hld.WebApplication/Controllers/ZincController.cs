@@ -157,7 +157,6 @@ namespace Hld.WebApplication.Controllers
                 //Commented By me
                 SellerCloudOrderID = ZincOrder.client_notes.our_internal_order_id;
                 RequestID = SubmitOrderToZincForSave(ZincOrder);
-                
                 if (RequestID != string.Empty)
                 {
                     bool status = false;
@@ -182,8 +181,6 @@ namespace Hld.WebApplication.Controllers
                                 _OrderApiAccess.SetOrderHavingNotes(ApiURL, token, Convert.ToInt32(updateSCViewModel.SCOrderID));
                             }
                         }
-
-
                     }
                     // UpdateScOrderToDs updateSc = new UpdateScOrderToDs();
                     var getOrderId = new UpdateScOrderToDs()
@@ -195,10 +192,8 @@ namespace Hld.WebApplication.Controllers
                         },
                         DropshipStatus ="Requested"
                     };
-                    
-
-                    //  status = await UpdateDropShipStatusInZinc(ZincOrder.client_notes.our_internal_order_id, "Requested");
                     status = UpdateDropShipStatus(SCRestURL, authenticate.access_token, getOrderId);
+
                     status = _sellerCloudApiAccess.UpdateSellerCloudOrderDropShipStatus(ApiURL, token, updateSCViewModel);
                     if (status)
                     {
@@ -209,8 +204,7 @@ namespace Hld.WebApplication.Controllers
                         zincOrderLogViewModel.ZincAccountId = ZincAccountId;
                         zincOrderLogViewModel.CreditCardId = CreditCardId;
                         zincOrderLogViewModel.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
-
-                      //  _zincOrderLogID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLog(ApiURL, token, zincOrderLogViewModel);
+                        _zincOrderLogID = _zincOrderLogAndDetailApiAccess.SaveZincOrderLog(ApiURL, token, zincOrderLogViewModel);
                         //save order logs
                         ZincOrderLogDetailViewModel model = new ZincOrderLogDetailViewModel();
                         model.ZincOrderStatusInternal = ZincOrderLogInternalStatus.OrderRequestSent.ToString();
@@ -221,7 +215,7 @@ namespace Hld.WebApplication.Controllers
                     }
                 }
                 return Json(new { requestid = RequestID, zincorderlogid = _zincOrderLogID, zincrequestid = RequestID, message = "Order Request Has Been Send To Zinc Successfully!" });
-                //return Json(new { requestid = "1234", zincorderlogid = "1324", zincrequestid = "1234",message= "Order Request Has Been Send To Zinc Successfully!" });
+              
             }
             catch (Exception ex)
             {

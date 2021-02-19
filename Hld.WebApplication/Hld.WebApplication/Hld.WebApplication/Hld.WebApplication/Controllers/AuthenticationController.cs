@@ -153,16 +153,7 @@ namespace Hld.WebApplication.Controllers
                                 Response.Cookies.Append("POMasterID", appUser.UserName, cookieOption);
                                 return RedirectToAction("Dashboard", "HLDHistory");
                             }
-                            //if (User.IsInRole("Vendor"))
-                            //{
-                               
-                            //}
-                            //else {
-                               
-                               
-                            //}
-                            
-                          
+                        
                         }
 
                     }
@@ -264,8 +255,6 @@ namespace Hld.WebApplication.Controllers
                     return "";
             }
         }
-
-
         public IActionResult Logout()
         {
             foreach (var cookie in Request.Cookies.Keys)

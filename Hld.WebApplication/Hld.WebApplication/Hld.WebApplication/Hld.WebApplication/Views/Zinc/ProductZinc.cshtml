@@ -210,11 +210,11 @@
                     <div class="col-2"></div>
                     <span style="margin-left: 5px;"><a class="nav-link " style="padding-left: 5px;" target="_blank" asp-controller="Zinc" asp-action="GetSendToZincCount">Purchase Orders - Zinc</a></span>
                     @*<span><a class="nav-link " target="_blank" asp-controller="ZincWatchlist" asp-action="WatchListSummary">Zinc Watch List</a></span>*@
-                    <span>
-                        <a style='margin-left:5px; cursor: pointer;vertical-align: middle;' href="/ZincWatchlist/ZincWatchlistLogForJob?EmptyFirstTime=No&ASIN=&ProductSKU=@Model.Product_Sku&orderDateTimeFrom=&orderDateTimeTo=" target='_blank'>
-                            Zinc Watch List
-                        </a>
-                    </span>
+                <span>
+                    <a style='margin-left:5px; cursor: pointer;vertical-align: middle;' href="/ZincWatchlist/ZincWatchList?EmptyFirstTime=No&ASIN=&ProductSKU=@Model.Product_Sku&Active_Inactive=&Enabled_Disabled=&orderDateTimeFrom=&orderDateTimeTo=" target='_blank'>
+                        Zinc Watch List
+                    </a>
+                </span>
                 </div>
 
             </div>
@@ -374,12 +374,18 @@
 
                         traditional: true,
                         success: function (data) {
-                            $(row).find('.ButtonLoaderForZinc').css('display', 'none');
-                            $("#GetZincResponce").empty();
-                            $("#GetZincResponce").html('<div class="alert alert-success alert-dismissible"><a href = "#" class= "close" data-dismiss="alert" aria-label="close" >&times;</a><strong>Alert!</strong> ASIN ' + data.ASIN + ' has been ' + data.MessageWatchlist + ', last update ' + data.LastUpdatedDate+'</div>');
-                            $("#GetZincResponceheader").css('display', 'inline');
-                            
+                            if (data.MessageWatchlist != null && data.MessageWatchlist != "") {
+                                $(row).find('.ButtonLoaderForZinc').css('display', 'none');
+                                $("#GetZincResponce").empty();
+                                $("#GetZincResponce").html('<div class="alert alert-success alert-dismissible"><a href = "#" class= "close" data-dismiss="alert" aria-label="close" >&times;</a><strong>Alert!</strong> ASIN ' + data.MessageWatchlist + '</div>');
+                                $("#GetZincResponceheader").css('display', 'inline');
+                            }
+                            else {
+                                $(row).find('.ButtonLoaderForZinc').css('display', 'none');
+                            }
+                          
                         }
+                       
                     });
                 });
            
