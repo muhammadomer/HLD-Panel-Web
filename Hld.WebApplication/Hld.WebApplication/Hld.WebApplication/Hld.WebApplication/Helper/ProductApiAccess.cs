@@ -2455,6 +2455,35 @@ namespace Hld.WebApplication.Helper
             }
             return listmodel;
         }
+        public bool ExecuteJob(string ApiURL, string token, int JobId)
+        {
+            bool status = false;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/ExecuteJob?JobId=" + JobId);
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+
+                var response = (HttpWebResponse)request.GetResponse();
+                string strResponse = "";
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return status;
+        }
     }
 }
 

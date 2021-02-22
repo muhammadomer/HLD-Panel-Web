@@ -746,8 +746,8 @@ $('.successmessage').hide();
                     $(".loader").show();
                     $.ajax({
                         type: 'post',
-                      //  url: '../product/GetStausFromZinc',
-                        url: '../product/GetStausFromZincNew',
+                        url: '../product/GetStausFromZinc',
+                      //  url: '../product/GetStausFromZincNew',
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();

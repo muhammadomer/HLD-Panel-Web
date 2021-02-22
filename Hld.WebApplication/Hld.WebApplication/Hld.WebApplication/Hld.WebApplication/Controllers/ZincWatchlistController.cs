@@ -522,6 +522,6 @@ namespace Hld.WebApplication.Controllers
             ViewBag.image_name_URL = s3BucketURL_large;
             return View(model);
         }
-
+        
     }
 }

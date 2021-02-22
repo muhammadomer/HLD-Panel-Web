@@ -2065,6 +2065,23 @@ namespace Hld.WebApplication.Controllers
 
 
         }
-       
+        [HttpPost]
+        public bool ExecuteJob(int JobId)
+        {
+            bool Status = false;
+            try
+            {
+                string token = Request.Cookies["Token"];
+                Status = ProductApiAccess.ExecuteJob(ApiURL, token,JobId);
+                Status = true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return Status;
+        }
+
     }
 }

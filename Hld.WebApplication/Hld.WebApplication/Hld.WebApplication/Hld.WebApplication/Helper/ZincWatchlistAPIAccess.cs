@@ -287,9 +287,9 @@ namespace Hld.WebApplication.Helper
                 }
                 ViewModel = JsonConvert.DeserializeObject<int>(strResponse);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             return ViewModel;
         }
@@ -705,5 +705,7 @@ namespace Hld.WebApplication.Helper
             }
           
         }
+
+       
     }
 }

@@ -55,8 +55,12 @@
                 <th>
                     No Prime
                 </th>
+
                 <th>
                     Unavailable
+                </th>
+                <th>
+                    Status
                 </th>
                 <th>Logs</th>
             </tr>
@@ -64,53 +68,57 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.JobID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CompletionTime)
-                    </td>
-                    <td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompletionTime)
+                </td>
+                <td>
 
-                        <span class="total" style="font-weight:600">
-                            @(string.Format("{0}", (item.CompletionTime - item.StartTime).Value.Duration()).ToString())
-                        </span>
-                    </td>
-                    <td>
-                        @item.Total_ASIN
-                    </td>
-                    <td>
-                        @item.Available
-                    </td>
-                    <td>
-                        @{
-                            int Total_ASIN = Convert.ToInt32(item.Total_ASIN);
-                            decimal itemprice = 0.0m;
-                            if (Total_ASIN > 0)
-                            {
-                                itemprice =Math.Round( (decimal)(item.Available/item.Total_ASIN) * 100,0);
-                            }
-
+                    <span class="total" style="font-weight:600">
+                        @(string.Format("{0}", (item.CompletionTime - item.StartTime).Value.Duration()).ToString())
+                    </span>
+                </td>
+                <td>
+                    @item.Total_ASIN
+                </td>
+                <td>
+                    @item.Available
+                </td>
+                <td>
+                    @{
+                        int Total_ASIN = Convert.ToInt32(item.Total_ASIN);
+                        decimal itemprice = 0.0m;
+                        if (Total_ASIN > 0)
+                        {
+                            itemprice = Math.Round((decimal)(item.Available / item.Total_ASIN) * 100, 0);
                         }
-                        @itemprice%
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Prime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NoPrime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Unavailable)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Logs", "MainViewLogs", new { ASIN = " ", jobID = item.JobID, available = " " }, new { target = "_blank" })
-                    </td>
-                </tr>
+
+                    }
+                    @itemprice%
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoPrime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unavailable)
+                </td>
+                <td>
+                    <a href="#" class="runjob" dataid="@item.JobID">@item.Status</a>
+                </td>
+                <td>
+                    @Html.ActionLink("Logs", "MainViewLogs", new { ASIN = " ", jobID = item.JobID, available = " " }, new { target = "_blank" })
+                </td>
+            </tr>
             }
         </tbody>
     </table>
