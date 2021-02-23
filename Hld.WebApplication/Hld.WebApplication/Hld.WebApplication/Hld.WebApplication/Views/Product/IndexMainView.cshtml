@@ -423,6 +423,53 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             </div>
         </div>
     </div>
+    <div class="modal fade" id="myModalSuccessZinc" style="margin-top: 130px;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content modelwidth">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-check" style=" color: green;
+font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                    </strong>
+                    <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body myclassSuccessZinc" style="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default closeModel" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success btnsubmitZinc" data-dismiss="modal">Yes</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModalSuccessResponce" style="margin-top: 130px;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content modelwidth">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-check" style=" color: green;
+font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                    </strong>
+                    <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body myclassSuccessResponce" style="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default closeModel" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts{
@@ -442,7 +489,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 if ($(this).is(':checked')) {
 
                     $(".tableProductListSelected tbody tr").each(function () {
-                       
+
                         var productSKU = $(this).find('.productSkuForEnableDisable').val();
 
                         if (productSKU !=null) {
@@ -868,25 +915,25 @@ $('.successmessage').hide();
                                 var sku = {};
                                 sku.totalSKU = $(this).closest('tr').find('#productSkuForUpdating').val().length
                                  totalSKU.push(sku);
-                                
+
                                 var obj = {};
                                 if (asin) {
                                     obj.SKU = $(this).closest('tr').find('#productSkuForUpdating').val();
                                     data.push(obj);
-                                }                            
+                                }
                             }
                         });
                         console.log("data get by me", data);
                         console.log("data get by me", SKUCountWithoutASIn);
                         console.log("data get by me", totalSKU);
                         var totalSKU = totalSKU.length;
-                        $(".loader").hide();
-                        debugger
+
                         $(".myclassSuccessWar").empty();
-                        $(".myclassSuccessWar").append('<span class=""style="display:block;">You have selected ' + '<strong>' + totalSKU + '</strong>' + ' SKU and ' + "<strong>" + SKUCountWithoutASIn +"</strong>"+ ' have no ASIN.</span><span style="">Do you want to Prcoessed ?</span>');
-                        
+                        $(".myclassSuccessWar").append('<span class=""style="display:block;">You have selected ' + '<strong>' + totalSKU + '</strong>' + ' SKU and ' + "<strong>" + SKUCountWithoutASIn + "</strong>" + ' have no ASIN.</span><span style="">Do you want to proceed?</span>');
+
                         $("#myModalSuccessWar").modal({ backdrop: 'static', keyboard: false });
                         $(document).on('click', '.btnsubmitr', function () {
+                            $(".loader").show();
                             $.ajax({
                                 type: 'post',
                                 url: '../product/GetStausFromZinc',
@@ -894,7 +941,7 @@ $('.successmessage').hide();
                                 data: {data},
                                 success: function (res) {
                                     $(".loader").hide();
-                                    debugger
+
                                     $(".myclassSuccess").empty();
                                     $(".myclassSuccess").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
                                     $("#myModalSuccess").modal({ backdrop: 'static', keyboard: false });
@@ -904,9 +951,9 @@ $('.successmessage').hide();
                                 }
                             });
                         });
-                      
+
                     }
-                    if ($(document).find('.checkboxSkuForUpdating').is(':checked')) {
+                    if ($(document).find('.checkboxSkuForUpdating').is(':checked') && !$('#checkAllPages').is(':checked')) {
                         var SKUCountWithoutASIn = 0;
                         var totalSKU = [];
                         var data = [];
@@ -918,7 +965,7 @@ $('.successmessage').hide();
                                     SKUCountWithoutASIn = SKUCountWithoutASIn + 1
                                 }
                                 var sku = {};
-                                sku.totalSKU = $(this).find('#productSkuForUpdating').length                               
+                                sku.totalSKU = $(this).find('#productSkuForUpdating').length
                                 totalSKU.push(sku);
 
                                 var obj = {};
@@ -932,12 +979,11 @@ $('.successmessage').hide();
                         console.log("data get by me", SKUCountWithoutASIn);
                         console.log("data get by me", totalSKU);
                         var totalSKU = totalSKU.length;
-                        $(".loader").hide();
-                        debugger
                         $(".myclassSuccessWar").empty();
-                        $(".myclassSuccessWar").append('<span class=""style="display:block;">You have selected ' + '<strong>' + totalSKU + '</strong>' + ' SKU and ' + "<strong>" + SKUCountWithoutASIn + "</strong>" + ' have no ASIN.</span><span style="">Do you want to Prcoessed ?</span>');
+                        $(".myclassSuccessWar").append('<span class=""style="display:block;">You have selected ' + '<strong>' + totalSKU + '</strong>' + ' SKU and ' + "<strong>" + SKUCountWithoutASIn + "</strong>" + ' have no ASIN.</span><span style="">Do you want to proceed?</span>');
                         $("#myModalSuccessWar").modal({ backdrop: 'static', keyboard: false });
                         $(document).on('click', '.btnsubmitr', function () {
+                            $(".loader").show();
                             $.ajax({
                                 type: 'post',
                                 url: '../product/GetStausFromZinc',
@@ -945,7 +991,6 @@ $('.successmessage').hide();
                                 data: { data },
                                 success: function (res) {
                                     $(".loader").hide();
-                                    debugger
                                     $(".myclassSuccess").empty();
                                     $(".myclassSuccess").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
                                     $("#myModalSuccess").modal({ backdrop: 'static', keyboard: false });
@@ -956,6 +1001,48 @@ $('.successmessage').hide();
                             });
                         });
 
+                    }
+                    if ($('#checkAllPages').is(':checked') && ($('#actionMenu option:selected').val() == "StatusFromZinc")) {
+                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                        $(".loader").show();
+                        $.ajax({
+                            type: 'POST',
+                            url: UrlZinc,
+                            dataType: "json",
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
+                            traditional: true,
+                            success: function (data) {
+                                $(".loader").hide();
+                                debugger;
+                                 var TotalSKU = parseInt('@ViewBag.TotalCount');//1260
+                                var withasin = data;//124
+                                var withoutasin = TotalSKU - withasin;//124                               
+                                $(".myclassSuccessZinc").empty();
+                                $(".myclassSuccessZinc").append('<span class=""style="display:block;">You have selected ' + '<strong>' + TotalSKU + '</strong>' + ' SKU and ' + "<strong>" + withoutasin + "</strong>" + ' have no ASIN.</span><span style="">Do you want to proceed?</span>');
+                                $("#myModalSuccessZinc").modal({ backdrop: 'static', keyboard: false });
+                                $(document).on('click', '.btnsubmitZinc', function () {
+                                    $(".loader").show();
+                                    var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                                    $.ajax({
+                                        type: 'post',
+                                        url:UrlZincGet,                                       
+                                        data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
+                                        success: function (res) {
+                                            $(".loader").hide();
+
+                                            $(".myclassSuccessResponce").empty();
+                                            $(".myclassSuccessResponce").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+                                            $("#myModalSuccessResponce").modal({ backdrop: 'static', keyboard: false });
+                                            $('.closeModel').on('click', function () {
+                                                location.reload();
+                                            });
+                                           
+                                        }
+                                    });
+                                });
+                            }
+
+                        });
                     }
                 }
 

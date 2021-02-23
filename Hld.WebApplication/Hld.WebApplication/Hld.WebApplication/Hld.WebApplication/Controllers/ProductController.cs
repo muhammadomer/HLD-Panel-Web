@@ -94,8 +94,7 @@ namespace Hld.WebApplication.Controllers
                     if (item !=null)
                     {
                         model.DSTag =item;
-                    }
-                    
+                    }                   
                 }
             }
             else
@@ -2183,14 +2182,11 @@ namespace Hld.WebApplication.Controllers
                     int length = Val.Length;
                     foreach (var item in Val)
                     {
-                        if (item == "Yes")
+                        if (item !=null)
                         {
-                            DSTag = "Yes";
+                            DSTag = item;
                         }
-                        if (item == "No")
-                        {
-                            DSTag = "No";
-                        }
+                      
                     }
                 }
                 else
@@ -2275,7 +2271,7 @@ namespace Hld.WebApplication.Controllers
 
             return Json(new { filePath = Path.GetTempPath(), fileName = excelName });
         }
-
+     
         [HttpPost]
         public async Task<JsonResult>  GetSinglePageExportResult( List<ExportProductDataViewModel> data)
         {
@@ -2302,7 +2298,254 @@ namespace Hld.WebApplication.Controllers
             
             return Json(new { filePath = Path.GetTempPath(), fileName = excelName });
         }
+        public int SelectAllForGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus)
+        {
+          
+            token = Request.Cookies["Token"];
+           
+            if (!string.IsNullOrEmpty(WHQStatus) && WHQStatus != "undefined")
+            {
+                string[] Val = WHQStatus.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "1")
+                    {
+                        WHQStatus = "1";
+                    }
+                    if (item == "2")
+                    {
+                        WHQStatus = "2";
+                    }
+                }
+            }
+            else
+            {
+                WHQStatus = "ALL";
+            }
+
+            if (!string.IsNullOrEmpty(DSTag) && DSTag != "undefined")
+            {
+                string[] Val = DSTag.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item !=null)
+                    {
+                        DSTag = item;
+                    }
+                    
+                }
+            }
+            else
+            {
+                DSTag = "ALL";
+            }
+            ViewBag.skuSearchList = "";
+            //start
+            if (dropshipstatusSearch == null || dropshipstatusSearch == "undefined")
+            {
+                dropshipstatusSearch = "ALL";
+            }
+            if (Sku == null || Sku == "undefined")
+            {
+                Sku = "Nill";
+            }
+            //if (asin == null || asin == "undefined")
+            //{
+            //    asin = "Nill";
+            //}
+            //if (dropshipstatusSearch == "asin")
+            //{
+            //    asin = Sku;
+            //    Sku = "Nill";
+            //}
+            //if (Producttitle == null || Producttitle == "undefined")
+            //{
+            //    Producttitle = "Nill";
+            //}
+            //if (dropshipstatusSearch == "ProductTitle")
+            //{
+            //    Producttitle = Sku;
+            //    Sku = "Nill";
+            //}
+            if (dropshipstatusSearch == "asin" || dropshipstatusSearch == "sku" || dropshipstatusSearch == "ProductTitle")
+            {
+                dropshipstatusSearch = "All";
+            }
 
 
+            //end
+            if (dropshipstatus == null || dropshipstatus == "undefined")
+            {
+                dropshipstatus = "ALL";
+            }
+            if (Sku == null || Sku == "undefined")
+            {
+                Sku = "Nill";
+            }
+           
+            if (dropshipstatus == "asin" || dropshipstatus == "sku" || dropshipstatus == "ProductTitle")
+            {
+                dropshipstatus = "All";
+            }
+
+            int count;
+            count = ProductApiAccess.SelectAllForGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus);
+            //var ASIN = viewModels.ASIN;
+            //var SKU = viewModels.SKU;
+            //var TotalCount = viewModels.TotalCount;
+            //viewModels.ASIN =viewModels.ASIN;
+            //viewModels.SKU =viewModels.SKU;
+            //viewModels.TotalCount =viewModels.TotalCount;
+            return count;
+        }
+        [HttpPost]
+        public IActionResult SelectAllSKUandASINGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus)
+        {
+            //getting skulist from session data
+            token = Request.Cookies["Token"];
+            ViewBag.S3BucketURL = s3BucketURL;
+            ViewBag.S3BucketURL_large = s3BucketURL_large;
+            var key = HttpContext.Session.GetString("skuList");
+            var search = HttpContext.Session.GetString("dropshipsearch");
+
+            string folder = _environment.WebRootPath;
+            string excelName = $"ProductData.xlsx";
+            string downloadUrl = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, excelName);
+            FileInfo file = new FileInfo(Path.GetTempPath() + excelName);
+            if (file.Exists)
+            {
+                file.Delete();
+                file = new FileInfo(Path.GetTempPath() + excelName);
+            }
+
+
+
+            //if (string.IsNullOrEmpty(key) && (string.IsNullOrEmpty(dropshipstatusSearch) || dropshipstatusSearch == "undefined") && (string.IsNullOrEmpty(dropshipstatus) || dropshipstatus == "undefined") && (string.IsNullOrEmpty(Sku) || Sku == "undefined") && (string.IsNullOrEmpty(asin) || asin == "undefined") && string.IsNullOrEmpty(Producttitle))
+
+            //{
+
+            //    List<ProductDisplayInventoryViewModel> viewModels = new List<ProductDisplayInventoryViewModel>();
+
+            //    return PartialView("~/Views/Product/_Index.cshtml", viewModels);
+
+            //}
+
+
+            if (!string.IsNullOrEmpty(WHQStatus) && WHQStatus != "undefined")
+            {
+                string[] Val = WHQStatus.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "1")
+                    {
+                        WHQStatus = "1";
+                    }
+                    if (item == "2")
+                    {
+                        WHQStatus = "2";
+                    }
+                }
+            }
+            else
+            {
+                WHQStatus = "ALL";
+            }
+
+            if (!string.IsNullOrEmpty(DSTag) && DSTag != "undefined")
+            {
+                string[] Val = DSTag.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item != null)
+                    {
+                        DSTag = item;
+                    }
+
+                }
+            }
+            else
+            {
+                DSTag = "ALL";
+            }
+            ViewBag.skuSearchList = "";
+            //start
+            if (dropshipstatusSearch == null || dropshipstatusSearch == "undefined")
+            {
+                dropshipstatusSearch = "ALL";
+            }
+            if (Sku == null || Sku == "undefined")
+            {
+                Sku = "Nill";
+            }
+            //if (asin == null || asin == "undefined")
+            //{
+            //    asin = "Nill";
+            //}
+            //if (dropshipstatusSearch == "asin")
+            //{
+            //    asin = Sku;
+            //    Sku = "Nill";
+            //}
+            //if (Producttitle == null || Producttitle == "undefined")
+            //{
+            //    Producttitle = "Nill";
+            //}
+            //if (dropshipstatusSearch == "ProductTitle")
+            //{
+            //    Producttitle = Sku;
+            //    Sku = "Nill";
+            //}
+            if (dropshipstatusSearch == "asin" || dropshipstatusSearch == "sku" || dropshipstatusSearch == "ProductTitle")
+            {
+                dropshipstatusSearch = "All";
+            }
+
+
+            //end
+            if (dropshipstatus == null || dropshipstatus == "undefined")
+            {
+                dropshipstatus = "ALL";
+            }
+            if (Sku == null || Sku == "undefined")
+            {
+                Sku = "Nill";
+            }
+            //if (asin == null || asin == "undefined")
+            //{
+            //    asin = "Nill";
+            //}
+            //if (dropshipstatus == "asin")
+            //{
+            //    asin = Sku;
+            //    Sku = "Nill";
+            //}
+            //if (Producttitle == null || Producttitle == "undefined")
+            //{
+            //    Producttitle = "Nill";
+            //}
+            //if (dropshipstatus == "ProductTitle")
+            //{
+            //    Producttitle = Sku;
+            //    Sku = "Nill";
+            //}
+            if (dropshipstatus == "asin" || dropshipstatus == "sku" || dropshipstatus == "ProductTitle")
+            {
+                dropshipstatus = "All";
+            }
+
+            List<ZincGetStatusFromZincViewModel> viewModels = new List<ZincGetStatusFromZincViewModel>();
+            viewModels = ProductApiAccess.SelectAllSKUandASINGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus);
+            viewModels.Select(a => a.SKUlist);
+            //foreach (var item in viewModels.sku)
+            //{
+            //    GetStausFromZinc(item.SKU)
+            //}
+ 
+            return View(viewModels);
+        }
     }
 }

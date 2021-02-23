@@ -2585,6 +2585,61 @@ namespace Hld.WebApplication.Helper
             }
             return responses;
         }
+        public int SelectAllForGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus)
+        {
+            int count;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllForGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
 
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                count = JsonConvert.DeserializeObject<int>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return count;
+        }
+        public List<ZincGetStatusFromZincViewModel> SelectAllSKUandASINGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllSKUandASINGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            try
+            {
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                    }
+                }
+                List<ZincGetStatusFromZincViewModel> responses = JsonConvert.DeserializeObject<List<ZincGetStatusFromZincViewModel>>(strResponse);
+                return responses;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+        }
     }
 }
