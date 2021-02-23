@@ -2465,8 +2465,14 @@ namespace Hld.WebApplication.Helper
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/ExecuteJob?JobId=" + JobId);
 
 
-                var response = (HttpWebResponse)request.GetResponse();
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
                 string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
                 using (var sr = new StreamReader(response.GetResponseStream()))
                 {
                     strResponse = sr.ReadToEnd();
