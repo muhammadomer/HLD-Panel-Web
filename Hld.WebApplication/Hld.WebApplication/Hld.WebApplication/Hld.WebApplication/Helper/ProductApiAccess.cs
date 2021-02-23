@@ -207,9 +207,9 @@ namespace Hld.WebApplication.Helper
             return Convert.ToBoolean(jsonObjectResponse);
         }
 
-        public List<ProductDisplayInventoryViewModel> GetAllProducts(string ApiURL, string token, int startLimit, int endLimit, string sort, string dropship, string dropshipsearch, string sku, string asin, string ProductTitle, string DSTag, string TypeSearch)
+        public List<ProductDisplayInventoryViewModel> GetAllProducts(string ApiURL, string token, int startLimit, int endLimit, string sort, string dropship, string dropshipsearch, string sku, string asin, string ProductTitle, string DSTag, string TypeSearch, string WHQStatus)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + startLimit + "/" + endLimit + "/" + sort + "/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + asin + "/" + ProductTitle + "/" + DSTag + "/" + TypeSearch);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + startLimit + "/" + endLimit + "/" + sort + "/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + asin + "/" + ProductTitle + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -226,9 +226,9 @@ namespace Hld.WebApplication.Helper
             return responses;
         }
 
-        public List<ExportProductDataViewModel> GetAllProductsForExport(string ApiURL, string token, string dropship, string dropshipstatusSearch, string sku)
+        public List<ExportProductDataViewModel> GetAllProductsForExport(string ApiURL, string token, string dropship, string dropshipstatusSearch, string Sku)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/Export/" + dropship + "/" + dropshipstatusSearch + "/" + sku);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/Export/" + dropship + "/" + dropshipstatusSearch + "/" + "/" + Sku);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -276,6 +276,7 @@ namespace Hld.WebApplication.Helper
             return responses;
         }
 
+
         public List<FileContents> GetShadowsOfChildSku(string ApiURL, string token, List<CreateRelationOnSCViewModel> dataSKU)
         {
             List<FileContents> responses = new List<FileContents>();
@@ -302,14 +303,14 @@ namespace Hld.WebApplication.Helper
                     }
                 }
 
-                 responses = JsonConvert.DeserializeObject<List<FileContents>>(strResponse);
+                responses = JsonConvert.DeserializeObject<List<FileContents>>(strResponse);
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-         
+
             return responses;
         }
         public List<BulkUpdateFileContents> GetDataOfSku(string ApiURL, string token, List<GetBulkUpdateSkuViewModel> dataSKU)
@@ -373,7 +374,7 @@ namespace Hld.WebApplication.Helper
             try
             {
                 GetParentSku getParentSku = new GetParentSku();
-                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetParentOfThisSku?sku=" + sku);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetParentOfThisSku?sku=" + sku);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -396,7 +397,7 @@ namespace Hld.WebApplication.Helper
 
                 throw ex;
             }
-            
+
         }
         public int GetAllProductsCount(string ApiURL, string token, ProductInventorySearchViewModel ViewModel)
         {
@@ -990,7 +991,7 @@ namespace Hld.WebApplication.Helper
         }
         public int GetStatusFromZinc(string ApiURL, string token, List<GetStatusFromZincViewModel> viewModel)
         {
-          //  string status = "";
+            //  string status = "";
             int ID = 0;
             try
             {
@@ -1012,9 +1013,9 @@ namespace Hld.WebApplication.Helper
                 {
                     strResponse = sr.ReadToEnd();
                 }
-                
+
                 ID = Convert.ToInt32(strResponse);
-              //  status = JsonConvert.DeserializeObject<string>(strResponse);
+                //  status = JsonConvert.DeserializeObject<string>(strResponse);
             }
             catch (Exception ex)
             {
@@ -1190,7 +1191,7 @@ namespace Hld.WebApplication.Helper
             }
             return ViewModel;
         }
-        public List<GetChildSkuVM> GetChildProductList(string apiurl, string token,int id)
+        public List<GetChildSkuVM> GetChildProductList(string apiurl, string token, int id)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Product/GetChildSkuById?id=" + id);
             request.Method = "GET";
@@ -1277,7 +1278,7 @@ namespace Hld.WebApplication.Helper
             string status = "";
             try
             {
-                
+
                 var data = JsonConvert.SerializeObject(viewModel);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lp.api.sellercloud.com/rest/api/ProductImage");
                 request.Method = "POST";
@@ -1419,12 +1420,12 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
-        public List<GetShadowsOfChildViewModel> GetShadowsOfChild(string ApiURL, string token,string childSku)
+        public List<GetShadowsOfChildViewModel> GetShadowsOfChild(string ApiURL, string token, string childSku)
         {
             List<GetShadowsOfChildViewModel> listmodel = new List<GetShadowsOfChildViewModel>();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetShadowsOfChild?childSku="+ childSku);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetShadowsOfChild?childSku=" + childSku);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -1562,7 +1563,7 @@ namespace Hld.WebApplication.Helper
         public bool UpdateRelationInBulkUpdateTable(string ApiURL, string token, UpdateIsRelationViewModel updateIsRelation)
         {
             bool status = false;
-            
+
             try
             {
                 var data = JsonConvert.SerializeObject(updateIsRelation);
@@ -1699,8 +1700,8 @@ namespace Hld.WebApplication.Helper
             bool status = false;
             try
             {
-              
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/UpdateProductStatusWhenProductCreatedOnSC?sku="+sku);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/UpdateProductStatusWhenProductCreatedOnSC?sku=" + sku);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -1716,9 +1717,9 @@ namespace Hld.WebApplication.Helper
                         status = Convert.ToBoolean(strResponse);
                     }
                 }
-               
-                
-                
+
+
+
             }
             catch (Exception ex)
             {
@@ -1726,7 +1727,7 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
-        public string ShadowCreate(string ApiURL, string token,List<SaveSkuShadowViewModel> viewModel)
+        public string ShadowCreate(string ApiURL, string token, List<SaveSkuShadowViewModel> viewModel)
         {
             string status = "";
             try
@@ -1756,7 +1757,7 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
-       
+
 
         public bool SaveSellerCloudImagesForChildSku(string ApiURL, string token, ImagesSaveToDatabaseWithURLViewMOdel viewModel)
         {
@@ -2000,9 +2001,9 @@ namespace Hld.WebApplication.Helper
             List<ProductManufactureListViewModel> responses = JsonConvert.DeserializeObject<List<ProductManufactureListViewModel>>(strResponse);
             return responses;
         }
-        public List<GetDeviceModelViewMdel> GetManufactureDeviceIdByNameChange(string apiurl, string token, int ManufactureModel,int ManufactureId)
+        public List<GetDeviceModelViewMdel> GetManufactureDeviceIdByNameChange(string apiurl, string token, int ManufactureModel, int ManufactureId)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetDeviceModelModel?ManufactureModel=" + ManufactureModel+ "&ManufactureId=" + ManufactureId);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiurl + "/api/Manufacture/GetDeviceModelModel?ManufactureModel=" + ManufactureModel + "&ManufactureId=" + ManufactureId);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -2083,7 +2084,7 @@ namespace Hld.WebApplication.Helper
             }
             return status;
         }
-        public string BulkUpdateList(string ApiURL, string token,EditBulkUpdateViewModel viewModel)
+        public string BulkUpdateList(string ApiURL, string token, EditBulkUpdateViewModel viewModel)
         {
             string status = "";
             try
@@ -2317,7 +2318,7 @@ namespace Hld.WebApplication.Helper
             List<GetDataForBulkUpdatejobViewModel> listmodel = new List<GetDataForBulkUpdatejobViewModel>();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetDataForBulkUpdateJob?ParentID=" + ParentID );
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetDataForBulkUpdateJob?ParentID=" + ParentID);
                 request.Method = "POST";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -2331,7 +2332,7 @@ namespace Hld.WebApplication.Helper
                     strResponse = sr.ReadToEnd();
                 }
                 listmodel = JsonConvert.DeserializeObject<List<GetDataForBulkUpdatejobViewModel>>(strResponse);
-                
+
             }
             catch (Exception ex)
             {
@@ -2369,7 +2370,7 @@ namespace Hld.WebApplication.Helper
             }
             return ViewModel;
         }
-        public bool BBQtyupdate(string ApiURL, string token, string SKU,bool BBQtyUpdate)
+        public bool BBQtyupdate(string ApiURL, string token, string SKU, bool BBQtyUpdate)
         {
             bool status = false;
             try
@@ -2403,7 +2404,7 @@ namespace Hld.WebApplication.Helper
             bool status = false;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Configuration/" + Email + "/"+Checkboxstatus);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Configuration/" + Email + "/" + Checkboxstatus);
                 request.Method = "POST";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -2455,16 +2456,13 @@ namespace Hld.WebApplication.Helper
             }
             return listmodel;
         }
+
         public bool ExecuteJob(string ApiURL, string token, int JobId)
         {
             bool status = false;
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/ExecuteJob?JobId=" + JobId);
-                request.Method = "POST";
-                request.Accept = "application/json;";
-                request.ContentType = "application/json";
-                request.Headers["Authorization"] = "Bearer " + token;
 
 
                 var response = (HttpWebResponse)request.GetResponse();
@@ -2482,8 +2480,105 @@ namespace Hld.WebApplication.Helper
 
                 throw ex;
             }
+
             return status;
         }
+        public List<ExportProductDataViewModel> GetAllProductsForExportWithLimitCount(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            string strResponse = "";
+            try
+            {
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                    }
+                }
+                List<ExportProductDataViewModel> responses = JsonConvert.DeserializeObject<List<ExportProductDataViewModel>>(strResponse);
+                return responses;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+        }
+        //public List<ExportProductDataViewModel> GetSinglePageExportResult(string ApiURL, string token, List<ExportProductDataViewModel>data)
+        //{
+        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetSinglePageExportResult/");
+        //    request.Method = "GET";
+        //    request.Accept = "application/json;";
+        //    request.ContentType = "application/json";
+        //    request.Headers["Authorization"] = "Bearer " + token;
+        //    string strResponse = "";
+        //    try
+        //    {
+        //        using (WebResponse webResponse = request.GetResponse())
+        //        {
+        //            using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+        //            {
+        //                strResponse = stream.ReadToEnd();
+        //            }
+        //        }
+        //        List<ExportProductDataViewModel> responses = JsonConvert.DeserializeObject<List<ExportProductDataViewModel>>(strResponse);
+        //        return responses;
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw;
+        //    }
+
+
+        //}
+
+        public List<ExportProductDataViewModel> GetSinglePageExportResult(string ApiURL, string token, List<ExportProductDataViewModel> data)
+        {
+            List<ExportProductDataViewModel> responses = new List<ExportProductDataViewModel>();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetSinglePageExportResult");
+                var datad = JsonConvert.SerializeObject(data);
+                request.Method = "POST";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(datad);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                string strResponse = "";
+                using (WebResponse webResponse = request.GetResponse())
+                {
+                    using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                    {
+                        strResponse = stream.ReadToEnd();
+                    }
+                }
+
+                responses = JsonConvert.DeserializeObject<List<ExportProductDataViewModel>>(strResponse);
+
+               
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return responses;
+        }
+
     }
 }
-

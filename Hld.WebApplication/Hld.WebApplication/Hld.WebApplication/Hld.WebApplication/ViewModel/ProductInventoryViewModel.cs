@@ -11,6 +11,7 @@ namespace Hld.WebApplication.ViewModel
         public string dropshipstatus { get; set; }
         public string dropshipstatusSearch { get; set; }
         public string DSTag { get; set; }
+        public string WHQStatus { get; set; }
         public string Sku { get; set; }
         [Required(ErrorMessage = "Please Enter Sku List")]
         public string SearchFromSkuList { get; set; }

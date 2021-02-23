@@ -65,7 +65,8 @@
         <thead class="" style="background-color:lightgrey">
             <tr>
                 <th data-sorter="false">
-                    <input type="checkbox" id="headerCheckBox" />
+                    <div><span id="totalSelected">0</span></div>
+                    <input type="checkbox" id="headerCheckBox" class="headerCheckBox" />
                 </th>
                 <th data-sorter="false">
                     <label>Image</label>
@@ -103,7 +104,7 @@
                     <label>MSRP/<br>Selling Price</label>
                 </th>
                 <th data-sorter="false">
-                    BB Fee/<br> Percentage
+                    BB/<br> Product ID
                 </th>
                 <th data-sorter="false">EST P&L</th>
                 <th data-sorter="false">Status</th>
@@ -118,7 +119,7 @@
             <tr>
                 <td>
                     <input class="checkboxSkuForUpdating checkboxSkForEnableDisable" type="checkbox" />
-                    <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />
+                    <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" data-sku="@item.ProductSKU" class="productSkuForEnableDisable" />
                 </td>
                 <td>
                     @{
@@ -176,25 +177,28 @@
                     @Html.DisplayFor(modelItem => item.BBMSRP)<br>
                     @Html.DisplayFor(modelItem => item.BBSellingPrice)
                 </td>
+                <!--<td>
+                    0.00 /0.00--> <!--Best by Fee & Percentage-->
+                <!--</td>-->
                 <td>
-                    0.00 /0.00 <!--Best by Fee & Percentage-->
+                   @item.BestBuyProductSKU
                 </td>
                 <td>0</td><!--PST P&L-->
 
                 <td>
 
-                    @if(item.Continue ==true)
-                       {
-                    <span>Continue</span>
+                    @if (item.Continue == true)
+                    {
+                        <span>Continue</span>
 
-                        }
-                       else
-                      {
-                    <span>Discontinued</span>
-                      }
-                   
-                    </td>
-                </tr>
+                    }
+                    else
+                    {
+                        <span>Discontinued</span>
+                    }
+
+                </td>
+            </tr>
             }
         </tbody>
     </table>

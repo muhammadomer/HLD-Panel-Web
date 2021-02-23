@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
 }
 
-
+<link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
 <link href="~/lib/jquery.tablesorter/css/theme.bootstrap_4.min.css" rel="stylesheet" />
 <style type="text/css">
     .tablesorter-bootstrap tfoot td, .tablesorter-bootstrap tfoot th, .tablesorter-bootstrap thead td, .tablesorter-bootstrap thead th {
@@ -137,158 +137,147 @@
     <div class="mb-1 row" id="searchForm" style="margin-top: 60px;">
 
         <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header">Search Inventory 
-                    <div class="alert alert-success successmessage" style="float:right;display:none">
-                        <button class="close successmessagclose" aria-label="close">&times;</button>
-                        <strong>Success!</strong><span class="successAppend"></span>
-                    </div>
-                </div>
-                <div class="card-body" style="        padding: 0.5rem
-">
-                    @using (Html.BeginForm("IndexMainView", "Product", FormMethod.Get, new { @class = "form-inline" }))
-                    {
-                        @*<label class="mb-2 mr-sm-2">Select Dropship :</label>*@
-
-                        <select style="padding:0px;box-shadow: none; width:110px!important;" id="multiselect" class="form-control" asp-for="dropshipstatusSearch">
+            <h6>Search Inventory</h6>
+            <div class="card-body" style="padding:0">
+                @using (Html.BeginForm("IndexMainView", "Product", FormMethod.Get, new { @class = "form-inline" }))
+                {
+                    <div class="col-md-1 p-0 mr-1">
+                        <select style="padding:0px;box-shadow: none;width: 100%;" id="multiselect" class="form-control" asp-for="dropshipstatusSearch">
                             <option value="1">Dropship</option>
                             <option value="0">Dropship None</option>
                             <option value="ALL">All</option>
                         </select>
-                        @*<div class="col-md-1 p-0 mr-1"style="width:150px">
-                            <select id="multiselect" class="3col active form-control mb-2 mr-sm-2 QuantityStatus" multiple="multiple" style="box-shadow:none"asp-for="dropshipstatusSearch">
-                            <option value="1">Dropship</option>
-                            <option value="0">Dropship None</option>
-                            <option value="ALL">All</option>
-                            </select>
-                            <input type="hidden" name="Sku" id="ddlQuantity" />
-                            </div>*@
-
-
-
-                        <div class=" col-md-1 p-0 mr-1">
-                            <select id="multiselect" style="padding:0px;box-shadow: none; width:110px!important;" class="form-control col-md-1 DSTagselect" multiple="multiple">
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
+                    </div>
+                    <div class="col-md-1 p-0 mr-1">
+                        <select id="multiselect" style="padding:0px;box-shadow: none; width:110px!important;" class="form-control col-md-1 active DSTagselect" multiple="multiple">
+                            @*<option value="Yes">Yes</option>
+                            <option value="No">No</option>*@
+                        </select>
                         <input type="hidden" name="DSTag" id="ddDSTag" />
-
-                        <select style="padding:0px;margin-right:6px;width:110px!important;box-shadow: none;" id="multiselect" class="form-control" asp-for="dropshipstatus">
-
-                            <option value="sku">SKU</option>
-                            <option value="ProductTitle">Title</option>
-                            <option value="asin">ASIN</option>
-                            @*<option value="1">Dropship</option>
-                                <option value="0">Dropship None</option>*@
-                            <option value="ALL">All</option>
+                    </div>
+                    <div class="col-md-1 p-0 mr-1">
+                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active WHQStatus" multiple="multiple">
+                            <option value="1">WHQ > 0</option>
+                            <option value="2">WHQ < 0</option>
                         </select>
-                        <label class="mb-2 mr-sm-2"></label>
-
-                        <input type="text" autocomplete="off" class="form-control" asp-for="Sku" style="box-shadow: none;width: 540px;" />
-                        <label class="mb-2 mr-sm-2"></label>
-
-                        <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
-                        <select id="" class="form-control p-sm-0" asp-for="TypeSearch">
-                            <option value="ALL">ALL</option>
-                            <option value="Continued">Continued </option>
-                            <option value="Discontinued">Discontinued</option>
-                        </select>
+                        <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
+                    </div>
 
 
-                        <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                    <select style="padding:0px;width:110px!important;box-shadow: none;" id="multiselect" class="form-control" asp-for="dropshipstatus">
+
+                        <option value="sku">SKU</option>
+                        <option value="ProductTitle">Title</option>
+                        <option value="asin">ASIN</option>
+                        <option value="ALL">All</option>
+                    </select>
+                    <label class="mb-2 mr-sm-2"></label>
+
+                    <input type="text" autocomplete="off" class="form-control" asp-for="Sku" style="box-shadow: none;width: 360px;" />
+                    <label class="mb-2 mr-sm-2"></label>
+
+                    <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
+                    <select id="" class="form-control p-sm-0" asp-for="TypeSearch">
+                        <option value="ALL">ALL</option>
+                        <option value="Continued">Continued </option>
+                        <option value="Discontinued">Discontinued</option>
+                    </select>
 
 
-                        <div class="dropdown show ">
-                            <a class="btn btn-secondary dropdown-toggle myclasss1" href="#" role="button" id="dropdownMenuLink" style="background:#007bff;border-color:#007bff; margin-left:15px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Tags
-                            </a>
-                            <div class="dropdown-menu myclasss" aria-labelledby="dropdownMenuLink">
-
-                                <a class="dropdown-item" asp-controller="Tag" asp-action="Create" target="_blank" style="color:#007bff">Add New Tag</a>
-                                <a class="dropdown-item" href="javascript:;" id="addasintags" style="color: #007bff"> Assign Tag </a>
-                                <a class="dropdown-item" href="#" id="Removetags" style="color: #007bff"> Remove Tag </a>
-                            </div>
-                        </div>
-
-                        <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder">Export</button>
-                    }
+                    <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
 
 
+                    <div class="dropdown show ">
+                        <a class="btn btn-secondary dropdown-toggle myclasss1" href="#" role="button" id="dropdownMenuLink" style="background:#007bff;border-color:#007bff; margin-left:15px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Tags
+                        </a>
+                        <div class="dropdown-menu myclasss" aria-labelledby="dropdownMenuLink">
 
-                </div>
-            </div>
-
-
-            <div class="container">
-                <div class="modal fade" style="margin-top: 80px!important;" id="myModaltags">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title text-info text-center">Assign Tags</h4>
-                            </div>
-                            <div class="modal-body">
-                                <select class="selectbox" id="ddlselected" multiple="multiple">
-                                    <option value="" selected disabled>--Please select your tags--</option>
-
-                                </select>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="alert alert-success  successmessageModel" style="display:none">
-                                    <a href="#" class="close" aria-label="close">&times;</a>
-                                    <strong>Success!</strong><span class="successAppendModel"></span>
-
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="alert alert-danger  dangermessageModel " style="display:none">
-                                    <a href="#" class="close" aria-label="close">&times;</a>
-                                    <strong>Alert!</strong><span class="failureAppendModel"> Some Error Occured.</span>
-                                </div>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
-                            </div>
+                            <a class="dropdown-item" asp-controller="Tag" asp-action="Create" target="_blank" style="color:#007bff">Add New Tag</a>
+                            <a class="dropdown-item" href="javascript:;" id="addasintags" style="color: #007bff"> Assign Tag </a>
+                            <a class="dropdown-item" href="#" id="Removetags" style="color: #007bff"> Remove Tag </a>
                         </div>
                     </div>
-                </div>
+
+                    <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder">Export</button>
+                    @*<button class="ml-1 btn btn-primary" type="button" id="btnexportOrderget">Export</button>*@
+                }
+
+
+
             </div>
+        </div>
 
 
-            <div class="container">
-                <div class="modal fade" style="margin-top: 80px!important;" id="RemoveModalOpen">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title text-info text-center">Remove Tags</h4>
+        <div class="container">
+            <div class="modal fade" style="margin-top: 80px!important;" id="myModaltags">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title text-info text-center">Assign Tags</h4>
+                        </div>
+                        <div class="modal-body">
+                            <select class="selectbox" id="ddlselected" multiple="multiple">
+                                <option value="" selected disabled>--Please select your tags--</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="alert alert-success  successmessageModel" style="display:none">
+                                <a href="#" class="close" aria-label="close">&times;</a>
+                                <strong>Success!</strong><span class="successAppendModel"></span>
+
                             </div>
-                            <div class="modal-body">
-                                <select class="selectbox" id="selectedRemove" multiple="multiple">
-                                    <option value="" selected disabled>--Please select your tags--</option>
-                                </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="alert alert-danger  dangermessageModel " style="display:none">
+                                <a href="#" class="close" aria-label="close">&times;</a>
+                                <strong>Alert!</strong><span class="failureAppendModel"> Some Error Occured.</span>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="alert alert-success  successmessageModelRM" style="display:none">
-                                    <a href="#" class="close" aria-label="close">&times;</a>
-                                    <strong>Success!</strong><span class="successAppendModelRM"></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="alert alert-danger  dangermessageModelRM " style="display:none">
-                                    <a href="#" class="close" aria-label="close">&times;</a>
-                                    <strong>Alert!</strong><span class="failureAppendModelRM"> Some Error Occured.</span>
-                                </div>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="btnRemove">Save</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="btnSave">Save</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="container">
+            <div class="modal fade" style="margin-top: 80px!important;" id="RemoveModalOpen">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title text-info text-center">Remove Tags</h4>
+                        </div>
+                        <div class="modal-body">
+                            <select class="selectbox" id="selectedRemove" multiple="multiple">
+                                <option value="" selected disabled>--Please select your tags--</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="alert alert-success  successmessageModelRM" style="display:none">
+                                <a href="#" class="close" aria-label="close">&times;</a>
+                                <strong>Success!</strong><span class="successAppendModelRM"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="alert alert-danger  dangermessageModelRM " style="display:none">
+                                <a href="#" class="close" aria-label="close">&times;</a>
+                                <strong>Alert!</strong><span class="failureAppendModelRM"> Some Error Occured.</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="btnRemove">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="row mt-3 mb-3">
         <input type="hidden" value="@ViewBag.skuSearchList" id="skuSearchList" />
@@ -301,26 +290,39 @@
             </div>
         }
 
-        <div class="divCounter col-sm-3">
-            Total item's Found:@ViewBag.TotalCount &nbsp;&nbsp;
-            @if (string.IsNullOrEmpty(ViewBag.skuSearchList))
-            {
-                <span id="itemPerPage"> Item's Per Page:50</span>
-            }
+    <div class="divCounter col-sm-3">
+        @if (ViewBag.TotalCount == null)
+        {
+            <span style="vertical-align:sub">Total Orders Found : 0 </span>
+            <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : 0</span>
+        }
+        else
+        {
+            <span style="vertical-align:sub"> Total Orders Found : @ViewBag.TotalCount</span>
+            <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : <span class="itemPerPage"></span></span>
+        }
+        @*<span>Total Orders Found: @ViewBag.TotalCount &nbsp;&nbsp;</span>*@
 
-        </div>
+       
+        @*@if (string.IsNullOrEmpty(ViewBag.skuSearchList))
+        {
+            <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : <span class="itemPerPage"></span></span>
+
+        }*@
+
+    </div>
         <div class="col-sm-2">
-            @if ((ViewBag.TotalCount / 50) > 1 && ViewBag.Sku != "Nill")
-            {
-                <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span>Select All Pages</span>
-                <span class="Processing">
+            @*@if ((ViewBag.TotalCount / 50) > 1 && ViewBag.Sku != "Nill")
+            {*@
+                <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span style="padding-left: 3px;vertical-align:text-bottom">Select All Pages</span><span id="totalSelectedAll"style="vertical-align:top;"></span>
+                <span class="Processing"style="">
                     <span style="display:none;">   <img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
                 </span>
-            }
+            @*}*@
         </div>
-        <div class="col-sm-3 ">
+        <div class="col-sm-4">
             <div class="row ">
-                <div class="col-sm-8">
+                <div class="col-sm-9"style="float:right">
                     <select id="actionMenu" class="form-control p-sm-0">
                         <option value="ED-DS-SKU">Enable/Disable Dropship SKU</option>
                         <option value="EnableProduct">Set as Continued</option>
@@ -340,7 +342,7 @@
 
     </div>
     <div class="col-sm-3 p-0">
-        <div  class="pagination"></div>
+        <div class="pagination"></div>
     </div>
     <div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
         <div class="modal-dialog">
@@ -366,29 +368,92 @@
 
         </div>
     </div>
+    <div class="modal fade" id="myModalSuccess" style="margin-top: 130px;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content modelwidth">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-check" style=" color: green;
+font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;
+">Success!</span>
+                    </strong>
+                    <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body myclassSuccess" style="padding-left:0!important;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default closeModel" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
     <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.widgets.min.js"></script>
-    <script type="text/javascript">
-   
-        $(document).ready(function () {
+    <div>
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+            $(document).on('click', '#headerCheckBox', function () {
+                var i = 0;
+                if ($(this).is(':checked')) {
+
+                    $(".tableProductListSelected tbody tr").each(function () {
+                        debugger;
+                        var productSKU = $(this).find('.productSkuForEnableDisable').val();
+
+                        if (productSKU !=null) {
+                            $(this).find('.checkboxSkForEnableDisable').prop('checked', true);
+                            i++;
+                        }
+                    });
+
+                }
+                else {
+
+                    $(".tableProductListSelected tbody tr ").each(function () {
+                        $(this).find('.checkboxSkForEnableDisable').prop('checked', false);
+                    });
+                }
+                $("#totalSelected").text(i);
+            });
 
 
-            $('select[multiple].DSTagselect').multiselect({
+
+            $(document).on('click', '.checkboxSkForEnableDisable', function () {
+                var i = parseInt($("#totalSelected").text());
+                if ($(this).is(':checked')) {
+                    i++;
+                }
+                else {
+                    i--;
+                }
+                $("#totalSelected").text(i);
+            });
+
+
+
+            $('select[multiple].active.WHQStatus').multiselect({
                 columns: 1,
-                placeholder: 'DS Tags',
+                placeholder: 'WHQ Status',
                 maxPlaceholderOpts: 1,
-
                 selectAll: false,
                 onOptionClick: function (element, option) {
-                    $('#ddDSTag').val($(element).val());
+                    $('#ddlWHQStatus').val($(element).val());
                     $(element).val();
                 },
+
             });
             $('.successmessage').hide();
 
@@ -396,17 +461,17 @@ $('.successmessagclose').click(function () {
 $('.successmessage').hide();
 });
 
-            $('select[multiple].active.3col.QuantityStatus').multiselect({
-                columns: 1,
-                placeholder: 'ALL',
-                maxPlaceholderOpts: 1,
+            //$('select[multiple].active.3col.QuantityStatus').multiselect({
+            //    columns: 1,
+            //    placeholder: 'ALL',
+            //    maxPlaceholderOpts: 1,
 
-                selectAll: false,
-                onOptionClick: function (element, option) {
-                    $('#ddlQuantity').val($(element).val());
-                    $(element).val();
-                },
-            });
+            //    selectAll: false,
+            //    onOptionClick: function (element, option) {
+            //        $('#ddlQuantity').val($(element).val());
+            //        $(element).val();
+            //    },
+            //});
 
 
 
@@ -483,7 +548,9 @@ $('.successmessage').hide();
                 $('.pagination').show();
                 $('#itemPerPage').show();
             });
-
+            $('#btnSearchOrder').click(function () {
+                $('#ddlWHQStatus').val();
+            });
 
 
 
@@ -530,6 +597,7 @@ $('.successmessage').hide();
             var dropshipstatusSearch = getUrlParameter('dropshipstatusSearch');
             var sku = getUrlParameter('Sku');
             var DSTagItem = getUrlParameter('DSTag');
+            var WHQStatus = getUrlParameter('WHQStatus');
 
             var TypeSearch = getUrlParameter('TypeSearch');
             if (TypeSearch == "Continued") {
@@ -543,19 +611,33 @@ $('.successmessage').hide();
 
 
 
-            if (DSTagItem != null) {
+            //if (DSTagItem != null) {
 
-                var res = DSTagItem.split(",");
-                $.each(res, function (key, value) {
-                    $(".ms-options").find("input[type=checkbox]").each(function () {
+            //    var res = DSTagItem.split(",");
+            //    $.each(res, function (key, value) {
+            //        $(".ms-options").find("input[type=checkbox]").each(function () {
 
-                        if ($(this).val() == value.trim()) {
-                            $(this).prop("checked", true);
-                            $('#ddDSTag').val($(this).val());
-                        }
-                    });
-                });
-            }
+            //            if ($(this).val() == value.trim()) {
+            //                $(this).prop("checked", true);
+            //                $('#ddDSTag').val($(this).val());
+            //            }
+            //        });
+            //    });
+            //}
+
+
+
+            //var statusText = $(".DSTagselect").text();
+            //var DSTagItem = statusText.split(",");
+            //$.each(DSTagItem, function (key, value) {
+            //    $(".ms-options").find("input[type=checkbox]").each(function () {
+            //        if ($(this).parents("select").hasClass("DSTagselect")) {
+            //            if ($(this).val() == value.trim()) {
+            //                $(this).prop("checked", true);
+            //            }
+            //        }
+            //    });
+            //});
 
             //if (sku != null) {
             //    var res = sku.split(",");
@@ -570,14 +652,14 @@ $('.successmessage').hide();
             //    });
             //}
 
-            $('#btnexportOrder').click(function () {
+            @*$('#btnexportOrder').click(function () {
                 var Url = '/Product/Index/';
 
                 $.ajax({
                     type: 'POST',
                     url: Url,
                     dataType: "json",
-                    data: { dropshipstatus: dropship, Sku: sku },
+                    data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, DSTag: DSTag },
 
                     traditional: true,
                     success: function (data) {
@@ -586,7 +668,8 @@ $('.successmessage').hide();
                     }
 
                 });
-            })
+            })*@
+
 
 
             $(document).on('change', '#headerCheckBox', function () {
@@ -611,13 +694,13 @@ $('.successmessage').hide();
 
                         $.get(url).done(function (response) {
                             $('#modelBody').empty();
-
                             $('#modelBody').html(response);
                             $('#myModal').modal('show');
                             $('.Processing').children('span').css('display', 'none');
                         });
                         $.fn.checkUncheckSKU_checkbox(status);
                         $(document).find('#headerCheckBox').attr('checked', status);
+                        console.log("get status",status)
                     }
                     else if ($(document).find('#headerCheckBox').is(':checked')) {
                         $(document).find('.checkboxSkuForUpdating').each(function (index) {
@@ -740,8 +823,6 @@ $('.successmessage').hide();
 
                             data.push({ SKU: sku});
                         }
-
-
                     });
                     $(".loader").show();
                     $.ajax({
@@ -752,13 +833,16 @@ $('.successmessage').hide();
                         success: function (res) {
                             $(".loader").hide();
                             debugger
-                            $('.successAppend').empty();
-                            $('.successAppend').append('<span class="pl-1">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
-$('.successmessage').show();
-                           // $.notify("<span>Status from Zinc Updated  successfully</span><a href='../ZincWatchlist/MainViewLogs/jobID="+res+"'target=_blank'>"+res+"</a>", {
-                             //   globalPosition: 'bottom right', autoHideDelay: null, autoHide: false, clickToHide: true, arrowShow: true, arrowSize: 5, className: 'danger myclass1'},);
+                            $(".myclassSuccess").empty();
+                            $(".myclassSuccess").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+                            $("#myModalSuccess").modal({ backdrop: 'static', keyboard: false });
+                            $('.closeModel').on('click', function () {
+                                location.reload();
+                            });
+//                            $('.successAppend').empty();
+//                            $('.successAppend').append('<span class="pl-1">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+//$('.successmessage').show();
 
-                            //$("#btnSearchOrder").click();
                         }
                     });
                    // setInterval('location.reload()', 6000);
@@ -767,12 +851,16 @@ $('.successmessage').show();
             });
 
 
-            $('#checkAllPages').change(function () {
-                var status = $(this).is(':checked');
-                $.fn.checkUncheckSKU_checkbox(status);
-                $(document).find('#headerCheckBox').attr('checked', status);
-            });
-
+            //$('#checkAllPages').change(function () {
+            //    var status = $(this).is(':checked');
+            //    $.fn.checkUncheckSKU_checkbox(status);
+            //    $(document).find('#headerCheckBox').attr('checked', status);
+            //});
+            $.fn.checkUncheckSKU_checkbox = function (status) {
+                $(document).find('.checkboxSkuForUpdating').each(function (index) {
+                    $(this).attr('checked', status);
+                });
+            }
             if ($('#skuSearchList').val() == "")
             {
 
@@ -786,12 +874,13 @@ $('.successmessage').show();
                         pageNo = page;
 
                         // add code which gets executed when user selects a page
-                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch;
+                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
                         $(".loader").show();
                         $.get(url).done(function (response) {
                             $('#loadOrder').empty();
                             $(".loader").hide();
                             $('#loadOrder').html(response);
+
                             var table = $(document).find('#tableProductList');
                             getasinamazoneprice();
                             $(table).tablesorter({
@@ -803,6 +892,11 @@ $('.successmessage').show();
 
                                 }
                             });
+                            var itemcount = $("#tableProductList").find("tr").length-1;
+                            $(".itemPerPage").text(itemcount);
+
+                            SelectAllCount($("#checkAllPages"));
+
                            // $(table).stickyTableHeaders({ fixedOffset: 0 });
                         });
                     },
@@ -847,6 +941,328 @@ $('.successmessage').show();
                 });
             }
 
+            //if (WHQStatus != null) {
+
+            //    var res = WHQStatus.split(",");
+            //    $.each(res, function (key, value) {
+            //        $(".ms-options").find("input[type=checkbox]").each(function () {
+
+            //            if ($(this).val() == value.trim()) {
+            //                $(this).prop("checked", true);
+            //                $('#ddlWHQStatus').val($(this).val());
+            //            }
+            //        });
+            //    });
+            //}
+            if (WHQStatus != null) {
+
+                var res = WHQStatus.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlWHQStatus').val(WHQStatus);
+                $.each(res, function (key, value) {
+
+                    var setval = 21;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 21) {
+                        $(".WHQStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".WHQStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }
+
+                });
+            }
+
+            //if (DSTagItem != null) {
+
+            //    var Order = DSTagItem.split(",");
+            //    //$('#ddlQuantity').val($(this).item);
+            //    $('#ddDSTag').val(DSTagItem);
+            //    $.each(Order, function (key, value) {
+            //        var setval = 22;
+            //        var getval = value;
+            //        getval = setval;
+            //        console.log(getval);
+            //        if (getval == 22) {
+            //            $(".DSTagselect").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+            //                if ($(this).val() == value.trim()) {
+            //                    $(this).prop("checked", true);
+            //                }
+            //            });
+            //        }
+            //        else {
+
+            //            $(".DSTagselect").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+            //                if ($(this).val() == value.trim()) {
+            //                    $(this).prop("checked", false);
+            //                }
+            //            });
+            //        }
+
+            //    });
+            //}
+            //if (DSTagItem != null) {
+
+            //    var res = DSTagItem.split(",");
+            //    //$('#ddlQuantity').val($(this).item);
+            //    $('#ddDSTag').val(DSTagItem);
+            //    $.each(res, function (key, value) {
+            //        $(".ms-options").find("input[type=checkbox]").each(function () {
+
+            //            if ($(this).val() == value.trim()) {
+            //                $(this).prop("checked", true);
+
+            //            }
+            //        });
+            //    });
+            //}
+            //debugger
+            //var BoxContain = $("#ddDSTag").val();
+            //var DSTagItem = BoxContain.split(",");
+            //$.each(DSTagItem, function (key, value) {
+            //$(".ms-options").find("input[type=checkbox]").each(function () {
+            //    if ($(this).parents("select").hasClass("DSTagselect")) {
+            //        if ($(this).val() == value.trim()) {
+            //            $(this).prop("checked", true);
+            //        }
+            //    }
+            //});
+            //});
+            debugger
+
+
+            var Url = '/Tag/TagListForAssign/';
+            $(".DSTagselect").empty();
+            $.ajax({
+                type: 'Get',
+                url: Url,
+                dataType: 'json',
+                traditional: true,
+                success: function (data) {
+                    $.each(data, function (key, value) {
+                        $(".DSTagselect").append($("<option></option>").val(value.TagId).html(value.TagName));
+                    });
+                    multis();
+                    if (DSTagItem != null) {
+
+                        var Order = DSTagItem.split(",");
+                        //$('#ddlQuantity').val($(this).item);
+                        $('#ddDSTag').val(DSTagItem);
+                        $.each(Order, function (key, value) {
+                            var setval = 22;
+                            var getval = value;
+                            getval = setval;
+                            console.log(getval);
+                            if (getval == 22) {
+                                $(".DSTagselect").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+                            else {
+
+                                $(".DSTagselect").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", false);
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+                }
+
+
+
+            })
+            // action menu
+            function multis() {
+                $('select[multiple].active.DSTagselect').multiselect({
+                    columns: 1,
+                    placeholder: 'Tag',
+                    maxPlaceholderOpts: 1,
+                    selectAll: false,
+                    onOptionClick: function (element, option) {
+                        $('#ddDSTag').val($(element).val());
+                    }
+                });
+            }
+
+
+
+            //
+
+            //select
+            function SelectAllCount(_this) {
+                var i = 0;
+                page = 1;
+                pageNo = page;
+                debugger;
+                if ($(_this).is(':checked')) {
+                    var selectallchecked = parseInt('@ViewBag.TotalCount');
+                    console.log(selectallchecked)
+                    $("#totalSelectedAll").text(': ' + selectallchecked);
+
+                      $(".tableProductListSelected tbody tr ").each(function () {
+
+                        var productSKU = $(this).find('.productSkuForEnableDisable').val();
+                        if (productSKU != null) {
+                            $(this).find('.checkboxSkForEnableDisable').prop('checked', true);
+                            i++;
+                        }
+                    });
+                }
+                else {
+                    $(".tableProductListSelected tbody tr ").each(function () {
+                        $(this).find('.checkboxSkForEnableDisable').prop('checked', false);
+                        $("#totalSelectedAll").text('');
+
+                    });
+                }
+                $("#totalSelected").text(i);
+            }
+
+            $(document).on('click', '#checkAllPages', function () {
+                SelectAllCount($(this));
+            });
+
+                $('#btnexportOrder').click(function () {
+
+                    if ($('#checkAllPages').is(':checked')) {
+                          var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                        $.ajax({
+                            type: 'POST',
+                            url: URLEXPORT,
+                            dataType: "json",
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
+
+                            traditional: true,
+                            success: function (data) {
+                                window.location.href = "@Url.RouteUrl(new
+            { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
+                            }
+
+                        });
+
+                    }
+
+                     else if ($(document).find('#headerCheckBox').is(':checked')) {
+
+                    var data = [];
+                    $('.tableProductListSelected tbody tr ').each(function () {
+                        if ($(document).find('#headerCheckBox').is(':checked')) {
+                            var obj = {};
+                            obj.productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+                            data.push(obj);
+                        }
+                    });
+                    console.log("data get by me", data)
+                    var Url = '/Product/GetSinglePageExportResult';
+                    $.ajax({
+                        type: "POST",
+                        //dataType: "json",
+                        //contentType: "application/json",
+                        url: Url,
+                        data: { data },
+                        success: function (data) {
+                            window.location.href = "@Url.RouteUrl(new
+            { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
+                        }
+
+                    });
+                    }
+                    else if ($(document).find('.checkboxSkuForUpdating').is(':checked')) {
+                            var data = [];
+                    $('.tableProductListSelected tbody tr ').each(function () {
+                        if ($(this).find('.checkboxSkuForUpdating').is(':checked')) {
+                            var obj = {};
+                            obj.productSKU = $(this).find('#productSkuForUpdating').val();
+                            data.push(obj);
+                        }
+                    });
+                    console.log("data get by me", data)
+                    var Url = '/Product/GetSinglePageExportResult';
+                    $.ajax({
+                        type: "POST",
+                        //dataType: "json",
+                        //contentType: "application/json",
+                        url: Url,
+                        data: { data },
+                        success: function (data) {
+                            window.location.href = "@Url.RouteUrl(new
+            { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
+                        }
+
+                    });
+                    }
+                else {
+                    var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                    $.ajax({
+                        type: 'POST',
+                        url: URLEXPORT,
+                        dataType: "json",
+                        data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
+
+                        traditional: true,
+                        success: function (data) {
+                            window.location.href = "@Url.RouteUrl(new
+            { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
+                        }
+
+                    });
+                }
+
+            });
+
+
+            //
+            debugger
+            $('#btnexportOrderget').click(function () {
+                //var data = new Array();
+                var data = [];
+                $('.tableProductListSelected tbody tr ').each(function () {
+                    if ($(document).find('#headerCheckBox').is(':checked')) {
+                        var obj = {};
+                        obj.productSKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+                        data.push(obj);
+                    }
+                });
+                console.log("data get by me", data)
+                var Url = '/Product/GetSinglePageExportResult';
+                $.ajax({
+                    type: "POST",
+                    //dataType: "json",
+                    //contentType: "application/json",
+                    url: Url,
+                    data:{ data },
+                    success: function (data) {
+                        window.location.href = "@Url.RouteUrl(new
+            { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
+                    }
+
+                });
+
+            })
+            //
 
 
         $('body').on('click', 'span.sku', function () {
@@ -1093,5 +1509,6 @@ $('.successmessage').show();
         //    }
         //});
 
-    </script>
+        </script>
+    </div>
 }
