@@ -129,6 +129,15 @@
         box-sizing: border-box;
         padding: 60px;
     }
+    .mydlete {
+        position: fixed;
+        top: 24%;
+        left: 70%;
+        color: red;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        padding: 60px;
+    }
 </style>
 <div>
     <div class="loader">
@@ -151,7 +160,7 @@
                     <div class="col-md-1 p-0 mr-1">
                         <select id="multiselect" style="padding:0px;box-shadow: none; width:110px!important;" class="form-control col-md-1 active DSTagselect" multiple="multiple">
                             @*<option value="Yes">Yes</option>
-                            <option value="No">No</option>*@
+                                <option value="No">No</option>*@
                         </select>
                         <input type="hidden" name="DSTag" id="ddDSTag" />
                     </div>
@@ -290,39 +299,39 @@
             </div>
         }
 
-    <div class="divCounter col-sm-3">
-        @if (ViewBag.TotalCount == null)
-        {
-            <span style="vertical-align:sub">Total Orders Found : 0 </span>
-            <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : 0</span>
-        }
-        else
-        {
-            <span style="vertical-align:sub"> Total Orders Found : @ViewBag.TotalCount</span>
-            <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : <span class="itemPerPage"></span></span>
-        }
-        @*<span>Total Orders Found: @ViewBag.TotalCount &nbsp;&nbsp;</span>*@
+        <div class="divCounter col-sm-3">
+            @if (ViewBag.TotalCount == null)
+            {
+                <span style="vertical-align:sub">Total Orders Found : 0 </span>
+                <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : 0</span>
+            }
+            else
+            {
+                <span style="vertical-align:sub"> Total Orders Found : @ViewBag.TotalCount</span>
+                <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : <span class="itemPerPage"></span></span>
+            }
+            @*<span>Total Orders Found: @ViewBag.TotalCount &nbsp;&nbsp;</span>*@
 
-       
-        @*@if (string.IsNullOrEmpty(ViewBag.skuSearchList))
-        {
-            <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : <span class="itemPerPage"></span></span>
 
-        }*@
+            @*@if (string.IsNullOrEmpty(ViewBag.skuSearchList))
+                {
+                    <span id="itemPerPage" style="margin-left:20px;vertical-align:sub"> Records Per Page : <span class="itemPerPage"></span></span>
 
-    </div>
+                }*@
+
+        </div>
         <div class="col-sm-2">
             @*@if ((ViewBag.TotalCount / 50) > 1 && ViewBag.Sku != "Nill")
-            {*@
-                <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span style="padding-left: 3px;vertical-align:text-bottom">Select All Pages</span><span id="totalSelectedAll"style="vertical-align:top;"></span>
-                <span class="Processing"style="">
-                    <span style="display:none;">   <img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
-                </span>
+                {*@
+            <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span style="padding-left: 3px;vertical-align:text-bottom">Select All Pages</span><span id="totalSelectedAll" style="vertical-align:top;"></span>
+            <span class="Processing" style="">
+                <span style="display:none;">   <img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
+            </span>
             @*}*@
         </div>
         <div class="col-sm-4">
             <div class="row ">
-                <div class="col-sm-9"style="float:right">
+                <div class="col-sm-9" style="float:right">
                     <select id="actionMenu" class="form-control p-sm-0">
                         <option value="ED-DS-SKU">Enable/Disable Dropship SKU</option>
                         <option value="EnableProduct">Set as Continued</option>
@@ -368,6 +377,29 @@
 
         </div>
     </div>
+    <div class="modal fade" id="myModalSuccessWar" style="margin-top: 130px;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content modelwidth">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+
+                    <strong>
+                        <i class="fa fa-exclamation-triangle" style=" color: red;font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;">Warning !</span>
+                    </strong>
+                    <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body myclassSuccessWar" style="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default closeModel" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success btnsubmitr" data-dismiss="modal">Yes</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="myModalSuccess" style="margin-top: 130px;">
         <div class="modal-dialog modal-md">
             <div class="modal-content modelwidth">
@@ -382,7 +414,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     </strong>
                     <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
                 </div>
-                <div class="modal-body myclassSuccess" style="padding-left:0!important;">
+                <div class="modal-body myclassSuccess" style="">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default closeModel" data-dismiss="modal">Close</button>
@@ -410,7 +442,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 if ($(this).is(':checked')) {
 
                     $(".tableProductListSelected tbody tr").each(function () {
-                        debugger;
+                       
                         var productSKU = $(this).find('.productSkuForEnableDisable').val();
 
                         if (productSKU !=null) {
@@ -685,6 +717,7 @@ $('.successmessage').hide();
             $(document).on('click', '#btnEnableDisableSKU', function () {
 
                 var SKUArraryForSinglePage = [];
+
                 if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
                     var status = $('#checkAllPages').is(':checked');
                     debugger
@@ -813,41 +846,154 @@ $('.successmessage').hide();
                     setInterval('location.reload()', 6000);
                     console.log(data);
                 }
-
+                //Test Zinc Status
                 if ($('#actionMenu option:selected').val() == "StatusFromZinc") {
 
-                    var data = [];
-                    $(".tableProductListSelected tbody tr ").each(function () {
-                        if ($(this).find('.checkboxSkForEnableDisable').is(':checked')) {
-                            var sku = $(this).find('.productSkuForEnableDisable').val();
-
-                            data.push({ SKU: sku});
-                        }
-                    });
-                    $(".loader").show();
-                    $.ajax({
-                        type: 'post',
-                        url: '../product/GetStausFromZinc',
-                      //  url: '../product/GetStausFromZincNew',
-                        data: { data },
-                        success: function (res) {
-                            $(".loader").hide();
-                            debugger
-                            $(".myclassSuccess").empty();
-                            $(".myclassSuccess").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
-                            $("#myModalSuccess").modal({ backdrop: 'static', keyboard: false });
-                            $('.closeModel').on('click', function () {
-                                location.reload();
+                    var checked = $('.tableProductListSelected').find(':checked').length;
+                    console.log(checked,"elenthth");
+                    if (checked<2) {
+                        $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                        return;
+                    }
+                    if ($(document).find('#headerCheckBox').is(':checked')) {
+                        var SKUCountWithoutASIn = 0;
+                        var totalSKU = [];
+                        var data = [];
+                        $('.tableProductListSelected tbody tr ').each(function () {
+                            if ($(document).find('#headerCheckBox').is(':checked')) {
+                                var asin = $(this).closest('tr').find('.getasinprice').find('a').text();
+                                if (asin == "") {
+                                    SKUCountWithoutASIn = SKUCountWithoutASIn + 1
+                                }
+                                var sku = {};
+                                sku.totalSKU = $(this).closest('tr').find('#productSkuForUpdating').val().length
+                                 totalSKU.push(sku);
+                                
+                                var obj = {};
+                                if (asin) {
+                                    obj.SKU = $(this).closest('tr').find('#productSkuForUpdating').val();
+                                    data.push(obj);
+                                }                            
+                            }
+                        });
+                        console.log("data get by me", data);
+                        console.log("data get by me", SKUCountWithoutASIn);
+                        console.log("data get by me", totalSKU);
+                        var totalSKU = totalSKU.length;
+                        $(".loader").hide();
+                        debugger
+                        $(".myclassSuccessWar").empty();
+                        $(".myclassSuccessWar").append('<span class=""style="display:block;">You have selected ' + '<strong>' + totalSKU + '</strong>' + ' SKU and ' + "<strong>" + SKUCountWithoutASIn +"</strong>"+ ' have no ASIN.</span><span style="">Do you want to Prcoessed ?</span>');
+                        
+                        $("#myModalSuccessWar").modal({ backdrop: 'static', keyboard: false });
+                        $(document).on('click', '.btnsubmitr', function () {
+                            $.ajax({
+                                type: 'post',
+                                url: '../product/GetStausFromZinc',
+                                //  url: '../product/GetStausFromZincNew',
+                                data: {data},
+                                success: function (res) {
+                                    $(".loader").hide();
+                                    debugger
+                                    $(".myclassSuccess").empty();
+                                    $(".myclassSuccess").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+                                    $("#myModalSuccess").modal({ backdrop: 'static', keyboard: false });
+                                    $('.closeModel').on('click', function () {
+                                        location.reload();
+                                    });
+                                }
                             });
-//                            $('.successAppend').empty();
-//                            $('.successAppend').append('<span class="pl-1">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
-//$('.successmessage').show();
+                        });
+                      
+                    }
+                    if ($(document).find('.checkboxSkuForUpdating').is(':checked')) {
+                        var SKUCountWithoutASIn = 0;
+                        var totalSKU = [];
+                        var data = [];
+                        $('.tableProductListSelected tbody tr ').each(function () {
+                            if ($(this).find('.checkboxSkuForUpdating').is(':checked')) {
 
-                        }
-                    });
-                   // setInterval('location.reload()', 6000);
-                    console.log(data);
+                                var asin = $(this).find('.getasinprice').find('a').text();
+                                if (asin == "") {
+                                    SKUCountWithoutASIn = SKUCountWithoutASIn + 1
+                                }
+                                var sku = {};
+                                sku.totalSKU = $(this).find('#productSkuForUpdating').length                               
+                                totalSKU.push(sku);
+
+                                var obj = {};
+                                if (asin) {
+                                    obj.SKU = $(this).find('#productSkuForUpdating').val();
+                                    data.push(obj);
+                                }
+                            }
+                        });
+                        console.log("data get by me", data);
+                        console.log("data get by me", SKUCountWithoutASIn);
+                        console.log("data get by me", totalSKU);
+                        var totalSKU = totalSKU.length;
+                        $(".loader").hide();
+                        debugger
+                        $(".myclassSuccessWar").empty();
+                        $(".myclassSuccessWar").append('<span class=""style="display:block;">You have selected ' + '<strong>' + totalSKU + '</strong>' + ' SKU and ' + "<strong>" + SKUCountWithoutASIn + "</strong>" + ' have no ASIN.</span><span style="">Do you want to Prcoessed ?</span>');
+                        $("#myModalSuccessWar").modal({ backdrop: 'static', keyboard: false });
+                        $(document).on('click', '.btnsubmitr', function () {
+                            $.ajax({
+                                type: 'post',
+                                url: '../product/GetStausFromZinc',
+                                //  url: '../product/GetStausFromZincNew',
+                                data: { data },
+                                success: function (res) {
+                                    $(".loader").hide();
+                                    debugger
+                                    $(".myclassSuccess").empty();
+                                    $(".myclassSuccess").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+                                    $("#myModalSuccess").modal({ backdrop: 'static', keyboard: false });
+                                    $('.closeModel').on('click', function () {
+                                        location.reload();
+                                    });
+                                }
+                            });
+                        });
+
+                    }
                 }
+
+                //
+//                if ($('#actionMenu option:selected').val() == "StatusFromZinc") {
+
+//                    var data = [];
+//                    $(".tableProductListSelected tbody tr ").each(function () {
+//                        if ($(this).find('.checkboxSkForEnableDisable').is(':checked')) {
+//                            var sku = $(this).find('.productSkuForEnableDisable').val();
+
+//                            data.push({ SKU: sku});
+//                        }
+//                    });
+//                    $(".loader").show();
+//                    $.ajax({
+//                        type: 'post',
+//                        url: '../product/GetStausFromZinc',
+//                      //  url: '../product/GetStausFromZincNew',
+//                        data: { data },
+//                        success: function (res) {
+//                            $(".loader").hide();
+//                            debugger
+//                            $(".myclassSuccess").empty();
+//                            $(".myclassSuccess").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+//                            $("#myModalSuccess").modal({ backdrop: 'static', keyboard: false });
+//                            $('.closeModel').on('click', function () {
+//                                location.reload();
+//                            });
+////                            $('.successAppend').empty();
+////                            $('.successAppend').append('<span class="pl-1">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+////$('.successmessage').show();
+
+//                        }
+//                    });
+//                   // setInterval('location.reload()', 6000);
+//                    console.log(data);
+//                }
             });
 
 

@@ -211,6 +211,28 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         </div>
     </div>
 </div>
+<div class="modal fade" id="warningmodel" style="margin-top: 130px;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content modelwidth">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <strong>
+                    <i class="fa fa-exclamation-triangle" style=" color: red;font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align: text-top;margin-left: 4px;">Warning!</span>
+                </strong>
+
+                <button type="button" class="close closeModel" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body myclassExcluded" style="padding-left:0!important;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default closeModel" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success btnsubmitr" data-dismiss="modal">Yes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <div class="container-fluid">
     <div id="loadOrder">
 
@@ -229,6 +251,26 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            $(document).on('click', '.runjob', function () {
+
+                var row = $(this).closest("tr");
+                var JobId = $(this).attr('dataid');
+                $(".myclassExcluded").empty();
+                $(".myclassExcluded").append("<p style='margin-left: 20px;'>Are you Sure You Want to Start the job " + JobId + " ?</p>");
+                $("#warningmodel").modal({ backdrop: 'static', keyboard: false });
+                $(document).on('click', '.btnsubmitr', function () {
+
+                    $.ajax({
+                        url: '../Product/ExecuteJob?JobId=' + JobId,
+                        data: {},
+                        type: 'POST',
+                        traditional: true,
+                        success: function (data) {
+                        }
+                    });
+                });
+            });
             $(".loader").hide();
             $(document).on('click', '#headerCheckBox', function () {
                 var i = 0;
@@ -492,6 +534,48 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
             $(document).on('click', '#btnEnableDisableSKU', function () {
                 {
+                    //for run job
+                     
+                    if ($('#actionMenu option:selected').val() == "jobrun") {
+                        debugger
+                        {
+                            $(document).find('.table tbody tr').each(function (index) {
+
+                                var jobID = $(this).find('.GETjobID').attr('data-id');
+                                if (jobID != null) {
+                                    $(".myclassExcluded").empty();
+                                    $(".myclassExcluded").append("<p style='margin-left: 20px;'>Are you Sure You Want to Start the job " + jobID + " ?</p>");
+                                    $("#warningmodel").modal({ backdrop: 'static', keyboard: false });
+                                }                          
+                               
+                            });
+                            if (jobID.length > 0) {
+                                $(document).on('click', '.btnsubmitr', function () {
+                                    $.ajax({
+                                        url: '../Product/ExecuteJob?JobId=' + jobID,
+                                        data: {},
+                                        type: 'POST',
+                                        traditional: true,
+                                        success: function (data) {
+                                        }
+                                    });
+                                });
+                            }
+                        }
+
+                    }
+
+
+
+
+
+
+
+
+                    //
+
+
+
                     var SKUArraryForSinglePage = [];
                     if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
                         var checked = $('.table').find(':checked').length;

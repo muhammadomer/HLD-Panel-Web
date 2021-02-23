@@ -73,15 +73,28 @@
                     @Html.DisplayFor(modelItem => item.JobID)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StartTime)
+                    @if (item.StartTime != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", item.StartTime)
+                    }
+                    @*@Html.DisplayFor(modelItem => item.StartTime)*@
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CompletionTime)
+                    @if (item.CompletionTime != DateTime.MinValue)
+                    {
+                        @string.Format("{0: MMM d, yyyy}", item.CompletionTime)
+                    }
+                    @*@Html.DisplayFor(modelItem => item.CompletionTime)*@
                 </td>
                 <td>
 
                     <span class="total" style="font-weight:600">
-                        @(string.Format("{0}", (item.CompletionTime - item.StartTime).Value.Duration()).ToString())
+                        @if(item.StartTime != DateTime.MinValue)
+                        {
+                            @(string.Format("{0}", (item.CompletionTime - item.StartTime).Value.Duration()).ToString())
+                        }
+
+
                     </span>
                 </td>
                 <td>

@@ -136,6 +136,7 @@
                 <input class="checkboxSkuForUpdating checkboxSkForEnableDisable " disabled="@(item.ZincResponse=="Available" && item.HLD_CA1<=0 &&item.IsPrime==1?false:true)" type="checkbox" />
                 <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />
                 <input type="hidden" asp-for="@item.BBProductId" id="productIdForUpdating" class="productSkuForEnableDisable" />
+                <input type="hidden" asp-for="@item.jobID" id="jobID" class="GETjobID"data-id="@item.jobID" />
                 @*<input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />*@
             </td>
             <td>
