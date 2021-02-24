@@ -131,12 +131,25 @@
         {
         <tr>
             <td>
-                
+                @{
+
+                    var pp = @Model.Where(p => p.ProductSKU == item.ProductSKU).Min(p => p.UnitOriginPrice_Max);
+                    var min = @Model.Where(p => p.ProductSKU == item.ProductSKU && p.UnitOriginPrice_Max == Convert.ToDouble(pp)).Select(x => new
+                    {
+                        price = x.UnitOriginPrice_Max,
+                        z_ASIN = x.ASIN
+                    });
+                }
+                @min.FirstOrDefault().z_ASIN;
                 <input type='text' style="display:none" class='form-control CheckApproved watchlistdata' value='@item.IsPrime'>
                 <input class="checkboxSkuForUpdating checkboxSkForEnableDisable " disabled="@(item.ZincResponse=="Available" && item.HLD_CA1<=0 &&item.IsPrime==1?false:true)" type="checkbox" />
                 <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />
                 <input type="hidden" asp-for="@item.BBProductId" id="productIdForUpdating" class="productSkuForEnableDisable" />
-                <input type="hidden" asp-for="@item.jobID" id="jobID" class="GETjobID"data-id="@item.jobID" />
+                <input type="hidden" asp-for="@item.jobID" id="jobID" class="GETjobID" data-id="@item.jobID" />
+                @if (min.FirstOrDefault().z_ASIN == item.ASIN)
+                {
+                 <input type="hidden" asp-for="@item.ASIN" id="ASINForUpdating" class="ASINForEnableDisable" />
+                }
                 @*<input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />*@
             </td>
             <td>
@@ -151,6 +164,10 @@
             </td>
             <td>
                 <a href="https://www.amazon.ca/dp/@item.ASIN" target="_blank">@item.ASIN</a>
+                @if (min.FirstOrDefault().z_ASIN == item.ASIN)
+                {
+                   <span>Valid</span>
+                }
             </td>
             <td>
                 <span><a style="cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-productsku="@item.ProductSKU" target="_blank">@item.ProductSKU</a></span><br />
@@ -210,7 +227,7 @@
 
                 @{
                     //var maxprice = Math.Floor((item.UnitOriginPrice_Max / 100), 0)+0.95;
-                    var maxprice = Math.Floor((item.UnitOriginPrice_Max / 100)) + 0.95;
+                    var maxprice = Math.Round((item.UnitOriginPrice_Max / 100),2);
                     var maxpriceText = maxprice * 100;
                 }
                 <input style="display:none" value="@maxpriceText" class="UpdatingSellingPrice" />

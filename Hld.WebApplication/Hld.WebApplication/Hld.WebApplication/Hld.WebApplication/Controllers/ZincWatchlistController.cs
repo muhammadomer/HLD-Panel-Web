@@ -236,14 +236,32 @@ namespace Hld.WebApplication.Controllers
             searchViewModel.JobID = jobID == "undefined" ? "" : jobID;
             searchViewModel.Available = available == "undefined" ? "" : available;
             listmodel = _ApiAccess.UpdateBestBuyForAllPages(ApiURL, token, searchViewModel);
+      
+            List<ZincWatchlistLogsViewModel> listmodelBB = new List<ZincWatchlistLogsViewModel>();
 
-            foreach(var item in listmodel)
+            foreach (var item in listmodel)
             {
-                item.UnitOriginPrice_Max = (Math.Floor((item.UnitOriginPrice_Max / 100)) + 0.95)*100;
-                item.ZincJobId = Convert.ToInt32(jobID);
-            }
+                ZincWatchlistLogsViewModel modelBB = new ZincWatchlistLogsViewModel();
+                if (listmodel.Where(p => p.ProductSKU == item.ProductSKU).Count() > 1)
+                {
+                  double min = listmodel.Where(p => p.ProductSKU == item.ProductSKU).Min(p => p.UnitOriginPrice_Max);
+                  var data =  listmodel.Where(p => p.ProductSKU == item.ProductSKU && p.UnitOriginPrice_Max == min).FirstOrDefault();
+                    if (data.ASIN == item.ASIN && data.ProductSKU == item.ProductSKU)
+                    {
+                        item.UnitOriginPrice_Max = (Math.Round(item.UnitOriginPrice_Max / 100, 2)) * 100;
+                        item.ZincJobId = Convert.ToInt32(jobID);
+                        listmodelBB.Add(item);
+                    }
+                    
+                }
+                else {
+                    item.UnitOriginPrice_Max = (Math.Round(item.UnitOriginPrice_Max / 100, 2)) * 100;
+                    item.ZincJobId = Convert.ToInt32(jobID);
+                    listmodelBB.Add(item);
 
-            int ID = _ApiAccess.SaveBestBuyUpdateList(ApiURL, token, listmodel);
+                }
+            }
+            int ID = _ApiAccess.SaveBestBuyUpdateList(ApiURL, token, listmodelBB);
             return ID;
         }
 
