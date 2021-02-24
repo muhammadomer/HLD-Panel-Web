@@ -82,10 +82,14 @@
     <img src="~/Images/giffff.gif" />
 </div>
 <div class="container-fluid p-0">
-    <h4 style="margin-left: 13px;">Zinc WatchList Logs<span style="cursor:pointer!important"><a href="../BestBuyProduct/SummaryCount" target="_blank"style="margin-left: 85px;cursor:pointer!important;
+    <h6 style="margin-left: 13px;">
+        Zinc Offers Update<span style="cursor:pointer!important">
+            <a href="../BestBuyProduct/SummaryCount" target="_blank" style="margin-left: 85px;cursor:pointer!important;
         font-size: 12px !important;
         text-decoration: underline;
-">BB Price Logs</a></span></h4>
+">BB Price Logs</a>
+        </span>
+    </h6>
     
     
     <div class="row col col-12" id="fixActionMenu">
@@ -96,7 +100,7 @@
                 </div>
 
                 <span>Results Per Page: 100 </span>
-                <span style="margin-left:40px; margin-right:20px;">Results Found: @ViewBag.logsRecords</span>
+                <span style="margin-left:40px; margin-right:20px;">Results Found: @ViewBag.logsRecords</span><span style="padding-left: 3px;vertical-align:text-bottom">Completed</span><span id="CompletedAll" style="vertical-align:top;"></span>
                 <div style="margin-left:15px">
                     @using (Html.BeginForm("MainViewLogs", "ZincWatchlist", FormMethod.Get))
                     {
@@ -254,6 +258,16 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
         $(document).ready(function () {
 
+            var AvailableCount = parseInt('@ViewBag.AvailableCount');
+            var UnAvailableCount = parseInt('@ViewBag.UnAvailableCount');
+            var ListingRemovedCount = parseInt('@ViewBag.ListingRemovedCount');
+            var ErrorCount = parseInt('@ViewBag.ErrorCount');
+            var TotalRecord = parseInt('@ViewBag.Total');
+            var SumAll = ((AvailableCount + UnAvailableCount + ListingRemovedCount + ErrorCount) / TotalRecord) * 100;
+            var ExactValue = (SumAll.toFixed());
+            $("#CompletedAll").text(': ' + ExactValue+'%');
+
+            console.log()
             $(document).on('click', '.runjob', function () {
 
                 var row = $(this).closest("tr");

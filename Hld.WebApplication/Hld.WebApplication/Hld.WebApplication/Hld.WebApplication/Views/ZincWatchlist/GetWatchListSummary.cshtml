@@ -59,9 +59,7 @@
                 <th>
                     Unavailable
                 </th>
-                <th>
-                    Status
-                </th>
+             
                 <th>Logs</th>
             </tr>
         </thead>
@@ -75,14 +73,14 @@
                 <td>
                     @if (item.StartTime != DateTime.MinValue)
                     {
-                        @string.Format("{0: MMM d, yyyy}", item.StartTime)
+                        @string.Format("{0: MMM d, yyyy HH:mm:ss tt}", item.StartTime)
                     }
                     @*@Html.DisplayFor(modelItem => item.StartTime)*@
                 </td>
                 <td>
                     @if (item.CompletionTime != DateTime.MinValue)
                     {
-                        @string.Format("{0: MMM d, yyyy}", item.CompletionTime)
+                       @string.Format("{0: MMM d, yyyy HH:mm:ss tt}", item.CompletionTime)
                     }
                     @*@Html.DisplayFor(modelItem => item.CompletionTime)*@
                 </td>
@@ -125,9 +123,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Unavailable)
                 </td>
-                <td>
+                @*<td>
                     <a href="#" class="runjob" dataid="@item.JobID">@item.Status</a>
-                </td>
+                </td>*@
                 <td>
                     @Html.ActionLink("Logs", "MainViewLogs", new { ASIN = " ", jobID = item.JobID, available = " " }, new { target = "_blank" })
                 </td>
