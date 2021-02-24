@@ -119,6 +119,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.AvailableCount = obj.Available;
             ViewBag.UnAvailableCount = obj.UnAvailable;
             ViewBag.ListingRemovedCount = obj.ListingRemoved;
+            ViewBag.ErrorCount = obj.ErrorCount;
             ViewBag.logsRecords = Count;
             ViewBag.JobID = jobID;
 

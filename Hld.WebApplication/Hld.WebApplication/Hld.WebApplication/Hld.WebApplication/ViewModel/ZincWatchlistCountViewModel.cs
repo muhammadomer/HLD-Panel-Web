@@ -12,5 +12,6 @@ namespace Hld.WebApplication.ViewModel
         public int ListingRemoved { get; set; }
         public int TotalCount { get; set; }
         public int Total{ get; set; }
+        public int ErrorCount { get; set; }
     }
 }

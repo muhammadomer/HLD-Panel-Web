@@ -112,7 +112,9 @@
                         <label class="radio-inline" style="margin-left: 10px;">
                             <input type="radio" name="available" value="Listing Removed" /> Listing Removed<span> (@ViewBag.ListingRemovedCount)</span>
                         </label>
-
+                        <label class="radio-inline" style="margin-left: 10px;">
+                            <input type="radio" name="available" value="Error" /> Error<span> (@ViewBag.ErrorCount)</span>
+                        </label>
                         <input type="hidden" name="ASIN" value="" id="ddlZincStatusValues" />
                         <input type="hidden" name="jobID" value="@ViewBag.JobID" id="ddlDSStatusValues" />
                     }
@@ -535,7 +537,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             $(document).on('click', '#btnEnableDisableSKU', function () {
                 {
                     //for run job
-                     
+
                     if ($('#actionMenu option:selected').val() == "jobrun") {
                         debugger
                         {
@@ -543,24 +545,28 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                                 var jobID = $(this).find('.GETjobID').attr('data-id');
                                 if (jobID != null) {
+                                    debugger;
+                                    var TotalRecords = parseInt('@ViewBag.logsRecords');
+                                    var AfterCal = TotalRecords * 0.01;
+                                    var ExactCal = (AfterCal.toFixed(2));
                                     $(".myclassExcluded").empty();
-                                    $(".myclassExcluded").append("<p style='margin-left: 20px;'>Are you Sure You Want to Start the job " + jobID + " ?</p>");
+                                    $(".myclassExcluded").append('<p style="margin-left: 20px;">Please note you are sending  ' + '<strong>' + TotalRecords + '</strong>' + ' records to get ASIN update from Zinc, it will cost ' + '<strong>US $' + ExactCal + '</strong>' + ' Please ensure if this update is necessary</p>');
                                     $("#warningmodel").modal({ backdrop: 'static', keyboard: false });
-                                }                          
-                               
+                                }
+
                             });
-                            if (jobID.length > 0) {
-                                $(document).on('click', '.btnsubmitr', function () {
-                                    $.ajax({
-                                        url: '../Product/ExecuteJob?JobId=' + jobID,
-                                        data: {},
-                                        type: 'POST',
-                                        traditional: true,
-                                        success: function (data) {
-                                        }
-                                    });
-                                });
-                            }
+                            //if (jobID.length > 0) {
+                            //    $(document).on('click', '.btnsubmitr', function () {
+                            //        $.ajax({
+                            //            url: '../Product/ExecuteJob?JobId=' + jobID,
+                            //            data: {},
+                            //            type: 'POST',
+                            //            traditional: true,
+                            //            success: function (data) {
+                            //            }
+                            //        });
+                            //    });
+                            //}
                         }
 
                     }
@@ -652,10 +658,10 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                                     var MSRP = $(this).closest('tr').find('.MSRP').val();
                                     var UpdateSelling = parseFloat($(this).closest('tr').find('.UpdatingSellingPrice').val());
 
-                                    data.push({ ProductSKU: ProductSku, BBProductId: ProductId, UnitOriginPrice_MSRP: MSRP, UnitOriginPrice_Max: UpdateSelling,ZincJobId:jobID });
+                                    data.push({ ProductSKU: ProductSku, BBProductId: ProductId, UnitOriginPrice_MSRP: MSRP, UnitOriginPrice_Max: UpdateSelling, ZincJobId: jobID, ASIN: ASIN });
                                 }
                             });
-
+                            console.log("responce get asin",data)
                             debugger;
                             var Url = '/ZincWatchlist/UpdateBestBuyForSelectPages';
 
