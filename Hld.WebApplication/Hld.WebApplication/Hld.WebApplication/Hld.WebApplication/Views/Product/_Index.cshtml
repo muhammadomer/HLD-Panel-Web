@@ -167,7 +167,8 @@
                 </td>
                 <td>
                     DSQ &nbsp; @item.dropship_Qty &nbsp;  <input type="checkbox" disabled="disabled" asp-for="@item.dropship_status" /> <br />
-                    WHQ @item.ProductrWarehouseQtyViewModel.Where(E => E.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()
+                    WHQ @item.AggregatedQty
+                    @*WHQ @item.ProductrWarehouseQtyViewModel.Where(E => E.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()*@
                 </td>
 
                 <td> - - -</td><!--Location in WH-->

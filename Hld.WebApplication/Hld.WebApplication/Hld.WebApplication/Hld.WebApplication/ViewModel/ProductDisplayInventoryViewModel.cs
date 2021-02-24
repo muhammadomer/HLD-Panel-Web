@@ -25,7 +25,7 @@ namespace Hld.WebApplication.ViewModel
         public bool dropship_status { get; set; }
         public int dropship_Qty { get; set; }
         public int BBProductID { get; set; }
-
+        public int AggregatedQty { get; set; }
 
         public List<ProductWarehouseQtyViewModel> ProductrWarehouseQtyViewModel { get; set; }
         public List<SkuTagOrderViewModel> skuTags { get; set; }

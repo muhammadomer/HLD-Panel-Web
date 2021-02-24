@@ -555,18 +555,18 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                                 }
 
                             });
-                            //if (jobID.length > 0) {
-                            //    $(document).on('click', '.btnsubmitr', function () {
-                            //        $.ajax({
-                            //            url: '../Product/ExecuteJob?JobId=' + jobID,
-                            //            data: {},
-                            //            type: 'POST',
-                            //            traditional: true,
-                            //            success: function (data) {
-                            //            }
-                            //        });
-                            //    });
-                            //}
+                            if (jobID.length > 0) {
+                                $(document).on('click', '.btnsubmitr', function () {
+                                    $.ajax({
+                                        url: '../Product/ExecuteJob?JobId=' + jobID,
+                                        data: {},
+                                        type: 'POST',
+                                        traditional: true,
+                                        success: function (data) {
+                                        }
+                                    });
+                                });
+                            }
                         }
 
                     }
