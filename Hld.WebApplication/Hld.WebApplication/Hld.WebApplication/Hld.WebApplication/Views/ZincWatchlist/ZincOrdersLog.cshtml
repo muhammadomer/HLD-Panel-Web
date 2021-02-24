@@ -298,6 +298,7 @@
             $('#btnSearchOrder').click(function () {
 
                 $('#itemPerPage').show();
+                $('#Zinc_Status').val();
             });
 
 
@@ -323,6 +324,10 @@
             $('#reportrange').daterangepicker({
                 startDate: start,
                 endDate: end,
+                autoUpdateInput: true,
+                locale: {
+                    cancelLabel: 'Clear'
+                },
                 ranges: {
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -343,7 +348,12 @@
                 console.log($("#orderDateTimeTo").val());
                 console.log(selectedDatTo);
             });
-
+            $('#reportrange').find('span').html('');
+            $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
+                $('#reportrange').find('span').html('');
+                $('#orderDateTimeFrom').val('');
+                $('#orderDateTimeTo').val('');
+            });
             //var Items = getUrlParameter('CustomerName');
           
             $('select[multiple].active.2col.Zinc_Status').multiselect({
@@ -376,38 +386,7 @@
             var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
             var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
             var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
-            if (Zinc_Status != null) {
-                debugger;
-                var res = Zinc_Status.split(",");
-                $.each(res, function (key, value) {
-                    var setval = 25;
-                    var getval = value;
-                    getval = setval;
-                    console.log(getval);
-                    if (getval == 25) {
-                        $(".Zinc_Status").next().children(".ms-options").find("input[type=checkbox]").each(function () {
-
-                            if ($(this).val() == value.trim()) {
-                                $(this).prop("checked", true);
-                            }
-                        });
-                    }
-                    else {
-
-                        $(".Zinc_Status").next().children(".ms-options").find("input[type=checkbox]").each(function () {
-                            //if($(this).parents("select").hasClass("WHQStatus"))
-
-                            if ($(this).val() == value.trim()) {
-                                $(this).prop("checked", false);
-                            }
-                        });
-                    }
-
-                   
-                });
-            }
            
-
             if (EmptyFirstTime) {
                 $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
 
@@ -520,10 +499,62 @@
                  });
                 $(".loader").hide();
             }
+            if (Zinc_Status != null) {
+                debugger;
+                var res = Zinc_Status.split(",");
+                $('#Zinc_Status').val(Zinc_Status);
+                $.each(res, function (key, value) {
+                    var setval = 25;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 25) {
+                        $(".Zinc_Status").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".Zinc_Status").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }
 
 
+                });
+            }
+            if (OrderDateTimeFrom) {
+
+
+                $('#orderDateTimeFrom').val(OrderDateTimeFrom);
+                //$('#reportrange span').html(OrderDateTimeFrom);
+                //$('#reportrange span').val(OrderDateTimeFrom);
+
+
+
+
+            }
+            if (OrderDateTimeTo) {
+
+
+                //$('#reportrange span').text(OrderDateTimeTo);
+                //$('#reportrange span').html(OrderDateTimeTo);
+                $('#orderDateTimeTo').val(OrderDateTimeTo);
+
+
+
+            }
             $(".table").tablesorter();
+           
+
 
         });
+   
     </script>
 }

@@ -909,7 +909,7 @@ $('.successmessage').hide();
                         $('.tableProductListSelected tbody tr ').each(function () {
                             if ($(document).find('#headerCheckBox').is(':checked')) {
                                 var asin = $(this).closest('tr').find('.getasinprice').find('a').text();
-                                if (asin == "") {
+                                if (asin == "" || asin == "0") {
                                     SKUCountWithoutASIn = SKUCountWithoutASIn + 1
                                 }
                                 var sku = {};
@@ -961,7 +961,7 @@ $('.successmessage').hide();
                             if ($(this).find('.checkboxSkuForUpdating').is(':checked')) {
 
                                 var asin = $(this).find('.getasinprice').find('a').text();
-                                if (asin == "") {
+                                if (asin == "" || asin =="0") {
                                     SKUCountWithoutASIn = SKUCountWithoutASIn + 1
                                 }
                                 var sku = {};

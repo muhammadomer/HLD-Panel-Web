@@ -10,12 +10,12 @@ namespace Hld.WebApplication.ViewModel
         public string SKU { get; set; }
         public string ASIN { get; set; }
         public int TotalCount { get; set; }
-        public List<ZincGetStatusFromZincViewModelResponce> SKUlist { get; set; }
+        //public List<ZincGetStatusFromZincViewModelResponce> SKUlist { get; set; }
 
     }
-    public class ZincGetStatusFromZincViewModelResponce
-    {
-        public string SKU { get; set; }
-    }
+    //public class ZincGetStatusFromZincViewModelResponce
+    //{
+    //    public string SKU { get; set; }
+    //}
   
 }

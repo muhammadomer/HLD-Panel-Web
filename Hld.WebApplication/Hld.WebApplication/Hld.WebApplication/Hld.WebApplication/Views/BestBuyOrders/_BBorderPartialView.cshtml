@@ -373,53 +373,58 @@
                                         &nbsp; <span style="margin:5px;"><strong>MP Order #:</strong> <a href="https://marketplace.bestbuy.ca/mmp/shop/order/@item.OrderNumber" target="_blank">@item.OrderNumber</a>     </span>
                                         @*&nbsp; <span style="margin:5px;"><strong>BB Order Status:</strong> @item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault() </span>*@
                                         &nbsp; <span style="margin:5px;">
-    <strong>BB Order Status:</strong>
-    @*@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()*@
+                                            <strong>BB Order Status:</strong>
+                                            @*@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()*@
 
-    @{
-        string order_state = item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault();
-    }
-    @{
-        if (order_state == "Shipping" || order_state == "SHIPPING")
-        {
-            <span style="color:green">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
-        }
-        else if (order_state == "WAITING_ACCEPTANCE")
-        {
-            <span style="color:red">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
-        }
-        else if (order_state == "WAITING_DEBIT_PAYMENT" || order_state == "WAITING_DEBIT_PAYMEN")
-        {
-            <span style="color:orange">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
-        }
-        else
-        {
-            <span>@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
-        }
-    }
-
-
+                                            @{
+                                                string order_state = item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault();
+                                            }
+                                            @{
+                                                if (order_state == "Shipping" || order_state == "SHIPPING")
+                                                {
+                                                    <span style="color:green">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                                                }
+                                                else if (order_state == "WAITING_ACCEPTANCE")
+                                                {
+                                                    <span style="color:red">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                                                }
+                                                else if (order_state == "WAITING_DEBIT_PAYMENT" || order_state == "WAITING_DEBIT_PAYMEN")
+                                                {
+                                                    <span style="color:orange">@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@item.BBProductDetail.Select(e => e.OrderStatus).FirstOrDefault()</span>
+                                                }
+                                            }
 
 
 
-</span>
+
+
+                                        </span>
                                         &nbsp;<span>   <i class="getToolTip fa fa-info" style="cursor:pointer" data-id="@item.SellerCloudOrderID" height="18px" width="18px" alt=""></i> </span>
                                         <span class="showToolTipData"></span>
                                         <a asp-action="BBOrderViewPage" target="_blank" asp-controller="BestBuyOrders" asp-route-SCorderid="@item.OrderNumber">Order View Page</a>
                                         @if (item.IsNotes == "1")
-                                                    {
+                                        {
                                             <span><img src="~/Images/orange-2.png" style="height: 22px;cursor: pointer;" value="@item.SellerCloudOrderID" class="btnViewNotes" /></span>
                                         }
                                         else
                                         {
                                             <span><img src="~/Images/empty-2.png" style="height: 22px;cursor: pointer;" value="@item.SellerCloudOrderID" class="btnViewNotes" /></span>
                                         }
-                                            @if (@item.ZincAccountId != 0)
+                                        @if (@item.ZincAccountId != 0)
                                         {
                                             @*<span><img src="~/Images/icon-credit (2).png" style="height: 24px;cursor: pointer;" value="" data-AccountId="@item.ZincAccountId" data-CreditCard="@item.CreditCardId" class="btnViewCreditDetail" /></span>*@
                                             <span class="AmzAC" data-AccountId="@item.ZincAccountId" data-CreditCard="@item.CreditCardId" style="margin-left: 10px;"></span>
                                             <span &nbsp; class="CreditCard" data-AccountId="@item.ZincAccountId" data-CreditCard="@item.CreditCardId" style="margin-left:5px;"></span>
                                         }
+                                        <span>
+                                            <a style='margin-left:5px;cursor:pointer!important;vertical-align: middle;' href="/ZincWatchlist/ZincOrdersLog?EmptyFirstTime=No&SC_Order_ID=@item.SellerCloudOrderID&Amazon_AcName=&Zinc_Status=&orderDateTimeFrom=&orderDateTimeTo=" target='_blank'>
+                                                Zinc Log
+                                            </a>
+                                        </span>
                                     </div>
                                 </td>
                             </tr>

@@ -2613,8 +2613,9 @@ namespace Hld.WebApplication.Helper
             }
             return count;
         }
-        public List<ZincGetStatusFromZincViewModel> SelectAllSKUandASINGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus)
+        public int SelectAllSKUandASINGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus)
         {
+            int JobId = 0;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllSKUandASINGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus);
             request.Method = "GET";
             request.Accept = "application/json;";
@@ -2630,8 +2631,8 @@ namespace Hld.WebApplication.Helper
                         strResponse = stream.ReadToEnd();
                     }
                 }
-                List<ZincGetStatusFromZincViewModel> responses = JsonConvert.DeserializeObject<List<ZincGetStatusFromZincViewModel>>(strResponse);
-                return responses;
+                JobId = JsonConvert.DeserializeObject<int>(strResponse);
+                return JobId;
             }
             catch (Exception ex)
             {

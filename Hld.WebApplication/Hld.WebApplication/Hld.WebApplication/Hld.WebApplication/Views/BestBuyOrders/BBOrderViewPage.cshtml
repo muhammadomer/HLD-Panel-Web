@@ -449,7 +449,11 @@
                         {
 
                             <span><img src="~/Images/empty-2.png" style="height: 22px;cursor: pointer;" value="@Model.SellerCloudOrderID" class="btnViewNotes" /></span>
-                        }
+                        }<span>
+    <a style='margin-left:5px;cursor:pointer!important;vertical-align: middle;' href="/ZincWatchlist/ZincOrdersLog?EmptyFirstTime=No&SC_Order_ID=@Model.SellerCloudOrderID&Amazon_AcName=&Zinc_Status=&orderDateTimeFrom=&orderDateTimeTo=" target='_blank'>
+        Zinc Log
+    </a>
+</span>
                     </div>
                     <div>
                         <label class="col-3 p-0">SC Order#:</label>

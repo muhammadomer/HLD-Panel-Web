@@ -2401,7 +2401,7 @@ namespace Hld.WebApplication.Controllers
             return count;
         }
         [HttpPost]
-        public IActionResult SelectAllSKUandASINGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus)
+        public int SelectAllSKUandASINGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus)
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -2537,15 +2537,11 @@ namespace Hld.WebApplication.Controllers
                 dropshipstatus = "All";
             }
 
-            List<ZincGetStatusFromZincViewModel> viewModels = new List<ZincGetStatusFromZincViewModel>();
-            viewModels = ProductApiAccess.SelectAllSKUandASINGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus);
-            viewModels.Select(a => a.SKUlist);
-            //foreach (var item in viewModels.sku)
-            //{
-            //    GetStausFromZinc(item.SKU)
-            //}
- 
-            return View(viewModels);
+            List<GetStatusFromZincViewModel> viewModels = new List<GetStatusFromZincViewModel>();
+            int JobId;
+            JobId = ProductApiAccess.SelectAllSKUandASINGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus);
+     
+            return JobId;
         }
     }
 }
