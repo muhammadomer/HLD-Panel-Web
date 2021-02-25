@@ -123,7 +123,46 @@ namespace Hld.WebApplication.Controllers
                 model.WHQStatus = "ALL";
             }
 
-
+            if (!string.IsNullOrEmpty(model.BBProductID) && model.BBProductID != "undefined")
+            {
+                string[] Val = model.BBProductID.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        model.BBProductID = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        model.BBProductID = "No";
+                    }
+                }
+            }
+            else
+            {
+                model.BBProductID = "ALL";
+            }
+            if (!string.IsNullOrEmpty(model.ASINS) && model.asin != "undefined")
+            {
+                string[] Val = model.ASINS.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        model.ASINS = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        model.ASINS = "No";
+                    }
+                }
+            }
+            else
+            {
+                model.ASINS = "ALL";
+            }
             if (!string.IsNullOrEmpty(model.SearchFromSkuList))
             {
                 var lines = model.SearchFromSkuList.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -225,7 +264,7 @@ namespace Hld.WebApplication.Controllers
             int count = ProductApiAccess.GetAllProductsCount(ApiURL, token, model);
             return count;
         }
-        public IActionResult Index(int? page, string sort, string dropshipstatus, string dropshipstatusSearch, string Sku, string asin, string Producttitle, string DSTag, string TypeSearch,string WHQStatus)
+        public IActionResult Index(int? page, string sort, string dropshipstatus, string dropshipstatusSearch, string Sku, string asin, string Producttitle, string DSTag, string TypeSearch,string WHQStatus,string BBProductID,string ASINS)
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -254,6 +293,8 @@ namespace Hld.WebApplication.Controllers
                 viewmodel.SearchFromSkuList = skuList;
                 viewmodel.DSTag = "ALL";
                 viewmodel.WHQStatus = "ALL";
+                viewmodel.BBProductID = "ALL";
+                viewmodel.ASINS = "ALL";
                 ViewBag.asin = "Nill";
                 ViewBag.Producttitle = "Nill";
                 List<ProductDisplayInventoryViewModel> productList = ProductApiAccess.GetAllProductsWihtoutPageLimit(ApiURL, token, viewmodel);
@@ -301,6 +342,49 @@ namespace Hld.WebApplication.Controllers
                 {
                   DSTag = "ALL";
                 }
+                if (!string.IsNullOrEmpty(BBProductID) && BBProductID != "undefined")
+                {
+                    string[] Val = BBProductID.Split(',');
+                    int length = Val.Length;
+                    foreach (var item in Val)
+                    {
+                        if (item == "Yes")
+                        {
+                            BBProductID = "Yes";
+                        }
+                        if (item == "No")
+                        {
+                            BBProductID = "No";
+                        }
+                    }
+                }
+                else
+                {
+                    BBProductID = "ALL";
+                }
+                if (!string.IsNullOrEmpty(ASINS) && ASINS != "undefined")
+                {
+                    string[] Val = ASINS.Split(',');
+                    int length = Val.Length;
+                    foreach (var item in Val)
+                    {
+                        if (item == "Yes")
+                        {
+                            ASINS = "Yes";
+                        }
+                        if (item == "No")
+                        {
+                            ASINS = "No";
+                        }
+                    }
+                }
+                else
+                {
+                    ASINS = "ALL";
+                }
+
+
+
                 ViewBag.skuSearchList = "";
                 //start
                 if (dropshipstatusSearch == null || dropshipstatusSearch == "undefined")
@@ -379,7 +463,7 @@ namespace Hld.WebApplication.Controllers
                     endLimit = (pageNumber - 1) * pageSize;
                     ViewBag.pageNumber = page.Value;
                 }
-                List<ProductDisplayInventoryViewModel> viewModels = ProductApiAccess.GetAllProducts(ApiURL, token, startlimit, endLimit, sort, dropshipstatus, dropshipstatusSearch, Sku.Trim(), asin, Producttitle, DSTag, TypeSearch,WHQStatus);
+                List<ProductDisplayInventoryViewModel> viewModels = ProductApiAccess.GetAllProducts(ApiURL, token, startlimit, endLimit, sort, dropshipstatus, dropshipstatusSearch, Sku.Trim(), asin, Producttitle, DSTag, TypeSearch,WHQStatus,BBProductID,ASINS);
                 return PartialView("~/Views/Product/_Index.cshtml", viewModels);
             }
         }

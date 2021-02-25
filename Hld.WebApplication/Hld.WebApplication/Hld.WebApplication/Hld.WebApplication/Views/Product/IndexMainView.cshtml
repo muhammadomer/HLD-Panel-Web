@@ -31,7 +31,13 @@
     #pagination > a {
         padding: 5px;
     }
-
+   
+   /* .ms-options-wrap.ms-active > .ms-options {
+        min-height: 62px !important;
+        max-height: 400px !important;
+        column-count: 1 !important;
+        overflow-x: hidden !important;
+    }*/
     .pagination > a {
         padding: 5px;
     }
@@ -61,9 +67,11 @@
         min-height: 92px !important;
     }
 
+
     .ms-options-wrap > button:focus, .ms-options-wrap > button {
         border-radius: 4px;
         height: 25px;
+
         outline: none !important;
     }
 
@@ -74,7 +82,9 @@
     .ms-options-wrap > .ms-options > ul label {
         width: 101% !important;
     }
-
+    .ms-options-wrap:nth-of-type(2) .ms-options {
+        min-width: 200px !important;
+    }
     .loader {
         position: fixed;
         left: 0px;
@@ -119,7 +129,7 @@
         box-sizing: border-box;
         padding: 60px;
     }
-
+    
     .myclass1 {
         position: fixed;
         top: 30%;
@@ -171,19 +181,32 @@
                         </select>
                         <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
                     </div>
+                    <div class="col-md-1 p-0 mr-1">
+                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ASINStatus" multiple="multiple">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        <input type="hidden" name="ASINS" id="ddlASINStatus" />
+                    </div>
+                    <div class="col-md-1 p-0 mr-1">
+                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ShowSKUwithBBProductID" multiple="multiple">
+                            <option value="Yes">Show with BB Product ID</option>
+                            <option value="No">Show without BB Product ID</option>
+                        </select>
+                        <input type="hidden" name="BBProductID" id="ddlShowSKUBBProductID" />
+                    </div>
 
 
                     <select style="padding:0px;width:110px!important;box-shadow: none;" id="multiselect" class="form-control" asp-for="dropshipstatus">
-
                         <option value="sku">SKU</option>
                         <option value="ProductTitle">Title</option>
                         <option value="asin">ASIN</option>
                         <option value="ALL">All</option>
                     </select>
-                    <label class="mb-2 mr-sm-2"></label>
+                    <label class="mb-2 mr-sm-1"></label>
 
-                    <input type="text" autocomplete="off" class="form-control" asp-for="Sku" style="box-shadow: none;width: 360px;" />
-                    <label class="mb-2 mr-sm-2"></label>
+                    <input type="text" autocomplete="off" class="form-control" asp-for="Sku" style="box-shadow: none;width: 255px;" />
+                    <label class="mb-2"></label>
 
                     <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
                     <select id="" class="form-control p-sm-0" asp-for="TypeSearch">
@@ -197,7 +220,7 @@
 
 
                     <div class="dropdown show ">
-                        <a class="btn btn-secondary dropdown-toggle myclasss1" href="#" role="button" id="dropdownMenuLink" style="background:#007bff;border-color:#007bff; margin-left:15px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="btn btn-secondary dropdown-toggle myclasss1" href="#" role="button" id="dropdownMenuLink" style="background:#007bff;border-color:#007bff; margin-left:3px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Tags
                         </a>
                         <div class="dropdown-menu myclasss" aria-labelledby="dropdownMenuLink">
@@ -208,9 +231,9 @@
                         </div>
                     </div>
 
-                    <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder"style="margin-right:1px">Export</button>
+                    <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder" style="margin-right:1px">Export</button>
                     <span>
-                        <span class="btnexportOrderforshow"style="display:none;"><img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
+                        <span class="btnexportOrderforshow" style="display:none;"><img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
                     </span>
                     @*<button class="ml-1 btn btn-primary" type="button" id="btnexportOrderget">Export</button>*@
                 }
@@ -537,6 +560,29 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 },
 
             });
+
+                $('select[multiple].active.ASINStatus').multiselect({
+                    columns: 1,
+                    placeholder: 'ASIN Available',
+                    maxPlaceholderOpts: 1,
+                    selectAll: false,
+                    onOptionClick: function (element, option) {
+                        $('#ddlASINStatus').val($(element).val());
+                        $(element).val();
+                    },
+
+                });
+                $('select[multiple].active.ShowSKUwithBBProductID').multiselect({
+                    columns: 1,
+                    placeholder: 'Show SKUs',
+                    maxPlaceholderOpts: 1,
+                    selectAll: false,
+                    onOptionClick: function (element, option) {
+                        $('#ddlShowSKUBBProductID').val($(element).val());
+                        $(element).val();
+                    },
+
+                });
             $('.successmessage').hide();
 
 $('.successmessagclose').click(function () {
@@ -680,6 +726,8 @@ $('.successmessage').hide();
             var sku = getUrlParameter('Sku');
             var DSTagItem = getUrlParameter('DSTag');
             var WHQStatus = getUrlParameter('WHQStatus');
+                var ASINStatus = getUrlParameter('ASINS');
+            var BBProductID = getUrlParameter('BBProductID');
 
             var TypeSearch = getUrlParameter('TypeSearch');
             if (TypeSearch == "Continued") {
@@ -1116,7 +1164,7 @@ $('.successmessage').hide();
                         pageNo = page;
 
                         // add code which gets executed when user selects a page
-                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID +'&ASIN=' + ASINStatus;
                         $(".loader").show();
                         $.get(url).done(function (response) {
                             $('#loadOrder').empty();
@@ -1229,6 +1277,70 @@ $('.successmessage').hide();
                 });
             }
 
+                if (ASINStatus != null) {
+
+                    var res = ASINStatus.split(",");
+                    //$('#ddlQuantity').val($(this).item);
+                    $('#ddlASINStatus').val(ASINStatus);
+                    $.each(res, function (key, value) {
+
+                        var setval = 25;
+                        var getval = value;
+                        getval = setval;
+                        console.log(getval);
+                        if (getval == 25) {
+                            $(".ASINStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", true);
+                                }
+                            });
+                        }
+                        else {
+
+                            $(".ASINStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", false);
+                                }
+                            });
+                        }
+
+                    });
+                }
+                if (BBProductID != null) {
+
+                    var res = BBProductID.split(",");
+                    //$('#ddlQuantity').val($(this).item);
+                    $('#ddlShowSKUBBProductID').val(BBProductID);
+                    $.each(res, function (key, value) {
+
+                        var setval = 30;
+                        var getval = value;
+                        getval = setval;
+                        console.log(getval);
+                        if (getval == 30) {
+                            $(".ShowSKUwithBBProductID").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", true);
+                                }
+                            });
+                        }
+                        else {
+
+                            $(".ShowSKUwithBBProductID").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", false);
+                                }
+                            });
+                        }
+
+                    });
+                }
             //if (DSTagItem != null) {
 
             //    var Order = DSTagItem.split(",");

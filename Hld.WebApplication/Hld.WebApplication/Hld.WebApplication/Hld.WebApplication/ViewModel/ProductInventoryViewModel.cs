@@ -18,5 +18,7 @@ namespace Hld.WebApplication.ViewModel
         public string asin { get; set; }
         public string Producttitle { get; set; }
         public string TypeSearch { get; set; }
+        public string BBProductID { get; set; }
+        public string ASINS { get; set; }
     }
 }
