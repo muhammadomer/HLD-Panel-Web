@@ -160,7 +160,7 @@
                     <div class="col-md-1 p-0 mr-1">
                         <select id="multiselect" style="padding:0px;box-shadow: none; width:110px!important;" class="form-control col-md-1 active DSTagselect" multiple="multiple">
                             @*<option value="Yes">Yes</option>
-                                <option value="No">No</option>*@
+                    <option value="No">No</option>*@
                         </select>
                         <input type="hidden" name="DSTag" id="ddDSTag" />
                     </div>
@@ -208,7 +208,10 @@
                         </div>
                     </div>
 
-                    <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder">Export</button>
+                    <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder"style="margin-right:1px">Export</button>
+                    <span>
+                        <span class="btnexportOrderforshow"style="display:none;"><img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
+                    </span>
                     @*<button class="ml-1 btn btn-primary" type="button" id="btnexportOrderget">Export</button>*@
                 }
 
@@ -325,7 +328,7 @@
                 {*@
             <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span style="padding-left: 3px;vertical-align:text-bottom">Select All Pages</span><span id="totalSelectedAll" style="vertical-align:top;"></span>
             <span class="Processing" style="">
-                <span style="display:none;">   <img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
+                <span style="display:none;"><img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
             </span>
             @*}*@
         </div>
@@ -980,6 +983,12 @@ $('.successmessage').hide();
                         console.log("data get by me", totalSKU);
                         var totalSKU = totalSKU.length;
                         $(".myclassSuccessWar").empty();
+                        if (SKUCountWithoutASIn == totalSKU) {
+                            $('.btnsubmitr').hide();
+                        }
+                        else {
+                            $('.btnsubmitr').show();
+                        }
                         $(".myclassSuccessWar").append('<span class=""style="display:block;">You have selected ' + '<strong>' + totalSKU + '</strong>' + ' SKU and ' + "<strong>" + SKUCountWithoutASIn + "</strong>" + ' have no ASIN.</span><span style="">Do you want to proceed?</span>');
                         $("#myModalSuccessWar").modal({ backdrop: 'static', keyboard: false });
                         $(document).on('click', '.btnsubmitr', function () {
@@ -1379,9 +1388,10 @@ $('.successmessage').hide();
             });
 
                 $('#btnexportOrder').click(function () {
-
+                    $(".btnexportOrderforshow").css('display', 'inline');
                     if ($('#checkAllPages').is(':checked')) {
                           var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                        $(".btnexportOrderforshow").css('display', 'inline');
                         $.ajax({
                             type: 'POST',
                             url: URLEXPORT,
@@ -1390,6 +1400,7 @@ $('.successmessage').hide();
 
                             traditional: true,
                             success: function (data) {
+                                $(".btnexportOrderforshow").css('display', 'none');
                                 window.location.href = "@Url.RouteUrl(new
             { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
                             }
@@ -1409,7 +1420,8 @@ $('.successmessage').hide();
                         }
                     });
                     console.log("data get by me", data)
-                    var Url = '/Product/GetSinglePageExportResult';
+                        var Url = '/Product/GetSinglePageExportResult';
+                        $(".btnexportOrderforshow").css('display', 'inline');
                     $.ajax({
                         type: "POST",
                         //dataType: "json",
@@ -1417,6 +1429,7 @@ $('.successmessage').hide();
                         url: Url,
                         data: { data },
                         success: function (data) {
+                            $(".btnexportOrderforshow").css('display', 'none');
                             window.location.href = "@Url.RouteUrl(new
             { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
                         }
@@ -1432,7 +1445,8 @@ $('.successmessage').hide();
                             data.push(obj);
                         }
                     });
-                    console.log("data get by me", data)
+                        console.log("data get by me", data)
+                        $(".btnexportOrderforshow").css('display', 'inline');
                     var Url = '/Product/GetSinglePageExportResult';
                     $.ajax({
                         type: "POST",
@@ -1441,13 +1455,15 @@ $('.successmessage').hide();
                         url: Url,
                         data: { data },
                         success: function (data) {
+                            $(".btnexportOrderforshow").css('display', 'none');
                             window.location.href = "@Url.RouteUrl(new
             { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
                         }
 
                     });
                     }
-                else {
+                    else {
+                        $(".btnexportOrderforshow").css('display', 'inline');
                     var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
                     $.ajax({
                         type: 'POST',
@@ -1457,6 +1473,7 @@ $('.successmessage').hide();
 
                         traditional: true,
                         success: function (data) {
+                            $(".btnexportOrderforshow").css('display', 'none');
                             window.location.href = "@Url.RouteUrl(new
             { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
                         }

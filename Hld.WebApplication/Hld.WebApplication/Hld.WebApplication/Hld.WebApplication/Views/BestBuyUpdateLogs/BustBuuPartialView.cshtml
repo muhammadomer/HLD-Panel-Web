@@ -89,6 +89,9 @@
                 Product SKU
             </th>
             <th>
+                ASIN
+            </th>
+            <th>
                 Job ID #
             </th>
 
@@ -116,6 +119,22 @@
             </td>
             <td>
                 <span><a style="cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-productsku="@item.SKU" target="_blank">@item.SKU</a></span><br />
+                <a style="padding-left:2px;cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-ProductSKU="@item.SKU" target="_blank">
+                    <img height="13px" width="15px" src="~/Images/zinc.png" />
+                </a>
+                <a style="padding-left:5px;cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.SKU" target="_blank">
+                    <img height="13px" width="15px" src="~/Images/sellercloud-gray.png" />
+                </a>
+                <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.ProductId" target="_blank">
+                    <img height="10px" width="15px" src="~/Images/openbb.png" />
+                </a>
+                <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.ProductId" target="_blank">
+                    <img height="13px" width="15px" src="~/Images/BestBuy-Gray.png" />
+                </a>
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.ASIN)*@
+                <a href="https://www.amazon.ca/dp/@item.ASIN" target="_blank">@item.ASIN</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.JobId)
@@ -127,6 +146,8 @@
             <td>
 
                 @item.MSRP
+
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.importId)

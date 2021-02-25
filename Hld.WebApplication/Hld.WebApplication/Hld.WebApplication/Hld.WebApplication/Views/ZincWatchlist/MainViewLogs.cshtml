@@ -297,11 +297,15 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         var watchlistsku = $(this).find('.watchlistdata').val();
                         var WHQ = $(this).find('.whq').val();
                         var IsPrime = $(this).find('.isprime').val();
-
-                        if (watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
+                       
+                        if ($(this).find('.ValidASIN').length>0 && watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
                             $(this).find('.checkboxSkForEnableDisable').prop('checked', true);
                             i++;
                         }
+                        
+                        //if (ASIN && watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
+                           
+                        //}
                     });
 
                 }
@@ -343,7 +347,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
 
             //})
-
+           
             $(document).on("click", ".btnsavetable", function () {
                 //var selectedRow = $(this);
                 //var productid = $(selectedRow).parents('tr').find('.idZincProxy').val();
@@ -352,7 +356,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 var ThisContext = $(this).closest('tr');
                 console.log("price get", maxprice);
                 console.log("asin value", asin);
-
+               
                 $.ajax({
                     type: 'GET',
                     url: '../ZincWatchlist/UpdatePriceMax',
@@ -361,11 +365,14 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         MaxPrice: maxprice
                     },
                     success: function (data) {
+                        $(".btnbuttonstyle").hide();                      
+                        $(this).closest('tr').find(".btnbuttonstyle").show();
                         //$("#dialog-Delete").dialog("close");
                         //$(".loader").hide();
                         //selectedRow.parents('tr').remove();
                         $(ThisContext).find('.UpdatingSellingPrice').val(parseFloat(maxprice)*100);
-                        $.notify('update Successfully', { globalPosition: 'bottom right', className: 'danger myclass' });
+                        $.notify('Update Successfully', { globalPosition: 'bottom right', className: 'danger myclass', autoHideDelay:200 });
+                        //$.notify('Update Successfully', { globalPosition: 'bottom right', successOptions });
                     },
                     Error: function (err) {
 
@@ -373,7 +380,18 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 });
 
             });
-
+            //$(function () {
+            //    var successOptions = {
+            //        autoHideDelay: 200,
+            //        showAnimation: "fadeIn",
+            //        hideAnimation: "fadeOut",
+            //        hideDuration: 200,
+            //        arrowShow: false,
+            //        className: "success",
+            //    }
+            //    successOptions()
+            //});
+            
             $(document).on("click", ".btncanceltable", function () {
                 $(".btnbuttonstyle").hide();
 
@@ -585,17 +603,6 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                     }
 
-
-
-
-
-
-
-
-                    //
-
-
-
                     var SKUArraryForSinglePage = [];
                     if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
                         var checked = $('.table').find(':checked').length;
@@ -721,11 +728,14 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         var watchlistsku = $(this).find('.watchlistdata').val();
                         var WHQ = $(this).find('.whq').val();
                         var IsPrime = $(this).find('.isprime').val();
-
-                        if (watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
+                        if ($(this).find('.ValidASIN').length > 0 && watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
                             $(this).find('.checkboxSkForEnableDisable').prop('checked', true);
                             i++;
                         }
+                        //if (watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
+                        //    $(this).find('.checkboxSkForEnableDisable').prop('checked', true);
+                        //    i++;
+                        //}
                     });
                 }
                 else {
@@ -736,6 +746,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 }
                 $("#totalSelected").text(i);
             }
+
 
             $(document).on('click', '#selectall', function () {
                 SelectAllCount($(this));
@@ -771,7 +782,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             }
             return false;
         }
-
+      
 
     </script>
 }

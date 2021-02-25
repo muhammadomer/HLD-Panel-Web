@@ -9,6 +9,7 @@ namespace Hld.WebApplication.ViewModel
     {
         public string SKU { get; set; }
         public int ProductId { get; set; }
+        public string ASIN { get; set; }
         public decimal UpdateSelllingPrice { get; set; }
         public decimal MSRP { get; set; }
         public string importId { get; set; }

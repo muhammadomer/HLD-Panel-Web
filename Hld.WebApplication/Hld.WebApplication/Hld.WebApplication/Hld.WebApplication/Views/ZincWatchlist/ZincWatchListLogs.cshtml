@@ -142,7 +142,7 @@
                 }
                 @*@min.FirstOrDefault().z_ASIN;*@
                 <input type='text' style="display:none" class='form-control CheckApproved watchlistdata' value='@item.IsPrime'>
-                <input class="checkboxSkuForUpdating checkboxSkForEnableDisable " disabled="@(item.ZincResponse=="Available"  && item.HLD_CA1<=0 &&item.IsPrime==1?false:true)" type="checkbox" />
+                <input class="checkboxSkuForUpdating checkboxSkForEnableDisable " disabled="@(item.ZincResponse=="Available" && min.FirstOrDefault().z_ASIN == item.ASIN && item.HLD_CA1<=0 &&item.IsPrime==1?false:true)" type="checkbox" />
                 <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />
                 <input type="hidden" asp-for="@item.BBProductId" id="productIdForUpdating" class="productSkuForEnableDisable" />
                 <input type="hidden" asp-for="@item.jobID" id="jobID" class="GETjobID" data-id="@item.jobID" />
@@ -166,6 +166,7 @@
                 <a href="https://www.amazon.ca/dp/@item.ASIN" target="_blank">@item.ASIN</a>
                 @if (min.FirstOrDefault().z_ASIN == item.ASIN)
                 {
+                    <input type="hidden"class="ValidASIN"data-asin="@item.ASIN"value="@item.ASIN"/>
                    <span><strong>
     <i class="fa fa-check" style=" color: green;font-size:15px;vertical-align:bottom!important"></i>
 </strong></span>

@@ -247,7 +247,7 @@ namespace Hld.WebApplication.Controllers
                 {
                   double min = listmodel.Where(p => p.ProductSKU == item.ProductSKU).Min(p => p.UnitOriginPrice_Max);
                   var data =  listmodel.Where(p => p.ProductSKU == item.ProductSKU && p.UnitOriginPrice_Max == min).FirstOrDefault();
-                    if (data.ASIN == item.ASIN && data.ProductSKU == item.ProductSKU)
+                    if (data.ASIN == item.ASIN && data.ProductSKU == item.ProductSKU && listmodelBB.Where(z=>z.ProductSKU==item.ProductSKU).Count()==0)
                     {
                         item.UnitOriginPrice_Max = (Math.Round(item.UnitOriginPrice_Max / 100, 2)) * 100;
                         item.ZincJobId = Convert.ToInt32(jobID);
