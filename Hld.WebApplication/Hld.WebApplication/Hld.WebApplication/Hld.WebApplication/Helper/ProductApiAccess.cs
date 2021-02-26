@@ -207,9 +207,9 @@ namespace Hld.WebApplication.Helper
             return Convert.ToBoolean(jsonObjectResponse);
         }
 
-        public List<ProductDisplayInventoryViewModel> GetAllProducts(string ApiURL, string token, int startLimit, int endLimit, string sort, string dropship, string dropshipsearch, string sku, string asin, string ProductTitle, string DSTag, string TypeSearch, string WHQStatus,string BBProductID,string ASINS)
+        public List<ProductDisplayInventoryViewModel> GetAllProducts(string ApiURL, string token, int startLimit, int endLimit, string sort, string dropship, string dropshipsearch, string sku, string asin, string ProductTitle, string DSTag, string TypeSearch, string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + startLimit + "/" + endLimit + "/" + sort + "/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + asin + "/" + ProductTitle + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus+"/"+BBProductID+"/"+ASINS);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + startLimit + "/" + endLimit + "/" + sort + "/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + asin + "/" + ProductTitle + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus+"/"+BBProductID+"/"+ASINS+"/"+ ApprovedUnitPrice);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";

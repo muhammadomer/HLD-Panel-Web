@@ -6,7 +6,10 @@
 
 <link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
 <link href="~/lib/jquery.tablesorter/css/theme.bootstrap_4.min.css" rel="stylesheet" />
+
 <style type="text/css">
+
+ 
     .tablesorter-bootstrap tfoot td, .tablesorter-bootstrap tfoot th, .tablesorter-bootstrap thead td, .tablesorter-bootstrap thead th {
         font: 12px Arial,Sans-serif;
         font-weight: 600;
@@ -32,12 +35,6 @@
         padding: 5px;
     }
    
-   /* .ms-options-wrap.ms-active > .ms-options {
-        min-height: 62px !important;
-        max-height: 400px !important;
-        column-count: 1 !important;
-        overflow-x: hidden !important;
-    }*/
     .pagination > a {
         padding: 5px;
     }
@@ -46,45 +43,7 @@
         display: none;
     }
 
-    /*.ms-options-wrap > .ms-options {
-        position: static !important;
-        min-height: 100px !important;
-        margin-right: 350px !important;
-        overflow-y: scroll;
-    }
 
-        .ms-options-wrap > .ms-options > ul input[type="checkbox"] {
-            position: static !important;
-            margin-right: 350px !important;
-        }
-
-        .ms-options-wrap > .ms-options > ul label {
-            padding: 4px 4px 4px 3px !important;
-        }*/
-
-    .ms-options-wrap.ms-active > .ms-options {
-        max-width: 400px !important;
-        min-height: 92px !important;
-    }
-
-
-    .ms-options-wrap > button:focus, .ms-options-wrap > button {
-        border-radius: 4px;
-        height: 25px;
-
-        outline: none !important;
-    }
-
-    ms-options-wrap > button:focus, .ms-options-wrap > button {
-        padding: 1px 0px 1px 2px !important;
-    }
-
-    .ms-options-wrap > .ms-options > ul label {
-        width: 101% !important;
-    }
-    .ms-options-wrap:nth-of-type(2) .ms-options {
-        min-width: 200px !important;
-    }
     .loader {
         position: fixed;
         left: 0px;
@@ -106,7 +65,10 @@
             margin-right: -50%;
             transform: translate(-50%,-50%);
         }
-
+    .forms input[type="text"]:focus {
+        width: 170px;
+        font-size: 14px;
+    }
     .myclasss {
         top: 22px !important;
     }
@@ -148,6 +110,25 @@
         box-sizing: border-box;
         padding: 60px;
     }
+   .ms-options-wrap.ms-active > .ms-options {
+        max-width: 400px !important;
+        min-height: 92px !important;
+    }
+
+    .ms-options-wrap > button:focus, .ms-options-wrap > button {
+        border-radius: 4px;
+        height: 25px;
+        outline: none !important;
+    }
+
+    ms-options-wrap > button:focus, .ms-options-wrap > button {
+        padding: 1px 0px 1px 2px !important;
+    }
+
+   .ms-options-wrap > .ms-options > ul label {
+        width: 101% !important;
+    }
+
 </style>
 <div>
     <div class="loader">
@@ -188,6 +169,7 @@
                         </select>
                         <input type="hidden" name="ASINS" id="ddlASINStatus" />
                     </div>
+
                     <div class="col-md-1 p-0 mr-1">
                         <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ShowSKUwithBBProductID" multiple="multiple">
                             <option value="Yes">Show with BB Product ID</option>
@@ -195,7 +177,13 @@
                         </select>
                         <input type="hidden" name="BBProductID" id="ddlShowSKUBBProductID" />
                     </div>
-
+                    <div class="col-md-1 p-0 mr-1">
+                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ApprovedPriceStatus" multiple="multiple">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        <input type="hidden" name="ApprovedUnitPrice" id="ddlApprovedPriceStatus" />
+                    </div>
 
                     <select style="padding:0px;width:110px!important;box-shadow: none;" id="multiselect" class="form-control" asp-for="dropshipstatus">
                         <option value="sku">SKU</option>
@@ -205,7 +193,7 @@
                     </select>
                     <label class="mb-2 mr-sm-1"></label>
 
-                    <input type="text" autocomplete="off" class="form-control" asp-for="Sku" style="box-shadow: none;width: 255px;" />
+                    <input type="text" autocomplete="off" class="form-control" asp-for="Sku" style="box-shadow: none;width: 121px;" />
                     <label class="mb-2"></label>
 
                     <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
@@ -583,6 +571,17 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     },
 
                 });
+                $('select[multiple].active.ApprovedPriceStatus').multiselect({
+                    columns: 1,
+                    placeholder: 'Approved Prices',
+                    maxPlaceholderOpts: 1,
+                    selectAll: false,
+                    onOptionClick: function (element, option) {
+                        $('#ddlApprovedPriceStatus').val($(element).val());
+                        $(element).val();
+                    },
+
+                });
             $('.successmessage').hide();
 
 $('.successmessagclose').click(function () {
@@ -728,6 +727,7 @@ $('.successmessage').hide();
             var WHQStatus = getUrlParameter('WHQStatus');
                 var ASINStatus = getUrlParameter('ASINS');
             var BBProductID = getUrlParameter('BBProductID');
+                var ApprovedUnitPrice = getUrlParameter('ApprovedUnitPrice');
 
             var TypeSearch = getUrlParameter('TypeSearch');
             if (TypeSearch == "Continued") {
@@ -1164,7 +1164,7 @@ $('.successmessage').hide();
                         pageNo = page;
 
                         // add code which gets executed when user selects a page
-                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID +'&ASIN=' + ASINStatus;
+                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
                         $(".loader").show();
                         $.get(url).done(function (response) {
                             $('#loadOrder').empty();
@@ -1331,6 +1331,39 @@ $('.successmessage').hide();
                         else {
 
                             $(".ShowSKUwithBBProductID").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", false);
+                                }
+                            });
+                        }
+
+                    });
+                }
+
+                if (ApprovedUnitPrice != null) {
+
+                    var res = ApprovedUnitPrice.split(",");
+                    //$('#ddlQuantity').val($(this).item);
+                    $('#ddlApprovedPriceStatus').val(BBProductID);
+                    $.each(res, function (key, value) {
+
+                        var setval = 35;
+                        var getval = value;
+                        getval = setval;
+                        console.log(getval);
+                        if (getval == 35) {
+                            $(".ApprovedPriceStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", true);
+                                }
+                            });
+                        }
+                        else {
+
+                            $(".ApprovedPriceStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
                                 //if($(this).parents("select").hasClass("WHQStatus"))
 
                                 if ($(this).val() == value.trim()) {

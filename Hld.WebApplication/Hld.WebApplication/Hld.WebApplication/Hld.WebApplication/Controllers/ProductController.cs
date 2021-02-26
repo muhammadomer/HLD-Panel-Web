@@ -163,6 +163,27 @@ namespace Hld.WebApplication.Controllers
             {
                 model.ASINS = "ALL";
             }
+
+            if (!string.IsNullOrEmpty(model.ApprovedUnitPrice) && model.asin != "undefined")
+            {
+                string[] Val = model.ApprovedUnitPrice.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        model.ApprovedUnitPrice = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        model.ApprovedUnitPrice = "No";
+                    }
+                }
+            }
+            else
+            {
+                model.ApprovedUnitPrice = "ALL";
+            }
             if (!string.IsNullOrEmpty(model.SearchFromSkuList))
             {
                 var lines = model.SearchFromSkuList.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -264,7 +285,7 @@ namespace Hld.WebApplication.Controllers
             int count = ProductApiAccess.GetAllProductsCount(ApiURL, token, model);
             return count;
         }
-        public IActionResult Index(int? page, string sort, string dropshipstatus, string dropshipstatusSearch, string Sku, string asin, string Producttitle, string DSTag, string TypeSearch,string WHQStatus,string BBProductID,string ASINS)
+        public IActionResult Index(int? page, string sort, string dropshipstatus, string dropshipstatusSearch, string Sku, string asin, string Producttitle, string DSTag, string TypeSearch,string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice)
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -382,6 +403,26 @@ namespace Hld.WebApplication.Controllers
                 {
                     ASINS = "ALL";
                 }
+                if (!string.IsNullOrEmpty(ApprovedUnitPrice) && ApprovedUnitPrice != "undefined")
+                {
+                    string[] Val = ApprovedUnitPrice.Split(',');
+                    int length = Val.Length;
+                    foreach (var item in Val)
+                    {
+                        if (item == "Yes")
+                        {
+                            ApprovedUnitPrice = "Yes";
+                        }
+                        if (item == "No")
+                        {
+                            ApprovedUnitPrice = "No";
+                        }
+                    }
+                }
+                else
+                {
+                    ApprovedUnitPrice = "ALL";
+                }
 
 
 
@@ -463,7 +504,7 @@ namespace Hld.WebApplication.Controllers
                     endLimit = (pageNumber - 1) * pageSize;
                     ViewBag.pageNumber = page.Value;
                 }
-                List<ProductDisplayInventoryViewModel> viewModels = ProductApiAccess.GetAllProducts(ApiURL, token, startlimit, endLimit, sort, dropshipstatus, dropshipstatusSearch, Sku.Trim(), asin, Producttitle, DSTag, TypeSearch,WHQStatus,BBProductID,ASINS);
+                List<ProductDisplayInventoryViewModel> viewModels = ProductApiAccess.GetAllProducts(ApiURL, token, startlimit, endLimit, sort, dropshipstatus, dropshipstatusSearch, Sku.Trim(), asin, Producttitle, DSTag, TypeSearch,WHQStatus,BBProductID,ASINS, ApprovedUnitPrice);
                 return PartialView("~/Views/Product/_Index.cshtml", viewModels);
             }
         }

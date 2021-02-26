@@ -240,6 +240,7 @@ namespace Hld.WebApplication.Controllers
             SC.POType = "PurchaseOrder";
             SC.CaseQtyMode = false;
             SC.DefaultWarehouseID = 358;
+            SC.VendorNote = "";
             List<Product> list = new List<Product>();
 
             foreach (var item in data.list)

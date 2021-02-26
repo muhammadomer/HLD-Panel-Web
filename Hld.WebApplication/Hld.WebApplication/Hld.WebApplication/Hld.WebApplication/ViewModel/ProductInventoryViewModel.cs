@@ -20,5 +20,7 @@ namespace Hld.WebApplication.ViewModel
         public string TypeSearch { get; set; }
         public string BBProductID { get; set; }
         public string ASINS { get; set; }
+        public string ApprovedUnitPrice { get; set; }
+
     }
 }
