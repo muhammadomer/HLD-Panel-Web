@@ -2489,9 +2489,9 @@ namespace Hld.WebApplication.Helper
 
             return status;
         }
-        public List<ExportProductDataViewModel> GetAllProductsForExportWithLimitCount(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus)
+        public List<ExportProductDataViewModel> GetAllProductsForExportWithLimitCount(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus,string BBProductID, string ASINS, string ApprovedUnitPrice)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus + "/" + BBProductID + "/" + ASINS + "/" + ApprovedUnitPrice);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";

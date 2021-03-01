@@ -2248,7 +2248,7 @@ namespace Hld.WebApplication.Controllers
             return Status;
         }
         //FOR EXPORT DATE
-        public async Task<JsonResult> EXPORTDate(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus)
+        public async Task<JsonResult> EXPORTDate(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice)
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -2318,7 +2318,69 @@ namespace Hld.WebApplication.Controllers
                 {
                     DSTag = "ALL";
                 }
-                ViewBag.skuSearchList = "";
+
+            if (!string.IsNullOrEmpty(BBProductID) && BBProductID != "undefined")
+            {
+                string[] Val = BBProductID.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        BBProductID = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        BBProductID = "No";
+                    }
+                }
+            }
+            else
+            {
+                BBProductID = "ALL";
+            }
+            if (!string.IsNullOrEmpty(ASINS) && ASINS != "undefined")
+            {
+                string[] Val = ASINS.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        ASINS = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        ASINS = "No";
+                    }
+                }
+            }
+            else
+            {
+                ASINS = "ALL";
+            }
+            if (!string.IsNullOrEmpty(ApprovedUnitPrice) && ApprovedUnitPrice != "undefined")
+            {
+                string[] Val = ApprovedUnitPrice.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        ApprovedUnitPrice = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        ApprovedUnitPrice = "No";
+                    }
+                }
+            }
+            else
+            {
+                ApprovedUnitPrice = "ALL";
+            }
+
+            ViewBag.skuSearchList = "";
                 //start
                 if (dropshipstatusSearch == null || dropshipstatusSearch == "undefined")
                 {
@@ -2385,7 +2447,7 @@ namespace Hld.WebApplication.Controllers
                 }
                 
                 
-                List<ExportProductDataViewModel> viewModels = ProductApiAccess.GetAllProductsForExportWithLimitCount(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus);
+                List<ExportProductDataViewModel> viewModels = ProductApiAccess.GetAllProductsForExportWithLimitCount(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus,BBProductID,ASINS,ApprovedUnitPrice);
                 await Task.Yield();
                 using (var package = new ExcelPackage(file))
                 {

@@ -725,9 +725,9 @@ $('.successmessage').hide();
             var sku = getUrlParameter('Sku');
             var DSTagItem = getUrlParameter('DSTag');
             var WHQStatus = getUrlParameter('WHQStatus');
-                var ASINStatus = getUrlParameter('ASINS');
+            var ASINStatus = getUrlParameter('ASINS');
             var BBProductID = getUrlParameter('BBProductID');
-                var ApprovedUnitPrice = getUrlParameter('ApprovedUnitPrice');
+            var ApprovedUnitPrice = getUrlParameter('ApprovedUnitPrice');
 
             var TypeSearch = getUrlParameter('TypeSearch');
             if (TypeSearch == "Continued") {
@@ -1073,7 +1073,7 @@ $('.successmessage').hide();
                                 debugger;
                                  var TotalSKU = parseInt('@ViewBag.TotalCount');//1260
                                 var withasin = data;//124
-                                var withoutasin = TotalSKU - withasin;//124                               
+                                var withoutasin = TotalSKU - withasin;//124
                                 $(".myclassSuccessZinc").empty();
                                 $(".myclassSuccessZinc").append('<span class=""style="display:block;">You have selected ' + '<strong>' + TotalSKU + '</strong>' + ' SKU and ' + "<strong>" + withoutasin + "</strong>" + ' have no ASIN.</span><span style="">Do you want to proceed?</span>');
                                 $("#myModalSuccessZinc").modal({ backdrop: 'static', keyboard: false });
@@ -1082,7 +1082,7 @@ $('.successmessage').hide();
                                     var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
                                     $.ajax({
                                         type: 'post',
-                                        url:UrlZincGet,                                       
+                                        url:UrlZincGet,
                                         data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
                                         success: function (res) {
                                             $(".loader").hide();
@@ -1093,7 +1093,7 @@ $('.successmessage').hide();
                                             $('.closeModel').on('click', function () {
                                                 location.reload();
                                             });
-                                           
+
                                         }
                                     });
                                 });
@@ -1346,7 +1346,7 @@ $('.successmessage').hide();
 
                     var res = ApprovedUnitPrice.split(",");
                     //$('#ddlQuantity').val($(this).item);
-                    $('#ddlApprovedPriceStatus').val(BBProductID);
+                    $('#ddlApprovedPriceStatus').val(ApprovedUnitPrice);
                     $.each(res, function (key, value) {
 
                         var setval = 35;
@@ -1535,13 +1535,13 @@ $('.successmessage').hide();
                 $('#btnexportOrder').click(function () {
                     $(".btnexportOrderforshow").css('display', 'inline');
                     if ($('#checkAllPages').is(':checked')) {
-                          var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
                         $(".btnexportOrderforshow").css('display', 'inline');
                         $.ajax({
                             type: 'POST',
                             url: URLEXPORT,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
 
                             traditional: true,
                             success: function (data) {
@@ -1609,21 +1609,22 @@ $('.successmessage').hide();
                     }
                     else {
                         $(".btnexportOrderforshow").css('display', 'inline');
-                    var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
-                    $.ajax({
-                        type: 'POST',
-                        url: URLEXPORT,
-                        dataType: "json",
-                        data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
+                      var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
+                        $(".btnexportOrderforshow").css('display', 'inline');
+                        $.ajax({
+                            type: 'POST',
+                            url: URLEXPORT,
+                            dataType: "json",
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
 
-                        traditional: true,
-                        success: function (data) {
-                            $(".btnexportOrderforshow").css('display', 'none');
-                            window.location.href = "@Url.RouteUrl(new
+                            traditional: true,
+                            success: function (data) {
+                                $(".btnexportOrderforshow").css('display', 'none');
+                                window.location.href = "@Url.RouteUrl(new
             { Controller = "Product", Action = "downloadFile"})/?fileName=" + data.fileName + "&file=" + data.fileName + "&filePath=" + data.filePath;
-                        }
+                            }
 
-                    });
+                        });
                 }
 
             });

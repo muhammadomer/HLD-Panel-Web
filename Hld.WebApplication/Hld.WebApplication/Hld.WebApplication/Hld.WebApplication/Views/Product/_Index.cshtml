@@ -179,13 +179,20 @@
                     @Html.DisplayFor(modelItem => item.BBSellingPrice)
                 </td>
                 <!--<td>
-                    0.00 /0.00--> <!--Best by Fee & Percentage-->
+        0.00 /0.00-->
+                <!--Best by Fee & Percentage-->
                 <!--</td>-->
                 <td>
-                   @item.BestBuyProductSKU
+                    @item.BestBuyProductSKU
                 </td>
-                <td>  @item.ApprovedUnitPrice</td><!--PST P&L-->
+                <td>
+                    <a style='margin-left:5px; cursor: pointer;' href="/ApprovedPrice/Index?&sku=@item.ProductSKU" target='_blank'>
+                        @item.ApprovedUnitPrice
+                    </a>
+                   
+                </td><!--PST P&L-->
 
+               
                 <td>
 
                     @if (item.Continue == true)
