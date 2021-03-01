@@ -106,7 +106,7 @@
                 <th data-sorter="false">
                     BB/<br> Product ID
                 </th>
-                <th data-sorter="false">Approved UnitPrice</th>
+                <th data-sorter="false"style="width:9%!important">Approved Price</th>
                 <th data-sorter="false">Status</th>
 
 
@@ -179,20 +179,30 @@
                     @Html.DisplayFor(modelItem => item.BBSellingPrice)
                 </td>
                 <!--<td>
-        0.00 /0.00-->
+    0.00 /0.00-->
                 <!--Best by Fee & Percentage-->
                 <!--</td>-->
                 <td>
                     @item.BestBuyProductSKU
                 </td>
-                <td>
-                    <a style='margin-left:5px; cursor: pointer;' href="/ApprovedPrice/Index?&sku=@item.ProductSKU" target='_blank'>
-                        @item.ApprovedUnitPrice
-                    </a>
-                   
-                </td><!--PST P&L-->
+                <!--<td>-->
+                    @*<a style='margin-left:5px; cursor: pointer;' href="/ApprovedPrice/Index?&sku=@item.ProductSKU" target='_blank'>
+                @item.ApprovedUnitPrice
+            </a>*@
 
-               
+                <!--</td>--><!--PST P&L-->
+                <td>
+
+                    @foreach (var inner in item.ApprovedPriceList)
+                    {
+                        if (@inner.VendorAlias != "")
+                        {                            
+                            <span>@inner.VendorAlias</span>
+                            <span><a style='cursor: pointer;' href='/ApprovedPrice/Index?&sku=@item.ProductSKU&title=' target='_blank'> @inner.ApprovedUnitPrice  </a> @inner.Currency</span><br />
+                        }
+                    }
+                </td>
+
                 <td>
 
                     @if (item.Continue == true)

@@ -65,10 +65,7 @@
             margin-right: -50%;
             transform: translate(-50%,-50%);
         }
-    .forms input[type="text"]:focus {
-        width: 170px;
-        font-size: 14px;
-    }
+   
     .myclasss {
         top: 22px !important;
     }
@@ -193,7 +190,7 @@
                     </select>
                     <label class="mb-2 mr-sm-1"></label>
 
-                    <input type="text" autocomplete="off" class="form-control" asp-for="Sku" style="box-shadow: none;width: 121px;" />
+                    <input type="text" autocomplete="off" class="form-control inputclass" asp-for="Sku" style="box-shadow: none;width:121px" />
                     <label class="mb-2"></label>
 
                     <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
@@ -573,7 +570,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 });
                 $('select[multiple].active.ApprovedPriceStatus').multiselect({
                     columns: 1,
-                    placeholder: 'Approved Prices',
+                    placeholder: 'Approved Price',
                     maxPlaceholderOpts: 1,
                     selectAll: false,
                     onOptionClick: function (element, option) {
@@ -1060,30 +1057,30 @@ $('.successmessage').hide();
 
                     }
                     if ($('#checkAllPages').is(':checked') && ($('#actionMenu option:selected').val() == "StatusFromZinc")) {
-                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
                         $(".loader").show();
                         $.ajax({
                             type: 'POST',
                             url: UrlZinc,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice},
                             traditional: true,
                             success: function (data) {
                                 $(".loader").hide();
                                 debugger;
-                                 var TotalSKU = parseInt('@ViewBag.TotalCount');//1260
-                                var withasin = data;//124
-                                var withoutasin = TotalSKU - withasin;//124
+                                 var TotalSKU = parseInt('@ViewBag.TotalCount');//158
+                                var withasin = data;//171
+                                var withoutasin = TotalSKU - withasin;//158 171=-13
                                 $(".myclassSuccessZinc").empty();
                                 $(".myclassSuccessZinc").append('<span class=""style="display:block;">You have selected ' + '<strong>' + TotalSKU + '</strong>' + ' SKU and ' + "<strong>" + withoutasin + "</strong>" + ' have no ASIN.</span><span style="">Do you want to proceed?</span>');
                                 $("#myModalSuccessZinc").modal({ backdrop: 'static', keyboard: false });
                                 $(document).on('click', '.btnsubmitZinc', function () {
                                     $(".loader").show();
-                                    var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus;
+                                    var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
                                     $.ajax({
                                         type: 'post',
                                         url:UrlZincGet,
-                                        data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus },
+                                        data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
                                         success: function (res) {
                                             $(".loader").hide();
 

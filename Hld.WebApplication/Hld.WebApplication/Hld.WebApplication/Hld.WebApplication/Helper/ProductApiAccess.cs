@@ -2585,12 +2585,12 @@ namespace Hld.WebApplication.Helper
             }
             return responses;
         }
-        public int SelectAllForGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus)
+        public int SelectAllForGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice)
         {
             int count;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllForGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllForGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus + "&BBProductID=" + BBProductID + "&ASINS=" + ASINS + "&ApprovedUnitPrice=" + ApprovedUnitPrice);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -2613,10 +2613,10 @@ namespace Hld.WebApplication.Helper
             }
             return count;
         }
-        public int SelectAllSKUandASINGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus)
+        public int SelectAllSKUandASINGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice)
         {
             int JobId = 0;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllSKUandASINGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllSKUandASINGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus + "&BBProductID=" + BBProductID + "&ASINS=" + ASINS + "&ApprovedUnitPrice=" + ApprovedUnitPrice);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";

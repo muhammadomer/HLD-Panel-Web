@@ -2485,7 +2485,7 @@ namespace Hld.WebApplication.Controllers
             
             return Json(new { filePath = Path.GetTempPath(), fileName = excelName });
         }
-        public int SelectAllForGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus)
+        public int SelectAllForGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice)
         {
           
             token = Request.Cookies["Token"];
@@ -2527,6 +2527,66 @@ namespace Hld.WebApplication.Controllers
             else
             {
                 DSTag = "ALL";
+            }
+            if (!string.IsNullOrEmpty(BBProductID) && BBProductID != "undefined")
+            {
+                string[] Val = BBProductID.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        BBProductID = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        BBProductID = "No";
+                    }
+                }
+            }
+            else
+            {
+                BBProductID = "ALL";
+            }
+            if (!string.IsNullOrEmpty(ASINS) && ASINS != "undefined")
+            {
+                string[] Val = ASINS.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        ASINS = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        ASINS = "No";
+                    }
+                }
+            }
+            else
+            {
+                ASINS = "ALL";
+            }
+            if (!string.IsNullOrEmpty(ApprovedUnitPrice) && ApprovedUnitPrice != "undefined")
+            {
+                string[] Val = ApprovedUnitPrice.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        ApprovedUnitPrice = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        ApprovedUnitPrice = "No";
+                    }
+                }
+            }
+            else
+            {
+                ApprovedUnitPrice = "ALL";
             }
             ViewBag.skuSearchList = "";
             //start
@@ -2578,7 +2638,7 @@ namespace Hld.WebApplication.Controllers
             }
 
             int count;
-            count = ProductApiAccess.SelectAllForGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus);
+            count = ProductApiAccess.SelectAllForGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus, BBProductID, ASINS, ApprovedUnitPrice);
             //var ASIN = viewModels.ASIN;
             //var SKU = viewModels.SKU;
             //var TotalCount = viewModels.TotalCount;
@@ -2588,7 +2648,7 @@ namespace Hld.WebApplication.Controllers
             return count;
         }
         [HttpPost]
-        public int SelectAllSKUandASINGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus)
+        public int SelectAllSKUandASINGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus,string BBProductID, string ASINS, string ApprovedUnitPrice)
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -2658,6 +2718,66 @@ namespace Hld.WebApplication.Controllers
             {
                 DSTag = "ALL";
             }
+            if (!string.IsNullOrEmpty(BBProductID) && BBProductID != "undefined")
+            {
+                string[] Val = BBProductID.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        BBProductID = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        BBProductID = "No";
+                    }
+                }
+            }
+            else
+            {
+                BBProductID = "ALL";
+            }
+            if (!string.IsNullOrEmpty(ASINS) && ASINS != "undefined")
+            {
+                string[] Val = ASINS.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        ASINS = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        ASINS = "No";
+                    }
+                }
+            }
+            else
+            {
+                ASINS = "ALL";
+            }
+            if (!string.IsNullOrEmpty(ApprovedUnitPrice) && ApprovedUnitPrice != "undefined")
+            {
+                string[] Val = ApprovedUnitPrice.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        ApprovedUnitPrice = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        ApprovedUnitPrice = "No";
+                    }
+                }
+            }
+            else
+            {
+                ApprovedUnitPrice = "ALL";
+            }
             ViewBag.skuSearchList = "";
             //start
             if (dropshipstatusSearch == null || dropshipstatusSearch == "undefined")
@@ -2726,7 +2846,7 @@ namespace Hld.WebApplication.Controllers
 
             List<GetStatusFromZincViewModel> viewModels = new List<GetStatusFromZincViewModel>();
             int JobId;
-            JobId = ProductApiAccess.SelectAllSKUandASINGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus);
+            JobId = ProductApiAccess.SelectAllSKUandASINGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus, BBProductID, ASINS, ApprovedUnitPrice);
      
             return JobId;
         }
