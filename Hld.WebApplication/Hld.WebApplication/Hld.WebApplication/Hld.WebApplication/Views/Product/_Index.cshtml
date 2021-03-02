@@ -82,7 +82,7 @@
                     <label>Title</label>
                 </th>
                 <th data-sorter="false">
-                    <label>Asin</label>
+                    <label>ASIN</label>
                 </th>
                 @*<th data-sorter="false">
                     <label>Color</label>
@@ -149,9 +149,9 @@
                     @Html.DisplayFor(modelItem => item.ProductTitle)
                 </td>
                 <td style="" class="getasinprice"></td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.ColorName)
-                </td>
+                </td>*@
                 <td>
                     @if (item.skuTags != null)
 

@@ -6,10 +6,10 @@
 
 <link href="~/lib/jQuery-MultiSelect/jquery.multiselect.css" rel="stylesheet" />
 <link href="~/lib/jquery.tablesorter/css/theme.bootstrap_4.min.css" rel="stylesheet" />
-
+<link href="~/select2/css/select2.min.css" rel="stylesheet" />
 <style type="text/css">
 
- 
+
     .tablesorter-bootstrap tfoot td, .tablesorter-bootstrap tfoot th, .tablesorter-bootstrap thead td, .tablesorter-bootstrap thead th {
         font: 12px Arial,Sans-serif;
         font-weight: 600;
@@ -34,7 +34,7 @@
     #pagination > a {
         padding: 5px;
     }
-   
+
     .pagination > a {
         padding: 5px;
     }
@@ -65,7 +65,7 @@
             margin-right: -50%;
             transform: translate(-50%,-50%);
         }
-   
+
     .myclasss {
         top: 22px !important;
     }
@@ -88,7 +88,7 @@
         box-sizing: border-box;
         padding: 60px;
     }
-    
+
     .myclass1 {
         position: fixed;
         top: 30%;
@@ -98,6 +98,7 @@
         box-sizing: border-box;
         padding: 60px;
     }
+
     .mydlete {
         position: fixed;
         top: 24%;
@@ -107,7 +108,8 @@
         box-sizing: border-box;
         padding: 60px;
     }
-   .ms-options-wrap.ms-active > .ms-options {
+
+    .ms-options-wrap.ms-active > .ms-options {
         max-width: 400px !important;
         min-height: 92px !important;
     }
@@ -122,10 +124,9 @@
         padding: 1px 0px 1px 2px !important;
     }
 
-   .ms-options-wrap > .ms-options > ul label {
+    .ms-options-wrap > .ms-options > ul label {
         width: 101% !important;
     }
-
 </style>
 <div>
     <div class="loader">
@@ -148,7 +149,7 @@
                     <div class="col-md-1 p-0 mr-1">
                         <select id="multiselect" style="padding:0px;box-shadow: none; width:110px!important;" class="form-control col-md-1 active DSTagselect" multiple="multiple">
                             @*<option value="Yes">Yes</option>
-                    <option value="No">No</option>*@
+                                <option value="No">No</option>*@
                         </select>
                         <input type="hidden" name="DSTag" id="ddDSTag" />
                     </div>
@@ -169,13 +170,13 @@
 
                     <div class="col-md-1 p-0 mr-1">
                         <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ShowSKUwithBBProductID" multiple="multiple">
-                            <option value="Yes">Show with BB Product ID</option>
-                            <option value="No">Show without BB Product ID</option>
+                            <option value="Yes">W BB Product ID</option>
+                            <option value="No">WO BB Product ID</option>
                         </select>
                         <input type="hidden" name="BBProductID" id="ddlShowSKUBBProductID" />
                     </div>
-                    <div class="col-md-1 p-0 mr-1">
-                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ApprovedPriceStatus" multiple="multiple">
+                    <div class="p-0 mr-1" style="min-width:120px!important;position:relative">
+                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ApprovedPriceStatus" multiple="multiple" style="position:absolute!important">
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
@@ -190,7 +191,7 @@
                     </select>
                     <label class="mb-2 mr-sm-1"></label>
 
-                    <input type="text" autocomplete="off" class="form-control inputclass" asp-for="Sku" style="box-shadow: none;width:121px" />
+                    <input type="text" autocomplete="off" class="form-control inputclass" asp-for="Sku" style="box-shadow: none;width:145px" />
                     <label class="mb-2"></label>
 
                     <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
@@ -332,26 +333,29 @@
 
         </div>
         <div class="col-sm-2">
-            @*@if ((ViewBag.TotalCount / 50) > 1 && ViewBag.Sku != "Nill")
-                {*@
-            <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span style="padding-left: 3px;vertical-align:text-bottom">Select All Pages</span><span id="totalSelectedAll" style="vertical-align:top;"></span>
-            <span class="Processing" style="">
-                <span style="display:none;"><img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
-            </span>
-            @*}*@
+          
+            @if ((ViewBag.TotalCount / 30) > 1)
+            {
+                <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span style="padding-left: 3px;vertical-align:text-bottom">Select All Pages</span><span id="totalSelectedAll" style="vertical-align:top;"></span>
+                <span class="Processing" style="">
+                    <span style="display:none;"><img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
+                </span>
+            }
+           
         </div>
         <div class="col-sm-4">
-            <div class="row ">
-                <div class="col-sm-9" style="float:right">
+            <div class="row" style="float:right">
+                <div class="col-sm-9" style="float:right;padding-right:0">
                     <select id="actionMenu" class="form-control p-sm-0">
                         <option value="ED-DS-SKU">Enable/Disable Dropship SKU</option>
                         <option value="EnableProduct">Set as Continued</option>
                         <option value="DisableProduct">Set as Discontinued</option>
                         <option value="StatusFromZinc">Get Status From Zinc</option>
                     </select>
+
                 </div>
                 <div class="col-sm-1">
-                    <input type="button" id="btnEnableDisableSKU" class="ml-sm-1 btn btn-primary" value="Go" />
+                    <input type="button" id="btnEnableDisableSKU" class="btn btn-primary" value="Go"style="height:27px" />
                 </div>
             </div>
 
@@ -487,14 +491,15 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/sticky-table-headers/js/jquery.stickytableheaders.min.js"></script>
     <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
+    <script src="~/select2/js/select2.full.min.js"></script>
     <script src="~/lib/jQuery-MultiSelect/jquery.multiselect.js"></script>
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.widgets.min.js"></script>
-    <div>
+  
         <script type="text/javascript">
 
             $(document).ready(function () {
-
+                $("#actionMenu").select2();
             $(document).on('click', '#headerCheckBox', function () {
                 var i = 0;
                 if ($(this).is(':checked')) {
@@ -579,11 +584,11 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     },
 
                 });
-            $('.successmessage').hide();
+                $('.successmessage').hide();
 
-$('.successmessagclose').click(function () {
-$('.successmessage').hide();
-});
+                $('.successmessagclose').click(function () {
+                    $('.successmessage').hide();
+                });
 
             //$('select[multiple].active.3col.QuantityStatus').multiselect({
             //    columns: 1,
@@ -878,7 +883,7 @@ $('.successmessage').hide();
                             });
                         }
                         else {
-                              $.notify('Product not selected', { globalPosition: 'bottom right', className: 'warning myclass' });
+                            $.notify('Product not selected', { globalPosition: 'bottom right', className: 'warning mydlete' });
                         }
                     }
 
@@ -943,13 +948,16 @@ $('.successmessage').hide();
                 }
                 //Test Zinc Status
                 if ($('#actionMenu option:selected').val() == "StatusFromZinc") {
+                    $('.tableProductListSelected tbody tr ').each(function () {
+                        var checked = $(document).find('.checkboxSkuForUpdating').is(':checked');
+                      
+                        if (checked==false) {
+                            $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });
+                            return;
+                        }
+                    });
+                    
 
-                    var checked = $('.tableProductListSelected').find(':checked').length;
-                    console.log(checked,"elenthth");
-                    if (checked<2) {
-                        $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });
-                        return;
-                    }
                     if ($(document).find('#headerCheckBox').is(':checked')) {
                         var SKUCountWithoutASIn = 0;
                         var totalSKU = [];
@@ -962,7 +970,7 @@ $('.successmessage').hide();
                                 }
                                 var sku = {};
                                 sku.totalSKU = $(this).closest('tr').find('#productSkuForUpdating').val().length
-                                 totalSKU.push(sku);
+                                totalSKU.push(sku);
 
                                 var obj = {};
                                 if (asin) {
@@ -986,7 +994,7 @@ $('.successmessage').hide();
                                 type: 'post',
                                 url: '../product/GetStausFromZinc',
                                 //  url: '../product/GetStausFromZincNew',
-                                data: {data},
+                                data: { data },
                                 success: function (res) {
                                     $(".loader").hide();
 
@@ -1009,7 +1017,7 @@ $('.successmessage').hide();
                             if ($(this).find('.checkboxSkuForUpdating').is(':checked')) {
 
                                 var asin = $(this).find('.getasinprice').find('a').text();
-                                if (asin == "" || asin =="0") {
+                                if (asin == "" || asin == "0") {
                                     SKUCountWithoutASIn = SKUCountWithoutASIn + 1
                                 }
                                 var sku = {};
@@ -1063,12 +1071,12 @@ $('.successmessage').hide();
                             type: 'POST',
                             url: UrlZinc,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice},
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
                             traditional: true,
                             success: function (data) {
                                 $(".loader").hide();
                                 debugger;
-                                 var TotalSKU = parseInt('@ViewBag.TotalCount');//158
+                                var TotalSKU = parseInt('@ViewBag.TotalCount');//158
                                 var withasin = data;//171
                                 var withoutasin = TotalSKU - withasin;//158 171=-13
                                 $(".myclassSuccessZinc").empty();
@@ -1079,7 +1087,7 @@ $('.successmessage').hide();
                                     var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
                                     $.ajax({
                                         type: 'post',
-                                        url:UrlZincGet,
+                                        url: UrlZincGet,
                                         data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
                                         success: function (res) {
                                             $(".loader").hide();
@@ -1903,5 +1911,5 @@ $('.successmessage').hide();
         //});
 
         </script>
-    </div>
+ 
 }
