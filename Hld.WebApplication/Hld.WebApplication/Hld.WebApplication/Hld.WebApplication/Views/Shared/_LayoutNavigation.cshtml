@@ -8,7 +8,7 @@
     @using Microsoft.AspNetCore.Authorization
     @inject IAuthorizationService AuthorizationService
     @*Production , Development*@
-    <environment include="Development">
+    <environment include="Production">
         <link href="~/Images/d.ico" rel="icon" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
@@ -366,8 +366,8 @@
                             <ul class="dropdown-menu " aria-labelledby="dropdown1">
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "Access to Orders")).Succeeded)
                                 {
-                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " asp-controller="BestBuyProduct" asp-action="BestBuOrdersDetail">BestBuy Orders</a></li>
-                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " target="_blank" asp-controller="BestBuyOrders" asp-action="BestbuyOrderDetails">BestBuy New Orders</a></li>
+                                   
+                                    <li class="dropdown-item nav-item" href="#"> <a class="nav-link " target="_blank" asp-controller="BestBuyOrders" asp-action="BestbuyOrderDetails">BestBuy Orders</a></li>
                                     <li class="dropdown-item nav-item" href="#">  <a class="nav-link "  asp-controller="BestBuyTrackingUpdateLog" asp-action="BestBuyTracking">BB Order Tracking Log</a></li>
 
                                 }
@@ -569,14 +569,7 @@
         </main>
     </div>
 
-    @*<footer class="text-center text-muted">
-
-            <p> &copy; 2019 - Hld.WebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></p>
-
-        </footer>*@
-
-
-<environment include="Development">
+<environment include="Production">
     <script src="~/lib/jquery/dist/jquery.js"></script>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
