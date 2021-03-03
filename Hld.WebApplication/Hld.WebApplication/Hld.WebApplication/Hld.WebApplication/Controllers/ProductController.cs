@@ -89,13 +89,16 @@ namespace Hld.WebApplication.Controllers
             {
                 string[] Val = model.DSTag.Split(',');
                 int length = Val.Length;
+
                 foreach (var item in Val)
                 {
-                    if (item !=null)
+                    if (item != null)
                     {
-                        model.DSTag =item;
-                    }                   
+                        model.DSTag = item;
+
+                    }
                 }
+
             }
             else
             {
@@ -143,7 +146,7 @@ namespace Hld.WebApplication.Controllers
             {
                 model.BBProductID = "ALL";
             }
-            if (!string.IsNullOrEmpty(model.ASINS) && model.asin != "undefined")
+            if (!string.IsNullOrEmpty(model.ASINS) && model.ASINS != "undefined")
             {
                 string[] Val = model.ASINS.Split(',');
                 int length = Val.Length;
@@ -164,7 +167,7 @@ namespace Hld.WebApplication.Controllers
                 model.ASINS = "ALL";
             }
 
-            if (!string.IsNullOrEmpty(model.ApprovedUnitPrice) && model.asin != "undefined")
+            if (!string.IsNullOrEmpty(model.ApprovedUnitPrice) && model.ApprovedUnitPrice != "undefined")
             {
                 string[] Val = model.ApprovedUnitPrice.Split(',');
                 int length = Val.Length;
@@ -183,6 +186,27 @@ namespace Hld.WebApplication.Controllers
             else
             {
                 model.ApprovedUnitPrice = "ALL";
+            }
+
+            if (!string.IsNullOrEmpty(model.ASINListingRemoved) && model.ASINListingRemoved != "undefined")
+            {
+                string[] Val = model.ASINListingRemoved.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item == "Yes")
+                    {
+                        model.ASINListingRemoved = "Yes";
+                    }
+                    if (item == "No")
+                    {
+                        model.ASINListingRemoved = "No";
+                    }
+                }
+            }
+            else
+            {
+                model.ASINListingRemoved = "ALL";
             }
             if (!string.IsNullOrEmpty(model.SearchFromSkuList))
             {
@@ -285,7 +309,7 @@ namespace Hld.WebApplication.Controllers
             int count = ProductApiAccess.GetAllProductsCount(ApiURL, token, model);
             return count;
         }
-        public IActionResult Index(int? page, string sort, string dropshipstatus, string dropshipstatusSearch, string Sku, string asin, string Producttitle, string DSTag, string TypeSearch,string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice)
+        public IActionResult Index(int? page, string sort, string dropshipstatus, string dropshipstatusSearch, string Sku, string asin, string Producttitle, string DSTag, string TypeSearch,string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice,string ASINListingRemoved)
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -423,7 +447,26 @@ namespace Hld.WebApplication.Controllers
                 {
                     ApprovedUnitPrice = "ALL";
                 }
-
+                if (!string.IsNullOrEmpty(ASINListingRemoved) && ASINListingRemoved != "undefined")
+                {
+                    string[] Val = ASINListingRemoved.Split(',');
+                    int length = Val.Length;
+                    foreach (var item in Val)
+                    {
+                        if (item == "Yes")
+                        {
+                            ASINListingRemoved = "Yes";
+                        }
+                        if (item == "No")
+                        {
+                           ASINListingRemoved = "No";
+                        }
+                    }
+                }
+                else
+                {
+                    ASINListingRemoved = "ALL";
+                }
 
 
                 ViewBag.skuSearchList = "";
@@ -504,7 +547,7 @@ namespace Hld.WebApplication.Controllers
                     endLimit = (pageNumber - 1) * pageSize;
                     ViewBag.pageNumber = page.Value;
                 }
-                List<ProductDisplayInventoryViewModel> viewModels = ProductApiAccess.GetAllProducts(ApiURL, token, startlimit, endLimit, sort, dropshipstatus, dropshipstatusSearch, Sku.Trim(), asin, Producttitle, DSTag, TypeSearch,WHQStatus,BBProductID,ASINS, ApprovedUnitPrice);
+                List<ProductDisplayInventoryViewModel> viewModels = ProductApiAccess.GetAllProducts(ApiURL, token, startlimit, endLimit, sort, dropshipstatus, dropshipstatusSearch, Sku.Trim(), asin, Producttitle, DSTag, TypeSearch,WHQStatus,BBProductID,ASINS, ApprovedUnitPrice,ASINListingRemoved);
                 return PartialView("~/Views/Product/_Index.cshtml", viewModels);
             }
         }
@@ -1903,6 +1946,18 @@ namespace Hld.WebApplication.Controllers
             List<AsinAmazonePriceViewModel> tagViewModel = new List<AsinAmazonePriceViewModel>();
             tagViewModel = ProductApiAccess.GetSkuAmazonePrice(ApiURL, token, sku);
             return tagViewModel;
+
+
+        }
+
+        [HttpGet]
+        public List<ApprovedPriceForInventoryPageViewModel> GetApprovedPrice(string sku)
+        {
+            string token = Request.Cookies["Token"];
+            List<ApprovedPriceForInventoryPageViewModel> ViewModel = new List<ApprovedPriceForInventoryPageViewModel>();
+            ViewModel = ProductApiAccess.GetApprovedPrice(ApiURL, token, sku);
+          
+            return ViewModel;
 
 
         }

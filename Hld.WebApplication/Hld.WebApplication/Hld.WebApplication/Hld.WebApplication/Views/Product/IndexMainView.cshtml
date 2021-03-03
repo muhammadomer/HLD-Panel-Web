@@ -43,7 +43,10 @@
         display: none;
     }
 
-
+    .tagspan {
+        font-weight: bold;
+        padding-right: 5px;
+    }
     .loader {
         position: fixed;
         left: 0px;
@@ -135,93 +138,239 @@
     <div class="mb-1 row" id="searchForm" style="margin-top: 60px;">
 
         <div class="col-sm-12">
-            <h6>Search Inventory</h6>
+
+            @if (Model.ASINS != "ALL")
+            {
+                <div class="row col-12 ASINHide">
+                    <span class="tagspan">ASIN Available Status :</span>
+
+                    @if (Model.ASINS == "Yes")
+                    {
+
+                        <span style="padding-left:0px;" class="asin-status-text">Yes</span><span style="margin-left:3px"><input class="ASINCLASS" type="checkbox" value="@Model.ASINS" checked></span>
+                    }
+                    else
+                    {
+                        <span style="padding-left:0px;" class="asin-status-text">No</span><span style="margin-left:3px"><input class="ASINCLASS" type="checkbox" value="@Model.ASINS" checked></span>
+                    }
+
+                </div>
+            }
+            @if (Model.BBProductID != "ALL")
+            {
+                <div class="row col-12 SKUHide">
+                    <span class="tagspan">Show SKUs Status :</span>
+
+                    @if (Model.BBProductID == "Yes")
+                    {
+
+                        <span style="padding-left:0px;" class="sku-status-text">W BB Product ID</span><span style="margin-left:3px"><input class="SKUCLASS" type="checkbox" value="@Model.BBProductID" checked></span>
+                    }
+                    else
+                    {
+                        <span style="padding-left:0px;" class="sku-status-text">WO BB Product ID</span><span style="margin-left:3px"><input class="SKUCLASS" type="checkbox" value="@Model.BBProductID" checked></span>
+                    }
+
+                </div>
+            }
+            @if (Model.ApprovedUnitPrice != "ALL")
+            {
+                <div class="row col-12 APRHide">
+                    <span class="tagspan">Approved Prices Status :</span>
+
+                    @if (Model.ApprovedUnitPrice == "Yes")
+                    {
+
+                        <span style="padding-left:0px;" class="apr-status-text">Yes</span><span style="margin-left:3px"><input class="APRCLASS" type="checkbox" value="@Model.ApprovedUnitPrice" checked></span>
+                    }
+                    else
+                    {
+                        <span style="padding-left:0px;" class="apr-status-text">No</span><span style="margin-left:3px"><input class="APRCLASS" type="checkbox" value="@Model.ApprovedUnitPrice" checked></span>
+                    }
+
+                </div>
+            }
+            @if (Model.WHQStatus != "ALL")
+            {
+                <div class="row col-12 WHQHide">
+                    <span class="tagspan">WHQ Status :</span>
+
+                    @if (Model.WHQStatus == "1")
+                    {
+
+                        <span style="padding-left:0px;" class="whq-status-text">WHQ > 0</span><span style="margin-left:3px"><input class="WHQCLASS" type="checkbox" value="@Model.WHQStatus" checked></span>
+                    }
+                    else
+                    {
+                        <span style="padding-left:0px;" class="whq-status-text">WHQ <= 0</span><span style="margin-left:3px"><input class="WHQCLASS" type="checkbox" value="@Model.WHQStatus" checked></span>
+                    }
+                </div>
+            }
+            @if (Model.dropshipstatusSearch != "ALL")
+            {
+                <div class="row col-12 DROPHide">
+                    <span class="tagspan">Dropship Status :</span>
+
+                    @if (Model.dropshipstatusSearch == "1")
+                    {
+
+                        <span style="padding-left:0px;" class="drop-status-text">Dropship</span><span style="margin-left:3px"><input class="DROPCLASS" type="checkbox" value="@Model.dropshipstatusSearch" checked></span>
+                    }
+                    else
+                    {
+                        <span style="padding-left:0px;" class="drop-status-text">Dropship None</span><span style="margin-left:3px"><input class="DROPCLASS" type="checkbox" value="@Model.dropshipstatusSearch" checked></span>
+                    }
+
+                </div>
+            }
+            @if (Model.ASINListingRemoved != "ALL")
+            {
+                <div class="row col-12 LSRHide">
+                    <span class="tagspan">ASIN Listing Removed Status :</span>
+
+                    @if (Model.ASINListingRemoved == "Yes")
+                    {
+
+                        <span style="padding-left:0px;" class="">Yes</span><span style="margin-left:3px"><input class="LSRCLASS" type="checkbox" value="@Model.ASINListingRemoved" checked></span>
+                    }
+                    else
+                    {
+                        <span style="padding-left:0px;" class="">No</span><span style="margin-left:3px"><input class="LSRCLASS" type="checkbox" value="@Model.ASINListingRemoved" checked></span>
+                    }
+                </div>
+            }
+            @if (Model.DSTag != "ALL")
+            {
+                <div class="row col-12 TGHide">
+                    <span class="tagspan">Tag Status :</span>
+
+
+                    @foreach (var item in Model.DSTag.Split(","))
+                    {
+
+                        @switch (item)
+                        {
+                            case "1":
+                                <label style="padding-left:0px;" value="@item" class="TG-status-text">DS</label> break;
+                            case "2":
+                                <span style="padding-left:0px;" value="@item" class="TG-status-text">WH</span> break;
+
+                            case "3":
+                                <span style="padding-left:0px;" value="@item" class="TG-status-text">Zinc</span> break;
+                            case "4":
+                                <span style="padding-left:0px;" value="@item" class="TG-status-text">HA</span> break;
+                            case "5":
+                                <span style="padding-left:0px;" value="@item" class="TG-status-text">PrAdj</span>break;
+
+                        }
+                    }<span style="margin-left:3px"><input class="TGCLASS" type="checkbox" value="" checked></span>
+
+
+
+
+                </div>}
+            <h6 style="color:cadetblue">Search Inventory</h6>
             <div class="card-body" style="padding:0">
                 @using (Html.BeginForm("IndexMainView", "Product", FormMethod.Get, new { @class = "form-inline" }))
                 {
-                    <div class="col-md-1 p-0 mr-1">
-                        <select style="padding:0px;box-shadow: none;width: 100%;" id="multiselect" class="form-control" asp-for="dropshipstatusSearch">
-                            <option value="1">Dropship</option>
-                            <option value="0">Dropship None</option>
+                    <div class="row col-sm-12">
+                        <div class="p-0 mr-1" style="width:160px">
+                            <select style="padding:0px;box-shadow: none;width: 100%;" id="multiselect" class="form-control dropshipstatusSearch" asp-for="dropshipstatusSearch">
+                                <option value="1">Dropship</option>
+                                <option value="0">Dropship None</option>
+                                <option value="ALL">All</option>
+                            </select>
+                            @*<input type="hidden" name="dropshipstatusSearch" id="ddldropshipstatusSearch" />*@
+                        </div>
+                        <div class="p-0 mr-1" style=" width: 56px;position:relative">
+                            <select id="multiselect" style="padding:0px;box-shadow: none; width:70px!important;position:absolute" class="form-control col-md-1 active DSTagselect" multiple="multiple">
+                                @*<option value="Yes">Yes</option>
+                            <option value="No">No</option>*@
+                            </select>
+                            <input type="hidden" name="DSTag" id="ddDSTag" />
+                        </div>
+                        <div class="p-0 mr-1" style="position:relative;width:78px">
+                            <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active WHQStatus" multiple="multiple" style="position:absolute">
+                                <option value="1">WHQ > 0</option>
+                                <option value="2">WHQ < 0</option>
+                            </select>
+                            <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
+                        </div>
+                        <div class="p-0 mr-1" style="position:relative;width:110px">
+                            <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ASINStatus" multiple="multiple" style="position:absolute">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <input type="hidden" name="ASINS" id="ddlASINStatus" />
+                        </div>
+
+                        <div class="p-0 mr-1" style="position:relative;width:130px">
+                            <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ShowSKUwithBBProductID" multiple="multiple" style="position:absolute">
+                                <option value="Yes">W BB Product ID</option>
+                                <option value="No">WO BB Product ID</option>
+                            </select>
+                            <input type="hidden" name="BBProductID" id="ddlShowSKUBBProductID" />
+                        </div>
+                        <div class="p-0 mr-1" style="min-width:120px!important;position:relative">
+                            <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ApprovedPriceStatus" multiple="multiple" style="position:absolute!important">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <input type="hidden" name="ApprovedUnitPrice" id="ddlApprovedPriceStatus" />
+                        </div>
+
+                        <select style="padding:0px;width:75px!important;box-shadow: none;" id="multiselect" class="form-control" asp-for="dropshipstatus">
+                            <option value="sku">SKU</option>
+                            <option value="ProductTitle">Title</option>
+                            <option value="asin">ASIN</option>
                             <option value="ALL">All</option>
                         </select>
-                    </div>
-                    <div class="col-md-1 p-0 mr-1">
-                        <select id="multiselect" style="padding:0px;box-shadow: none; width:110px!important;" class="form-control col-md-1 active DSTagselect" multiple="multiple">
-                            @*<option value="Yes">Yes</option>
-                                <option value="No">No</option>*@
+                        <label class="mb-2 mr-sm-1"></label>
+
+                        <input type="text" autocomplete="off" class="form-control inputclass" asp-for="Sku" style="box-shadow: none;width:165px" />
+                        <label class="mb-2"></label>
+
+                        <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
+                        <select id="" class="form-control p-sm-0" asp-for="TypeSearch">
+                            <option value="ALL">ALL</option>
+                            <option value="Continued">Continued </option>
+                            <option value="Discontinued">Discontinued</option>
                         </select>
-                        <input type="hidden" name="DSTag" id="ddDSTag" />
-                    </div>
-                    <div class="col-md-1 p-0 mr-1">
-                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active WHQStatus" multiple="multiple">
-                            <option value="1">WHQ > 0</option>
-                            <option value="2">WHQ < 0</option>
-                        </select>
-                        <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
-                    </div>
-                    <div class="col-md-1 p-0 mr-1">
-                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ASINStatus" multiple="multiple">
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                        <input type="hidden" name="ASINS" id="ddlASINStatus" />
-                    </div>
-
-                    <div class="col-md-1 p-0 mr-1">
-                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ShowSKUwithBBProductID" multiple="multiple">
-                            <option value="Yes">W BB Product ID</option>
-                            <option value="No">WO BB Product ID</option>
-                        </select>
-                        <input type="hidden" name="BBProductID" id="ddlShowSKUBBProductID" />
-                    </div>
-                    <div class="p-0 mr-1" style="min-width:120px!important;position:relative">
-                        <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ApprovedPriceStatus" multiple="multiple" style="position:absolute!important">
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                        <input type="hidden" name="ApprovedUnitPrice" id="ddlApprovedPriceStatus" />
-                    </div>
-
-                    <select style="padding:0px;width:110px!important;box-shadow: none;" id="multiselect" class="form-control" asp-for="dropshipstatus">
-                        <option value="sku">SKU</option>
-                        <option value="ProductTitle">Title</option>
-                        <option value="asin">ASIN</option>
-                        <option value="ALL">All</option>
-                    </select>
-                    <label class="mb-2 mr-sm-1"></label>
-
-                    <input type="text" autocomplete="off" class="form-control inputclass" asp-for="Sku" style="box-shadow: none;width:145px" />
-                    <label class="mb-2"></label>
-
-                    <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
-                    <select id="" class="form-control p-sm-0" asp-for="TypeSearch">
-                        <option value="ALL">ALL</option>
-                        <option value="Continued">Continued </option>
-                        <option value="Discontinued">Discontinued</option>
-                    </select>
 
 
-                    <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                        <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
 
 
-                    <div class="dropdown show ">
-                        <a class="btn btn-secondary dropdown-toggle myclasss1" href="#" role="button" id="dropdownMenuLink" style="background:#007bff;border-color:#007bff; margin-left:3px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Tags
-                        </a>
-                        <div class="dropdown-menu myclasss" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown show">
+                            <a class="btn btn-secondary dropdown-toggle myclasss1" href="#" role="button" id="dropdownMenuLink" style="background:#007bff;border-color:#007bff; margin-left:3px;height:26px!important" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Tags
+                            </a>
+                            <div class="dropdown-menu myclasss" aria-labelledby="dropdownMenuLink">
 
-                            <a class="dropdown-item" asp-controller="Tag" asp-action="Create" target="_blank" style="color:#007bff">Add New Tag</a>
-                            <a class="dropdown-item" href="javascript:;" id="addasintags" style="color: #007bff"> Assign Tag </a>
-                            <a class="dropdown-item" href="#" id="Removetags" style="color: #007bff"> Remove Tag </a>
+                                <a class="dropdown-item" asp-controller="Tag" asp-action="Create" target="_blank" style="color:#007bff">Add New Tag</a>
+                                <a class="dropdown-item" href="javascript:;" id="addasintags" style="color: #007bff"> Assign Tag </a>
+                                <a class="dropdown-item" href="#" id="Removetags" style="color: #007bff"> Remove Tag </a>
+                            </div>
                         </div>
-                    </div>
 
-                    <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder" style="margin-right:1px">Export</button>
-                    <span>
-                        <span class="btnexportOrderforshow" style="display:none;"><img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
-                    </span>
-                    @*<button class="ml-1 btn btn-primary" type="button" id="btnexportOrderget">Export</button>*@
+                        <button class="ml-1 btn btn-primary" type="button" id="btnexportOrder" style="margin-right:1px">Export</button>
+                        <span>
+                            <span class="btnexportOrderforshow" style="display:none;"><img height="25px" width="25px" src="~/Images/loadingImage.gif" /> Processing . .</span>
+                        </span>
+                        @*<button class="ml-1 btn btn-primary" type="button" id="btnexportOrderget">Export</button>*@
+
+                    </div>
+                    <div class="row col-sm-12 mt-2">
+                        <div class="p-0 mr-1" style="position:relative;width:160px">
+                            <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ASINListingRemoved" multiple="multiple" style="position:absolute">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <input type="hidden" name="ASINListingRemoved" id="ddlASINListingRemoved" />
+                        </div>
+
+
+                    </div>
                 }
 
 
@@ -354,7 +503,7 @@
 
                 </div>
                 <div class="col-sm-1">
-                    <input type="button" id="btnEnableDisableSKU" class="btn btn-primary" value="Go"style="height:27px" />
+                    <input type="button" id="btnEnableDisableSKU" class="btn btn-success" value="Go"style="height:27px" />
                 </div>
             </div>
 
@@ -495,7 +644,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.widgets.min.js"></script>
   
-        <script type="text/javascript">
+    <script type="text/javascript">
 
             $(document).ready(function () {
                 $("#actionMenu").select2();
@@ -561,6 +710,17 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     },
 
                 });
+                $('select[multiple].active.ASINListingRemoved').multiselect({
+                    columns: 1,
+                    placeholder: 'ASIN Listing Removed',
+                    maxPlaceholderOpts: 1,
+                    selectAll: false,
+                    onOptionClick: function (element, option) {
+                        $('#ddlASINListingRemoved').val($(element).val());
+                        $(element).val();
+                    },
+
+                });
                 $('select[multiple].active.ShowSKUwithBBProductID').multiselect({
                     columns: 1,
                     placeholder: 'Show SKUs',
@@ -608,7 +768,6 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 $(".table tbody tr ").each(function () {
                     var sku = $(this).find('#productSkuForUpdating').val()
                     var Url = '/Product/GetSkuAmazonePrice?sku=' + sku;
-
                     var row = $(this);
                     $.ajax({
                         type: 'Get',
@@ -628,7 +787,38 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     });
                 });
             }
+                function getapprovedrice() {
 
+                    $(".table tbody tr ").each(function () {
+                        var sku = $(this).find('#productSkuForUpdating').val()
+                        var Url = '/Product/GetApprovedPrice?sku=' + sku;
+                        var row = $(this);
+                        $.ajax({
+                            type: 'Get',
+                            url: Url,
+                           
+                            traditional: true,
+                            success: function (data) {
+                               
+                                
+                                console.log(data,"approved dataddddd")
+                                $(row).find(".getapprovedprice").empty();
+                                $.each(data, function (key, value) {
+                                    
+                                    if (value.VendorAlias != "") {
+                                        $(row).find(".getapprovedprice").append($("<span>" + value.VendorAlias + "</span> <span><a target='_blank' href='/ApprovedPrice/Index?&sku=" + value.SKU + "&title='>" + value.ApprovedUnitPrice.toFixed(2) + "</a></span> <span>" + value.Currency + "</span><br/>"));
+
+                                    }
+                                   
+                                });
+                                if (data == undefined) {
+                                    $(row).find(".getapprovedprice").append($("<span>- - - </span>"));
+                                }
+
+                            }
+                        });
+                    });
+                }
 
             //global functions
             $('select#multiselect').on('change', function () {
@@ -729,6 +919,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             var ASINStatus = getUrlParameter('ASINS');
             var BBProductID = getUrlParameter('BBProductID');
             var ApprovedUnitPrice = getUrlParameter('ApprovedUnitPrice');
+            var ASINListingRemoved = getUrlParameter('ASINListingRemoved');
 
             var TypeSearch = getUrlParameter('TypeSearch');
             if (TypeSearch == "Continued") {
@@ -819,7 +1010,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                 if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
                     var status = $('#checkAllPages').is(':checked');
-                    debugger
+                   
                     if (status) {
                         $('.Processing').children('span').css('display', 'inline')
                         var url = '/Product/SelectAllPagesWithoutPageLimit?dropshipstatus=' + dropship + '&Sku=' + sku;
@@ -949,13 +1140,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 if ($('#actionMenu option:selected').val() == "StatusFromZinc") {
                     $('.tableProductListSelected tbody tr ').each(function () {
                         var checked = $(document).find('.checkboxSkuForUpdating').is(':checked');
-                      
+
                         if (checked==false) {
                             $.notify('Please Select Items!', { globalPosition: 'bottom right', className: 'danger mydlete' });
                             return;
                         }
                     });
-                    
+
 
                     if ($(document).find('#headerCheckBox').is(':checked')) {
                         var SKUCountWithoutASIn = 0;
@@ -1074,7 +1265,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             traditional: true,
                             success: function (data) {
                                 $(".loader").hide();
-                                debugger;
+                              
                                 var TotalSKU = parseInt('@ViewBag.TotalCount');//158
                                 var withasin = data;//171
                                 var withoutasin = TotalSKU - withasin;//158 171=-13
@@ -1168,7 +1359,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         pageNo = page;
 
                         // add code which gets executed when user selects a page
-                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
+                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
                         $(".loader").show();
                         $.get(url).done(function (response) {
                             $('#loadOrder').empty();
@@ -1177,6 +1368,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                             var table = $(document).find('#tableProductList');
                             getasinamazoneprice();
+                            getapprovedrice();
                             $(table).tablesorter({
                                 theme: 'bootstrap',
                                 headerTemplate: '{content} {icon}',
@@ -1248,6 +1440,248 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             //        });
             //    });
             //}
+                //For checked unchecked status
+                var whqText = $(".whq-status-text").text();
+                var whqstatus = whqText.split(",");
+                
+                $.each(whqstatus, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+                        if ($(this).parents("select").hasClass("WHQStatus")) {
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        }
+                    });
+                });
+                var tagText = $(".TG-status-text").text();
+                var tgstatus = tagText.split(",");
+
+                $.each(tgstatus, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+                        if ($(this).parents("select").hasClass("DSTagselect")) {
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        }
+                    });
+                });
+                $(document).on('change', '.WHQCLASS', function (e) {
+                    if (WHQStatus != null) {
+
+                        var WHQ = WHQStatus.split(",");
+                        //$('#ddlQuantity').val($(this).item);
+                        $('#ddlWHQStatus').val(WHQStatus);
+                        $.each(WHQ, function (key, value) {
+                            var setval = 20;
+                            var getval = value;
+                            getval = setval;
+                            console.log(getval);
+                            if (getval == 20) {
+                                $(".WHQStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", false);
+                                        $(".WHQHide").hide();
+                                        $('#ddlWHQStatus').val('');
+                                    }
+                                });
+                            }
+                            else {
+
+                                $(".WHQStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                $(document).on('change', '.DROPCLASS', function (e) {
+                    if (dropshipstatusSearch != null) {
+                        $(".DROPHide").hide();
+                        $('.dropshipstatusSearch').val('ALL').trigger('change'); 
+                    }
+                });
+                var asinText = $(".asin-status-text").text();
+                var asinstatus = asinText.split(",");
+                $.each(asinstatus, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+                        if ($(this).parents("select").hasClass("ASINStatus")) {
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        }
+                    });
+                });
+                $(document).on('change', '.ASINCLASS', function (e) {
+                    if (ASINStatus != null) {
+
+                        var res = ASINStatus.split(",");
+                        //$('#ddlQuantity').val($(this).item);
+                        $('#ddlASINStatus').val(ASINStatus);
+                        $.each(res, function (key, value) {
+
+                            var setval = 25;
+                            var getval = value;
+                            getval = setval;
+                            console.log(getval);
+                            if (getval == 25) {
+                                $(".ASINStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", false);
+                                        $(".ASINHide").hide();
+                                        $('#ddlASINStatus').val('');
+                                    }
+                                });
+                            }
+                            else {
+
+                                $(".ASINStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+                });
+
+                var skuText = $(".sku-status-text").text();
+                var skustatus = skuText.split(",");
+                $.each(skustatus, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+                        if ($(this).parents("select").hasClass("ShowSKUwithBBProductID")) {
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        }
+                    });
+                });
+                $(document).on('change', '.SKUCLASS', function (e) {
+                    if (BBProductID != null) {
+
+                        var res = BBProductID.split(",");
+                        //$('#ddlQuantity').val($(this).item);
+                        $('#ddlShowSKUBBProductID').val(BBProductID);
+                        $.each(res, function (key, value) {
+
+                            var setval = 30;
+                            var getval = value;
+                            getval = setval;
+                            console.log(getval);
+                            if (getval == 30) {
+                                $(".ShowSKUwithBBProductID").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", false);
+                                        $(".SKUHide").hide();
+                                        $('#ddlShowSKUBBProductID').val('');
+                                    }
+                                });
+                            }
+                            else {
+
+                                $(".ShowSKUwithBBProductID").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+                });
+                var aprText = $(".apr-status-text").text();
+                var aprstatus = aprText.split(",");
+                $.each(aprstatus, function (key, value) {
+                    $(".ms-options").find("input[type=checkbox]").each(function () {
+                        if ($(this).parents("select").hasClass("ApprovedPriceStatus")) {
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        }
+                    });
+                });
+                $(document).on('change', '.APRCLASS', function (e) {
+                    if (ApprovedUnitPrice != null) {
+
+                        var res = ApprovedUnitPrice.split(",");
+                        //$('#ddlQuantity').val($(this).item);
+                        $('#ddlApprovedPriceStatus').val(ApprovedUnitPrice);
+                        $.each(res, function (key, value) {
+
+                            var setval = 35;
+                            var getval = value;
+                            getval = setval;
+                            console.log(getval);
+                            if (getval == 35) {
+                                $(".ApprovedPriceStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", false);
+                                        $(".APRHide").hide();
+                                        $('#ddlApprovedPriceStatus').val('');
+                                    }
+                                });
+                            }
+                            else {
+
+                                $(".ApprovedPriceStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+                });
+
+                $(document).on('change', '.LSRCLASS', function (e) {
+                    if (ASINListingRemoved != null) {
+
+                        var res = ASINListingRemoved.split(",");
+                        //$('#ddlQuantity').val($(this).item);
+                        $('#ddlASINListingRemoved').val(ASINListingRemoved);
+                        $.each(res, function (key, value) {
+
+                            var setval = 25;
+                            var getval = value;
+                            getval = setval;
+                            console.log(getval);
+                            if (getval == 25) {
+                                $(".ASINListingRemoved").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", false);
+                                        $(".LSRHide").hide();
+                                        $('#ddlASINListingRemoved').val('');
+                                    }
+                                });
+                            }
+                            else {
+
+                                $(".ASINListingRemoved").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+                });
+                //
             if (WHQStatus != null) {
 
                 var res = WHQStatus.split(",");
@@ -1378,6 +1812,38 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                     });
                 }
+                if (ASINListingRemoved != null) {
+
+                    var res = ASINListingRemoved.split(",");
+                    //$('#ddlQuantity').val($(this).item);
+                    $('#ddlASINListingRemoved').val(ASINListingRemoved);
+                    $.each(res, function (key, value) {
+
+                        var setval = 25;
+                        var getval = value;
+                        getval = setval;
+                        console.log(getval);
+                        if (getval == 25) {
+                            $(".ASINListingRemoved").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", true);
+                                }
+                            });
+                        }
+                        else {
+
+                            $(".ASINListingRemoved").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", false);
+                                }
+                            });
+                        }
+
+                    });
+                }
             //if (DSTagItem != null) {
 
             //    var Order = DSTagItem.split(",");
@@ -1435,7 +1901,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             //    }
             //});
             //});
-            debugger
+            
 
 
             var Url = '/Tag/TagListForAssign/';
@@ -1480,11 +1946,46 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                         });
                     }
+                    $(document).on('change', '.TGCLASS', function (e) {
+                        if (DSTagItem != null) {
+
+                            var Order = DSTagItem.split(",");
+                            //$('#ddlQuantity').val($(this).item);
+                            $('#ddDSTag').val(DSTagItem);
+                            $.each(Order, function (key, value) {
+                                var setval = 22;
+                                var getval = value;
+                                getval = setval;
+                                console.log(getval);
+                                if (getval == 22) {
+                                    $(".DSTagselect").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                        if ($(this).val() == value.trim()) {
+                                            $(this).prop("checked", false);
+                                            $(".TGHide").hide();
+                                            $('#ddDSTag').val('');
+                                        }
+                                    });
+                                }
+                                else {
+
+                                    $(".DSTagselect").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                        if ($(this).val() == value.trim()) {
+                                            $(this).prop("checked", true);
+                                        }
+                                    });
+                                }
+
+                            });
+                        }
+                    });
                 }
 
 
 
             })
+
             // action menu
             function multis() {
                 $('select[multiple].active.DSTagselect').multiselect({
@@ -1497,8 +1998,23 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     }
                 });
             }
+                //var tagText = [];
+                //$(".TG-status-text").each(function () {
+                //    var vl = $(this).attr("value");
+                //    tagText.push(vl);
+                //});
+                //if (tagText.length > 0) {
+                //    $.each(tagText, function (key, value) {
+                //        $(".DSTagselect").next().children(".ms-options").find("input[type=checkbox]").each(function () {
 
+                //            if ($(this).val() == value.trim()) {
+                //                $(this).prop("checked", true);
+                //            }
+                //        });
+                //    });
+                //}
 
+          
 
             //
 
@@ -1507,7 +2023,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 var i = 0;
                 page = 1;
                 pageNo = page;
-                debugger;
+               
                 if ($(_this).is(':checked')) {
                     var selectallchecked = parseInt('@ViewBag.TotalCount');
                     console.log(selectallchecked)
@@ -1635,7 +2151,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
 
             //
-            debugger
+           
             $('#btnexportOrderget').click(function () {
                 //var data = new Array();
                 var data = [];
@@ -1909,6 +2425,6 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         //    }
         //});
 
-        </script>
+    </script>
  
 }

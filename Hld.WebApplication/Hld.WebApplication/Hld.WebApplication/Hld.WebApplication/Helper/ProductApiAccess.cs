@@ -207,9 +207,9 @@ namespace Hld.WebApplication.Helper
             return Convert.ToBoolean(jsonObjectResponse);
         }
 
-        public List<ProductDisplayInventoryViewModel> GetAllProducts(string ApiURL, string token, int startLimit, int endLimit, string sort, string dropship, string dropshipsearch, string sku, string asin, string ProductTitle, string DSTag, string TypeSearch, string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice)
+        public List<ProductDisplayInventoryViewModel> GetAllProducts(string ApiURL, string token, int startLimit, int endLimit, string sort, string dropship, string dropshipsearch, string sku, string asin, string ProductTitle, string DSTag, string TypeSearch, string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice,string ASINListingRemoved)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + startLimit + "/" + endLimit + "/" + sort + "/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + asin + "/" + ProductTitle + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus+"/"+BBProductID+"/"+ASINS+"/"+ ApprovedUnitPrice);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + startLimit + "/" + endLimit + "/" + sort + "/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + asin + "/" + ProductTitle + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus+"/"+BBProductID+"/"+ASINS+"/"+ ApprovedUnitPrice+"/"+ ASINListingRemoved);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -895,7 +895,35 @@ namespace Hld.WebApplication.Helper
             }
             return ViewList;
         }
+        public List<ApprovedPriceForInventoryPageViewModel> GetApprovedPrice(string ApiURL, string token, string sku)
+        {
+            List<ApprovedPriceForInventoryPageViewModel> ViewList = new List<ApprovedPriceForInventoryPageViewModel>();
 
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetApprovedPrice/" + sku);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewList = JsonConvert.DeserializeObject<List<ApprovedPriceForInventoryPageViewModel>>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return ViewList;
+        }
         public ProductSaveViewModel GetProductInfoFromSellerCloudForMIssingSku(string ApiURL, string token, string SKU)
         {
             var Item = new ProductSaveViewModel();

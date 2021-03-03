@@ -191,28 +191,28 @@
             </a>*@
 
                 <!--</td>--><!--PST P&L-->
-                <td>
+                <td style="" class="getapprovedprice">
 
-                    @foreach (var inner in item.ApprovedPriceList)
+                    @*@foreach (var inner in item.ApprovedPriceList)
                     {
                         if (@inner.VendorAlias != "")
                         {                            
                             <span>@inner.VendorAlias</span>
                             <span><a style='cursor: pointer;' href='/ApprovedPrice/Index?&sku=@item.ProductSKU&title=' target='_blank'> @inner.ApprovedUnitPrice  </a> @inner.Currency</span><br />
                         }
-                    }
+                    }*@
                 </td>
 
                 <td>
 
-                    @if (item.Continue == true)
+                    @if (item.Remark == true)
                     {
-                        <span>Continue</span>
+                        <span>Listing Removed</span>
 
                     }
                     else
                     {
-                        <span>Discontinued</span>
+                        <span></span>
                     }
 
                 </td>

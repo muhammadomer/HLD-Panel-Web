@@ -8,7 +8,7 @@ namespace Hld.WebApplication.ViewModel
     public class ApprovedPriceForInventoryViewModel
     {
             public int idApprovedPrice { get; set; }        
-            public int? VendorId { get; set; }
+            public int? VendorId { get; set; }          
             public string VendorAlias { get; set; }
             public decimal ApprovedUnitPrice { get; set; }
             public decimal CAD { get; set; }

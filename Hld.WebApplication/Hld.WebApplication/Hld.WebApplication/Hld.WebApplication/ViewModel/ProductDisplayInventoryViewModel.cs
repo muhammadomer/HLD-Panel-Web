@@ -27,6 +27,7 @@ namespace Hld.WebApplication.ViewModel
         public int BBProductID { get; set; }
         public int AggregatedQty { get; set; }
         public decimal ApprovedUnitPrice { get; set; }
+        public bool Remark { get; set; }
 
         public List<ProductWarehouseQtyViewModel> ProductrWarehouseQtyViewModel { get; set; }
         public List<SkuTagOrderViewModel> skuTags { get; set; }
