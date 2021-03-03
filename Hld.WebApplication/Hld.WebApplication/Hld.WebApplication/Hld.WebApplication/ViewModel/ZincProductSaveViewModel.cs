@@ -32,6 +32,7 @@ namespace Hld.WebApplication.ViewModel
         public DateTime updateDate { get; set; }
         public int ValidStatus { get; set; }
         public int Frequency { get; set; }
+        public bool Remark { get; set; }
         public List<ProductSkuFromAsinViewModel> listSKU { get; set; }
     }
 }

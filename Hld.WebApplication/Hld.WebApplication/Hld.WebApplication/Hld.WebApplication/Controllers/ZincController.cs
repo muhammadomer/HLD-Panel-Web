@@ -674,7 +674,26 @@ namespace Hld.WebApplication.Controllers
                 {
                     model.offers = model.offers.Where(s => s.condition.ToLower().Trim().Equals("new") && s.price > 0 && s.fba_badge.Equals(true)).ToList();
                 }
-                
+                if (model.offers == null)
+                {
+                        zincProductSaveViewModel = new ZincProductSaveViewModel();
+                        zincProductSaveViewModel.timestemp = 0;
+                        zincProductSaveViewModel.status = "Listing Removed";
+                        zincProductSaveViewModel.ASIN = orderid;
+                        zincProductSaveViewModel.Product_sku = ProductSKU;
+                        zincProductSaveViewModel.sellerName = "";
+                        zincProductSaveViewModel.percent_positive = 0;
+                        zincProductSaveViewModel.itemprice = 0;
+                        zincProductSaveViewModel.itemavailable = false;
+                        zincProductSaveViewModel.handlingday_min = 0;
+                        zincProductSaveViewModel.handlingday_max = 0;
+                        zincProductSaveViewModel.item_prime_badge = false;
+                        zincProductSaveViewModel.delivery_days_max = 0;
+                        zincProductSaveViewModel.item_condition = "";
+
+                   
+                    return zincProductSaveViewModel;
+                }
                 if ((model.status != "processing" || model.status != "failed") && model.offers != null && model.offers.Count > 0 )
                 {
                     // getting all those offers which have fulfilled true
@@ -692,6 +711,30 @@ namespace Hld.WebApplication.Controllers
                         minPriceOfOffer = offerids.Min(e => e.offerPrice);
                         offerID = offerids.Where(e => e.offerPrice.Value == minPriceOfOffer.Value).Select(e => e.offerid).FirstOrDefault();
                     }
+                    //if(offerids == null)
+                    //{
+                    //   var  modelss = model.offers.Where(e => e.offer_id == offerID).ToList();
+
+                    //    if (modelss != null && modelss.Count > 0)
+                    //    {
+                    //           zincProductSaveViewModel = new ZincProductSaveViewModel();
+                    //           zincProductSaveViewModel.timestemp = 0;
+                    //           zincProductSaveViewModel.status = "Listing Removed ";
+                    //           zincProductSaveViewModel.ASIN = orderid;
+                    //           zincProductSaveViewModel.Product_sku = ProductSKU;
+                    //           zincProductSaveViewModel.sellerName = "";
+                    //           zincProductSaveViewModel.percent_positive = 0;
+                    //           zincProductSaveViewModel.itemprice =0;
+                    //           zincProductSaveViewModel.itemavailable = false;
+                    //           zincProductSaveViewModel.handlingday_min = 0;
+                    //           zincProductSaveViewModel.handlingday_max = 0;
+                    //           zincProductSaveViewModel.item_prime_badge = false;
+                    //           zincProductSaveViewModel.delivery_days_max =0;
+                    //           zincProductSaveViewModel.item_condition = "";
+                            
+                    //    }
+                    //    return zincProductSaveViewModel;
+                    //}
                     var models = model.offers.Where(e => e.offer_id == offerID).ToList();
 
                     if (models != null && models.Count > 0)
@@ -1050,10 +1093,22 @@ namespace Hld.WebApplication.Controllers
                 token = Request.Cookies["Token"];
                 bool status = false;
                  zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
-                zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
-                zincProductSaveViewModel.ASIN = orderid;
-                zincProductSaveViewModel.Product_sku = ProductSKU;
-                status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+                if (zincProductSaveViewModel.status== "Listing Removed")
+                {
+                    zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
+                    zincProductSaveViewModel.ASIN = orderid;
+                    zincProductSaveViewModel.Product_sku = ProductSKU;
+                    zincProductSaveViewModel.Remark = true;
+                    status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+                }
+                else
+                {
+                    zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
+                    zincProductSaveViewModel.ASIN = orderid;
+                    zincProductSaveViewModel.Product_sku = ProductSKU;
+                    status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+                }
+                
 
                 return zincProductSaveViewModel;
             }
