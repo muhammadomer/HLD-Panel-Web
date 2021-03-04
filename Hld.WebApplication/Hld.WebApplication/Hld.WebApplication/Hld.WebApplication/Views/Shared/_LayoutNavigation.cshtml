@@ -8,7 +8,7 @@
     @using Microsoft.AspNetCore.Authorization
     @inject IAuthorizationService AuthorizationService
     @*Production , Development*@
-    <environment include="Production">
+    <environment include="Development">
         <link href="~/Images/d.ico" rel="icon" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" />
@@ -569,7 +569,7 @@
         </main>
     </div>
 
-<environment include="Production">
+<environment include="Development">
     <script src="~/lib/jquery/dist/jquery.js"></script>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>

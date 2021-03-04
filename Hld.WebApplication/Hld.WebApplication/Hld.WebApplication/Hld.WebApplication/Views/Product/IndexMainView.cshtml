@@ -139,7 +139,7 @@
 
         <div class="col-sm-12">
 
-            @if (Model.ASINS != "ALL")
+            @if (Model.ASINS != "ALL" && !string.IsNullOrEmpty(Model.ASINS))
             {
                 <div class="row col-12 ASINHide">
                     <span class="tagspan">ASIN Available Status :</span>
@@ -156,7 +156,7 @@
 
                 </div>
             }
-            @if (Model.BBProductID != "ALL")
+            @if (Model.BBProductID != "ALL" && !string.IsNullOrEmpty(Model.BBProductID))
             {
                 <div class="row col-12 SKUHide">
                     <span class="tagspan">Show SKUs Status :</span>
@@ -173,7 +173,7 @@
 
                 </div>
             }
-            @if (Model.ApprovedUnitPrice != "ALL")
+            @if (Model.ApprovedUnitPrice != "ALL" && !string.IsNullOrEmpty(Model.ApprovedUnitPrice))
             {
                 <div class="row col-12 APRHide">
                     <span class="tagspan">Approved Prices Status :</span>
@@ -190,7 +190,7 @@
 
                 </div>
             }
-            @if (Model.WHQStatus != "ALL")
+            @if (Model.WHQStatus != "ALL" && !string.IsNullOrEmpty(Model.WHQStatus))
             {
                 <div class="row col-12 WHQHide">
                     <span class="tagspan">WHQ Status :</span>
@@ -206,7 +206,7 @@
                     }
                 </div>
             }
-            @if (Model.dropshipstatusSearch != "ALL")
+            @if (Model.dropshipstatusSearch != "ALL" && !string.IsNullOrEmpty(Model.dropshipstatusSearch))
             {
                 <div class="row col-12 DROPHide">
                     <span class="tagspan">Dropship Status :</span>
@@ -223,7 +223,7 @@
 
                 </div>
             }
-            @if (Model.ASINListingRemoved != "ALL")
+            @if (Model.ASINListingRemoved != "ALL" && !string.IsNullOrEmpty(Model.ASINListingRemoved))
             {
                 <div class="row col-12 LSRHide">
                     <span class="tagspan">ASIN Listing Removed Status :</span>
@@ -239,7 +239,7 @@
                     }
                 </div>
             }
-            @if (Model.DSTag != "ALL")
+            @if (Model.DSTag != "ALL" && !string.IsNullOrEmpty(Model.DSTag))
             {
                 <div class="row col-12 TGHide">
                     <span class="tagspan">Tag Status :</span>
@@ -276,14 +276,15 @@
                     <div class="row col-sm-12">
                         <div class="p-0 mr-1" style="width:160px">
                             <select style="padding:0px;box-shadow: none;width: 100%;" id="multiselect" class="form-control dropshipstatusSearch" asp-for="dropshipstatusSearch">
+                                <option value="ALL">All</option>
                                 <option value="1">Dropship</option>
                                 <option value="0">Dropship None</option>
-                                <option value="ALL">All</option>
+                                
                             </select>
                             @*<input type="hidden" name="dropshipstatusSearch" id="ddldropshipstatusSearch" />*@
                         </div>
-                        <div class="p-0 mr-1" style=" width: 56px;position:relative">
-                            <select id="multiselect" style="padding:0px;box-shadow: none; width:70px!important;position:absolute" class="form-control col-md-1 active DSTagselect" multiple="multiple">
+                        <div class="p-0 mr-1" style=" width: 81px;position:relative">
+                            <select id="multiselect" style="padding:0px;box-shadow: none; width:81px!important;position:absolute" class="form-control col-md-1 active DSTagselect" multiple="multiple">
                                 @*<option value="Yes">Yes</option>
                             <option value="No">No</option>*@
                             </select>
@@ -327,7 +328,7 @@
                         </select>
                         <label class="mb-2 mr-sm-1"></label>
 
-                        <input type="text" autocomplete="off" class="form-control inputclass" asp-for="Sku" style="box-shadow: none;width:165px" />
+                        <input type="text" autocomplete="off" class="form-control inputclass" asp-for="Sku" style="box-shadow: none;width:140px" />
                         <label class="mb-2"></label>
 
                         <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
@@ -1255,13 +1256,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                     }
                     if ($('#checkAllPages').is(':checked') && ($('#actionMenu option:selected').val() == "StatusFromZinc")) {
-                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
+                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
                         $(".loader").show();
                         $.ajax({
                             type: 'POST',
                             url: UrlZinc,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved },
                             traditional: true,
                             success: function (data) {
                                 $(".loader").hide();
@@ -1269,29 +1270,39 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                                 var TotalSKU = parseInt('@ViewBag.TotalCount');//158
                                 var withasin = data;//171
                                 var withoutasin = TotalSKU - withasin;//158 171=-13
+                                if (TotalSKU == withoutasin) {
+                                    $('.btnsubmitZinc').hide();
                                 $(".myclassSuccessZinc").empty();
-                                $(".myclassSuccessZinc").append('<span class=""style="display:block;">You have selected ' + '<strong>' + TotalSKU + '</strong>' + ' SKU and ' + "<strong>" + withoutasin + "</strong>" + ' have no ASIN.</span><span style="">Do you want to proceed?</span>');
+                                $(".myclassSuccessZinc").append('<span class=""style="display:block;">You have selected ' + '<strong>' + TotalSKU + '</strong>' + ' SKU and ' + "<strong>" + withoutasin + "</strong>" + ' have no ASIN.</span><span style="color:red;font-weight:bold">You cannot proceed this request!</span>');
                                 $("#myModalSuccessZinc").modal({ backdrop: 'static', keyboard: false });
-                                $(document).on('click', '.btnsubmitZinc', function () {
-                                    $(".loader").show();
-                                    var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
-                                    $.ajax({
-                                        type: 'post',
-                                        url: UrlZincGet,
-                                        data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
-                                        success: function (res) {
-                                            $(".loader").hide();
+                                }
+                                else {
+                                    $('.btnsubmitZinc').show();
+                                    $(".myclassSuccessZinc").empty();
+                                    $(".myclassSuccessZinc").append('<span class=""style="display:block;">You have selected ' + '<strong>' + TotalSKU + '</strong>' + ' SKU and ' + "<strong>" + withoutasin + "</strong>" + ' have no ASIN.</span><span style="">Do you want to proceed?</span>');
+                                   $("#myModalSuccessZinc").modal({ backdrop: 'static', keyboard: false });
+                                    $(document).on('click', '.btnsubmitZinc', function () {
+                                        $(".loader").show();
+                                        var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
+                                        $.ajax({
+                                            type: 'post',
+                                            url: UrlZincGet,
+                                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved },
+                                            success: function (res) {
+                                                $(".loader").hide();
 
-                                            $(".myclassSuccessResponce").empty();
-                                            $(".myclassSuccessResponce").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
-                                            $("#myModalSuccessResponce").modal({ backdrop: 'static', keyboard: false });
-                                            $('.closeModel').on('click', function () {
-                                                location.reload();
-                                            });
+                                                $(".myclassSuccessResponce").empty();
+                                                $(".myclassSuccessResponce").append('<span class="">Job Created Successfully and Job ID is:<a href="/ZincWatchlist/MainViewLogs?jobID=' + res + '" target="_blank">' + res + '</a>');
+                                                $("#myModalSuccessResponce").modal({ backdrop: 'static', keyboard: false });
+                                                $('.closeModel').on('click', function () {
 
-                                        }
+                                                });
+
+                                            }
+                                        });
                                     });
-                                });
+                                }
+                               
                             }
 
                         });
@@ -1413,6 +1424,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     $('#loadOrder').empty();
                     $('#loadOrder').html(response);
                     getasinamazoneprice();
+                    getapprovedrice();
                      $(".loader").hide();
                     var table = $(document).find('#tableProductList');
                     $(table).tablesorter({
@@ -1423,6 +1435,8 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             this.wrapInner('<span class="icons"></span>');
                         }
                     });
+                    var itemcount = $("#tableProductList").find("tr").length - 1;
+                    $(".itemPerPage").text(itemcount);
                    // $(table).stickyTableHeaders({ fixedOffset: 0 });
                 });
             }
@@ -2055,14 +2069,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 $('#btnexportOrder').click(function () {
                     $(".btnexportOrderforshow").css('display', 'inline');
                     if ($('#checkAllPages').is(':checked')) {
-                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
+                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
                         $(".btnexportOrderforshow").css('display', 'inline');
                         $.ajax({
                             type: 'POST',
                             url: URLEXPORT,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
-
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved },
                             traditional: true,
                             success: function (data) {
                                 $(".btnexportOrderforshow").css('display', 'none');
@@ -2129,13 +2142,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     }
                     else {
                         $(".btnexportOrderforshow").css('display', 'inline');
-                      var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice;
+                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
                         $(".btnexportOrderforshow").css('display', 'inline');
                         $.ajax({
                             type: 'POST',
                             url: URLEXPORT,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved },
 
                             traditional: true,
                             success: function (data) {
