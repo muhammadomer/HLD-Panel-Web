@@ -85,7 +85,25 @@ namespace Hld.WebApplication.Controllers
         [Authorize(Policy = "Access to Inventory")]
         public IActionResult IndexMainView(ProductInventorySearchViewModel model, string input)
         {
-           
+            if (!string.IsNullOrEmpty(model.BBPriceUpdate) && model.BBPriceUpdate != "undefined")
+            {
+                string[] Val = model.BBPriceUpdate.Split(',');
+                int length = Val.Length;
+
+                foreach (var item in Val)
+                {
+                    if (item != null)
+                    {
+                        model.BBPriceUpdate = item;
+
+                    }
+                }
+
+            }
+            else
+            {
+                model.BBPriceUpdate = "ALL";
+            }
             if (!string.IsNullOrEmpty(model.DSTag) && model.DSTag != "undefined")
             {
                 string[] Val = model.DSTag.Split(',');
@@ -291,15 +309,22 @@ namespace Hld.WebApplication.Controllers
             {
                 model.dropshipstatus = "All";
             }
-
-            token = Request.Cookies["Token"];
-            ViewBag.TotalCount = ProductApiAccess.GetAllProductsCount(ApiURL, token, model);
-            ViewBag.Sku = model.Sku == null || model.Sku == "undefined" ? "Nill" : model.Sku.Trim();
-            ViewBag.asin = model.asin == null || model.asin == "undefined" ? "Nill" : model.asin.Trim();
-            if (model.Sku == "Nill")
+            if ((string.IsNullOrEmpty(model.EmptyFirstTime) || model.EmptyFirstTime == "undefined"))
             {
-                model.Sku = "";
+
             }
+            else
+            {
+                token = Request.Cookies["Token"];
+                ViewBag.TotalCount = ProductApiAccess.GetAllProductsCount(ApiURL, token, model);
+                ViewBag.Sku = model.Sku == null || model.Sku == "undefined" ? "Nill" : model.Sku.Trim();
+                ViewBag.asin = model.asin == null || model.asin == "undefined" ? "Nill" : model.asin.Trim();
+                if (model.Sku == "Nill")
+                {
+                    model.Sku = "";
+                }
+            }
+           
             
             return View(model);
         }
@@ -311,7 +336,7 @@ namespace Hld.WebApplication.Controllers
             int count = ProductApiAccess.GetAllProductsCount(ApiURL, token, model);
             return count;
         }
-        public IActionResult Index(int? page, string sort, string dropshipstatus, string dropshipstatusSearch, string Sku, string asin, string Producttitle, string DSTag, string TypeSearch,string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice,string ASINListingRemoved)
+        public IActionResult Index(int? page, string sort, string dropshipstatus, string dropshipstatusSearch, string Sku, string asin, string Producttitle, string DSTag, string TypeSearch,string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice,string ASINListingRemoved,string BBPriceUpdate,string EmptyFirstTime="")
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -341,6 +366,9 @@ namespace Hld.WebApplication.Controllers
                 viewmodel.DSTag = "ALL";
                 viewmodel.WHQStatus = "ALL";
                 viewmodel.BBProductID = "ALL";
+                viewmodel.BBPriceUpdate = "ALL";
+                viewmodel.ASINListingRemoved = "ALL";
+                viewmodel.ApprovedUnitPrice = "ALL";
                 viewmodel.ASINS = "ALL";
                 ViewBag.asin = "Nill";
                 ViewBag.Producttitle = "Nill";
@@ -371,7 +399,23 @@ namespace Hld.WebApplication.Controllers
                 {
                   WHQStatus = "ALL";
                 }
+                if (!string.IsNullOrEmpty(BBPriceUpdate) && BBPriceUpdate != "undefined")
+                {
+                    string[] Val = BBPriceUpdate.Split(',');
+                    int length = Val.Length;
+                    foreach (var item in Val)
+                    {
+                        if (item != null)
+                        {
+                            BBPriceUpdate = item;
+                        }
 
+                    }
+                }
+                else
+                {
+                    BBPriceUpdate = "ALL";
+                }
                 if (!string.IsNullOrEmpty(DSTag) &&DSTag != "undefined")
                 {
                     string[] Val = DSTag.Split(',');
@@ -549,8 +593,15 @@ namespace Hld.WebApplication.Controllers
                     endLimit = (pageNumber - 1) * pageSize;
                     ViewBag.pageNumber = page.Value;
                 }
-                List<ProductDisplayInventoryViewModel> viewModels = ProductApiAccess.GetAllProducts(ApiURL, token, startlimit, endLimit, sort, dropshipstatus, dropshipstatusSearch, Sku.Trim(), asin, Producttitle, DSTag, TypeSearch,WHQStatus,BBProductID,ASINS, ApprovedUnitPrice,ASINListingRemoved);
-                return PartialView("~/Views/Product/_Index.cshtml", viewModels);
+                if ((string.IsNullOrEmpty(EmptyFirstTime) || EmptyFirstTime == "undefined"))
+                { 
+
+                }
+               
+                    List<ProductDisplayInventoryViewModel> viewModels = ProductApiAccess.GetAllProducts(ApiURL, token, startlimit, endLimit, sort, dropshipstatus, dropshipstatusSearch, Sku.Trim(), asin, Producttitle, DSTag, TypeSearch, WHQStatus, BBProductID, ASINS, ApprovedUnitPrice, ASINListingRemoved, BBPriceUpdate);
+                 return PartialView("~/Views/Product/_Index.cshtml", viewModels);
+                
+                    
             }
         }
        
@@ -2305,7 +2356,7 @@ namespace Hld.WebApplication.Controllers
             return Status;
         }
         //FOR EXPORT DATE
-        public async Task<JsonResult> EXPORTDate(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved)
+        public async Task<JsonResult> EXPORTDate(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved,string BBPriceUpdate)
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -2375,6 +2426,23 @@ namespace Hld.WebApplication.Controllers
                 {
                     DSTag = "ALL";
                 }
+            if (!string.IsNullOrEmpty(BBPriceUpdate) && BBPriceUpdate != "undefined")
+            {
+                string[] Val = BBPriceUpdate.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item != null)
+                    {
+                        BBPriceUpdate = item;
+                    }
+
+                }
+            }
+            else
+            {
+                BBPriceUpdate = "ALL";
+            }
 
             if (!string.IsNullOrEmpty(BBProductID) && BBProductID != "undefined")
             {
@@ -2523,7 +2591,7 @@ namespace Hld.WebApplication.Controllers
                 }
                 
                 
-                List<ExportProductDataViewModel> viewModels = ProductApiAccess.GetAllProductsForExportWithLimitCount(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus,BBProductID,ASINS,ApprovedUnitPrice, ASINListingRemoved);
+                List<ExportProductDataViewModel> viewModels = ProductApiAccess.GetAllProductsForExportWithLimitCount(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus,BBProductID,ASINS,ApprovedUnitPrice, ASINListingRemoved, BBPriceUpdate);
                 await Task.Yield();
                 using (var package = new ExcelPackage(file))
                 {
@@ -2561,7 +2629,7 @@ namespace Hld.WebApplication.Controllers
             
             return Json(new { filePath = Path.GetTempPath(), fileName = excelName });
         }
-        public int SelectAllForGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved)
+        public int SelectAllForGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved,string BBPriceUpdate)
         {
           
             token = Request.Cookies["Token"];
@@ -2586,7 +2654,23 @@ namespace Hld.WebApplication.Controllers
             {
                 WHQStatus = "ALL";
             }
+            if (!string.IsNullOrEmpty(BBPriceUpdate) && BBPriceUpdate != "undefined")
+            {
+                string[] Val = BBPriceUpdate.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item != null)
+                    {
+                        BBPriceUpdate = item;
+                    }
 
+                }
+            }
+            else
+            {
+                BBPriceUpdate = "ALL";
+            }
             if (!string.IsNullOrEmpty(DSTag) && DSTag != "undefined")
             {
                 string[] Val = DSTag.Split(',');
@@ -2734,7 +2818,7 @@ namespace Hld.WebApplication.Controllers
             }
 
             int count;
-            count = ProductApiAccess.SelectAllForGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus, BBProductID, ASINS, ApprovedUnitPrice, ASINListingRemoved);
+            count = ProductApiAccess.SelectAllForGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus, BBProductID, ASINS, ApprovedUnitPrice, ASINListingRemoved, BBPriceUpdate);
             //var ASIN = viewModels.ASIN;
             //var SKU = viewModels.SKU;
             //var TotalCount = viewModels.TotalCount;
@@ -2744,7 +2828,7 @@ namespace Hld.WebApplication.Controllers
             return count;
         }
         [HttpPost]
-        public int SelectAllSKUandASINGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus,string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved)
+        public int SelectAllSKUandASINGetStatusFromZinc(string dropshipstatus, string dropshipstatusSearch, string Sku, string DSTag, string TypeSearch, string WHQStatus,string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved,string BBPriceUpdate)
         {
             //getting skulist from session data
             token = Request.Cookies["Token"];
@@ -2813,6 +2897,23 @@ namespace Hld.WebApplication.Controllers
             else
             {
                 DSTag = "ALL";
+            }
+            if (!string.IsNullOrEmpty(BBPriceUpdate) && BBPriceUpdate != "undefined")
+            {
+                string[] Val = BBPriceUpdate.Split(',');
+                int length = Val.Length;
+                foreach (var item in Val)
+                {
+                    if (item != null)
+                    {
+                        BBPriceUpdate = item;
+                    }
+
+                }
+            }
+            else
+            {
+                BBPriceUpdate = "ALL";
             }
             if (!string.IsNullOrEmpty(BBProductID) && BBProductID != "undefined")
             {
@@ -2963,7 +3064,7 @@ namespace Hld.WebApplication.Controllers
 
             List<GetStatusFromZincViewModel> viewModels = new List<GetStatusFromZincViewModel>();
             int JobId;
-            JobId = ProductApiAccess.SelectAllSKUandASINGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus, BBProductID, ASINS, ApprovedUnitPrice, ASINListingRemoved);
+            JobId = ProductApiAccess.SelectAllSKUandASINGetStatusFromZinc(ApiURL, token, dropshipstatus, dropshipstatusSearch, Sku.Trim(), DSTag, TypeSearch, WHQStatus, BBProductID, ASINS, ApprovedUnitPrice, ASINListingRemoved, BBPriceUpdate);
      
             return JobId;
         }

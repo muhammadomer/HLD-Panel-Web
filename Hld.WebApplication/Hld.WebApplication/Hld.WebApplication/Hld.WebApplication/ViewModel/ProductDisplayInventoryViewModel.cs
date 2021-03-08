@@ -28,6 +28,7 @@ namespace Hld.WebApplication.ViewModel
         public int AggregatedQty { get; set; }
         public decimal ApprovedUnitPrice { get; set; }
         public bool Remark { get; set; }
+        public DateTime? BBPriceUpdate { get; set; }
 
         public List<ProductWarehouseQtyViewModel> ProductrWarehouseQtyViewModel { get; set; }
         public List<SkuTagOrderViewModel> skuTags { get; set; }

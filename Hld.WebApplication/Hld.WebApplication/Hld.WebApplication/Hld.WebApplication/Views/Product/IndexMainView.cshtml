@@ -130,6 +130,49 @@
     .ms-options-wrap > .ms-options > ul label {
         width: 101% !important;
     }
+    @@media only screen and (min-width: 1700px) {
+        .inputclass {
+            width: 500px!important;
+        }
+        #WHQStatus {
+            width: 125px !important;
+        }
+        #ASINStatus {
+            width: 140px !important;
+        }
+        #ApprovedPriceStatus {
+            width: 150px !important;
+        }
+        #DSTagselect {
+            width: 110px !important;
+        }
+        .dropsearch {
+            width: 110px !important;
+        }
+       
+        }
+    @@media only screen and (max-width: 1400px) {
+        .inputclass {
+            width: 140px !important;
+            
+        }
+        #WHQStatus {
+            width: 78px !important;
+        }
+        #ASINStatus {
+            width: 110px !important;
+        }
+        #ApprovedPriceStatus {
+            width: 120px !important;
+        }
+        #DSTagselect {
+            width:81px !important;
+        }
+        .dropsearch {
+            width: 75px !important;
+        }
+    }
+    
 </style>
 <div>
     <div class="loader">
@@ -206,6 +249,40 @@
                     }
                 </div>
             }
+            @if (Model.BBPriceUpdate != "ALL" && !string.IsNullOrEmpty(Model.BBPriceUpdate))
+            {
+        <div class="row col-12 BBPriceUpdateHide">
+            <span class="tagspan">BB Prices Last Update Status :</span>
+
+            @if (Model.BBPriceUpdate == "1")
+            {
+
+        <span style="padding-left:0px;" class="">Last 7 Days</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+            }
+            else if (Model.BBPriceUpdate == "2")
+            {
+        <span style="padding-left:0px;" class="">Last 14 Days</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+            }
+            else if (Model.BBPriceUpdate == "3")
+            {
+        <span style="padding-left:0px;" class="">Last Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+            }
+            else if (Model.BBPriceUpdate == "4")
+            {
+        <span style="padding-left:0px;" class="">Last 3 Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+            }
+            else if (Model.BBPriceUpdate == "5")
+            {
+        <span style="padding-left:0px;" class="">Last 6 Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+            }
+           
+            else
+            {
+        <span style="padding-left:0px;" class="">Last 1 Year</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+            }
+        </div>
+            }
+
             @if (Model.dropshipstatusSearch != "ALL" && !string.IsNullOrEmpty(Model.dropshipstatusSearch))
             {
                 <div class="row col-12 DROPHide">
@@ -273,31 +350,33 @@
             <div class="card-body" style="padding:0">
                 @using (Html.BeginForm("IndexMainView", "Product", FormMethod.Get, new { @class = "form-inline" }))
                 {
+                    <input name="EmptyFirstTime" id="EmptyFirstTime" value="@Model.EmptyFirstTime" style="display:none" />
+
                     <div class="row col-sm-12">
                         <div class="p-0 mr-1" style="width:160px">
                             <select style="padding:0px;box-shadow: none;width: 100%;" id="multiselect" class="form-control dropshipstatusSearch" asp-for="dropshipstatusSearch">
                                 <option value="ALL">All</option>
                                 <option value="1">Dropship</option>
                                 <option value="0">Dropship None</option>
-                                
+
                             </select>
                             @*<input type="hidden" name="dropshipstatusSearch" id="ddldropshipstatusSearch" />*@
                         </div>
-                        <div class="p-0 mr-1" style=" width: 81px;position:relative">
+                        <div class="p-0 mr-1" style="position:relative" id="DSTagselect">
                             <select id="multiselect" style="padding:0px;box-shadow: none; width:81px!important;position:absolute" class="form-control col-md-1 active DSTagselect" multiple="multiple">
                                 @*<option value="Yes">Yes</option>
-                            <option value="No">No</option>*@
+                        <option value="No">No</option>*@
                             </select>
                             <input type="hidden" name="DSTag" id="ddDSTag" />
                         </div>
-                        <div class="p-0 mr-1" style="position:relative;width:78px">
+                        <div class="p-0 mr-1" style="position:relative;" id="WHQStatus">
                             <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active WHQStatus" multiple="multiple" style="position:absolute">
                                 <option value="1">WHQ > 0</option>
                                 <option value="2">WHQ < 0</option>
                             </select>
                             <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
                         </div>
-                        <div class="p-0 mr-1" style="position:relative;width:110px">
+                        <div class="p-0 mr-1" style="position:relative;" id="ASINStatus">
                             <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ASINStatus" multiple="multiple" style="position:absolute">
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
@@ -312,7 +391,7 @@
                             </select>
                             <input type="hidden" name="BBProductID" id="ddlShowSKUBBProductID" />
                         </div>
-                        <div class="p-0 mr-1" style="min-width:120px!important;position:relative">
+                        <div class="p-0 mr-1" style="position:relative" id="ApprovedPriceStatus">
                             <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active ApprovedPriceStatus" multiple="multiple" style="position:absolute!important">
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
@@ -320,7 +399,7 @@
                             <input type="hidden" name="ApprovedUnitPrice" id="ddlApprovedPriceStatus" />
                         </div>
 
-                        <select style="padding:0px;width:75px!important;box-shadow: none;" id="multiselect" class="form-control" asp-for="dropshipstatus">
+                        <select style="padding:0px;box-shadow: none;" id="multiselect" class="form-control dropsearch" asp-for="dropshipstatus">
                             <option value="sku">SKU</option>
                             <option value="ProductTitle">Title</option>
                             <option value="asin">ASIN</option>
@@ -328,7 +407,7 @@
                         </select>
                         <label class="mb-2 mr-sm-1"></label>
 
-                        <input type="text" autocomplete="off" class="form-control inputclass" asp-for="Sku" style="box-shadow: none;width:140px" />
+                        <input type="text" autocomplete="off" class="form-control inputclass" name="Sku" @*asp-for="Sku"*@ style="box-shadow: none;" />
                         <label class="mb-2"></label>
 
                         <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
@@ -368,6 +447,17 @@
                                 <option value="No">No</option>
                             </select>
                             <input type="hidden" name="ASINListingRemoved" id="ddlASINListingRemoved" />
+                        </div>
+                        <div class="p-0 mr-1" style="position:relative;width:164px">
+                            <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active BBPriceUpdateClass" multiple="multiple" style="position:absolute">
+                                <option value="1">Last 7 Days</option>
+                                <option value="2">Last 14 Days</option>
+                                <option value="3">Last Month</option>
+                                <option value="4">Last 3 Month</option>
+                                <option value="5">Last 6 Month</option>
+                                <option value="6">Last 1 Year</option>
+                            </select>
+                            <input type="hidden" name="BBPriceUpdate" id="ddlBBPriceUpdate" />
                         </div>
 
 
@@ -454,6 +544,8 @@
         <input type="hidden" value="@ViewBag.skuSearchList" id="skuSearchList" />
         @if (string.IsNullOrEmpty(ViewBag.skuSearchList))
         {
+            
+
             <div class="col-sm-3" id="pagination">
                 <div class="pagination">
 
@@ -649,6 +741,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
             $(document).ready(function () {
                 $("#actionMenu").select2();
+                $("#EmptyFirstTime").val("No");
             $(document).on('click', '#headerCheckBox', function () {
                 var i = 0;
                 if ($(this).is(':checked')) {
@@ -699,6 +792,17 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 },
 
             });
+                $('select[multiple].active.BBPriceUpdateClass').multiselect({
+                    columns: 1,
+                    placeholder: 'BB Prices Last Update',
+                    maxPlaceholderOpts: 1,
+                    selectAll: false,
+                    onOptionClick: function (element, option) {
+                        $('#ddlBBPriceUpdate').val($(element).val());
+                        $(element).val();
+                    },
+
+                });
 
                 $('select[multiple].active.ASINStatus').multiselect({
                     columns: 1,
@@ -861,6 +965,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             $('#searchFromSkuList').click(function () {
                 $('.pagination').hide();
                 $('#itemPerPage').hide();
+                
             });
 
             $('#btnSearchOrder').click(function () {
@@ -921,6 +1026,8 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             var BBProductID = getUrlParameter('BBProductID');
             var ApprovedUnitPrice = getUrlParameter('ApprovedUnitPrice');
             var ASINListingRemoved = getUrlParameter('ASINListingRemoved');
+                var BBPriceUpdate = getUrlParameter('BBPriceUpdate');
+                var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
 
             var TypeSearch = getUrlParameter('TypeSearch');
             if (TypeSearch == "Continued") {
@@ -1256,13 +1363,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                     }
                     if ($('#checkAllPages').is(':checked') && ($('#actionMenu option:selected').val() == "StatusFromZinc")) {
-                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
+                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate;
                         $(".loader").show();
                         $.ajax({
                             type: 'POST',
                             url: UrlZinc,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved, BBPriceUpdate: BBPriceUpdate },
                             traditional: true,
                             success: function (data) {
                                 $(".loader").hide();
@@ -1283,11 +1390,11 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                                    $("#myModalSuccessZinc").modal({ backdrop: 'static', keyboard: false });
                                     $(document).on('click', '.btnsubmitZinc', function () {
                                         $(".loader").show();
-                                        var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
+                                        var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate;
                                         $.ajax({
                                             type: 'post',
                                             url: UrlZincGet,
-                                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved },
+                                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved,BBPriceUpdate: BBPriceUpdate},
                                             success: function (res) {
                                                 $(".loader").hide();
 
@@ -1356,9 +1463,11 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 $(document).find('.checkboxSkuForUpdating').each(function (index) {
                     $(this).attr('checked', status);
                 });
-            }
-            if ($('#skuSearchList').val() == "")
-            {
+                }
+                debugger
+                if ($('#skuSearchList').val() == "" || EmptyFirstTime)
+                {
+                    debugger
 
                 $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
                     format: '[< nncnn >]',
@@ -1370,7 +1479,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         pageNo = page;
 
                         // add code which gets executed when user selects a page
-                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
+                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + "&BBPriceUpdate=" + BBPriceUpdate + '&EmptyFirstTime=' + EmptyFirstTime;
                         $(".loader").show();
                         $.get(url).done(function (response) {
                             $('#loadOrder').empty();
@@ -1695,6 +1804,75 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         });
                     }
                 });
+
+                $(document).on('change', '.WHQCLASS', function (e) {
+                    if (WHQStatus != null) {
+
+                        var WHQ = WHQStatus.split(",");
+                        //$('#ddlQuantity').val($(this).item);
+                        $('#ddlWHQStatus').val(WHQStatus);
+                        $.each(WHQ, function (key, value) {
+                            var setval = 20;
+                            var getval = value;
+                            getval = setval;
+                            console.log(getval);
+                            if (getval == 20) {
+                                $(".WHQStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", false);
+                                        $(".WHQHide").hide();
+                                        $('#ddlWHQStatus').val('');
+                                    }
+                                });
+                            }
+                            else {
+
+                                $(".WHQStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+                $(document).on('change', '.BBPriceUpdateCLASS', function (e) {
+                    if (BBPriceUpdate != null) {
+
+                        var res = BBPriceUpdate.split(",");
+                        //$('#ddlQuantity').val($(this).item);
+                        $('#ddlBBPriceUpdate').val(BBPriceUpdate);
+                        $.each(res, function (key, value) {
+
+                            var setval = 40;
+                            var getval = value;
+                            getval = setval;
+                            console.log(getval);
+                            if (getval == 40) {
+                                $(".BBPriceUpdateClass").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", false);
+                                        $(".BBPriceUpdateHide").hide();
+                                        $('#ddlBBPriceUpdate').val('');
+                                    }
+                                });
+                            }
+                            else {
+
+                                $(".BBPriceUpdateClass").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                    //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                    if ($(this).val() == value.trim()) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+                });
                 //
             if (WHQStatus != null) {
 
@@ -1727,8 +1905,39 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     }
 
                 });
-            }
+                }
+                if (BBPriceUpdate != null) {
 
+                    var res = BBPriceUpdate.split(",");
+                    //$('#ddlQuantity').val($(this).item);
+                    $('#ddlBBPriceUpdate').val(BBPriceUpdate);
+                    $.each(res, function (key, value) {
+
+                        var setval = 40;
+                        var getval = value;
+                        getval = setval;
+                        console.log(getval);
+                        if (getval == 40) {
+                            $(".BBPriceUpdateClass").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", true);
+                                }
+                            });
+                        }
+                        else {
+
+                            $(".BBPriceUpdateClass").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", false);
+                                }
+                            });
+                        }
+
+                    });
+                }
                 if (ASINStatus != null) {
 
                     var res = ASINStatus.split(",");
@@ -2069,13 +2278,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 $('#btnexportOrder').click(function () {
                     $(".btnexportOrderforshow").css('display', 'inline');
                     if ($('#checkAllPages').is(':checked')) {
-                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
+                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved +'&BBPriceUpdate='+BBPriceUpdate;
                         $(".btnexportOrderforshow").css('display', 'inline');
                         $.ajax({
                             type: 'POST',
                             url: URLEXPORT,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved,BBPriceUpdate: BBPriceUpdate },
                             traditional: true,
                             success: function (data) {
                                 $(".btnexportOrderforshow").css('display', 'none');
@@ -2142,14 +2351,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     }
                     else {
                         $(".btnexportOrderforshow").css('display', 'inline');
-                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved;
+                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate;
                         $(".btnexportOrderforshow").css('display', 'inline');
                         $.ajax({
                             type: 'POST',
                             url: URLEXPORT,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved },
-
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved, BBPriceUpdate: BBPriceUpdate },
                             traditional: true,
                             success: function (data) {
                                 $(".btnexportOrderforshow").css('display', 'none');

@@ -22,6 +22,8 @@ namespace Hld.WebApplication.ViewModel
         public string ASINS { get; set; }
         public string ApprovedUnitPrice { get; set; }
         public string ASINListingRemoved { get; set; }
+        public string BBPriceUpdate { get; set; }
+        public string EmptyFirstTime { get; set; }
 
     }
 }
