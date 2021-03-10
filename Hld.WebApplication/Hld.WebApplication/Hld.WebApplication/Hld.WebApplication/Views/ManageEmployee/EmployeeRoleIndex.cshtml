@@ -63,6 +63,8 @@
             //},
             data: data,
             success: function (data) {
+                $("#employeeRoleModal").modal('hide');
+                location.reload();
                 //$("#myModalTitlePO").modal({ backdrop: 'static', keyboard: false });
             },
             Error: function (err) {

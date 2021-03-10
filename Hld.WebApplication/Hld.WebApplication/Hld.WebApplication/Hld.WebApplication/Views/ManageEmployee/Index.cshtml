@@ -233,6 +233,8 @@
             //},
             data: data,
             success: function (data) {
+                $("#employeeModal").modal('hide');
+                location.reload();
                 //$("#myModalTitlePO").modal({ backdrop: 'static', keyboard: false });
             },
             Error: function (err) {

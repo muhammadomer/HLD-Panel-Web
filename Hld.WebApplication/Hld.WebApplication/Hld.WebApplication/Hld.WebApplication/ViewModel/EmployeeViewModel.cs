@@ -15,4 +15,13 @@ namespace Hld.WebApplication.ViewModel
         public string EmployeeName { get; set; }
         public string EmployeeRoleName { get; set; }
     }
+    public class EmployeeModel
+    {
+        public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public int EmployeeRole { get; set; }
+        public bool Active { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string EmployeeName { get; set; }
+    }
 }

@@ -17,8 +17,16 @@ namespace Hld.WebApplication.Helper
             try
             {
 
-
-                var data = JsonConvert.SerializeObject(ViewModel);
+                EmployeeModel model = new EmployeeModel()
+                { 
+                    EmployeeName=ViewModel.EmployeeName,
+                    Id=ViewModel.Id,
+                    EmployeeId=ViewModel.EmployeeId,
+                    Active=ViewModel.Active,
+                    CreatedOn=ViewModel.CreatedOn,
+                    EmployeeRole=ViewModel.EmployeeRole
+                };
+                var data = JsonConvert.SerializeObject(model);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Employee/save/");
                 request.Method = "POST";
                 request.Accept = "application/json;";
@@ -40,7 +48,7 @@ namespace Hld.WebApplication.Helper
                 status = JsonConvert.DeserializeObject<bool>(strResponse);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
