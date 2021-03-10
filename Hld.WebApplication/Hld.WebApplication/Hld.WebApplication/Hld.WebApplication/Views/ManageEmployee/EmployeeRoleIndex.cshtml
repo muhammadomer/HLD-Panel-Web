@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewData["Title"] = "Employee Role Index";
+}
+
+<div class="modal fade" id="employeeRoleModal" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Employee Role</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form action="" id="form">
+                    <div class="form-group">
+                        <label>Employee Role:</label>
+                        <input type="text" class="form-control" id="empRole" name="EmployeeRole" placeholder="Enter role">
+                    </div>
+                    <div class="form-group">
+                        <label>Employee Permissions:</label>
+                        <input type="text" class="form-control" id="empPermissions" name="Permissions" placeholder="Enter Permissions">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" id="saveBtn">Save</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<a class="btn btn-sm btn-secondary" id="addEmpoyeeRole" style="margin-bottom: 5px;box-shadow:none">Add Employee Role</a>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $("#addEmpoyeeRole").click(function () {
+        $("#employeeRoleModal").modal('show');
+    });
+
+    $("#saveBtn").click(function () {
+        debugger;
+        var data=$("#form").serialize();
+        //var empName = $("#empName").val();
+        //var empRole = $("#empRole").val();
+        //var status = $('#customSwitch').is(':checked');
+        //var data = {
+        //    EmployeeRole: empRole,
+        //    EmployeeName: empName,
+        //    Active: status
+        //};
+        $.ajax({
+            type: 'POST',
+            url: '../ManageEmployee/AddEmployeeRole',
+            //data: {
+            //    ProductPONotes: ProductPONotes,
+            //    PO: PO
+            //},
+            data: data,
+            success: function (data) {
+                //$("#myModalTitlePO").modal({ backdrop: 'static', keyboard: false });
+            },
+            Error: function (err) {
+
+            }
+        });
+    });
+
+    $(".editBtn").click(function () {
+        debugger;
+        var id = $(this).parent().find('.empId').val();
+        $.ajax({
+            type: 'GET',
+            url: '../ManageEmployee/GetEmployeeById',
+            data: {
+                Id: id,
+            },
+            success: function (data) {
+                debugger;
+                $("#empNameUpdate").val(data.EmployeeName);
+                $("#empRoleUpdate").val();
+                $('#customSwitchUpdate').is(':checked');
+                $("#employeeModalUpdate").modal('show');
+            },
+            Error: function (err) {
+                alert("Error");
+            }
+        });
+    })
+</script>

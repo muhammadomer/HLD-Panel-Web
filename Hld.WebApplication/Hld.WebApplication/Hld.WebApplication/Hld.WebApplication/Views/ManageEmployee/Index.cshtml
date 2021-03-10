@@ -1,0 +1,265 @@
+﻿@model  Hld.WebApplication.ViewModel.ListEmpAndRoleViewModel
+@{
+    ViewData["Title"] = "Manage Employee";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+
+<style>
+    .form-control {
+        height: calc(1em + 0.75rem + 9px)
+    }
+
+    .custom-control-input-success:checked ~ .custom-control-label::before {
+        background-color: #28a745 !important;
+        border-color: #28a745 !important;
+    }
+
+    .custom-control-input-danger:checked ~ .custom-control-label::before {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+    }
+
+    .custom-control-input-warning:checked ~ .custom-control-label::before {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+    }
+
+    .custom-control-input-info:checked ~ .custom-control-label::before {
+        background-color: #17a2b8 !important;
+        border-color: #17a2b8 !important;
+    }
+
+    /* Large toggl switches */
+    .custom-switch-lg .custom-control-label::before {
+        left: -2.25rem;
+        width: 3rem;
+        border-radius: 1.5rem;
+    }
+
+    .custom-switch-lg .custom-control-label::after {
+        top: calc(.25rem + 3px);
+        left: calc(-2.25rem + 4px);
+        width: calc(1.5rem - 6px);
+        height: calc(1.5rem - 6px);
+        border-radius: 1.5rem;
+    }
+
+    .custom-switch-lg .custom-control-input:checked ~ .custom-control-label::after {
+        transform: translateX(1.4rem);
+    }
+
+    .custom-switch-lg .custom-control-label::before {
+        height: 1.5rem;
+    }
+
+    .custom-switch-lg .custom-control-label {
+        padding-left: 1.5rem;
+        line-height: 1.7rem;
+    }
+
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="employeeModal" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Employee</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form action="">
+                    <div class="form-group">
+                        <label>Employee Name:</label>
+                        <input type="text" class="form-control" id="empName" placeholder="Enter name">
+                    </div>
+                    <div class="form-group">
+                        <label>Employee Role:</label>
+                        <select class="form-control" id="empRole">
+                            @foreach (var item in Model.Roles)
+                            {
+                                <option value="@item.RollId">@item.EmployeeRole</option>
+                            }
+
+                        </select>
+                    </div>
+                    <p class="custom-control custom-switch">
+                        <input class="custom-control-input" id="customSwitch" type="checkbox">
+                        <label class="custom-control-label font-italic" for="customSwitch">Active</label>
+                    </p>
+                    <!--<div class="col-lg-4">
+                        <div class="card rounded-0 border-0 shadow mb-4">
+                            <div class="card-body p-4 text-center">-->
+                                <!-- Custom switch -->
+                                <!--<p class="custom-control custom-switch">
+                                    <input class="custom-control-input" id="customSwitch1" type="checkbox" checked>
+                                    <label class="custom-control-label font-italic" for="customSwitch1">Feature one</label>
+                                </p>-->
+
+                                <!-- Custom switch -->
+                                <!--<p class="custom-control custom-switch m-0">
+                                    <input class="custom-control-input" id="customSwitch2" type="checkbox">
+                                    <label class="custom-control-label font-italic" for="customSwitch2">Feature two</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>-->
+                    @*<span class="custom-control custom-switch IsActiveSwtich" data-Isactive="" data-Id="" value="" style="padding-left: 3.25rem!important;">
+                        <input type="checkbox" class="custom-control-input" checked="" id="" style="display: inline-block!important">
+                        <label class="custom-control-label" for=""></label>
+                    </span>*@
+                    @*<div class="checkbox">
+                        <label><input type="checkbox" id="active" class="checkbox"> Active</label>
+                    </div>*@
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" id="saveBtn">Save</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="employeeModalUpdate" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Employee</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form action="">
+                    <div class="form-group">
+                        <label>Employee Name:</label>
+                        <input type="text" class="form-control" id="empNameUpdate" placeholder="Enter name">
+                    </div>
+                    <div class="form-group">
+                        <label>Employee Role:</label>
+                        <select class="form-control" id="empRoleUpdate">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                    <p class="custom-control custom-switch">
+                        <input class="custom-control-input" id="customSwitchUpdate" type="checkbox">
+                        <label class="custom-control-label font-italic" for="customSwitch">Active</label>
+                    </p>
+                    <!--<div class="col-lg-4">
+                        <div class="card rounded-0 border-0 shadow mb-4">
+                            <div class="card-body p-4 text-center">-->
+                    <!-- Custom switch -->
+                    <!--<p class="custom-control custom-switch">
+                        <input class="custom-control-input" id="customSwitch1" type="checkbox" checked>
+                        <label class="custom-control-label font-italic" for="customSwitch1">Feature one</label>
+                    </p>-->
+                    <!-- Custom switch -->
+                    <!--<p class="custom-control custom-switch m-0">
+                                    <input class="custom-control-input" id="customSwitch2" type="checkbox">
+                                    <label class="custom-control-label font-italic" for="customSwitch2">Feature two</label>
+                                </p>
+                            </div>
+                        </div>
+                    </div>-->
+                    @*<span class="custom-control custom-switch IsActiveSwtich" data-Isactive="" data-Id="" value="" style="padding-left: 3.25rem!important;">
+                            <input type="checkbox" class="custom-control-input" checked="" id="" style="display: inline-block!important">
+                            <label class="custom-control-label" for=""></label>
+                        </span>*@
+                    @*<div class="checkbox">
+                            <label><input type="checkbox" id="active" class="checkbox"> Active</label>
+                        </div>*@
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" id="updateBtn">Update</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<a class="btn btn-sm btn-secondary" id="addEmpoyee" style="margin-bottom: 5px;box-shadow:none">Add Employee</a>
+<a class="btn btn-sm btn-secondary" target="_blank" asp-controller="ManageEmployee" asp-action="EmployeeRoleIndex" style="margin-bottom: 5px;box-shadow:none">Add Employee Role</a>
+<table class="table table-sm table-bordered">
+    <tr style="color:cadetblue"><th>Employee Name</th><th>Employee ID</th><th>Employee Role</th><th>Active</th><th>Created On</th><th>Action</th></tr>
+    <tbody>
+        @foreach (var item in Model.Employees)
+        {
+            <tr>
+                <td>@item.EmployeeName</td>
+                <td>@item.EmployeeId</td>
+                <td>@item.EmployeeRoleName</td>
+                <td>@item.Active</td>
+                <td>@item.CreatedOn</td>
+                <td><input type="hidden" value="@item.Id" class="empId" /> <a href="#" class="editBtn">Edit</a></td>
+            </tr>
+        }
+    </tbody>
+    
+</table>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $("#addEmpoyee").click(function () {
+        $("#employeeModal").modal('show');
+    });
+
+    $("#saveBtn").click(function () {
+
+        debugger;
+        var empName = $("#empName").val();
+        var empRole = $("#empRole").val();
+        var status = $('#customSwitch').is(':checked');
+        var data = {
+            EmployeeRole: empRole,
+            EmployeeName: empName,
+            Active: status
+        };
+        $.ajax({
+            type: 'POST',
+            url: '../ManageEmployee/AddEmployeeRecord',
+            //data: {
+            //    ProductPONotes: ProductPONotes,
+            //    PO: PO
+            //},
+            data: data,
+            success: function (data) {
+                //$("#myModalTitlePO").modal({ backdrop: 'static', keyboard: false });
+            },
+            Error: function (err) {
+
+            }
+        });
+    });
+
+    $(".editBtn").click(function () {
+        debugger;
+        var id = $(this).parent().find('.empId').val();
+        $.ajax({
+            type: 'GET',
+            url: '../ManageEmployee/GetEmployeeById',
+            data: {
+                Id: id,
+            },
+            success: function (data) {
+                debugger;
+                $("#empNameUpdate").val(data.EmployeeName);
+                $("#empRoleUpdate").val();
+                $('#customSwitchUpdate').is(':checked');
+                $("#employeeModalUpdate").modal('show');  
+            },
+            Error: function (err) {
+                alert("Error");
+            }
+        });
+    })
+</script>
