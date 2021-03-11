@@ -81,7 +81,30 @@ namespace Hld.WebApplication.Helper
             }
             return Id;
         }
+        public List<PredictionHistroyViewModel> GetPredictionDetailCopy(string ApiURL, string token, int startLimit, int offset, string SearchFromSkuListPredict)
+        {
 
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionHistroy/GetPredictionDetailCopy?startLimit=" + startLimit + "&offset=" + offset + "&SearchFromSkuListPredict=" + SearchFromSkuListPredict);
+            request.Method = "GET";
+            request.Accept = "application/json;";
+            request.ContentType = "application/json";
+            request.Headers["Authorization"] = "Bearer " + token;
+            //request.Timeout = Timeout.Infinite;
+            //request.KeepAlive = true;
+            string strResponse = "";
+
+
+            using (WebResponse webResponse = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(webResponse.GetResponseStream()))
+                {
+                    strResponse = stream.ReadToEnd();
+                }
+            }
+            List<PredictionHistroyViewModel> responses = JsonConvert.DeserializeObject<List<PredictionHistroyViewModel>>(strResponse);
+
+            return responses;
+        }
         public List<PredictionHistroyViewModel> GetPredictionDetail(string ApiURL, string token, int startLimit, int offset, int VendorId, string SKU, string Title, bool Approved, bool Excluded, bool KitShadowStatus, bool Continue, string Sort, string SortedType, int Type = 0)
         {
 
@@ -106,12 +129,12 @@ namespace Hld.WebApplication.Helper
 
             return responses;
         }
-        public int PredictionSummaryCount(string ApiURL, string token, int VendorId, string SKU, string Title, bool Approved, bool Excluded, bool KitShadowStatus, bool Continue, int Type = 0)
+        public int PredictionSummaryCount(string ApiURL, string token, int VendorId, string SKU, string Title, bool Approved, bool Excluded, bool KitShadowStatus, bool Continue, string SearchFromSkuListPredict, int Type = 0)
         {
             int Count = 0;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionSummaryCount?VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Excluded=" + Excluded +"&KitShadowStatus=" + KitShadowStatus+"&Continue=" + Continue + "&Type=" + Type);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/PredictionSummaryCount?VendorId=" + VendorId + "&SKU=" + SKU + "&Title=" + Title + "&Approved=" + Approved + "&Excluded=" + Excluded +"&KitShadowStatus=" + KitShadowStatus+"&Continue=" + Continue + "&SearchFromSkuListPredict=" + SearchFromSkuListPredict+ "&Type=" + Type);
                 request.Method = "GET"; ;
                 request.Method = "GET";
                 request.Accept = "application/json;";

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.S3;
@@ -8,6 +9,7 @@ using DataAccess.ViewModels;
 using Hld.WebApplication.Helper;
 using Hld.WebApplication.ViewModel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -96,18 +98,37 @@ namespace Hld.WebApplication.Controllers
             {
                 POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
             }
-
-            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, Approved,Excluded, KitShadowStatus,Continue, viewModel.Type);
+            if (!string.IsNullOrEmpty(viewModel.SearchFromSkuListPredict))
+            {
+                var lines = viewModel.SearchFromSkuListPredict.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                string newLines = string.Join(",", lines);
+                viewModel.SearchFromSkuListPredict = getString(newLines);
+                string skuList = JsonConvert.SerializeObject(viewModel.SearchFromSkuListPredict);
+                HttpContext.Session.SetString("skuList", skuList);
+               
+                ViewBag.skuSearchList = "searchList";
+            }
+            else
+            {
+                viewModel.SearchFromSkuListPredict = "Nill";
+                ViewBag.skuSearchList = "";
+            }
+            var Count = _ApiAccess.PredictionSummaryCount(ApiURL, token, POMasterID, viewModel.SKU, viewModel.Title, Approved,Excluded, KitShadowStatus,Continue, viewModel.SearchFromSkuListPredict, viewModel.Type);
             ViewBag.TotalCount = Count;
             return View(viewModel);
         }
 
         public IActionResult PredictionDetail(int? page, string SKU, string Title, int VendorId, string Sort, string SortedType, string ItemType = "", int Type = 0)
         {
+            string token = Request.Cookies["Token"];
+            var key = HttpContext.Session.GetString("skuList");
             bool Approved = false;
             bool Excluded = false;
             bool Continue = false;
             bool KitShadowStatus = false;
+
+           
+
             if (!string.IsNullOrEmpty(ItemType) && ItemType != "undefined")
             {
                 string[] Val = ItemType.Split(',');
@@ -133,11 +154,12 @@ namespace Hld.WebApplication.Controllers
 
                 }
             }
-            string token = Request.Cookies["Token"];
+           
             IPagedList<PredictionHistroyViewModel> data = null;
             int pageNumber = page.HasValue ? Convert.ToInt32(page) : 1;
             int pageSize = 50;
             int offset = 0;
+            
             int startlimit = pageSize;
             if (page.HasValue)
             {
@@ -152,7 +174,21 @@ namespace Hld.WebApplication.Controllers
             {
                 POMasterID = Convert.ToInt32(Request.Cookies["POMasterID"]);
             }
+           
+            if (!string.IsNullOrEmpty(key))
+            {
+                string skuList = JsonConvert.DeserializeObject<string>(key);
+                List<PredictionHistroyViewModel> listmodels = new List<PredictionHistroyViewModel>();
+                listmodels = _ApiAccess.GetPredictionDetailCopy(ApiURL, token, startlimit, offset, skuList);
+                data = new StaticPagedList<PredictionHistroyViewModel>(listmodels, pageNumber, pageSize, listmodels.Count);
+                
+                ViewBag.S3BucketURL = s3BucketURL;
+                ViewBag.S3BucketURL_large = s3BucketURL_large;
+                HttpContext.Session.Remove("skuList");
+                ViewBag.skuSearchList = "searchList";
+                return PartialView("~/Views/PredictionHistory/PredictionDetail.cshtml", data);
 
+            }
             if (string.IsNullOrEmpty(SKU))
                 SKU = "undefined";
             if (string.IsNullOrEmpty(Title))
@@ -160,9 +196,55 @@ namespace Hld.WebApplication.Controllers
             List<PredictionHistroyViewModel> listmodel = new List<PredictionHistroyViewModel>();
             listmodel = _ApiAccess.GetPredictionDetail(ApiURL, token, startlimit, offset, POMasterID, SKU, Title, Approved, Excluded, KitShadowStatus, Continue, Sort, SortedType, Type);
             data = new StaticPagedList<PredictionHistroyViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
+           
             ViewBag.S3BucketURL = s3BucketURL;
             ViewBag.S3BucketURL_large = s3BucketURL_large;
+          
             return PartialView("~/Views/PredictionHistory/PredictionDetail.cshtml", data);
+        }
+
+        public IActionResult SkuSelectListPredict()
+        {
+            return PartialView("~/Views/PredictionHistory/_skuSelectListPredict.cshtml");
+        }
+        public string getString(string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                //   '\'apple\',\'banana\''
+                string finalString = "";
+                string[] splitString = text.Split(',');
+
+                int end = splitString.Length - 1;
+                StringBuilder stringBuilder = new StringBuilder();
+
+                if (!(splitString.Length > 1))
+                {
+                    stringBuilder.Append(string.Concat("\'", splitString[0] + "\'"));
+                }
+                else
+                {
+                    for (int i = 0; i < splitString.Length; i++)
+                    {
+                        stringBuilder.Append(string.Concat("\'", splitString[i] + "\',"));
+                    }
+                }
+                int index = stringBuilder.ToString().LastIndexOf(',');
+                if (index != -1)
+                {
+                    finalString = stringBuilder.ToString().Remove(index);
+                }
+                else
+                {
+                    finalString = stringBuilder.ToString();
+                }
+
+                return finalString;
+            }
+            else
+            {
+                return "";
+            }
         }
         public int Save(PredictionPOViewModel data)
         {

@@ -1,0 +1,20 @@
+﻿@model HistorySearchViewModel
+<div>
+    <form asp-action="Index" asp-controller="PredictionHistory" role="form">
+
+        <div class="form-group row">
+            <div class="col-md-8">
+                <input name="EmptyFirstTime" id="EmptyFirstTime" value="No" style="display:none" />
+                <textarea id="SearchFromSkuListPredict" name="SearchFromSkuListPredict" style="padding-left:4px;margin-right: -26px;" cols="50" rows="10"></textarea>
+             
+            </div>
+            <div class="col-md-4">
+                <span id="countsku" style="bottom: 0; position: absolute;margin-left: -42px;"></span>
+
+            </div>
+
+        </div>
+        <span class="text-danger" asp-validation-for="SearchFromSkuListPredict"></span>
+        <input type="submit" id="SearchFromSkuListPredict" value="Search" class="btn btn-primary" />
+    </form>
+</div>

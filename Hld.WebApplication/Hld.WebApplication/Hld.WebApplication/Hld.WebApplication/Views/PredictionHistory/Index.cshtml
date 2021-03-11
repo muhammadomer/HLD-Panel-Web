@@ -13,7 +13,7 @@
     .ui-autocomplete {
         z-index: 2000;
     }
-    
+
     .table thead th {
         background-color: lightgray !important;
     }
@@ -49,10 +49,9 @@
     .table {
         margin-top: 96px;
     }
-        
+
 
         .table thead tr th {
-           
             vertical-align: top !important;
         }
 
@@ -64,7 +63,6 @@
         .table thead tr th {
             position: sticky;
             top: 168px;
-            
             z-index: 2;
             background-color: lightgray;
         }
@@ -192,6 +190,7 @@
         border-radius: 2px;
         background-color: blue;
     }
+
     .tooltipQtyShow {
         position: relative;
         display: contents;
@@ -227,7 +226,7 @@
             border-color: #555 transparent transparent transparent;
         }
 
-   /* .tooltipQtyShowApp:hover .tooltiptextShowApp {
+    /* .tooltipQtyShowApp:hover .tooltiptextShowApp {
         visibility: visible;
         opacity: 1;
     }*/
@@ -239,14 +238,16 @@
         box-sizing: border-box;
         cursor: pointer;
         display: block;
-        height: 26px!important;
+        height: 26px !important;
         user-select: none;
         -webkit-user-select: none;
     }
+
     .select2-container--default .select2-results > .select2-results__options {
-        max-height: 350px!important;
+        max-height: 350px !important;
         overflow-y: auto;
     }
+
     .ms-options-wrap.ms-active > .ms-options {
         max-width: 400px !important;
         min-height: 92px !important;
@@ -386,7 +387,7 @@
                     </div>
                 }
                 <div class="col-md-2 p-0 mr-1">
-                    <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none"/>
+                    <input type="text" id="SKU" name="SKU" placeholder="SKU" value="@Model.SKU" class="form-control" style="box-shadow:none" />
                     <input type="text" id="Sorted" name="Sorted" value="@Model.Sorted" class="form-control" style="box-shadow:none;display:none" />
                     <input type="text" id="SortedType" name="SortedType" value="@Model.SortedType" class="form-control" style="box-shadow:none;display:none" />
                 </div>
@@ -403,28 +404,29 @@
                         <option value="90">90</option>
                     </select>
                 </div>
+                <button type="button" class="btn btn-link" id="btnSearchFromSkuListPredict"> SKU</button>
                 <div class=" col-md-2 p-0 mr-1" style="">
                     <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 QuantityStatus" multiple="multiple" style="padding:0px;box-shadow: none; width:130px!important;">
                         <option value="Approved">Approved Price</option>
                         <option value="Excluded">DS Excluded Products</option>
                         <option value="Continue">Discontinued Products</option>
                         <option value="KitShadowStatus">Kit & Shadow status of Products</option>
-                        
+
                     </select>
                     <input type="hidden" name="ItemType" id="ddlQuantity" />
                 </div>
 
                 @*<div class="p-0 mr-1" style="margin-right:12px">
-                    <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Approved Price</label>
-                </div>
-                <div class="col-md-1 p-0 mr-1">
-                    <input type="checkbox" id="Excluded" name="Excluded" asp-for="@Model.Excluded" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">DS Excluded Products</label>
-                </div>
-                <div class="col-md-1 p-0 mr-1">
-                    <input type="checkbox" id="Continue" name="Continue" asp-for="@Model.Continue" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Discontinued Products</label>
-                </div>*@
+            <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Approved Price</label>
+        </div>
+        <div class="col-md-1 p-0 mr-1">
+            <input type="checkbox" id="Excluded" name="Excluded" asp-for="@Model.Excluded" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">DS Excluded Products</label>
+        </div>
+        <div class="col-md-1 p-0 mr-1">
+            <input type="checkbox" id="Continue" name="Continue" asp-for="@Model.Continue" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Discontinued Products</label>
+        </div>*@
                 <div class="col-md-1 p-0">
-                    <button class=" btn btn-primary" type="submit" id="btnSearchOrder"style="height: 26px;box-shadow:none!important">Search</button>
+                    <button class=" btn btn-primary" type="submit" id="btnSearchOrder" style="height: 26px;box-shadow:none!important">Search</button>
                 </div>
 
             </div>
@@ -451,6 +453,18 @@ margin-top: 10px;">
                 </div>
             </div>
         </div>
+        <input type="hidden" value="@ViewBag.skuSearchList" id="skuSearchList" />
+        @if (string.IsNullOrEmpty(ViewBag.skuSearchList))
+        {
+
+
+            @*<div class="col-sm-3" id="pagination">
+                <div class="pagination">
+
+                </div>
+            </div>*@
+        }
+
         <div class="col-md-2" style="padding-top:5px;">
             <span style="margin-right: 15px;">Records Per Page : 50</span>
         </div>
@@ -487,7 +501,7 @@ margin-top: 10px;">
         </div>
 
     </div>
-  
+
 </div>
 <div class="modal fade" id="myModalIncluded" style="margin-top: 130px;">
     <div class="modal-dialog modal-md">
@@ -621,6 +635,25 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
         </div>
     </div>
+</div>   <div class="modal fade" style="margin-top: 80px!important;" id="myModalPredict" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:112%!important;">
+            <div class="modal-header">
+                <h5 class="modal-title">Paste one SKU per line</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBodyPredict">             
+            </div>
+            <div class="modal-footer" style="justify-content:space-between">
+                <span style="color:red;font-weight:bold;display:none" class="errorclass">You cannot enter more than 50 SKUs.</span>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+
+    </div>
 </div>
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -654,14 +687,66 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         var sort = "";
         $(document).ready(function () {
            
-           
+            $('#btnSearchFromSkuListPredict').click(function () {
+                $('#modelBodyPredict').empty();
+                $('.errorclass').css('display', 'none');
+                  $('#modelBodyPredict').load('@Url.Action("SkuSelectListPredict", "PredictionHistory")');
+                $('#myModalPredict').modal('show');
+               
+            });
+            $(document).on("paste", "#SearchFromSkuListPredict", function () {
+                var elem = $(this);
+
+                setTimeout(function () {
+                    elem.val(function (i, val) {
+                        var splitrows = val.split('\n');
+                        var result = splitrows.length;
+                        if (result <= 50) {
+                            return val;
+                            $('#SearchFromSkuListPredict').attr('readonly', false);
+                        }
+                        else {
+
+                            let value = "";
+                            for (var i = 0; i <= 49; i++) {
+                                value = value + splitrows[i] + "\n";
+
+                            }
+                            $('.errorclass').css('display', 'inline');
+                            $('#SearchFromSkuListPredict').attr('readonly', true).css("background-color", "rgb(234 230 230)");
+                            $('#SearchFromSkuListPredict').attr('value', value);
+                            return value;
+
+
+                        }
+
+                    });
+
+                }, 20);
+
+
+            });
+            $(document).on("keyup", "#SearchFromSkuListPredict", function () {
+                var  val= $("#SearchFromSkuListPredict").val();
+                var splitrows = val.split('\n');
+                var result = splitrows.length;
+                $("#countsku").text(result-1 + "/50");
+            })
+            
+            $('#searchFromSkuList').click(function () {
+                $('.pagination').hide();
+            });
+
+            $('#btnSearchOrder').click(function () {
+                $('.pagination').show();
+            });
             var previoussku = "";
             $(document).on('click', '.copyText', function () {
-               
-                
+
+
                //$(this).closest("tr").find(".tooltiptextShowApp").css({ "visibility": "hidden", "opacity": 1 });
                 //$(this).closest("tr").find(".tooltipQtyShowApp").css({ "visibility": "hidden", "opacity": 0 });
-                debugger;
+             
                 var id = $(this).closest("tr").find(".SKU");
                 var text = $(this).closest("tr").find(".skuspan");
                 id.select();
@@ -669,7 +754,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 $(text.closest("tr").find(".tooltiptextShowApp").css({ "visibility": "visible", "opacity": 1 }));
                 if (previoussku != "") {
                     $(previoussku).closest("tr").find(".tooltiptextShowApp").css({ "visibility": "hidden", "opacity": 0 })
-                }            
+                }
                 previoussku = text
             });
 
@@ -723,7 +808,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             var shippedId = '';
                             var shippeddate = '';
                             var shippedqty = '';
-                            debugger;
+                          
                             var list = value.list
                             $.each(list, function (index, item) {
                                 var ShippedOn = new Date(item.ShippedOn);
@@ -886,7 +971,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 //$(this).parents('tr').find('.Getproductid').click();
                 var row = $(this).parents('tr');
                 var ProductSKU = $(row).find('.SKU').val();
-                debugger;
+                
                 $.ajax({
                     url: "/Product/GetProductDetailsForAPBySku",
                     type: "POST",
@@ -901,9 +986,9 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             });
 
             function GetInternalPOIdBySku() {
-                debugger;
+              
                 $(".table tbody tr ").each(function () {
-                    debugger;
+                   
                     var sku = $(this).find('.SKU').val();
                     var Url = '/PredictionHistory/GetInternalPOIdBySku?data=' + sku;
                     var row = $(this);
@@ -913,7 +998,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         dataType: 'json',
                         traditional: true,
                         success: function (data) {
-                            debugger;
+                          
                             $(row).find(".InternalPOID").empty();
                             var tdContent = '<div>';
                             $.each(data, function (key, value) {
@@ -934,7 +1019,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 if ($(this).is(':checked')) {
                     //$('.checkbx').attr('checked', true);
                     $(".table tbody tr ").each(function () {
-                        debugger;
+                       
                         var CheckApproved = $(this).find('.CheckApproved').val();
                         console.log();
                         if (CheckApproved == "0") {
@@ -959,7 +1044,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 var addtopo = false;
                  var POCreation = false;
                 var action = $('#ActionMenu').val();
-                debugger;
+             
 
                 if (action == "") {
                     $.notify('Please select an option', { globalPosition: 'bottom right', className: 'danger mydlete' });
@@ -1011,7 +1096,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                 if (action == "AddToPO") {
                     $(".table tbody tr ").each(function () {
-                        debugger;
+                      
                         if ($(this).find('.selectRow').is(':checked')) {
                             var CheckApproved = $(this).find('.CheckApproved').val();
                             console.log();
@@ -1037,7 +1122,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         dataType: 'json',
                         traditional: true,
                         success: function (res, ui) {
-                            debugger;
+                         
                             console.log("data", res);
                             var POs = '';
                             $.each(res, function (key, value) {
@@ -1073,7 +1158,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                 if (action == "POCreation") {
                     $(".table tbody tr ").each(function () {
-                        debugger;
+                     
                         if ($(this).find('.selectRow').is(':checked')) {
                             var CheckApproved = $(this).find('.CheckApproved').val();
                             console.log();
@@ -1177,7 +1262,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         data: { data },
                         success: function (res) {
                             $(".loader").hide();
-                            
+
                             $(".myclassDiscontinued").append("<p style='margin-left: 20px;'>Product Discontinued Successfully!</p>");
                             $("#myModalDiscontinued").modal({ backdrop: 'static', keyboard: false });
                             $('.closeModel').on('click', function () {
@@ -1213,7 +1298,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             $('.closeModel').on('click', function () {
                                 location.reload();
                             });
-                            
+
                         }
 
                     });
@@ -1352,7 +1437,7 @@ setInterval('location.reload()', 5000);
             });
 
             $(document).on('click', '.selectRow', function () {
-                debugger;
+               
                 if (selectedVendor != "") {
 
                     $(this).parents('tr').find('.selectVendor').each(function () {
@@ -1388,11 +1473,11 @@ setInterval('location.reload()', 5000);
             });
 
             $(document).on('click', '.selectVendor', function () {
-                debugger;
+               
                 selectedId = $(this).attr("data-VendorId");
                 selectedVendor = $(this).val();
                 currency = $(this).attr("data-Currency");
-                debugger;
+               
                 $('.table tbody tr').each(function () {
 
                     var found = false;
@@ -1415,11 +1500,11 @@ setInterval('location.reload()', 5000);
                         }
                     }
                 });
-                debugger;
+               
             });
 
             $(document).on('click', '.selectPOId', function () {
-                debugger;
+              
                 selectPOId = $(this).val();
             });
 
@@ -1546,7 +1631,7 @@ setInterval('location.reload()', 5000);
             var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
             //var VendorId = $("#VendorIdForMessage").val();
             if (item != null) {
-                debugger;
+           
                 var res = item.split(",");
                 $.each(res, function (key, value) {
                     $(".ms-options").find("input[type=checkbox]").each(function () {
@@ -1564,58 +1649,58 @@ setInterval('location.reload()', 5000);
             var KitShadowStatus = getUrlParameter('KitShadowStatus');
 
 
+            if ($('#skuSearchList').val() == "") {
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
 
-            $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
-
-                  format: '[< nncnn >]',
-                  perpage: 50, // show 10 elements per page
-                  lapping: 0, // don't overlap pages for the moment
-                  page: 1, // start at page, can also be "null" or negative
+                    format: '[< nncnn >]',
+                    perpage: 50, // show 10 elements per page
+                    lapping: 0, // don't overlap pages for the moment
+                    page: 1, // start at page, can also be "null" or negative
                     stepwidth: 0, // =0 means blockwise next/prev steps
-                  onSelect: function (page) {
-                      debugger;
-                      pageNo = page;
-                      // add code which gets executed when user selects a page
-                      var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type + '&Excluded=' + Excluded + '&Continue=' + Continue + '&ItemType=' + item + '&KitShadowStatus=' + KitShadowStatus;
-                      var completURL = url  ;
-                      $(".loadertbl").show();
-                      $(".loader").show();
-                      $.ajax({
-                          url: completURL,
-                          data: {  },
-                          type: 'POST',
-                          traditional: true,
-                          success: function (data) {
+                    onSelect: function (page) {
+                       
+                        pageNo = page;
+                        // add code which gets executed when user selects a page
+                        var url = '/PredictionHistory/PredictionDetail?page=' + page + '&VendorId=' + VendorId + '&Title=' + Title + '&SKU=' + SKU + '&Approved=' + Approved + '&Sort=' + Sorted + '&SortedType=' + SortedType + '&Type=' + Type + '&Excluded=' + Excluded + '&Continue=' + Continue + '&ItemType=' + item + '&KitShadowStatus=' + KitShadowStatus;
+                        var completURL = url;
+                        $(".loadertbl").show();
+                        $(".loader").show();
+                        $.ajax({
+                            url: completURL,
+                            data: {},
+                            type: 'POST',
+                            traditional: true,
+                            success: function (data) {
 
-                              $('#loadOrder').empty();
-                              $('#loadOrder').html(data);
-                              $(function () {
-                                  $(".table").tablesorter();
-                              })
-                              $(".loadertbl").hide();
-                              GetInternalPOIdBySku();
-                              $(".loader").hide();
-                           // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
-                          },
-                          error: function (data) {
-                              debugger;
-                          }
-                      });
-                      if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
-                          if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
-                              start = moment(OrderDateTimeFrom);
-                              end = moment(OrderDateTimeTo);
-                              cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
-                          }
-                          else {
-                              $('#reportrange span').html("No Date Selected");
-                          }
+                                $('#loadOrder').empty();
+                                $('#loadOrder').html(data);
+                                $(function () {
+                                    $(".table").tablesorter();
+                                })
+                                $(".loadertbl").hide();
+                                GetInternalPOIdBySku();
+                                $(".loader").hide();
+                                // $('#tableOrderList').stickyTableHeaders({ fixedOffset: 0 });
+                            },
+                            error: function (data) {
+                              
+                            }
+                        });
+                        if (typeof OrderDateTimeFrom !== "undefined" && typeof OrderDateTimeTo !== "undefined") {
+                            if (OrderDateTimeFrom !== "" && OrderDateTimeTo !== "") {
+                                start = moment(OrderDateTimeFrom);
+                                end = moment(OrderDateTimeTo);
+                                cb(moment(OrderDateTimeFrom), moment(OrderDateTimeTo));
+                            }
+                            else {
+                                $('#reportrange span').html("No Date Selected");
+                            }
 
-                      }
-                      else {
-                          $('#reportrange span').html("No Date Selected");
-                      }
-                  },
+                        }
+                        else {
+                            $('#reportrange span').html("No Date Selected");
+                        }
+                    },
                     onFormat: function (type) {
                         switch (type) {
                             case 'block': // n and c
@@ -1634,11 +1719,61 @@ setInterval('location.reload()', 5000);
                                 return '<a href="#">Last</a>';
                         }
                     }
-             });
+                });
+            }
+
+            else {
+                $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
+                    format: '[< nncnn >]',
+                    perpage: 50, // show 10 elements per page
+                    lapping: 0, // don't overlap pages for the moment
+                    page: 1, // start at page, can also be "null" or negative
+                    stepwidth: 0, // =0 means blockwise next/prev steps
+                    onSelect: function (page) {
+                        pageNo = page;
+                        var url = '/PredictionHistory/PredictionDetail?page=' + 1 + "";
+                        $(".loadertbl").show();
+                        $(".loader").show();
+                        $.get(url).done(function (response) {
+                            $('#loadOrder').empty();
+                            $('#loadOrder').html(response);
+                            $(function () {
+                                $(".table").tablesorter();
+                            })
+                            $(".loadertbl").hide();
+                            GetInternalPOIdBySku();
+                            $(".loader").hide();
+                        });
+                    },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (this.page === this.value) {
+                                    return '<span>' + this.value + '</span>';
+                                } else {
+                                    return '<a href="#">' + this.value + '</a>';
+                                }
+                            case 'next': // >
+                                return '<a href="#">&gt;</a>';
+                            case 'prev': // <
+                                return '<a href="#">&lt;</a>';
+                            case 'first': // [
+                                return '<a href="#">First</a>';
+                            case 'last': // ]
+                                return '<a href="#">Last</a>';
+                        }
+                    }
+                });
+
+            }
+
+
+               
+            
            // $(".table").tablesorter();
 
             $(document).on('click', '.sortCover', function () {
-                debugger;
+              
                 //var pageURL = $(location).attr("href");
                 var sortedVal = $("#Sorted").val();
                 var sortedTypeVal = $("#SortedType").val();
@@ -1658,7 +1793,7 @@ setInterval('location.reload()', 5000);
             });
 
             $(document).on('click', '.Def60Cover', function () {
-                debugger;
+             
                 //var pageURL = $(location).attr("href");
                 var sortedVal = $("#Sorted").val();
                 var sortedTypeVal = $("#SortedType").val();
@@ -1677,7 +1812,7 @@ setInterval('location.reload()', 5000);
                 $("#btnSearchOrder").click();
             });
             $(document).on('click', '.Def90Cover', function () {
-                debugger;
+               
                 //var pageURL = $(location).attr("href");
                 var sortedVal = $("#Sorted").val();
                 var sortedTypeVal = $("#SortedType").val();

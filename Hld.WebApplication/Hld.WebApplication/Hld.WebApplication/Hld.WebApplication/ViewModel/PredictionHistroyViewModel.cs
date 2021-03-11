@@ -101,5 +101,7 @@ namespace Hld.WebApplication.ViewModel
         public bool Excluded { get; set; }
         public bool Continue { get; set; }
         public bool KitShadowStatus { get; set; }
+        public string SearchFromSkuListPredict { get; set; }
+        public string EmptyFirstTime { get; set; }
     }
 }

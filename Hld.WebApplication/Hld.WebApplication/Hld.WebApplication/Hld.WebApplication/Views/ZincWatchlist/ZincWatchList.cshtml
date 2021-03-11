@@ -325,6 +325,10 @@
             $('#reportrange').daterangepicker({
                 startDate: start,
                 endDate: end,
+                autoUpdateInput: true,
+                locale: {
+                    cancelLabel: 'Clear'
+                },
                 ranges: {
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -345,7 +349,12 @@
                 console.log($("#orderDateTimeTo").val());
                 console.log(selectedDatTo);
             });
-
+            $('#reportrange').find('span').html('');
+            $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
+                $('#reportrange').find('span').html('');
+                $('#orderDateTimeFrom').val('');
+                $('#orderDateTimeTo').val('');
+            });
             //var Items = getUrlParameter('CustomerName');
             $('select[multiple].active.3col.Enabled_Disabled').multiselect({
                 columns: 1,
@@ -391,80 +400,7 @@
             var OrderDateTimeFrom = getUrlParameter('orderDateTimeFrom');
             var OrderDateTimeTo = getUrlParameter('orderDateTimeTo');
             var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
-            if (Active_Inactive != null) {
-                debugger;
-                var res = Active_Inactive.split(",");
-                $.each(res, function (key, value) {
-                    var setval = 25;
-                    var getval = value;
-                    getval = setval;
-                    console.log(getval);
-                    if (getval == 25) {
-                        $(".Active_Inactive").next().children(".ms-options").find("input[type=checkbox]").each(function () {
-
-                            if ($(this).val() == value.trim()) {
-                                $(this).prop("checked", true);
-                            }
-                        });
-                    }
-                    else {
-
-                        $(".Dropship").next().children(".ms-options").find("input[type=checkbox]").each(function () {
-                            //if($(this).parents("select").hasClass("WHQStatus"))
-
-                            if ($(this).val() == value.trim()) {
-                                $(this).prop("checked", false);
-                            }
-                        });
-                    }
-
-                    //$(".ms-options").find("input[type=checkbox]").each(function () {
-
-                    //    if ($(this).val() == value.trim()) {
-                    //        $(this).prop("checked", true);
-                    //        $('#Dropship').val($(this).val());
-                    //    }
-                    //});
-                });
-            }
-            if (Enabled_Disabled != null) {
-                debugger;
-                var res = Enabled_Disabled.split(",");
-                $.each(res, function (key, value) {
-
-                    var setval = 21;
-                    var getval = value;
-                    getval = setval;
-                    console.log(getval);
-                    if (getval == 21) {
-                        $(".Enabled_Disabled").next().children(".ms-options").find("input[type=checkbox]").each(function () {
-
-                            if ($(this).val() == value.trim()) {
-                                $(this).prop("checked", true);
-                            }
-                        });
-                    }
-                    else {
-
-                        $(".UpdateStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
-                            //if($(this).parents("select").hasClass("WHQStatus"))
-
-                            if ($(this).val() == value.trim()) {
-                                $(this).prop("checked", false);
-                            }
-                        });
-                    }
-
-                    //$(".ms-options").find("input[type=checkbox]").each(function () {
-
-                    //    if ($(this).val() == value.trim()) {
-                    //        $(this).prop("checked", true);
-                    //        $('#UpdateStatus').val($(this).val());
-                    //    }
-                    //});
-                });
-            }
-
+           
             if (EmptyFirstTime) {
                 $(".pagination").paging(parseInt('@ViewBag.TotalCount'), {
 
@@ -578,7 +514,88 @@
                 $(".loader").hide();
             }
 
+            if (Active_Inactive != null) {
+                debugger;
+                var res = Active_Inactive.split(",");
+                
+                $('#Active_Inactive').val(Active_Inactive);
+                $.each(res, function (key, value) {
+                    var setval = 25;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 25) {
+                        $(".Active_Inactive").next().children(".ms-options").find("input[type=checkbox]").each(function () {
 
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".Dropship").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }
+
+                    //$(".ms-options").find("input[type=checkbox]").each(function () {
+
+                    //    if ($(this).val() == value.trim()) {
+                    //        $(this).prop("checked", true);
+                    //        $('#Dropship').val($(this).val());
+                    //    }
+                    //});
+                });
+            }
+            if (Enabled_Disabled != null) {
+                debugger;
+                var res = Enabled_Disabled.split(",");
+                $('#Enabled_Disabled').val(Enabled_Disabled);
+                $.each(res, function (key, value) {
+
+                    var setval = 21;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 21) {
+                        $(".Enabled_Disabled").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".UpdateStatus").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }
+
+                    //$(".ms-options").find("input[type=checkbox]").each(function () {
+
+                    //    if ($(this).val() == value.trim()) {
+                    //        $(this).prop("checked", true);
+                    //        $('#UpdateStatus').val($(this).val());
+                    //    }
+                    //});
+                });
+            }
+            if (OrderDateTimeFrom) {
+                $('#orderDateTimeFrom').val(OrderDateTimeFrom);            
+            }
+            if (OrderDateTimeTo) {
+                $('#orderDateTimeTo').val(OrderDateTimeTo);
+            }
             $(".table").tablesorter();
 
         });
