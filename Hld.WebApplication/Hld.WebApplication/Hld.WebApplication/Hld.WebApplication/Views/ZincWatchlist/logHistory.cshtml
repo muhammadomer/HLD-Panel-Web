@@ -139,6 +139,8 @@
             <tr>
                 <th>Job ID</th>
                 <th>Scheduled Date</th>
+                <th>Start Time</th>
+                <th>Completion Time</th>
                 <th>Run Time</th>
                 <th>
                     Amz Responce
@@ -171,9 +173,37 @@
 
                         </td>
                         <td>
+                            @if (item.CompletionTime != DateTime.MinValue)
+                            {
+                                @string.Format("{0: MMM d, yyyy HH:mm:ss tt}", @item.StartTime)
+                            }
+                            else
+                            {
+
+                            }
+
+                        </td>
+                        <td>
+                            @if (item.CompletionTime != DateTime.MinValue)
+                            {
+                                @string.Format("{0: MMM d, yyyy HH:mm:ss tt}", @item.CompletionTime)
+                            }
+                            else { }
+
+                        </td>
+                        <td>
                             @if (item.JobID != 0)
                             {
-                                @item.RunTime
+                                @if (item.CompletionTime !=DateTime.MinValue)
+                                {
+                                    string rundate =Convert.ToString(@item.CompletionTime - @item.StartTime);
+                                     @string.Format("{0: MMM d, yyyy HH:mm:ss tt}", @rundate)
+                                }
+                                else
+                                {
+
+                                }
+
                             }
                         </td>
                         <td>

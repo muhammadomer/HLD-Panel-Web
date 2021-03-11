@@ -51,7 +51,8 @@ namespace Hld.WebApplication.ViewModel
         public string Remarks { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime CompletionTime { get; set; }
-        public TimeSpan RunTime { get; set; }
+       // public TimeSpan? RunTime { get; set; }
+        public DateTime? RunTime { get; set; }
 
     }
 }
