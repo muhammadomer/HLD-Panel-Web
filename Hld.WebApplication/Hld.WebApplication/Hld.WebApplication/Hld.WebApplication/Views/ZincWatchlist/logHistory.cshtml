@@ -154,7 +154,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Schedule)
+            @foreach (var item in Model.Schedule.OrderBy(x=>x.NextUpdateDate))
             {
                 
                     <tr >
@@ -175,7 +175,7 @@
                         <td>
                             @if (item.CompletionTime != DateTime.MinValue)
                             {
-                                @string.Format("{0: MMM d, yyyy HH:mm:ss tt}", @item.StartTime)
+                                @string.Format("{0: dd-MMM-yyyy hh:mm tt}", @item.StartTime)
                             }
                             else
                             {
@@ -186,7 +186,7 @@
                         <td>
                             @if (item.CompletionTime != DateTime.MinValue)
                             {
-                                @string.Format("{0: MMM d, yyyy HH:mm:ss tt}", @item.CompletionTime)
+                                @string.Format("{0: dd-MMM-yyyy hh:mm tt}", @item.CompletionTime)
                             }
                             else { }
 
@@ -197,7 +197,7 @@
                                 @if (item.CompletionTime !=DateTime.MinValue)
                                 {
                                     string rundate =Convert.ToString(@item.CompletionTime - @item.StartTime);
-                                     @string.Format("{0: MMM d, yyyy HH:mm:ss tt}", @rundate)
+                                     @string.Format("{0: dd-MMM-yyyy hh:mm tt}", @rundate)
                                 }
                                 else
                                 {

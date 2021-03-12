@@ -5,7 +5,7 @@
 <style type="text/css">
 
 
-        /*#tableProductList > tbody > tr > td {
+    /*#tableProductList > tbody > tr > td {
     font-family: Arial;
     font-size: 8pt;
     padding: 0.2rem;
@@ -18,43 +18,43 @@
     .table th, .table td {
     padding: 0.2rem;
     }*/
-        .taground {
-            color: white;
-            font-size: 10px;
-            padding: 1px;
-            border: none;
-            border-radius: 3px;
-            margin-right: 5px;
-        }
+    .taground {
+        color: white;
+        font-size: 10px;
+        padding: 1px;
+        border: none;
+        border-radius: 3px;
+        margin-right: 5px;
+    }
 
-        .table {
-            border-right: 1px solid #eee !important;
-            border-left: 1px solid #eee !important;
-            border-bottom: 1px solid #eee !important;
-        }
+    .table {
+        border-right: 1px solid #eee !important;
+        border-left: 1px solid #eee !important;
+        border-bottom: 1px solid #eee !important;
+    }
 
-        .tblproductlist {
-            top: 51px;
-            width: 98%;
-            position: fixed;
-            z-index: 10;
-        }
+    .tblproductlist {
+        top: 51px;
+        width: 98%;
+        position: fixed;
+        z-index: 10;
+    }
 
-        .table thead tr th {
-            position: sticky;
-            top: 50px;
-            padding: 0px;
-            z-index: 2;
-            
-        }
+    .table thead tr th {
+        position: sticky;
+        top: 50px;
+        padding: 0px;
+        z-index: 2;
+    }
 
-        .table thead tr th {
-            text-align: left !important;
-        }
+    .table thead tr th {
+        text-align: left !important;
+    }
 
-        .table tbody tr td {
-            padding-left: 5px !important;
-        }
+    .table tbody tr td {
+        padding-left: 5px !important;
+    }
+
     .tooltipactive {
         position: relative;
         display: contents;
@@ -96,14 +96,13 @@
             visibility: visible;
             opacity: 1;
         }
-   
 </style>
 
 <div class="container-fluid p-0">
     @*<h6> Inventory View > BestBuy</h6>*@
 
     <table id="tableProductList" style="width:100%; table-layout:fixed;" class="table table-hover tablesorter tableProductListSelected">
-        
+
         <thead class="" style="background-color:lightgrey">
             <tr>
                 <th data-sorter="false">
@@ -127,8 +126,8 @@
                     <label>ASIN</label>
                 </th>
                 @*<th data-sorter="false">
-                    <label>Color</label>
-                </th>*@
+                        <label>Color</label>
+                    </th>*@
                 <th data-sorter="false">
                     <label>Tag</label>
                 </th>
@@ -148,7 +147,7 @@
                 <th data-sorter="false">
                     BB/<br> Product ID
                 </th>
-                <th data-sorter="false"style="width:9%!important">Approved Price</th>
+                <th data-sorter="false" style="width:9%!important">Approved Price</th>
                 <th data-sorter="false">
                     BB/<span class="tooltipactive">
                         <i class=" fa fa-info" style="cursor:pointer;margin-left:5px!important;width:0.3em!important" data-id=""></i>
@@ -168,92 +167,93 @@
 
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    <input class="checkboxSkuForUpdating checkboxSkForEnableDisable" type="checkbox" />
-                    <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" data-sku="@item.ProductSKU" class="productSkuForEnableDisable" />
-                </td>
-                <td>
-                    @{
-                        <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageURL">
-                            <img src="@ViewBag.S3BucketURL/@item.ImageURL" class="rounded DeleteImage" height="50" width="50" />
+                <tr>
+                    <td>
+                        <input class="checkboxSkuForUpdating checkboxSkForEnableDisable" type="checkbox" />
+                        <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" data-sku="@item.ProductSKU" class="productSkuForEnableDisable" />
+                    </td>
+                    <td>
+                        @{
+                            <a target="_blank" href="@ViewBag.S3BucketURL_large/@item.ImageURL">
+                                <img src="@ViewBag.S3BucketURL/@item.ImageURL" class="rounded DeleteImage" height="50" width="50" />
+                            </a>
+                        }
+                    </td>
+                    <td>
+
+                        <a asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.ProductSKU" target="_blank">@item.ProductSKU</a><br>
+
+                        <a style="padding-left:2px;cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-ProductSKU="@item.ProductSKU" target="_blank">
+                            <img height="13px" width="15px" src="~/Images/zinc.png" />
                         </a>
-                    }
-                </td>
-                <td>
+                        <a style="padding-left:5px;cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.ProductSKU" target="_blank">
+                            <img height="13px" width="15px" src="~/Images/sellercloud-gray.png" />
+                        </a>
+                        <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BestBuyProductSKU" target="_blank">
+                            <img height="13px" width="15px" src="~/Images/BestBuy-Gray.png" />
+                        </a>
+                        <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.BestBuyProductSKU" target="_blank">
+                            <img height="10px" width="15px" src="~/Images/openbb.png" />
+                        </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductTitle)
+                    </td>
+                    <td style="" class="getasinprice"></td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.ColorName)
+                        </td>*@
+                    <td>
+                        @if (item.skuTags != null)
 
-                    <a asp-action="PropertyPage" asp-controller="BestBuyProduct" asp-route-ProductSKU="@item.ProductSKU" target="_blank">@item.ProductSKU</a><br>
-
-                    <a style="padding-left:2px;cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-ProductSKU="@item.ProductSKU" target="_blank">
-                        <img height="13px" width="15px" src="~/Images/zinc.png" />
-                    </a>
-                    <a style="padding-left:5px;cursor:pointer" href="https://lp.cwa.sellercloud.com/Inventory/Product_Dashboard.aspx?Id=@item.ProductSKU" target="_blank">
-                        <img height="13px" width="15px" src="~/Images/sellercloud-gray.png" />
-                    </a>
-                    <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BestBuyProductSKU" target="_blank">
-                        <img height="13px" width="15px" src="~/Images/BestBuy-Gray.png" />
-                    </a>
-                    <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.BestBuyProductSKU" target="_blank">
-                        <img height="10px" width="15px" src="~/Images/openbb.png" />
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductTitle)
-                </td>
-                <td style="" class="getasinprice"></td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.ColorName)
-                </td>*@
-                <td>
-                    @if (item.skuTags != null)
-
-                    {
-                        @foreach (var tag in item.skuTags)
                         {
-                            <span class="taground" style="background-color:@tag.TagColor;">@tag.TagName</span>
+                            @foreach (var tag in item.skuTags)
+                            {
+                                <span class="taground" style="background-color:@tag.TagColor;">@tag.TagName</span>
+                            }
+
+
                         }
 
+                    </td>
+                    <td>
+                        DSQ &nbsp; @item.dropship_Qty &nbsp;  <input type="checkbox" disabled="disabled" asp-for="@item.dropship_status" /> <br />
+                        WHQ @item.AggregatedQty
+                        @*WHQ @item.ProductrWarehouseQtyViewModel.Where(E => E.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()*@
+                    </td>
 
-                    }
+                    <td> - - -</td><!--Location in WH-->
 
-                </td>
-                <td>
-                    DSQ &nbsp; @item.dropship_Qty &nbsp;  <input type="checkbox" disabled="disabled" asp-for="@item.dropship_status" /> <br />
-                    WHQ @item.AggregatedQty
-                    @*WHQ @item.ProductrWarehouseQtyViewModel.Where(E => E.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()*@
-                </td>
-
-                <td> - - -</td><!--Location in WH-->
-
-                <td>@item.AvgCost</td> <!--Average Cost-->
-                <td>
-                    @Html.DisplayFor(modelItem => item.BBMSRP)<br>
-                    @Html.DisplayFor(modelItem => item.BBSellingPrice)
-                </td>
-                <!--<td>
-    0.00 /0.00-->
-                <!--Best by Fee & Percentage-->
-                <!--</td>-->
-                <td>
-                    @item.BestBuyProductSKU
-                </td>
-                <!--<td>-->
+                    <td>@item.AvgCost</td> <!--Average Cost-->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BBMSRP)<br>
+                        @Html.DisplayFor(modelItem => item.BBSellingPrice)
+                    </td>
+                    <!--<td>
+                    0.00 /0.00-->
+                    <!--Best by Fee & Percentage-->
+                    <!--</td>-->
+                    <td>
+                        @item.BestBuyProductSKU
+                    </td>
+                    <!--<td>-->
                     @*<a style='margin-left:5px; cursor: pointer;' href="/ApprovedPrice/Index?&sku=@item.ProductSKU" target='_blank'>
-                @item.ApprovedUnitPrice
-            </a>*@
+                            @item.ApprovedUnitPrice
+                        </a>*@
 
-                <!--</td>--><!--PST P&L-->
-                <td style="" class="getapprovedprice">
+                    <!--</td>--><!--PST P&L-->
+                    <td style="" class="getapprovedprice">
 
-                    @*@foreach (var inner in item.ApprovedPriceList)
-                    {
-                        if (@inner.VendorAlias != "")
-                        {                            
-                            <span>@inner.VendorAlias</span>
-                            <span><a style='cursor: pointer;' href='/ApprovedPrice/Index?&sku=@item.ProductSKU&title=' target='_blank'> @inner.ApprovedUnitPrice  </a> @inner.Currency</span><br />
-                        }
-                    }*@
-                </td>
+                        @*@foreach (var inner in item.ApprovedPriceList)
+                            {
+                                if (@inner.VendorAlias != "")
+                                {
+                                    <span>@inner.VendorAlias</span>
+                                    <span><a style='cursor: pointer;' href='/ApprovedPrice/Index?&sku=@item.ProductSKU&title=' target='_blank'> @inner.ApprovedUnitPrice  </a> @inner.Currency</span><br />
+                                }
+                            }*@
+                    </td>
+                 
                 <td>
                     @if (item.BBPriceUpdate != DateTime.MinValue)
                     {
@@ -264,7 +264,7 @@
 
                     @if (item.Continue == true)
                     {
-                    <span style="color:green">Continue</span>
+                    <span style="color:green">Continued</span>
 
                     }
                     else
@@ -284,6 +284,8 @@
 
                 </td>
             </tr>
+
+ 
             }
         </tbody>
     </table>
@@ -295,7 +297,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-           
+
 
         });
 

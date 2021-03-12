@@ -1068,10 +1068,22 @@ namespace Hld.WebApplication.Controllers
                 token = Request.Cookies["Token"];
                 bool status = false;
                 zincProductSaveViewModel = GetASINDetailFromZinc(orderid, ProductSKU);
-                zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
-                zincProductSaveViewModel.ASIN = orderid;
-                zincProductSaveViewModel.Product_sku = ProductSKU;
-                status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+                if (zincProductSaveViewModel.status == "Listing Removed")
+                {
+                    zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
+                    zincProductSaveViewModel.ASIN = orderid;
+                    zincProductSaveViewModel.Product_sku = ProductSKU;
+                    zincProductSaveViewModel.Remark = true;
+                    status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+                }
+                else
+                {
+                    zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
+                    zincProductSaveViewModel.ASIN = orderid;
+                    zincProductSaveViewModel.Product_sku = ProductSKU;
+                    zincProductSaveViewModel.Remark = false;
+                    status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
+                }
 
                 return Json(new { success = true });
             }
@@ -1106,6 +1118,7 @@ namespace Hld.WebApplication.Controllers
                     zincProductSaveViewModel.bb_product_zinc_id = Convert.ToInt32(bbZincID);
                     zincProductSaveViewModel.ASIN = orderid;
                     zincProductSaveViewModel.Product_sku = ProductSKU;
+                    zincProductSaveViewModel.Remark = false;
                     status = _zincApiAccess.UpdateZincProductASINDetail(ApiURL, token, zincProductSaveViewModel);
                 }
                 

@@ -47,41 +47,41 @@ namespace Hld.WebApplication.Controllers
         [HttpGet]
         public async System.Threading.Tasks.Task<IActionResult> AuthenticateAlreadyLoginAsync()
         {
-            var ischecked = GetCheckboxstatus();
-            if(ischecked.Count> 0)
+            int ischecked = 0;
+            if(ischecked > 0)
             {
-                if (ischecked.FirstOrDefault().Checkboxstatus)
-                {
-                    Login login = new Login();
+                //if (ischecked.FirstOrDefault().Checkboxstatus)
+                //{
+                //    Login login = new Login();
 
-                    login.Email = ischecked.FirstOrDefault().Email;
+                //    login.Email = ischecked.FirstOrDefault().Email;
 
-                    string role = await Authenticated(login);
+                //    string role = await Authenticated(login);
 
-                    if (role == "Vendor")
-                    {
+                //    if (role == "Vendor")
+                //    {
 
-                        return RedirectToAction("PurchaseOrders", "PurchaseOrder");
-                    }
-                    if (role == "Receiver")
-                    {
+                //        return RedirectToAction("PurchaseOrders", "PurchaseOrder");
+                //    }
+                //    if (role == "Receiver")
+                //    {
 
-                        return RedirectToAction("Create", "Shipment");
-                    }
-                    if (role == "Admin")
-                    {
+                //        return RedirectToAction("Create", "Shipment");
+                //    }
+                //    if (role == "Admin")
+                //    {
 
-                        return RedirectToAction("DashBoard", "HLDHistory");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Authenticate", "Authentication");
-                    }
-                }
-                else
-                {
+                //        return RedirectToAction("DashBoard", "HLDHistory");
+                //    }
+                //    else
+                //    {
+                //        return RedirectToAction("Authenticate", "Authentication");
+                //    }
+                //}
+                //else
+                //{
                     return RedirectToAction("Authenticate", "Authentication");
-                }
+                //}
             }
            
             else

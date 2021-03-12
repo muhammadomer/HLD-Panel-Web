@@ -404,7 +404,6 @@
                         <option value="90">90</option>
                     </select>
                 </div>
-                <button type="button" class="btn btn-link" id="btnSearchFromSkuListPredict"> SKU</button>
                 <div class=" col-md-2 p-0 mr-1" style="">
                     <select id="multiselect" class="3col active form-control  mb-2 mr-sm-2 QuantityStatus" multiple="multiple" style="padding:0px;box-shadow: none; width:130px!important;">
                         <option value="Approved">Approved Price</option>
@@ -415,16 +414,8 @@
                     </select>
                     <input type="hidden" name="ItemType" id="ddlQuantity" />
                 </div>
+                <button type="button" class="btn btn-link" id="btnSearchFromSkuListPredict"> SKU</button>
 
-                @*<div class="p-0 mr-1" style="margin-right:12px">
-            <input type="checkbox" id="Approved" name="Approved" asp-for="@Model.Approved" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Approved Price</label>
-        </div>
-        <div class="col-md-1 p-0 mr-1">
-            <input type="checkbox" id="Excluded" name="Excluded" asp-for="@Model.Excluded" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">DS Excluded Products</label>
-        </div>
-        <div class="col-md-1 p-0 mr-1">
-            <input type="checkbox" id="Continue" name="Continue" asp-for="@Model.Continue" class="" style="margin-top:4px;width:17px;height:17px;" /><label style="margin-left:5px; vertical-align:super;">Discontinued Products</label>
-        </div>*@
                 <div class="col-md-1 p-0">
                     <button class=" btn btn-primary" type="submit" id="btnSearchOrder" style="height: 26px;box-shadow:none!important">Search</button>
                 </div>

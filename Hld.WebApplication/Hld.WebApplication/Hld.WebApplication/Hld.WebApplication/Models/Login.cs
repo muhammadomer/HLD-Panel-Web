@@ -10,8 +10,6 @@ namespace Hld.WebApplication.Models
     {
         [Required]
         public string Email { get; set; }
-
-        
         public string Password { get; set; }
         public bool Checkboxstatus { get; set; }
 
