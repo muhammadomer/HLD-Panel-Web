@@ -144,13 +144,13 @@ namespace Hld.WebApplication.Controllers
                                 set @dollarRate =( select usd_to_cad from CurrencyExchange where `status`=true  order by currency_date desc limit 1);
 
 select (@row_number:=@row_number+1) TotalRecords,abc.* from (
-select  orders.sellerCloudID,inSellerCloud,orderLines.offer_sku,orderLines.quantity,
+select SCOrders.seller_cloud_order_id,inSellerCloud,SCOrderLines.offer_sku,SCOrderLines.quantity,
 product.avg_cost as ProductAvgCost,
-orderLines.total_price,orderLines.total_commission,orders.order_id,
+SCOrderLines.total_price,SCOrderLines.total_commission,SCOrders.order_id,
 TaxGST,TaxPST,Round( product.avg_cost * @dollarRate ,2) as avg_cost 
- from orders inner join orderLines on orders.order_id=orderLines.order_id
- inner join product on product.sku=orderLines.offer_sku
- where orderLines.offer_sku='" + sku + "' order by inSellerCloud desc ) abc ";
+ from SCOrders inner join SCOrderLines on SCOrders.order_id=SCOrderLines.order_id
+ inner join product on product.sku=SCOrderLines.offer_sku
+ where SCOrderLines.offer_sku='" + sku + "' SCOrder by inSellerCloud desc ) abc ";
             var tmpDataField = "";
             var tmpFilterOperator = "";
             var where = "";
