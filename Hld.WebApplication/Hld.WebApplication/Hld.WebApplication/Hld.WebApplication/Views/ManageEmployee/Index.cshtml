@@ -1,4 +1,4 @@
-﻿@model  Hld.WebApplication.ViewModel.ListEmpAndRoleViewModel
+﻿@model Hld.WebApplication.ViewModel.ListEmpAndRoleViewModel
 @{
     ViewData["Title"] = "Manage Employee";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
@@ -29,34 +29,9 @@
         border-color: #17a2b8 !important;
     }
 
-    /* Large toggl switches */
-    .custom-switch-lg .custom-control-label::before {
-        left: -2.25rem;
-        width: 3rem;
-        border-radius: 1.5rem;
+    .borderColorRed{
+        border-color:red;
     }
-
-    .custom-switch-lg .custom-control-label::after {
-        top: calc(.25rem + 3px);
-        left: calc(-2.25rem + 4px);
-        width: calc(1.5rem - 6px);
-        height: calc(1.5rem - 6px);
-        border-radius: 1.5rem;
-    }
-
-    .custom-switch-lg .custom-control-input:checked ~ .custom-control-label::after {
-        transform: translateX(1.4rem);
-    }
-
-    .custom-switch-lg .custom-control-label::before {
-        height: 1.5rem;
-    }
-
-    .custom-switch-lg .custom-control-label {
-        padding-left: 1.5rem;
-        line-height: 1.7rem;
-    }
-
 </style>
 
 <!-- Modal -->
@@ -71,10 +46,11 @@
 
             </div>
             <div class="modal-body">
-                <form action="">
+                <form action="" id="employeeAddForm">
                     <div class="form-group">
                         <label>Employee Name:</label>
-                        <input type="text" class="form-control" id="empName" placeholder="Enter name">
+                        <input type="text" class="form-control" id="empName" name="EmployeeName" placeholder="Enter name">
+                        <p style="color:red;display:none" class="requiredMessage">This field is required</p>
                     </div>
                     <div class="form-group">
                         <label>Employee Role:</label>
@@ -83,37 +59,33 @@
                             {
                                 <option value="@item.RollId">@item.EmployeeRole</option>
                             }
-
                         </select>
+                        <p style="color:red;display:none" class="requiredMessage">This field is required</p>
                     </div>
-                    <p class="custom-control custom-switch">
-                        <input class="custom-control-input" id="customSwitch" type="checkbox">
-                        <label class="custom-control-label font-italic" for="customSwitch">Active</label>
-                    </p>
-                    <!--<div class="col-lg-4">
-                        <div class="card rounded-0 border-0 shadow mb-4">
-                            <div class="card-body p-4 text-center">-->
-                                <!-- Custom switch -->
-                                <!--<p class="custom-control custom-switch">
-                                    <input class="custom-control-input" id="customSwitch1" type="checkbox" checked>
-                                    <label class="custom-control-label font-italic" for="customSwitch1">Feature one</label>
-                                </p>-->
+                    <div class="form-group">
+                        <label>Employee Id:</label>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input type="text" readonly="readonly" class="form-control" id="employee6digitsId" placeholder="">
+                            </div>
+                            <div class="col-md-1">
+                                <button style="display:inline" class="btn random6Digits" type="button">
+                                    <svg class="svg-inline--fa fa-sync fa-w-16 text-info getToolTip" style="cursor: pointer;" data-id="Today" alt="" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                                        <path fill="currentColor" d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z">
 
-                                <!-- Custom switch -->
-                                <!--<p class="custom-control custom-switch m-0">
-                                    <input class="custom-control-input" id="customSwitch2" type="checkbox">
-                                    <label class="custom-control-label font-italic" for="customSwitch2">Feature two</label>
-                                </p>
+                                        </path>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-                    </div>-->
-                    @*<span class="custom-control custom-switch IsActiveSwtich" data-Isactive="" data-Id="" value="" style="padding-left: 3.25rem!important;">
-                        <input type="checkbox" class="custom-control-input" checked="" id="" style="display: inline-block!important">
-                        <label class="custom-control-label" for=""></label>
-                    </span>*@
-                    @*<div class="checkbox">
-                        <label><input type="checkbox" id="active" class="checkbox"> Active</label>
-                    </div>*@
+                        <p style="color:red;display:none" class="requiredMessage">This field is required</p>
+                    </div>
+                    <div class="form-group">
+                        <p class="custom-control custom-switch">
+                            <input class="custom-control-input" id="customSwitch" type="checkbox">
+                            <label class="custom-control-label font-italic" for="customSwitch">Active</label>
+                        </p>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -132,51 +104,49 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add Employee</h4>
+                <h4 class="modal-title">Update Employee</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
             </div>
             <div class="modal-body">
-                <form action="">
+                <form action="" id="updateEmployeeForm">
+                    <input type="hidden" name="Id" id="empIdUpdate" />
                     <div class="form-group">
                         <label>Employee Name:</label>
-                        <input type="text" class="form-control" id="empNameUpdate" placeholder="Enter name">
+                        <input type="text" class="form-control" id="empNameUpdate" name="EmployeeName" placeholder="Enter name">
                     </div>
                     <div class="form-group">
                         <label>Employee Role:</label>
-                        <select class="form-control" id="empRoleUpdate">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
+                        <select class="form-control" id="empRoleUpdate" name="EmployeeRole">
+                            @foreach (var item in Model.Roles)
+                            {
+                                <option value="@item.RollId">@item.EmployeeRole</option>
+                            }
                         </select>
                     </div>
-                    <p class="custom-control custom-switch">
-                        <input class="custom-control-input" id="customSwitchUpdate" type="checkbox">
-                        <label class="custom-control-label font-italic" for="customSwitch">Active</label>
-                    </p>
-                    <!--<div class="col-lg-4">
-                        <div class="card rounded-0 border-0 shadow mb-4">
-                            <div class="card-body p-4 text-center">-->
-                    <!-- Custom switch -->
-                    <!--<p class="custom-control custom-switch">
-                        <input class="custom-control-input" id="customSwitch1" type="checkbox" checked>
-                        <label class="custom-control-label font-italic" for="customSwitch1">Feature one</label>
-                    </p>-->
-                    <!-- Custom switch -->
-                    <!--<p class="custom-control custom-switch m-0">
-                                    <input class="custom-control-input" id="customSwitch2" type="checkbox">
-                                    <label class="custom-control-label font-italic" for="customSwitch2">Feature two</label>
-                                </p>
+                    <div class="form-group">
+                        <label>Employee Id:</label>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input type="text" readonly="readonly" class="form-control" name="EmployeeId" id="employee6digitsIdUpdate" placeholder="">
+                            </div>
+                            <div class="col-md-1">
+                                <button style="display:inline" class="btn" id="random6DigitsUpdate" type="button">
+                                    <svg class="svg-inline--fa fa-sync fa-w-16 text-info getToolTip" style="cursor: pointer;" data-id="Today" alt="" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                                        <path fill="currentColor" d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z">
+
+                                        </path>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-                    </div>-->
-                    @*<span class="custom-control custom-switch IsActiveSwtich" data-Isactive="" data-Id="" value="" style="padding-left: 3.25rem!important;">
-                            <input type="checkbox" class="custom-control-input" checked="" id="" style="display: inline-block!important">
-                            <label class="custom-control-label" for=""></label>
-                        </span>*@
-                    @*<div class="checkbox">
-                            <label><input type="checkbox" id="active" class="checkbox"> Active</label>
-                        </div>*@
+                    </div>
+                    <div class="form-group">
+                        <p class="custom-control custom-switch">
+                            <input class="custom-control-input" id="customSwitchUpdate" name="Active" type="checkbox">
+                            <label class="custom-control-label font-italic" for="customSwitchUpdate">Active</label>
+                        </p>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -187,7 +157,7 @@
 
     </div>
 </div>
-<a class="btn btn-sm btn-secondary" id="addEmpoyee" style="margin-bottom: 5px;box-shadow:none">Add Employee</a>
+<a class="btn btn-sm btn-secondary" href="#" id="addEmpoyee" style="margin-bottom: 5px;box-shadow:none">Add Employee</a>
 <a class="btn btn-sm btn-secondary" target="_blank" asp-controller="ManageEmployee" asp-action="EmployeeRoleIndex" style="margin-bottom: 5px;box-shadow:none">Add Employee Role</a>
 <table class="table table-sm table-bordered">
     <tr style="color:cadetblue"><th>Employee Name</th><th>Employee ID</th><th>Employee Role</th><th>Active</th><th>Created On</th><th>Action</th></tr>
@@ -198,70 +168,292 @@
                 <td>@item.EmployeeName</td>
                 <td>@item.EmployeeId</td>
                 <td>@item.EmployeeRoleName</td>
-                <td>@item.Active</td>
+                <td>
+                    @if (item.Active == true)
+                    {
+                        <span class="custom-control custom-switch IsActiveSwtich" data-Isactive="@item.Active" data-Id="@item.Id" value="@item.Active" style="padding-left: 3.25rem!important;">
+                            <input type="checkbox" class="custom-control-input" checked="@item.Active" id="@item.Active" style="display: inline-block!important">
+                            <label class="custom-control-label" for="@item.Active"></label>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="custom-control custom-switch IsActiveSwtich" data-Isactive="@item.Active" data-Id="@item.Id" value="@item.Active" style="padding-left: 3.25rem!important;">
+                            <input type="checkbox" class="custom-control-input" checked="@item.Active" id="@item.Active" style="display: inline-block!important">
+                            <label class="custom-control-label" for="@item.Active"></label>
+                        </span>
+                    }
+                </td>
                 <td>@item.CreatedOn</td>
                 <td><input type="hidden" value="@item.Id" class="empId" /> <a href="#" class="editBtn">Edit</a></td>
             </tr>
         }
     </tbody>
-    
+
 </table>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $("#addEmpoyee").click(function () {
-        $("#employeeModal").modal('show');
-    });
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script type="text/javascript">
 
-    $("#saveBtn").click(function () {
+        $(document).ready(function () {
 
-        debugger;
-        var empName = $("#empName").val();
-        var empRole = $("#empRole").val();
-        var status = $('#customSwitch').is(':checked');
-        var data = {
-            EmployeeRole: empRole,
-            EmployeeName: empName,
-            Active: status
-        };
-        $.ajax({
-            type: 'POST',
-            url: '../ManageEmployee/AddEmployeeRecord',
-            //data: {
-            //    ProductPONotes: ProductPONotes,
-            //    PO: PO
-            //},
-            data: data,
-            success: function (data) {
-                $("#employeeModal").modal('hide');
-                location.reload();
-                //$("#myModalTitlePO").modal({ backdrop: 'static', keyboard: false });
-            },
-            Error: function (err) {
-
-            }
-        });
-    });
-
-    $(".editBtn").click(function () {
-        debugger;
-        var id = $(this).parent().find('.empId').val();
-        $.ajax({
-            type: 'GET',
-            url: '../ManageEmployee/GetEmployeeById',
-            data: {
-                Id: id,
-            },
-            success: function (data) {
+            $("#addEmpoyee").click(function () {
+                $("#employeeAddForm").trigger("reset");
+                $('.requiredMessage').hide();
+                $("#employeeAddForm input[type=text]").each(function () {
+                    $(this).removeClass("borderColorRed");
+                });
+                $("#employeeModal").modal('show');
+            });
+            $(document).on("click", ".IsActiveSwtich", function () {
                 debugger;
-                $("#empNameUpdate").val(data.EmployeeName);
-                $("#empRoleUpdate").val();
-                $('#customSwitchUpdate').is(':checked');
-                $("#employeeModalUpdate").modal('show');  
-            },
-            Error: function (err) {
-                alert("Error");
-            }
+                var val = $(this).attr("data-Isactive").toLocaleLowerCase();
+                var IsActive = false;
+                if (val == "false") {
+                    IsActive = true;
+                }
+                var id = $(this).attr("data-Id");
+                var url = "/ManageEmployee/UpdateEmpActiveStatusById";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        Id: id,
+                        Active: IsActive,
+                    },
+                    success: function (data) {
+                        location.href = '../ManageEmployee/Index';
+                    }
+                });
+            });
+            $("#saveBtn").click(function () {
+                debugger;
+                var empName = $("#empName").val();
+                var empRole = $("#empRole").val();
+                var status = $('#customSwitch').is(':checked');
+                var employeeId = $("#employee6digitsId").val();
+                //if (empName == "") {
+                //    $('.requiredMessage').show();
+                //    return;
+                //}
+                //if (empRole == "") {
+                //    $('.requiredMessage').show();
+                //    return;
+                //}
+                //if (employeeId == "") {
+                //    $('.requiredMessage').show();
+                //    return;
+                //}
+                var isValid = true;
+                $("#employeeAddForm input[type=text]").each(function () {
+                    debugger;
+                    //alert(this.value);
+                    if (this.value == "") {
+                        isValid = false;
+                        $(this).addClass("borderColorRed");
+                    }
+                });
+                if (isValid == false) {
+                    return;
+                }
+                var data = {
+                    EmployeeRole: empRole,
+                    EmployeeName: empName,
+                    Active: status,
+                    EmployeeId: employeeId
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: '../ManageEmployee/AddEmployeeRecord',
+                    data: data,
+                    success: function (data) {
+                        $("#employeeModal").modal('hide');
+                        location.reload();
+                        //$("#myModalTitlePO").modal({ backdrop: 'static', keyboard: false });
+                    },
+                    Error: function (err) {
+
+                    }
+                });
+            });
+
+            $(":input").on("keyup change", function (e) {
+                debugger;
+                $(this).removeClass("borderColorRed");
+            });
+
+            $(".editBtn").click(function () {
+
+                debugger;
+                var id = $(this).parent().find('.empId').val();
+                $.ajax({
+                    type: 'GET',
+                    url: '../ManageEmployee/GetEmployeeById',
+                    data: {
+                        Id: id,
+                    },
+                    success: function (data) {
+                        debugger;
+                        $("#empIdUpdate").val(data.Id);
+                        $("#empNameUpdate").val(data.EmployeeName);
+                        $("#employee6digitsIdUpdate").val(data.EmployeeId);
+                        $("#empRoleUpdate").val(data.EmployeeRole);
+                        if (data.Active) {
+                            $('#customSwitchUpdate').prop('checked', true);
+                        }
+                        else {
+                            $('#customSwitchUpdate').prop('checked', false);
+                        }
+
+                        $("#updateEmployeeForm input[type=text]").each(function () {
+                            debugger;
+                            $(this).removeClass("borderColorRed");
+                        });
+                        $("#employeeModalUpdate").modal('show');
+                    },
+                    Error: function (err) {
+                        alert("Error");
+                    }
+                });
+            });
+
+
+            $("#updateBtn").click(function () {
+                debugger;
+                var isValid = true;
+                $("#updateEmployeeForm input[type=text]").each(function () {
+                    debugger;
+                    if (this.value == "") {
+                        isValid = false;
+                        $(this).addClass("borderColorRed");
+                    }
+                });
+                if (isValid == false) {
+                    return;
+                }
+                var id = $('#empIdUpdate').val();
+                //var data = $("#updateEmployeeForm").serialize();
+                var status = $('#customSwitchUpdate').is(':checked');
+                var empName = $("#empNameUpdate").val();
+                var empRole = $("#empRoleUpdate").val();
+                var employeeId = $("#employee6digitsIdUpdate").val();
+                var data = {
+                    Id: id,
+                    EmployeeRole: empRole,
+                    EmployeeName: empName,
+                    Active: status,
+                    EmployeeId: employeeId
+                };
+                data.Active = status;
+                $.ajax({
+                    type: 'POST',
+                    url: '../ManageEmployee/AddEmployeeRecord',
+                    data: data,
+                    success: function (data) {
+                        debugger;
+                        $("#employeeModalUpdate").modal('hide');
+                        location.reload();
+                    },
+                    Error: function (err) {
+                        alert("Error");
+                    }
+                });
+            });
+
+            $('.changeActiveStatus').change(function () {
+                debugger;
+                var empId = $(this).parent().find('.empId').val();
+                var checked = false;
+                if (this.checked) {
+                    checked = true;
+                }
+                var data = {
+                    Id: empId,
+                    Active: checked,
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '../ManageEmployee/UpdateEmpActiveStatusById',
+                    data: data,
+                    success: function (data) {
+                        debugger;
+                        alert(data);
+                        $("#employeeModalUpdate").modal('hide');
+                    },
+                    Error: function (err) {
+                        alert("Error");
+                    }
+                });
+            });
+
+            //TO Get 6 digits random number
+            $('.random6Digits').click(function () {
+                debugger;
+                $.ajax({
+                    type: 'GET',
+                    url: '../ManageEmployee/GetRandom6DigitsEmployeeId',
+                    success: function (data) {
+                        debugger;
+                        $("#employee6digitsId").val(data);
+                        $("#employee6digitsId").removeClass("borderColorRed");
+                    },
+                    Error: function (err) {
+                        alert("Error");
+                    }
+                });
+            });
+
+            //TO Get 6 digits random number for update Modal
+            $('#random6DigitsUpdate').click(function () {
+                debugger;
+                $.ajax({
+                    type: 'GET',
+                    url: '../ManageEmployee/GetRandom6DigitsEmployeeId',
+                    success: function (data) {
+                        debugger;
+                        $("#employee6digitsIdUpdate").val(data);
+                    },
+                    Error: function (err) {
+                        alert("Error");
+                    }
+                });
+            });
+
         });
-    })
-</script>
+
+
+        $(document).on("click", ".IsActiveSwtichh", function () {
+            debugger;
+            var val = $(this).attr("data-Isactive").toLocaleLowerCase();
+            var IsActive = false;
+            if (val == "false") {
+                IsActive = true;
+            }
+            var empId = $(this).attr("data-Id");
+            var url = "/ManageEmployee/UpdateEmpActiveStatusById";
+            var con = confirm("Are you sure to change staus?");
+            var data = {
+                Id: empId,
+                Active: IsActive,
+            };
+            if (con) {
+                $.ajax({
+                    type: 'POST',
+                    url: '../ManageEmployee/UpdateEmpActiveStatusById',
+                    data: data,
+                    success: function (data) {
+                        debugger;
+                        alert(data);
+                        $("#employeeModalUpdate").modal('hide');
+                    },
+                    Error: function (err) {
+                        alert("Error");
+                    }
+                });
+            }
+            
+        });
+    </script>
+}

@@ -46,7 +46,7 @@ namespace Hld.WebApplication.Helper
                     strResponse = sr.ReadToEnd();
                 }
                 status = JsonConvert.DeserializeObject<bool>(strResponse);
-
+                
             }
             catch (Exception ex)
             {
@@ -85,7 +85,7 @@ namespace Hld.WebApplication.Helper
             return listmodel;
         }
 
-        public EmployeeViewModel EidtEmployeeByid(string ApiURL, string token, int id)
+        public EmployeeViewModel EditEmployeeByid(string ApiURL, string token, int id)
         {
             EmployeeViewModel ViewModel = new EmployeeViewModel();
 
@@ -115,5 +115,96 @@ namespace Hld.WebApplication.Helper
             }
             return ViewModel;
         }
+
+        public bool UpdateEmployeeById(string ApiURL, string token, EmployeeViewModel ViewModel)
+        {
+            bool status = false;
+            try
+            {
+                EmployeeModel model = new EmployeeModel()
+                {
+                    EmployeeName = ViewModel.EmployeeName,
+                    Id = ViewModel.Id,
+                    EmployeeId = ViewModel.EmployeeId,
+                    Active = ViewModel.Active,
+                    CreatedOn = ViewModel.CreatedOn,
+                    EmployeeRole = ViewModel.EmployeeRole
+                };
+                var data = JsonConvert.SerializeObject(model);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Employee/UpdateEmployee/");
+                //request.Method = "POST";
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return status;
+        }
+
+        public bool UpdateEmpActiveStatusById(string ApiURL, string token, EmployeeViewModel ViewModel)
+        {
+            bool status = false;
+            try
+            {
+                EmployeeModel model = new EmployeeModel()
+                {
+                    EmployeeName = ViewModel.EmployeeName,
+                    Id = ViewModel.Id,
+                    EmployeeId = ViewModel.EmployeeId,
+                    Active = ViewModel.Active,
+                    CreatedOn = ViewModel.CreatedOn,
+                    EmployeeRole = ViewModel.EmployeeRole
+                };
+                var data = JsonConvert.SerializeObject(model);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Employee/UpdateEmpActiveStatusById/");
+                //request.Method = "POST";
+                request.Method = "PUT";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                status = JsonConvert.DeserializeObject<bool>(strResponse);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return status;
+        }
+
     }
 }

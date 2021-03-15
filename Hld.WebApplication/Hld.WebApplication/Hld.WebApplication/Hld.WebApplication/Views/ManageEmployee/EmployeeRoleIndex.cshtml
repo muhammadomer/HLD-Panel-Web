@@ -1,7 +1,14 @@
-﻿
+﻿@model Hld.WebApplication.ViewModel.ListEmpAndRoleViewModel
+
 @{
     ViewData["Title"] = "Employee Role Index";
 }
+
+<style>
+    .borderColorRed {
+        border-color: red;
+    }
+</style>
 
 <div class="modal fade" id="employeeRoleModal" role="dialog" style="margin-top: 80px!important;">
     <div class="modal-dialog">
@@ -17,7 +24,7 @@
                 <form action="" id="form">
                     <div class="form-group">
                         <label>Employee Role:</label>
-                        <input type="text" class="form-control" id="empRole" name="EmployeeRole" placeholder="Enter role">
+                        <input type="text" class="form-control" id="empRole" required name="EmployeeRole" placeholder="Enter role">
                     </div>
                     <div class="form-group">
                         <label>Employee Permissions:</label>
@@ -34,33 +41,90 @@
     </div>
 </div>
 
-<a class="btn btn-sm btn-secondary" id="addEmpoyeeRole" style="margin-bottom: 5px;box-shadow:none">Add Employee Role</a>
+<div class="modal fade" id="employeeUpdateRoleModal" role="dialog" style="margin-top: 80px!important;">
+    <div class="modal-dialog">
 
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Employee Role</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form action="" id="updateEmployeeRolesForm">
+                    <input type="hidden" name="RollId" id="empRollIdUpdate" />
+                    <div class="form-group">
+                        <label>Employee Role:</label>
+                        <input type="text" class="form-control" id="empRoleUpdate" required name="EmployeeRole" placeholder="Enter role">
+                    </div>
+                    <div class="form-group">
+                        <label>Employee Permissions:</label>
+                        <input type="text" class="form-control" id="empPermissionsUpdate" name="Permissions" placeholder="Enter Permissions">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" id="updateBtn">Update</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<a class="btn btn-sm btn-secondary" href="#" id="addEmpoyeeRole" style="margin-bottom: 5px;box-shadow:none">Add Employee Role</a>
+
+<table class="table table-sm table-bordered">
+    <tr style="color:cadetblue"><th>Roll Id</th><th>EmployeeRole</th><th>Permissions</th><th>Created On</th><th>Action</th></tr>
+    <tbody>
+        @foreach (var item in Model.Roles)
+        {
+            <tr>
+                <td>@item.RollId</td>
+                <td>@item.EmployeeRole</td>
+                <td>@item.Permissions</td>
+                <td>@item.CreatedOn</td>
+                <td><input type="hidden" value="@item.RollId" class="empRollId" /> <a href="#" class="editBtn">Edit</a></td>
+            </tr>
+        }
+    </tbody>
+
+</table>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $("#addEmpoyeeRole").click(function () {
+        debugger;
+        $("#form input[type=text]").each(function () {
+            $(this).removeClass("borderColorRed");
+        });
         $("#employeeRoleModal").modal('show');
+    });
+
+    $(":input").on("keyup change", function (e) {
+        debugger;
+        $(this).removeClass("borderColorRed");
     });
 
     $("#saveBtn").click(function () {
         debugger;
-        var data=$("#form").serialize();
-        //var empName = $("#empName").val();
-        //var empRole = $("#empRole").val();
-        //var status = $('#customSwitch').is(':checked');
-        //var data = {
-        //    EmployeeRole: empRole,
-        //    EmployeeName: empName,
-        //    Active: status
-        //};
+        var isValid = true;
+        $("#form input[required]").each(function () {
+            debugger;
+            //alert(this.value);
+            if (this.value == "") {
+                isValid = false;
+                $(this).addClass("borderColorRed");
+            }
+        });
+        if (isValid == false) {
+            return;
+        }
+        var data = $("#form").serialize();
         $.ajax({
             type: 'POST',
             url: '../ManageEmployee/AddEmployeeRole',
-            //data: {
-            //    ProductPONotes: ProductPONotes,
-            //    PO: PO
-            //},
             data: data,
             success: function (data) {
                 $("#employeeRoleModal").modal('hide');
@@ -75,23 +139,57 @@
 
     $(".editBtn").click(function () {
         debugger;
-        var id = $(this).parent().find('.empId').val();
+        var id = $(this).parent().find('.empRollId').val();
         $.ajax({
             type: 'GET',
-            url: '../ManageEmployee/GetEmployeeById',
+            url: '../ManageEmployee/GetEmployeeRoleByRollId',
             data: {
                 Id: id,
             },
             success: function (data) {
                 debugger;
-                $("#empNameUpdate").val(data.EmployeeName);
-                $("#empRoleUpdate").val();
-                $('#customSwitchUpdate').is(':checked');
-                $("#employeeModalUpdate").modal('show');
+                $("#empRollIdUpdate").val(data.RollId);
+                $("#empRoleUpdate").val(data.EmployeeRole);
+                $("#empPermissionsUpdate").val(data.Permissions);
+                $("#updateEmployeeRolesForm input[type=text]").each(function () {
+                    $(this).removeClass("borderColorRed");
+                });
+                $("#employeeUpdateRoleModal").modal('show');
             },
             Error: function (err) {
                 alert("Error");
             }
         });
     })
+
+    $("#updateBtn").click(function () {
+        debugger;
+        var isValid = true;
+        $("#updateEmployeeRolesForm input[required]").each(function () {
+            debugger;
+            if (this.value == "") {
+                isValid = false;
+                $(this).addClass("borderColorRed");
+            }
+        });
+        if (isValid == false) {
+            return;
+        }
+        //var id = $(this).parent().find('.empId').val();
+        var data = $("#updateEmployeeRolesForm").serialize();
+        $.ajax({
+            type: 'POST',
+            url: '../ManageEmployee/AddEmployeeRole',
+            data: data,
+            success: function (data) {
+                //debugger;
+                $("#employeeUpdateRoleModal").modal('hide');
+                location.reload();
+            },
+            Error: function (err) {
+                alert("Error");
+            }
+        });
+    });
+
 </script>

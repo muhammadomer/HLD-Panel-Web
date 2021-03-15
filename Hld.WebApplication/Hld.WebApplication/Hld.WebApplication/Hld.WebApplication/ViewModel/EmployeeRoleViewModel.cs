@@ -10,5 +10,6 @@ namespace Hld.WebApplication.ViewModel
         public int RollId { get; set; }
         public string EmployeeRole { get; set; }
         public string Permissions { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

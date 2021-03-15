@@ -52,33 +52,33 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddEmployeeRecord(EmployeeViewModel model)
+        public JsonResult AddEmployeeRecord(EmployeeViewModel model)
         {
             if (ModelState.IsValid)
             {
+                bool status = false;
                 try
                 {
                     string token = Request.Cookies["Token"];
                     if (model.Id > 0)
                     {
-                        //_employeeApiAccess.UpdateWarehouseAddress(ApiURL, token, model);
+                        status= _employeeApiAccess.UpdateEmployeeById(ApiURL, token, model);
                     }
                     else
                     {
                         model.CreatedOn = DateTime.UtcNow;
-                        model.EmployeeId = 123456;
-                        _employeeApiAccess.SaveEmployee(ApiURL, token, model);
+                        status = _employeeApiAccess.SaveEmployee(ApiURL, token, model);
                     }
-                    return RedirectToAction("Index", "ManageEmployee");
+                    return Json(status);
                 }
                 catch
                 {
-                    return View();
+                    return Json(status);
                 }
             }
             else
             {
-                return View(model);
+                return Json(false);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Hld.WebApplication.Controllers
                 int empId = Convert.ToInt32(id);
                 string token = Request.Cookies["Token"];
                 EmployeeViewModel ViewModel = new EmployeeViewModel();
-                ViewModel = _employeeApiAccess.EidtEmployeeByid(ApiURL, token, empId);
+                ViewModel = _employeeApiAccess.EditEmployeeByid(ApiURL, token, empId);
                 return ViewModel;
             }
             else
@@ -101,35 +101,88 @@ namespace Hld.WebApplication.Controllers
 
         public IActionResult EmployeeRoleIndex()
         {
+            ListEmpAndRoleViewModel model = new ListEmpAndRoleViewModel();
+            var rolesList = _employeeRoleApiAccess.EmployeeRolesList(ApiURL, token);
+            if (rolesList != null)
+            {
+                model.Roles = rolesList;
+                return View(model);
+            }
             return View();
         }
 
-        public ActionResult AddEmployeeRole(EmployeeRoleViewModel model)
+        public JsonResult AddEmployeeRole(EmployeeRoleViewModel model)
         {
             if (ModelState.IsValid)
             {
+                bool status = false;
                 try
                 {
                     string token = Request.Cookies["Token"];
                     if (model.RollId > 0)
                     {
-                        //_employeeApiAccess.UpdateWarehouseAddress(ApiURL, token, model);
+                        status=_employeeRoleApiAccess.UpdateEmployeeRoleByRoleId(ApiURL, token, model);
                     }
                     else
                     {
-                        _employeeRoleApiAccess.SaveEmployeeRole(ApiURL, token, model);
+                        model.CreatedOn = DateTime.UtcNow;
+                        status=_employeeRoleApiAccess.SaveEmployeeRole(ApiURL, token, model);
                     }
-                    return RedirectToAction("ManageEmployeeIndex", "ManageEmployee");
+                    return Json(status);
                 }
                 catch
                 {
-                    return View();
+                    return Json(status);
                 }
             }
             else
             {
-                return View(model);
+                return Json(false);
             }
+        }
+
+        [HttpGet]
+        public EmployeeRoleViewModel GetEmployeeRoleByRollId(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                int empId = Convert.ToInt32(id);
+                string token = Request.Cookies["Token"];
+                EmployeeRoleViewModel ViewModel = new EmployeeRoleViewModel();
+                ViewModel = _employeeRoleApiAccess.GettEmployeeRollByRollId(ApiURL, token, empId);
+                return ViewModel;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        [HttpPost]
+        public JsonResult UpdateEmpActiveStatusById(EmployeeViewModel model)
+        {
+            bool status = false;
+            try
+            {
+                string token = Request.Cookies["Token"];
+                if (model.Id > 0)
+                {
+                    status = _employeeApiAccess.UpdateEmpActiveStatusById(ApiURL, token, model);
+                }
+                return Json(status);
+            }
+            catch
+            {
+                return Json(status);
+            }
+        }
+
+        public JsonResult GetRandom6DigitsEmployeeId()
+        {
+            string randomNumbers = string.Empty;
+            Random generator = new Random();
+            randomNumbers = generator.Next(0, 1000000).ToString("D6");
+            return Json(randomNumbers);
         }
     }
 }
