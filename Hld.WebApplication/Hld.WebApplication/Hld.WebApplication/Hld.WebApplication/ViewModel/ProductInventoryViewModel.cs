@@ -24,6 +24,8 @@ namespace Hld.WebApplication.ViewModel
         public string ASINListingRemoved { get; set; }
         public string BBPriceUpdate { get; set; }
         public string EmptyFirstTime { get; set; }
+        public string seltedtaglist { get; set; }
+        public string BBInternalDescription { get; set; }
 
     }
 }

@@ -135,16 +135,16 @@
             width: 500px!important;
         }
         #WHQStatus {
-            width: 125px !important;
+            width: 90px !important;
         }
         #ASINStatus {
-            width: 140px !important;
+            width: 115px !important;
         }
         #ApprovedPriceStatus {
-            width: 150px !important;
+            width: 120px !important;
         }
         #DSTagselect {
-            width: 110px !important;
+            width: 85px !important;
         }
         .dropsearch {
             width: 110px !important;
@@ -172,7 +172,97 @@
             width: 75px !important;
         }
     }
-    
+    .tooltipactivebb {
+        position: relative;
+        display: contents;
+    }
+
+        .tooltipactivebb .tooltiptexttbb {
+            visibility: hidden;
+            width: 400px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            text-align: left;
+            padding-left: 10px;
+            font-family: arial;
+            position: absolute;
+            z-index: 113;
+            bottom: 52%;
+            /* left: -245px; */
+            margin-bottom: 17px;
+            margin-left: 0px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltipactivebb .tooltiptexttbb::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 5%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltipactivebb:hover .tooltiptexttbb {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    .tooltipactivebbinternal {
+        position: relative;
+        display: contents;
+    }
+
+        .tooltipactivebbinternal .tooltiptexttbbinternal {
+            visibility: hidden;
+            width: 270px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            text-align: left;
+            padding-left: 10px;
+            font-family: arial;
+            position: absolute;
+            z-index: 113;
+            bottom: 52%;
+            /* left: -245px; */
+            margin-bottom: 17px;
+            margin-left: 0px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+            .tooltipactivebbinternal .tooltiptexttbbinternal::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 5%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltipactivebbinternal:hover .tooltiptexttbbinternal {
+            visibility: visible;
+            opacity: 1;
+        }
+    .taground {
+        color: white;
+        font-size: 10px;
+        padding: 1px;
+        border: none;
+        border-radius: 3px;
+        margin-right: 5px;
+    }
 </style>
 <div>
     <div class="loader">
@@ -251,36 +341,36 @@
             }
             @if (Model.BBPriceUpdate != "ALL" && !string.IsNullOrEmpty(Model.BBPriceUpdate))
             {
-        <div class="row col-12 BBPriceUpdateHide">
-            <span class="tagspan">BB Prices Last Update Status :</span>
+                <div class="row col-12 BBPriceUpdateHide">
+                    <span class="tagspan">BB Prices Last Update Status :</span>
 
-            @if (Model.BBPriceUpdate == "1")
-            {
+                    @if (Model.BBPriceUpdate == "1")
+                    {
 
-        <span style="padding-left:0px;" class="">Last 7 Days</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
-            }
-            else if (Model.BBPriceUpdate == "2")
-            {
-        <span style="padding-left:0px;" class="">Last 14 Days</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
-            }
-            else if (Model.BBPriceUpdate == "3")
-            {
-        <span style="padding-left:0px;" class="">Last Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
-            }
-            else if (Model.BBPriceUpdate == "4")
-            {
-        <span style="padding-left:0px;" class="">Last 3 Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
-            }
-            else if (Model.BBPriceUpdate == "5")
-            {
-        <span style="padding-left:0px;" class="">Last 6 Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
-            }
-           
-            else
-            {
-        <span style="padding-left:0px;" class="">Last 1 Year</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
-            }
-        </div>
+                        <span style="padding-left:0px;" class="">Last 7 Days</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+                    }
+                    else if (Model.BBPriceUpdate == "2")
+                    {
+                        <span style="padding-left:0px;" class="">Last 14 Days</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+                    }
+                    else if (Model.BBPriceUpdate == "3")
+                    {
+                        <span style="padding-left:0px;" class="">Last Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+                    }
+                    else if (Model.BBPriceUpdate == "4")
+                    {
+                        <span style="padding-left:0px;" class="">Last 3 Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+                    }
+                    else if (Model.BBPriceUpdate == "5")
+                    {
+                        <span style="padding-left:0px;" class="">Last 6 Month</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+                    }
+
+                    else
+                    {
+                        <span style="padding-left:0px;" class="">Last 1 Year</span><span style="margin-left:3px"><input class="BBPriceUpdateCLASS" type="checkbox" value="@Model.BBPriceUpdate" checked></span>
+                    }
+                </div>
             }
 
             @if (Model.dropshipstatusSearch != "ALL" && !string.IsNullOrEmpty(Model.dropshipstatusSearch))
@@ -313,6 +403,22 @@
                     else
                     {
                         <span style="padding-left:0px;" class="">No</span><span style="margin-left:3px"><input class="LSRCLASS" type="checkbox" value="@Model.ASINListingRemoved" checked></span>
+                    }
+                </div>
+            }
+            @if (Model.BBInternalDescription != "ALL" && !string.IsNullOrEmpty(Model.BBInternalDescription))
+            {
+                <div class="row col-12 BBInternalHide">
+                    <span class="tagspan">BB ASIN Internal Description Status :</span>
+
+                    @if (Model.BBInternalDescription == "Yes")
+                    {
+
+                        <span style="padding-left:0px;" class="">Yes</span><span style="margin-left:3px"><input class="BBINTERNALCLASS" type="checkbox" value="@Model.BBInternalDescription" checked></span>
+                    }
+                    else
+                    {
+                        <span style="padding-left:0px;" class="">No</span><span style="margin-left:3px"><input class="BBINTERNALCLASS" type="checkbox" value="@Model.BBInternalDescription" checked></span>
                     }
                 </div>
             }
@@ -365,7 +471,7 @@
                         <div class="p-0 mr-1" style="position:relative" id="DSTagselect">
                             <select id="multiselect" style="padding:0px;box-shadow: none; width:81px!important;position:absolute" class="form-control col-md-1 active DSTagselect" multiple="multiple">
                                 @*<option value="Yes">Yes</option>
-                        <option value="No">No</option>*@
+                            <option value="No">No</option>*@
                             </select>
                             <input type="hidden" name="DSTag" id="ddDSTag" />
                         </div>
@@ -448,25 +554,44 @@
                             </select>
                             <input type="hidden" name="ASINListingRemoved" id="ddlASINListingRemoved" />
                         </div>
-                        <div class="p-0 mr-1" style="position:relative;width:164px">
-                            <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active BBPriceUpdateClass" multiple="multiple" style="position:absolute">
-                                <option value="1">Last 7 Days</option>
-                                <option value="2">Last 14 Days</option>
-                                <option value="3">Last Month</option>
-                                <option value="4">Last 3 Month</option>
-                                <option value="5">Last 6 Month</option>
-                                <option value="6">Last 1 Year</option>
-                            </select>
-                            <input type="hidden" name="BBPriceUpdate" id="ddlBBPriceUpdate" />
+                        <div class="tooltipactivebb">
+                            <div class="p-0 mr-1 showclasss" style="position:relative;width:170px">
+                                <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active BBPriceUpdateClass" multiple="multiple" style="position:absolute">
+                                    <option value="1">In Last 7 Days</option>
+                                    <option value="2">In Last 14 Days</option>
+                                    <option value="3">In Last Month</option>
+                                    <option value="4">In Last 3 Month</option>
+                                    <option value="5">In Last 6 Month</option>
+                                    <option value="6">In Last 1 Year</option>
+                                </select>
+                                <input type="hidden" name="BBPriceUpdate" id="ddlBBPriceUpdate" />
+                                <span class="">
+                                    <span class="tooltiptexttbb">
+                                        This filter shows BB Prices not updated in last selected days or months
+                                    </span>
+                                </span>
+                            </div>
                         </div>
+                        <div class="tooltipactivebbinternal">
+                            <div class="p-0 mr-1" style="position:relative;width:100px">
+                                <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active BBInternalDescription" multiple="multiple" style="position:absolute">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <input type="hidden" name="BBInternalDescription" id="ddlBBInternalDescription" />
+                                <span class="">
+                                    <span class="tooltiptexttbbinternal">
+                                        The ASIN updated on BB Internal Description
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                        }
+
 
 
                     </div>
-                }
-
-
-
-            </div>
         </div>
 
 
@@ -612,9 +737,9 @@
     <div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
-            <div class="modal-content">
+            <div class="modal-content"style="width:112%!important;">
                 <div class="modal-header">
-                    <h4 class="modal-title">SKU Status</h4>
+                    <h5 class="modal-title">Paste data.one record per line <br /> Max records 50</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
                 </div>
@@ -625,7 +750,8 @@
                             <input type="submit" value="SearchFromSKUList" class="hideForBulkSku btn btn-primary" />
                         </form>*@
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer"style="justify-content:space-between">
+                    <span style="color:red;font-weight:bold;display:none"class="errorclass">you cannot enter more then 50 record</span>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
 
@@ -738,8 +864,103 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
     <script src="~/lib/jquery.tablesorter/js/jquery.tablesorter.widgets.min.js"></script>
   
     <script type="text/javascript">
+        var keynum;
+        var lines = 1;
 
-            $(document).ready(function () {
+        //function limitLines(e) {
+        //    $('.errorclass').css('display', 'none');
+
+        //    if (window.event) {
+        //        keynum = e.keyCode;
+        //    } else if (e.which) {
+        //        keynum = e.which;
+        //    }
+        //    if (keynum == 13) {
+        //        if (lines == 10) {
+
+        //            $('.errorclass').css('display', 'inline');
+
+        //            return false;
+        //        }
+        //        else {
+        //            lines++;
+        //        }
+        //    }
+        //}
+
+        $(document).ready(function () {
+            $(document).on("paste", "#SearchFromSkuList", function () {
+                var elem = $(this);
+
+                setTimeout(function () {
+                    elem.val(function (i, val) {
+                        var splitrows = val.split('\n');
+                        var result = splitrows.length;
+                        if (result <= 50) {
+                            return val;
+                            $('#SearchFromSkuList').attr('readonly', false);
+                        }
+                        else {
+
+                            let value = "";
+                            for (var i = 0; i <= 49; i++) {
+                                value = value + splitrows[i] + "\n";
+
+                            }
+                            $('.errorclass').css('display', 'inline');
+                            $('#SearchFromSkuList').attr('readonly', true).css("background-color", "rgb(234 230 230)");
+                            $('#SearchFromSkuList').attr('value', value);
+                            return value;
+
+
+                        }
+
+                    });
+
+                }, 20);
+
+
+            });
+            $(document).on("keyup", "#SearchFromSkuList", function () {
+                var val = $("#SearchFromSkuList").val();
+                var splitrows = val.split('\n');
+                var result = splitrows.length;
+                $("#countsku").text(result-1+ "/50");
+            })
+            //$(document).on("paste", "#SearchFromSkuList", function () {
+            //    var elem = $(this);
+
+            //    setTimeout(function () {
+            //        elem.val(function (i,val) {
+            //           var splitrows= val.split('\n');
+            //            var result = splitrows.length;
+            //            if (result <=50) {
+            //                return val;
+            //                $('#SearchFromSkuList').attr('readonly', false);
+            //                }
+            //            else {
+
+            //                    let value = "";
+            //                    for (var i = 0; i <=49; i++) {
+            //                        value = value + splitrows[i] + "\n";
+
+            //                    }
+            //                $('.errorclass').css('display', 'inline');
+            //                $('#SearchFromSkuList').attr('readonly', true).css("color", "gray");;
+            //                $('#SearchFromSkuList').attr('value', value);
+            //                return value;
+
+
+            //                }
+
+            //        });
+
+            //    }, 20);
+
+
+            //});
+
+
                 $("#actionMenu").select2();
                 $("#EmptyFirstTime").val("No");
             $(document).on('click', '#headerCheckBox', function () {
@@ -779,7 +1000,17 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 $("#totalSelected").text(i);
             });
 
+            $('select[multiple].active.BBInternalDescription').multiselect({
+                columns: 1,
+                placeholder: 'BB ASIN',
+                maxPlaceholderOpts: 1,
+                selectAll: false,
+                onOptionClick: function (element, option) {
+                    $('#ddlBBInternalDescription').val($(element).val());
+                    $(element).val();
+                },
 
+            });
 
             $('select[multiple].active.WHQStatus').multiselect({
                 columns: 1,
@@ -794,7 +1025,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             });
                 $('select[multiple].active.BBPriceUpdateClass').multiselect({
                     columns: 1,
-                    placeholder: 'BB Prices Last Update',
+                    placeholder: 'BB Prices Not Updated',
                     maxPlaceholderOpts: 1,
                     selectAll: false,
                     onOptionClick: function (element, option) {
@@ -901,20 +1132,20 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         $.ajax({
                             type: 'Get',
                             url: Url,
-                           
+
                             traditional: true,
                             success: function (data) {
-                               
-                                
+
+
                                 console.log(data,"approved dataddddd")
                                 $(row).find(".getapprovedprice").empty();
                                 $.each(data, function (key, value) {
-                                    
+
                                     if (value.VendorAlias != "") {
                                         $(row).find(".getapprovedprice").append($("<span>" + value.VendorAlias + "</span> <span><a target='_blank' href='/ApprovedPrice/Index?&sku=" + value.SKU + "&title='>" + value.ApprovedUnitPrice.toFixed(2) + "</a></span> <span>" + value.Currency + "</span><br/>"));
 
                                     }
-                                   
+
                                 });
                                 if (data == undefined) {
                                     $(row).find(".getapprovedprice").append($("<span>- - - </span>"));
@@ -924,7 +1155,38 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         });
                     });
                 }
+            function getakutag() {
 
+                $(".table tbody tr ").each(function () {
+                    var sku = $(this).find('#productSkuForUpdating').val()
+                    var Url = '/Product/GetTags?sku=' + sku;
+                    var row = $(this);
+                    $.ajax({
+                        type: 'Get',
+                        url: Url,
+
+                        traditional: true,
+                        success: function (data) {
+
+
+                            console.log(data, "getskuTags dataddddd")
+                            $(row).find(".getskuTags").empty();
+                            $.each(data, function (key, value) {
+
+                                if (value.TagName != "") {
+                                    $(row).find(".getskuTags").append($("<span class='taground' style='background-color:"+ value.TagColor+"'>" + value.TagName + "</span><br/>"));
+
+                                }
+
+                            });
+                            if (data == undefined) {
+                                $(row).find(".getskuTags").append($("<span>- - - </span>"));
+                            }
+
+                        }
+                    });
+                });
+            }
             //global functions
             $('select#multiselect').on('change', function () {
                 var sval = $('select#multiselect').val();
@@ -965,7 +1227,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             $('#searchFromSkuList').click(function () {
                 $('.pagination').hide();
                 $('#itemPerPage').hide();
-                
+
             });
 
             $('#btnSearchOrder').click(function () {
@@ -980,6 +1242,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
             $('#btnSearchFromSkuList').click(function () {
                 $('#modelBody').empty();
+                $('.errorclass').css('display', 'none');
                 $('#modelBody').load('@Url.Action("SkuSelectList", "Product")');
                 $('#myModal').modal('show');
             });
@@ -1028,7 +1291,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             var ASINListingRemoved = getUrlParameter('ASINListingRemoved');
                 var BBPriceUpdate = getUrlParameter('BBPriceUpdate');
                 var EmptyFirstTime = getUrlParameter('EmptyFirstTime');
-
+            var BBInternalDescription = getUrlParameter('BBInternalDescription');
             var TypeSearch = getUrlParameter('TypeSearch');
             if (TypeSearch == "Continued") {
 
@@ -1118,7 +1381,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                 if ($('#actionMenu option:selected').val() == "ED-DS-SKU") {
                     var status = $('#checkAllPages').is(':checked');
-                   
+
                     if (status) {
                         $('.Processing').children('span').css('display', 'inline')
                         var url = '/Product/SelectAllPagesWithoutPageLimit?dropshipstatus=' + dropship + '&Sku=' + sku;
@@ -1363,17 +1626,17 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
                     }
                     if ($('#checkAllPages').is(':checked') && ($('#actionMenu option:selected').val() == "StatusFromZinc")) {
-                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate;
+                        var UrlZinc = '/Product/SelectAllForGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate + '&BBInternalDescription=' + BBInternalDescription;
                         $(".loader").show();
                         $.ajax({
                             type: 'POST',
                             url: UrlZinc,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved, BBPriceUpdate: BBPriceUpdate },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved, BBPriceUpdate: BBPriceUpdate, BBInternalDescription: BBInternalDescription },
                             traditional: true,
                             success: function (data) {
                                 $(".loader").hide();
-                              
+
                                 var TotalSKU = parseInt('@ViewBag.TotalCount');//158
                                 var withasin = data;//171
                                 var withoutasin = TotalSKU - withasin;//158 171=-13
@@ -1390,11 +1653,11 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                                    $("#myModalSuccessZinc").modal({ backdrop: 'static', keyboard: false });
                                     $(document).on('click', '.btnsubmitZinc', function () {
                                         $(".loader").show();
-                                        var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate;
+                                        var UrlZincGet = '/Product/SelectAllSKUandASINGetStatusFromZinc?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate+'&BBInternalDescription=' + BBInternalDescription;
                                         $.ajax({
                                             type: 'post',
                                             url: UrlZincGet,
-                                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved,BBPriceUpdate: BBPriceUpdate},
+                                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINStatus: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved, BBPriceUpdate: BBPriceUpdate, BBInternalDescription: BBInternalDescription},
                                             success: function (res) {
                                                 $(".loader").hide();
 
@@ -1409,7 +1672,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                                         });
                                     });
                                 }
-                               
+
                             }
 
                         });
@@ -1479,7 +1742,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         pageNo = page;
 
                         // add code which gets executed when user selects a page
-                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + "&BBPriceUpdate=" + BBPriceUpdate + '&EmptyFirstTime=' + EmptyFirstTime;
+                        var url = '/Product/Index?page=' + page + '&dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + "&BBPriceUpdate=" + BBPriceUpdate + "&BBInternalDescription=" + BBInternalDescription+ '&EmptyFirstTime=' + EmptyFirstTime;
                         $(".loader").show();
                         $.get(url).done(function (response) {
                             $('#loadOrder').empty();
@@ -1489,6 +1752,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                             var table = $(document).find('#tableProductList');
                             getasinamazoneprice();
                             getapprovedrice();
+                            getakutag();
                             $(table).tablesorter({
                                 theme: 'bootstrap',
                                 headerTemplate: '{content} {icon}',
@@ -1534,6 +1798,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     $('#loadOrder').html(response);
                     getasinamazoneprice();
                     getapprovedrice();
+                    getakutag();
                      $(".loader").hide();
                     var table = $(document).find('#tableProductList');
                     $(table).tablesorter({
@@ -1566,7 +1831,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 //For checked unchecked status
                 var whqText = $(".whq-status-text").text();
                 var whqstatus = whqText.split(",");
-                
+
                 $.each(whqstatus, function (key, value) {
                     $(".ms-options").find("input[type=checkbox]").each(function () {
                         if ($(this).parents("select").hasClass("WHQStatus")) {
@@ -1620,11 +1885,17 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     }
                 });
                 $(document).on('change', '.DROPCLASS', function (e) {
-                    if (dropshipstatusSearch != null) {
+
                         $(".DROPHide").hide();
-                        $('.dropshipstatusSearch').val('ALL').trigger('change'); 
-                    }
+                        $('.dropshipstatusSearch').val('ALL').trigger('change');
+
                 });
+            //$(document).on('change', '.DROPCLASS', function (e) {
+            //    if (dropship != null) {
+            //        $(".DROPHide").hide();
+            //        $('.dropshipstatusSearch').val('ALL').trigger('change');
+            //    }
+            //});
                 var asinText = $(".asin-status-text").text();
                 var asinstatus = asinText.split(",");
                 $.each(asinstatus, function (key, value) {
@@ -1873,7 +2144,76 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         });
                     }
                 });
-                //
+            $(document).on('change', '.BBINTERNALCLASS', function (e) {
+                if (BBInternalDescription != null) {
+
+                    var res = BBInternalDescription.split(",");
+                    //$('#ddlQuantity').val($(this).item);
+                    $('#ddlBBInternalDescription').val(BBInternalDescription);
+                    $.each(res, function (key, value) {
+
+                        var setval = 12;
+                        var getval = value;
+                        getval = setval;
+                        console.log(getval);
+                        if (getval == 12) {
+                            $(".BBInternalDescription").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", false);
+                                    $(".BBInternalHide").hide();
+                                    $('#ddlBBInternalDescription').val('');
+                                }
+                            });
+                        }
+                        else {
+
+                            $(".BBInternalDescription").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                                //if($(this).parents("select").hasClass("WHQStatus"))
+
+                                if ($(this).val() == value.trim()) {
+                                    $(this).prop("checked", true);
+                                }
+                            });
+                        }
+
+                    });
+                }
+            });
+            //
+            if (BBInternalDescription != null) {
+
+                var res = BBInternalDescription.split(",");
+                //$('#ddlQuantity').val($(this).item);
+                $('#ddlBBInternalDescription').val(BBInternalDescription);
+                $.each(res, function (key, value) {
+
+                    var setval = 12;
+                    var getval = value;
+                    getval = setval;
+                    console.log(getval);
+                    if (getval == 12) {
+                        $(".BBInternalDescription").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", true);
+
+                            }
+                        });
+                    }
+                    else {
+
+                        $(".BBInternalDescription").next().children(".ms-options").find("input[type=checkbox]").each(function () {
+                            //if($(this).parents("select").hasClass("WHQStatus"))
+
+                            if ($(this).val() == value.trim()) {
+                                $(this).prop("checked", false);
+                            }
+                        });
+                    }
+
+                });
+            }
             if (WHQStatus != null) {
 
                 var res = WHQStatus.split(",");
@@ -2124,7 +2464,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             //    }
             //});
             //});
-            
+
 
 
             var Url = '/Tag/TagListForAssign/';
@@ -2237,7 +2577,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 //    });
                 //}
 
-          
+
 
             //
 
@@ -2246,7 +2586,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 var i = 0;
                 page = 1;
                 pageNo = page;
-               
+
                 if ($(_this).is(':checked')) {
                     var selectallchecked = parseInt('@ViewBag.TotalCount');
                     console.log(selectallchecked)
@@ -2278,13 +2618,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 $('#btnexportOrder').click(function () {
                     $(".btnexportOrderforshow").css('display', 'inline');
                     if ($('#checkAllPages').is(':checked')) {
-                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved +'&BBPriceUpdate='+BBPriceUpdate;
+                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate + '&BBInternalDescription=' + BBInternalDescription;
                         $(".btnexportOrderforshow").css('display', 'inline');
                         $.ajax({
                             type: 'POST',
                             url: URLEXPORT,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved,BBPriceUpdate: BBPriceUpdate },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved, BBPriceUpdate: BBPriceUpdate, BBInternalDescription: BBInternalDescription},
                             traditional: true,
                             success: function (data) {
                                 $(".btnexportOrderforshow").css('display', 'none');
@@ -2351,13 +2691,13 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     }
                     else {
                         $(".btnexportOrderforshow").css('display', 'inline');
-                        var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate;
+                      var URLEXPORT = '/Product/EXPORTDate?dropshipstatus=' + dropship + '&dropshipstatusSearch=' + dropshipstatusSearch + '&Sku=' + sku + '&DSTag=' + DSTagItem + '&TypeSearch=' + TypeSearch + '&WHQStatus=' + WHQStatus + '&BBProductID=' + BBProductID + '&ASINS=' + ASINStatus + '&ApprovedUnitPrice=' + ApprovedUnitPrice + '&ASINListingRemoved=' + ASINListingRemoved + '&BBPriceUpdate=' + BBPriceUpdate + '&BBInternalDescription=' + BBInternalDescription;
                         $(".btnexportOrderforshow").css('display', 'inline');
                         $.ajax({
                             type: 'POST',
                             url: URLEXPORT,
                             dataType: "json",
-                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved, BBPriceUpdate: BBPriceUpdate },
+                            data: { dropshipstatus: dropship, dropshipstatusSearch: dropshipstatusSearch, Sku: sku, DSTag: DSTagItem, TypeSearch: TypeSearch, WHQStatus: WHQStatus, BBProductID: BBProductID, ASINS: ASINStatus, ApprovedUnitPrice: ApprovedUnitPrice, ASINListingRemoved: ASINListingRemoved, BBPriceUpdate: BBPriceUpdate, BBInternalDescription: BBInternalDescription},
                             traditional: true,
                             success: function (data) {
                                 $(".btnexportOrderforshow").css('display', 'none');
@@ -2372,7 +2712,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
 
             //
-           
+
             $('#btnexportOrderget').click(function () {
                 //var data = new Array();
                 var data = [];

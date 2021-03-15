@@ -75,212 +75,216 @@
             background-color: lightgray !important;
         }
 </style>
+<div class="container-fluid p-0">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th data-sorter="false">
+                    <div><span id="totalSelected">0</span></div>
+                    <input type="checkbox" id="headerCheckBox" />
+                </th>
+                <th>
+                    Job ID #
+                </th>
+                <th>
+                    Image
+                </th>
 
-<table class="table">
-    <thead class="thead-light">
-        <tr>
-            <th data-sorter="false">
-                <div><span id="totalSelected">0</span></div>
-                <input type="checkbox" id="headerCheckBox" />
-            </th>
-            <th>
-                Job ID #
-            </th>
-            <th>
-                Image
-            </th>
+                <th style="width:7%">
+                    ASIN
+                </th>
+                <th>
+                    Product SKU
+                </th>
+                <th>
+                    Zinc Response
+                </th>
+                <th>
+                    Seller Name
+                </th>
+                <th>
+                    WHQ
+                </th>
+                <th>
+                    Amazon Price
+                </th>
+                <th>
+                    Prime
+                </th>
+                <th>
+                    Fulfilled BY
+                </th>
+                <th>Product ID</th>
 
-            <th style="width:7%">
-                ASIN
-            </th>
-            <th>
-                Product SKU
-            </th>
-            <th>
-                Zinc Response
-            </th>
-            <th>
-                Seller Name
-            </th>
-            <th>
-                WHQ
-            </th>
-            <th>
-                Amazon Price
-            </th>
-            <th>
-                Prime
-            </th>
-            <th>
-                Fulfilled BY
-            </th>
-            <th>Product ID</th>
+                <th style="width: 3%;"> Existing Selling Price</th>
 
-            <th style="width: 3%;"> Existing Selling Price</th>
+                <th>Updated Selling Price</th>
 
-            <th>Updated Selling Price</th>
+                <th>MSRP Price</th>
+                <th>Import Id</th>
+                <th style="width: 6%;">BB Job ID</th>
+                <th style="width: 6%;">Updated Price BB</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{
 
-            <th>MSRP Price</th>
-            <th>Import Id</th>
-            <th style="width: 6%;">BB Job ID</th>
-            <th style="width: 6%;">Updated Price BB</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @{
+                            var pp = @Model.Where(p => p.ProductSKU == item.ProductSKU).Min(p => p.UnitOriginPrice_Max);
+                            var min = @Model.Where(p => p.ProductSKU == item.ProductSKU && p.UnitOriginPrice_Max == Convert.ToDouble(pp)).Select(x => new
+                            {
+                                price = x.UnitOriginPrice_Max,
+                                z_ASIN = x.ASIN
+                            });
+                        }
+                        @*@min.FirstOrDefault().z_ASIN;*@
+                        <input type='text' style="display:none" class='form-control CheckApproved watchlistdata' value='@item.IsPrime'>
+                        <input class="checkboxSkuForUpdating checkboxSkForEnableDisable " disabled="@(item.ZincResponse=="Available" && min.FirstOrDefault().z_ASIN == item.ASIN && item.HLD_CA1<=0 &&item.IsPrime==1?false:true)" type="checkbox" />
+                        <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />
+                        <input type="hidden" asp-for="@item.BBProductId" id="productIdForUpdating" class="productSkuForEnableDisable" />
+                        <input type="hidden" asp-for="@item.jobID" id="jobID" class="GETjobID" data-id="@item.jobID" />
+                        @if (min.FirstOrDefault().z_ASIN == item.ASIN)
+                        {
+                            <input type="hidden" asp-for="@item.ASIN" id="ASINForUpdating" class="ASINForEnableDisable" />
+                        }
+                        @*<input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />*@
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.jobID)
+                    </td>
+                    <td>
+                        @{
+                            <a target="_blank" href="@ViewBag.image_name_URL/@item.image_name">
+                                <img src="@ViewBag.Compress_image_URL/@item.Compress_image" class="rounded" height="50" width="50" />
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        <a href="https://www.amazon.ca/dp/@item.ASIN" target="_blank">@item.ASIN</a>
+                        @if (min.FirstOrDefault().z_ASIN == item.ASIN)
+                        {
+                            <input type="hidden" class="ValidASIN" data-asin="@item.ASIN" value="@item.ASIN" />
+                            <span>
+                                <strong>
+                                    <i class="fa fa-check" style=" color: green;font-size:15px;vertical-align:bottom!important"></i>
+                                </strong>
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        <span><a style="cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-productsku="@item.ProductSKU" target="_blank">@item.ProductSKU</a></span><br />
+                        <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BBProductId" target="_blank">
+                            <img height="13px" width="15px" src="~/Images/BestBuy-Gray.png" />
 
-                    var pp = @Model.Where(p => p.ProductSKU == item.ProductSKU).Min(p => p.UnitOriginPrice_Max);
-                    var min = @Model.Where(p => p.ProductSKU == item.ProductSKU && p.UnitOriginPrice_Max == Convert.ToDouble(pp)).Select(x => new
-                    {
-                        price = x.UnitOriginPrice_Max,
-                        z_ASIN = x.ASIN
-                    });
-                }
-                @*@min.FirstOrDefault().z_ASIN;*@
-                <input type='text' style="display:none" class='form-control CheckApproved watchlistdata' value='@item.IsPrime'>
-                <input class="checkboxSkuForUpdating checkboxSkForEnableDisable " disabled="@(item.ZincResponse=="Available" && min.FirstOrDefault().z_ASIN == item.ASIN && item.HLD_CA1<=0 &&item.IsPrime==1?false:true)" type="checkbox" />
-                <input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />
-                <input type="hidden" asp-for="@item.BBProductId" id="productIdForUpdating" class="productSkuForEnableDisable" />
-                <input type="hidden" asp-for="@item.jobID" id="jobID" class="GETjobID" data-id="@item.jobID" />
-                @if (min.FirstOrDefault().z_ASIN == item.ASIN)
-                {
-                 <input type="hidden" asp-for="@item.ASIN" id="ASINForUpdating" class="ASINForEnableDisable" />
-                }
-                @*<input type="hidden" asp-for="@item.ProductSKU" id="productSkuForUpdating" class="productSkuForEnableDisable" />*@
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.jobID)
-            </td>
-            <td>
-                @{
-                    <a target="_blank" href="@ViewBag.image_name_URL/@item.image_name">
-                        <img src="@ViewBag.Compress_image_URL/@item.Compress_image" class="rounded" height="50" width="50" />
-                    </a>
-                }
-            </td>
-            <td>
-                <a href="https://www.amazon.ca/dp/@item.ASIN" target="_blank">@item.ASIN</a>
-                @if (min.FirstOrDefault().z_ASIN == item.ASIN)
-                {
-                    <input type="hidden"class="ValidASIN"data-asin="@item.ASIN"value="@item.ASIN"/>
-                   <span><strong>
-    <i class="fa fa-check" style=" color: green;font-size:15px;vertical-align:bottom!important"></i>
-</strong></span>
-                }
-            </td>
-            <td>
-                <span><a style="cursor:pointer" asp-action="ProductZinc" asp-controller="Zinc" asp-route-productsku="@item.ProductSKU" target="_blank">@item.ProductSKU</a></span><br />
-                <a style="padding-left:2px;cursor:pointer" href="https://marketplace.bestbuy.ca/mmp/shop/offer?productId=@item.BBProductId" target="_blank">
-                    <img height="13px" width="15px" src="~/Images/BestBuy-Gray.png" />
+                        </a>
+                        <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.BBProductId" target="_blank">
+                            <img height="10px" width="15px" src="~/Images/openbb.png" />
+                        </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ZincResponse)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SellerName)
+                    </td>
+                    <td>
+                        <input style="display:none" value="@item.HLD_CA1" class="whq" />
+                        @item.HLD_CA1
+                    </td>
+                    <td>
+                        @{
+                            int item_price = Convert.ToInt32(item.Amz_Price);
+                            decimal itemprice = 0.0m;
+                            if (item_price > 0)
+                            {
+                                itemprice = (decimal)(item_price / 100.0);
+                            }
 
-                </a>
-                <a style="padding-left:2px;cursor:pointer" href="https://www.bestbuy.ca/en-ca/search?search=+@item.BBProductId" target="_blank">
-                    <img height="10px" width="15px" src="~/Images/openbb.png" />
-                </a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZincResponse)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellerName)
-            </td>
-            <td>
-                <input style="display:none" value="@item.HLD_CA1" class="whq" />
-                @item.HLD_CA1
-            </td>
-            <td>
-                @{
-                    int item_price = Convert.ToInt32(item.Amz_Price);
-                    decimal itemprice = 0.0m;
-                    if (item_price > 0)
-                    {
-                        itemprice = (decimal)(item_price / 100.0);
-                    }
+                        }
+                        $@itemprice
 
-                }
-                $@itemprice
+                    </td>
+                    <td>
+                        <input style="display:none" class="isprime" value="@item.IsPrime" />
+                        @if (item.IsPrime == 1)
+                        {
+                            <span>Available</span>
+                        }
+                        else
+                        {
+                            // <span>Unavailable</span>
 
-            </td>
-            <td>
-                <input style="display:none" class="isprime" value="@item.IsPrime"/>
-                @if (item.IsPrime == 1)
-                {
-                    <span>Available</span>
-                }
-                else
-                {
-                   // <span>Unavailable</span>
-                    
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FulfilledBY)
-            </td>
-            <td>
-                @item.BBProductId
-            </td>
-            <td>
-                @item.BBSellingPrice
-            </td>
-            <td>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FulfilledBY)
+                    </td>
+                    <td>
+                        @item.BBProductId
+                    </td>
+                    <td>
+                        @item.BBSellingPrice
+                    </td>
+                    <td>
 
-                @{
-                    //var maxprice = Math.Floor((item.UnitOriginPrice_Max / 100), 0)+0.95;
-                    var maxprice = Math.Round((item.UnitOriginPrice_Max / 100),2);
-                    var maxpriceText = maxprice * 100;
-                }
-                <input style="display:none" value="@maxpriceText" class="UpdatingSellingPrice" />
-                <input style="display:none" value="@item.UnitOriginPrice_MSRP" class="MSRP" />
-                <div class="btndivstyle form-group row">
-                    <div class="row" style="width:150px!important">
-                        <div class="col-md-12">
-                            <div class='input-group cmclass' style=''>
-                                <div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color: #0099cc !important; font-size:12px;'>$</span></div>
-                                <input type="number" value="@maxprice" class="form-control inputvalchange" data-id="@item.ASIN" />
+                        @{
+                            //var maxprice = Math.Floor((item.UnitOriginPrice_Max / 100), 0)+0.95;
+                            var maxprice = Math.Round((item.UnitOriginPrice_Max / 100), 2);
+                            var maxpriceText = maxprice * 100;
+                        }
+                        <input style="display:none" value="@maxpriceText" class="UpdatingSellingPrice" />
+                        <input style="display:none" value="@item.UnitOriginPrice_MSRP" class="MSRP" />
+                        <div class="btndivstyle form-group row">
+                            <div class="row" style="width:150px!important">
+                                <div class="col-md-12">
+                                    <div class='input-group cmclass' style=''>
+                                        <div class='input-group-append preappendlist'> <span class='input-group-text appendafter' style='color: #0099cc !important; font-size:12px;'>$</span></div>
+                                        <input type="number" value="@maxprice" class="form-control inputvalchange" data-id="@item.ASIN" />
 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-left:-5px!important">
+                                <div class="col-md-12">
+                                    <span class="btnbuttonstyle">
+                                        <button class="btn btn-sm btn-warning btnsavetable" id="" style="">Save</button>
+                                        <button class="btn btn-sm btn-secondary btncanceltable" id="btncanceltable">Cancel</button>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" style="margin-left:-5px!important">
-                        <div class="col-md-12">
-                            <span class="btnbuttonstyle">
-                                <button class="btn btn-sm btn-warning btnsavetable" id="" style="">Save</button>
-                                <button class="btn btn-sm btn-secondary btncanceltable" id="btncanceltable">Cancel</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                @{ var msrpprice = (Math.Round(item.UnitOriginPrice_MSRP, 2));
+                    </td>
+                    <td>
+                        @{ var msrpprice = (Math.Round(item.UnitOriginPrice_MSRP, 2));
 
 
 
-                                    var y = msrpprice.ToString().Split(".");
+                            var y = msrpprice.ToString().Split(".");
 
-                                    var MSRP = msrpprice.ToString();
-                                    if (y.Length > 1)
-                                    {
+                            var MSRP = msrpprice.ToString();
+                            if (y.Length > 1)
+                            {
 
 
-                                    }
-                                    else
-                                    {
-                                        MSRP = msrpprice + ".00";
-                                    }
-                }
-                @MSRP
-            </td>
-            <td>@item.ImportId</td>
-            <td><a href="../BestBuyUpdateLogs/Index?JobId=@item.BBJobID" target="_blank">@item.BBJobID</a></td>
-            <td>@item.UpdatedPriceBB</td>
-        </tr>
-            <tr style="width: 98%;" class="detail hidden_row" id=@(item.ASIN+item.jobID)>
-            </tr>
-        }
-    </tbody>
-</table>
+                            }
+                            else
+                            {
+                                MSRP = msrpprice + ".00";
+                            }
+                        }
+                        @MSRP
+                    </td>
+                    <td>@item.ImportId</td>
+                    <td><a href="../BestBuyUpdateLogs/Index?JobId=@item.BBJobID" target="_blank">@item.BBJobID</a></td>
+                    <td>@item.UpdatedPriceBB</td>
+                </tr>
+                <tr style="width: 98%;" class="detail hidden_row" id=@(item.ASIN+item.jobID)>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

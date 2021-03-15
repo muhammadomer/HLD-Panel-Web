@@ -72,7 +72,8 @@
                 <th>
                     Schedule Enabled Disabled
                 </th>
-                <th>                 
+                <th>Next Job Run Date</th>
+                <th>
                     Action
                 </th>
             </tr>
@@ -81,56 +82,67 @@
 
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        <a target="_blank" href="@ViewBag.image_name_URL/@item.image_name">
-                            <img src="@ViewBag.Compress_image_URL/@item.Compress_image" class="rounded" height="50" width="50" />
-                        </a>
-                    </td>
-                    <td>
-                        <a href="/BestBuyProduct/PropertyPage?ProductSKU=@item.ProductSKU" class="skuspan" target="_blank">@item.ProductSKU</a>
-                        @*@item.ProductSKU*@
-                    </td>
-                    <td>
-                        <a target="_blank" href="https://www.amazon.ca/dp/@item.ASIN?th=1&psc=1">@item.ASIN</a>
-                        @*@item.ASIN*@
-                    </td>
+            <tr>
+                <td>
+                    <a target="_blank" href="@ViewBag.image_name_URL/@item.image_name">
+                        <img src="@ViewBag.Compress_image_URL/@item.Compress_image" class="rounded" height="50" width="50" />
+                    </a>
+                </td>
+                <td>
+                    <a href="/BestBuyProduct/PropertyPage?ProductSKU=@item.ProductSKU" class="skuspan" target="_blank">@item.ProductSKU</a>
+                    @*@item.ProductSKU*@
+                </td>
+                <td>
+                    <a target="_blank" href="https://www.amazon.ca/dp/@item.ASIN?th=1&psc=1">@item.ASIN</a>
+                    @*@item.ASIN*@
+                </td>
 
-                    <td>
+                <td>
 
-                        @{
-                            if (item.Active_Inactive == "1")
-                            {
-                                                <span>Active</span>
-                            }
-                            else
-                            {<span>Inactive</span>
-
-                            }
+                    @{
+                        if (item.Active_Inactive == "1")
+                        {
+                            <span>Active</span>
                         }
-                    </td>
-                   
-                    <td>
-                        @{
-                            if (item.NextUpdateDate == null)
-                            {
-                                <span>Disabled</span>
-                            }
-                            else
-                            {
+                        else
+                        {<span>Inactive</span>
 
-                                <span>Enabled</span>
-                            }
                         }
+                    }
+                </td>
 
-                    </td>
-                    <td>
-                        
-                           
-                            <a href="/ZincWatchlist/logHistory?ProductSKU=@item.ProductSKU&ASIN=@item.ASIN" target="_blank"style="cursor:pointer!important">Log History</a>
-                        
-                    </td>
-                </tr>
+                <td>
+                    @{
+                        if (item.NextUpdateDate == DateTime.MinValue)
+                        {
+                            <span>Disabled</span>
+                        }
+                        else
+                        {
+
+                            <span>Enabled</span>
+                        }
+                    }
+
+                </td>
+                <td>
+                    @{
+                        if (item.NextUpdateDate == DateTime.MinValue)
+                        {
+                        }
+                        else
+                        {
+                            @string.Format("{0:MMM dd, yyyy}", @item.NextUpdateDate)
+                        }
+                    }
+                </td>
+                <td>
+
+
+                    <a href="/ZincWatchlist/logHistory?ProductSKU=@item.ProductSKU&ASIN=@item.ASIN" target="_blank" style="cursor:pointer!important">Log History</a>
+
+                </td>
+            </tr>
             }
         </tbody>
     </table>

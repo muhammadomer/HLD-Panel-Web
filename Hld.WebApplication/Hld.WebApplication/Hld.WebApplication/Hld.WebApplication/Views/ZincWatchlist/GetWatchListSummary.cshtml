@@ -127,7 +127,8 @@
                     <a href="#" class="runjob" dataid="@item.JobID">@item.Status</a>
                 </td>*@
                 <td>
-                    @Html.ActionLink("Logs", "MainViewLogs", new { ASIN = " ", jobID = item.JobID, available = " " }, new { target = "_blank" })
+                   @* @Html.ActionLink("Logs", "MainViewLogs", new { ASIN = " ", jobID = item.JobID, available = " " }, new { target = "_blank" })*@
+                    @Html.ActionLink("Logs", "MainViewLogs", new {jobID = item.JobID}, new { target = "_blank" })
                 </td>
             </tr>
             }

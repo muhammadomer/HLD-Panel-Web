@@ -207,9 +207,9 @@ namespace Hld.WebApplication.Helper
             return Convert.ToBoolean(jsonObjectResponse);
         }
 
-        public List<ProductDisplayInventoryViewModel> GetAllProducts(string ApiURL, string token, int startLimit, int endLimit, string sort, string dropship, string dropshipsearch, string sku, string asin, string ProductTitle, string DSTag, string TypeSearch, string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice,string ASINListingRemoved,string BBPriceUpdate)
+        public List<ProductDisplayInventoryViewModel> GetAllProducts(string ApiURL, string token, int startLimit, int endLimit, string sort, string dropship, string dropshipsearch, string sku, string asin, string ProductTitle, string DSTag, string TypeSearch, string WHQStatus,string BBProductID,string ASINS,string ApprovedUnitPrice,string ASINListingRemoved,string BBPriceUpdate, string BBInternalDescription)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + startLimit + "/" + endLimit + "/" + sort + "/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + asin + "/" + ProductTitle + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus+"/"+BBProductID+"/"+ASINS+"/"+ ApprovedUnitPrice+"/"+ ASINListingRemoved+"/"+ BBPriceUpdate);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + startLimit + "/" + endLimit + "/" + sort + "/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + asin + "/" + ProductTitle + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus+"/"+BBProductID+"/"+ASINS+"/"+ ApprovedUnitPrice+"/"+ ASINListingRemoved+"/"+ BBPriceUpdate+"/"+BBInternalDescription);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -915,6 +915,36 @@ namespace Hld.WebApplication.Helper
                     strResponse = sr.ReadToEnd();
                 }
                 ViewList = JsonConvert.DeserializeObject<List<ApprovedPriceForInventoryPageViewModel>>(strResponse);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return ViewList;
+        }
+
+        public List<SkuTagOrderViewModel> GetTags(string ApiURL, string token, string sku)
+        {
+            List<SkuTagOrderViewModel> ViewList = new List<SkuTagOrderViewModel>();
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/GetTags/" + sku);
+                request.Method = "GET";
+                request.Accept = "application/json;";
+                request.ContentType = "application/json";
+                request.Headers["Authorization"] = "Bearer " + token;
+                string strResponse = "";
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    strResponse = sr.ReadToEnd();
+                }
+                ViewList = JsonConvert.DeserializeObject<List<SkuTagOrderViewModel>>(strResponse);
 
             }
             catch (Exception)
@@ -2517,9 +2547,9 @@ namespace Hld.WebApplication.Helper
 
             return status;
         }
-        public List<ExportProductDataViewModel> GetAllProductsForExportWithLimitCount(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus,string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved,string BBPriceUpdate)
+        public List<ExportProductDataViewModel> GetAllProductsForExportWithLimitCount(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus,string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved,string BBPriceUpdate,string BBInternalDescription)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus + "/" + BBProductID + "/" + ASINS + "/" + ApprovedUnitPrice+"/"+ ASINListingRemoved+"/"+BBPriceUpdate);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/" + dropship + "/" + "/" + dropshipsearch + "/" + "/" + sku + "/" + DSTag + "/" + TypeSearch + "/" + WHQStatus + "/" + BBProductID + "/" + ASINS + "/" + ApprovedUnitPrice+"/"+ ASINListingRemoved+"/"+BBPriceUpdate+"/"+BBInternalDescription);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";
@@ -2613,12 +2643,12 @@ namespace Hld.WebApplication.Helper
             }
             return responses;
         }
-        public int SelectAllForGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved, string BBPriceUpdate )
+        public int SelectAllForGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice,string ASINListingRemoved, string BBPriceUpdate,string BBInternalDescription)
         {
             int count;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllForGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus + "&BBProductID=" + BBProductID + "&ASINS=" + ASINS + "&ApprovedUnitPrice=" + ApprovedUnitPrice+ "&ASINListingRemoved=" + ASINListingRemoved+ "&BBPriceUpdate=" + BBPriceUpdate);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllForGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus + "&BBProductID=" + BBProductID + "&ASINS=" + ASINS + "&ApprovedUnitPrice=" + ApprovedUnitPrice+ "&ASINListingRemoved=" + ASINListingRemoved+ "&BBPriceUpdate=" + BBPriceUpdate+ "&BBInternalDescription="+ BBInternalDescription);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
@@ -2641,10 +2671,10 @@ namespace Hld.WebApplication.Helper
             }
             return count;
         }
-        public int SelectAllSKUandASINGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice, string ASINListingRemoved,string BBPriceUpdate)
+        public int SelectAllSKUandASINGetStatusFromZinc(string ApiURL, string token, string dropship, string dropshipsearch, string sku, string DSTag, string TypeSearch, string WHQStatus, string BBProductID, string ASINS, string ApprovedUnitPrice, string ASINListingRemoved,string BBPriceUpdate,string BBInternalDescription)
         {
             int JobId = 0;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllSKUandASINGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus + "&BBProductID=" + BBProductID + "&ASINS=" + ASINS + "&ApprovedUnitPrice=" + ApprovedUnitPrice+ "&ASINListingRemoved=" + ASINListingRemoved+ "&BBPriceUpdate=" + BBPriceUpdate);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Product/SelectAllSKUandASINGetStatusFromZinc?dropship=" + dropship + "&dropshipsearch=" + dropshipsearch + "&sku=" + sku + "&DSTag=" + DSTag + "&TypeSearch=" + TypeSearch + "&WHQStatus=" + WHQStatus + "&BBProductID=" + BBProductID + "&ASINS=" + ASINS + "&ApprovedUnitPrice=" + ApprovedUnitPrice+ "&ASINListingRemoved=" + ASINListingRemoved+ "&BBPriceUpdate=" + BBPriceUpdate+ "&BBInternalDescription=" + BBInternalDescription);
             request.Method = "GET";
             request.Accept = "application/json;";
             request.ContentType = "application/json";

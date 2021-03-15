@@ -12,9 +12,7 @@
     <table id="table" class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th>
-                    Sr. #
-                </th>
+                
                 <th>
                     SKU
                 </th>
@@ -50,23 +48,21 @@
             </tr>
         </thead>
         <tbody>
-            @{
-                int sno = 0;
-            }
+           
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @{ sno++; }
-                        @sno
-                    </td>
+                   
                     <td>
                         
                         @Html.DisplayFor(modelItem => item.ProductSku)
                     </td>
                     <td>
-
-                        @Html.DisplayFor(modelItem => item.LastUpdate)
+                        @if (item.LastUpdate != DateTime.MinValue)
+                        {
+                            @string.Format("{0:MMM dd, yyyy}", @item.LastUpdate)
+                        }
+                       
                     </td>
                     <td>
 
@@ -91,13 +87,16 @@
                     <td>
                         @if (item.OfferStartDate.HasValue)
                         {
-                            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.OfferStartDate.Value))
+                            @*@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.OfferStartDate.Value))*@
+                            @string.Format("{0:MMM dd, yyyy}", @item.OfferStartDate)
                         }
                     </td>
                     <td>
                         @if (item.OfferEndDate.HasValue)
                         {
-                            @Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.OfferEndDate.Value))
+                            @string.Format("{0:MMM dd, yyyy}", @item.OfferEndDate)
+                        
+                        @*@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.OfferEndDate.Value))*@
                         }
                     </td>
                 </tr>

@@ -100,15 +100,16 @@ namespace Hld.WebApplication.Controllers
             listmodel = _ApiAccess.GetWatchListSummaryByID(ApiURL, token, jobid);
             return listmodel;
         }
-        public IActionResult MainViewLogs(string ASIN, string available, string jobID)
+       // public IActionResult MainViewLogs(string ASIN, string available, string jobID)
+        public IActionResult MainViewLogs(ZincWatchLogsSearchViewModel searchViewModel)
         {
             string token = Request.Cookies["Token"];
             int Count = 0;
 
-            ZincWatchLogsSearchViewModel searchViewModel = new ZincWatchLogsSearchViewModel();
-            searchViewModel.ASIN = ASIN;
-            searchViewModel.JobID = jobID;
-            searchViewModel.Available = available;
+            //ZincWatchLogsSearchViewModel searchViewModel = new ZincWatchLogsSearchViewModel();
+            //searchViewModel.ASIN = ASIN;
+            //searchViewModel.JobID = jobID;
+            //searchViewModel.Available = available;
 
             Count = _ApiAccess.GetWatchListLogsCount(ApiURL, token, searchViewModel);
             ZincWatchlistCountViewModel obj = new ZincWatchlistCountViewModel();
@@ -121,16 +122,20 @@ namespace Hld.WebApplication.Controllers
             ViewBag.ListingRemovedCount = obj.ListingRemoved;
             ViewBag.ErrorCount = obj.ErrorCount;
             ViewBag.logsRecords = Count;
-            ViewBag.JobID = jobID;
+            ViewBag.JobID = searchViewModel.JobID;
 
-            if (ASIN != null)
+            if (searchViewModel.ASIN != null)
             {
                 return View("~/Views/ZincWatchlist/MainViewLogsASIN.cshtml");
 
             }
-            return View();
+
+            ViewBag.ASINFilter = searchViewModel.ASINFilter;
+            ViewBag.SKU=searchViewModel.SKU;
+            
+            return View(searchViewModel);
         }
-        public IActionResult ZincWatchListLogs(string ASIN, string available, string jobID, int page = 0)
+        public IActionResult ZincWatchListLogs(string ASINFilter, string SKU, string available, string jobID, int page = 0)
         {
             string token = Request.Cookies["Token"];
             List<ZincWatchlistLogsViewModel> listmodel = new List<ZincWatchlistLogsViewModel>();
@@ -143,7 +148,8 @@ namespace Hld.WebApplication.Controllers
 
             offset = (pageNumber - 1) * 100;
             ZincWatchLogsSearchViewModel searchViewModel = new ZincWatchLogsSearchViewModel();
-            searchViewModel.ASIN = ASIN == "undefined" ? "" : ASIN;
+            searchViewModel.ASINFilter = ASINFilter == "undefined" ? "" : ASINFilter;
+            searchViewModel.SKU = SKU == "undefined" ? "" : SKU;
             searchViewModel.JobID = jobID == "undefined" ? "" : jobID;
             searchViewModel.Available = available == "undefined" ? "" : available;
             searchViewModel.Offset = offset;
@@ -156,7 +162,7 @@ namespace Hld.WebApplication.Controllers
             ViewBag.No_Removed = listmodel.Where(e => e.ZincResponse == "Listing Removed").Count();
             ViewBag.No_Total = listmodel.Count();
             data = new StaticPagedList<ZincWatchlistLogsViewModel>(listmodel, pageNumber, pageSize, listmodel.Count);
-            if (ASIN != null && ASIN != "undefined")
+            if (searchViewModel.ASIN != null && searchViewModel.ASIN != "undefined")
             {
                 return PartialView("~/Views/ZincWatchlist/ZincWatchListLogsASIN.cshtml", data);
             }

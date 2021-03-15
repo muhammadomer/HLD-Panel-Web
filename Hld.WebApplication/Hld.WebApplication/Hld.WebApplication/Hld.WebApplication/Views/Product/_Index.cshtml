@@ -72,6 +72,7 @@
             padding-left: 10px;
             font-family: arial;
             position: absolute;
+            cursor:pointer!important;
             z-index: 113;
             bottom: 64%;
             /* left: -245px; */
@@ -85,7 +86,7 @@
                 content: "";
                 position: absolute;
                 top: 100%;
-                left: 91%;
+                left: 94%;
                 margin-left: -5px;
                 border-width: 5px;
                 border-style: solid;
@@ -95,6 +96,7 @@
         .tooltipactive:hover .tooltiptextt {
             visibility: visible;
             opacity: 1;
+            cursor: pointer !important;
         }
 </style>
 
@@ -136,7 +138,7 @@
                 </th>
 
                 <th data-sorter="false">
-                    Location in HLD WH
+                     BIN ID
                 </th>
                 <th data-sorter="false">
                     <label>Avg Cost</label>
@@ -148,16 +150,20 @@
                     BB/<br> Product ID
                 </th>
                 <th data-sorter="false" style="width:9%!important">Approved Price</th>
-                <th data-sorter="false">
-                    BB/<span class="tooltipactive">
-                        <i class=" fa fa-info" style="cursor:pointer;margin-left:5px!important;width:0.3em!important" data-id=""></i>
+                
+                <th data-sorter="false"style=" cursor: pointer !important;">
+                    <span class="tooltipactive">
+
                         <span class="tooltiptextt">
                             This column shows the BB Prices Last Update via Zinc Watch List
                         </span>
-                    </span><br>
-                    Price Update
+
+                        BB Price Update/<br />
+                        BB ASIN Update
+                    </span>
 
                 </th>
+                
                 <th data-sorter="false">Status</th>
 
 
@@ -203,8 +209,8 @@
                     @*<td>
                             @Html.DisplayFor(modelItem => item.ColorName)
                         </td>*@
-                    <td>
-                        @if (item.skuTags != null)
+                    <td class="getskuTags">
+                        @*@if (item.skuTags != null)
 
                         {
                             @foreach (var tag in item.skuTags)
@@ -213,16 +219,17 @@
                             }
 
 
-                        }
+                        }*@
 
                     </td>
                     <td>
                         DSQ &nbsp; @item.dropship_Qty &nbsp;  <input type="checkbox" disabled="disabled" asp-for="@item.dropship_status" /> <br />
                         WHQ @item.AggregatedQty
+
                         @*WHQ @item.ProductrWarehouseQtyViewModel.Where(E => E.WarehouseName == "HLD-CA1").Select(e => e.AvailableQty).FirstOrDefault()*@
                     </td>
 
-                    <td> - - -</td><!--Location in WH-->
+                    <td>@item.LocationNotes</td><!--Location in WH-->
 
                     <td>@item.AvgCost</td> <!--Average Cost-->
                     <td>
@@ -254,12 +261,15 @@
                             }*@
                     </td>
                  
-                <td>
-                    @if (item.BBPriceUpdate != DateTime.MinValue)
-                    {
-                        @string.Format("{0:MMM dd, yyyy}", @item.BBPriceUpdate)
-                    }
-                </td>
+                    <td>
+                        @if (item.BBPriceUpdate != DateTime.MinValue)
+                        {
+                            @string.Format("{0:MMM dd, yyyy}", @item.BBPriceUpdate)
+                        }
+                        <br />
+                        @item.BBInternalDescription
+                    </td>
+                @*<td></td>*@
                 <td>
 
                     @if (item.Continue == true)

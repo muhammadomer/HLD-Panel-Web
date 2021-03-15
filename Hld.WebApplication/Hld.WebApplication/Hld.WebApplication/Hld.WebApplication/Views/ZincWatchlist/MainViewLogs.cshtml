@@ -1,8 +1,9 @@
-﻿
+﻿@model Hld.WebApplication.ViewModel.ZincWatchLogsSearchViewModel
 @{
     ViewData["Title"] = "MainViewLogs";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
-}
+}@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 <link href="~/select2/css/select2.min.css" rel="stylesheet" />
 <style>
     .pagination > a {
@@ -31,8 +32,7 @@
     .btngocalss {
         box-shadow: none !important;
         border: none !important;
-        
-         height: 28px !important;
+        height: 28px !important;
         margin-left: -6px !important;
         border-radius: 5px !important;
     }
@@ -82,7 +82,7 @@
     <img src="~/Images/giffff.gif" />
 </div>
 <div class="container-fluid p-0">
-    <h6 style="margin-left: 13px;">
+    <h6 style="">
         Zinc Offers Update<span style="cursor:pointer!important">
             <a href="../BestBuyProduct/SummaryCount" target="_blank" style="margin-left: 85px;cursor:pointer!important;
         font-size: 12px !important;
@@ -90,51 +90,21 @@
 ">BB Price Logs</a>
         </span>
     </h6>
-    
-    
-    <div class="row col col-12" id="fixActionMenu">
-        <div class="col col-md-8">
-            <div class="row">
-                <div class="pagination col-md-3 col" style="margin-left: 10px;">
 
-                </div>
 
-                <span>Results Per Page: 100 </span>
-                <span style="margin-left:40px; margin-right:20px;">Results Found: @ViewBag.logsRecords</span><span style="padding-left: 3px;vertical-align:text-bottom">Completed</span><span id="CompletedAll" style="vertical-align:top;"></span>
-                <div style="margin-left:15px">
-                    @using (Html.BeginForm("MainViewLogs", "ZincWatchlist", FormMethod.Get))
-                    {
-                        <label class="radio-inline">
-                            <input type="radio" name="available" checked value="" /> All <span> (@ViewBag.Total)</span>
-                        </label>
-                        <label class="radio-inline" style="margin-left: 10px;">
-                            <input type="radio" name="available" value="Available" /> Available<span> (@ViewBag.AvailableCount)</span>
-                        </label>
-                        <label class="radio-inline" style="margin-left: 10px;">
-                            <input type="radio" name="available" value="Currently Unavailable" /> UnAvailable<span> (@ViewBag.UnAvailableCount)</span>
-                        </label>
-                        <label class="radio-inline" style="margin-left: 10px;">
-                            <input type="radio" name="available" value="Listing Removed" /> Listing Removed<span> (@ViewBag.ListingRemovedCount)</span>
-                        </label>
-                        <label class="radio-inline" style="margin-left: 10px;">
-                            <input type="radio" name="available" value="Error" /> Error<span> (@ViewBag.ErrorCount)</span>
-                        </label>
-                        <input type="hidden" name="ASIN" value="" id="ddlZincStatusValues" />
-                        <input type="hidden" name="jobID" value="@ViewBag.JobID" id="ddlDSStatusValues" />
-                    }
-                </div>
-            </div>
+    <div class="row col col-12" id="fixActionMenu" style="padding-left: 10px;">
+
+
+        <div class="pagination col-md-3 col" style="">
+
         </div>
-        @*<div class="col col-md-2">
+        <div class="col-md-4 p-0">
+            <span>Results Per Page: 100 </span>
+            <span style="margin-left:40px; margin-right:20px;">Results Found: @ViewBag.logsRecords</span><span style="padding-left: 3px;vertical-align:text-bottom">Completed</span><span id="CompletedAll" style="        vertical-align: top;
+        margin-right: 30px;
+"></span>
 
-            </div>*@
-        @*<div class="col col-md-2">
-                <span>Item Per Page :100</span>
-            </div>*@
-        @*<div class="col col-md-4">
-
-
-            </div>*@
+        </div>
 
         <div class="col-md-4 p-0">
             <span class="" style="padding-top:4px !important;">
@@ -158,34 +128,76 @@
 
 
         </div>
-
-
-        <div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">SKU Status</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-                    </div>
-                    <div class="modal-body" id="modelBody">
-                        @*For Bulk Selction of SKU
-                            <form asp-action="IndexMainView" asp-controller="Product">
-                                <textarea id="SearchFromSkuList" class="hideForBulkSku" name="SearchFromSkuList" cols="50" rows="10"></textarea>
-                                <input type="submit" value="SearchFromSKUList" class="hideForBulkSku btn btn-primary" />
-                            </form>*@
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
+        <br />
     </div>
 </div>
+
+<div class="container-fluid p-0" style="margin-bottom:10px">
+    <div class="col-sm-12 p-0">
+        @using (Html.BeginForm("MainViewLogs", "ZincWatchlist", FormMethod.Get))
+        {
+            <div class="row" style="margin-left:2px;margin-top:15px;">
+                <label class="radio-inline">
+                    <input type="radio" name="available" checked value="" /> All <span> (@ViewBag.Total)</span>
+                </label>
+                <label class="radio-inline" style="margin-left: 10px;">
+                    <input type="radio" name="available" value="Available" /> Available<span> (@ViewBag.AvailableCount)</span>
+                </label>
+                <label class="radio-inline" style="margin-left: 10px;">
+                    <input type="radio" name="available" value="Currently Unavailable" /> UnAvailable<span> (@ViewBag.UnAvailableCount)</span>
+                </label>
+                <label class="radio-inline" style="margin-left: 10px;">
+                    <input type="radio" name="available" value="Listing Removed" /> Listing Removed<span> (@ViewBag.ListingRemovedCount)</span>
+                </label>
+                <label class="radio-inline" style="margin-left: 10px;">
+                    <input type="radio" name="available" value="Error" /> Error<span> (@ViewBag.ErrorCount)</span>
+                </label>
+                @*<input type="hidden" name="ASIN" value="" id="ddlZincStatusValues" />*@
+                <input type="hidden" name="jobID" value="@ViewBag.JobID" id="ddlDSStatusValues" />
+                <div class="col-md-2 p-0 mr-1 ml-5">
+                    <input type="text" id="ASIN" name="ASINFilter" placeholder="ASIN" class="form-control" style="box-shadow: none" />
+                 
+                </div>
+                <div class="col-md-2 p-0 mr-1 ml-1">
+                    <input type="text" id="SKU" name="SKU" value="" placeholder="SKU" class="form-control" style="box-shadow: none" />
+                </div>
+                <div class="col-md-1 p-0">
+                    <button class=" btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+
+
+<div class="modal fade" style="margin-top: 80px!important;" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">SKU Status</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelBody">
+                @*For Bulk Selction of SKU
+                    <form asp-action="IndexMainView" asp-controller="Product">
+                        <textarea id="SearchFromSkuList" class="hideForBulkSku" name="SearchFromSkuList" cols="50" rows="10"></textarea>
+                        <input type="submit" value="SearchFromSKUList" class="hideForBulkSku btn btn-primary" />
+                    </form>*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
 <div class="modal fade" id="myModaleBestBuy" style="margin-top: 130px;">
     <div class="modal-dialog modal-sm">
         <div class="modal-content modelwidth">
@@ -239,12 +251,12 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         </div>
     </div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid p-0">
     <div id="loadOrder">
 
     </div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" style="">
     <div class="pagination">
 
     </div>
@@ -255,8 +267,28 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
     <script src="~/lib/jQuery-Paging/jquery.paging.min.js"></script>
     <script src="~/select2/js/select2.full.min.js"></script>
     <script type="text/javascript">
-
+        $(function () {
+            $('#ASIN,#SKU').bind('input', function () {
+                $(this).val(function (_, v) {
+                    return v.replace(/\s+/g, '');
+                });
+            });
+        });
         $(document).ready(function () {
+            debugger
+            var ASINVAL = "@ViewBag.ASINFilter";
+
+            var ASINGet = ASINVAL.toString();
+            if (ASINGet!= null) {
+                $('#ASIN').val(ASINGet);
+            }
+             var SKUVAL = "@ViewBag.SKU";
+
+            var SKUGet = SKUVAL.toString();
+            if (SKUGet!= null) {
+                $('#SKU').val(SKUGet);
+            }
+
 
             var AvailableCount = parseInt('@ViewBag.AvailableCount');
             var UnAvailableCount = parseInt('@ViewBag.UnAvailableCount');
@@ -297,14 +329,14 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         var watchlistsku = $(this).find('.watchlistdata').val();
                         var WHQ = $(this).find('.whq').val();
                         var IsPrime = $(this).find('.isprime').val();
-                       
+
                         if ($(this).find('.ValidASIN').length>0 && watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
                             $(this).find('.checkboxSkForEnableDisable').prop('checked', true);
                             i++;
                         }
-                        
+
                         //if (ASIN && watchlistsku == 1 && WHQ <= 0 && IsPrime == 1) {
-                           
+
                         //}
                     });
 
@@ -347,7 +379,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
 
             //})
-           
+
             $(document).on("click", ".btnsavetable", function () {
                 //var selectedRow = $(this);
                 //var productid = $(selectedRow).parents('tr').find('.idZincProxy').val();
@@ -356,7 +388,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 var ThisContext = $(this).closest('tr');
                 console.log("price get", maxprice);
                 console.log("asin value", asin);
-               
+
                 $.ajax({
                     type: 'GET',
                     url: '../ZincWatchlist/UpdatePriceMax',
@@ -365,7 +397,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         MaxPrice: maxprice
                     },
                     success: function (data) {
-                        $(".btnbuttonstyle").hide();                      
+                        $(".btnbuttonstyle").hide();
                         $(this).closest('tr').find(".btnbuttonstyle").show();
                         //$("#dialog-Delete").dialog("close");
                         //$(".loader").hide();
@@ -391,7 +423,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             //    }
             //    successOptions()
             //});
-            
+
             $(document).on("click", ".btncanceltable", function () {
                 $(".btnbuttonstyle").hide();
 
@@ -430,9 +462,10 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     }
                 }
             };
-            var ASIN = getUrlParameter('ASIN');
+            var ASIN = getUrlParameter('ASINFilter');
             var available = getUrlParameter('available');
             var jobID = getUrlParameter('jobID');
+            var SKU = getUrlParameter('SKU');
               //$(document).on('change', '#headerCheckBox', function () {
 
               //  var result = $(this).is(':checked');
@@ -461,7 +494,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                 // add code which gets executed when user selects a page
 
                       var url = '/ZincWatchlist/ZincWatchListLogs?page=' + page + ''
-                    var completURL = url + '&ASIN=' + ASIN + '&jobID=' + jobID+ '&available=' + available;
+                    var completURL = url + '&ASINFilter=' + ASIN + '&SKU=' + SKU + '&jobID=' + jobID+ '&available=' + available;
                     $(".loadertbl").show();
                     $(".loader").show();
                     $.ajax({
@@ -782,7 +815,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
             }
             return false;
         }
-      
+
 
     </script>
 }

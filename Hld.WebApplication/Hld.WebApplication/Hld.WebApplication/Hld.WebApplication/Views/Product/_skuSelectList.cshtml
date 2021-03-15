@@ -14,11 +14,19 @@
                     <option value="0">Dropship None</option>
                     <option value="ALL">All</option>
                 </select>
+
+                <select style="margin-top:15px;padding:0px;box-shadow: none; width:110px!important;" id="multiselect" class="form-control" name="seltedtaglist">
+
+                    <option value="1">SKUs</option>
+                    <option value="0">BB Product ID</option>
+
+                </select>
+                <span id="countsku" style="bottom: 0; position: absolute;margin-left: -42px;"></span>
             </div>
-        
+           
         </div>
         <span class="text-danger" asp-validation-for="SearchFromSkuList"></span>
-        <input type="submit" id="searchFromSkuList" value="SearchFromSKUList" class="btn btn-primary" />
+        <input type="submit" id="searchFromSkuList" value="Search" class="btn btn-primary" />
     </form>
 </div>
 
