@@ -127,20 +127,20 @@
                 </td>
                 <td>
                     @{
-                        if (item.NextUpdateDate == DateTime.MinValue)
-                        {
-                        }
-                        else
+                        if (item.Active_Inactive == "1")
                         {
                             @string.Format("{0:MMM dd, yyyy}", @item.NextUpdateDate)
                         }
+                        else
+                        {
+                            <span></span>
+
+                        }
                     }
+                    
                 </td>
                 <td>
-
-
                     <a href="/ZincWatchlist/logHistory?ProductSKU=@item.ProductSKU&ASIN=@item.ASIN" target="_blank" style="cursor:pointer!important">Log History</a>
-
                 </td>
             </tr>
             }

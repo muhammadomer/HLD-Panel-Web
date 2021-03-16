@@ -93,7 +93,15 @@
                         { text: 'Fees', datafield: 'calculation_Comission', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
                         { text: 'Tax', datafield: 'calculation_TotalTax', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
                         { text: 'Profit', datafield: 'calculation_ProfitLoss', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' },
-                        { text: 'Profit%', datafield: 'calculation_ProfitLossPercentage', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center' }
+                        {
+                            text: 'Profit%', datafield: 'calculation_ProfitLossPercentage', filterable: false, columntype: 'textbox', filtertype: 'input', width: 80, cellsalign: 'center', align: 'center', cellsrenderer: function (row) {
+                                var calculation_ProfitLossPercentage = dataAdapter.records[row].calculation_ProfitLossPercentage;
+                                return '<span style="display: table;margin-left: 30px;margin-top: 8px;">' + calculation_ProfitLossPercentage+''+"%"+'</span>';
+                            }
+
+
+
+                        }
                     ]
                 });
 

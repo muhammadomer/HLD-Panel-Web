@@ -471,7 +471,7 @@
                         <div class="p-0 mr-1" style="position:relative" id="DSTagselect">
                             <select id="multiselect" style="padding:0px;box-shadow: none; width:81px!important;position:absolute" class="form-control col-md-1 active DSTagselect" multiple="multiple">
                                 @*<option value="Yes">Yes</option>
-                            <option value="No">No</option>*@
+                <option value="No">No</option>*@
                             </select>
                             <input type="hidden" name="DSTag" id="ddDSTag" />
                         </div>
@@ -516,13 +516,13 @@
                         <input type="text" autocomplete="off" class="form-control inputclass" name="Sku" @*asp-for="Sku"*@ style="box-shadow: none;" />
                         <label class="mb-2"></label>
 
-                        <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
-                        <select id="" class="form-control p-sm-0" asp-for="TypeSearch">
+
+                        <select id="" class="form-control p-sm-0 ml-sm-1" asp-for="TypeSearch">
                             <option value="ALL">ALL</option>
                             <option value="Continued">Continued </option>
                             <option value="Discontinued">Discontinued</option>
                         </select>
-
+                        <button type="button" class="btn btn-link" id="btnSearchFromSkuList"> SKU</button>
 
                         <button class="ml-1 btn btn-primary" type="submit" id="btnSearchOrder">Search</button>
 
@@ -699,7 +699,7 @@
                 }*@
 
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2 CheckAllPagesHide">
           
         
                 <input type="checkbox" value="Check All Pages" id="checkAllPages" /><span style="padding-left: 3px;vertical-align:text-bottom">Select All Pages</span><span id="totalSelectedAll" style="vertical-align:top;"></span>
@@ -887,8 +887,19 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
         //        }
         //    }
         //}
-
+       
         $(document).ready(function () {
+            
+            $(document).on("click", "#searchFromSkuList", function () {
+                if ($("textarea").val() != "") {
+                    return true;
+                    
+                }
+                else {
+                    $('#SearchFromSkuList').css("border", "1px solid red");
+                    return false;
+                }
+            });
             $(document).on("paste", "#SearchFromSkuList", function () {
                 var elem = $(this);
 
@@ -899,6 +910,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                         if (result <= 50) {
                             return val;
                             $('#SearchFromSkuList').attr('readonly', false);
+                            
                         }
                         else {
 
@@ -922,6 +934,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
 
             });
             $(document).on("keyup", "#SearchFromSkuList", function () {
+                $('#SearchFromSkuList').css("border", "1px solid gray");
                 var val = $("#SearchFromSkuList").val();
                 var splitrows = val.split('\n');
                 var result = splitrows.length;
@@ -1800,6 +1813,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     getapprovedrice();
                     getakutag();
                      $(".loader").hide();
+                    $(".CheckAllPagesHide").hide();
                     var table = $(document).find('#tableProductList');
                     $(table).tablesorter({
                         theme: 'bootstrap',
@@ -1811,6 +1825,7 @@ font-size: 20px;vertical-align:bottom!important"></i><span style="vertical-align
                     });
                     var itemcount = $("#tableProductList").find("tr").length - 1;
                     $(".itemPerPage").text(itemcount);
+                  
                    // $(table).stickyTableHeaders({ fixedOffset: 0 });
                 });
             }
