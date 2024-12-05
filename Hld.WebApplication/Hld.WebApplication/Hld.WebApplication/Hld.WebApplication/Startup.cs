@@ -51,15 +51,16 @@ namespace Hld.WebApplication
             });
             services.AddDbContext<ApplicationDbContext>(options =>
              options.UseMySql(
-                 Configuration.GetConnectionString("bb2HldNet")));
+                 Configuration.GetConnectionString("bbe2")));
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDistributedMemoryCache();
-            services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(20);//You can set Time   
-            });
+       services.AddSession(options =>
+      {
+          options.IdleTimeout = TimeSpan.FromMinutes(20);//You can set Time   
+      });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
             {
                 options.SerializerSettings.ContractResolver
@@ -125,7 +126,7 @@ namespace Hld.WebApplication
             app.UseStaticFiles();
             app.UseSession();
             app.UseCookiePolicy();
-           
+
             var config = this.Configuration.GetAWSLoggingConfigSection();
 
             loggerFactory.AddAWSProvider(config);

@@ -211,7 +211,7 @@ namespace Hld.WebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult BBorderPartialView(string order_id, string sellerCloudID, string CustomerName, string EmptyFirstTime, int? page, int ShippingBoxContain, int WHQStatus, string sort, string ZincStatus, string OrderStatus, string sku, string orderDateTimeFrom, string orderDateTimeTo, string DSStatus, string PaymentStatus = "", string ShippingTags = "",string BBOrderStatus="")
+        public ActionResult baseplatebaseplate(string order_id, string sellerCloudID, string CustomerName, string EmptyFirstTime, int? page, int ShippingBoxContain, int WHQStatus, string sort, string ZincStatus, string OrderStatus, string sku, string orderDateTimeFrom, string orderDateTimeTo, string DSStatus, string PaymentStatus = "", string ShippingTags = "",string BBOrderStatus="")
         {
             if (ZincStatus == null)
             {

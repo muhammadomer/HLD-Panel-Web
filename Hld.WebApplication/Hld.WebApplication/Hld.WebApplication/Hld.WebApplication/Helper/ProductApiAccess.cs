@@ -2457,7 +2457,7 @@ namespace Hld.WebApplication.Helper
             return status;
         }
 
-        public bool SaveCheckboxstatus(string ApiURL, string Email, bool Checkboxstatus)
+        public bool SaveCheckboxstatus(string ApiURL,string token ,string Email, bool Checkboxstatus)
         {
             bool status = false;
             try
@@ -2466,7 +2466,7 @@ namespace Hld.WebApplication.Helper
                 request.Method = "POST";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
-                //request.Headers["Authorization"] = "Bearer " + token;
+                request.Headers["Authorization"] = "Bearer " + token;
 
 
                 var response = (HttpWebResponse)request.GetResponse();
@@ -2486,16 +2486,16 @@ namespace Hld.WebApplication.Helper
             return status;
         }
 
-        public List<Login> GetCheckboxstatus(string ApiURL)
+        public List<Login> GetCheckboxstatus(string ApiURL,string token,string userid)
         {
             List<Login> listmodel = new List<Login>();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Configuration/GetCheckboxstatus");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiURL + "/api/Configuration/" + userid);
                 request.Method = "GET";
                 request.Accept = "application/json;";
                 request.ContentType = "application/json";
-                //request.Headers["Authorization"] = "Bearer " + token;
+                request.Headers["Authorization"] = "Bearer " + token;
                 string strResponse = "";
 
                 var response = (HttpWebResponse)request.GetResponse();

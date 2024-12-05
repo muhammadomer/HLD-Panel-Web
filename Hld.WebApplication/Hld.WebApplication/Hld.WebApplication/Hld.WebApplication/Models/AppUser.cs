@@ -9,5 +9,7 @@ namespace Hld.WebApplication.Models
     public class AppUser:IdentityUser
     {
         public string UserAlias { get; set; }
+   //     public string UserId { get; set; }
+
     }
 }

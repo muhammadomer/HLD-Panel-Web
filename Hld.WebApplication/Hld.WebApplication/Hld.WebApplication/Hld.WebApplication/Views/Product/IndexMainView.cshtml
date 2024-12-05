@@ -335,7 +335,8 @@
                     }
                     else
                     {
-                        <span style="padding-left:0px;" class="whq-status-text">WHQ <= 0</span><span style="margin-left:3px"><input class="WHQCLASS" type="checkbox" value="@Model.WHQStatus" checked></span>
+                       @*  <span style="padding-left:0px;" class="whq-status-text">WHQ <= 0</span> *@
+                        <span style="margin-left:3px"><input class="WHQCLASS" type="checkbox" value="@Model.WHQStatus" checked></span>
                     }
                 </div>
             }
@@ -478,7 +479,7 @@
                         <div class="p-0 mr-1" style="position:relative;" id="WHQStatus">
                             <select id="multiselect" class="form-control mb-2 mr-sm-2 mt-2 active WHQStatus" multiple="multiple" style="position:absolute">
                                 <option value="1">WHQ > 0</option>
-                                <option value="2">WHQ < 0</option>
+                                <option value="2">WHQ > 0</option>
                             </select>
                             <input type="hidden" name="WHQStatus" id="ddlWHQStatus" />
                         </div>

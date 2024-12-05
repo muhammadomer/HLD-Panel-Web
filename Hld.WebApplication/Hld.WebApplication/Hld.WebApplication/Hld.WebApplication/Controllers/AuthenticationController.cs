@@ -14,17 +14,20 @@ using Hld.WebApplication.Models;
 using MySqlX.XDevAPI;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace Hld.WebApplication.Controllers
 {
-    
+   
     public class AuthenticationController : Controller
     {
         private readonly IConfiguration _configuration;
         private UserManager<AppUser> userManager;
         private RoleManager<IdentityRole> roleManager;
-        ProductApiAccess ProductApiAccess = null;
+       ProductApiAccess ProductApiAccess = null;
         private SignInManager<AppUser> signInManager;
+        
+        private ILogger<Login> _ilogger;
         public AuthenticationController(IConfiguration configuration, UserManager<AppUser> userMgr, SignInManager<AppUser> signinMgr, RoleManager<IdentityRole> _roleManager)
         {
             this._configuration = configuration;
@@ -32,6 +35,7 @@ namespace Hld.WebApplication.Controllers
             roleManager = _roleManager;
                signInManager = signinMgr;
             ProductApiAccess = new ProductApiAccess();
+           
         }
         //public IActionResult Index()
         //{
@@ -47,48 +51,75 @@ namespace Hld.WebApplication.Controllers
         [HttpGet]
         public async System.Threading.Tasks.Task<IActionResult> AuthenticateAlreadyLoginAsync()
         {
-            int ischecked = 0;
-            if(ischecked > 0)
+
+             bool sign = false;
+            var temp = userManager.GetUserName(User);
+            sign = signInManager.IsSignedIn(User);
+
+        
+         var   temp1= Request.Cookies["UserAlias"];
+
+         var temp3=   Request.Cookies["UserName"];
+            var temp4 = Request.Cookies["UserId"];
+
+
+            if (temp1 != null)
             {
-                //if (ischecked.FirstOrDefault().Checkboxstatus)
-                //{
-                //    Login login = new Login();
+                List<Login> listmodel = GetCheckboxstatus(temp1);
 
-                //    login.Email = ischecked.FirstOrDefault().Email;
+           sign = listmodel.FirstOrDefault().Checkboxstatus;
 
-                //    string role = await Authenticated(login);
+          
 
-                //    if (role == "Vendor")
-                //    {
+                   
+            if (sign)
+            {
+              
+                Login login = new Login();
+                login.Email = listmodel.FirstOrDefault().Email;
+               
+              
 
-                //        return RedirectToAction("PurchaseOrders", "PurchaseOrder");
-                //    }
-                //    if (role == "Receiver")
-                //    {
+                    string role = await Authenticated(login);
 
-                //        return RedirectToAction("Create", "Shipment");
-                //    }
-                //    if (role == "Admin")
-                //    {
+                    if (role == "Vendor")
+                    {
 
-                //        return RedirectToAction("DashBoard", "HLDHistory");
-                //    }
-                //    else
-                //    {
-                //        return RedirectToAction("Authenticate", "Authentication");
-                //    }
-                //}
-                //else
-                //{
-                    return RedirectToAction("Authenticate", "Authentication");
-                //}
-            }
+                        return RedirectToAction("PurchaseOrders", "PurchaseOrder");
+                    }
+                    if (role == "Receiver")
+                    {
+
+                        return RedirectToAction("Create", "Shipment");
+                    }
+                    if (role == "Admin")
+                    {
+
+                        return RedirectToAction("DashBoard", "HLDHistory");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Authenticate", "Authentication");
+                    }
+                }
+            //    else
+            //    {
+            //        return RedirectToAction("Authenticate", "Authentication");
+            //    }
+            //}
            
             else
             {
                 return RedirectToAction("Authenticate", "Authentication");
             }
-           
+
+            }
+
+            else
+                {
+                    return RedirectToAction("Authenticate", "Authentication");
+                }
+
         }
 
 
@@ -104,7 +135,7 @@ namespace Hld.WebApplication.Controllers
                     if (appUser != null)
                     {
                         await signInManager.SignOutAsync();
-                        Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+                        Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password,login.Checkboxstatus, false);
                         if (result.Succeeded)
                         {
                             AuthenciateViewModel authenticateView = new AuthenciateViewModel();
@@ -129,10 +160,10 @@ namespace Hld.WebApplication.Controllers
                             {
                                 strResponse = sr.ReadToEnd();
                             }
-                            
+                             SaveCheckboxstatus(appUser.Email, login.Checkboxstatus);
                             AuthenciateViewModel responses = JsonConvert.DeserializeObject<AuthenciateViewModel>(strResponse);
                             var cookieOption = new CookieOptions();
-                            cookieOption.Expires = DateTime.Now.AddMinutes(600);
+                            cookieOption.Expires = DateTime.Now.AddYears(2);
                             Response.Cookies.Append("Token", responses.Token, cookieOption);
                             Response.Cookies.Append("UserId", responses.UserId.ToString(), cookieOption);
                             Response.Cookies.Append("UserName", responses.UserName, cookieOption);                          
@@ -215,7 +246,7 @@ namespace Hld.WebApplication.Controllers
 
                             AuthenciateViewModel responses = JsonConvert.DeserializeObject<AuthenciateViewModel>(strResponse);
                             var cookieOption = new CookieOptions();
-                            cookieOption.Expires = DateTime.Now.AddMinutes(600);
+                        cookieOption.Expires = DateTime.Now.AddYears(2);
                             Response.Cookies.Append("Token", responses.Token, cookieOption);
                             Response.Cookies.Append("UserId", responses.UserId.ToString(), cookieOption);
                             Response.Cookies.Append("UserName", responses.UserName, cookieOption);
@@ -274,20 +305,20 @@ namespace Hld.WebApplication.Controllers
         [HttpPut]
         public bool SaveCheckboxstatus(string Email, bool Checkboxstatus)
         {
-
+           
             string token = Request.Cookies["Token"];
             string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
-            ProductApiAccess.SaveCheckboxstatus(ApiURL, Email, Checkboxstatus);
+         ProductApiAccess.SaveCheckboxstatus(ApiURL,token ,Email, Checkboxstatus);
 
             return true;
         }
         [HttpGet]
-        public List<Login> GetCheckboxstatus()
+        public List<Login> GetCheckboxstatus(string userid)
         {
             string token = Request.Cookies["Token"];
             string ApiURL = _configuration.GetValue<string>("WebApiURL:URL");
             List<Login> listmodel = new List<Login>();
-            listmodel = ProductApiAccess.GetCheckboxstatus(ApiURL);
+            listmodel = ProductApiAccess.GetCheckboxstatus(ApiURL,token,userid);
             return listmodel;
         }
     }
